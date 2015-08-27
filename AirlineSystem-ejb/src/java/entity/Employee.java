@@ -23,6 +23,10 @@ public class Employee implements Serializable {
     
     private String name;
     private String displayName;
+    private String role;
+    private String password;
+    private String hpNumber;
+    private String department;
 
     public String getStaffID() {
         return staffID;
@@ -79,10 +83,6 @@ public class Employee implements Serializable {
     public void setDepartment(String department) {
         this.department = department;
     }
-    private String role;
-    private String password;
-    private String hpNumber;
-    private String department;
     
     
     
