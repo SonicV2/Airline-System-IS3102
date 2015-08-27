@@ -12,6 +12,6 @@ import javax.ejb.Local;
  * @author HOULIANG
  */
 @Local
-public interface NewSessionBeanLocal {
+public interface EmployeeSessionBeanLocal {
     
 }

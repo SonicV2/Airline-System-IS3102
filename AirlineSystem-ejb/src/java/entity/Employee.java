@@ -1,97 +1,79 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-/**
- *
- * @author Yuqing
- */
 @Entity
 public class Employee implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    private String staffID; //staff ID will be NRIC of employee
+    private String employeeID; //staff ID will be NRIC of employee
+    private String employeeName;
+    private String employeeDisplayName;
+    private String employeePassword;
     
-    private String name;
-    private String displayName;
-    private String role;
-    private String password;
-    private String hpNumber;
-    private String department;
-
-    public String getStaffID() {
-        return staffID;
-    }
-
-    public void setStaffID(String staffID) {
-        this.staffID = staffID;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDisplayName() {
-        return displayName;
-    }
-
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getHpNumber() {
-        return hpNumber;
-    }
-
-    public void setHpNumber(String hpNumber) {
-        this.hpNumber = hpNumber;
-    }
-
-    public String getDepartment() {
-        return department;
-    }
-
-    public void setDepartment(String department) {
-        this.department = department;
-    }
+    private String  employeeRole;
+    private String employeeDepartment;
     
+    private String employeeDOB;
+    private String employeeGender;
+    private String employeeHpNumber;
     
+    private boolean employeeLockOut;
+    private boolean employeeAccountActivate;
     
+     public void createEmployee(String employeeID,String employeeName,String employeeDisplayName,
+                                String  employeeRole,String employeeDepartment,String employeeDOB,
+                                String employeeGender,String employeeHpNumber){
+        employeePassword="password";
+        employeeAccountActivate=false;
+        employeeLockOut=false;
+        
+    }
+     
+    public String getEmployeeID() {return employeeID; }
+    public void setEmployeeID(String employeeID) {this.employeeID = employeeID;}
+
+    public String getEmployeeName() {return employeeName;}
+    public void setEmployeeName(String employeeName) {this.employeeName = employeeName;}
+
+    public String getEmployeeDisplayName() {return employeeDisplayName;}
+    public void setEmployeeDisplayName(String employeeDisplayName) {this.employeeDisplayName = employeeDisplayName;}
+
+    public String getEmployeePassword() {return employeePassword;}
+    public void setEmployeePassword(String employeePassword) {this.employeePassword = employeePassword;}
+
+    public String getEmployeeRole() {return employeeRole;}
+    public void setEmployeeRole(String employeeRole) {this.employeeRole = employeeRole;}
+
+    public String getEmployeeDepartment() {return employeeDepartment;}
+    public void setEmployeeDepartment(String employeeDepartment) {this.employeeDepartment = employeeDepartment;}
+
+    public String getEmployeeDOB() {return employeeDOB;}
+    public void setEmployeeDOB(String employeeDOB) {this.employeeDOB = employeeDOB;}
+
+    public String getEmployeeGender() {return employeeGender;}
+    public void setEmployeeGender(String employeeGender) {this.employeeGender = employeeGender;}
+
+    public String getEmployeeHpNumber() {return employeeHpNumber;}
+    public void setEmployeeHpNumber(String employeeHpNumber) {this.employeeHpNumber = employeeHpNumber;}
+
+    public boolean isEmployeeLockOut() {return employeeLockOut;}
+    public void setEmployeeLockOut(boolean employeeLockOut) {this.employeeLockOut = employeeLockOut;}
+
+    public boolean isEmployeeAccountActivate() {return employeeAccountActivate;}
+    public void setEmployeeAccountActivate(boolean employeeAccountActivate) {this.employeeAccountActivate = employeeAccountActivate;}
+         
     
-    
-    @Override
+@Override
     public int hashCode() {
         int hash = 0;
-        hash += (staffID != null ? staffID.hashCode() : 0);
+        hash += (employeeID != null ? employeeID.hashCode() : 0);
         return hash;
     }
 
@@ -102,7 +84,7 @@ public class Employee implements Serializable {
             return false;
         }
         Employee other = (Employee) object;
-        if ((this.staffID == null && other.staffID != null) || (this.staffID != null && !this.staffID.equals(other.staffID))) {
+        if ((this.employeeID == null && other.employeeID != null) || (this.employeeID != null && !this.employeeID.equals(other.employeeID))) {
             return false;
         }
         return true;
@@ -110,7 +92,7 @@ public class Employee implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.Employee[ id=" + staffID + " ]";
+        return "entity.Employee[ id=" + employeeID + " ]";
     }
     
 }
