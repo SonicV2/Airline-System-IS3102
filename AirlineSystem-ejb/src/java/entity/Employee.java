@@ -19,21 +19,79 @@ import javax.persistence.Id;
 public class Employee implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private String staffID; //staff ID will be NRIC of employee
+    
+    private String name;
+    private String displayName;
 
-    public Long getId() {
-        return id;
+    public String getStaffID() {
+        return staffID;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setStaffID(String staffID) {
+        this.staffID = staffID;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getHpNumber() {
+        return hpNumber;
+    }
+
+    public void setHpNumber(String hpNumber) {
+        this.hpNumber = hpNumber;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+    private String role;
+    private String password;
+    private String hpNumber;
+    private String department;
+    
+    
+    
+    
+    
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += (staffID != null ? staffID.hashCode() : 0);
         return hash;
     }
 
@@ -44,7 +102,7 @@ public class Employee implements Serializable {
             return false;
         }
         Employee other = (Employee) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((this.staffID == null && other.staffID != null) || (this.staffID != null && !this.staffID.equals(other.staffID))) {
             return false;
         }
         return true;
@@ -52,7 +110,7 @@ public class Employee implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.Employee[ id=" + id + " ]";
+        return "entity.Employee[ id=" + staffID + " ]";
     }
     
 }
