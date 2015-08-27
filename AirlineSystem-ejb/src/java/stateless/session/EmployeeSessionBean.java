@@ -13,6 +13,9 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
      public void addEmployee(String employeeID,String employeeName,String employeeDisplayName,
                                 String  employeeRole,String employeeDepartment,String employeeDOB,
                                 String employeeGender,String employeeHpNumber){
+        
+         
+         
         Employee employee=new Employee();
         employee.createEmployee(employeeID,employeeName,employeeDisplayName,employeeRole,employeeDepartment,
                 employeeDOB,employeeGender,employeeHpNumber);

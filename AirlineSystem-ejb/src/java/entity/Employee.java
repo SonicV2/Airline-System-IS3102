@@ -17,7 +17,7 @@ public class Employee implements Serializable {
     private String employeeDisplayName;
     private String employeePassword;
     
-    private String  employeeRole;
+    private String employeeRole;
     private String employeeDepartment;
     
     private String employeeDOB;
@@ -30,9 +30,18 @@ public class Employee implements Serializable {
      public void createEmployee(String employeeID,String employeeName,String employeeDisplayName,
                                 String  employeeRole,String employeeDepartment,String employeeDOB,
                                 String employeeGender,String employeeHpNumber){
-        employeePassword="password";
-        employeeAccountActivate=false;
-        employeeLockOut=false;
+        this.employeeID=employeeID;
+        this.employeeName=employeeName;
+        this.employeeDisplayName=employeeDisplayName;
+        this.employeeRole=employeeRole;
+        this.employeeDepartment=employeeDepartment;
+        this.employeeDOB=employeeDOB;
+        this.employeeGender=employeeGender;
+        this.employeeHpNumber=employeeHpNumber;
+        
+        this.employeePassword="password";
+        this.employeeAccountActivate=false;
+        this.employeeLockOut=false;
         
     }
      

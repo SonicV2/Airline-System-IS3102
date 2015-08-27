@@ -9,15 +9,30 @@
         <h1>Welcome to Employee Management Page</h1>
          <h:form>
             <h:outputLabel value="Employee ID: " style="font-weight:bold" />
-            <h:inputText value="" />
+            <h:inputText value="#{employeeManageBean.employeeID}" />
             <br/>
             <h:outputLabel value="Employee Name: " style="font-weight:bold" />
-            <h:inputText value="" />
-            
-    
-            
-       
-            <h:commandButton value="Login" />
+            <h:inputText value="#{employeeManageBean.employeeName}" />
+            <br/>
+            <h:outputLabel value="employeeDisplayName: " style="font-weight:bold" />
+            <h:inputText value="#{employeeManageBean.employeeDisplayName}" />
+            <br/>
+            <h:outputLabel value="employeeRole: " style="font-weight:bold" />
+            <h:inputText value="#{employeeManageBean.employeeRole}" />
+            <br/>
+            <h:outputLabel value="employeeDepartment: " style="font-weight:bold" />
+            <h:inputText value="#{employeeManageBean.employeeDepartment}" />
+            <br/>
+            <h:outputLabel value="employeeDOB: " style="font-weight:bold" />
+            <h:inputText value="#{employeeManageBean.employeeDOB}" />
+            <br/>
+            <h:outputLabel value="employeeGender: " style="font-weight:bold" />
+            <h:inputText value="#{employeeManageBean.employeeGender}" />
+            <br/>
+            <h:outputLabel value="employeeHpNumber: " style="font-weight:bold" />
+            <h:inputText value="#{employeeManageBean.employeeHpNumber}" />
+            <br/>
+            <h:commandButton value="Login" actionListener="#{employeeManageBean.addEmployee}"/>
         </h:form>
         
     </h:body>
