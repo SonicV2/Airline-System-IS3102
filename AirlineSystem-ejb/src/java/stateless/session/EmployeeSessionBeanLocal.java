@@ -5,6 +5,8 @@
  */
 package stateless.session;
 
+import entity.Employee;
+import java.util.Date;
 import javax.ejb.Local;
 
 /**
@@ -14,7 +16,9 @@ import javax.ejb.Local;
 @Local
 public interface EmployeeSessionBeanLocal {
     
-    public void addEmployee(String employeeID,String employeeName,String employeeDisplayName,
-                                String  employeeRole,String employeeDepartment,String employeeDOB,
-                                String employeeGender,String employeeHpNumber);
+    public void addEmployee(String employeeDisplayFirstName,String employeeDisplayLastName,
+                                String  employeeRole,String employeeDepartment,Date employeeDOB,
+                                String employeeGender,String employeeHpNumber,String employeeMailingAddress);
+    
+    public Employee getEmployee(String employeeID);
 }

@@ -1,5 +1,6 @@
 package managedbean;
 
+import java.util.Date;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
@@ -21,20 +22,25 @@ public class EmployeeManageBean {
     
     String employeeID;
     String employeeName;
-    String employeeDisplayName;
-    String  employeeRole;
+    String employeeDisplayFirstName;
+    String employeeDisplayLastName;
+    String employeeRole;
     String employeeDepartment;
-    String employeeDOB;
+    Date employeeDOB=new Date();
     String employeeGender;
     String employeeHpNumber;
-    
+    String employeeMailingAddress;
+
+   
     
     public EmployeeManageBean() {
     }
     
     
     public void addEmployee(ActionEvent event){
-        employeeSessionBean.addEmployee(employeeID, employeeName, employeeDisplayName, employeeRole, employeeDepartment, employeeDOB, employeeGender, employeeHpNumber);
+        employeeSessionBean.addEmployee(employeeDisplayFirstName,employeeDisplayLastName,employeeRole, 
+                                        employeeDepartment, employeeDOB, employeeGender, employeeHpNumber,
+                                        employeeMailingAddress);
     
     }
     
@@ -44,6 +50,24 @@ public class EmployeeManageBean {
         this.employeeSessionBean = employeeSessionBean;
     }
 
+    
+     public String getEmployeeDisplayLastName() {
+        return employeeDisplayLastName;
+    }
+
+    public void setEmployeeDisplayLastName(String employeeDisplayLastName) {
+        this.employeeDisplayLastName = employeeDisplayLastName;
+    }
+
+    public String getEmployeeMailingAddress() {
+        return employeeMailingAddress;
+    }
+
+    public void setEmployeeMailingAddress(String employeeMailingAddress) {
+        this.employeeMailingAddress = employeeMailingAddress;
+    }
+    
+    
     public String getEmployeeID() {
         return employeeID;
     }
@@ -60,12 +84,12 @@ public class EmployeeManageBean {
         this.employeeName = employeeName;
     }
 
-    public String getEmployeeDisplayName() {
-        return employeeDisplayName;
+    public String getEmployeeDisplayFirstName() {
+        return employeeDisplayFirstName;
     }
 
-    public void setEmployeeDisplayName(String employeeDisplayName) {
-        this.employeeDisplayName = employeeDisplayName;
+    public void setEmployeeDisplayFirstName(String employeeDisplayFirstName) {
+        this.employeeDisplayFirstName = employeeDisplayFirstName;
     }
 
     public String getEmployeeRole() {
@@ -84,11 +108,11 @@ public class EmployeeManageBean {
         this.employeeDepartment = employeeDepartment;
     }
 
-    public String getEmployeeDOB() {
+    public Date getEmployeeDOB() {
         return employeeDOB;
     }
 
-    public void setEmployeeDOB(String employeeDOB) {
+    public void setEmployeeDOB(Date employeeDOB) {
         this.employeeDOB = employeeDOB;
     }
 

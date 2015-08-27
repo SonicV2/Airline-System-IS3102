@@ -2,57 +2,98 @@ package entity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 public class Employee implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    private String employeeID; //staff ID will be NRIC of employee
-    private String employeeName;
-    private String employeeDisplayName;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long employeeID; //Auto generate by system
+    private String employeeUserName; // will be log-in name
+    private String employeeDisplayFirstName; //employee's actual name
+    private String employeeDisplayLastName;
+
+   
     private String employeePassword;
+    
+    private String employeeEmailAddress; //company email 
+    private String employeeMailingAddress;
     
     private String employeeRole;
     private String employeeDepartment;
     
-    private String employeeDOB;
+    @Temporal(TemporalType.DATE)
+    private Date employeeDOB;
+    
     private String employeeGender;
     private String employeeHpNumber;
     
     private boolean employeeLockOut;
     private boolean employeeAccountActivate;
     
-     public void createEmployee(String employeeID,String employeeName,String employeeDisplayName,
-                                String  employeeRole,String employeeDepartment,String employeeDOB,
-                                String employeeGender,String employeeHpNumber){
-        this.employeeID=employeeID;
-        this.employeeName=employeeName;
-        this.employeeDisplayName=employeeDisplayName;
+     
+    
+    
+    public void createEmployee(String employeeDisplayFirstName,String employeeDisplayLastName,
+                                String  employeeRole,String employeeDepartment,Date employeeDOB,
+                                String employeeGender,String employeeHpNumber,String employeeMailingAddress){
+      
+        //employeeDOB=new Date();
+        this.employeeDisplayFirstName=employeeDisplayFirstName;
+        this.employeeDisplayLastName=employeeDisplayLastName;
         this.employeeRole=employeeRole;
         this.employeeDepartment=employeeDepartment;
         this.employeeDOB=employeeDOB;
         this.employeeGender=employeeGender;
         this.employeeHpNumber=employeeHpNumber;
+        this.employeeMailingAddress=employeeMailingAddress;
         
         this.employeePassword="password";
         this.employeeAccountActivate=false;
         this.employeeLockOut=false;
         
     }
-     
-    public String getEmployeeID() {return employeeID; }
-    public void setEmployeeID(String employeeID) {this.employeeID = employeeID;}
+    
+     public String getEmployeeDisplayLastName() {
+        return employeeDisplayLastName;
+    }
 
-    public String getEmployeeName() {return employeeName;}
-    public void setEmployeeName(String employeeName) {this.employeeName = employeeName;}
+    public void setEmployeeDisplayLastName(String employeeDisplayLastName) {
+        this.employeeDisplayLastName = employeeDisplayLastName;
+    }
+    
+    public String getEmployeeEmailAddress() {
+        return employeeEmailAddress;
+    }
 
-    public String getEmployeeDisplayName() {return employeeDisplayName;}
-    public void setEmployeeDisplayName(String employeeDisplayName) {this.employeeDisplayName = employeeDisplayName;}
+    public void setEmployeeEmailAddress(String employeeEmailAddress) {
+        this.employeeEmailAddress = employeeEmailAddress;
+    }
+
+    public String getEmployeeMailingAddress() {
+        return employeeMailingAddress;
+    }
+
+    public void setEmployeeMailingAddress(String employeeMailingAddress) {
+        this.employeeMailingAddress = employeeMailingAddress;
+    }
+    
+    public Long getEmployeeID() {return employeeID; }
+    public void setEmployeeID(Long employeeID) {this.employeeID = employeeID;}
+
+    public String getEmployeeUserName() {return employeeUserName;}
+    public void setEmployeeUserName(String employeeUserName) {this.employeeUserName = employeeUserName;}
+
+    public String getEmployeeDisplayFirstName() {return employeeDisplayFirstName;}
+    public void setEmployeeDisplayFirstName(String employeeDisplayFirstName) {this.employeeDisplayFirstName = employeeDisplayFirstName;}
 
     public String getEmployeePassword() {return employeePassword;}
     public void setEmployeePassword(String employeePassword) {this.employeePassword = employeePassword;}
@@ -63,8 +104,8 @@ public class Employee implements Serializable {
     public String getEmployeeDepartment() {return employeeDepartment;}
     public void setEmployeeDepartment(String employeeDepartment) {this.employeeDepartment = employeeDepartment;}
 
-    public String getEmployeeDOB() {return employeeDOB;}
-    public void setEmployeeDOB(String employeeDOB) {this.employeeDOB = employeeDOB;}
+    public Date getEmployeeDOB() {return employeeDOB;}
+    public void setEmployeeDOB(Date employeeDOB) {this.employeeDOB = employeeDOB;}
 
     public String getEmployeeGender() {return employeeGender;}
     public void setEmployeeGender(String employeeGender) {this.employeeGender = employeeGender;}
