@@ -21,4 +21,6 @@ public interface EmployeeSessionBeanLocal {
                                 String employeeGender,String employeeHpNumber,String employeeMailingAddress);
     
     public Employee getEmployee(String employeeID);
+    
+    public String generateUserName(String employeeFirstName, String employeeLastName);
 }
