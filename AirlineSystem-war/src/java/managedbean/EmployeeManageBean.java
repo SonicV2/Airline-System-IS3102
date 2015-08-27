@@ -26,7 +26,7 @@ public class EmployeeManageBean {
     String employeeDisplayLastName;
     String employeeRole;
     String employeeDepartment;
-    Date employeeDOB=new Date();
+    Date employeeDOB;
     String employeeGender;
     String employeeHpNumber;
     String employeeMailingAddress;
