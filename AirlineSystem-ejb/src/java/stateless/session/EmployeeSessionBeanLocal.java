@@ -17,10 +17,12 @@ import javax.ejb.Local;
 public interface EmployeeSessionBeanLocal {
     
     public void addEmployee(String employeeID,String employeeDisplayFirstName,String employeeDisplayLastName,
-                                String  employeeRole,String employeeDepartment,Date employeeDOB,
-                                String employeeGender,String employeeHpNumber,String employeeMailingAddress);
+                            String  employeeRole,String employeeDepartment,Date employeeDOB,
+                            String employeeGender,String employeeHpNumber,String employeeMailingAddress,
+                            String employeeOfficeNumber);
     
     public Employee getEmployee(String employeeUserName);
+    public Employee getEmployeeUseID(String employeeID); //get employee by using ID
     
     public String generateUserName(String employeeFirstName, String employeeLastName);
 }

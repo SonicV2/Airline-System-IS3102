@@ -19,11 +19,11 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
     @Override
     public void addEmployee(String employeeID,String employeeDisplayFirstName, String employeeDisplayLastName,
             String employeeRole, String employeeDepartment, Date employeeDOB,
-            String employeeGender, String employeeHpNumber, String employeeMailingAddress) {
+            String employeeGender, String employeeHpNumber, String employeeMailingAddress,String employeeOfficeNumber) {
 
         Employee employee = new Employee();
         employee.createEmployee( employeeID,employeeDisplayFirstName, employeeDisplayLastName, employeeRole, employeeDepartment,
-                employeeDOB, employeeGender, employeeHpNumber, employeeMailingAddress);
+                employeeDOB, employeeGender, employeeHpNumber, employeeMailingAddress,employeeOfficeNumber);
        
         String userName = generateUserName(employeeDisplayFirstName, employeeDisplayLastName);
         employee.setEmployeeUserName(userName);
@@ -32,8 +32,9 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
         em.persist(employee);
 
     }
-
-    @Override
+ 
+//get employee by using UserName
+    @Override  
     public Employee getEmployee(String employeeUserName) {
         Employee employee=new Employee();
         try{
@@ -46,17 +47,34 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
             employee = (Employee)results.get(0);
             
         }else employee=null;
-            
-            
-            
-            //employee=(Employee)q.getSingleResult();
-            
+
         }catch(EntityNotFoundException enfe){
             System.out.println("\nEntity not found error" + "enfe.getMessage()");
         }
         return employee;
     }
 
+// Get employee by using ID
+    @Override  
+    public Employee getEmployeeUseID(String employeeID) {
+        Employee employee=new Employee();
+        try{
+            
+            Query q=em.createQuery("SELECT a FROM Employee " + "AS a WHERE a.employeeID=:id");
+            q.setParameter("id", employeeID);
+            
+            List results=q.getResultList();
+            if (!results.isEmpty()){
+            employee = (Employee)results.get(0);
+            
+        }else employee=null;
+            
+        }catch(EntityNotFoundException enfe){
+            System.out.println("\nEntity not found error" + "enfe.getMessage()");
+        }
+        return employee;
+    }
+    
 //    System generates user name for new employee
     @Override
     public String generateUserName(String employeeFirstName, String employeeLastName) {

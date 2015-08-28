@@ -82,19 +82,8 @@
               <h:inputText class="form-control" value="#{employeeManageBean.employeeDisplayLastName}" />
               </div>
             </div>
-              <div class="form-group">
-              <h:outputLabel value="Role: " class="col-md-4 control-label" />
-              <div class="col-md-8">
-              <h:inputText class="form-control" value="#{employeeManageBean.employeeRole}" />
-              </div>
-            </div>
-            <div class="form-group">
-              <h:outputLabel value="Department: " class="col-md-4 control-label" />
-              <div class="col-md-8">
-              <h:inputText class="form-control" value="#{employeeManageBean.employeeDepartment}" />
-              </div>
-            </div>
-            <div class="form-group">
+            
+             <div class="form-group">
               <h:outputLabel value="Date of Birth: " class="col-md-4 control-label" />
               <div class="col-md-8">
               <p:calendar id="button" value="#{employeeManageBean.employeeDOB}" showOn="button"/>
@@ -102,26 +91,49 @@
               </div>
             </div>
             
-              <div class="form-group">
+            <div class="form-group">
               <h:outputLabel value="Gender: " class="col-md-4 control-label" />
               <div class="col-md-8">
               <h:inputText class="form-control" value="#{employeeManageBean.employeeGender}" />
               </div>
             </div>
-              <div class="form-group">
+              
+            <div class="form-group">
+              <h:outputLabel value="Role: " class="col-md-4 control-label" />
+              <div class="col-md-8">
+              <h:inputText class="form-control" value="#{employeeManageBean.employeeRole}" />
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <h:outputLabel value="Department: " class="col-md-4 control-label" />
+              <div class="col-md-8">
+              <h:inputText class="form-control" value="#{employeeManageBean.employeeDepartment}" />
+              </div>
+            </div>
+           
+            <div class="form-group">
               <h:outputLabel value="Mobile Number: " class="col-md-4 control-label" />
               <div class="col-md-8">
               <h:inputText class="form-control" value="#{employeeManageBean.employeeHpNumber}" />
               </div>
             </div>
-              <div class="form-group">
+              
+            <div class="form-group">
+              <h:outputLabel value="Office Number: " class="col-md-4 control-label" />
+              <div class="col-md-8">
+              <h:inputText class="form-control" value="#{employeeManageBean.employeeOfficeNumber}" />
+              </div>
+            </div>
+              
+            <div class="form-group">
               <h:outputLabel value="Mailing Address: " class="col-md-4 control-label" />
               <div class="col-md-8">
               <h:inputText class="form-control" value="#{employeeManageBean.employeeMailingAddress}" />
               </div>
             </div>
               <div class="form-group">
-                <h:commandButton class="btn btn-primary btn-md btn-block" value="Save Information" actionListener="#{employeeManageBean.addEmployee}"/>
+                <h:commandButton class="btn btn-primary btn-md btn-block" value="Save Information" actionListener="#{employeeManageBean.addEmployee}" action="employeeInformation"/>
                 </div>
           </h:form>
         </div>
