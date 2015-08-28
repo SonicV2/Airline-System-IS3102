@@ -9,7 +9,7 @@
         <meta charset="utf-8" />
         <meta name="viewport" content ="width=device-width, initial-scale=1"/>
         <meta http-equiv="X-UA-Compatible" content="IE-edge" />
-        
+
         <h:outputStylesheet library ="css" name="bootstrap.css" />
         <title>Facelet Title</title>
         <style>
@@ -19,127 +19,127 @@
                 max-width: 80%;
             }
             .ui-inputfield {
-            margin: 0;
-            outline: medium none;
-            padding: 4px;
-            font-weight: normal;
-            height: 34px;
-            padding: 6px 12px;
-            font-size: 14px;
-            line-height: 1.42857143;
-            color: #555;
-            background-color: #fff;
-            background-image: none;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
-            box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
-            -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
-            -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-            transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-        }
-        
-        input[type="submit"].btn-block, input[type="reset"].btn-block, input[type="button"].btn-block {
-        width: 70%;
-        margin: auto;
-    
-        }
+                margin: 0;
+                outline: medium none;
+                padding: 4px;
+                font-weight: normal;
+                height: 34px;
+                padding: 6px 12px;
+                font-size: 14px;
+                line-height: 1.42857143;
+                color: #555;
+                background-color: #fff;
+                background-image: none;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+                box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+                -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+                -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+                transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+            }
+
+            input[type="submit"].btn-block, input[type="reset"].btn-block, input[type="button"].btn-block {
+                width: 70%;
+                margin: auto;
+
+            }
         </style>
-        
-        
+
+
     </h:head>
     <h:body>
-        
+
         <h3 class="text-center">Welcome to Employee Management Page</h3>
         <br></br>
         <br></br>
-        
+
         <div class="row">
-    <div class="col-md-8 col-sm-8 col-xs-8">
-      <div class="panel panel-default">
-        <div class="panel-heading clearfix">
-          <i class="icon-calendar"></i>
-          <h3 class="panel-title">Please Enter Employee Information</h3>
-        </div>
-       
-        <div class="panel-body">
-          <h:form class="form-horizontal row-border" >
-            <div class="form-group">
-              <h:outputLabel value="NRIC Number: " class="col-md-4 control-label" />
-              <div class="col-md-8">
-              <h:inputText class="form-control" value="#{employeeManageBean.employeeID}" />
-              </div>
-            </div>
-            <div class="form-group">
-              <h:outputLabel value="First Name: " class="col-md-4 control-label" />
-              <div class="col-md-8">
-              <h:inputText class="form-control" value="#{employeeManageBean.employeeDisplayFirstName}" />
-              </div>
-            </div>
-            <div class="form-group">
-              <h:outputLabel value="Last Name: " class="col-md-4 control-label" />
-              <div class="col-md-8">
-              <h:inputText class="form-control" value="#{employeeManageBean.employeeDisplayLastName}" />
-              </div>
-            </div>
-            
-             <div class="form-group">
-              <h:outputLabel value="Date of Birth: " class="col-md-4 control-label" />
-              <div class="col-md-8">
-              <p:calendar id="button" value="#{employeeManageBean.employeeDOB}" showOn="button"/>
-              <!--<h:inputText class="form-control" value="#{employeeManageBean.employeeDOB}" />-->
-              </div>
-            </div>
-            
-            <div class="form-group">
-              <h:outputLabel value="Gender: " class="col-md-4 control-label" />
-              <div class="col-md-8">
-              <h:inputText class="form-control" value="#{employeeManageBean.employeeGender}" />
-              </div>
-            </div>
-              
-            <div class="form-group">
-              <h:outputLabel value="Role: " class="col-md-4 control-label" />
-              <div class="col-md-8">
-              <h:inputText class="form-control" value="#{employeeManageBean.employeeRole}" />
-              </div>
-            </div>
-            
-            <div class="form-group">
-              <h:outputLabel value="Department: " class="col-md-4 control-label" />
-              <div class="col-md-8">
-              <h:inputText class="form-control" value="#{employeeManageBean.employeeDepartment}" />
-              </div>
-            </div>
-           
-            <div class="form-group">
-              <h:outputLabel value="Mobile Number: " class="col-md-4 control-label" />
-              <div class="col-md-8">
-              <h:inputText class="form-control" value="#{employeeManageBean.employeeHpNumber}" />
-              </div>
-            </div>
-              
-            <div class="form-group">
-              <h:outputLabel value="Office Number: " class="col-md-4 control-label" />
-              <div class="col-md-8">
-              <h:inputText class="form-control" value="#{employeeManageBean.employeeOfficeNumber}" />
-              </div>
-            </div>
-              
-            <div class="form-group">
-              <h:outputLabel value="Mailing Address: " class="col-md-4 control-label" />
-              <div class="col-md-8">
-              <h:inputText class="form-control" value="#{employeeManageBean.employeeMailingAddress}" />
-              </div>
-            </div>
-              <div class="form-group">
-                <h:commandButton class="btn btn-primary btn-md btn-block" value="Save Information" actionListener="#{employeeManageBean.addEmployee}" action="employeeInformation"/>
+            <div class="col-md-8 col-sm-8 col-xs-8">
+                <div class="panel panel-default">
+                    <div class="panel-heading clearfix">
+                        <i class="icon-calendar"></i>
+                        <h3 class="panel-title">Please Enter Employee Information</h3>
+                    </div>
+
+                    <div class="panel-body">
+                        <h:form class="form-horizontal row-border" >
+                            <div class="form-group">
+                                <h:outputLabel value="NRIC Number: " class="col-md-4 control-label" />
+                                <div class="col-md-8">
+                                    <h:inputText class="form-control" value="#{employeeManageBean.employeeID}" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <h:outputLabel value="First Name: " class="col-md-4 control-label" />
+                                <div class="col-md-8">
+                                    <h:inputText class="form-control" value="#{employeeManageBean.employeeDisplayFirstName}" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <h:outputLabel value="Last Name: " class="col-md-4 control-label" />
+                                <div class="col-md-8">
+                                    <h:inputText class="form-control" value="#{employeeManageBean.employeeDisplayLastName}" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <h:outputLabel value="Date of Birth: " class="col-md-4 control-label" />
+                                <div class="col-md-8">
+                                    <p:calendar id="button" value="#{employeeManageBean.employeeDOB}" showOn="button"/>
+                                    <!--<h:inputText class="form-control" value="#{employeeManageBean.employeeDOB}" />-->
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <h:outputLabel value="Gender: " class="col-md-4 control-label" />
+                                <div class="col-md-8">
+                                    <h:inputText class="form-control" value="#{employeeManageBean.employeeGender}" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <h:outputLabel value="Role: " class="col-md-4 control-label" />
+                                <div class="col-md-8">
+                                    <h:inputText class="form-control" value="#{employeeManageBean.employeeRole}" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <h:outputLabel value="Department: " class="col-md-4 control-label" />
+                                <div class="col-md-8">
+                                    <h:inputText class="form-control" value="#{employeeManageBean.employeeDepartment}" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <h:outputLabel value="Mobile Number: " class="col-md-4 control-label" />
+                                <div class="col-md-8">
+                                    <h:inputText class="form-control" value="#{employeeManageBean.employeeHpNumber}" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <h:outputLabel value="Office Number: " class="col-md-4 control-label" />
+                                <div class="col-md-8">
+                                    <h:inputText class="form-control" value="#{employeeManageBean.employeeOfficeNumber}" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <h:outputLabel value="Mailing Address: " class="col-md-4 control-label" />
+                                <div class="col-md-8">
+                                    <h:inputText class="form-control" value="#{employeeManageBean.employeeMailingAddress}" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <h:commandButton class="btn btn-primary btn-md btn-block" value="Save Information" actionListener="#{employeeManageBean.addEmployee}" action="employeeInformation"/>
+                            </div>
+                        </h:form>
+                    </div>
                 </div>
-          </h:form>
-        </div>
-      </div>
-    </div>
-  </div>  
+            </div>
+        </div>  
     </h:body>
 </html>
 

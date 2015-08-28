@@ -9,18 +9,18 @@ import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import stateless.session.EmployeeSessionBeanLocal;
 
-
 @ManagedBean
 @RequestScoped
-@Named(value="employeeManageBean")
+@Named(value = "employeeManageBean")
 public class EmployeeManageBean {
+
     @EJB
     private EmployeeSessionBeanLocal employeeSessionBean;
 
     public EmployeeSessionBeanLocal getEmployeeSessionBean() {
         return employeeSessionBean;
     }
-    
+
     String employeeID;
     String employeeUserName;
     String employeeDisplayFirstName;
@@ -32,39 +32,34 @@ public class EmployeeManageBean {
     String employeeHpNumber;
     String employeeMailingAddress;
     String employeeOfficeNumber;
-    
     String employeeEmailAddress;
-
-   
-   
-    
     Employee employee;
-    
+
     public EmployeeManageBean() {
     }
-    
-    public void addEmployee(ActionEvent event){
-        employeeSessionBean.addEmployee(employeeID,employeeDisplayFirstName,employeeDisplayLastName,employeeRole, 
-                                        employeeDepartment, employeeDOB, employeeGender, employeeHpNumber,
-                                        employeeMailingAddress,employeeOfficeNumber);
-    
-        employee=getEmployee(employeeID);
-        employeeUserName=employee.getEmployeeUserName();
-        employeeEmailAddress=employee.getEmployeeEmailAddress();
+
+    public void addEmployee(ActionEvent event) {
+        employeeSessionBean.addEmployee(employeeID, employeeDisplayFirstName, employeeDisplayLastName, employeeRole,
+                employeeDepartment, employeeDOB, employeeGender, employeeHpNumber,
+                employeeMailingAddress, employeeOfficeNumber);
+
+        employee = getEmployee(employeeID); //in order to get the employeeUserName and email which is generated after the creation of employee
         
+        employeeUserName = employee.getEmployeeUserName();
+        employeeEmailAddress = employee.getEmployeeEmailAddress();
+
     }
-    
-    public Employee getEmployee(String employeeID){
-        employee=employeeSessionBean.getEmployeeUseID(employeeID);
+
+    public Employee getEmployee(String employeeID) {
+        Employee employee = employeeSessionBean.getEmployeeUseID(employeeID);
         return employee;
     }
-    
+
     public void setEmployeeSessionBean(EmployeeSessionBeanLocal employeeSessionBean) {
         this.employeeSessionBean = employeeSessionBean;
     }
 
-    
-     public String getEmployeeDisplayLastName() {
+    public String getEmployeeDisplayLastName() {
         return employeeDisplayLastName;
     }
 
@@ -79,8 +74,7 @@ public class EmployeeManageBean {
     public void setEmployeeMailingAddress(String employeeMailingAddress) {
         this.employeeMailingAddress = employeeMailingAddress;
     }
-    
-    
+
     public String getEmployeeID() {
         return employeeID;
     }
@@ -144,14 +138,16 @@ public class EmployeeManageBean {
     public void setEmployeeHpNumber(String employeeHpNumber) {
         this.employeeHpNumber = employeeHpNumber;
     }
-     public String getEmployeeOfficeNumber() {
+
+    public String getEmployeeOfficeNumber() {
         return employeeOfficeNumber;
     }
 
     public void setEmployeeOfficeNumber(String employeeOfficeNumber) {
         this.employeeOfficeNumber = employeeOfficeNumber;
     }
-     public String getEmployeeEmailAddress() {
+
+    public String getEmployeeEmailAddress() {
         return employeeEmailAddress;
     }
 
