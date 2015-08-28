@@ -5,12 +5,14 @@ import java.util.Date;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.bean.SessionScoped;
 import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import stateless.session.EmployeeSessionBeanLocal;
 
 @ManagedBean
-@RequestScoped
+@SessionScoped
+//@RequestScoped
 @Named(value = "employeeManageBean")
 public class EmployeeManageBean {
 

@@ -5,6 +5,7 @@ import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.inject.Named;
@@ -12,7 +13,8 @@ import org.primefaces.context.RequestContext;
 import stateless.session.EmployeeSessionBeanLocal;
 
 @ManagedBean
-@RequestScoped
+//@RequestScoped
+@SessionScoped
 @Named(value="loginManageBean")
 public class LoginManageBean {
     @EJB
@@ -33,7 +35,7 @@ public class LoginManageBean {
        doLogin(employeeUserName,employeePassword);
         
         if(logInCheck==true) {
-            return "employeeDashBoard";
+            return "employeeDashBoard" + "?faces-redirect=true";
         } 
         RequestContext.getCurrentInstance().update("growl");
         FacesContext context=FacesContext.getCurrentInstance();
