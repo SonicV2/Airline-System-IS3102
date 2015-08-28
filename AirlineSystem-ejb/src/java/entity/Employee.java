@@ -39,12 +39,15 @@ public class Employee implements Serializable {
     private boolean employeeLockOut;
     private boolean employeeAccountActivate;
     
+    private String employeeOfficeNumber;
+
+   
      
     
     
     public void createEmployee(String employeeID,String employeeDisplayFirstName,String employeeDisplayLastName,
                                 String  employeeRole,String employeeDepartment,Date employeeDOB,
-                                String employeeGender,String employeeHpNumber,String employeeMailingAddress){
+                                String employeeGender,String employeeHpNumber,String employeeMailingAddress,String employeeOfficeNumber){
       
         
         this.employeeID=employeeID;
@@ -56,6 +59,7 @@ public class Employee implements Serializable {
         this.employeeGender=employeeGender;
         this.employeeHpNumber=employeeHpNumber;
         this.employeeMailingAddress=employeeMailingAddress;
+        this.employeeOfficeNumber=employeeOfficeNumber;
         
         this.employeePassword="password";
         this.employeeAccountActivate=false;
@@ -119,7 +123,14 @@ public class Employee implements Serializable {
 
     public boolean isEmployeeAccountActivate() {return employeeAccountActivate;}
     public void setEmployeeAccountActivate(boolean employeeAccountActivate) {this.employeeAccountActivate = employeeAccountActivate;}
-         
+    
+     public String getEmployeeOfficeNumber() {
+        return employeeOfficeNumber;
+    }
+
+    public void setEmployeeOfficeNumber(String employeeOfficeNumber) {
+        this.employeeOfficeNumber = employeeOfficeNumber;
+    }
     
 @Override
     public int hashCode() {

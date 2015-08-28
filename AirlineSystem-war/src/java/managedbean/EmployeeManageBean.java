@@ -1,5 +1,6 @@
 package managedbean;
 
+import entity.Employee;
 import java.util.Date;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
@@ -21,7 +22,7 @@ public class EmployeeManageBean {
     }
     
     String employeeID;
-    String employeeName;
+    String employeeUserName;
     String employeeDisplayFirstName;
     String employeeDisplayLastName;
     String employeeRole;
@@ -30,26 +31,33 @@ public class EmployeeManageBean {
     String employeeGender;
     String employeeHpNumber;
     String employeeMailingAddress;
+    String employeeOfficeNumber;
+    
+    String employeeEmailAddress;
 
    
+   
+    
+    Employee employee;
     
     public EmployeeManageBean() {
     }
     
-    public String test(){
-        return "index";
-    }
-    
-    
-    
     public void addEmployee(ActionEvent event){
         employeeSessionBean.addEmployee(employeeID,employeeDisplayFirstName,employeeDisplayLastName,employeeRole, 
                                         employeeDepartment, employeeDOB, employeeGender, employeeHpNumber,
-                                        employeeMailingAddress);
+                                        employeeMailingAddress,employeeOfficeNumber);
     
+        employee=getEmployee(employeeID);
+        employeeUserName=employee.getEmployeeUserName();
+        employeeEmailAddress=employee.getEmployeeEmailAddress();
+        
     }
     
-    
+    public Employee getEmployee(String employeeID){
+        employee=employeeSessionBean.getEmployeeUseID(employeeID);
+        return employee;
+    }
     
     public void setEmployeeSessionBean(EmployeeSessionBeanLocal employeeSessionBean) {
         this.employeeSessionBean = employeeSessionBean;
@@ -81,12 +89,12 @@ public class EmployeeManageBean {
         this.employeeID = employeeID;
     }
 
-    public String getEmployeeName() {
-        return employeeName;
+    public String getEmployeeUserName() {
+        return employeeUserName;
     }
 
-    public void setEmployeeName(String employeeName) {
-        this.employeeName = employeeName;
+    public void setEmployeeUserName(String employeeUserName) {
+        this.employeeUserName = employeeUserName;
     }
 
     public String getEmployeeDisplayFirstName() {
@@ -136,6 +144,18 @@ public class EmployeeManageBean {
     public void setEmployeeHpNumber(String employeeHpNumber) {
         this.employeeHpNumber = employeeHpNumber;
     }
-        
-    
+     public String getEmployeeOfficeNumber() {
+        return employeeOfficeNumber;
+    }
+
+    public void setEmployeeOfficeNumber(String employeeOfficeNumber) {
+        this.employeeOfficeNumber = employeeOfficeNumber;
+    }
+     public String getEmployeeEmailAddress() {
+        return employeeEmailAddress;
+    }
+
+    public void setEmployeeEmailAddress(String employeeEmailAddress) {
+        this.employeeEmailAddress = employeeEmailAddress;
+    }
 }
