@@ -30,12 +30,24 @@
                 margin: 30px 40px;
                 opacity: 0.9;
         }}
-        
         .modal-dialog {
         opacity: 0.9;
         }
-
         .modal-footer {   border-top: 0px; }
+        .ui-growl-image-error {
+            display: none;
+        }
+        .ui-growl-message {
+            padding: 0 0 5px 0;
+            width: 220px;
+            float: left;
+        }
+        .ui-growl-item {
+            background-color: #f84545;
+        }
+        .ui-growl {
+            width: initial;
+        }
         </style>
     </h:head>
 
@@ -52,9 +64,11 @@
                             <div class="form-group">
                                 
                                 <p:growl id="growl" sticky="true" showDetail="true"/>
+                               
                                 <p:outputLabel value="Employee Username: " />
                                 <p:inputText class="form-control input-lg" placeholder="Username" value="#{loginManageBean.employeeUserName}"  />
                                 <br/>
+                               
                              </div>
                             <div class="form-group">
                                 <p:outputLabel value="Password: " />
