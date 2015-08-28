@@ -49,14 +49,19 @@ public class LoginManageBean {
         
         employee=employeeSessionBean.getEmployee(employeeUserName);
         
-        if(employee==null){
-            doLogInMsg= "Invaild Employee Name!";
+        if(employeeUserName.equals("") && employeePassword.equals("") )
+        {
+            doLogInMsg= "Please Enter your User Name and Password!";
             logInCheck=false;
-        }else if(employee.getEmployeePassword().equals(employeePassword)){
-            doLogInMsg = employee.getEmployeeDisplayLastName();
-            logInCheck=true;
-        }else {doLogInMsg= "Invaild Password!";
+        }else{if(employee==null){
+                doLogInMsg= "Invaild Employee Name!";
                 logInCheck=false;
+            }else if(employee.getEmployeePassword().equals(employeePassword)){
+                doLogInMsg = employee.getEmployeeDisplayLastName();
+                logInCheck=true;
+            }else {doLogInMsg= "Invaild Password!";
+                    logInCheck=false;
+            }
         }
     }
     
