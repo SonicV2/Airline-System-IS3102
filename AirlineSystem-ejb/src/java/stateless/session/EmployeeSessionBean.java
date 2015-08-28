@@ -37,12 +37,22 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
     public Employee getEmployee(String employeeUserName) {
         Employee employee=new Employee();
         try{
+            
             Query q=em.createQuery("SELECT a FROM Employee " + "AS a WHERE a.employeeUserName=:userName");
             q.setParameter("userName", employeeUserName);
-            employee=(Employee)q.getSingleResult();
+            
+            List results=q.getResultList();
+            if (!results.isEmpty()){
+            employee = (Employee)results.get(0);
+            
+        }else employee=null;
+            
+            
+            
+            //employee=(Employee)q.getSingleResult();
+            
         }catch(EntityNotFoundException enfe){
             System.out.println("\nEntity not found error" + "enfe.getMessage()");
-            
         }
         return employee;
     }

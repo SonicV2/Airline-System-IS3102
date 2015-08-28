@@ -34,9 +34,11 @@ public class LoginManageBean {
         
         if(logInCheck==true) {
             return "employeeDashBoard";
-        } else {
-            return "loginFail";
-        }
+        } 
+        RequestContext.getCurrentInstance().update("growl");
+        FacesContext context=FacesContext.getCurrentInstance();
+        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,"LoginFail",doLogInMsg));
+        return "";
     }   
     
     
@@ -46,12 +48,12 @@ public class LoginManageBean {
         employee=employeeSessionBean.getEmployee(employeeUserName);
         
         if(employee==null){
-            doLogInMsg= "Employee not found!";
+            doLogInMsg= "Invaild Employee Name!";
             logInCheck=false;
         }else if(employee.getEmployeePassword().equals(employeePassword)){
             doLogInMsg = employee.getEmployeeDisplayLastName();
             logInCheck=true;
-        }else {doLogInMsg= "Invaild Password";
+        }else {doLogInMsg= "Invaild Password!";
                 logInCheck=false;
         }
     }
