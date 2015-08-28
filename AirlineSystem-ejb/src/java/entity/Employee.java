@@ -20,31 +20,21 @@ public class Employee implements Serializable {
     private String employeeUserName; // Unique User log-in name
     private String employeeDisplayFirstName; //employee's actual name
     private String employeeDisplayLastName;
-
-   
     private String employeePassword;
-    
-    private String employeeEmailAddress; //company email 
-    private String employeeMailingAddress;
-    
+    private String employeeEmailAddress; //company email @merlion.com.sg
+    private String employeeMailingAddress; 
     private String employeeRole;
     private String employeeDepartment;
-    
-    @Temporal(TemporalType.DATE)
-    private Date employeeDOB;
-    
     private String employeeGender;
     private String employeeHpNumber;
+    private String employeeOfficeNumber;
+    @Temporal(TemporalType.DATE)
+    private Date employeeDOB;
     
     private boolean employeeLockOut;
     private boolean employeeAccountActivate;
     
-    private String employeeOfficeNumber;
 
-   
-     
-    
-    
     public void createEmployee(String employeeID,String employeeDisplayFirstName,String employeeDisplayLastName,
                                 String  employeeRole,String employeeDepartment,Date employeeDOB,
                                 String employeeGender,String employeeHpNumber,String employeeMailingAddress,String employeeOfficeNumber){
