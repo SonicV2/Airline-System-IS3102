@@ -36,6 +36,11 @@ public class EmployeeManageBean {
     public EmployeeManageBean() {
     }
     
+    public String test(){
+        return "index";
+    }
+    
+    
     
     public void addEmployee(ActionEvent event){
         employeeSessionBean.addEmployee(employeeID,employeeDisplayFirstName,employeeDisplayLastName,employeeRole, 

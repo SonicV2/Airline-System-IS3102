@@ -46,16 +46,21 @@
                         <h:form class="form col-md-12 center-block">
                             <div class="form-group">
                                 <p:outputLabel value="Employee Username: " style="font-weight:bold" />
-                                <p:inputText class="form-control input-lg" placeholder="Username" value="#{employeeManageBean.employeeID}"  />
+                                <p:inputText class="form-control input-lg" placeholder="Username" value="#{loginManageBean.employeeUserName}"  />
                                 <br/>
                              </div>
                             <div class="form-group">
                                 <p:outputLabel value="Password: " style="font-weight:bold" />
-                                <p:inputText class="form-control input-lg" placeholder="Password" value="#{employeeManageBean.employeeName}" />
+                                <p:inputText class="form-control input-lg" placeholder="Password" value="#{loginManageBean.employeePassword}" />
                                 <br/>
                             </div>
                             <div class="form-group">
-                                <button class="btn btn-primary btn-lg btn-block">Sign In</button>
+                               
+                                     <p:commandButton class="btn btn-primary btn-lg btn-block" value="Login" action="#{loginManageBean.check}"/>
+                                
+                                
+                                
+<!--                                <button class="btn btn-primary btn-lg btn-block">Sign In</button>-->
                                 <!--<span class="pull-right"><a href="#">Register</a></span><span><a href="#">Need help?</a></span>-->
                             </div>
                         </h:form>

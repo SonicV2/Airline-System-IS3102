@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityNotFoundException;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -33,15 +34,15 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
     }
 
     @Override
-    public Employee getEmployee(String employeeID) {
-        Query query = em.createNamedQuery("SELECT e FROM Employee e WHERE e.employeeID=:inEmployeeID");
-        query.setParameter("inEmployeeID", employeeID);
-        Employee employee = null;
-
-        try {
-            employee = (Employee) query.getSingleResult();
-        } catch (NoResultException ex) {
-            ex.printStackTrace();
+    public Employee getEmployee(String employeeUserName) {
+        Employee employee=new Employee();
+        try{
+            Query q=em.createQuery("SELECT a FROM Employee " + "AS a WHERE a.employeeUserName=:userName");
+            q.setParameter("userName", employeeUserName);
+            employee=(Employee)q.getSingleResult();
+        }catch(EntityNotFoundException enfe){
+            System.out.println("\nEntity not found error" + "enfe.getMessage()");
+            
         }
         return employee;
     }
@@ -85,12 +86,8 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
                 userName = userName.substring(0, len) + i + "";
                 System.out.println(userName);
                 i++;
-            }
-
-            
+            }           
         }
         return userName;
-
     }
-
 }
