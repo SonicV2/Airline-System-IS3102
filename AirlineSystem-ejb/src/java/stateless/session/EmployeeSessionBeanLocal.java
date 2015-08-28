@@ -20,7 +20,7 @@ public interface EmployeeSessionBeanLocal {
                                 String  employeeRole,String employeeDepartment,Date employeeDOB,
                                 String employeeGender,String employeeHpNumber,String employeeMailingAddress);
     
-    public Employee getEmployee(String employeeID);
+    public Employee getEmployee(String employeeUserName);
     
     public String generateUserName(String employeeFirstName, String employeeLastName);
 }
