@@ -16,15 +16,18 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
     private EntityManager em;
 
     @Override
-    public void addEmployee(String employeeDisplayFirstName, String employeeDisplayLastName,
+    public void addEmployee(String employeeID,String employeeDisplayFirstName, String employeeDisplayLastName,
             String employeeRole, String employeeDepartment, Date employeeDOB,
             String employeeGender, String employeeHpNumber, String employeeMailingAddress) {
 
         Employee employee = new Employee();
-        employee.createEmployee(employeeDisplayFirstName, employeeDisplayLastName, employeeRole, employeeDepartment,
+        employee.createEmployee( employeeID,employeeDisplayFirstName, employeeDisplayLastName, employeeRole, employeeDepartment,
                 employeeDOB, employeeGender, employeeHpNumber, employeeMailingAddress);
+       
         String userName = generateUserName(employeeDisplayFirstName, employeeDisplayLastName);
         employee.setEmployeeUserName(userName);
+        
+        employee.setEmployeeEmailAddress(userName+"@merlion.com.sg");
         em.persist(employee);
 
     }
