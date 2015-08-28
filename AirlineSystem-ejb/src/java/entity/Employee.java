@@ -38,8 +38,7 @@ public class Employee implements Serializable {
     public void createEmployee(String employeeID,String employeeDisplayFirstName,String employeeDisplayLastName,
                                 String  employeeRole,String employeeDepartment,Date employeeDOB,
                                 String employeeGender,String employeeHpNumber,String employeeMailingAddress,String employeeOfficeNumber){
-      
-        
+    
         this.employeeID=employeeID;
         this.employeeDisplayFirstName=employeeDisplayFirstName;
         this.employeeDisplayLastName=employeeDisplayLastName;
@@ -51,7 +50,7 @@ public class Employee implements Serializable {
         this.employeeMailingAddress=employeeMailingAddress;
         this.employeeOfficeNumber=employeeOfficeNumber;
         
-        this.employeePassword="password";
+        this.employeePassword="password"; //set default password to 'password'
         this.employeeAccountActivate=false;
         this.employeeLockOut=false;
         
@@ -121,7 +120,7 @@ public class Employee implements Serializable {
     public void setEmployeeOfficeNumber(String employeeOfficeNumber) {
         this.employeeOfficeNumber = employeeOfficeNumber;
     }
-    
+/* ----------------System auto generated code, no need to modify---------------------*/   
 @Override
     public int hashCode() {
         int hash = 0;

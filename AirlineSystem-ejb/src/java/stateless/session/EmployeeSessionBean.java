@@ -18,12 +18,14 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
 
     @Override
     public void addEmployee(String employeeID,String employeeDisplayFirstName, String employeeDisplayLastName,
-            String employeeRole, String employeeDepartment, Date employeeDOB,
-            String employeeGender, String employeeHpNumber, String employeeMailingAddress,String employeeOfficeNumber) {
+                            String employeeRole, String employeeDepartment, Date employeeDOB,
+                            String employeeGender, String employeeHpNumber, String employeeMailingAddress,
+                            String employeeOfficeNumber) {
 
         Employee employee = new Employee();
-        employee.createEmployee( employeeID,employeeDisplayFirstName, employeeDisplayLastName, employeeRole, employeeDepartment,
-                employeeDOB, employeeGender, employeeHpNumber, employeeMailingAddress,employeeOfficeNumber);
+        employee.createEmployee(employeeID,employeeDisplayFirstName, employeeDisplayLastName, 
+                                employeeRole, employeeDepartment,employeeDOB, employeeGender, 
+                                employeeHpNumber, employeeMailingAddress,employeeOfficeNumber);
        
         String userName = generateUserName(employeeDisplayFirstName, employeeDisplayLastName);
         employee.setEmployeeUserName(userName);
@@ -44,9 +46,8 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
             
             List results=q.getResultList();
             if (!results.isEmpty()){
-            employee = (Employee)results.get(0);
-            
-        }else employee=null;
+                employee = (Employee)results.get(0);         
+            }else employee=null;
 
         }catch(EntityNotFoundException enfe){
             System.out.println("\nEntity not found error" + "enfe.getMessage()");
@@ -65,10 +66,9 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
             
             List results=q.getResultList();
             if (!results.isEmpty()){
-            employee = (Employee)results.get(0);
+                employee = (Employee)results.get(0);
             
-        }else employee=null;
-            
+            }else employee=null;      
         }catch(EntityNotFoundException enfe){
             System.out.println("\nEntity not found error" + "enfe.getMessage()");
         }
@@ -118,4 +118,8 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
         }
         return userName;
     }
+    
+    
+    
+    
 }
