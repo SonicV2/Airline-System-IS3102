@@ -23,8 +23,11 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
         Employee employee = new Employee();
         employee.createEmployee( employeeID,employeeDisplayFirstName, employeeDisplayLastName, employeeRole, employeeDepartment,
                 employeeDOB, employeeGender, employeeHpNumber, employeeMailingAddress);
+       
         String userName = generateUserName(employeeDisplayFirstName, employeeDisplayLastName);
         employee.setEmployeeUserName(userName);
+        
+        employee.setEmployeeEmailAddress(userName+"@merlion.com.sg");
         em.persist(employee);
 
     }

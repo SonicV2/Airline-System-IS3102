@@ -15,8 +15,8 @@ import javax.persistence.TemporalType;
 public class Employee implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    
     private String employeeID; //Unique identifier for user retrieve
+    
     private String employeeUserName; // will be log-in name
     private String employeeDisplayFirstName; //employee's actual name
     private String employeeDisplayLastName;
@@ -47,6 +47,7 @@ public class Employee implements Serializable {
                                 String employeeGender,String employeeHpNumber,String employeeMailingAddress){
       
         //employeeDOB=new Date();
+        this.employeeID=employeeID;
         this.employeeDisplayFirstName=employeeDisplayFirstName;
         this.employeeDisplayLastName=employeeDisplayLastName;
         this.employeeRole=employeeRole;
