@@ -38,7 +38,7 @@ public class EmployeeManageBean {
     
     
     public void addEmployee(ActionEvent event){
-        employeeSessionBean.addEmployee(employeeDisplayFirstName,employeeDisplayLastName,employeeRole, 
+        employeeSessionBean.addEmployee(employeeID,employeeDisplayFirstName,employeeDisplayLastName,employeeRole, 
                                         employeeDepartment, employeeDOB, employeeGender, employeeHpNumber,
                                         employeeMailingAddress);
     

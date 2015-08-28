@@ -10,7 +10,11 @@
         
         <h1>Welcome to Employee Management Page</h1>
          <h:form>
-             <h:outputLabel value="FirstName: " style="font-weight:bold" />
+            <h:outputLabel value="NRIC Number: " style="font-weight:bold" />
+            <h:inputText value="#{employeeManageBean.employeeID}" />
+            <br/>
+            
+            <h:outputLabel value="FirstName: " style="font-weight:bold" />
             <h:inputText value="#{employeeManageBean.employeeDisplayFirstName}" />
             <br/>
            

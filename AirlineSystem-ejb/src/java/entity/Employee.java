@@ -15,8 +15,8 @@ import javax.persistence.TemporalType;
 public class Employee implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long employeeID; //Auto generate by system
+    
+    private String employeeID; //Unique identifier for user retrieve
     private String employeeUserName; // will be log-in name
     private String employeeDisplayFirstName; //employee's actual name
     private String employeeDisplayLastName;
@@ -42,7 +42,7 @@ public class Employee implements Serializable {
      
     
     
-    public void createEmployee(String employeeDisplayFirstName,String employeeDisplayLastName,
+    public void createEmployee(String employeeID,String employeeDisplayFirstName,String employeeDisplayLastName,
                                 String  employeeRole,String employeeDepartment,Date employeeDOB,
                                 String employeeGender,String employeeHpNumber,String employeeMailingAddress){
       
@@ -86,8 +86,8 @@ public class Employee implements Serializable {
         this.employeeMailingAddress = employeeMailingAddress;
     }
     
-    public Long getEmployeeID() {return employeeID; }
-    public void setEmployeeID(Long employeeID) {this.employeeID = employeeID;}
+    public String getEmployeeID() {return employeeID; }
+    public void setEmployeeID(String employeeID) {this.employeeID = employeeID;}
 
     public String getEmployeeUserName() {return employeeUserName;}
     public void setEmployeeUserName(String employeeUserName) {this.employeeUserName = employeeUserName;}
