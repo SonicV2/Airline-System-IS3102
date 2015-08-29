@@ -49,6 +49,7 @@ public class EmployeeManageBean {
         
         employeeUserName = employee.getEmployeeUserName();
         employeeEmailAddress = employee.getEmployeeEmailAddress();
+        employeeSessionBean.hashPwd(employeeID);
 
     }
 

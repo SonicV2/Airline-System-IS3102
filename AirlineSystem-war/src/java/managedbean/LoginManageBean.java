@@ -56,7 +56,7 @@ public class LoginManageBean {
         }else{if(employee==null){
                 doLogInMsg= "Invaild Employee Name!";
                 logInCheck=false;
-            }else if(employee.getEmployeePassword().equals(employeePassword)){
+            }else if(employeeSessionBean.isSameHash(employeeUserName, employeePassword)){
                 doLogInMsg = employee.getEmployeeDisplayLastName();
                 logInCheck=true;
             }else {doLogInMsg= "Invaild Password!";

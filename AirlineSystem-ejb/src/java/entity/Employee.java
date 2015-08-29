@@ -1,28 +1,27 @@
 package entity;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
 public class Employee implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     private String employeeID; //Unique identifier for user retrieve
-    
+
     private String employeeUserName; // Unique User log-in name
     private String employeeDisplayFirstName; //employee's actual name
     private String employeeDisplayLastName;
     private String employeePassword;
     private String employeeEmailAddress; //company email @merlion.com.sg
-    private String employeeMailingAddress; 
+    private String employeeMailingAddress;
     private String employeeRole;
     private String employeeDepartment;
     private String employeeGender;
@@ -30,41 +29,42 @@ public class Employee implements Serializable {
     private String employeeOfficeNumber;
     @Temporal(TemporalType.DATE)
     private Date employeeDOB;
-    
+
     private boolean employeeLockOut;
     private boolean employeeAccountActivate;
-    
 
-    public void createEmployee(String employeeID,String employeeDisplayFirstName,String employeeDisplayLastName,
-                                String  employeeRole,String employeeDepartment,Date employeeDOB,
-                                String employeeGender,String employeeHpNumber,String employeeMailingAddress,String employeeOfficeNumber){
-      
-        
-        this.employeeID=employeeID;
-        this.employeeDisplayFirstName=employeeDisplayFirstName;
-        this.employeeDisplayLastName=employeeDisplayLastName;
-        this.employeeRole=employeeRole;
-        this.employeeDepartment=employeeDepartment;
-        this.employeeDOB=employeeDOB;
-        this.employeeGender=employeeGender;
-        this.employeeHpNumber=employeeHpNumber;
-        this.employeeMailingAddress=employeeMailingAddress;
-        this.employeeOfficeNumber=employeeOfficeNumber;
-        
-        this.employeePassword="password";
-        this.employeeAccountActivate=false;
-        this.employeeLockOut=false;
-        
+    @OneToOne(cascade={CascadeType.PERSIST})
+    private Salt salt;
+
+    public void createEmployee(String employeeID, String employeeDisplayFirstName, String employeeDisplayLastName,
+            String employeeRole, String employeeDepartment, Date employeeDOB,
+            String employeeGender, String employeeHpNumber, String employeeMailingAddress, String employeeOfficeNumber) {
+
+        this.employeeID = employeeID;
+        this.employeeDisplayFirstName = employeeDisplayFirstName;
+        this.employeeDisplayLastName = employeeDisplayLastName;
+        this.employeeRole = employeeRole;
+        this.employeeDepartment = employeeDepartment;
+        this.employeeDOB = employeeDOB;
+        this.employeeGender = employeeGender;
+        this.employeeHpNumber = employeeHpNumber;
+        this.employeeMailingAddress = employeeMailingAddress;
+        this.employeeOfficeNumber = employeeOfficeNumber;
+
+        this.employeePassword = "password";
+        this.employeeAccountActivate = false;
+        this.employeeLockOut = false;
+
     }
-    
-     public String getEmployeeDisplayLastName() {
+
+    public String getEmployeeDisplayLastName() {
         return employeeDisplayLastName;
     }
 
     public void setEmployeeDisplayLastName(String employeeDisplayLastName) {
         this.employeeDisplayLastName = employeeDisplayLastName;
     }
-    
+
     public String getEmployeeEmailAddress() {
         return employeeEmailAddress;
     }
@@ -80,49 +80,118 @@ public class Employee implements Serializable {
     public void setEmployeeMailingAddress(String employeeMailingAddress) {
         this.employeeMailingAddress = employeeMailingAddress;
     }
-    
-    public String getEmployeeID() {return employeeID; }
-    public void setEmployeeID(String employeeID) {this.employeeID = employeeID;}
 
-    public String getEmployeeUserName() {return employeeUserName;}
-    public void setEmployeeUserName(String employeeUserName) {this.employeeUserName = employeeUserName;}
+    public String getEmployeeID() {
+        return employeeID;
+    }
 
-    public String getEmployeeDisplayFirstName() {return employeeDisplayFirstName;}
-    public void setEmployeeDisplayFirstName(String employeeDisplayFirstName) {this.employeeDisplayFirstName = employeeDisplayFirstName;}
+    public void setEmployeeID(String employeeID) {
+        this.employeeID = employeeID;
+    }
 
-    public String getEmployeePassword() {return employeePassword;}
-    public void setEmployeePassword(String employeePassword) {this.employeePassword = employeePassword;}
+    public String getEmployeeUserName() {
+        return employeeUserName;
+    }
 
-    public String getEmployeeRole() {return employeeRole;}
-    public void setEmployeeRole(String employeeRole) {this.employeeRole = employeeRole;}
+    public void setEmployeeUserName(String employeeUserName) {
+        this.employeeUserName = employeeUserName;
+    }
 
-    public String getEmployeeDepartment() {return employeeDepartment;}
-    public void setEmployeeDepartment(String employeeDepartment) {this.employeeDepartment = employeeDepartment;}
+    public String getEmployeeDisplayFirstName() {
+        return employeeDisplayFirstName;
+    }
 
-    public Date getEmployeeDOB() {return employeeDOB;}
-    public void setEmployeeDOB(Date employeeDOB) {this.employeeDOB = employeeDOB;}
+    public void setEmployeeDisplayFirstName(String employeeDisplayFirstName) {
+        this.employeeDisplayFirstName = employeeDisplayFirstName;
+    }
 
-    public String getEmployeeGender() {return employeeGender;}
-    public void setEmployeeGender(String employeeGender) {this.employeeGender = employeeGender;}
+    public String getEmployeePassword() {
+        return employeePassword;
+    }
 
-    public String getEmployeeHpNumber() {return employeeHpNumber;}
-    public void setEmployeeHpNumber(String employeeHpNumber) {this.employeeHpNumber = employeeHpNumber;}
+    public void setEmployeePassword(String employeePassword) {
+        this.employeePassword = employeePassword;
+    }
 
-    public boolean isEmployeeLockOut() {return employeeLockOut;}
-    public void setEmployeeLockOut(boolean employeeLockOut) {this.employeeLockOut = employeeLockOut;}
+    public String getEmployeeRole() {
+        return employeeRole;
+    }
 
-    public boolean isEmployeeAccountActivate() {return employeeAccountActivate;}
-    public void setEmployeeAccountActivate(boolean employeeAccountActivate) {this.employeeAccountActivate = employeeAccountActivate;}
-    
-     public String getEmployeeOfficeNumber() {
+    public void setEmployeeRole(String employeeRole) {
+        this.employeeRole = employeeRole;
+    }
+
+    public String getEmployeeDepartment() {
+        return employeeDepartment;
+    }
+
+    public void setEmployeeDepartment(String employeeDepartment) {
+        this.employeeDepartment = employeeDepartment;
+    }
+
+    public Date getEmployeeDOB() {
+        return employeeDOB;
+    }
+
+    public void setEmployeeDOB(Date employeeDOB) {
+        this.employeeDOB = employeeDOB;
+    }
+
+    public String getEmployeeGender() {
+        return employeeGender;
+    }
+
+    public void setEmployeeGender(String employeeGender) {
+        this.employeeGender = employeeGender;
+    }
+
+    public String getEmployeeHpNumber() {
+        return employeeHpNumber;
+    }
+
+    public void setEmployeeHpNumber(String employeeHpNumber) {
+        this.employeeHpNumber = employeeHpNumber;
+    }
+
+    public boolean isEmployeeLockOut() {
+        return employeeLockOut;
+    }
+
+    public void setEmployeeLockOut(boolean employeeLockOut) {
+        this.employeeLockOut = employeeLockOut;
+    }
+
+    public boolean isEmployeeAccountActivate() {
+        return employeeAccountActivate;
+    }
+
+    public void setEmployeeAccountActivate(boolean employeeAccountActivate) {
+        this.employeeAccountActivate = employeeAccountActivate;
+    }
+
+    public String getEmployeeOfficeNumber() {
         return employeeOfficeNumber;
     }
 
     public void setEmployeeOfficeNumber(String employeeOfficeNumber) {
         this.employeeOfficeNumber = employeeOfficeNumber;
     }
-    
-@Override
+
+    /**
+     * @return the salt
+     */
+    public Salt getSalt() {
+        return salt;
+    }
+
+    /**
+     * @param salt the salt to set
+     */
+    public void setSalt(Salt salt) {
+        this.salt = salt;
+    }
+
+    @Override
     public int hashCode() {
         int hash = 0;
         hash += (employeeID != null ? employeeID.hashCode() : 0);
@@ -146,5 +215,5 @@ public class Employee implements Serializable {
     public String toString() {
         return "entity.Employee[ id=" + employeeID + " ]";
     }
-    
+
 }
