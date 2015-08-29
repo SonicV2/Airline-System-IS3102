@@ -30,8 +30,7 @@ public class LoginManageBean {
     }
     
       public String check() {
-      
-      
+
        doLogin(employeeUserName,employeePassword);
         
         if(logInCheck==true) {
@@ -80,9 +79,5 @@ public class LoginManageBean {
     public void setEmployeePassword(String employeePassword) {
         this.employeePassword = employeePassword;
     }
-    
-    
-    
-    
-    
+
 }
