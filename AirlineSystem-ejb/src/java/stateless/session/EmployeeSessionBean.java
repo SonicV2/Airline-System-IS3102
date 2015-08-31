@@ -227,6 +227,13 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
         }
     }
     
+    /* To set employee to be active after they changed their password*/
+    
+    public void employeeActivate(String userName){
+        Employee employee = getEmployee(userName);
+        employee.setEmployeeAccountActivate(true);
+        em.persist(employee);
+    }
    
 
 }

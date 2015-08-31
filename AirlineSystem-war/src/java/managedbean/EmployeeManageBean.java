@@ -42,6 +42,11 @@ public class EmployeeManageBean {
     Employee employee;
 
     private String employeeNewPwd;
+    private String employeeNewPwdRe; 
+
+    
+    
+    private boolean pwdChangeStatus;
     
     public EmployeeManageBean() {
     }
@@ -61,10 +66,22 @@ public class EmployeeManageBean {
 
     public void changePwd(ActionEvent event){
          String employeeUserName = loginManageBean.employeeUserName;
-         employeeSessionBean.hashNewPwd(employeeUserName, employeeNewPwd);
-         
+         if(employeeNewPwd.equals(employeeNewPwdRe)){
+            employeeSessionBean.hashNewPwd(employeeUserName, employeeNewPwd);
+            employeeSessionBean.employeeActivate(employeeUserName);
+            pwdChangeStatus=true;
+          
+         }else{
+             pwdChangeStatus=false;
+         }
     }
     
+    public String pwdStatus(){
+        if(pwdChangeStatus==true){
+            return "index" + "?faces-redirect=true";
+        }else
+            return "";
+    }
     
     public Employee getEmployee(String employeeID) {
         Employee employee = employeeSessionBean.getEmployeeUseID(employeeID);
@@ -197,5 +214,13 @@ public class EmployeeManageBean {
      */
     public void setLoginManageBean(LoginManageBean loginManageBean) {
         this.loginManageBean = loginManageBean;
+    }
+    
+    public String getEmployeeNewPwdRe() {
+        return employeeNewPwdRe;
+    }
+
+    public void setEmployeeNewPwdRe(String employeeNewPwdRe) {
+        this.employeeNewPwdRe = employeeNewPwdRe;
     }
 }

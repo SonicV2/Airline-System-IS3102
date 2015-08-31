@@ -25,6 +25,7 @@ public class LoginManageBean {
     Employee employee;
     String doLogInMsg;
     boolean logInCheck;
+    boolean firstTimer;
     
     public LoginManageBean() {
     }
@@ -34,13 +35,17 @@ public class LoginManageBean {
       
        doLogin(employeeUserName,employeePassword);
         
-        if(logInCheck==true) {
-            return "employeeDashBoard" + "?faces-redirect=true";
-        } 
-        RequestContext.getCurrentInstance().update("growl");
-        FacesContext context=FacesContext.getCurrentInstance();
-        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,"LoginFail",doLogInMsg));
-        return "";
+            if(logInCheck==true) {
+                if(firstTimer==true){
+                    return "newUserChangePwd" + "?faces-redirect=true";
+                }else{
+                    return "employeeDashBoard" + "?faces-redirect=true";
+                }
+            } 
+            RequestContext.getCurrentInstance().update("growl");
+            FacesContext context=FacesContext.getCurrentInstance();
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,"LoginFail",doLogInMsg));
+            return ""; 
     }   
     
     
@@ -48,7 +53,7 @@ public class LoginManageBean {
     {
         
         employee=employeeSessionBean.getEmployee(employeeUserName);
-        
+        firstTimer=false;
         if(employeeUserName.equals("") && employeePassword.equals("") )
         {
             doLogInMsg= "Please Enter your User Name and Password!";
@@ -59,6 +64,9 @@ public class LoginManageBean {
             }else if(employeeSessionBean.isSameHash(employeeUserName, employeePassword)){
                 doLogInMsg = employee.getEmployeeDisplayLastName();
                 logInCheck=true;
+                if(employee.isEmployeeAccountActivate()==false){
+                    firstTimer=true;
+                }
             }else {doLogInMsg= "Invaild Password!";
                     logInCheck=false;
             }
