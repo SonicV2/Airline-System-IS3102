@@ -46,14 +46,14 @@
             }
         </style>
 
-                                  <!--Add new employee to the database-->
+        <!--Add new employee to the database-->
     </h:head>
     <h:body>
 
         <h3 class="text-center">Welcome to Employee Management Page</h3>
         <br></br>
         <br></br>
-        
+
         <div class="row">
             <div class="col-md-8 col-sm-8 col-xs-8">
                 <div class="panel panel-default">
@@ -94,7 +94,25 @@
                             <div class="form-group">
                                 <h:outputLabel value="Gender: " class="col-md-4 control-label" />
                                 <div class="col-md-8">
-                                    <h:inputText class="form-control" value="#{employeeManageBean.employeeGender}" />
+
+                                    <h:panelGrid>
+                                        
+                                        <p:selectOneRadio id="gender" value="#{employeeManageBean.employeeGender}">
+                                            <f:selectItem itemLabel="Male" itemValue="Male" />
+                                            <f:selectItem itemLabel="Female" itemValue="Female" />
+                                        </p:selectOneRadio>
+                                    </h:panelGrid>
+
+
+
+
+
+
+
+
+
+
+                                    
                                 </div>
                             </div>
 
