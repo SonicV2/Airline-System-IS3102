@@ -48,7 +48,18 @@
         .ui-growl {
             width: initial;
         }
+        #captcha{
+            right:20px;
+        }
         
+        #recaptcha_area{
+            margin-top: -30px;
+            margin-left: -25px;
+        }
+        
+        #recaptcha_table{
+            transform: scale(0.8);
+        }
         
         </style>
     </h:head>
@@ -78,7 +89,10 @@
                                 <br/>
                             </div>
                             <div class="form-group">
-                              
+                                <div id="capt">
+                                     <p:captcha id="captcha" label="Captcha" secure="true" theme="clean"/>
+                                    <p:message for="captcha" />
+                                </div>
                                      <h:commandButton class="btn btn-primary btn-lg btn-block" value="Login" action="#{loginManageBean.check}"/>
 
                                 <span class="pull-right"><a href="#">Forgot Password? </a></span>
