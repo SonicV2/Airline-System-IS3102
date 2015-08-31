@@ -78,7 +78,7 @@ public class EmployeeManageBean {
     
     public String pwdStatus(){
         if(pwdChangeStatus==true){
-            return "index" + "?faces-redirect=true";
+            return "employeeDashBoard" + "?faces-redirect=true";
         }else
             return "";
     }
