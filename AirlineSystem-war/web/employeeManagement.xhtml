@@ -11,7 +11,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE-edge" />
 
         <h:outputStylesheet library ="css" name="bootstrap.css" />
-        <title>Facelet Title</title>
+        <title>Employee Management</title>
         <style>
             .row {
                 /* margin-right: auto; */
@@ -44,6 +44,16 @@
                 margin: auto;
 
             }
+            
+            .missingfield{
+                padding-left:36%; 
+                color:red;
+            }
+            
+            .missingfieldbtn{
+               
+                color:red;
+            }
         </style>
 
         <!--Add new employee to the database-->
@@ -67,28 +77,43 @@
                             <div class="form-group">
                                 <h:outputLabel value="NRIC Number: " class="col-md-4 control-label" />
                                 <div class="col-md-8">
-                                    <h:inputText class="form-control" value="#{employeeManageBean.employeeID}" />
+                                    <h:inputText id="nric" required="true" requiredMessage="Please fill in NRIC field!" class="form-control" value="#{employeeManageBean.employeeID}" />
+                                </div>
+                                <div class="missingfield">
+                                    <h:message for="nric"  />
                                 </div>
                             </div>
                             <div class="form-group">
                                 <h:outputLabel value="First Name: " class="col-md-4 control-label" />
                                 <div class="col-md-8">
-                                    <h:inputText class="form-control" value="#{employeeManageBean.employeeDisplayFirstName}" />
+                                    <h:inputText id="firstname" required="true" requiredMessage="Please fill in first name field!" class="form-control" value="#{employeeManageBean.employeeDisplayFirstName}" />
+                                </div>
+                                
+                                <div class="missingfield">
+                                    <h:message for="firstname" />
                                 </div>
                             </div>
                             <div class="form-group">
                                 <h:outputLabel value="Last Name: " class="col-md-4 control-label" />
                                 <div class="col-md-8">
-                                    <h:inputText class="form-control" value="#{employeeManageBean.employeeDisplayLastName}" />
+                                    <h:inputText id="lastname" required="true" requiredMessage="Please fill in last name field!" class="form-control" value="#{employeeManageBean.employeeDisplayLastName}" />
                                 </div>
+                                <div class="missingfield">
+                                    <h:message for="lastname"  />
+                                </div>
+                                
                             </div>
 
                             <div class="form-group">
                                 <h:outputLabel value="Date of Birth: " class="col-md-4 control-label" />
                                 <div class="col-md-8">
-                                    <p:calendar id="button" value="#{employeeManageBean.employeeDOB}" showOn="button"/>
+                                    <p:calendar id="button" required="true" requiredMessage="Please fill in Date of Birth field!" value="#{employeeManageBean.employeeDOB}" showOn="button"/>
                               
                                 </div>
+                                <div class="missingfield">
+                                    <h:message for="button" />
+                                </div>
+                                
                             </div>
 
                             <div class="form-group">
@@ -97,11 +122,14 @@
 
                                     <h:panelGrid>
                                         
-                                        <p:selectOneRadio id="gender" value="#{employeeManageBean.employeeGender}">
+                                        <p:selectOneRadio id="gender" required="true" requiredMessage="Please Select Gender!" value="#{employeeManageBean.employeeGender}">
                                             <f:selectItem itemLabel="Male" itemValue="Male" />
                                             <f:selectItem itemLabel="Female" itemValue="Female" />
                                         </p:selectOneRadio>
                                     </h:panelGrid>
+                                    <div class="missingfieldbtn">
+                                        <h:message for="gender"  />
+                                    </div>
 
                                 </div>
                             </div>
@@ -109,35 +137,50 @@
                             <div class="form-group">
                                 <h:outputLabel value="Role: " class="col-md-4 control-label" />
                                 <div class="col-md-8">
-                                    <h:inputText class="form-control" value="#{employeeManageBean.employeeRole}" />
+                                    <h:inputText id="roles" required="true" requiredMessage="Please fill in role field!" class="form-control" value="#{employeeManageBean.employeeRole}" />
+                                </div>
+                                <div class="missingfield">
+                                     <h:message for="roles" />
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <h:outputLabel value="Department: " class="col-md-4 control-label" />
                                 <div class="col-md-8">
-                                    <h:inputText class="form-control" value="#{employeeManageBean.employeeDepartment}" />
+                                    <h:inputText id="department" required="true" requiredMessage="Please fill in departemnt field!" class="form-control" value="#{employeeManageBean.employeeDepartment}" />
+                                </div>
+                                <div class="missingfield">
+                                     <h:message for="department"  />
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <h:outputLabel value="Mobile Number: " class="col-md-4 control-label" />
                                 <div class="col-md-8">
-                                    <h:inputText class="form-control" value="#{employeeManageBean.employeeHpNumber}" />
+                                    <h:inputText id="mobile" required="true" requiredMessage="Please fill in mobile number field!" class="form-control" value="#{employeeManageBean.employeeHpNumber}" />
+                                </div>
+                                <div class="missingfield">
+                                     <h:message for="mobile" />
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <h:outputLabel value="Office Number: " class="col-md-4 control-label" />
                                 <div class="col-md-8">
-                                    <h:inputText class="form-control" value="#{employeeManageBean.employeeOfficeNumber}" />
+                                    <h:inputText id="office" required="true" requiredMessage="Please fill in office number field!" class="form-control" value="#{employeeManageBean.employeeOfficeNumber}" />
+                                </div>
+                                <div class="missingfield"> 
+                                     <h:message for="office" />
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <h:outputLabel value="Mailing Address: " class="col-md-4 control-label" />
                                 <div class="col-md-8">
-                                    <h:inputText class="form-control" value="#{employeeManageBean.employeeMailingAddress}" />
+                                    <h:inputText id="address" required="true" requiredMessage="Please fill in mailing address field!" class="form-control" value="#{employeeManageBean.employeeMailingAddress}" />
+                                </div>
+                                <div class="missingfield">
+                                     <h:message for="address"  />
                                 </div>
                             </div>
                             <div class="form-group">
