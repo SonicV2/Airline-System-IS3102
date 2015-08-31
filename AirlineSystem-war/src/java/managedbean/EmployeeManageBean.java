@@ -4,6 +4,7 @@ import entity.Employee;
 import java.util.Date;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
 import javax.faces.event.ActionEvent;
@@ -19,6 +20,9 @@ public class EmployeeManageBean {
     @EJB
     private EmployeeSessionBeanLocal employeeSessionBean;
 
+    @ManagedProperty(value="#{loginManageBean}")
+    private LoginManageBean loginManageBean;
+    
     public EmployeeSessionBeanLocal getEmployeeSessionBean() {
         return employeeSessionBean;
     }
@@ -37,6 +41,8 @@ public class EmployeeManageBean {
     String employeeEmailAddress;
     Employee employee;
 
+    private String employeeNewPwd;
+    
     public EmployeeManageBean() {
     }
 
@@ -53,6 +59,13 @@ public class EmployeeManageBean {
 
     }
 
+    public void changePwd(ActionEvent event){
+         String employeeUserName = loginManageBean.employeeUserName;
+         employeeSessionBean.hashNewPwd(employeeUserName, employeeNewPwd);
+         
+    }
+    
+    
     public Employee getEmployee(String employeeID) {
         Employee employee = employeeSessionBean.getEmployeeUseID(employeeID);
         return employee;
@@ -156,5 +169,33 @@ public class EmployeeManageBean {
 
     public void setEmployeeEmailAddress(String employeeEmailAddress) {
         this.employeeEmailAddress = employeeEmailAddress;
+    }
+
+    /**
+     * @return the employeeNewPwd
+     */
+    public String getEmployeeNewPwd() {
+        return employeeNewPwd;
+    }
+
+    /**
+     * @param employeeNewPwd the employeeNewPwd to set
+     */
+    public void setEmployeeNewPwd(String employeeNewPwd) {
+        this.employeeNewPwd = employeeNewPwd;
+    }
+
+    /**
+     * @return the loginManageBean
+     */
+    public LoginManageBean getLoginManageBean() {
+        return loginManageBean;
+    }
+
+    /**
+     * @param loginManageBean the loginManageBean to set
+     */
+    public void setLoginManageBean(LoginManageBean loginManageBean) {
+        this.loginManageBean = loginManageBean;
     }
 }

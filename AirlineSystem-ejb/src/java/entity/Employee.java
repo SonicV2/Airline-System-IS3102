@@ -1,10 +1,14 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -33,8 +37,9 @@ public class Employee implements Serializable {
     private boolean employeeLockOut;
     private boolean employeeAccountActivate;
 
-    @OneToOne(cascade={CascadeType.PERSIST})
+    @OneToOne(cascade = {CascadeType.PERSIST})
     private Salt salt;
+
 
     public void createEmployee(String employeeID, String employeeDisplayFirstName, String employeeDisplayLastName,
             String employeeRole, String employeeDepartment, Date employeeDOB,
@@ -215,5 +220,6 @@ public class Employee implements Serializable {
     public String toString() {
         return "entity.Employee[ id=" + employeeID + " ]";
     }
+
 
 }
