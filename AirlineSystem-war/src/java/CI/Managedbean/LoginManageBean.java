@@ -1,6 +1,6 @@
-package managedbean;
+package CI.Managedbean;
 
-import entity.Employee;
+import CI.Entity.Employee;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -8,7 +8,7 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import org.primefaces.context.RequestContext;
-import stateless.session.EmployeeSessionBeanLocal;
+import CI.Session.EmployeeSessionBeanLocal;
 
 @ManagedBean
 //@ViewScoped
