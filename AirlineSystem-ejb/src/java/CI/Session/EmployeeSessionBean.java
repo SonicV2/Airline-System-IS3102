@@ -1,7 +1,7 @@
-package stateless.session;
+package CI.Session;
 
-import entity.Employee;
-import entity.Salt;
+import CI.Entity.Employee;
+import CI.Entity.Salt;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;

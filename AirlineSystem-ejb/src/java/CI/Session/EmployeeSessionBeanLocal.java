@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package stateless.session;
+package CI.Session;
 
-import entity.Employee;
+import CI.Entity.Employee;
 import java.util.Date;
 import javax.ejb.Local;
 
