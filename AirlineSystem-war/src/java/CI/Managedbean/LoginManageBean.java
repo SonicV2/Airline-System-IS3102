@@ -36,9 +36,9 @@ public class LoginManageBean {
         
             if(logInCheck==true) {
                 if(firstTimer==true){
-                    return "newUserChangePwd" + "?faces-redirect=true";
+                    return "CI/newUserChangePwd" + "?faces-redirect=true";
                 }else{
-                    return "employeeDashBoard" + "?faces-redirect=true";
+                    return "CI/employeeDashBoard" + "?faces-redirect=true";
                 }
             } 
             RequestContext.getCurrentInstance().update("growl");
