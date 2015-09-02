@@ -64,24 +64,20 @@ public class EmployeeManageBean {
 
     }
 
-    public void changePwd(ActionEvent event){
+    public String changePwd(){
          String employeeUserName = loginManageBean.employeeUserName;
          if(employeeNewPwd.equals(employeeNewPwdRe)){
             employeeSessionBean.hashNewPwd(employeeUserName, employeeNewPwd);
             employeeSessionBean.employeeActivate(employeeUserName);
             pwdChangeStatus=true;
+            return "employeeDashBoard" + "?faces-redirect=true";
           
          }else{
              pwdChangeStatus=false;
+             return "/login.xhtml" + "?faces-redirect=true";
          }
     }
     
-    public String pwdStatus(){
-        if(pwdChangeStatus==true){
-            return "CI/employeeDashBoard" + "?faces-redirect=true";
-        }else
-            return "";
-    }
     
     public Employee getEmployee(String employeeID) {
         Employee employee = employeeSessionBean.getEmployeeUseID(employeeID);
