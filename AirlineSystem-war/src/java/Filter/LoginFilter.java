@@ -5,14 +5,12 @@
  */
 package Filter;
 
-import CI.Managedbean.LoginManageBean;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import javax.servlet.Filter;
 import java.util.logging.LogRecord;
-import javax.servlet.DispatcherType;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
@@ -21,13 +19,17 @@ import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author smu
  */
-@WebFilter(urlPatterns = {"/CI/*"}, dispatcherTypes = {DispatcherType.REQUEST})
+@WebFilter(urlPatterns = {"*.xhtml"})
 public class LoginFilter implements Filter {
+
+    private String userName;
+    private String timeoutPage = "/AirlineSystem-war/login.xhtml";
 
     public LoginFilter() {
     }
@@ -40,16 +42,25 @@ public class LoginFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws ServletException, IOException {
-        doBeforeProcessing(request, response);
-        HttpServletRequest req = (HttpServletRequest) request;
-        LoginManageBean login = (LoginManageBean) req.getSession().getAttribute("loginManageBean");
-        if (login != null && !login.isLogin()) {
-            chain.doFilter(request, response);
-        } else {
+        try {
+            HttpServletRequest req = (HttpServletRequest) request;
             HttpServletResponse res = (HttpServletResponse) response;
-            res.sendRedirect(req.getContextPath() + "/index.xhtml");
+            HttpSession ses = req.getSession(false);
+            String reqURI = req.getRequestURI();
+            String[] url = reqURI.split("/");
+            String redURl = url[0]+"/" + url[1] +"/" +"login.xhtml";
+            System.out.println("url0: "+ url[0] + "url1: "+url[1] + "url: "+url[2]);
+            
+            if(url[2].equals("login.xhtml") || (ses!=null && ses.getAttribute("isLogin")!=null)){
+                System.out.println("Process ");
+                chain.doFilter(request, response);
+            }else{
+                System.out.println("Redirct to");
+                res.sendRedirect(redURl);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
-        doAfterProcessing(request, response);
     }
 
     @Override
@@ -105,8 +116,29 @@ public class LoginFilter implements Filter {
         return stackTrace;
     }
 
-  
     public boolean isLoggable(LogRecord record) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public String getTimeoutPage() {
+        return timeoutPage;
+    }
+
+    public void setTimeoutPage(String timeoutPage) {
+        this.timeoutPage = timeoutPage;
+    }
+
+    /**
+     * @return the userName
+     */
+    public String getUserName() {
+        return userName;
+    }
+
+    /**
+     * @param userName the userName to set
+     */
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }
