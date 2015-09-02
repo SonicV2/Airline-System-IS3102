@@ -89,7 +89,10 @@ public class LoginManageBean {
 //       }
 //    }
 
-   
+    public String logout() {
+        FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+        return "/login.xhtml?faces-redirect=true";
+    }
 
     public String getEmployeeUserName() {
         return employeeUserName;
