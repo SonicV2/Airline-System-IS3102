@@ -11,14 +11,6 @@
         <load-on-startup>1</load-on-startup>
     </servlet>
     
-    <filter>
-        <filter-name>LoginFilter</filter-name>
-        <filter-class>Filter.LoginFilter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>LoginFilter</filter-name>
-        <url-pattern>/CI/*</url-pattern>
-    </filter-mapping>
     
      <context-param>
         <param-name>primefaces.PUBLIC_CAPTCHA_KEY</param-name>
@@ -44,7 +36,7 @@
         <param-value>bootstrap</param-value>  
     </context-param>  
     <welcome-file-list>
-        <welcome-file>index.xhtml</welcome-file>
+        <welcome-file>login.xhtml</welcome-file>
     </welcome-file-list>
     
     <security-constraint>
@@ -52,7 +44,7 @@
         <web-resource-collection>
             <web-resource-name>Default Secure Pages</web-resource-name>
             <description>Default Secure Pages</description>
-            <url-pattern>/index.xhtml</url-pattern>
+            <url-pattern>/login.xhtml</url-pattern>
         </web-resource-collection>
         <user-data-constraint>
             <description/>
