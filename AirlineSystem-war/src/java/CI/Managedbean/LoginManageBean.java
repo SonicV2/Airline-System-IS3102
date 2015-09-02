@@ -72,6 +72,14 @@ public class LoginManageBean {
         }
     }
     
+    public boolean isLogin(){
+        if(logInCheck == true){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    
     public String getEmployeeUserName() {
         return employeeUserName;
     }
