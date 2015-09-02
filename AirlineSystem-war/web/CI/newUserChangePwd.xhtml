@@ -18,9 +18,9 @@
         <h:outputLabel value="Re-enter your New Password"/>
         <p:password value="#{employeeManageBean.employeeNewPwdRe }"/>
         
-        <h:commandButton value="Save" action="#{employeeManageBean.pwdStatus()}" actionListener="#{employeeManageBean.changePwd}"/>
+        <h:commandButton value="Save" action="#{employeeManageBean.changePwd}"/>
         
-        <h:commandLink value="Message" action="message?faces-redirect=true"/>
+
         </h:form>
     </h:body>
 </html>
