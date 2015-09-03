@@ -23,20 +23,7 @@
 
 
     <h:body>
-<!--       Welcome to dash board!
-       <h:outputLabel value="#{loginManageBean.employeeUserName}"/>
-        
-       
-       <h:form>
-           
-           <h:commandButton value="Logout" action="#{loginManageBean.logout}"/>
-       </h:form>
-        -->
-       
-<!--       <h:form>
-           
-           <h:commandButton value="Logout" action="#{loginManageBean.logout}"/>
-       </h:form>-->
+
 
         <div id="wrapper">
 
@@ -254,18 +241,20 @@
                             <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
                             </li>
                             <li class="divider"></li>
-                            
+                            <li> 
                             <h:form>
-       
-                            <li><a><h:commandButton value="Logout" action="#{loginManageBean.logout}"/><i class="fa fa-sign-out fa-fw"></i> Logout</a>
-                            </h:form>
-                            </li>
+           
+                              <i class="fa fa-gear fa-fw"></i>  <h:commandButton value="Logout" action="#{loginManageBean.logout}"/></h:form></li>
+                           
                         </ul>
+                         </li>
+                    
                          <!--/.dropdown-user--> 
-                    </li>
+                    <!--</li>-->
                      <!--/.dropdown--> 
-                </ul>
+                <!--</ul>-->
                  <!--/.navbar-top-links--> 
+                </ul>
             </nav>
         </div>
 
@@ -285,7 +274,7 @@
                                 <a href="morris.html">Morris.js Charts</a>
                             </li>
                         </ul>
-                         /.nav-second-level 
+<!--                         /.nav-second-level -->
                     </li>
                     <li>
                         <a href="tables.html"><i class="fa fa-table fa-fw"></i> Tables</a>
@@ -315,7 +304,7 @@
                                 <a href="grid.html">Grid</a>
                             </li>
                         </ul>
-                         /.nav-second-level 
+<!--                         /.nav-second-level -->
                     </li>
                     <li>
                         <a href="#"><i class="fa fa-sitemap fa-fw"></i> Multi-Level Dropdown<span class="fa arrow"></span></a>
@@ -342,10 +331,10 @@
                                         <a href="#">Third Level Item</a>
                                     </li>
                                 </ul>
-                                 /.nav-third-level 
+<!--                                 /.nav-third-level -->
                             </li>
                         </ul>
-                         /.nav-second-level 
+<!--                         /.nav-second-level -->
                     </li>
                     <li>
                         <a href="#"><i class="fa fa-files-o fa-fw"></i> Sample Pages<span class="fa arrow"></span></a>
@@ -357,14 +346,14 @@
                                 <a href="login.html">Login Page</a>
                             </li>
                         </ul>
-                         /.nav-second-level 
+<!--                         /.nav-second-level -->
                     </li>
                 </ul>
             </div>
-             /.sidebar-collapse 
+<!--             /.sidebar-collapse -->
         </div>
     
-         /.navbar-static-side 
+<!--         /.navbar-static-side -->
         
         
         <div id="page-wrapper">
@@ -373,12 +362,12 @@
                     <h1 class="page-header">Dashboard</h1>
                 <h2> Welcome to dashboard! <h:outputLabel value="#{loginManageBean.employeeUserName}"/> </h2>
                 </div>
-                 /.col-lg-12 
+<!--                 /.col-lg-12 -->
             </div>
             
             <br></br>
             
-             /.row 
+<!--             /.row -->
             <div class="row">
                 <div class="col-lg-3 col-md-6">
                     <div class="panel panel-primary">
@@ -434,7 +423,6 @@
     <h:outputScript library="js" name="jQuery/jQuery-2.1.4.min.js" />
     <h:outputScript library="js" name="bootstrap.min.js" /> 
     <h:outputScript library="js" name="metisMenu/metisMenu.min.js" />
-    
     <h:outputScript library="js" name="sb-admin-2.js" />
     
     </h:body>
