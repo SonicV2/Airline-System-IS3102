@@ -9,6 +9,7 @@ import CI.Entity.Message;
 import CI.Session.MessageSessionBeanLocal;
 import java.util.Date;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.faces.bean.ManagedBean;
@@ -46,7 +47,9 @@ public class MessageManagedBean {
         messageSessionBean.sendMsg(sender, receiver, msgText);
     }
 
-    public void unReadMessage(ActionEvent event){
+    
+    @PostConstruct
+    public void unReadMessage(){
         setUnReadMsg(messageSessionBean.unReadMsg(loginManageBean.employeeUserName));
 //        for(Message m: unReadMsg){
 //            m.setIsRead(true);
