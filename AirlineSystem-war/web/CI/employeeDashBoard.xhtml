@@ -23,10 +23,18 @@
 
 
     <h:body>
+<!--       Welcome to dash board!
+       <h:outputLabel value="#{loginManageBean.employeeUserName}"/>
+        -->
+       
+<!--       <h:form>
+           
+           <h:commandButton value="Logout" action="#{loginManageBean.logout}"/>
+       </h:form>-->
 
         <div id="wrapper">
 
-            <!-- Navigation -->
+             <!--Navigation--> 
             <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -37,7 +45,7 @@
                     </button>
                     <a class="navbar-brand" href="index.html">Merlion Airlines Admin Dashboard</a>
                 </div>
-                <!-- /.navbar-header -->
+<!--                 /.navbar-header -->
 
                 <ul class="nav navbar-top-links navbar-right">
                     <li class="dropdown">
@@ -88,9 +96,9 @@
                                 </a>
                             </li>
                         </ul>
-                        <!-- /.dropdown-messages -->
+                         <!--/.dropdown-messages--> 
                     </li>
-                    <!-- /.dropdown -->
+                     <!--/.dropdown--> 
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                             <i class="fa fa-tasks fa-fw"></i>  <i class="fa fa-caret-down"></i>
@@ -167,9 +175,9 @@
                                 </a>
                             </li>
                         </ul>
-                        <!-- /.dropdown-tasks -->
+                         <!--/.dropdown-tasks--> 
                     </li>
-                    <!-- /.dropdown -->
+                     <!--/.dropdown--> 
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                             <i class="fa fa-bell fa-fw"></i>  <i class="fa fa-caret-down"></i>
@@ -227,9 +235,9 @@
                                 </a>
                             </li>
                         </ul>
-                        <!-- /.dropdown-alerts -->
+                         <!--/.dropdown-alerts--> 
                     </li>
-                    <!-- /.dropdown -->
+                     <!--/.dropdown--> 
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                             <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
@@ -240,14 +248,18 @@
                             <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
                             </li>
                             <li class="divider"></li>
-                            <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                            
+                            <h:form>
+       
+                            <li><a><h:commandButton value="Logout" action="#{loginManageBean.logout}"/><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                            </h:form>
                             </li>
                         </ul>
-                        <!-- /.dropdown-user -->
+                         <!--/.dropdown-user--> 
                     </li>
-                    <!-- /.dropdown -->
+                     <!--/.dropdown--> 
                 </ul>
-                <!-- /.navbar-top-links -->
+                 <!--/.navbar-top-links--> 
             </nav>
         </div>
 
@@ -267,7 +279,7 @@
                                 <a href="morris.html">Morris.js Charts</a>
                             </li>
                         </ul>
-                        <!-- /.nav-second-level -->
+                         /.nav-second-level 
                     </li>
                     <li>
                         <a href="tables.html"><i class="fa fa-table fa-fw"></i> Tables</a>
@@ -297,7 +309,7 @@
                                 <a href="grid.html">Grid</a>
                             </li>
                         </ul>
-                        <!-- /.nav-second-level -->
+                         /.nav-second-level 
                     </li>
                     <li>
                         <a href="#"><i class="fa fa-sitemap fa-fw"></i> Multi-Level Dropdown<span class="fa arrow"></span></a>
@@ -324,10 +336,10 @@
                                         <a href="#">Third Level Item</a>
                                     </li>
                                 </ul>
-                                <!-- /.nav-third-level -->
+                                 /.nav-third-level 
                             </li>
                         </ul>
-                        <!-- /.nav-second-level -->
+                         /.nav-second-level 
                     </li>
                     <li>
                         <a href="#"><i class="fa fa-files-o fa-fw"></i> Sample Pages<span class="fa arrow"></span></a>
@@ -339,28 +351,28 @@
                                 <a href="login.html">Login Page</a>
                             </li>
                         </ul>
-                        <!-- /.nav-second-level -->
+                         /.nav-second-level 
                     </li>
                 </ul>
             </div>
-            <!-- /.sidebar-collapse -->
+             /.sidebar-collapse 
         </div>
     
-        <!-- /.navbar-static-side -->
+         /.navbar-static-side 
         
         
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
-<!--                    <h1 class="page-header">Dashboard</h1>-->
+                    <h1 class="page-header">Dashboard</h1>
                 <h2> Welcome to dashboard! <h:outputLabel value="#{loginManageBean.employeeUserName}"/> </h2>
                 </div>
-                <!-- /.col-lg-12 -->
+                 /.col-lg-12 
             </div>
             
             <br></br>
             
-            <!-- /.row -->
+             /.row 
             <div class="row">
                 <div class="col-lg-3 col-md-6">
                     <div class="panel panel-primary">

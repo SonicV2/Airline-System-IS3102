@@ -9,77 +9,91 @@ import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import org.primefaces.context.RequestContext;
 import CI.Session.EmployeeSessionBeanLocal;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 @ManagedBean
 //@ViewScoped
 //@RequestScoped
 @SessionScoped
-@Named(value="loginManageBean")
+@Named(value = "loginManageBean")
 public class LoginManageBean {
+
     @EJB
     private EmployeeSessionBeanLocal employeeSessionBean;
-    
+
     String employeeUserName;
     String employeePassword;
     Employee employee;
     String doLogInMsg;
     boolean logInCheck;
     boolean firstTimer;
-    
+    HttpServletRequest req;
+
     public LoginManageBean() {
     }
-    
-      public String check() {
-      
-      
-       doLogin(employeeUserName,employeePassword);
+
+    public String check() {
+       
+        doLogin(employeeUserName, employeePassword);
+        HttpSession session = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+        if (logInCheck == true) {
+            
+            session.setAttribute("isLogin", employeeUserName);
+            if (firstTimer == true) {
+                return "CI/newUserChangePwd" + "?faces-redirect=true";
+            } else {
+                return "CI/employeeDashBoard" + "?faces-redirect=true";
+            }
+           
+        }
+        RequestContext.getCurrentInstance().update("growl");
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "LoginFail", doLogInMsg));
         
-            if(logInCheck==true) {
-                if(firstTimer==true){
-                    return "CI/newUserChangePwd" + "?faces-redirect=true";
-                }else{
-                    return "CI/employeeDashBoard" + "?faces-redirect=true";
-                }
-            } 
-            RequestContext.getCurrentInstance().update("growl");
-            FacesContext context=FacesContext.getCurrentInstance();
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,"LoginFail",doLogInMsg));
-            return ""; 
-    }   
-    
-    
-    public void doLogin(String employeeUserName, String employeePassword)
-    {
-        
-        employee=employeeSessionBean.getEmployee(employeeUserName);
-        firstTimer=false;
-        if(employeeUserName.equals("") && employeePassword.equals("") )
-        {
-            doLogInMsg= "Please Enter your User Name and Password!";
-            logInCheck=false;
-        }else{if(employee==null){
-                doLogInMsg= "Invaild Employee Name!";
-                logInCheck=false;
-            }else if(employeeSessionBean.isSameHash(employeeUserName, employeePassword)){
+        session.setAttribute("isLogin", null);
+        return "";
+    }
+
+    public void doLogin(String employeeUserName, String employeePassword) {
+
+        employee = employeeSessionBean.getEmployee(employeeUserName);
+        firstTimer = false;
+        if (employeeUserName.equals("") && employeePassword.equals("")) {
+            doLogInMsg = "Please Enter your User Name and Password!";
+            logInCheck = false;
+        } else {
+            if (employee == null) {
+                doLogInMsg = "Invaild Employee Name!";
+                logInCheck = false;
+            } else if (employeeSessionBean.isSameHash(employeeUserName, employeePassword)) {
                 doLogInMsg = employee.getEmployeeDisplayLastName();
-                logInCheck=true;
-                if(employee.isEmployeeAccountActivate()==false){
-                    firstTimer=true;
+                logInCheck = true;
+                if (employee.isEmployeeAccountActivate() == false) {
+                    firstTimer = true;
                 }
-            }else {doLogInMsg= "Invaild Password!";
-                    logInCheck=false;
+            } else {
+                doLogInMsg = "Invaild Password!";
+                logInCheck = false;
             }
         }
     }
-    
-    public boolean isLogin(){
-        if(logInCheck == true){
-            return true;
-        }else{
-            return false;
-        }
+
+//    public void isLogin() {
+//        
+//       if(logInCheck){
+//           
+//           session.setAttribute("isLogin", true);
+//       }else{
+//           session.setAttribute("isLogin", false);
+//       }
+//    }
+
+    public String logout() {
+        FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+        return "/login.xhtml?faces-redirect=true";
     }
-    
+
     public String getEmployeeUserName() {
         return employeeUserName;
     }
@@ -95,9 +109,5 @@ public class LoginManageBean {
     public void setEmployeePassword(String employeePassword) {
         this.employeePassword = employeePassword;
     }
-    
-    
-    
-    
-    
+
 }
