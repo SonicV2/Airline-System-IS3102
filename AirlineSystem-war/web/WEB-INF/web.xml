@@ -20,6 +20,11 @@
         <url-pattern>*.xhtml</url-pattern>
     </filter-mapping>
     
+    <listener>
+        <description>HttpSessionListener</description>
+        <listener-class>Filter.TimeoutFilter</listener-class>
+    </listener>
+    
      <context-param>
         <param-name>primefaces.PUBLIC_CAPTCHA_KEY</param-name>
         <param-value>6LctFwwTAAAAAJE2KD6Won5bSW4nYWuOJ1DtfNgd</param-value>
@@ -35,7 +40,7 @@
     </servlet-mapping>
     <session-config>
         <session-timeout>
-            30
+            1
         </session-timeout>
     </session-config>
     
