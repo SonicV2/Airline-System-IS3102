@@ -14,7 +14,7 @@ import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.RequestScoped;
 import javax.faces.event.ActionEvent;
 
 /**
@@ -23,7 +23,8 @@ import javax.faces.event.ActionEvent;
  */
 @Named(value = "messageManagedBean")
 @ManagedBean
-@SessionScoped
+//@SessionScoped
+@RequestScoped
 public class MessageManagedBean {
     @EJB
     private MessageSessionBeanLocal messageSessionBean;
@@ -51,9 +52,7 @@ public class MessageManagedBean {
     @PostConstruct
     public void unReadMessage(){
         setUnReadMsg(messageSessionBean.unReadMsg(loginManageBean.employeeUserName));
-//        for(Message m: unReadMsg){
-//            m.setIsRead(true);
-//        }
+        messageSessionBean.setMsgRead(loginManageBean.employeeUserName);
     }
     
     /**

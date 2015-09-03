@@ -23,8 +23,8 @@ public class Message implements Serializable {
     private Long MessageId;
     private String sender;
     private String receiver;
-    @Temporal(TemporalType.DATE)
-    private Date sendTime;
+    //@Temporal(TemporalType.DATE)
+    private String sendTime;
     private boolean isRead;
     private String msgText;
     
@@ -36,7 +36,7 @@ public class Message implements Serializable {
         this.setSender(sender);
         this.setReceiver(receiver);
         this.setMsgText(msg);
-        this.setSendTime(new Date());
+        this.setSendTime(new Date().toString());
         this.setIsRead(false);
         System.out.println("Message ENtity: Sender: "+sender +"Receiver: "+receiver +"Message: "+msg+ "date: "+sendTime);
     }
@@ -111,14 +111,14 @@ public class Message implements Serializable {
     /**
      * @return the sendTime
      */
-    public Date getSendTime() {
+    public String getSendTime() {
         return sendTime;
     }
 
     /**
      * @param sendTime the sendTime to set
      */
-    public void setSendTime(Date sendTime) {
+    public void setSendTime(String sendTime) {
         this.sendTime = sendTime;
     }
 

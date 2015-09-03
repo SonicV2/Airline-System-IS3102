@@ -21,6 +21,6 @@ public interface MessageSessionBeanLocal {
 
     List<Message> unReadMsg(String receiver);
 
-    void setMsgRead(List<Message> msgs);
+    void setMsgRead(String userName);
     
 }

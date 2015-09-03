@@ -89,8 +89,14 @@ public class MessageSessionBean implements MessageSessionBeanLocal {
     }
 
     @Override
-    public void setMsgRead(List<Message> msgs) {
-       
+    public void setMsgRead(String userName) {
+       Employee user = getEmployee(userName);
+       List<Message> msgList = user.getMsgs();
+       for(Message m: msgList){
+           if(m.isIsRead()==false){
+               m.setIsRead(true);
+           }
+       }
     }
     
     
