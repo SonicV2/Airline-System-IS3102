@@ -19,7 +19,7 @@
 
 
     </h:head>
-    
+    <h:body>  
     <!--    To add the same header on all dashboard pages  -->
         <ui:include src="dashboardHeader.xhtml"/>
 <!--    To add the same sidebar on all dashboard pages  -->
@@ -29,4 +29,12 @@
     Full Name: #{loginManageBean.employee.employeeDisplayFirstName} #{loginManageBean.employee.employeeDisplayLastName}
 
 </div>
+        
+         <h:outputScript library="js" name="jQuery/jQuery-2.1.4.min.js" />
+    <h:outputScript library="js" name="bootstrap.min.js" /> 
+    <h:outputScript library="js" name="metisMenu/metisMenu.min.js" />
+    <h:outputScript library="js" name="sb-admin-2.js" />
+    </h:body>
+    
+        
 </html>
