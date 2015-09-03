@@ -76,6 +76,7 @@ public class EmployeeManageBean {
             employeeSessionBean.hashNewPwd(employeeUserName, employeeNewPwd);
             employeeSessionBean.employeeActivate(employeeUserName);
             pwdChangeStatus=true;
+            employeeSessionBean.logPasswordChange(employeeUserName);
             return "employeeDashBoard" + "?faces-redirect=true";
           
          }else{

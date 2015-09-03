@@ -43,6 +43,7 @@ public class LoginManageBean {
             
             session.setAttribute("isLogin", employeeUserName);
             if (firstTimer == true) {
+                employeeSessionBean.logLogIn(employeeUserName);
                 return "CI/newUserChangePwd" + "?faces-redirect=true";
             } else {
                 return "CI/employeeDashBoard" + "?faces-redirect=true";

@@ -22,6 +22,8 @@ public interface EmployeeSessionBeanLocal {
                             String employeeOfficeNumber);
     
     public Employee getEmployee(String employeeUserName);
+    public void logLogIn(String userID);
+    public void logPasswordChange(String userID);
     public Employee getEmployeeUseID(String employeeID); //get employee by using ID
     
     public String generateUserName(String employeeFirstName, String employeeLastName);

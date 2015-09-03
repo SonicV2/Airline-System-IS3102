@@ -61,6 +61,44 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
         fh.close();
 
     }
+    
+    public void logLogIn(String userID){
+        Logger logger = Logger.getLogger(EmployeeSessionBean.class.getName());
+        
+        try {   
+        fh = new FileHandler("%h/LogIn.txt",99999,1,true);  
+        logger.addHandler(fh);
+        SimpleFormatter formatter = new SimpleFormatter();  
+        fh.setFormatter(formatter);  
+
+        } catch (SecurityException e) {  
+        e.printStackTrace();  
+        } catch (IOException e) {  
+        e.printStackTrace();  
+        } 
+        logger.info("User: "+ userID 
+                + "has logged in: ");
+        fh.close();
+    }
+    
+    public void logPasswordChange(String userID){
+        Logger logger = Logger.getLogger(EmployeeSessionBean.class.getName());
+        
+        try {   
+        fh = new FileHandler("%h/PasswordChange.txt",99999,1,true);  
+        logger.addHandler(fh);
+        SimpleFormatter formatter = new SimpleFormatter();  
+        fh.setFormatter(formatter);  
+
+        } catch (SecurityException e) {  
+        e.printStackTrace();  
+        } catch (IOException e) {  
+        e.printStackTrace();  
+        } 
+        logger.info("User: "+ userID 
+                + "has changed password: ");
+        fh.close();
+    }
 
 //get employee by using UserName
     @Override
