@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    
+        <h:head>  
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <h:outputStylesheet library ="css"  name="bootstrap.css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
+        <h:outputStylesheet library="css" name="admindb.css" />
+        <h:outputStylesheet library="css" name="morrisjs/morris.css" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js" />
+        <title>User Profile</title>
+    
+        <style>
+            .table > tbody > tr > td{
+                border-top: #fff;
+            }
+        </style>
+
+    </h:head>
+    <h:body>  
+    <!--    To add the same header on all dashboard pages  -->
+        <ui:include src="dashboardHeader.xhtml"/>
+<!--    To add the same sidebar on all dashboard pages  -->
+        <ui:include src="dashboardSidebar.xhtml"/>
+    <div id="page-wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2 class="page-header"> My Profile</h2>
+                </div>
+            </div>
+                    
+            
+        <div class="panel panel-yellow">
+                        <div class="panel-heading">
+                            #{loginManageBean.employee.employeeDisplayFirstName} #{loginManageBean.employee.employeeDisplayLastName}
+                        </div>
+                        <div class="panel-body">
+                           
+<!--                            <div class="table-responsive">-->
+                                <table class="table">
+                                    <tbody>
+                                            <td style="width: 30%;">Full Name: </td>
+                                            <td>#{loginManageBean.employee.employeeDisplayFirstName} #{loginManageBean.employee.employeeDisplayLastName}</td>
+                                            <td></td>
+                                        <tr>
+                                            <td>Role, Department</td>
+                                            <td>#{loginManageBean.employee.employeeRole}, #{loginManageBean.employee.employeeDepartment}</td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Birthday</td>
+                                            <td>#{loginManageBean.employee.employeeDOB.day}/#{loginManageBean.employee.employeeDOB.month}/#{loginManageBean.employee.employeeDOB.year}</td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Gender</td>
+                                            <td>#{loginManageBean.employee.employeeGender}</td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Home Address</td>
+                                            <td>#{loginManageBean.employee.employeeMailingAddress}</td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Office Number</td>
+                                            <td>#{loginManageBean.employee.employeeOfficeNumber}</td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Handphone Number</td>
+                                            <td>#{loginManageBean.employee.employeeHpNumber}</td>
+                                            <td></td>
+                                        </tr> 
+                                    </tbody>
+                                </table>
+                            <!-- /.table-responsive -->
+<!--                        </div>-->
+                    </div>
+                    </div>
+        <div class="text-center">
+        <button type="button" class="btn btn-warning">Change Information</button>
+        </div>
+    </div>
+        
+        
+          
+                    <!-- /.panel -->
+                
+                <!-- /.col-lg-6 -->
+            
+            <!-- /.row -->
+    
+        
+    <h:outputScript library="js" name="jQuery/jQuery-2.1.4.min.js" />
+    <h:outputScript library="js" name="bootstrap.min.js" /> 
+    <h:outputScript library="js" name="metisMenu/metisMenu.min.js" />
+    <h:outputScript library="js" name="sb-admin-2.js" />
+    </h:body>
+    
+        
+</html>

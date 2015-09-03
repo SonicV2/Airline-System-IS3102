@@ -40,6 +40,8 @@ public class Employee implements Serializable {
     @OneToOne(cascade = {CascadeType.PERSIST})
     private Salt salt;
 
+    @OneToMany(cascade = {CascadeType.PERSIST})
+    private List<Message> msgs = new ArrayList<Message>();
 
     public void createEmployee(String employeeID, String employeeDisplayFirstName, String employeeDisplayLastName,
             String employeeRole, String employeeDepartment, Date employeeDOB,
@@ -219,6 +221,20 @@ public class Employee implements Serializable {
     @Override
     public String toString() {
         return "entity.Employee[ id=" + employeeID + " ]";
+    }
+
+    /**
+     * @return the msgs
+     */
+    public List<Message> getMsgs() {
+        return msgs;
+    }
+
+    /**
+     * @param msgs the msgs to set
+     */
+    public void setMsgs(List<Message> msgs) {
+        this.msgs = msgs;
     }
 
 
