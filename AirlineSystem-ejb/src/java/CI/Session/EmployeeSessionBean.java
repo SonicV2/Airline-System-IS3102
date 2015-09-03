@@ -7,23 +7,29 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 import javax.ejb.Stateless;
 import javax.mail.NoSuchProviderException;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import java.io.IOException;
 
 @Stateless
 public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
 
     @PersistenceContext(unitName = "AirlineSystem-ejbPU")
     private EntityManager em;
-
+    FileHandler fh;  
+    
+    
+  
     @Override
-    public void addEmployee(String employeeID, String employeeDisplayFirstName, String employeeDisplayLastName,
+    public void addEmployee(String userID,String employeeID, String employeeDisplayFirstName, String employeeDisplayLastName,
             String employeeRole, String employeeDepartment, Date employeeDOB,
             String employeeGender, String employeeHpNumber, String employeeMailingAddress, String employeeOfficeNumber) {
 
@@ -37,6 +43,22 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
         employee.setEmployeeEmailAddress(userName + "@merlion.com.sg");
 
         em.persist(employee);
+        Logger logger = Logger.getLogger(EmployeeSessionBean.class.getName());
+        
+        try {   
+        fh = new FileHandler("%h/addEmployee.txt",99999,1,true);  
+        logger.addHandler(fh);
+        SimpleFormatter formatter = new SimpleFormatter();  
+        fh.setFormatter(formatter);  
+
+        } catch (SecurityException e) {  
+        e.printStackTrace();  
+        } catch (IOException e) {  
+        e.printStackTrace();  
+        } 
+        logger.info("User: "+ userID 
+                + "has added Employee: " + employeeID);
+        fh.close();
 
     }
 

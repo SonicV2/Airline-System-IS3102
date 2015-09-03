@@ -16,7 +16,7 @@ import javax.ejb.Local;
 @Local
 public interface EmployeeSessionBeanLocal {
     
-    public void addEmployee(String employeeID,String employeeDisplayFirstName,String employeeDisplayLastName,
+    public void addEmployee(String userID,String employeeID,String employeeDisplayFirstName,String employeeDisplayLastName,
                             String  employeeRole,String employeeDepartment,Date employeeDOB,
                             String employeeGender,String employeeHpNumber,String employeeMailingAddress,
                             String employeeOfficeNumber);
