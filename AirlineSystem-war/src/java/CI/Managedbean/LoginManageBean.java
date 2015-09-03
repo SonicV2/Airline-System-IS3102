@@ -9,6 +9,8 @@ import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import org.primefaces.context.RequestContext;
 import CI.Session.EmployeeSessionBeanLocal;
+import java.util.Date;
+import javax.faces.bean.ManagedProperty;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -21,7 +23,7 @@ public class LoginManageBean {
 
     @EJB
     private EmployeeSessionBeanLocal employeeSessionBean;
-
+    
     String employeeUserName;
     String employeePassword;
     Employee employee;
@@ -57,19 +59,19 @@ public class LoginManageBean {
 
     public void doLogin(String employeeUserName, String employeePassword) {
 
-        employee = employeeSessionBean.getEmployee(employeeUserName);
+        setEmployee(employeeSessionBean.getEmployee(employeeUserName));
         firstTimer = false;
         if (employeeUserName.equals("") && employeePassword.equals("")) {
             doLogInMsg = "Please Enter your User Name and Password!";
             logInCheck = false;
         } else {
-            if (employee == null) {
+            if (getEmployee() == null) {
                 doLogInMsg = "Invaild Employee Name!";
                 logInCheck = false;
             } else if (employeeSessionBean.isSameHash(employeeUserName, employeePassword)) {
-                doLogInMsg = employee.getEmployeeDisplayLastName();
+                doLogInMsg = getEmployee().getEmployeeDisplayLastName();
                 logInCheck = true;
-                if (employee.isEmployeeAccountActivate() == false) {
+                if (getEmployee().isEmployeeAccountActivate() == false) {
                     firstTimer = true;
                 }
             } else {
@@ -108,6 +110,20 @@ public class LoginManageBean {
 
     public void setEmployeePassword(String employeePassword) {
         this.employeePassword = employeePassword;
+    }
+
+    /**
+     * @return the employee
+     */
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    /**
+     * @param employee the employee to set
+     */
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
     }
 
 }
