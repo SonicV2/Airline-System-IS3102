@@ -16,10 +16,7 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-/**
- *
- * @author smu
- */
+
 @Stateless
 public class MessageSessionBean implements MessageSessionBeanLocal {
 

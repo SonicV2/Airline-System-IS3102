@@ -55,7 +55,15 @@ public class EmployeeManageBean {
 
     public void addEmployee(ActionEvent event) {
         HttpSession session = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(false);
-        String userID= session.getAttribute("isLogin").toString();
+        
+        String userID;
+        
+        if(session.getAttribute("isLogin")==null){
+            userID="Super admin ";
+        }else{ userID= session.getAttribute("isLogin").toString();
+        
+        }
+       
         employeeSessionBean.addEmployee(userID,employeeID, employeeDisplayFirstName, employeeDisplayLastName, employeeRole,
                 employeeDepartment, employeeDOB, employeeGender, employeeHpNumber,
                 employeeMailingAddress, employeeOfficeNumber);
@@ -70,7 +78,7 @@ public class EmployeeManageBean {
 
     public String changePwd(){
         HttpSession session = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(false);
-        String userID= session.getAttribute("isLogin").toString();
+        //String userID= session.getAttribute("isLogin").toString();
          String employeeUserName = loginManageBean.employeeUserName;
          if(employeeNewPwd.equals(employeeNewPwdRe)){
             employeeSessionBean.hashNewPwd(employeeUserName, employeeNewPwd);
