@@ -6,10 +6,14 @@
 package APS.Entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 /**
  *
@@ -20,20 +24,49 @@ public class Route implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private Long routeId;
+    private String origin;
+    private String destination;
+    @OneToMany(cascade={CascadeType.ALL}, mappedBy="route")
+    private List<Flight> flights = new ArrayList<Flight>();
+    
 
-    public Long getId() {
-        return id;
+    public Long getRouteId() {
+        return routeId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setRouteId(Long routeId) {
+        this.routeId = routeId;
+    }
+    
+    public String getOrigin() {
+        return origin;
+    }
+    
+    public void setOrigin(String origin){
+        this.origin = origin;
+    }
+    
+    public String getDestination() {
+        return destination;
+    }
+    
+    public void setDestination(String destination){
+        this.destination = destination;
+    }
+    
+    public List<Flight> getFlights() {
+        return flights;
     }
 
+    public void setFlights(List<Flight> flights) {
+        this.flights = flights;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += (routeId != null ? routeId.hashCode() : 0);
         return hash;
     }
 
@@ -44,7 +77,7 @@ public class Route implements Serializable {
             return false;
         }
         Route other = (Route) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((this.routeId == null && other.routeId != null) || (this.routeId != null && !this.routeId.equals(other.routeId))) {
             return false;
         }
         return true;
@@ -52,7 +85,7 @@ public class Route implements Serializable {
 
     @Override
     public String toString() {
-        return "APS.Entity.Route[ id=" + id + " ]";
+        return "APS.Entity.Route[ id=" + routeId + " ]";
     }
     
 }

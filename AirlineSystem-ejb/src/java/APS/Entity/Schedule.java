@@ -10,6 +10,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import java.util.Date;
 
 /**
  *
@@ -20,20 +24,63 @@ public class Schedule implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private Long scheduleId;
+    
+    @Temporal(TemporalType.DATE)
+    private Date departureDate;
+    
+    @Temporal(TemporalType.DATE)
+    private Date arrivalDate;
+    
+    private int seatsAvailable;
+    
+    @ManyToOne
+    private Flight flight;
 
-    public Long getId() {
-        return id;
+    public Long getScheduleId() {
+        return scheduleId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setScheduleId(Long scheduleId) {
+        this.scheduleId = scheduleId;
+    }
+    
+    public Date getDepartureDate() {
+        return departureDate;
+    }
+
+    public void setDepartureDate(Date departureDate) {
+        this.departureDate = departureDate;
+    }
+    
+    public Date getArrivalDate() {
+        return arrivalDate;
+    }
+
+    public void setArrivalDate(Date arrivalDate) {
+        this.arrivalDate = arrivalDate;
+    }
+    
+    public int getSeatsAvailable() {
+        return seatsAvailable;
+    }
+    
+    public void setSeatsAvailable(int seatsAvailable) {
+        this.seatsAvailable = seatsAvailable;
+    }
+    
+    public Flight getFlight() {
+        return flight;
+    }
+    
+    public void setFlight(Flight flight) {
+        this.flight = flight;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += (scheduleId != null ? scheduleId.hashCode() : 0);
         return hash;
     }
 
@@ -44,7 +91,7 @@ public class Schedule implements Serializable {
             return false;
         }
         Schedule other = (Schedule) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((this.scheduleId == null && other.scheduleId != null) || (this.scheduleId != null && !this.scheduleId.equals(other.scheduleId))) {
             return false;
         }
         return true;
@@ -52,7 +99,7 @@ public class Schedule implements Serializable {
 
     @Override
     public String toString() {
-        return "APS.Entity.Schedule[ id=" + id + " ]";
+        return "APS.Entity.Schedule[ id=" + scheduleId + " ]";
     }
     
 }
