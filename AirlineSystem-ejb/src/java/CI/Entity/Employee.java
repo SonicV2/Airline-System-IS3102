@@ -1,5 +1,6 @@
 package CI.Entity;
 
+import Organization.OrganizationUnit;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -8,6 +9,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
@@ -42,7 +44,11 @@ public class Employee implements Serializable {
 
     @OneToMany(cascade = {CascadeType.PERSIST})
     private List<Message> msgs = new ArrayList<Message>();
-
+    
+    
+    @ManyToOne(cascade = {CascadeType.PERSIST})
+    private OrganizationUnit organizationUnit=new OrganizationUnit();
+    
     public void createEmployee(String employeeID, String employeeDisplayFirstName, String employeeDisplayLastName,
             String employeeRole, String employeeDepartment, Date employeeDOB,
             String employeeGender, String employeeHpNumber, String employeeMailingAddress, String employeeOfficeNumber) {
@@ -235,6 +241,20 @@ public class Employee implements Serializable {
      */
     public void setMsgs(List<Message> msgs) {
         this.msgs = msgs;
+    }
+
+    /**
+     * @return the organizationUnit
+     */
+    public OrganizationUnit getOrganizationUnit() {
+        return organizationUnit;
+    }
+
+    /**
+     * @param organizationUnit the organizationUnit to set
+     */
+    public void setOrganizationUnit(OrganizationUnit organizationUnit) {
+        this.organizationUnit = organizationUnit;
     }
 
 
