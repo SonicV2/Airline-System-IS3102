@@ -40,10 +40,10 @@ public class LoginManageBean {
         doLogin(employeeUserName, employeePassword);
         HttpSession session = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(false);
         if (logInCheck == true) {
-            
+             employeeSessionBean.logLogIn(employeeUserName);
             session.setAttribute("isLogin", employeeUserName);
             if (firstTimer == true) {
-                employeeSessionBean.logLogIn(employeeUserName);
+               
                 return "CI/newUserChangePwd" + "?faces-redirect=true";
             } else {
                 return "CI/employeeDashBoard" + "?faces-redirect=true";

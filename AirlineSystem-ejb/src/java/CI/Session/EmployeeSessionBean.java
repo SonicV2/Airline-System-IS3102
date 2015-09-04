@@ -77,7 +77,7 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
         e.printStackTrace();  
         } 
         logger.info("User: "+ userID 
-                + "has logged in: ");
+                + " has logged in: ");
         fh.close();
     }
     
