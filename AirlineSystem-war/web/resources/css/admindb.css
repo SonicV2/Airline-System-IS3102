@@ -44,6 +44,17 @@ body {
     min-height: 50px;
 }
 
+.navbar-top-links li a .label {
+    position: absolute;
+    top: 13px;
+    right: 20px;
+    text-align: center;
+    font-size: 9px;
+    /* padding: 2px 3px; */
+    line-height: .9;
+
+}
+
 .navbar-top-links .dropdown-menu li {
     display: block;
 }
@@ -84,6 +95,7 @@ body {
     right: 0;
     left: auto;
 }
+
 
 .sidebar .sidebar-nav.navbar-collapse {
     padding-right: 0;
