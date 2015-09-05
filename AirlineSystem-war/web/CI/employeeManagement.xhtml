@@ -145,14 +145,29 @@
                             </div>
 
                             <div class="form-group">
-                                <h:outputLabel value="Department: " class="col-md-4 control-label" />
-                                <div class="col-md-8">
-                                    <h:inputText id="department" required="true" requiredMessage="Please fill in departemnt field!" class="form-control" value="#{employeeManageBean.employeeDepartment}" />
-                                </div>
-                                <div class="missingfield">
-                                     <h:message for="department"  />
-                                </div>
+                                <p:outputLabel for="department" value="department: " class="col-md-4 control-label" />
+                                <p:selectOneMenu id="department" value="#{departmentManageBean.department}" >
+                                  
+                                    <f:selectItem itemLabel="Select department" itemValue="" noSelectionOption="true" />
+                                    <f:selectItems value="#{departmentManagedBean.departments}" />
+                                </p:selectOneMenu>
+
+                               
+                               
                             </div>
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
 
                             <div class="form-group">
                                 <h:outputLabel value="Mobile Number: " class="col-md-4 control-label" />

@@ -7,11 +7,15 @@ package CI.Managedbean;
 
 import CI.Session.DepartmentSessionBeanLocal;
 import CI.Session.EmployeeSessionBeanLocal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import javax.naming.Context;
@@ -24,7 +28,7 @@ import javax.naming.NamingException;
  */
 
 @ManagedBean
-@SessionScoped
+@ViewScoped
 @Named(value = "departmentManageBean")
 public class departmentManagedBean {
     @EJB
@@ -40,7 +44,14 @@ public class departmentManagedBean {
     String departmentName;
     String departmentLocation;
 
+    private String department; // for dropdown selection
+    private List<String> departments=new ArrayList();;
+    
+    
+    
+    
     public departmentManagedBean() {
+        
     }
 
     public void addDepartment(ActionEvent event){
@@ -49,8 +60,13 @@ public class departmentManagedBean {
     
     }
     
-    
-    
+    @PostConstruct
+    public void retrive(){
+        
+        System.out.println("-------------------------------------------");
+        setDepartments(departmentSessionBean.retrive());
+    }
+   
     
     
     public String getDepartmentName() {
@@ -75,6 +91,22 @@ public class departmentManagedBean {
 
     public void setDepartmentSessionBean(DepartmentSessionBeanLocal departmentSessionBean) {
         this.departmentSessionBean = departmentSessionBean;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    public List<String> getDepartments() {
+        return departments;
+    }
+
+    public void setDepartments(List<String> departments) {
+        this.departments = departments;
     }
     
     
