@@ -34,6 +34,7 @@ public class MessageManagedBean {
     private String msgText;
     private Date lastRead;
     private List<Message> unReadMsg;
+    private List<Message> readMsg;
     
     @ManagedProperty(value="#{loginManageBean}")
     private LoginManageBean loginManageBean;
@@ -46,6 +47,7 @@ public class MessageManagedBean {
         setSender(loginManageBean.employeeUserName);
         System.out.println("Sender: " + sender + "Receiver: " + receiver + "message: " + msgText);
         messageSessionBean.sendMsg(sender, receiver, msgText);
+        receiveReadMessage(event);
     }
 
     
@@ -54,6 +56,13 @@ public class MessageManagedBean {
         setUnReadMsg(messageSessionBean.unReadMsg(loginManageBean.employeeUserName));
         messageSessionBean.setMsgRead(loginManageBean.employeeUserName);
     }
+    
+    public void receiveReadMessage(ActionEvent event)
+    {
+        setReadMsg(messageSessionBean.readMsg(loginManageBean.employeeUserName));
+        
+    }
+    
     
     /**
      * @return the msgText
@@ -137,6 +146,20 @@ public class MessageManagedBean {
      */
     public void setUnReadMsg(List<Message> unReadMsg) {
         this.unReadMsg = unReadMsg;
+    }
+
+    /**
+     * @return the readMsg
+     */
+    public List<Message> getReadMsg() {
+        return readMsg;
+    }
+
+    /**
+     * @param readMsg the readMsg to set
+     */
+    public void setReadMsg(List<Message> readMsg) {
+        this.readMsg = readMsg;
     }
     
 }
