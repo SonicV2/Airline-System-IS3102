@@ -9,6 +9,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -49,14 +50,17 @@ public class Employee implements Serializable {
     @ManyToOne(cascade = {CascadeType.PERSIST})
     private OrganizationUnit organizationUnit=new OrganizationUnit();
     
+    @ManyToMany(cascade = {CascadeType.PERSIST})
+    private List<Role> roles= new ArrayList<Role>(); 
+    
     public void createEmployee(String employeeID, String employeeDisplayFirstName, String employeeDisplayLastName,
-            String employeeRole, /*String employeeDepartment,*/ Date employeeDOB,
+            /*String employeeRole, String employeeDepartment,*/ Date employeeDOB,
             String employeeGender, String employeeHpNumber, String employeeMailingAddress, String employeeOfficeNumber) {
 
         this.employeeID = employeeID;
         this.employeeDisplayFirstName = employeeDisplayFirstName;
         this.employeeDisplayLastName = employeeDisplayLastName;
-        this.employeeRole = employeeRole;
+        //this.employeeRole = employeeRole;
         //this.employeeDepartment = employeeDepartment;
         this.employeeDOB = employeeDOB;
         this.employeeGender = employeeGender;
@@ -251,5 +255,15 @@ public class Employee implements Serializable {
         this.organizationUnit = organizationUnit;
     }
 
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
+    }
+
+    
+    
 
 }

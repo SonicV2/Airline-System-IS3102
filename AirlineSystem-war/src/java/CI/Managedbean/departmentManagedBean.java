@@ -45,15 +45,16 @@ public class departmentManagedBean {
     String departmentLocation;
 
     private String department; // for dropdown selection
-    private List<String> departments=new ArrayList();;
+    private List<String> departments=new ArrayList();
     
     
     
     
     public departmentManagedBean() {
-        
+    
     }
-
+    
+    /*This is for admin to create new department*/
     public void addDepartment(ActionEvent event){
     
         departmentSessionBean.addDepartment(departmentName, departmentLocation);
@@ -63,7 +64,7 @@ public class departmentManagedBean {
     @PostConstruct
     public void retrive(){
         
-        System.out.println("-------------------------------------------");
+        
         setDepartments(departmentSessionBean.retrive());
     }
    
