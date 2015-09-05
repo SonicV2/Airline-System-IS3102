@@ -1,6 +1,6 @@
 package CI.Entity;
 
-//import Organization.OrganizationUnit;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -46,18 +46,18 @@ public class Employee implements Serializable {
     private List<Message> msgs = new ArrayList<Message>();
     
     
-//    @ManyToOne(cascade = {CascadeType.PERSIST})
-//    private OrganizationUnit organizationUnit=new OrganizationUnit();
+    @ManyToOne(cascade = {CascadeType.PERSIST})
+    private OrganizationUnit organizationUnit=new OrganizationUnit();
     
     public void createEmployee(String employeeID, String employeeDisplayFirstName, String employeeDisplayLastName,
-            String employeeRole, String employeeDepartment, Date employeeDOB,
+            String employeeRole, /*String employeeDepartment,*/ Date employeeDOB,
             String employeeGender, String employeeHpNumber, String employeeMailingAddress, String employeeOfficeNumber) {
 
         this.employeeID = employeeID;
         this.employeeDisplayFirstName = employeeDisplayFirstName;
         this.employeeDisplayLastName = employeeDisplayLastName;
         this.employeeRole = employeeRole;
-        this.employeeDepartment = employeeDepartment;
+        //this.employeeDepartment = employeeDepartment;
         this.employeeDOB = employeeDOB;
         this.employeeGender = employeeGender;
         this.employeeHpNumber = employeeHpNumber;
@@ -236,26 +236,20 @@ public class Employee implements Serializable {
         return msgs;
     }
 
-    /**
-     * @param msgs the msgs to set
-     */
+   
     public void setMsgs(List<Message> msgs) {
         this.msgs = msgs;
     }
 
-    /**
-     * @return the organizationUnit
-     */
-//    public OrganizationUnit getOrganizationUnit() {
-//        return organizationUnit;
-//    }
-//
-//    /**
-//     * @param organizationUnit the organizationUnit to set
-//     */
-//    public void setOrganizationUnit(OrganizationUnit organizationUnit) {
-//        this.organizationUnit = organizationUnit;
-//    }
+        public OrganizationUnit getOrganizationUnit() {
+        return organizationUnit;
+    }
+
+    
+
+    public void setOrganizationUnit(OrganizationUnit organizationUnit) {
+        this.organizationUnit = organizationUnit;
+    }
 
 
 }
