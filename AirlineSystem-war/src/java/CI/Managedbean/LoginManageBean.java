@@ -63,13 +63,7 @@ public class LoginManageBean {
         setEmployee(employeeSessionBean.getEmployee(employeeUserName));
         firstTimer = false;
         
-        if(employee.isEmployeeLockOut()){
-             doLogInMsg = "Accound has been locked!";
-             logInCheck = false;
-             System.out.println("look here!");
-            
-        }else{
-            System.out.println("else look here!");
+       
         if (employeeUserName.equals("") && employeePassword.equals("")) {
             doLogInMsg = "Please Enter your User Name and Password!";
             logInCheck = false;
@@ -77,7 +71,12 @@ public class LoginManageBean {
             if (getEmployee() == null) {
                 doLogInMsg = "Invaild Employee Name!";
                 logInCheck = false;
-            } else if (employeeSessionBean.isSameHash(employeeUserName, employeePassword)) {
+            }else if(employee.isEmployeeLockOut()){
+             doLogInMsg = "Accound has been locked!";
+             logInCheck = false;
+             System.out.println("look here!");
+            
+            }else if (employeeSessionBean.isSameHash(employeeUserName, employeePassword)) {
                 doLogInMsg = getEmployee().getEmployeeDisplayLastName();
                 logInCheck = true;
                 if (getEmployee().isEmployeeAccountActivate() == false) {
@@ -87,7 +86,7 @@ public class LoginManageBean {
                 doLogInMsg = "Invaild Password!";
                 logInCheck = false;
             }
-        }
+        
         }
     }
 
