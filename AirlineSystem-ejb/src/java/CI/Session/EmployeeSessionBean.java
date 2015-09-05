@@ -3,6 +3,7 @@ package CI.Session;
 import CI.Entity.Employee;
 import CI.Entity.Salt;
 import CI.Entity.OrganizationUnit;
+import CI.Entity.Role;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -32,41 +33,58 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
     private List<Employee> employeelist=new ArrayList<Employee>();
     private Employee employee;
     private OrganizationUnit department;
-  
+     
+    private List<Role> rolelist=new ArrayList<Role>();
+    private Role role;
+    
     @Override
     public void addEmployee(String userID,String employeeID, String employeeDisplayFirstName, String employeeDisplayLastName,
             String employeeRole, String employeeDepartment, Date employeeDOB,
             String employeeGender, String employeeHpNumber, String employeeMailingAddress, String employeeOfficeNumber) {
-
+        
+        System.out.println(userID+" "+employeeID+" "+employeeDisplayFirstName+" "+employeeDisplayLastName
+                +" "+employeeRole+" "+employeeDepartment+" "+employeeDOB.toString()+" "+employeeGender
+                +" "+employeeHpNumber+" "+employeeMailingAddress+" "+employeeOfficeNumber);
+        
         employee = new Employee();
-        
         department= new OrganizationUnit();
-        
         department=getDepartment(employeeDepartment);
         
-        System.out.println("look here get department"+department.getdepartmentName());
+        System.out.println(department.getdepartmentName());
         
-        employee.createEmployee(employeeID, employeeDisplayFirstName, employeeDisplayLastName, employeeRole, /*employeeDepartment,*/
+        role=getRole(employeeRole);
+        List<Employee> employeelist_role=new ArrayList<Employee>();
+        
+        
+        employee.createEmployee(employeeID, employeeDisplayFirstName, employeeDisplayLastName,/* employeeRole, employeeDepartment,*/
                 employeeDOB, employeeGender, employeeHpNumber, employeeMailingAddress, employeeOfficeNumber);
 
+        
         String userName = generateUserName(employeeDisplayFirstName, employeeDisplayLastName);
         
-        employeelist=department.getEmployee();
-        employeelist.add(employee);
-        
-        System.out.println("look here"+employeelist.size());
-        
-        department.setEmployee(employeelist);
-        
-        employee.setOrganizationUnit(department);
-        
-        System.out.println("look here "+employee.getOrganizationUnit().getdepartmentName());
-        
         employee.setEmployeeUserName(userName);
-
         employee.setEmployeeEmailAddress(userName + "@merlion.com.sg");
         
+        em.flush();
+        //role=getRole(employeeID);
+        employeelist=department.getEmployee();
+        employeelist.add(employee);
+        department.setEmployee(employeelist);
+        employee.setOrganizationUnit(department);
         em.persist(employee);
+        
+        
+//        Employee employee_Role=getEmployee(userName);
+        rolelist=employee.getRoles();
+        rolelist.add(role);
+        employee.setRoles(rolelist);
+        employeelist_role=role.getEmployees();
+        employeelist_role.add(employee);
+        role.setEmployees(employeelist_role);
+
+        em.persist(role);
+        em.persist(employee);        
+
         Logger logger = Logger.getLogger(EmployeeSessionBean.class.getName());
         
         try {   
@@ -87,7 +105,9 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
     }
     
     // get department object when searching with deaprtment name
-    public OrganizationUnit getDepartment(String department){
+    public OrganizationUnit getDepartment(String depart){
+        
+        String department=depart.substring(0, depart.indexOf("("));
         
         OrganizationUnit department1 = new OrganizationUnit();
         try {
@@ -98,7 +118,7 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
             List results = q.getResultList();
             if (!results.isEmpty()) {
                 department1 = (OrganizationUnit) results.get(0);
-
+                
             } else {
                 department1 = null;
             }
@@ -108,6 +128,32 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
         }
         return department1;
     }
+    
+    // get role object when searching with role name
+    public Role getRole(String role){
+        
+        Role role1 = new Role();
+        try {
+
+            Query q = em.createQuery("SELECT a FROM Role " + "AS a WHERE a.roleName=:roleName");
+            q.setParameter("roleName", role);
+
+            List results = q.getResultList();
+            if (!results.isEmpty()) {
+                role1 = (Role) results.get(0);
+
+            } else {
+                role1 = null;
+            }
+
+        } catch (EntityNotFoundException enfe) {
+            System.out.println("\nEntity not found error" + "enfe.getMessage()");
+        }
+        return role1;
+    }
+    
+    
+    
     
     public void logLogIn(String userID){
         Logger logger = Logger.getLogger(EmployeeSessionBean.class.getName());

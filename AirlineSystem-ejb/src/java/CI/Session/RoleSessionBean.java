@@ -6,6 +6,7 @@
 package CI.Session;
 
 import CI.Entity.OrganizationUnit;
+import CI.Entity.Role;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -19,17 +20,17 @@ import javax.persistence.Query;
  * @author HOULIANG
  */
 @Stateless
-public class DepartmentSessionBean implements DepartmentSessionBeanLocal {
-
-    @PersistenceContext(unitName = "AirlineSystem-ejbPU")
+public class RoleSessionBean implements RoleSessionBeanLocal {
+     @PersistenceContext(unitName = "AirlineSystem-ejbPU")
     private EntityManager em;
+     
+     Role role=new Role();
+    
+    @Override
+    public void addRole(String roleName) {
 
-    OrganizationUnit department = new OrganizationUnit();
-
-    public void addDepartment(String departName, String departLocation) {
-
-        department.create(departName, departLocation);
-        em.persist(department);
+        role.create(roleName);
+        em.persist(role);
     }
     
     @Override
@@ -38,12 +39,12 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal {
         try {
             
             System.out.println("Look Look Here retrive");
-            Query q = em.createQuery("SELECT a FROM OrganizationUnit a");
+            Query q = em.createQuery("SELECT a FROM Role a");
 
-            List<OrganizationUnit> results = q.getResultList();
+            List<Role> results = q.getResultList();
             if (!results.isEmpty()) {
-                for (OrganizationUnit org : results) {
-                    list.add(org.getdepartmentName() + "(" +org.getLocation() + ")");
+                for (Role role : results) {
+                    list.add(role.getRoleName());
                 }
 
             } else {
@@ -55,5 +56,5 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal {
         }
         return list;
     }
-
+    
 }
