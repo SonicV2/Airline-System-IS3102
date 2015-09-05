@@ -5,6 +5,7 @@
  */
 package CI.Session;
 
+import CI.Entity.Employee;
 import CI.Entity.OrganizationUnit;
 import CI.Entity.Role;
 import java.util.ArrayList;
@@ -24,13 +25,19 @@ public class RoleSessionBean implements RoleSessionBeanLocal {
      @PersistenceContext(unitName = "AirlineSystem-ejbPU")
     private EntityManager em;
      
-     Role role=new Role();
-    
+     Role role_db=new Role();
+     
+     
+     private List<Role> rolelist=new ArrayList<Role>();
+     private Role role;
+     List<Employee> employeelist_role=new ArrayList<Employee>();
+     
+     
     @Override
     public void addRole(String roleName) {
 
-        role.create(roleName);
-        em.persist(role);
+        role_db.create(roleName);
+        em.persist(role_db);
     }
     
     @Override
@@ -55,6 +62,56 @@ public class RoleSessionBean implements RoleSessionBeanLocal {
             System.out.println("\nEntity not found error" + "enfe.getMessage()");
         }
         return list;
+    }
+    
+    public void addNewRole(Employee employee, String new_Role){
+       rolelist=employee.getRoles();
+       System.out.println("-----------------------rowsize"+rolelist.size());
+       
+       
+       role=getRole(new_Role);
+       rolelist.add(role);
+       System.out.println("--------rolename"+role.getRoleName());
+       employee.setRoles(rolelist);
+       System.out.println("--------------------111"+rolelist.size());
+       
+      
+       employeelist_role=role.getEmployees();
+       
+       
+       
+       System.out.println("------------------1");
+       employeelist_role.add(employee);
+       System.out.println("------------------2");
+       role.setEmployees(employeelist_role);
+       
+       
+        em.merge(employee);
+        em.merge(role);
+        
+      
+    }
+    
+    public Role getRole(String role){
+        
+        Role role1 = new Role();
+        try {
+
+            Query q = em.createQuery("SELECT a FROM Role " + "AS a WHERE a.roleName=:roleName");
+            q.setParameter("roleName", role);
+
+            List results = q.getResultList();
+            if (!results.isEmpty()) {
+                role1 = (Role) results.get(0);
+
+            } else {
+                role1 = null;
+            }
+
+        } catch (EntityNotFoundException enfe) {
+            System.out.println("\nEntity not found error" + "enfe.getMessage()");
+        }
+        return role1;
     }
     
 }
