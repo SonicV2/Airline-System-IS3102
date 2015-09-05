@@ -31,4 +31,6 @@ public interface EmployeeSessionBeanLocal {
     public boolean isSameHash(String userName, String pwd);
     public void hashNewPwd(String userName, String pwd);
     public void employeeActivate(String userName);
+    
+    
 }

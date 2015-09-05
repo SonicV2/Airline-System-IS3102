@@ -2,6 +2,7 @@ package CI.Session;
 
 import CI.Entity.Employee;
 import CI.Entity.Salt;
+import CI.Entity.OrganizationUnit;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -18,6 +19,7 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.io.IOException;
+import java.util.ArrayList;
 
 @Stateless
 public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
@@ -27,21 +29,43 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
     FileHandler fh;  
     
     
+    private List<Employee> employeelist=new ArrayList<Employee>();
+    private Employee employee;
+    private OrganizationUnit department;
   
     @Override
     public void addEmployee(String userID,String employeeID, String employeeDisplayFirstName, String employeeDisplayLastName,
             String employeeRole, String employeeDepartment, Date employeeDOB,
             String employeeGender, String employeeHpNumber, String employeeMailingAddress, String employeeOfficeNumber) {
 
-        Employee employee = new Employee();
-        employee.createEmployee(employeeID, employeeDisplayFirstName, employeeDisplayLastName, employeeRole, employeeDepartment,
+        employee = new Employee();
+        
+        department= new OrganizationUnit();
+        
+        department=getDepartment(employeeDepartment);
+        
+        System.out.println("look here get department"+department.getdepartmentName());
+        
+        employee.createEmployee(employeeID, employeeDisplayFirstName, employeeDisplayLastName, employeeRole, /*employeeDepartment,*/
                 employeeDOB, employeeGender, employeeHpNumber, employeeMailingAddress, employeeOfficeNumber);
 
         String userName = generateUserName(employeeDisplayFirstName, employeeDisplayLastName);
+        
+        employeelist=department.getEmployee();
+        employeelist.add(employee);
+        
+        System.out.println("look here"+employeelist.size());
+        
+        department.setEmployee(employeelist);
+        
+        employee.setOrganizationUnit(department);
+        
+        System.out.println("look here "+employee.getOrganizationUnit().getdepartmentName());
+        
         employee.setEmployeeUserName(userName);
 
         employee.setEmployeeEmailAddress(userName + "@merlion.com.sg");
-
+        
         em.persist(employee);
         Logger logger = Logger.getLogger(EmployeeSessionBean.class.getName());
         
@@ -60,6 +84,29 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
                 + "has added Employee: " + employeeID);
         fh.close();
 
+    }
+    
+    // get department object when searching with deaprtment name
+    public OrganizationUnit getDepartment(String department){
+        
+        OrganizationUnit department1 = new OrganizationUnit();
+        try {
+
+            Query q = em.createQuery("SELECT a FROM OrganizationUnit " + "AS a WHERE a.departmentName=:departmentName");
+            q.setParameter("departmentName", department);
+
+            List results = q.getResultList();
+            if (!results.isEmpty()) {
+                department1 = (OrganizationUnit) results.get(0);
+
+            } else {
+                department1 = null;
+            }
+
+        } catch (EntityNotFoundException enfe) {
+            System.out.println("\nEntity not found error" + "enfe.getMessage()");
+        }
+        return department1;
     }
     
     public void logLogIn(String userID){
@@ -294,6 +341,6 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
         employee.setEmployeeAccountActivate(true);
         em.persist(employee);
     }
-   
-
+        
+    
 }
