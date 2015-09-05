@@ -5,6 +5,7 @@
  */
 package CI.Session;
 
+import java.util.List;
 import javax.ejb.Local;
 
 /**
@@ -14,4 +15,5 @@ import javax.ejb.Local;
 @Local
 public interface DepartmentSessionBeanLocal {
     public void addDepartment(String departName, String departLocation);
+    public List<String> retrive();
 }
