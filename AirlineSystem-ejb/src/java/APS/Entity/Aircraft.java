@@ -22,10 +22,18 @@ public class Aircraft implements Serializable {
     @Id
     private String tailNo;
     @Temporal(TemporalType.DATE)
+    private Date datePurchased;
+    @Temporal(TemporalType.DATE)
     private Date lastMaintained;
     private Flight flight = new Flight();
     private AircraftType aircraftType = new AircraftType();
-
+    
+    public void createAircraft(String tailNo, Date datePurchased, Date lastMaintained) {
+        this.tailNo = tailNo;
+        this.datePurchased = datePurchased;
+        this.lastMaintained = lastMaintained;
+    }
+    
     public String getTailNo() {
         return tailNo;
     }
@@ -33,7 +41,15 @@ public class Aircraft implements Serializable {
     public void setTailNo(String tailNo) {
         this.tailNo = tailNo;
     }
+    
+    public Date getDatePurchased() {
+        return datePurchased;
+    }
 
+    public void setDatePurchased(Date datePurchased) {
+        this.datePurchased = datePurchased;
+    }
+    
     public Date getLastMaintained() {
         return lastMaintained;
     }

@@ -2,48 +2,129 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
-    <h:head>
-        <title>Message</title>
+      xmlns:jsf="http://xmlns.jcp.org/jsf"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+
+    <h:head>  
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <h:outputStylesheet library ="css"  name="bootstrap.css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
+        <h:outputStylesheet library="css" name="admindb.css" />
+        <h:outputStylesheet library="css" name="morrisjs/morris.css" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js" />
+        <title>Admin Dashboard</title>
+
+
     </h:head>
+
+
     <h:body>
+
+
+<!--    To add the same header on all dashboard pages  -->
+        <ui:include src="dashboardHeader.xhtml"/>
+<!--    To add the same sidebar on all dashboard pages  -->
+        <ui:include src="dashboardSidebar.xhtml"/>
+        
+        <div id="page-wrapper">
+        
+            <br></br>
         
         
-        <h:form>
-        <h:outputLabel value="Sender"/>
-        <h:outputLabel value="#{loginManageBean.employeeUserName}"/>
-        <br/>
-        <br/>
-        <h:outputLabel value="Send To"/>
-        <h:inputText value="#{messageManagedBean.receiver}"/>
-         <br/>
-         <br/>
-         
-        <h:outputLabel value="Message"/> 
-        <h:inputText value="#{messageManagedBean.msgText}"/>
-        <br/>
-        <h:commandButton value="Send" actionListener="#{messageManagedBean.sendMsg}"/>
         
-       
-        <p:dataTable var="message" value="#{messageManagedBean.unReadMsg}">
-            <p:column headerText="Sender">
-                <h:outputText value="#{message.sender}"/>
-            </p:column>
-            
-              <p:column headerText="Message">
-                  <h:outputText value="#{message.msgText}"/>
-            </p:column>
-            
-              <p:column headerText="Time">
-                  <h:outputText value="#{message.sendTime}"/>
-            </p:column>
-        </p:dataTable>
+             <div class="chat-panel panel panel-default">
+                        <div class="panel-heading">
+                            <i class="fa fa-comments fa-fw"></i>
+                            My messages
+                            <div class="btn-group pull-right">
+                                <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                                    <i class="fa fa-chevron-down"></i>
+                                </button>
+                                <ul class="dropdown-menu slidedown">
+                                    <li>
+                                        <a href="#">
+                                            <i class="fa fa-refresh fa-fw"></i> Refresh
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <i class="fa fa-check-circle fa-fw"></i> Available
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <i class="fa fa-times fa-fw"></i> Busy
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <i class="fa fa-clock-o fa-fw"></i> Away
+                                        </a>
+                                    </li>
+                                    <li class="divider"></li>
+                                    <li>
+                                        <a href="#">
+                                            <i class="fa fa-sign-out fa-fw"></i> Sign Out
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                  <div class="panel-body">
+                            <ul class="chat">
+                                <ui:repeat value="#{messageManagedBean.readMsg}" var="message">
+                                <li class="left clearfix">
+                                    <span class="chat-img pull-left">
+                                        <img src="http://placehold.it/50/55C1E7/fff" alt="User Avatar" class="img-circle" />
+                                    </span>
+                                    <div class="chat-body clearfix">
+                                        <div class="header">
+                                            <strong class="primary-font"><h:outputText value="#{message.sender}"/></strong>
+                                            <small class="pull-right text-muted">
+                                                <i class="fa fa-clock-o fa-fw"></i><h:outputText value="#{message.sendTime}"/>
+                                            </small>
+                                        </div>
+                                        <p>
+                                            <h:outputText value="#{message.msgText}"/>
+                                        </p>
+                                    </div>
+                                </li>
+                                </ui:repeat>
+                            </ul>
+                        </div>
+                        <!-- /.panel-body -->
+                        <h:form>
+                        <div class="panel-footer">
+                            To: 
+                            <div class="input-group">
+                                <h:inputText class="col-sm-3 input-sm" pt:placeholder="Username of receiver" value="#{messageManagedBean.receiver}"/>
+                                
+                                <h:inputText id="btn-input" class="col-sm-9 input-sm" pt:placeholder="Type your message here..." value="#{messageManagedBean.msgText}"/>
+                                <!--<input id="btn-input" type="text" class="form-control input-sm" placeholder="Type your message here..." />-->
+                                <span class="input-group-btn">
+                                    <button class="btn btn-warning btn-sm" id="btn-chat" jsf:action="message" jsf:actionListener="#{messageManagedBean.sendMsg}">
+                                        Send
+                                    </button>
+                                    
+                                  
+                                </span>
+                            </div>
+                        </div>
+                            </h:form>
+                        <!-- /.panel-footer -->
+             </div>
         
         
-       
-        
-        </h:form>
+        </div>
+    <h:outputScript library="js" name="jQuery/jQuery-2.1.4.min.js" />
+    <h:outputScript library="js" name="bootstrap.min.js" /> 
+    <h:outputScript library="js" name="metisMenu/metisMenu.min.js" />
+    <h:outputScript library="js" name="sb-admin-2.js" />
     </h:body>
 </html>
 

@@ -69,7 +69,9 @@ public class MessageSessionBean implements MessageSessionBeanLocal {
         }
         return employee;
     }
-
+    
+    
+    //get a list of unread messages from the database
     @Override
     public List<Message> unReadMsg(String receiver) {
         Employee receUser = getEmployee(receiver);
@@ -84,7 +86,25 @@ public class MessageSessionBean implements MessageSessionBeanLocal {
         
         return unReadMsgs;
     }
-
+    
+    //get at list of read messages from database
+    @Override
+    public List<Message> readMsg(String receiver) {
+        Employee receUser = getEmployee(receiver);
+        List<Message> msgs = receUser.getMsgs();
+        System.out.println("Reciever: "+ receiver + " number: "+msgs.size() );
+        List<Message> readMsgs = new ArrayList<Message>();
+        for(Message m : msgs){
+            if(m.getReceiver().equals(receiver) && m.isIsRead()==true){
+                readMsgs.add(m);
+            }
+        }
+        
+        return readMsgs;
+    }
+    
+    
+    //to set a list of messages as read
     @Override
     public void setMsgRead(String userName) {
        Employee user = getEmployee(userName);
@@ -96,6 +116,7 @@ public class MessageSessionBean implements MessageSessionBeanLocal {
        }
     }
     
+   
     
     
 }

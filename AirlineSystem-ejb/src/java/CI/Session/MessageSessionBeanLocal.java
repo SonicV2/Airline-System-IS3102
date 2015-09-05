@@ -20,7 +20,7 @@ public interface MessageSessionBeanLocal {
     void sendMsg(String sender, String receiver, String msgText);
 
     List<Message> unReadMsg(String receiver);
-
+    List<Message> readMsg(String receiver);
     void setMsgRead(String userName);
     
 }
