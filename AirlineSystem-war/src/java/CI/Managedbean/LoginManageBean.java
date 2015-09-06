@@ -10,9 +10,9 @@ import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import org.primefaces.context.RequestContext;
 import CI.Session.EmployeeSessionBeanLocal;
-import java.util.Date;
 import java.util.List;
-import javax.faces.bean.ManagedProperty;
+import java.util.Map;
+import javax.faces.context.ExternalContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -34,14 +34,14 @@ public class LoginManageBean {
     boolean firstTimer;
     HttpServletRequest req;
     String roles=""; // to get all roles in this string
-
+   HttpSession session = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(false);
     public LoginManageBean() {
     }
 
     public String check() {
        
         doLogin(employeeUserName, employeePassword);
-        HttpSession session = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+        
         if (logInCheck == true) {
              employeeSessionBean.logLogIn(employeeUserName);
             session.setAttribute("isLogin", employeeUserName);
@@ -63,6 +63,7 @@ public class LoginManageBean {
     
     public String direct(){
         if(employee.getOrganizationUnit().getdepartmentName().equals("HR")){
+           FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("department", employee.getOrganizationUnit().getdepartmentName());
             return "Department/HR" + "?faces-redirect=true";
         }else if(employee.getOrganizationUnit().getdepartmentName().equals("IT")){
             return "Department/IT" + "?faces-redirect=true";

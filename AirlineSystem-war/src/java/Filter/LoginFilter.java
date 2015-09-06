@@ -11,6 +11,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import javax.servlet.Filter;
 import java.util.logging.LogRecord;
+import javax.faces.context.FacesContext;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
@@ -55,6 +56,11 @@ public class LoginFilter implements Filter {
                 System.out.println("Process ");
                 chain.doFilter(request, response);
 
+            }
+            String department = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("department");
+            if(url[2].equals("CI") && department.equals("HR")){
+                System.out.println("url[2]: "+url[2] + "department: "+department);
+                res.sendRedirect("/AirlineSystem-war/Department/HR.xhtml");
             }
             else {
                 System.out.println("Redirct to");
