@@ -1,6 +1,7 @@
 package CI.Managedbean;
 
 import CI.Entity.Employee;
+import CI.Entity.Role;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -10,6 +11,7 @@ import javax.inject.Named;
 import org.primefaces.context.RequestContext;
 import CI.Session.EmployeeSessionBeanLocal;
 import java.util.Date;
+import java.util.List;
 import javax.faces.bean.ManagedProperty;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -31,6 +33,7 @@ public class LoginManageBean {
     boolean logInCheck;
     boolean firstTimer;
     HttpServletRequest req;
+    String roles; // to get all roles in this string
 
     public LoginManageBean() {
     }
@@ -60,9 +63,9 @@ public class LoginManageBean {
     
     public String direct(){
         if(employee.getOrganizationUnit().getdepartmentName().equals("HR")){
-            
-
             return "Department/HR" + "?faces-redirect=true";
+        }else if(employee.getOrganizationUnit().getdepartmentName().equals("IT")){
+            return "Department/IT" + "?faces-redirect=true";
         }
         
         return "CI/employeeDashBoard"+ "?faces-redirect=true";
@@ -70,11 +73,17 @@ public class LoginManageBean {
     
     
     public void doLogin(String employeeUserName, String employeePassword) {
-
+        String temp_roles=""; // to get all roles in this string
         setEmployee(employeeSessionBean.getEmployee(employeeUserName));
         firstTimer = false;
         
-       
+        List<Role> role=employee.getRoles();
+        for(Role r : role){
+            temp_roles+=r.getRoleName()+" ";
+        }
+        
+        roles=temp_roles;
+        
         if (employeeUserName.equals("") && employeePassword.equals("")) {
             doLogInMsg = "Please Enter your User Name and Password!";
             logInCheck = false;
@@ -146,4 +155,13 @@ public class LoginManageBean {
         this.employee = employee;
     }
 
+    public String getRoles() {
+        return roles;
+    }
+
+    public void setRoles(String roles) {
+        this.roles = roles;
+    }
+
+    
 }

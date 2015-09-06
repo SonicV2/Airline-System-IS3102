@@ -10,8 +10,10 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import CI.Session.EmployeeSessionBeanLocal;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
+import org.primefaces.context.RequestContext;
 
 @ManagedBean
 @SessionScoped
@@ -79,17 +81,24 @@ public class EmployeeManageBean {
     public String changePwd(){
         HttpSession session = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(false);
         //String userID= session.getAttribute("isLogin").toString();
+            FacesMessage message = null;
          String employeeUserName = loginManageBean.employeeUserName;
          if(employeeNewPwd.equals(employeeNewPwdRe)){
             employeeSessionBean.hashNewPwd(employeeUserName, employeeNewPwd);
             employeeSessionBean.employeeActivate(employeeUserName);
             pwdChangeStatus=true;
             employeeSessionBean.logPasswordChange(employeeUserName);
-            return "employeeDashBoard" + "?faces-redirect=true";
+            return "/login.xhtml" + "?faces-redirect=true";
           
          }else{
              pwdChangeStatus=false;
-             return "/login.xhtml" + "?faces-redirect=true";
+             
+             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Password Changed Fail", "");
+        
+             FacesContext.getCurrentInstance().addMessage(null, message);
+             
+             return "newUserChangePwd";
+             
          }
     }
     
