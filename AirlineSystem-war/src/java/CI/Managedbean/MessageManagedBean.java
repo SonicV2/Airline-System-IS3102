@@ -51,6 +51,7 @@ public class MessageManagedBean {
         FacesMessage message = null;
         if (messageSessionBean.getEmployee(receiver) == null || receiver.isEmpty()) {
             message = new FacesMessage(FacesMessage.SEVERITY_WARN, "No such receiver!", "");
+            receiveReadMessage(event); //to make sure the page refresh and show all the message
         } else {
             setSender(loginManageBean.employeeUserName);
             System.out.println("Sender: " + sender + "Receiver: " + receiver + "message: " + msgText);
