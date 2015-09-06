@@ -105,7 +105,7 @@
                             <div class="input-group">
                                 <h:inputText class="col-sm-3 input-sm" pt:placeholder="Username of receiver" value="#{messageManagedBean.receiver}"/>
                                 
-                                <h:inputText id="btn-input" class="col-sm-9 input-sm" pt:placeholder="Type your message here..." value="#{messageManagedBean.msgText}"/>
+                                <h:inputText id="btn-input"  class="col-sm-9 input-sm" pt:placeholder="Type your message here..." value="#{messageManagedBean.msgText}"/>
                                 <!--<input id="btn-input" type="text" class="form-control input-sm" placeholder="Type your message here..." />-->
                                 <span class="input-group-btn">
                                     <button class="btn btn-warning btn-sm" id="btn-chat" jsf:update="growl" jsf:action="message" jsf:actionListener="#{messageManagedBean.sendMsg}">
