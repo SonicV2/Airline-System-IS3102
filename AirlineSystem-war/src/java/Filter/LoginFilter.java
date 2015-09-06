@@ -51,10 +51,12 @@ public class LoginFilter implements Filter {
             String redURl = url[0] + "/" + url[1] + "/" + "login.xhtml";
             System.out.println("url0: " + url[0] + "url1: " + url[1] + "url: " + url[2]);
 
-            if (url[2].equals("login.xhtml") || (ses != null && ses.getAttribute("isLogin") != null) || reqURI.contains("javax.faces.resource") || url[2].equals("CI")) {
+            if (url[2].equals("login.xhtml") || (ses != null && ses.getAttribute("isLogin") != null) || reqURI.contains("javax.faces.resource")) {
                 System.out.println("Process ");
                 chain.doFilter(request, response);
-            } else {
+
+            }
+            else {
                 System.out.println("Redirct to");
                 res.sendRedirect(redURl);
             }
