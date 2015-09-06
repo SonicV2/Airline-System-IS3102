@@ -43,11 +43,12 @@ public class MessageManagedBean {
         lastRead = new Date();
     }
     
-    public void sendMsg(ActionEvent event){
+    public String sendMsg(ActionEvent event){
         setSender(loginManageBean.employeeUserName);
         System.out.println("Sender: " + sender + "Receiver: " + receiver + "message: " + msgText);
         messageSessionBean.sendMsg(sender, receiver, msgText);
         receiveReadMessage(event);
+        return null;
     }
 
     
