@@ -104,6 +104,7 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
 
     }
     
+    
     // get department object when searching with deaprtment name
     public OrganizationUnit getDepartment(String depart){
         

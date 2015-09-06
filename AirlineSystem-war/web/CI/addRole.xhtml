@@ -7,19 +7,37 @@
         <title>Facelet Title</title>
     </h:head>
     <h:body>
+
         <h:form class="form col-md-12 center-block">
             <div class="form-group">
 
-                <p:outputLabel value="Role Name: " />
-                <p:inputText class="form-control input-lg" value="#{roleManagedBean.roleName}"  />
+
+                <p:outputLabel value="Search Employee: " />
+                <p:inputText class="form-control input-lg" value="#{roleManagedBean.userID}"  />
+                <br/>                               
+            </div>
+
+            <h:commandButton class="btn btn-primary btn-lg btn-block" value="Search" actionListener="#{roleManagedBean.search}"/>
+
+            <p:dataTable var="role" value="#{roleManagedBean.newroles}">
+                <p:column headerText="Role Name">
+                    <h:outputText value="#{role}" />
+                </p:column>
+
+            </p:dataTable>
+
+
+            <div class="form-group">
+                <p:outputLabel value="New Role: " />
+                <p:inputText class="form-control input-lg" value="#{roleManagedBean.new_Role}" />
                 <br/>
-
             </div>
 
-            <div>
-                <h:commandButton class="btn btn-primary btn-lg btn-block" value="Create" actionListener="#{roleManagedBean.addRole}"/>
-            </div>
+            <h:commandButton class="btn btn-primary btn-lg btn-block" value="Add" action="#{roleManagedBean.addNewRole}"/>
+
         </h:form>
+
+
     </h:body>
 </html>
 
