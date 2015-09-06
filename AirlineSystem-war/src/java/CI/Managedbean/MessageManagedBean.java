@@ -11,10 +11,12 @@ import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.inject.Named;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
 /**
@@ -26,6 +28,7 @@ import javax.faces.event.ActionEvent;
 //@SessionScoped
 @RequestScoped
 public class MessageManagedBean {
+
     @EJB
     private MessageSessionBeanLocal messageSessionBean;
 
@@ -35,36 +38,46 @@ public class MessageManagedBean {
     private Date lastRead;
     private List<Message> unReadMsg;
     private List<Message> readMsg;
-    
-    @ManagedProperty(value="#{loginManageBean}")
+    private String errorMsg;
+
+    @ManagedProperty(value = "#{loginManageBean}")
     private LoginManageBean loginManageBean;
-    
+
     public MessageManagedBean() {
         lastRead = new Date();
     }
-    
-    public String sendMsg(ActionEvent event){
-        setSender(loginManageBean.employeeUserName);
-        System.out.println("Sender: " + sender + "Receiver: " + receiver + "message: " + msgText);
-        messageSessionBean.sendMsg(sender, receiver, msgText);
-        receiveReadMessage(event);
-        return null;
+
+    public void sendMsg(ActionEvent event) {
+        FacesMessage message = null;
+        if (messageSessionBean.getEmployee(receiver) == null || receiver.isEmpty()) {
+            message = new FacesMessage(FacesMessage.SEVERITY_WARN, "No such receiver!", "");
+        } else {
+            setSender(loginManageBean.employeeUserName);
+            System.out.println("Sender: " + sender + "Receiver: " + receiver + "message: " + msgText);
+            messageSessionBean.sendMsg(sender, receiver, msgText);
+            receiveReadMessage(event);
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Message Sent", "");
+        }
+        FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
-    
+    public void checkReceiver() {
+        if (messageSessionBean.getEmployee(receiver) == null) {
+            setErrorMsg("No user exists");
+        }
+    }
+
     @PostConstruct
-    public void unReadMessage(){
+    public void unReadMessage() {
         setUnReadMsg(messageSessionBean.unReadMsg(loginManageBean.employeeUserName));
         messageSessionBean.setMsgRead(loginManageBean.employeeUserName);
     }
-    
-    public void receiveReadMessage(ActionEvent event)
-    {
+
+    public void receiveReadMessage(ActionEvent event) {
         setReadMsg(messageSessionBean.readMsg(loginManageBean.employeeUserName));
-        
+
     }
-    
-    
+
     /**
      * @return the msgText
      */
@@ -162,5 +175,19 @@ public class MessageManagedBean {
     public void setReadMsg(List<Message> readMsg) {
         this.readMsg = readMsg;
     }
-    
+
+    /**
+     * @return the errorMsg
+     */
+    public String getErrorMsg() {
+        return errorMsg;
+    }
+
+    /**
+     * @param errorMsg the errorMsg to set
+     */
+    public void setErrorMsg(String errorMsg) {
+        this.errorMsg = errorMsg;
+    }
+
 }

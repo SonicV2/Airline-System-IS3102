@@ -5,6 +5,7 @@
  */
 package CI.Session;
 
+import CI.Entity.Employee;
 import CI.Entity.Message;
 import java.util.Date;
 import java.util.List;
@@ -22,5 +23,6 @@ public interface MessageSessionBeanLocal {
     List<Message> unReadMsg(String receiver);
     List<Message> readMsg(String receiver);
     void setMsgRead(String userName);
+    public Employee getEmployee(String employeeUserName) ;
     
 }

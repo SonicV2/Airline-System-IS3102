@@ -34,7 +34,7 @@ public class OrganizationUnit implements Serializable {
     
     
     /*
-    1.HR
+    1.HR (*)
     2.Ground ops 
     3.Flight ops
     4.cabin crew
