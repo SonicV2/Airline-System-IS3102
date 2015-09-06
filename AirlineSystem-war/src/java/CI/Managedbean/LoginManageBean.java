@@ -46,7 +46,7 @@ public class LoginManageBean {
                
                 return "CI/newUserChangePwd" + "?faces-redirect=true";
             } else {
-                return "CI/employeeDashBoard" + "?faces-redirect=true";
+                return direct();
             }
            
         }
@@ -57,7 +57,18 @@ public class LoginManageBean {
         session.setAttribute("isLogin", null);
         return "";
     }
-
+    
+    public String direct(){
+        if(employee.getOrganizationUnit().getdepartmentName().equals("HR")){
+            
+            System.out.println("-----------------"+employee.getEmployeeDepartment());
+            return "Department/HR" + "?faces-redirect=true";
+        }
+        
+        return "";
+    }
+    
+    
     public void doLogin(String employeeUserName, String employeePassword) {
 
         setEmployee(employeeSessionBean.getEmployee(employeeUserName));
