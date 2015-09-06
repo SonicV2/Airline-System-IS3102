@@ -39,7 +39,7 @@ public class OrganizationUnit implements Serializable {
     3.Flight ops
     4.cabin crew
     5.Marketing
-    6.IT
+    6.IT (our super admin)
     7.Customer service
     8.Finance
     */
