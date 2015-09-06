@@ -88,7 +88,9 @@ public class EmployeeManageBean {
             employeeSessionBean.employeeActivate(employeeUserName);
             pwdChangeStatus=true;
             employeeSessionBean.logPasswordChange(employeeUserName);
-            return "/login.xhtml" + "?faces-redirect=true";
+            
+            
+             return "/login.xhtml" + "?faces-redirect=true";
           
          }else{
              pwdChangeStatus=false;
