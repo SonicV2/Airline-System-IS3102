@@ -61,11 +61,11 @@ public class LoginManageBean {
     public String direct(){
         if(employee.getOrganizationUnit().getdepartmentName().equals("HR")){
             
-            System.out.println("-----------------"+employee.getEmployeeDepartment());
+
             return "Department/HR" + "?faces-redirect=true";
         }
         
-        return "";
+        return "CI/employeeDashBoard"+ "?faces-redirect=true";
     }
     
     
