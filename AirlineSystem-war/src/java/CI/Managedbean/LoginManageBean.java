@@ -33,8 +33,8 @@ public class LoginManageBean {
     boolean logInCheck;
     boolean firstTimer;
     HttpServletRequest req;
-    String roles=""; // to get all roles in this string
-   HttpSession session = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+    String roles; // to get all roles in this string
+
     public LoginManageBean() {
     }
 
@@ -74,16 +74,17 @@ public class LoginManageBean {
     
     
     public void doLogin(String employeeUserName, String employeePassword) {
-
+        String temp_roles=""; // to get all roles in this string
         setEmployee(employeeSessionBean.getEmployee(employeeUserName));
         firstTimer = false;
         
         List<Role> role=employee.getRoles();
         for(Role r : role){
-            roles+=r.getRoleName()+" ";
+            temp_roles+=r.getRoleName()+" ";
         }
         
-       
+        roles=temp_roles;
+        
         if (employeeUserName.equals("") && employeePassword.equals("")) {
             doLogInMsg = "Please Enter your User Name and Password!";
             logInCheck = false;
