@@ -42,7 +42,7 @@ public class RoleManagedBean {
     Employee employee;
     String userName; //username
     String name; //full name
-    List<String> newroles=new ArrayList<String>(); //to return all the current roles 
+    List<String> newroles; // List<String> newroles
             
     String msg;
     
@@ -53,6 +53,7 @@ public class RoleManagedBean {
     }
     
     public void search(ActionEvent event){
+        newroles=new ArrayList<String>(); //to return all the current roles 
         employee=employeeSessionBean.getEmployeeUseID(userID);
         if(employee==null){
             newroles.add("no such user!");
