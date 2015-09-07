@@ -46,6 +46,7 @@ public class LoginManageBean {
         if (logInCheck == true) {
             employeeSessionBean.logLogIn(employeeUserName);
             session.setAttribute("isLogin", employeeUserName);
+            
             if (firstTimer == true) {
 
                 return "CI/newUserChangePwd" + "?faces-redirect=true";
@@ -77,6 +78,7 @@ public class LoginManageBean {
     }
 
     public void doLogin(String employeeUserName, String employeePassword) {
+        HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
         String temp_roles = ""; // to get all roles in this string
         setEmployee(employeeSessionBean.getEmployee(employeeUserName));
         firstTimer = false;
@@ -98,6 +100,11 @@ public class LoginManageBean {
                 List<Role> role = employee.getRoles();
                 for (Role r : role) {
                     temp_roles += r.getRoleName() + " ";
+                    if(r.getRoleName().equals("SuperAdmin")){
+                        session.setAttribute("role", "SuperAdmin"); /*Add role --> SuperAdmin*/
+                    }else{
+                        session.setAttribute("role", "NSA");/*NSA--> Not Super Admin*/
+                    }
                 }
 
                 roles = temp_roles;

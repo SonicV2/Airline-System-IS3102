@@ -32,7 +32,7 @@ public class LoginFilter implements Filter {
 
     private String userName;
     private String timeoutPage = "/AirlineSystem-war/login.xhtml";
-       //FacesContext context = event.getFacesContext();
+    //FacesContext context = event.getFacesContext();
     //ExternalContext ex = context.getExternalContext();
 
     public LoginFilter() {
@@ -56,34 +56,28 @@ public class LoginFilter implements Filter {
             String redURl = url[0] + "/" + url[1] + "/" + "login.xhtml";
             System.out.println("url0: " + url[0] + "url1: " + url[1] + "url: " + url[2]);
 
-            if (url[2].equals("login.xhtml") || reqURI.contains("javax.faces.resource")
-                || url[2].equals("CI")/*Delete when necessary*/) {
+            if (url[2].equals("login.xhtml") || reqURI.contains("javax.faces.resource") /*|| url[2].equals("CI")/*Delete when necessary*/) {
                 System.out.println("Process ");
                 chain.doFilter(request, response);
 
             } else if (!url[2].equals("login.xhtml") && (ses != null && ses.getAttribute("isLogin") != null)) {
 
-                System.out.println("Url[3]: " + url[3]);
+                if (ses.getAttribute("role").equals("SuperAdmin")) { /* Super Admin could access all web pages*/
 
-                System.out.println("Department: " + ses.getAttribute("department").toString());
-                
-                if (url[3].equals("HR.xhtml") && ses.getAttribute("department").equals("HR")) {
+                    chain.doFilter(request, response);
+                } else if (url[3].equals("HR.xhtml") && ses.getAttribute("department").equals("HR")) {
                     chain.doFilter(request, response);
                 } else if (url[3].equals("IT.xhtml") && ses.getAttribute("department").equals("IT")) {
-                    System.out.println("ddfd: "+url[3]);
                     chain.doFilter(request, response);
-                }else if (url[3].equals("employeeProfile.xhtml") && ses.getAttribute("isLogin")!=null){
+                } else if (url[3].equals("employeeProfile.xhtml") && ses.getAttribute("isLogin") != null) {
                     chain.doFilter(request, response);
-                }else if (url[3].equals("message.xhtml") && ses.getAttribute("isLogin")!=null){
+                } else if (url[3].equals("message.xhtml") && ses.getAttribute("isLogin") != null) {
                     chain.doFilter(request, response);
-                }
-                
-                else {
-                    res.sendRedirect("/AirlineSystem-war/login.xhtml");
+                } else {
+                    res.sendError(401);/*Unauthorized Page*/
                 }
 
-            } 
-            else {
+            } else {
                 System.out.println("Redirct to");
                 res.sendRedirect(redURl);
             }
@@ -171,5 +165,3 @@ public class LoginFilter implements Filter {
         this.userName = userName;
     }
 }
-
-
