@@ -10,6 +10,7 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import CI.Session.EmployeeSessionBeanLocal;
+import java.text.SimpleDateFormat;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
@@ -37,7 +38,7 @@ public class EmployeeManageBean {
     String employeeDisplayLastName;
     String employeeRole;
     String employeeDepartment;
-    Date employeeDOB;
+    
     String employeeGender;
     String employeeHpNumber;
     String employeeMailingAddress;
@@ -48,6 +49,10 @@ public class EmployeeManageBean {
     private String employeeNewPwd;
     private String employeeNewPwdRe; 
 
+    //SimpleDateFormat format=new SimpleDateFormat("yyyy-mm-dd");
+    Date employeeDOB;
+    
+   
     
     
     private boolean pwdChangeStatus;
@@ -66,6 +71,7 @@ public class EmployeeManageBean {
         
         }
        
+        
         employeeSessionBean.addEmployee(userID,employeeID, employeeDisplayFirstName, employeeDisplayLastName, employeeRole,
                 employeeDepartment, employeeDOB, employeeGender, employeeHpNumber,
                 employeeMailingAddress, employeeOfficeNumber);
