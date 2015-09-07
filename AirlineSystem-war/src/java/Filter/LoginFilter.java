@@ -71,7 +71,13 @@ public class LoginFilter implements Filter {
                 } else if (url[3].equals("IT.xhtml") && ses.getAttribute("department").equals("IT")) {
                     System.out.println("ddfd: "+url[3]);
                     chain.doFilter(request, response);
-                } else {
+                }else if (url[3].equals("employeeProfile.xhtml") && ses.getAttribute("isLogin")!=null){
+                    chain.doFilter(request, response);
+                }else if (url[3].equals("message.xhtml") && ses.getAttribute("isLogin")!=null){
+                    chain.doFilter(request, response);
+                }
+                
+                else {
                     res.sendRedirect("/AirlineSystem-war/login.xhtml");
                 }
 
