@@ -41,7 +41,7 @@ public class LoginManageBean {
     public String check() {
        
         doLogin(employeeUserName, employeePassword);
-        
+        HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
         if (logInCheck == true) {
              employeeSessionBean.logLogIn(employeeUserName);
             session.setAttribute("isLogin", employeeUserName);
@@ -62,10 +62,12 @@ public class LoginManageBean {
     }
     
     public String direct(){
+        HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
         if(employee.getOrganizationUnit().getdepartmentName().equals("HR")){
-           FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("department", employee.getOrganizationUnit().getdepartmentName());
+           session.setAttribute("department", "HR");
             return "Department/HR" + "?faces-redirect=true";
         }else if(employee.getOrganizationUnit().getdepartmentName().equals("IT")){
+            session.setAttribute("department", "IT");
             return "Department/IT" + "?faces-redirect=true";
         }
         

@@ -11,6 +11,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import javax.servlet.Filter;
 import java.util.logging.LogRecord;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -31,6 +32,8 @@ public class LoginFilter implements Filter {
 
     private String userName;
     private String timeoutPage = "/AirlineSystem-war/login.xhtml";
+       //FacesContext context = event.getFacesContext();
+    //ExternalContext ex = context.getExternalContext();
 
     public LoginFilter() {
     }
@@ -44,6 +47,7 @@ public class LoginFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws ServletException, IOException {
         try {
+
             HttpServletRequest req = (HttpServletRequest) request;
             HttpServletResponse res = (HttpServletResponse) response;
             HttpSession ses = req.getSession(false);
@@ -52,16 +56,26 @@ public class LoginFilter implements Filter {
             String redURl = url[0] + "/" + url[1] + "/" + "login.xhtml";
             System.out.println("url0: " + url[0] + "url1: " + url[1] + "url: " + url[2]);
 
-            if (url[2].equals("login.xhtml") || (ses != null && ses.getAttribute("isLogin") != null) || reqURI.contains("javax.faces.resource")) {
+            if (url[2].equals("login.xhtml") || reqURI.contains("javax.faces.resource")) {
                 System.out.println("Process ");
                 chain.doFilter(request, response);
 
-            }
-            String department = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("department");
-            if(url[2].equals("CI") && department.equals("HR")){
-                System.out.println("url[2]: "+url[2] + "department: "+department);
-                res.sendRedirect("/AirlineSystem-war/Department/HR.xhtml");
-            }
+            } else if (!url[2].equals("login.xhtml") && (ses != null && ses.getAttribute("isLogin") != null)) {
+
+                System.out.println("Url[3]: " + url[3]);
+
+                System.out.println("Department: " + ses.getAttribute("department").toString());
+                
+                if (url[3].equals("HR.xhtml") && ses.getAttribute("department").equals("HR")) {
+                    chain.doFilter(request, response);
+                } else if (url[3].equals("IT.xhtml") && ses.getAttribute("department").equals("IT")) {
+                    System.out.println("ddfd: "+url[3]);
+                    chain.doFilter(request, response);
+                } else {
+                    res.sendRedirect("/AirlineSystem-war/login.xhtml");
+                }
+
+            } 
             else {
                 System.out.println("Redirct to");
                 res.sendRedirect(redURl);
