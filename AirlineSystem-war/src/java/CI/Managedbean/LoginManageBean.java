@@ -10,9 +10,9 @@ import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import org.primefaces.context.RequestContext;
 import CI.Session.EmployeeSessionBeanLocal;
-import java.util.Date;
 import java.util.List;
-import javax.faces.bean.ManagedProperty;
+import java.util.Map;
+import javax.faces.context.ExternalContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -61,10 +61,14 @@ public class LoginManageBean {
         return "";
     }
 
-    public String direct() {
-        if (employee.getOrganizationUnit().getdepartmentName().equals("HR")) {
+    
+    public String direct(){
+        HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+        if(employee.getOrganizationUnit().getdepartmentName().equals("HR")){
+           session.setAttribute("department", "HR");
             return "Department/HR" + "?faces-redirect=true";
-        } else if (employee.getOrganizationUnit().getdepartmentName().equals("IT")) {
+        }else if(employee.getOrganizationUnit().getdepartmentName().equals("IT")){
+            session.setAttribute("department", "IT");
             return "Department/IT" + "?faces-redirect=true";
         }
 

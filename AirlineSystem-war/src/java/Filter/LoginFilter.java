@@ -56,6 +56,7 @@ public class LoginFilter implements Filter {
             String redURl = url[0] + "/" + url[1] + "/" + "login.xhtml";
             System.out.println("url0: " + url[0] + "url1: " + url[1] + "url: " + url[2]);
 
+            if (url[2].equals("login.xhtml") || reqURI.contains("javax.faces.resource")) {
             if (url[2].equals("login.xhtml") || (ses != null && ses.getAttribute("isLogin") != null) || reqURI.contains("javax.faces.resource") 
                               /* || url[2].equals("CI")*/ /*need to delete in the future*/ 
                                || url[2].equals("APS") /*need to delete in the future*/ ) {
