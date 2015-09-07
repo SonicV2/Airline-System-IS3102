@@ -25,12 +25,19 @@ public class Route implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long routeId;
+    
     private String origin;
     private String destination;
     @OneToMany(cascade={CascadeType.ALL}, mappedBy="route")
     private List<Flight> flights = new ArrayList<Flight>();
     
-
+    
+    public void create(String origin, String destination){
+        this.origin=origin;
+        this.destination=destination;
+    }
+    
+    
     public Long getRouteId() {
         return routeId;
     }

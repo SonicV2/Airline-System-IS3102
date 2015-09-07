@@ -66,30 +66,19 @@ public class RoleSessionBean implements RoleSessionBeanLocal {
     
     public void addNewRole(Employee employee, String new_Role){
        rolelist=employee.getRoles();
-       System.out.println("-----------------------rowsize"+rolelist.size());
-       
-       
+
        role=getRole(new_Role);
        rolelist.add(role);
-       System.out.println("--------rolename"+role.getRoleName());
        employee.setRoles(rolelist);
-       System.out.println("--------------------111"+rolelist.size());
        
-      
        employeelist_role=role.getEmployees();
        
-       
-       
-       System.out.println("------------------1");
        employeelist_role.add(employee);
-       System.out.println("------------------2");
        role.setEmployees(employeelist_role);
-       
-       
+  
         em.merge(employee);
         em.merge(role);
-        
-      
+     
     }
     
     public Role getRole(String role){
