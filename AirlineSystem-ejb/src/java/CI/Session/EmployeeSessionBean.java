@@ -194,6 +194,20 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
         fh.close();
     }
 
+    @Override
+    public void updateInfo(String employeeUserName, Date employeeDOB,String employeeGender, String employeeHomeAddress, String employeeOfficeNumber,
+    String employeeHpNumber){
+        Employee employee = getEmployee(employeeUserName);
+        System.out.println("sessionBean: "+ employeeUserName + " dob: "+employeeDOB.toString());
+        
+        employee.setEmployeeDOB(employeeDOB);
+        employee.setEmployeeGender(employeeGender);
+        employee.setEmployeeMailingAddress(employeeHomeAddress);
+        employee.setEmployeeOfficeNumber(employeeOfficeNumber);
+        employee.setEmployeeHpNumber(employeeHpNumber);
+        em.persist(employee);
+    }
+     
 //get employee by using UserName
     @Override
     public Employee getEmployee(String employeeUserName) {

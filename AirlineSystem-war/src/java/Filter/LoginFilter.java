@@ -73,7 +73,10 @@ public class LoginFilter implements Filter {
                     chain.doFilter(request, response);
                 } else if (url[3].equals("message.xhtml") && ses.getAttribute("isLogin") != null) {
                     chain.doFilter(request, response);
-                } else {
+                } else if(url[3].equals("changeProfile.xhtml")){
+                    chain.doFilter(request, response);
+                }
+                else {
                     res.sendError(401);/*Unauthorized Page*/
                 }
 

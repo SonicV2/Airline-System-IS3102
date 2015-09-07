@@ -1,0 +1,77 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+
+        <div class="panel panel-yellow">
+            <div class="panel-heading">
+                #{loginManageBean.employee.employeeDisplayFirstName} #{loginManageBean.employee.employeeDisplayLastName}
+            </div>
+            <div class="panel-body">
+
+                <!--                            <div class="table-responsive">-->
+                <table class="table">
+                    <tbody>
+                        <td style="width: 30%;">Full Name: </td>
+                        <td>#{loginManageBean.employee.employeeDisplayFirstName} #{loginManageBean.employee.employeeDisplayLastName}</td>
+                        <td></td>
+                        <tr>
+                            <td>Role/Department</td>
+                            <td>#{loginManageBean.roles} / #{loginManageBean.employee.organizationUnit.getdepartmentName()}</td>
+                            <td></td>
+                        </tr>
+                        <h:form>
+                            <tr>
+                                <td>Birthday</td>
+                                <td><p:calendar id="button" value="#{changeProfileManagedBean.employeeDOB}" showOn="button"/></td>
+                                <td></td>
+                            </tr>
+
+                            <tr>
+                                <td>Gender </td>
+                                <td> <p:selectOneRadio id="gender"  value="#{changeProfileManagedBean.employeeGender}">
+                                        <f:selectItem itemLabel="Male" itemValue="Male" />
+                                        <f:selectItem itemLabel="Female" itemValue="Female" />
+                                    </p:selectOneRadio> </td>
+                            </tr>
+
+                            <tr>
+                                <td>Home Address</td>
+                                <td>
+                                    <h:inputText id="mobile" value="#{changeProfileManagedBean.employeeHomeAddress}" />
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>Office Number</td>
+                                <td>
+                                    <h:inputText value="#{changeProfileManagedBean.employeeOfficeNumber}" />
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>Handphone Number</td>
+                                <td>
+                                    <h:inputText value="#{changeProfileManagedBean.employeeHpNumber}" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <h:commandButton class="btn btn-primary btn-md btn-block" value="Save Information" actionListener="#{changeProfileManagedBean.updateInfo}" />
+                                </td>
+                            </tr>
+                        </h:form>
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+    </h:body>
+</html>
+

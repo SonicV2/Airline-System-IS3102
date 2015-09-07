@@ -32,5 +32,7 @@ public interface EmployeeSessionBeanLocal {
     public void hashNewPwd(String userName, String pwd);
     public void employeeActivate(String userName);
     
+    public void updateInfo(String employeeUserName, Date employeeDOB,String employeeGender, String employeeHomeAddress, String employeeOfficeNumber,
+    String employeeHpNumber);
     
 }
