@@ -75,9 +75,13 @@ public class RoleManagedBean {
     //for admin to create new roles
     public void addRole(ActionEvent event){
         roleSessionBean.addRole(roleName);
+        clear();
     }
     
-    
+    /*clear input after submit*/
+    public void clear(){
+        setRoleName("");
+    }
      @PostConstruct
     public void retrive(){
         setRoles(roleSessionBean.retrive());

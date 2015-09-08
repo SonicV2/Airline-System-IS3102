@@ -60,6 +60,7 @@ public class MessageManagedBean {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Message Sent", "");
         }
         FacesContext.getCurrentInstance().addMessage(null, message);
+        clear();
     }
 
     public void checkReceiver() {
@@ -68,6 +69,11 @@ public class MessageManagedBean {
         }
     }
 
+    public void clear(){
+        setSender("");
+        setReceiver("");
+        setMsgText("");
+    }
     @PostConstruct
     public void unReadMessage() {
         setUnReadMsg(messageSessionBean.unReadMsg(loginManageBean.employeeUserName));
