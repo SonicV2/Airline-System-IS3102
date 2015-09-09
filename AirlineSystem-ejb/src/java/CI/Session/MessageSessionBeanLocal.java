@@ -24,5 +24,7 @@ public interface MessageSessionBeanLocal {
     List<Message> readMsg(String receiver);
     void setMsgRead(String userName);
     public Employee getEmployee(String employeeUserName) ;
+
+    public void sendBroadcastMsg(String sender, List<String> departments , String msgText);
     
 }

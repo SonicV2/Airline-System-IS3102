@@ -13,6 +13,7 @@ import CI.Session.EmployeeSessionBeanLocal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import javax.annotation.PostConstruct;
 import javax.faces.context.ExternalContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -76,7 +77,11 @@ public class LoginManageBean {
 
         return "CI/employeeDashBoard" + "?faces-redirect=true";
     }
-
+   public void refresh(){
+       setEmployee(employeeSessionBean.getEmployee(employeeUserName));
+   }
+    
+    
     public void doLogin(String employeeUserName, String employeePassword) {
         HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
         String temp_roles = ""; // to get all roles in this string

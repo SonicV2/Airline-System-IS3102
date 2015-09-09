@@ -206,6 +206,7 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
         employee.setEmployeeOfficeNumber(employeeOfficeNumber);
         employee.setEmployeeHpNumber(employeeHpNumber);
         em.persist(employee);
+        em.flush();
     }
      
 //get employee by using UserName

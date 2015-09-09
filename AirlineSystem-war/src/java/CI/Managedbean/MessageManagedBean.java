@@ -39,7 +39,7 @@ public class MessageManagedBean {
     private List<Message> unReadMsg;
     private List<Message> readMsg;
     private String errorMsg;
-
+   
     @ManagedProperty(value = "#{loginManageBean}")
     private LoginManageBean loginManageBean;
 
@@ -62,7 +62,7 @@ public class MessageManagedBean {
         FacesContext.getCurrentInstance().addMessage(null, message);
         clear();
     }
-
+    
     public void checkReceiver() {
         if (messageSessionBean.getEmployee(receiver) == null) {
             setErrorMsg("No user exists");
@@ -196,5 +196,5 @@ public class MessageManagedBean {
     public void setErrorMsg(String errorMsg) {
         this.errorMsg = errorMsg;
     }
-
+    
 }

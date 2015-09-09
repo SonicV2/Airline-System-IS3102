@@ -59,6 +59,16 @@ public class changeProfileManagedBean {
         System.out.println("managebean: "+userName);
         System.out.println(employeeDOB+ " "+ employeeGender+ " "+ employeeHomeAddress+ " "+ employeeOfficeNumber+ " "+ employeeHpNumber);
         employeeSessionBean.updateInfo(userName, employeeDOB, employeeGender, employeeHomeAddress, employeeOfficeNumber, employeeHpNumber);
+        clear();
+        loginManageBean.refresh();
+    }
+    
+    public void clear(){
+        setEmployeeDOB(null);
+        setEmployeeGender(null);
+        setEmployeeHomeAddress("");
+        setEmployeeOfficeNumber("");
+        setEmployeeHpNumber("");
     }
 
     /**
