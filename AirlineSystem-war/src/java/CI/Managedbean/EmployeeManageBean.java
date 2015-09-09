@@ -45,6 +45,8 @@ public class EmployeeManageBean {
     String employeeOfficeNumber;
     String employeeEmailAddress;
     Employee employee;
+    
+    String employeePrivateEmail;
 
     private String employeeNewPwd;
     private String employeeNewPwdRe; 
@@ -74,7 +76,7 @@ public class EmployeeManageBean {
         
         employeeSessionBean.addEmployee(userID,employeeID, employeeDisplayFirstName, employeeDisplayLastName, employeeRole,
                 employeeDepartment, employeeDOB, employeeGender, employeeHpNumber,
-                employeeMailingAddress, employeeOfficeNumber);
+                employeeMailingAddress, employeeOfficeNumber, employeePrivateEmail);
 
         employee = getEmployee(employeeID); //in order to get the employeeUserName and email which is generated after the creation of employee
         
@@ -215,6 +217,16 @@ public class EmployeeManageBean {
     public void setEmployeeEmailAddress(String employeeEmailAddress) {
         this.employeeEmailAddress = employeeEmailAddress;
     }
+
+    public String getEmployeePrivateEmail() {
+        return employeePrivateEmail;
+    }
+
+    public void setEmployeePrivateEmail(String employeePrivateEmail) {
+        this.employeePrivateEmail = employeePrivateEmail;
+    }
+    
+    
 
     /**
      * @return the employeeNewPwd

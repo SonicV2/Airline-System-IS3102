@@ -16,7 +16,7 @@
         <h:outputStylesheet library="css" name="admindb.css" />
         <h:outputStylesheet library="css" name="morrisjs/morris.css" />
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js" />
-        <title>Super Admin</title>
+        <title>Employee Profile</title>
 
         <style>
             .table > tbody > tr > td{
@@ -79,7 +79,18 @@
                                 <td>Handphone Number</td>
                                 <td>#{loginManageBean.employee.employeeHpNumber}</td>
                                 <td></td>
-                            </tr> 
+                            </tr>
+                            <tr>
+                                <td>Company Email</td>
+                                <td>#{loginManageBean.employee.employeeEmailAddress}</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Personal Email</td>
+                                <td>#{loginManageBean.employee.employeePrivateEmail}</td>
+                                <td></td>
+                            </tr>
+                            
                         </tbody>
                     </table>
                     <!-- /.table-responsive -->
