@@ -27,13 +27,17 @@
 
 <!--    To add the same header on all dashboard pages  -->
         <ui:include src="/CI/dashboardHeader.xhtml"/>
-<!--    To add the same sidebar on all dashboard pages  -->
+  <!--    To add the same ITSidebar on all dashboard pages  -->      
         <ui:include src="/CI/dashboardSidebar.xhtml"/>
+        
         
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
 <!--                    <h1 class="page-header">Dashboard</h1>-->
+
+<div>
+      <h:outputText value="YOU ARE FROM IT" rendered="#{loginManageBean.employee.organizationUnit.getdepartmentName() == 'IT' }"/> </div>
                     <h2 class="page-header"> Welcome to dashboard, #{loginManageBean.employeeUserName}!</h2>
                 </div>
 <!--                 /.col-lg-12 -->
