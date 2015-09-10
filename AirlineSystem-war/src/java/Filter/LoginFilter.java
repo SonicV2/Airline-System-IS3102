@@ -56,7 +56,7 @@ public class LoginFilter implements Filter {
             String redURl = url[0] + "/" + url[1] + "/" + "login.xhtml";
             System.out.println("url0: " + url[0] + "url1: " + url[1] + "url: " + url[2]);
 
-            if (url[2].equals("login.xhtml") || reqURI.contains("javax.faces.resource") 
+            if (url[2].equals("login.xhtml") || reqURI.contains("javax.faces.resource") || url[2].equals("forgetPassword.xhtml")
                     || url[2].equals("CI")/*Delete when necessary*/) {
                 System.out.println("Process ");
                 chain.doFilter(request, response);
@@ -66,17 +66,18 @@ public class LoginFilter implements Filter {
                 if (ses.getAttribute("role").equals("SuperAdmin")) { /* Super Admin could access all web pages*/
 
                     chain.doFilter(request, response);
-                } else if (url[3].equals("HR.xhtml") && ses.getAttribute("department").equals("HR")) {
-                    chain.doFilter(request, response);
-                } else if (url[3].equals("IT.xhtml") && ses.getAttribute("department").equals("IT")) {
-                    chain.doFilter(request, response);
-                } else if (url[3].equals("employeeProfile.xhtml") && ses.getAttribute("isLogin") != null) {
-                    chain.doFilter(request, response);
-                } else if (url[3].equals("message.xhtml") && ses.getAttribute("isLogin") != null) {
-                    chain.doFilter(request, response);
-                } else if(url[3].equals("changeProfile.xhtml")){
-                    chain.doFilter(request, response);
-                }
+                } 
+//                else if (url[3].equals("HR.xhtml") && ses.getAttribute("department").equals("HR")) {
+//                    chain.doFilter(request, response);
+//                } else if (url[3].equals("IT.xhtml") && ses.getAttribute("department").equals("IT")) {
+//                    chain.doFilter(request, response);
+//                } else if (url[3].equals("employeeProfile.xhtml") && ses.getAttribute("isLogin") != null) {
+//                    chain.doFilter(request, response);
+//                } else if (url[3].equals("message.xhtml") && ses.getAttribute("isLogin") != null) {
+//                    chain.doFilter(request, response);
+//                } else if(url[3].equals("changeProfile.xhtml")){
+//                    chain.doFilter(request, response);
+//                }
                 else {
                     res.sendError(401);/*Unauthorized Page*/
                 }

@@ -66,17 +66,19 @@ public class LoginManageBean {
 
     
     public String direct(){
-        HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
-        if(employee.getOrganizationUnit().getdepartmentName().equals("HR")){
-           session.setAttribute("department", "HR");
-            return "Department/HR" + "?faces-redirect=true";
-        }else if(employee.getOrganizationUnit().getdepartmentName().equals("IT")){
-            session.setAttribute("department", "IT");
-            return "Department/IT" + "?faces-redirect=true";
-        }
+//        HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+//        if(employee.getOrganizationUnit().getdepartmentName().equals("HR")){
+//           session.setAttribute("department", "HR");
+//            return "Department/HR" + "?faces-redirect=true";
+//        }else if(employee.getOrganizationUnit().getdepartmentName().equals("IT")){
+//            session.setAttribute("department", "IT");
+//            return "Department/IT" + "?faces-redirect=true";
+//        }
 
         return "CI/employeeDashBoard" + "?faces-redirect=true";
     }
+    
+    
    public void refresh(){
        setEmployee(employeeSessionBean.getEmployee(employeeUserName));
    }
