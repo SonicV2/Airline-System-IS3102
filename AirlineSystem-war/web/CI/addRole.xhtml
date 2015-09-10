@@ -2,29 +2,56 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:jsf="http://xmlns.jcp.org/jsf"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <h:head>
+ 
+
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <h:outputStylesheet library ="css"  name="bootstrap.css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
+        <h:outputStylesheet library="css" name="admindb.css" />
+        <h:outputStylesheet library="css" name="morrisjs/morris.css" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js" />
         <title>Add Role</title>
+
+   
     </h:head>
     <h:body>
 
-        <h:form class="form col-md-12 center-block">
-            <div class="form-group">
+                <ui:include src="dashboardHeader.xhtml"/>
+<!--    To add the same sidebar on all dashboard pages  -->
+        <ui:include src="dashboardSidebar.xhtml"/>
+         <div id="page-wrapper">
+<div class="container-fluid">
+        <h:form class="col-md-6">
+            
+                  
+<div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-6">
+            <div class="input-group custom-search-form">
+                   <p:inputText class="form-control" placeholder="Search..." value="#{roleManagedBean.userID}"/>
+                                <span class="input-group-btn">
+                                    <h:commandButton class="btn btn-primary btn-block" value="Search" actionListener="#{roleManagedBean.search}"/>
+                            </span>
+                            </div>
 
-
-                <p:outputLabel value="Search Employee (NRIC): " />
-                <p:inputText class="form-control input-lg" value="#{roleManagedBean.userID}"  />
                 <br/>                               
-            </div>
-
-            <h:commandButton class="btn btn-primary btn-lg btn-block" value="Search" actionListener="#{roleManagedBean.search}"/>
-
+         
+     
+ 
             <p:dataTable var="role" value="#{roleManagedBean.newroles}">
                 <p:column headerText="Role Name">
                     <h:outputText value="#{role}" />
                 </p:column>
 
             </p:dataTable>
+               
+                               
 
 
             <div class="form-group">
@@ -34,10 +61,16 @@
             </div>
 
             <h:commandButton class="btn btn-primary btn-lg btn-block" value="Add" action="#{roleManagedBean.addNewRole}"/>
-
+     </div>
+</div>
+</div>
         </h:form>
 
 
+
+</div>
+         </div>
     </h:body>
+     
 </html>
 
