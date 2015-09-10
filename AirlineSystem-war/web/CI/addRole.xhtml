@@ -25,68 +25,55 @@
         <!--    To add the same sidebar on all dashboard pages  -->
         <ui:include src="dashboardSidebar.xhtml"/>
         <div id="page-wrapper">
-                <h:form class="col-md-6">
-                    <div class="panel-body">
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <div class="input-group custom-search-form">
-                                    <p:inputText class="form-control" placeholder="Search..." value="#{roleManagedBean.userID}"/>
-                                    <span class="input-group-btn">
-                                        <h:commandButton class="btn btn-primary btn-block" value="Search" actionListener="#{roleManagedBean.search}"/>
-                                    </span>
-                                </div>
-                                <br/>                               
+            <h:form class="col-md-6">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="input-group custom-search-form">
+                                <p:inputText class="form-control" placeholder="Search..." value="#{roleManagedBean.userID}"/>
+                                <span class="input-group-btn">
+                                    <h:commandButton class="btn btn-primary btn-block" value="Search" actionListener="#{roleManagedBean.search}"/>
+                                </span>
+                            </div>
+                            <br/>                               
 
 
 
-                                <p:dataTable var="role" value="#{roleManagedBean.newroles}">
-                                    <p:column headerText="Role Name">
-                                        <h:outputText value="#{role}" />
-                                    </p:column>
+                            <p:dataTable var="role" value="#{roleManagedBean.newroles}">
+                                <p:column headerText="Role Name">
+                                    <h:outputText value="#{role}" />
+                                </p:column>
 
-                                </p:dataTable>
-
-
+                            </p:dataTable>
 
 
-                                <div class="form-group">
-                                    <p:outputLabel value="New Role: " />
-                                    <p:inputText class="form-control input-lg" value="#{roleManagedBean.new_Role}" />
-                                    <br/>
-                                </div>
 
-                                <h:commandButton class="btn btn-primary btn-lg btn-block" value="Add" action="#{roleManagedBean.addNewRole}"/>
+
+                            <div class="form-group">
+                                <p:outputLabel value="New Role: " />
+                                <p:inputText class="form-control input-lg" value="#{roleManagedBean.new_Role}" />
+                                <br/>
                             </div>
 
-                <br/>                               
-         
-     
- 
-            <p:dataTable var="role" value="#{roleManagedBean.newroles}">
-                <p:column headerText="Role Name">
-                    <h:outputText value="#{role}" />
-                </p:column>
+                            <h:commandButton class="btn btn-primary btn-lg btn-block" value="Add" action="#{roleManagedBean.addNewRole}"/>
+                        </div>
 
-            </p:dataTable>
-               
-                               
+                        <br/>                               
 
 
-            <div class="form-group">
-                <p:outputLabel value="New Role: " />
-                <p:inputText class="form-control input-lg" value="#{roleManagedBean.new_Role}" />
-                <br/>
-            </div>
 
-            <h:commandButton class="btn btn-primary btn-lg btn-block" value="Add" action="#{roleManagedBean.addNewRole}"/>
-     </div>
-</div>
-</div>
+                        
+
+
+
+                    </div>
+                </div>
+                       
         </h:form>
 
 
-
         </div>
+        
     </h:body>
 
 </html>
