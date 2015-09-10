@@ -99,6 +99,7 @@
                                         <h:message for="firstname" />
                                     </div>
                                 </div>
+
                                 <div class="form-group">
                                     <h:outputLabel value="Last Name: " class="col-md-4 control-label" />
                                     <div class="col-md-8">
@@ -125,6 +126,7 @@
                                 <div class="form-group">
                                     <h:outputLabel value="Gender: " class="col-md-4 control-label" />
                                     <div class="col-md-8">
+<<<<<<< HEAD (e63496f) - Merge
 
                             <div class="form-group">
                                 <h:outputLabel value="Office Number: " class="col-md-4 control-label" />
@@ -146,6 +148,7 @@
                                 </div>
                             </div>
 
+                                        <h:panelGrid>
                                             <p:selectOneRadio id="gender" required="true" requiredMessage="Please Select Gender!" value="#{employeeManageBean.employeeGender}">
                                                 <f:selectItem itemLabel="Male" itemValue="Male" />
                                                 <f:selectItem itemLabel="Female" itemValue="Female" />
@@ -155,8 +158,21 @@
                                             <h:message for="gender"  />
                                         </div>
 
+                                    </div>  
+                                </div>    
+
+
+                                <div class="form-group">
+                                    <h:outputLabel value="Personal Email Address: " class="col-md-4 control-label" />
+                                    <div class="col-md-8">
+                                        <h:inputText id="PE" required="true" requiredMessage="Please fill in Personal email field!" class="form-control" value="#{employeeManageBean.employeePrivateEmail}" />
+                                    </div>
+                                    <div class="missingfield"> 
+                                        <h:message for="PE" />
                                     </div>
                                 </div>
+                     
+
 
                                 <div class="form-group">
                                     <p:outputLabel for="role" value="Role: " class="col-md-4 control-label" />
@@ -213,13 +229,16 @@
                                 </div>     
                             </div>
                         </div>
+
                         <div class="text-center">
                             <h:commandButton class="btn btn-success btn-block" value="Save Information" actionListener="#{employeeManageBean.addEmployee}" action="employeeInformation?faces-redirect=true"/>
                         </div>
+
+
                     </h:form>   
                     <br></br>
                     <br></br>
-                </div>
+                </div>   
             </div> 
         </div>
     </h:body>
