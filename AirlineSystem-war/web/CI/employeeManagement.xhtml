@@ -47,6 +47,11 @@
             .missingfieldbtn{
                 color:red;
             }
+            .dropdown-menu.select{
+                position: static;
+                display: inline;
+                
+            }
         </style>
 
         <!--Add new employee to the database-->
@@ -122,10 +127,10 @@
                                     <div class="col-md-8">
                                         <h:panelGrid>
 
-                                            <p:selectOneRadio id="gender" required="true" requiredMessage="Please Select Gender!" value="#{employeeManageBean.employeeGender}">
+                                            <h:selectOneRadio id="gender" required="true" requiredMessage="Please Select Gender!" value="#{employeeManageBean.employeeGender}">
                                                 <f:selectItem itemLabel="Male" itemValue="Male" />
                                                 <f:selectItem itemLabel="Female" itemValue="Female" />
-                                            </p:selectOneRadio>
+                                            </h:selectOneRadio>
                                         </h:panelGrid>
                                         <div class="missingfieldbtn">
                                             <h:message for="gender"  />
@@ -149,11 +154,11 @@
 
                                 <div class="form-group">
                                     <p:outputLabel for="role" value="Role: " class="col-md-4 control-label" />
-                                    <p:selectOneMenu id="role" value="#{employeeManageBean.employeeRole}" >
+                                    <h:selectOneMenu  id="role" styleClass="dropdown-menu select" value="#{employeeManageBean.employeeRole}"  >
 
                                         <f:selectItem itemLabel="Select Role" itemValue="" noSelectionOption="true" />
                                         <f:selectItems value="#{roleManagedBean.roles}" />
-                                    </p:selectOneMenu>
+                                    </h:selectOneMenu>
 
 
                                 </div>
@@ -161,11 +166,11 @@
 
                                 <div class="form-group">
                                     <p:outputLabel for="department" value="Department: " class="col-md-4 control-label" />
-                                    <p:selectOneMenu id="department" value="#{employeeManageBean.employeeDepartment}" >
+                                    <h:selectOneMenu id="department" styleClass="dropdown-menu select"  value="#{employeeManageBean.employeeDepartment}" >
 
                                         <f:selectItem itemLabel="Select department" itemValue="" noSelectionOption="true" />
                                         <f:selectItems value="#{departmentManagedBean.departments}" />
-                                    </p:selectOneMenu>
+                                    </h:selectOneMenu>
 
 
 
