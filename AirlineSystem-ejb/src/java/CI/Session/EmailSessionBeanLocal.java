@@ -14,4 +14,6 @@ import javax.ejb.Local;
 @Local
 public interface EmailSessionBeanLocal {
     public void sendEmail(String to, String subject, String body);
+    public String validateUser(String userName, String NRIC);
+    public String passGen();
 }
