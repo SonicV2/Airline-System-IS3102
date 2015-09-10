@@ -4,7 +4,8 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:jsf="http://xmlns.jcp.org/jsf"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <h:head>
 
 
@@ -25,6 +26,11 @@
         <!--    To add the same sidebar on all dashboard pages  -->
         <ui:include src="dashboardSidebar.xhtml"/>
         <div id="page-wrapper">
+            
+             <div class="row">
+                <div class="col-lg-12">
+                    <h2 class="page-header"> Add a role to an existing employee</h2>
+                </div>
             <h:form class="col-md-6">
                 <div class="panel-body">
                     <div class="row">
@@ -48,14 +54,16 @@
 
 
 
-
+                            <br></br>
                             <div class="form-group">
-                                <p:outputLabel value="New Role: " />
-                                <p:inputText class="form-control input-lg" value="#{roleManagedBean.new_Role}" />
+                                <label>New Role:</label>
+<!--                                <p:outputLabel value="New Role: " />-->
+                                <p:inputText class="form-control" value="#{roleManagedBean.new_Role}" />
                                 <br/>
                             </div>
-
-                            <h:commandButton class="btn btn-primary btn-lg btn-block" value="Add" action="#{roleManagedBean.addNewRole}"/>
+                              <div class="text-center">
+                            <h:commandButton class="btn btn-outline btn-success" value="Add" action="#{roleManagedBean.addNewRole}"/>
+                              </div>
                         </div>
 
                         <br/>                               
@@ -73,7 +81,7 @@
 
 
         </div>
-        
+        </div>
     </h:body>
 
 </html>
