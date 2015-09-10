@@ -105,6 +105,10 @@
     
     
     <ui:fragment rendered="#{loginManageBean.employee.organizationUnit.getdepartmentName() eq 'IT' }">
+      <ui:include src="ITSidebar.xhtml" />
+    </ui:fragment>
+    
+    <ui:fragment rendered ="#{loginManageBean.employee.organizationUnit.getdepartmentName() eq 'HR'}">
         <div class="navbar-default sidebar" role="navigation">
                 <div class="sidebar-nav navbar-collapse">
                     <ul class="nav" id="side-menu">
@@ -113,18 +117,8 @@
                     </li>
                     
                     <li>
-                        <a href="#{request.contextPath}/CI/AddDepartment.xhtml"><i class="fa fa-plus fa-fw"></i> Add a department</a>
+                        <a href="#{request.contextPath}/CI/employeeManagement.xhtml"><i class="fa fa-plus fa-fw"></i> Add an employee</a>
                     </li>
-                    <li>
-                        <a href="#{request.contextPath}/CI/createRole.xhtml"><i class="fa fa-plus fa-fw"></i> Create a new role</a>
-                    </li>
-                    <li>
-                        <a href="#{request.contextPath}/CI/addRole.xhtml"><i class="fa fa-plus fa-fw"></i> Add role to employee</a>
-                    </li>
-                    <li>
-                        <a href="#{request.contextPath}/CI/addRole.xhtml"><i class="fa fa-envelope fa-fw"></i> Make company announcement</a>
-                    </li>
-                    
                 </ul>
             </div>
     </div>

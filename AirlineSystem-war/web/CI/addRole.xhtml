@@ -3,7 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:jsf="http://xmlns.jcp.org/jsf"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <h:head>
  
 
@@ -20,6 +21,10 @@
    
     </h:head>
     <h:body>
+                <ui:include src="dashboardHeader.xhtml"/>
+<!--    To add the same sidebar on all dashboard pages  -->
+        <ui:include src="dashboardSidebar.xhtml"/>
+         <div id="page-wrapper">
 <div class="container-fluid">
         <h:form class="col-md-6">
             
@@ -62,7 +67,7 @@
 
 
 </div>
-        
+         </div>
     </h:body>
      
 </html>
