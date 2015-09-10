@@ -6,18 +6,17 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets">
     <h:head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content ="width=device-width, initial-scale=1"/>
-        <meta http-equiv="X-UA-Compatible" content="IE-edge" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <h:outputStylesheet library ="css"  name="bootstrap.css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
+        <h:outputStylesheet library="css" name="admindb.css" />
+        <h:outputStylesheet library="css" name="morrisjs/morris.css" />
 
-        <h:outputStylesheet library ="css" name="bootstrap.css" />
         <title>Employee Management</title>
         <style>
-            .row {
-                /* margin-right: auto; */
-                margin-left: auto;
-                max-width: 80%;
-            }
+
             .ui-inputfield {
                 margin: 0;
                 outline: medium none;
@@ -44,14 +43,14 @@
                 margin: auto;
 
             }
-            
+
             .missingfield{
                 padding-left:36%; 
                 color:red;
             }
-            
+
             .missingfieldbtn{
-               
+
                 color:red;
             }
         </style>
@@ -60,149 +59,151 @@
     </h:head>
     <h:body>
 
+        <!--    To add the same header on all dashboard pages  -->
+        <ui:include src="dashboardHeader.xhtml"/>
+        <!--    To add the same sidebar on all dashboard pages  -->
+        <ui:include src="dashboardSidebar.xhtml"/>
 
-        <h3 class="text-center">Welcome to Employee Management Page</h3>
-        <br></br>
-        <br></br>
+        <div id="page-wrapper">
 
-        <div class="row">
-            <div class="col-md-8 col-sm-8 col-xs-8">
-                <div class="panel panel-default">
-                    <div class="panel-heading clearfix">
-                        <i class="icon-calendar"></i>
-                        <h3 class="panel-title">Please Enter Employee Information</h3>
-                    </div>
+            <br></br>
+            <br></br>
 
-                    <div class="panel-body">
-                        <h:form class="form-horizontal row-border" >
-                            <div class="form-group">
-                                <h:outputLabel value="NRIC Number: " class="col-md-4 control-label" />
-                                <div class="col-md-8">
-                                    <h:inputText id="nric" required="true" requiredMessage="Please fill in NRIC field!" class="form-control" value="#{employeeManageBean.employeeID}" />
-                                </div>
-                                <div class="missingfield">
-                                    <h:message for="nric"  />
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <h:outputLabel value="First Name: " class="col-md-4 control-label" />
-                                <div class="col-md-8">
-                                    <h:inputText id="firstname" required="true" requiredMessage="Please fill in first name field!" class="form-control" value="#{employeeManageBean.employeeDisplayFirstName}" />
-                                </div>
-                                
-                                <div class="missingfield">
-                                    <h:message for="firstname" />
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <h:outputLabel value="Last Name: " class="col-md-4 control-label" />
-                                <div class="col-md-8">
-                                    <h:inputText id="lastname" required="true" requiredMessage="Please fill in last name field!" class="form-control" value="#{employeeManageBean.employeeDisplayLastName}" />
-                                </div>
-                                <div class="missingfield">
-                                    <h:message for="lastname"  />
-                                </div>
-                                
+            <div class="row">
+                <div class="col-lg-8">
+                    <h:form class="form-horizontal row-border" >
+                        <div class="panel panel-default">
+                            <div class="panel-heading clearfix">
+                                <i class="icon-calendar"></i>
+                                <h3 class="panel-title">Please Enter Employee Information</h3>
                             </div>
 
-                            <div class="form-group">
-                                <h:outputLabel value="Date of Birth: " class="col-md-4 control-label" />
-                                <div class="col-md-8">
-                                    <p:calendar id="button" required="true" requiredMessage="Please fill in Date of Birth field!" value="#{employeeManageBean.employeeDOB}" showOn="button"/>
-                              
-                                </div>
-                                <div class="missingfield">
-                                    <h:message for="button" />
-                                </div>
-                                
-                            </div>
+                            <div class="panel-body">
 
-                            <div class="form-group">
-                                <h:outputLabel value="Gender: " class="col-md-4 control-label" />
-                                <div class="col-md-8">
+                                <div class="form-group">
+                                    <h:outputLabel value="NRIC Number: " class="col-md-4 control-label" />
+                                    <div class="col-md-8">
+                                        <h:inputText id="nric" required="true" requiredMessage="Please fill in NRIC field!" class="form-control" value="#{employeeManageBean.employeeID}" />
+                                    </div>
+                                    <div class="missingfield">
+                                        <h:message for="nric"  />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <h:outputLabel value="First Name: " class="col-md-4 control-label" />
+                                    <div class="col-md-8">
+                                        <h:inputText id="firstname" required="true" requiredMessage="Please fill in first name field!" class="form-control" value="#{employeeManageBean.employeeDisplayFirstName}" />
+                                    </div>
 
-                                    <h:panelGrid>
-                                        
-                                        <p:selectOneRadio id="gender" required="true" requiredMessage="Please Select Gender!" value="#{employeeManageBean.employeeGender}">
-                                            <f:selectItem itemLabel="Male" itemValue="Male" />
-                                            <f:selectItem itemLabel="Female" itemValue="Female" />
-                                        </p:selectOneRadio>
-                                    </h:panelGrid>
-                                    <div class="missingfieldbtn">
-                                        <h:message for="gender"  />
+                                    <div class="missingfield">
+                                        <h:message for="firstname" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <h:outputLabel value="Last Name: " class="col-md-4 control-label" />
+                                    <div class="col-md-8">
+                                        <h:inputText id="lastname" required="true" requiredMessage="Please fill in last name field!" class="form-control" value="#{employeeManageBean.employeeDisplayLastName}" />
+                                    </div>
+                                    <div class="missingfield">
+                                        <h:message for="lastname"  />
                                     </div>
 
                                 </div>
-                            </div>
 
-                            <div class="form-group">
-                               <p:outputLabel for="role" value="Role: " class="col-md-4 control-label" />
-                               <p:selectOneMenu id="role" value="#{employeeManageBean.employeeRole}" >
-                                  
-                                    <f:selectItem itemLabel="Select Role" itemValue="" noSelectionOption="true" />
-                                    <f:selectItems value="#{roleManagedBean.roles}" />
-                                </p:selectOneMenu>
+                                <div class="form-group">
+                                    <h:outputLabel value="Date of Birth: " class="col-md-4 control-label" />
+                                    <div class="col-md-8">
+                                        <p:calendar id="button" required="true" requiredMessage="Please fill in Date of Birth field!" value="#{employeeManageBean.employeeDOB}" showOn="button"/>
 
-                                
-                            </div>
-                            
-                            
-                            
-                            
-                            
-                            
-                            
-                            
+                                    </div>
+                                    <div class="missingfield">
+                                        <h:message for="button" />
+                                    </div>
 
-                            <div class="form-group">
-                                <p:outputLabel for="department" value="Department: " class="col-md-4 control-label" />
-                                <p:selectOneMenu id="department" value="#{employeeManageBean.employeeDepartment}" >
-                                  
-                                    <f:selectItem itemLabel="Select department" itemValue="" noSelectionOption="true" />
-                                    <f:selectItems value="#{departmentManagedBean.departments}" />
-                                </p:selectOneMenu>
+                                </div>
 
-                               
-                               
-                            </div>
- 
-                            <div class="form-group">
-                                <h:outputLabel value="Mobile Number: " class="col-md-4 control-label" />
-                                <div class="col-md-8">
-                                    <h:inputText id="mobile" required="true" requiredMessage="Please fill in mobile number field!" class="form-control" value="#{employeeManageBean.employeeHpNumber}" />
-                                </div>
-                                <div class="missingfield">
-                                     <h:message for="mobile" />
-                                </div>
-                            </div>
+                                <div class="form-group">
+                                    <h:outputLabel value="Gender: " class="col-md-4 control-label" />
+                                    <div class="col-md-8">
 
-                            <div class="form-group">
-                                <h:outputLabel value="Office Number: " class="col-md-4 control-label" />
-                                <div class="col-md-8">
-                                    <h:inputText id="office" required="true" requiredMessage="Please fill in office number field!" class="form-control" value="#{employeeManageBean.employeeOfficeNumber}" />
-                                </div>
-                                <div class="missingfield"> 
-                                     <h:message for="office" />
-                                </div>
-                            </div>
+                                        <h:panelGrid>
 
-                            <div class="form-group">
-                                <h:outputLabel value="Mailing Address: " class="col-md-4 control-label" />
-                                <div class="col-md-8">
-                                    <h:inputText id="address" required="true" requiredMessage="Please fill in mailing address field!" class="form-control" value="#{employeeManageBean.employeeMailingAddress}" />
+                                            <p:selectOneRadio id="gender" required="true" requiredMessage="Please Select Gender!" value="#{employeeManageBean.employeeGender}">
+                                                <f:selectItem itemLabel="Male" itemValue="Male" />
+                                                <f:selectItem itemLabel="Female" itemValue="Female" />
+                                            </p:selectOneRadio>
+                                        </h:panelGrid>
+                                        <div class="missingfieldbtn">
+                                            <h:message for="gender"  />
+                                        </div>
+
+                                    </div>
                                 </div>
-                                <div class="missingfield">
-                                     <h:message for="address"  />
+
+                                <div class="form-group">
+                                    <p:outputLabel for="role" value="Role: " class="col-md-4 control-label" />
+                                    <p:selectOneMenu id="role" value="#{employeeManageBean.employeeRole}" >
+
+                                        <f:selectItem itemLabel="Select Role" itemValue="" noSelectionOption="true" />
+                                        <f:selectItems value="#{roleManagedBean.roles}" />
+                                    </p:selectOneMenu>
+
+
                                 </div>
+
+
+                                <div class="form-group">
+                                    <p:outputLabel for="department" value="Department: " class="col-md-4 control-label" />
+                                    <p:selectOneMenu id="department" value="#{employeeManageBean.employeeDepartment}" >
+
+                                        <f:selectItem itemLabel="Select department" itemValue="" noSelectionOption="true" />
+                                        <f:selectItems value="#{departmentManagedBean.departments}" />
+                                    </p:selectOneMenu>
+
+
+
+                                </div>
+
+                                <div class="form-group">
+                                    <h:outputLabel value="Mobile Number: " class="col-md-4 control-label" />
+                                    <div class="col-md-8">
+                                        <h:inputText id="mobile" required="true" requiredMessage="Please fill in mobile number field!" class="form-control" value="#{employeeManageBean.employeeHpNumber}" />
+                                    </div>
+                                    <div class="missingfield">
+                                        <h:message for="mobile" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <h:outputLabel value="Office Number: " class="col-md-4 control-label" />
+                                    <div class="col-md-8">
+                                        <h:inputText id="office" required="true" requiredMessage="Please fill in office number field!" class="form-control" value="#{employeeManageBean.employeeOfficeNumber}" />
+                                    </div>
+                                    <div class="missingfield"> 
+                                        <h:message for="office" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <h:outputLabel value="Mailing Address: " class="col-md-4 control-label" />
+                                    <div class="col-md-8">
+                                        <h:inputText id="address" required="true" requiredMessage="Please fill in mailing address field!" class="form-control" value="#{employeeManageBean.employeeMailingAddress}" />
+                                    </div>
+                                    <div class="missingfield">
+                                        <h:message for="address"  />
+                                    </div>
+                                </div>     
                             </div>
-                            <div class="form-group">
-                                <h:commandButton class="btn btn-primary btn-md btn-block" value="Save Information" actionListener="#{employeeManageBean.addEmployee}" action="employeeInformation?faces-redirect=true"/>
-                            </div>
-                        </h:form>
-                    </div>
+                        </div>
+                        <div class="text-center">
+                            <h:commandButton class="btn btn-success btn-block" value="Save Information" actionListener="#{employeeManageBean.addEmployee}" action="employeeInformation?faces-redirect=true"/>
+                        </div>
+                    </h:form>   
+                    <br></br>
+                    <br></br>
                 </div>
-            </div>
-        </div>  
+            </div> 
+        </div>
     </h:body>
 </html>
 

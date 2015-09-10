@@ -6,11 +6,17 @@ and open the template in the editor.
 -->
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-        <title>TODO supply a title</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    </head>
-    <body>
-        <div>TODO write content</div>
-    </body>
+     <div class="navbar-default sidebar" role="navigation">
+                <div class="sidebar-nav navbar-collapse">
+                    <ul class="nav" id="side-menu">
+                    <li>
+                        <a href="#{request.contextPath}/CI/employeeProfile.xhtml" style="font-size: 15px; color:black;"><i class="fa fa-user fa-fw"></i> #{loginManageBean.employee.employeeDisplayFirstName} #{loginManageBean.employee.employeeDisplayLastName} ( #{loginManageBean.employee.organizationUnit.getdepartmentName()} )</a>
+                    </li>
+                    
+                    <li>
+                        <a href="#{request.contextPath}/CI/employeeManagement.xhtml"><i class="fa fa-plus fa-fw"></i> Add an employee</a>
+                    </li>
+                </ul>
+            </div>
+    </div>
 </html>
