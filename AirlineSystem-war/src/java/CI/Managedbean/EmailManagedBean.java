@@ -47,6 +47,7 @@ public class EmailManagedBean {
         if(!email.equals("")){
             setPass(emailSessionBean.passGen());
             employeeSessionBean.hashNewPwd(userName, pass);
+            
             sendEmail(email);
         }
         

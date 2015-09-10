@@ -89,13 +89,21 @@
                                         <h:inputText value="#{changeProfileManagedBean.employeeHpNumber}" />
                                     </td>
                                 </tr>
+                                
+                                 <tr>
+                                    <td>Personal Email</td>
+                                    <td>
+                                        <h:inputText value="#{changeProfileManagedBean.employeePrivateEmail}" />
+                                    </td>
+                                </tr>
                             </tbody>
-
+                            
+                            
                         </table>
                     </div>
                 </div>
                 <div class="text-center">
-                    <h:commandButton class="btn btn-warning" value="Save Information" actionListener="#{changeProfileManagedBean.updateInfo}" />
+                    <h:commandButton class="btn btn-warning" value="Save Information" action="employeeProfile" actionListener="#{changeProfileManagedBean.updateInfo}" />
                 </div>
             </h:form>
 
