@@ -145,12 +145,13 @@
                                      <h:message for="PE" />
                                 </div>
                             </div>
-
+                                        <h:panelGrid>
                                             <p:selectOneRadio id="gender" required="true" requiredMessage="Please Select Gender!" value="#{employeeManageBean.employeeGender}">
                                                 <f:selectItem itemLabel="Male" itemValue="Male" />
                                                 <f:selectItem itemLabel="Female" itemValue="Female" />
                                             </p:selectOneRadio>
                                         </h:panelGrid>
+                             
                                         <div class="missingfieldbtn">
                                             <h:message for="gender"  />
                                         </div>
