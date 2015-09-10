@@ -20,41 +20,40 @@
     <h:body>
         <!--    To add the same header on all dashboard pages  -->
         <ui:include src="dashboardHeader.xhtml"/>
-<!--    To add the same sidebar on all dashboard pages  -->
+        <!--    To add the same sidebar on all dashboard pages  -->
         <ui:include src="dashboardSidebar.xhtml"/>
         <div id="page-wrapper">
-     <br></br>
-     
-                <div class="col-md-6">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            Add a department
-                        </div> 
-                        <div class="panel-body">
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <h:form>
-
-                                <p:outputLabel value="Department Name: " />
-                                <p:inputText  class="form-control input-lg" value="#{departmentManagedBean.departmentName}"  />
-                                <br/>
-                            <div class="form-group">
-                                <p:outputLabel value="Department Location " />
-                                <p:inputText  class="form-control input-lg" value="#{departmentManagedBean.departmentLocation}" />
-                                <br/>
-                                
-                            </div>
-           
-                             <div>
-                                 <h:commandButton  class="btn btn-primary btn-lg btn-block" value="Add" actionListener="#{departmentManagedBean.addDepartment}"/>
-                            </div>
-       </h:form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2 class="page-header"> Add a new department</h2>
                 </div>
-     
+
+                <br></br>
+
+
+                <div class="col-md-6 panel-body">
+
+
+                    <h:form>
+                        <div class="form-group">
+                            <label class="control-label col-md-5">Department Name:   </label>
+                            <!--                                <label value="Department Name: " />-->
+                            <p:inputText  class="form-inline" value="#{departmentManagedBean.departmentName}"  />
+                            <br/>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-5">Department Location:   </label>
+                            <p:inputText  class="form-inline" value="#{departmentManagedBean.departmentLocation}" />
+                            <br/>
+
+                        </div>
+
+                        <div class="text-center">
+                            <h:commandButton  class="btn btn-outline btn-primary" value="Add Department" actionListener="#{departmentManagedBean.addDepartment}"/>
+                        </div>
+                    </h:form>
+                </div>
+            </div>
         </div>
     </h:body>
 </html>
