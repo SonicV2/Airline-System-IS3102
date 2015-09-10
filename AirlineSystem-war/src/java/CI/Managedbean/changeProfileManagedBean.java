@@ -7,6 +7,7 @@ package CI.Managedbean;
 
 import CI.Session.EmployeeSessionBeanLocal;
 import java.util.Date;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.faces.bean.ManagedBean;
@@ -77,10 +78,24 @@ public class changeProfileManagedBean {
         setEmployeeHpNumber("");
     }
 
+    //to prepopulate data in change profile managedBean
+    @PostConstruct
+    public void init() {
+        userName = loginManageBean.getEmployee().getEmployeeUserName();
+        employeeDOB = loginManageBean.getEmployee().getEmployeeDOB();
+        employeeGender = loginManageBean.getEmployee().getEmployeeGender();
+        employeeHomeAddress = loginManageBean.getEmployee().getEmployeeEmailAddress();
+        employeeOfficeNumber = loginManageBean.getEmployee().getEmployeeOfficeNumber();
+        employeeHpNumber = loginManageBean.getEmployee().getEmployeeHpNumber();
+        employeeEmail = loginManageBean.getEmployee().getEmployeeEmailAddress();
+        employeePrivateEmail = loginManageBean.getEmployee().getEmployeePrivateEmail();
+    // Or here, especially if you depend on injected dependencies.
+}
     /**
      * Creates a new instance of changeProfileManagedBean
      */
     public changeProfileManagedBean() {
+    
     }
 
     /**
