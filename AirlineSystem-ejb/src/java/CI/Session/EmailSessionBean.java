@@ -94,7 +94,8 @@ public class EmailSessionBean implements EmailSessionBeanLocal {
         String email;
         if (employee != null) {
             if (employee.getEmployeeID().equals(NRIC)) {
-                email = employee.getEmployeeEmailAddress(); //need to change 
+                email = employee.getEmployeePrivateEmail(); //need to change 
+                System.out.println("Email Add: "+email);
             } else {
                 email = "";
             }
