@@ -40,12 +40,10 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
     @Override
     public void addEmployee(String userID,String employeeID, String employeeDisplayFirstName, String employeeDisplayLastName,
             String employeeRole, String employeeDepartment, Date employeeDOB,
-            String employeeGender, String employeeHpNumber, String employeeMailingAddress, String employeeOfficeNumber) {
+            String employeeGender, String employeeHpNumber, String employeeMailingAddress, String employeeOfficeNumber,
+            String employeePrivateEmail) {
         
-        System.out.println(userID+" "+employeeID+" "+employeeDisplayFirstName+" "+employeeDisplayLastName
-                +" "+employeeRole+" "+employeeDepartment+" "+employeeDOB.toString()+" "+employeeGender
-                +" "+employeeHpNumber+" "+employeeMailingAddress+" "+employeeOfficeNumber);
-        
+       
         employee = new Employee();
         department= new OrganizationUnit();
         department=getDepartment(employeeDepartment);
@@ -57,7 +55,8 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
         
         
         employee.createEmployee(employeeID, employeeDisplayFirstName, employeeDisplayLastName,/* employeeRole, employeeDepartment,*/
-                employeeDOB, employeeGender, employeeHpNumber, employeeMailingAddress, employeeOfficeNumber);
+                employeeDOB, employeeGender, employeeHpNumber, employeeMailingAddress, employeeOfficeNumber,
+                employeePrivateEmail);
 
         
         String userName = generateUserName(employeeDisplayFirstName, employeeDisplayLastName);
@@ -196,7 +195,7 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
 
     @Override
     public void updateInfo(String employeeUserName, Date employeeDOB,String employeeGender, String employeeHomeAddress, String employeeOfficeNumber,
-    String employeeHpNumber){
+    String employeeHpNumber, String employeePrivateEmail){
         Employee employee = getEmployee(employeeUserName);
         System.out.println("sessionBean: "+ employeeUserName + " dob: "+employeeDOB.toString());
         
@@ -205,6 +204,8 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
         employee.setEmployeeMailingAddress(employeeHomeAddress);
         employee.setEmployeeOfficeNumber(employeeOfficeNumber);
         employee.setEmployeeHpNumber(employeeHpNumber);
+      
+        employee.setEmployeePrivateEmail(employeePrivateEmail);
         em.persist(employee);
         em.flush();
     }

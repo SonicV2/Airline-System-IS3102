@@ -6,7 +6,7 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <h:head>
- 
+
 
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
@@ -18,57 +18,63 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js" />
         <title>Add Role</title>
 
-   
+
     </h:head>
     <h:body>
-                <ui:include src="dashboardHeader.xhtml"/>
-<!--    To add the same sidebar on all dashboard pages  -->
+        <ui:include src="dashboardHeader.xhtml"/>
+        <!--    To add the same sidebar on all dashboard pages  -->
         <ui:include src="dashboardSidebar.xhtml"/>
-         <div id="page-wrapper">
-<div class="container-fluid">
-        <h:form class="col-md-6">
-            
-                  
-<div class="panel-body">
-                            <div class="row">
-                                <div class="col-lg-6">
-            <div class="input-group custom-search-form">
-                   <p:inputText class="form-control" placeholder="Search..." value="#{roleManagedBean.userID}"/>
+        <div id="page-wrapper">
+            <h:form class="col-md-6">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="input-group custom-search-form">
+                                <p:inputText class="form-control" placeholder="Search..." value="#{roleManagedBean.userID}"/>
                                 <span class="input-group-btn">
                                     <h:commandButton class="btn btn-primary btn-block" value="Search" actionListener="#{roleManagedBean.search}"/>
-                            </span>
+                                </span>
                             </div>
-                <br/>                               
-         
-     
- 
-            <p:dataTable var="role" value="#{roleManagedBean.newroles}">
-                <p:column headerText="Role Name">
-                    <h:outputText value="#{role}" />
-                </p:column>
-
-            </p:dataTable>
-               
-                               
+                            <br/>                               
 
 
-            <div class="form-group">
-                <p:outputLabel value="New Role: " />
-                <p:inputText class="form-control input-lg" value="#{roleManagedBean.new_Role}" />
-                <br/>
-            </div>
 
-            <h:commandButton class="btn btn-primary btn-lg btn-block" value="Add" action="#{roleManagedBean.addNewRole}"/>
-     </div>
-</div>
-</div>
+                            <p:dataTable var="role" value="#{roleManagedBean.newroles}">
+                                <p:column headerText="Role Name">
+                                    <h:outputText value="#{role}" />
+                                </p:column>
+
+                            </p:dataTable>
+
+
+
+
+                            <div class="form-group">
+                                <p:outputLabel value="New Role: " />
+                                <p:inputText class="form-control input-lg" value="#{roleManagedBean.new_Role}" />
+                                <br/>
+                            </div>
+
+                            <h:commandButton class="btn btn-primary btn-lg btn-block" value="Add" action="#{roleManagedBean.addNewRole}"/>
+                        </div>
+
+                        <br/>                               
+
+
+
+                        
+
+
+
+                    </div>
+                </div>
+                       
         </h:form>
 
 
-
-</div>
-         </div>
+        </div>
+        
     </h:body>
-     
+
 </html>
 

@@ -25,6 +25,7 @@
 
 
         <div id="page-wrapper">
+
             <h:form>
                 <div class="row">
                     <div class="col-lg-12">
@@ -35,8 +36,8 @@
                     <p:selectManyCheckbox id="grid" value="#{broadcastMessageManagedBean.selectDepart}" layout="grid" columns="3">
                         <f:selectItems value="#{broadcastMessageManagedBean.departments}" var="department" itemLabel="#{department}" itemValue="#{department}" />
                     </p:selectManyCheckbox>
-                </div>
-                <div class="col-lg-6 form-group ">
+
+
                     <h:outputLabel value="Message" />                        
                     <h:inputTextarea class="form-control" rows="3" value="#{broadcastMessageManagedBean.broadcastMsg}"/>
                     <br></br>
@@ -54,6 +55,7 @@
                 </p:dialog>
             </h:form>
         </div>
+
     </h:body>
 
 </html>

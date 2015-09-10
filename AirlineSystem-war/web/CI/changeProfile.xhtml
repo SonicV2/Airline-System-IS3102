@@ -76,6 +76,27 @@
                                     </td>
                                 </tr>
 
+
+                            <tr>
+                                <td>Handphone Number</td>
+                                <td>
+                                    <h:inputText value="#{changeProfileManagedBean.employeeHpNumber}" />
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td>Private Email</td>
+                                <td>
+                                    <h:inputText value="#{changeProfileManagedBean.employeePrivateEmail}" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <h:commandButton class="btn btn-primary btn-md btn-block" value="Save Information" action="employeeProfile" actionListener="#{changeProfileManagedBean.updateInfo}" />
+                                </td>
+                            </tr>
+                        </h:form>
+                    </tbody>
                                 <tr>
                                     <td>Office Number</td>
                                     <td>
@@ -83,12 +104,7 @@
                                     </td>
                                 </tr>
 
-                                <tr>
-                                    <td>Handphone Number</td>
-                                    <td>
-                                        <h:inputText value="#{changeProfileManagedBean.employeeHpNumber}" />
-                                    </td>
-                                </tr>
+                              
                             </tbody>
 
                         </table>

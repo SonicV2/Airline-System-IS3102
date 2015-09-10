@@ -16,7 +16,6 @@
 
         <title>Employee Management</title>
         <style>
-
             .ui-inputfield {
                 margin: 0;
                 outline: medium none;
@@ -37,20 +36,15 @@
                 -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
                 transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
             }
-
             input[type="submit"].btn-block, input[type="reset"].btn-block, input[type="button"].btn-block {
                 width: 70%;
                 margin: auto;
-
             }
-
             .missingfield{
                 padding-left:36%; 
                 color:red;
             }
-
             .missingfieldbtn{
-
                 color:red;
             }
         </style>
@@ -60,7 +54,7 @@
     <h:body>
 
         <!--    To add the same header on all dashboard pages  -->
-        <ui:include src="dashboardHeader.xhtml"/>
+        <!--        <ui:include src="dashboardHeader.xhtml"/>-->
         <!--    To add the same sidebar on all dashboard pages  -->
         <ui:include src="dashboardSidebar.xhtml"/>
 
@@ -99,6 +93,7 @@
                                         <h:message for="firstname" />
                                     </div>
                                 </div>
+
                                 <div class="form-group">
                                     <h:outputLabel value="Last Name: " class="col-md-4 control-label" />
                                     <div class="col-md-8">
@@ -125,7 +120,6 @@
                                 <div class="form-group">
                                     <h:outputLabel value="Gender: " class="col-md-4 control-label" />
                                     <div class="col-md-8">
-
                                         <h:panelGrid>
 
                                             <p:selectOneRadio id="gender" required="true" requiredMessage="Please Select Gender!" value="#{employeeManageBean.employeeGender}">
@@ -137,8 +131,21 @@
                                             <h:message for="gender"  />
                                         </div>
 
+                                    </div>  
+                                </div>    
+
+
+                                <div class="form-group">
+                                    <h:outputLabel value="Personal Email Address: " class="col-md-4 control-label" />
+                                    <div class="col-md-8">
+                                        <h:inputText id="PE" required="true" requiredMessage="Please fill in Personal email field!" class="form-control" value="#{employeeManageBean.employeePrivateEmail}" />
+                                    </div>
+                                    <div class="missingfield"> 
+                                        <h:message for="PE" />
                                     </div>
                                 </div>
+                     
+
 
                                 <div class="form-group">
                                     <p:outputLabel for="role" value="Role: " class="col-md-4 control-label" />
@@ -195,15 +202,17 @@
                                 </div>     
                             </div>
                         </div>
+
                         <div class="text-center">
                             <h:commandButton class="btn btn-success btn-block" value="Save Information" actionListener="#{employeeManageBean.addEmployee}" action="employeeInformation?faces-redirect=true"/>
                         </div>
+
+
                     </h:form>   
                     <br></br>
                     <br></br>
-                </div>
+                </div>   
             </div> 
         </div>
     </h:body>
 </html>
-
