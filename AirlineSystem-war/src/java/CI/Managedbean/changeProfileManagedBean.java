@@ -36,6 +36,8 @@ public class changeProfileManagedBean {
     private String employeeHomeAddress;
     private String employeeOfficeNumber;
     private String employeeHpNumber;
+    private String employeeEmail;
+    private String employeePrivateEmail;
     
  
     public void updateInfo(ActionEvent event){
@@ -53,12 +55,16 @@ public class changeProfileManagedBean {
         if(employeeOfficeNumber.equals("")){
             setEmployeeOfficeNumber(employeeSessionBean.getEmployee(loginManageBean.employeeUserName).getEmployeeOfficeNumber());
         }
+        if(employeePrivateEmail.equals("")){
+            setEmployeePrivateEmail(employeeSessionBean.getEmployee(loginManageBean.employeeUserName).getEmployeePrivateEmail());
+        }
         if(employeeHpNumber.equals("")){
             setEmployeeHpNumber(employeeSessionBean.getEmployee(loginManageBean.employeeUserName).getEmployeeHpNumber());
         }
         System.out.println("managebean: "+userName);
         System.out.println(employeeDOB+ " "+ employeeGender+ " "+ employeeHomeAddress+ " "+ employeeOfficeNumber+ " "+ employeeHpNumber);
-        employeeSessionBean.updateInfo(userName, employeeDOB, employeeGender, employeeHomeAddress, employeeOfficeNumber, employeeHpNumber);
+        employeeSessionBean.updateInfo(userName, employeeDOB, employeeGender, employeeHomeAddress, employeeOfficeNumber, employeeHpNumber
+                                       ,employeePrivateEmail);
         clear();
         loginManageBean.refresh();
     }
@@ -146,6 +152,24 @@ public class changeProfileManagedBean {
     public void setEmployeeHpNumber(String employeeHpNumber) {
         this.employeeHpNumber = employeeHpNumber;
     }
+
+    public String getEmployeeEmail() {
+        return employeeEmail;
+    }
+
+    public void setEmployeeEmail(String employeeEmail) {
+        this.employeeEmail = employeeEmail;
+    }
+
+    public String getEmployeePrivateEmail() {
+        return employeePrivateEmail;
+    }
+
+    public void setEmployeePrivateEmail(String employeePrivateEmail) {
+        this.employeePrivateEmail = employeePrivateEmail;
+    }
+    
+    
 
     /**
      * @return the employeeSessionBean

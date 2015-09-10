@@ -57,9 +57,32 @@
 
                                 <h:commandButton class="btn btn-primary btn-lg btn-block" value="Add" action="#{roleManagedBean.addNewRole}"/>
                             </div>
-                        </div>
-                    </div>
-                </h:form>
+
+                <br/>                               
+         
+     
+ 
+            <p:dataTable var="role" value="#{roleManagedBean.newroles}">
+                <p:column headerText="Role Name">
+                    <h:outputText value="#{role}" />
+                </p:column>
+
+            </p:dataTable>
+               
+                               
+
+
+            <div class="form-group">
+                <p:outputLabel value="New Role: " />
+                <p:inputText class="form-control input-lg" value="#{roleManagedBean.new_Role}" />
+                <br/>
+            </div>
+
+            <h:commandButton class="btn btn-primary btn-lg btn-block" value="Add" action="#{roleManagedBean.addNewRole}"/>
+     </div>
+</div>
+</div>
+        </h:form>
 
 
 

@@ -36,6 +36,8 @@ public class Employee implements Serializable {
     private String employeeOfficeNumber;
     @Temporal(TemporalType.DATE)
     private Date employeeDOB;
+    
+    private String employeePrivateEmail;
 
     private boolean employeeLockOut;
     private boolean employeeAccountActivate;
@@ -55,7 +57,8 @@ public class Employee implements Serializable {
     
     public void createEmployee(String employeeID, String employeeDisplayFirstName, String employeeDisplayLastName,
             /*String employeeRole, String employeeDepartment,*/ Date employeeDOB,
-            String employeeGender, String employeeHpNumber, String employeeMailingAddress, String employeeOfficeNumber) {
+            String employeeGender, String employeeHpNumber, String employeeMailingAddress, String employeeOfficeNumber,
+            String employeePrivateEmail) {
         this.employeeID = employeeID;
         this.employeeDisplayFirstName = employeeDisplayFirstName;
         this.employeeDisplayLastName = employeeDisplayLastName;
@@ -67,6 +70,7 @@ public class Employee implements Serializable {
         this.employeeMailingAddress = employeeMailingAddress;
         this.employeeOfficeNumber = employeeOfficeNumber;
 
+        this.employeePrivateEmail = employeePrivateEmail;
         this.employeePassword = "password";
         this.employeeAccountActivate = false;
         this.employeeLockOut = false;
@@ -194,6 +198,15 @@ public class Employee implements Serializable {
         this.employeeOfficeNumber = employeeOfficeNumber;
     }
 
+    public String getEmployeePrivateEmail() {
+        return employeePrivateEmail;
+    }
+
+    public void setEmployeePrivateEmail(String employeePrivateEmail) {
+        this.employeePrivateEmail = employeePrivateEmail;
+    }
+    
+    
     /**
      * @return the salt
      */
