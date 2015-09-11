@@ -67,10 +67,10 @@ public class LoginManageBean {
     
     public String direct(){
         HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
-        if(employee.getOrganizationUnit().getdepartmentName().equals("HR")){
+        if(employee.getOrganizationUnit().getDepartmentName().equals("HR")){
            session.setAttribute("department", "HR");
             //return "Department/HR" + "?faces-redirect=true";
-        }else if(employee.getOrganizationUnit().getdepartmentName().equals("IT")){
+        }else if(employee.getOrganizationUnit().getDepartmentName().equals("IT")){
             session.setAttribute("department", "IT");
            // return "Department/IT" + "?faces-redirect=true";
         }

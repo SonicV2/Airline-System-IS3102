@@ -48,7 +48,7 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
         department= new OrganizationUnit();
         department=getDepartment(employeeDepartment);
         
-        System.out.println(department.getdepartmentName());
+        System.out.println(department.getDepartmentName());
         
         role=getRole(employeeRole);
         List<Employee> employeelist_role=new ArrayList<Employee>();
