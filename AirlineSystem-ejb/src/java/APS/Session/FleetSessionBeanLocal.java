@@ -16,12 +16,12 @@ import javax.ejb.Local;
  * @author Yunna
  */
 @Local
-public interface APSFleetManagementSystemLocal {
+public interface FleetSessionBeanLocal {
     
-    public void acquireAircraft(String tailNo, Date datePurchased, Date lastMaintained, String aircraftTypeId);
-    public void retireAircraft(String tailNo);
+    public void acquireAircraft(Date datePurchased, Date lastMaintained, String aircraftTypeId);
+    public void retireAircraft(Long tailNo);
     public AircraftType getAircraftType(String aircraftTypeId);
-    public Aircraft getAircraft(String tailNum);
+    public Aircraft getAircraft(Long tailNum);
     public List<AircraftType> getAircraftTypeList(String filter);
 
 }

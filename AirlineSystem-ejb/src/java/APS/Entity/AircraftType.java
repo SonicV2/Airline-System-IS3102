@@ -24,10 +24,12 @@ public class AircraftType implements Serializable {
     private String id;
     
     private double speed;
-    private int totalSeats;
+    private int travelRange;
+    private int firstSeats;
+    private int businessSeats;
+    private int economySeats;
     private int totalStaff;
     private double cost;
-    private double fuelCapacity;
     
     @OneToMany(cascade = {CascadeType.PERSIST}, mappedBy = "aircraftType")
     private List<Aircraft> aircraft = new ArrayList<Aircraft>();
@@ -48,12 +50,12 @@ public class AircraftType implements Serializable {
         this.speed = speed;
     }
 
-    public int getTotalSeats() {
-        return totalSeats;
+    public int getTravelRange() {
+        return travelRange;
     }
 
-    public void setTotalSeats(int totalSeats) {
-        this.totalSeats = totalSeats;
+    public void setTravelRange(int travelRange) {
+        this.travelRange = travelRange;
     }
 
     public int getTotalStaff() {
@@ -72,12 +74,28 @@ public class AircraftType implements Serializable {
         this.cost = cost;
     }
 
-    public double getFuelCapacity() {
-        return fuelCapacity;
+    public int getFirstSeats() {
+        return firstSeats;
     }
 
-    public void setFuelCapacity(double fuelCapacity) {
-        this.fuelCapacity = fuelCapacity;
+    public void setFirstSeats(int firstSeats) {
+        this.firstSeats = firstSeats;
+    }
+    
+    public int getBusinessSeats() {
+        return businessSeats;
+    }
+
+    public void setBusinessSeats(int businessSeats) {
+        this.businessSeats = businessSeats;
+    }
+    
+    public int getEconomySeats() {
+        return economySeats;
+    }
+
+    public void setEconomySeats(int economySeats) {
+        this.economySeats = economySeats;
     }
 
     public List<Aircraft> getAircraft() {

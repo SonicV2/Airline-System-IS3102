@@ -21,7 +21,7 @@ import java.util.ArrayList;
  * @author Yunna
  */
 @Stateless
-public class APSFleetManagementSystem implements APSFleetManagementSystemLocal {
+public class FleetSessionBean implements FleetSessionBeanLocal {
 
     @PersistenceContext(unitName = "AirlineSystem-ejbPU")
     private EntityManager em;
@@ -30,22 +30,31 @@ public class APSFleetManagementSystem implements APSFleetManagementSystemLocal {
     private Aircraft aircraft;
     private AircraftType aircraftType;
     
-    public void acquireAircraft(String tailNo, Date datePurchased, Date lastMaintained, String aircraftTypeId){
+    @Override
+    public void acquireAircraft(Date datePurchased, Date lastMaintained, String aircraftTypeId){
         
         aircraft = new Aircraft();
-        aircraft.createAircraft(tailNo, datePurchased, lastMaintained);
+        aircraftType = new AircraftType();
         aircraftType = getAircraftType(aircraftTypeId);
+
+        System.out.println(aircraftType.getId());
+        
         aircraft.setAircraftType(aircraftType);
         
+        aircraft.createAircraft(datePurchased, lastMaintained);
+        
+        em.persist(aircraft);
     }
 
-    public void retireAircraft(String tailNo){
+    @Override
+    public void retireAircraft(Long tailNo){
         
         aircraft = getAircraft(tailNo);
         em.remove(aircraft);
         
     }
     
+    @Override
     public List<AircraftType> getAircraftTypeList (String filter) {
         
         List<AircraftType> aircraftTypeList = new ArrayList();
@@ -54,9 +63,10 @@ public class APSFleetManagementSystem implements APSFleetManagementSystemLocal {
     }
     
     // get aircraftType object when searching with aircraftTypeId
+    @Override
     public AircraftType getAircraftType(String aircraftTypeId){
         
-        AircraftType type = new AircraftType();
+        AircraftType type1 = new AircraftType();
         try {
 
             Query q = em.createQuery("SELECT a FROM AircraftType " + "AS a WHERE a.id=:id");
@@ -64,20 +74,21 @@ public class APSFleetManagementSystem implements APSFleetManagementSystemLocal {
 
             List results = q.getResultList();
             if (!results.isEmpty()) {
-                type = (AircraftType) results.get(0);
+                type1 = (AircraftType) results.get(0);
 
             } else {
-                type = null;
+                type1 = null;
             }
 
         } catch (EntityNotFoundException enfe) {
             System.out.println("\nEntity not found error" + "enfe.getMessage()");
         }
-        return type;
+        return type1;
     }
     
     // get aircraft object when searching with tail num
-    public Aircraft getAircraft(String tailNum){
+    @Override
+    public Aircraft getAircraft(Long tailNum){
         
         Aircraft aircraft1 = new Aircraft();
         

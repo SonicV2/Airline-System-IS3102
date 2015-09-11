@@ -8,6 +8,8 @@ package APS.Entity;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -20,25 +22,25 @@ import javax.persistence.TemporalType;
 public class Aircraft implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    private String tailNo;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long tailNo;
     @Temporal(TemporalType.DATE)
     private Date datePurchased;
     @Temporal(TemporalType.DATE)
     private Date lastMaintained;
-    private Flight flight = new Flight();
+    //private Flight flight = new Flight();
     private AircraftType aircraftType = new AircraftType();
     
-    public void createAircraft(String tailNo, Date datePurchased, Date lastMaintained) {
-        this.tailNo = tailNo;
+    public void createAircraft(Date datePurchased, Date lastMaintained) {
         this.datePurchased = datePurchased;
         this.lastMaintained = lastMaintained;
     }
     
-    public String getTailNo() {
+    public Long getTailNo() {
         return tailNo;
     }
 
-    public void setTailNo(String tailNo) {
+    public void setTailNo(Long tailNo) {
         this.tailNo = tailNo;
     }
     
@@ -58,13 +60,14 @@ public class Aircraft implements Serializable {
         this.lastMaintained = lastMaintained;
     }
 
-    public Flight getFlight() {
+    /*public Flight getFlight() {
         return flight;
     }
 
     public void setFlight(Flight flight) {
         this.flight = flight;
-    }
+    }*/
+ 
 
     public AircraftType getAircraftType() {
         return aircraftType;

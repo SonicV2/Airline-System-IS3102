@@ -28,8 +28,8 @@ public class Flight implements Serializable {
     @OneToMany(cascade = {CascadeType.PERSIST}, mappedBy = "flight")
     private List<Schedule> schedule = new ArrayList<Schedule>();
     
-    @OneToMany(cascade = {CascadeType.PERSIST}, mappedBy = "flight")
-    private List<Aircraft> aircraft = new ArrayList<Aircraft>();
+    //@OneToMany(cascade = {CascadeType.PERSIST}, mappedBy = "flight")
+    //private List<Aircraft> aircraft = new ArrayList<Aircraft>();
     
     public String getFlightNo() {
         return flightNo;
@@ -63,14 +63,14 @@ public class Flight implements Serializable {
         this.route = route;
     }
 
-    public List<Aircraft> getAircraft() {
+    /*public List<Aircraft> getAircraft() {
         return aircraft;
     }
 
     public void setAircraft(List<Aircraft> aircraft) {
         this.aircraft = aircraft;
-    }
-    
+    }*/
+
     @Override
     public int hashCode() {
         int hash = 0;
