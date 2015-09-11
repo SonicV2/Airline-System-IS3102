@@ -51,17 +51,19 @@ public class EmailManagedBean {
         if(email.equals("nomatch")){
             
             message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "User Name and NRIC Does Not Match!","");
-                
+            RequestContext.getCurrentInstance().update("growll");
+            FacesContext.getCurrentInstance().addMessage(null, message);    
         }else if(email.equals("nouser")){
-            message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "No Such User Name!","");   
+            message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "No Such User Name!",""); 
+            RequestContext.getCurrentInstance().update("growll");
+            FacesContext.getCurrentInstance().addMessage(null, message);
         }else{
             setPass(emailSessionBean.passGen());
             employeeSessionBean.hashNewPwd(userName, pass);
             
             sendEmail(email);
         }
-        RequestContext.getCurrentInstance().update("growll");
-            FacesContext.getCurrentInstance().addMessage(null, message);
+        
     }
     
     
