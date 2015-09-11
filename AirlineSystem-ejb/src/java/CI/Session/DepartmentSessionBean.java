@@ -5,6 +5,7 @@
  */
 package CI.Session;
 
+import CI.Entity.Employee;
 import CI.Entity.OrganizationUnit;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +55,74 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal {
             System.out.println("\nEntity not found error" + "enfe.getMessage()");
         }
         return list;
+    }
+    
+    // Return employee department name
+    @Override
+    public String searchEmployee(String staffID){   
+        Employee employee = getEmployeeUseID(staffID);
+        if(employee == null){
+            return "User Not Exist!";
+        }else{
+            String dept = employee.getOrganizationUnit().getdepartmentName() + "(" +employee.getOrganizationUnit().getLocation() + ")";
+            System.out.println("Session Bean Dept: "+ dept);
+            return dept;
+        }
+    }
+        
+    @Override
+    public String changeDepartment(String staffID,String deptNameCom,String deptNameOldCom){
+        String deptName = deptNameCom.substring(0, deptNameCom.indexOf("("));
+        String deptNameOld = deptNameOldCom.substring(0, deptNameOldCom.indexOf("("));
+        
+        Employee employee = getEmployeeUseID(staffID);
+        OrganizationUnit ouOld =getDepartment(deptNameOld);
+        OrganizationUnit ouNew = getDepartment(deptName);
+        
+        List<Employee> employees = ouOld.getEmployee();
+        employees.remove(employee);
+        ouOld.setEmployee(employees);
+        
+        List<Employee> employeesNew = ouNew.getEmployee();
+        employeesNew.add(employee);
+        ouNew.setEmployee(employeesNew);
+        
+        employee.setOrganizationUnit(ouNew);
+        em.merge(employee);
+        
+        return "Successful!";
+        
+    }
+    
+    public OrganizationUnit getDepartment(String deptName){
+        Query q = em.createQuery("SELECT a FROM OrganizationUnit a WHERE a.departmentName =:deptName");
+        q.setParameter("deptName", deptName);
+        
+         List<OrganizationUnit> results = q.getResultList();
+         
+         return results.get(0);
+         
+    }
+    
+    public Employee getEmployeeUseID(String employeeID) {
+        Employee employee = new Employee();
+        try {
+
+            Query q = em.createQuery("SELECT a FROM Employee " + "AS a WHERE a.employeeID=:id");
+            q.setParameter("id", employeeID);
+
+            List results = q.getResultList();
+            if (!results.isEmpty()) {
+                employee = (Employee) results.get(0);
+
+            } else {
+                employee = null;
+            }
+
+        } catch (EntityNotFoundException enfe) {
+            System.out.println("\nEntity not found error" + "enfe.getMessage()");
+        }
+        return employee;
     }
 
 }

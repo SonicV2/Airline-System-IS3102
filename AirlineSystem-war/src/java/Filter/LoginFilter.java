@@ -70,7 +70,7 @@ public class LoginFilter implements Filter {
                 }
                 else if((url[3].equals("createRole.xhtml") || url[3].equals("createDepartment.xhtml") || url[3].equals("deleteRole.xhtml"))&&(ses.getAttribute("role").equals("Super Admin") || ses.getAttribute("department").equals("IT") )){
                     chain.doFilter(request, response);
-                } else if((url[3].equals("addRole.xhtml") || url[3].equals("employeeManagement.xhtml") || url[3].equals("employeeInformation.xhtml") || url[3].equals("deleteEmployeeRole.xhtml") )&&(ses.getAttribute("role").equals("Super Admin") || ses.getAttribute("department").equals("HR"))){
+                } else if((url[3].equals("addRole.xhtml") || url[3].equals("employeeManagement.xhtml") || url[3].equals("employeeInformation.xhtml") || url[3].equals("deleteEmployeeRole.xhtml") || url[3].equals("changeDepartment.xhtml") )&&(ses.getAttribute("role").equals("Super Admin") || ses.getAttribute("department").equals("HR"))){
                     chain.doFilter(request, response);
                 }
 

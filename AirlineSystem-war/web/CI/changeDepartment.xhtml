@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <h:form>
+            <h:outputLabel value="Please enter staff ID: "/>
+            <h:inputText value="#{departmentManagedBean.staffID}"/>
+            <h:commandButton value="Search" actionListener="#{departmentManagedBean.searchEmployee}"/>
+            <h:outputLabel value="#{departmentManagedBean.employeeDept}"/>
+            
+            
+              <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
+                <p:outputLabel for="department" value="Department:" />
+                <p:selectOneRadio id="department" value="#{departmentManagedBean.changeDeptName}"  layout="grid" columns="1">
+                    <f:selectItems value="#{departmentManagedBean.restDepts}" var="department" itemLabel="#{department}" itemValue="#{department}"/>
+                </p:selectOneRadio>
+            </h:panelGrid>
+                   
+            <h:commandButton value="Change!" actionListener="#{departmentManagedBean.changeDepartment}"/>
+            
+        </h:form>
+    </h:body>
+</html>
+

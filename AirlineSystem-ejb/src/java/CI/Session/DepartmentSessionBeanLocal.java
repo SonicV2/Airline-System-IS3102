@@ -16,4 +16,6 @@ import javax.ejb.Local;
 public interface DepartmentSessionBeanLocal {
     public void addDepartment(String departName, String departLocation);
     public List<String> retrive();
+     public String searchEmployee(String staffID);
+     public String changeDepartment(String staffID,String deptName,String deptNameOld);
 }
