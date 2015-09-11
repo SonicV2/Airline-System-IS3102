@@ -56,21 +56,24 @@ public class LoginFilter implements Filter {
             String redURl = url[0] + "/" + url[1] + "/" + "login.xhtml";
             System.out.println("url0: " + url[0] + "url1: " + url[1] + "url: " + url[2]);
 
-            if (url[2].equals("login.xhtml") || reqURI.contains("javax.faces.resource") || url[2].equals("forgetPassword.xhtml")
-                    || url[2].equals("CI")/*Delete when necessary*/) {
+            if (url[2].equals("login.xhtml") || reqURI.contains("javax.faces.resource") || url[2].equals("forgetPassword.xhtml") ){
+//                    || url[2].equals("CI")/*Delete when necessary*/) {
                 System.out.println("Process ");
                 chain.doFilter(request, response);
 
-            } else if (!url[2].equals("login.xhtml") && (ses != null && ses.getAttribute("isLogin") != null)) {
+            } else if (!url[2].equals("login.xhtml")  && (ses != null && ses.getAttribute("isLogin") != null)) {
 
                 if (ses.getAttribute("role").equals("SuperAdmin")) { /* Super Admin could access all web pages*/
-
                     chain.doFilter(request, response);
-                } 
-//                else if (url[3].equals("HR.xhtml") && ses.getAttribute("department").equals("HR")) {
-//                    chain.doFilter(request, response);
-//                } else if (url[3].equals("IT.xhtml") && ses.getAttribute("department").equals("IT")) {
-//                    chain.doFilter(request, response);
+                } else if(url[3].equals("employeeDashBoard.xhtml") || url[3].equals("employeeProfile.xhtml") || url[3].equals("message.xhtml") || url[3].equals("changeProfile.xhtml") || url[3].equals("newUserChangePwd.xhtml")){
+                    chain.doFilter(request, response);
+                }
+                else if((url[3].equals("createRole.xhtml") || url[3].equals("createDepartment.xhtml"))&& ses.getAttribute("department").equals("IT")){
+                    chain.doFilter(request, response);
+                } else if((url[3].equals("addRole.xhtml") || url[3].equals("employeeManagement.xhtml") || url[3].equals("employeeInformation.xhtml") || url[3].equals("deleteEmployeeRole.xhtml") )&& ses.getAttribute("department").equals("HR")){
+                    chain.doFilter(request, response);
+                }
+
 //                } else if (url[3].equals("employeeProfile.xhtml") && ses.getAttribute("isLogin") != null) {
 //                    chain.doFilter(request, response);
 //                } else if (url[3].equals("message.xhtml") && ses.getAttribute("isLogin") != null) {

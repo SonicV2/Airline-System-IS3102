@@ -47,7 +47,7 @@ public class RoleManagedBean {
     String msg;
     
     String new_Role; // user input to set new rows
-    
+    private List<String> deleteRoles;
     
     public RoleManagedBean() {
     }
@@ -70,6 +70,12 @@ public class RoleManagedBean {
         
     }
     
+    public void deleteEmployeeRole(ActionEvent event){
+        roleSessionBean.deleteEmployeeRole(employee, deleteRoles);
+        setUserID("");
+        setDeleteRoles(null);
+        setNewroles(null);
+    }
     
 
     //for admin to create new roles
@@ -191,6 +197,20 @@ public class RoleManagedBean {
 
     public void setNew_Role(String new_Role) {
         this.new_Role = new_Role;
+    }
+
+    /**
+     * @return the deleteRoles
+     */
+    public List<String> getDeleteRoles() {
+        return deleteRoles;
+    }
+
+    /**
+     * @param deleteRoles the deleteRoles to set
+     */
+    public void setDeleteRoles(List<String> deleteRoles) {
+        this.deleteRoles = deleteRoles;
     }
 
     
