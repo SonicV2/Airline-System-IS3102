@@ -48,8 +48,6 @@ public class OrganizationUnit implements Serializable {
         this.departmentName=departName;
         this.location=departLocation;
     }
-    
-    
 
     public String getdepartmentName() {
         return departmentName;
@@ -59,16 +57,6 @@ public class OrganizationUnit implements Serializable {
         this.departmentName = departmentName;
     }
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     @Override
     public int hashCode() {
         int hash = 0;
