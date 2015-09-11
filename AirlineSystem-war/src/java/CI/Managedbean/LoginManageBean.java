@@ -107,8 +107,8 @@ public class LoginManageBean {
                 List<Role> role = employee.getRoles();
                 for (Role r : role) {
                     temp_roles += r.getRoleName() + " ";
-                    if(r.getRoleName().equals("SuperAdmin")){
-                        session.setAttribute("role", "SuperAdmin"); /*Add role --> SuperAdmin*/
+                    if(r.getRoleName().equals("Super Admin")){
+                        session.setAttribute("role", "Super Admin"); /*Add role --> SuperAdmin*/
                     }else{
                         session.setAttribute("role", "NSA");/*NSA--> Not Super Admin*/
                     }

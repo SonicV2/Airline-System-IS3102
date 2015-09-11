@@ -42,8 +42,13 @@ public class departmentManagedBean {
     private List<String> departments=new ArrayList();
     private List<OrganizationUnit> orgUnits;
     
+    private String deleteDeptName;
+    private String staffID;
+    private String employeeDept; // dept from seachEmployee function in sessionbean
+    private String changeDeptName; // change department name
+    private List<String> restDepts ;
     
-    
+    private String errorMsg;
     
     public departmentManagedBean() {
     
@@ -56,14 +61,43 @@ public class departmentManagedBean {
         clear();
     }
     
+    public void searchEmployee(ActionEvent event){
+        setEmployeeDept(departmentSessionBean.searchEmployee(staffID));
+        if(employeeDept.equals("User Not Exist!")){
+            setErrorMsg("No User Exist!");
+        }else{
+            getRestDepartment();
+        }
+    }
+    
+    public void changeDepartment(ActionEvent event){
+        departmentSessionBean.changeDepartment(staffID, changeDeptName,employeeDept);
+        setStaffID("");
+        setRestDepts(null);
+        setEmployeeDept("");
+    }
     public void clear(){
         setDepartmentName("");
         setDepartmentLocation("");
     }
+    
+    public void getRestDepartment(){
+        restDepts = new ArrayList();
+        String deptName = employeeDept.substring(0, employeeDept.indexOf("("));
+        System.out.println("DeparmentName: " + deptName);
+        int index = employeeDept.indexOf("(")+1;
+        String deptLocation = employeeDept.substring(index, employeeDept.indexOf(")"));
+        System.out.println("DeparmentLocation: " +deptLocation);
+        for(String s : departments){
+            if(!s.substring(0, s.indexOf("(")).equals(deptName) && !s.substring(s.indexOf("("), s.indexOf(")")).equals(deptLocation)){
+                restDepts.add(s);
+            }
+        }
+    }
+    
+    
     @PostConstruct
     public void retrive(){
-        
-        
         setDepartments(departmentSessionBean.retrive());
         System.out.println("set org units");
        
@@ -112,6 +146,90 @@ public class departmentManagedBean {
 
     public void setDepartments(List<String> departments) {
         this.departments = departments;
+    }
+
+    /**
+     * @return the deleteDeptName
+     */
+    public String getDeleteDeptName() {
+        return deleteDeptName;
+    }
+
+    /**
+     * @param deleteDeptName the deleteDeptName to set
+     */
+    public void setDeleteDeptName(String deleteDeptName) {
+        this.deleteDeptName = deleteDeptName;
+    }
+
+    /**
+     * @return the staffID
+     */
+    public String getStaffID() {
+        return staffID;
+    }
+
+    /**
+     * @param staffID the staffID to set
+     */
+    public void setStaffID(String staffID) {
+        this.staffID = staffID;
+    }
+
+    /**
+     * @return the employeeDept
+     */
+    public String getEmployeeDept() {
+        return employeeDept;
+    }
+
+    /**
+     * @param employeeDept the employeeDept to set
+     */
+    public void setEmployeeDept(String employeeDept) {
+        this.employeeDept = employeeDept;
+    }
+
+    /**
+     * @return the changeDeptName
+     */
+    public String getChangeDeptName() {
+        return changeDeptName;
+    }
+
+    /**
+     * @param changeDeptName the changeDeptName to set
+     */
+    public void setChangeDeptName(String changeDeptName) {
+        this.changeDeptName = changeDeptName;
+    }
+
+    /**
+     * @return the restDepts
+     */
+    public List<String> getRestDepts() {
+        return restDepts;
+    }
+
+    /**
+     * @param restDepts the restDepts to set
+     */
+    public void setRestDepts(List<String> restDepts) {
+        this.restDepts = restDepts;
+    }
+
+    /**
+     * @return the errorMsg
+     */
+    public String getErrorMsg() {
+        return errorMsg;
+    }
+
+    /**
+     * @param errorMsg the errorMsg to set
+     */
+    public void setErrorMsg(String errorMsg) {
+        this.errorMsg = errorMsg;
     }
     
   

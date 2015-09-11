@@ -50,7 +50,7 @@
             .dropdown-menu.select{
                 position: static;
                 display: inline;
-                
+
             }
         </style>
 
@@ -113,7 +113,7 @@
                                 <div class="form-group">
                                     <h:outputLabel value="Date of Birth: " class="col-md-4 control-label" />
                                     <div class="col-md-8">
-                                        <p:calendar id="button" required="true" requiredMessage="Please fill in Date of Birth field!" value="#{employeeManageBean.employeeDOB}" showOn="button"/>
+                                        <p:calendar id="button" required="true" requiredMessage="Please fill in Date of Birth field!" value="#{employeeManageBean.employeeDOB}" showOn="button" navigator="true" yearRange="c-100:c"/>
 
                                     </div>
                                     <div class="missingfield">
@@ -143,13 +143,15 @@
                                 <div class="form-group">
                                     <h:outputLabel value="Personal Email Address: " class="col-md-4 control-label" />
                                     <div class="col-md-8">
-                                        <h:inputText id="PE" required="true" requiredMessage="Please fill in Personal email field!" class="form-control" value="#{employeeManageBean.employeePrivateEmail}" />
+                                        <h:inputText id="PE" required="true" validatorMessage="Not a valid email addess " requiredMessage="Please fill in Personal email field!" class="form-control" value="#{employeeManageBean.employeePrivateEmail}" >
+                                            <f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
+                                        </h:inputText> 
                                     </div>
                                     <div class="missingfield"> 
                                         <h:message for="PE" />
                                     </div>
                                 </div>
-                     
+
 
 
                                 <div class="form-group">

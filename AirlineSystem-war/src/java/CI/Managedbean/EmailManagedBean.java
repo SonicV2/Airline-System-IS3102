@@ -8,11 +8,14 @@ package CI.Managedbean;
 import CI.Session.EmailSessionBeanLocal;
 import CI.Session.EmployeeSessionBeanLocal;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.inject.Named;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import org.primefaces.context.RequestContext;
 
 /**
  *
@@ -44,13 +47,21 @@ public class EmailManagedBean {
     
     public void valideUser(ActionEvent event){
         setEmail(emailSessionBean.validateUser(userName, NRIC)); //get employee's email address 
-        if(!email.equals("")){
+        FacesMessage message = null;
+        if(email.equals("nomatch")){
+            
+            message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "User Name and NRIC Does Not Match!","");
+                
+        }else if(email.equals("nouser")){
+            message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "No Such User Name!","");   
+        }else{
             setPass(emailSessionBean.passGen());
             employeeSessionBean.hashNewPwd(userName, pass);
             
             sendEmail(email);
         }
-        
+        RequestContext.getCurrentInstance().update("growll");
+            FacesContext.getCurrentInstance().addMessage(null, message);
     }
     
     
@@ -60,6 +71,10 @@ public class EmailManagedBean {
         setBody("Your New Password: " + pass);// need to think of the link
         System.out.println("userName "+receiver + "Subject: "+subject+"body: "+body);
         emailSessionBean.sendEmail(email, subject, body);
+        FacesMessage message = null;
+        message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Email has been send ! Please check your personal email","");
+        RequestContext.getCurrentInstance().update("growll");
+        FacesContext.getCurrentInstance().addMessage(null, message);
         clear();
     }
 

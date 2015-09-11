@@ -5,7 +5,8 @@
       xmlns:jsf="http://xmlns.jcp.org/jsf"
       xmlns:p="http://primefaces.org/ui"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
 
 
@@ -55,11 +56,18 @@
 
 
                             <br></br>
+                            
                             <div class="form-group">
-                                <label>New Role:</label>
-<!--                                <p:outputLabel value="New Role: " />-->
-                                <p:inputText class="form-control" value="#{roleManagedBean.new_Role}" />
+                            
+                                <p:outputLabel for="role" value="Select Role to add: "  />
+                                <h:selectOneMenu  id="role"  value="#{roleManagedBean.new_Role}"  >
+
+                                   <f:selectItem itemLabel="Select Role" itemValue="" noSelectionOption="true" />
+                                   <f:selectItems value="#{roleManagedBean.roles}" />
+                                </h:selectOneMenu>    
+
                                 <br/>
+                          
                             </div>
                               <div class="text-center">
                             <h:commandButton class="btn btn-outline btn-success" value="Add" action="#{roleManagedBean.addNewRole}"/>

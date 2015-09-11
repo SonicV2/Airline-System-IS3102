@@ -18,5 +18,6 @@ public interface RoleSessionBeanLocal {
     public void addRole(String roleName);
     public List<String> retrive();
     public void addNewRole(Employee employee,String new_Role);
-    public void deleteEmployeeRole(Employee employee, List<String> roles);
+    public String deleteEmployeeRole(Employee employee, List<String> roles);
+     public String deleteRole(String roleName);
 }

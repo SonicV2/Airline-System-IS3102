@@ -51,7 +51,9 @@ public class RoleSessionBean implements RoleSessionBeanLocal {
             List<Role> results = q.getResultList();
             if (!results.isEmpty()) {
                 for (Role role : results) {
+                    if(!role.getRoleName().equals("Super Admin")){  //comment out if adding Super Admin
                     list.add(role.getRoleName());
+                    }
                 }
 
             } else {
@@ -65,20 +67,46 @@ public class RoleSessionBean implements RoleSessionBeanLocal {
     }
     
     @Override
-    public void deleteEmployeeRole(Employee employee, List<String> roles){
+    public String deleteEmployeeRole(Employee employee, List<String> roles){
         List<Role> roleList = employee.getRoles();
         for(String s : roles){
             Role r = new Role();
             r = getRole(s); //get role entity
             List<Employee> employeeLists = r.getEmployees(); // get all employee from one role
+            if(roleList.size()==1 && roleList.contains(r)){
+                return "Cannot Delete!";
+            }
             roleList.remove(r); // employee remove this role --> employee is the owner entity
             employeeLists.remove(employee); // remove employee from this role
             r.setEmployees(employeeLists);
         }
         employee.setRoles(roleList);
         em.merge(employee);
-        
+        return "Successful!";
        
+    }
+    
+    @Override
+    public String deleteRole(String roleName){
+        //String msg;
+        Role role = new Role();
+        role = getRole(roleName);
+        List<Employee> employees = role.getEmployees();
+        
+        for(Employee e : employees){
+            List<Role> roles = e.getRoles();
+            if(roles.size()==1 && roles.contains(role)){
+                return "Cannot Delete!";
+            }
+            roles.remove(role);
+            e.setRoles(roles);
+            em.merge(e);
+        }
+   
+        em.remove(role);
+        em.flush();
+        return "Successful!";
+        
     }
     
     public void addNewRole(Employee employee, String new_Role){
