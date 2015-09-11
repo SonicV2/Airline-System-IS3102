@@ -70,9 +70,7 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal {
             if (!results.isEmpty()){
                 
                 allDepts = results;
-                System.out.println("number of orgUNITS:" + allDepts.size()); 
-                System.out.println(allDepts.get(1).getDepartmentName());
-                System.out.println("retrieved!");
+                
             }else
             {
                 allDepts = null;

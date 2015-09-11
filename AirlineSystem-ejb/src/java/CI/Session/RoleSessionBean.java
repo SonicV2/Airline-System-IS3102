@@ -5,6 +5,7 @@
  */
 package CI.Session;
 
+import CI.Entity.AccessRight;
 import CI.Entity.Employee;
 import CI.Entity.OrganizationUnit;
 import CI.Entity.Role;
@@ -34,9 +35,26 @@ public class RoleSessionBean implements RoleSessionBeanLocal {
      
      
     @Override
-    public void addRole(String roleName) {
+    public void addRole(String roleName,List<String> accessRight) {
 
+       AccessRight ar= new AccessRight();
+        
+        
         role_db.create(roleName);
+        
+        if(accessRight.contains("accessAdd")){
+            System.out.println("sessionBean: accessright");
+            ar.setAccessAdd(true);         
+        }if(accessRight.contains("accessDelete")){
+            ar.setAccessDelete(true);
+        }if(accessRight.contains("accessAssign")){
+            ar.setAccessAssign(true);
+        }if(accessRight.contains("accessCreate")){
+            ar.setAccessCreate(true);
+        }if(accessRight.contains("accessView")){
+            ar.setAccessView(true);
+        }
+        role_db.setAccess(ar);
         em.persist(role_db);
     }
     

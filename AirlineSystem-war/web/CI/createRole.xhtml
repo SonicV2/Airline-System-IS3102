@@ -3,7 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
@@ -18,7 +19,7 @@
     </h:head>
     <h:body>
         <!--    To add the same header on all dashboard pages  -->
-        <ui:include src="dashboardHeader.xhtml"/>
+<!--        <ui:include src="dashboardHeader.xhtml"/>-->
         <!--    To add the same sidebar on all dashboard pages  -->
         <ui:include src="dashboardSidebar.xhtml"/>
         <div id="page-wrapper">
@@ -43,6 +44,16 @@
                             <label class="control-label col-md-5">Role Name:   </label>
 
                             <p:inputText class="form-inline" value="#{roleManagedBean.roleName}"  />
+                        </div>
+                        
+                        <div>
+                        <p:selectManyCheckbox id="grid" value="#{roleManagedBean.accessRight}" layout="grid" columns="2">
+                            <f:selectItem itemLabel="Add" itemValue="accessAdd" />
+                            <f:selectItem itemLabel="Delete" itemValue="accessDelete" />
+                            <f:selectItem itemLabel="Create" itemValue="accessCreate" />
+                            <f:selectItem itemLabel="Assign" itemValue="accessAssign" />
+                            <f:selectItem itemLabel="View" itemValue="accessView" />
+                        </p:selectManyCheckbox>
                         </div>
 
                         <div class="text-center">

@@ -50,7 +50,8 @@ public class RoleManagedBean {
     String new_Role; // user input to set new rows
     private List<String> deleteRoles;
     private String deleteRoleName; // delete role 
-   
+    
+    private List<String> accessRight;
     
     public RoleManagedBean() {
     }
@@ -90,7 +91,7 @@ public class RoleManagedBean {
 
     //for admin to create new roles
     public void addRole(ActionEvent event){
-        roleSessionBean.addRole(roleName);
+        roleSessionBean.addRole(roleName,accessRight);
         clear();
     }
     
@@ -250,6 +251,14 @@ public class RoleManagedBean {
      */
     public void setErrorMsg(String errorMsg) {
         this.errorMsg = errorMsg;
+    }
+
+    public List<String> getAccessRight() {
+        return accessRight;
+    }
+
+    public void setAccessRight(List<String> accessRight) {
+        this.accessRight = accessRight;
     }
 
    

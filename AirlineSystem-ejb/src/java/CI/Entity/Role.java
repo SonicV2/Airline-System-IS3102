@@ -14,6 +14,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 
 /**
  *
@@ -28,6 +29,9 @@ public class Role implements Serializable {
     @ManyToMany(cascade = {CascadeType.PERSIST}, mappedBy="roles")
     private List<Employee> employees= new ArrayList<Employee>(); 
     
+    
+   @OneToOne(cascade = {CascadeType.PERSIST})
+    private AccessRight access=new AccessRight();
     
     public void create(String roleName){
         this.roleName=roleName;
@@ -72,6 +76,14 @@ public class Role implements Serializable {
 
     public void setEmployees(List<Employee> employees) {
         this.employees = employees;
+    }
+
+    public AccessRight getAccess() {
+        return access;
+    }
+
+    public void setAccess(AccessRight access) {
+        this.access = access;
     }
     
     

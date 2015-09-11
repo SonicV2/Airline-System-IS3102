@@ -15,7 +15,7 @@ import javax.ejb.Local;
  */
 @Local
 public interface RoleSessionBeanLocal {
-    public void addRole(String roleName);
+    public void addRole(String roleName,List<String> accessRight);
     public List<String> retrive();
     public void addNewRole(Employee employee,String new_Role);
     public String deleteEmployeeRole(Employee employee, List<String> roles);
