@@ -23,6 +23,22 @@
         <!--    To add the same sidebar on all dashboard pages  -->
         <ui:include src="dashboardSidebar.xhtml"/>
         <div id="page-wrapper">
+            
+  
+            <p:dataTable var="depart" value="#{departmentManagedBean.orgUnits}">
+                    
+               
+                    <p:column headerText="Department Name">
+                        <h:outputText value="#{depart.departmentName}" />
+                    </p:column>
+ 
+                    <p:column headerText="Department Location">
+                        <h:outputText value="#{depart.location}" />
+                    </p:column>
+<!--                </ui:repeat>-->
+
+            </p:dataTable>
+            
             <div class="row">
                 <div class="col-lg-12">
                     <h2 class="page-header"> Add a new department</h2>

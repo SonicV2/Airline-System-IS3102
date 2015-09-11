@@ -5,22 +5,16 @@
  */
 package CI.Managedbean;
 
+import CI.Entity.OrganizationUnit;
 import CI.Session.DepartmentSessionBeanLocal;
-import CI.Session.EmployeeSessionBeanLocal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.event.ActionEvent;
 import javax.inject.Named;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 
 /**
  *
@@ -46,6 +40,7 @@ public class departmentManagedBean {
 
     private String department; // for dropdown selection
     private List<String> departments=new ArrayList();
+    private List<OrganizationUnit> orgUnits;
     
     private String deleteDeptName;
     private String staffID;
@@ -104,6 +99,11 @@ public class departmentManagedBean {
     @PostConstruct
     public void retrive(){
         setDepartments(departmentSessionBean.retrive());
+        System.out.println("set org units");
+       
+        
+        setOrgUnits(departmentSessionBean.retrieveAllDepts());
+       
     }
    
     
@@ -232,10 +232,16 @@ public class departmentManagedBean {
         this.errorMsg = errorMsg;
     }
     
+  
     
+    
+     public List<OrganizationUnit> getOrgUnits(){
+         return orgUnits;
+     }
      
-         
-   
-    
-    
+    public void setOrgUnits(List<OrganizationUnit> orgUnits) {
+        this.orgUnits = orgUnits;
+    }
 }
+         
+ 

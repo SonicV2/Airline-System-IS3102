@@ -44,7 +44,7 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal {
             List<OrganizationUnit> results = q.getResultList();
             if (!results.isEmpty()) {
                 for (OrganizationUnit org : results) {
-                    list.add(org.getdepartmentName() + "(" +org.getLocation() + ")");
+                    list.add(org.getDepartmentName() + "(" +org.getLocation() + ")");
                 }
 
             } else {
@@ -57,6 +57,34 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal {
         return list;
     }
     
+
+    @Override
+    public List<OrganizationUnit> retrieveAllDepts(){
+        
+        List<OrganizationUnit> allDepts = new ArrayList<OrganizationUnit>();
+        
+        try{
+            Query q = em.createQuery("SELECT a from OrganizationUnit a");
+            
+            List<OrganizationUnit> results = q.getResultList();
+            if (!results.isEmpty()){
+                
+                allDepts = results;
+                System.out.println("number of orgUNITS:" + allDepts.size()); 
+                System.out.println(allDepts.get(1).getDepartmentName());
+                System.out.println("retrieved!");
+            }else
+            {
+                allDepts = null;
+                System.out.println("no dept!");
+            }
+        }catch (EntityNotFoundException enfe) {
+            System.out.println("\nEntity not found error" + "enfe.getMessage()");
+        }
+       
+        return allDepts;
+    }
+
     // Return employee department name
     @Override
     public String searchEmployee(String staffID){   
@@ -64,7 +92,7 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal {
         if(employee == null){
             return "User Not Exist!";
         }else{
-            String dept = employee.getOrganizationUnit().getdepartmentName() + "(" +employee.getOrganizationUnit().getLocation() + ")";
+            String dept = employee.getOrganizationUnit().getDepartmentName() + "(" +employee.getOrganizationUnit().getLocation() + ")";
             System.out.println("Session Bean Dept: "+ dept);
             return dept;
         }
