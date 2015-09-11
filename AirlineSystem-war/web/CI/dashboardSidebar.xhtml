@@ -5,6 +5,9 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     
+    <ui:fragment rendered ="#{loginManageBean.employee.roles[0] eq 'CI.Entity.Role[ id=Super Admin ]'}">
+       <ui:include src="SuperAdminSidebar.xhtml" />
+    </ui:fragment>
     
     <ui:fragment rendered="#{loginManageBean.employee.organizationUnit.getDepartmentName() ne 'IT' }">
              <div class="navbar-default sidebar" role="navigation">
@@ -32,13 +35,15 @@
 <!--             /.sidebar-collapse -->
         </div>
     </ui:fragment>
+   
     
-    
-    <ui:fragment rendered="#{loginManageBean.employee.organizationUnit.getDepartmentName() eq 'IT' }">
+    <ui:fragment rendered="#{loginManageBean.employee.organizationUnit.getDepartmentName() eq 'IT' and loginManageBean.employee.roles[0] ne 'CI.Entity.Role[ id=Super Admin ]' }">
       <ui:include src="ITSidebar.xhtml" />
     </ui:fragment>
     
     <ui:fragment rendered ="#{loginManageBean.employee.organizationUnit.getDepartmentName() eq 'HR'}">
        <ui:include src="HRSidebar.xhtml" />
     </ui:fragment>
+    
+    
 </html>

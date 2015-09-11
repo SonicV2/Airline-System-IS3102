@@ -40,7 +40,7 @@ public class OrganizationUnit implements Serializable {
         this.departmentName=departName;
         this.location=departLocation;
     }
-
+    
     
 
     public String getDepartmentName() {
@@ -53,7 +53,7 @@ public class OrganizationUnit implements Serializable {
     
    
     
-   @Override
+    @Override
     public int hashCode() {
         int hash = 0;
         hash += (departmentName!= null ? departmentName.hashCode() : 0);
