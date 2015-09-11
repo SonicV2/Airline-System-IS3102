@@ -51,7 +51,7 @@ public class RoleSessionBean implements RoleSessionBeanLocal {
             List<Role> results = q.getResultList();
             if (!results.isEmpty()) {
                 for (Role role : results) {
-                    if(!role.getRoleName().equals("Super Admin")){
+                    if(!role.getRoleName().equals("Super Admin")){  //comment out if adding Super Admin
                     list.add(role.getRoleName());
                     }
                 }

@@ -99,10 +99,10 @@ public class EmailSessionBean implements EmailSessionBeanLocal {
                 email = employee.getEmployeePrivateEmail(); //need to change 
                 System.out.println("Email Add: "+email);
             } else {
-                email = "";
+                email = "nomatch";  //NRIC and username not match
             }
         } else {
-            email = "";
+            email = "nouser"; // cannot find such user
         }
         return email;
     }
