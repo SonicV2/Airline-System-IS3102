@@ -22,13 +22,18 @@
         <!--    To add the same sidebar on all dashboard pages  -->
         <ui:include src="dashboardSidebar.xhtml"/>
         <div id="page-wrapper">
-            
-            
-            
+
+
+
             <div class="row">
                 <div class="col-lg-12">
                     <h2 class="page-header"> Create a new role</h2>
                 </div>
+                <p:dataTable var="role" value="#{roleManagedBean.roles}">
+                    <p:column headerText="Existing Roles">
+                        <h:outputText value="#{role}" />
+                    </p:column> 
+                </p:dataTable>
 
                 <br></br>
                 <div class="col-md-6 panel-body">

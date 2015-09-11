@@ -58,6 +58,7 @@ public class departmentManagedBean {
     public void addDepartment(ActionEvent event){
     
         departmentSessionBean.addDepartment(departmentName, departmentLocation);
+        
         clear();
     }
     
