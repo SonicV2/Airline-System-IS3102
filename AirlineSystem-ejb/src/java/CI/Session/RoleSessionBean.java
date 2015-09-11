@@ -51,7 +51,9 @@ public class RoleSessionBean implements RoleSessionBeanLocal {
             List<Role> results = q.getResultList();
             if (!results.isEmpty()) {
                 for (Role role : results) {
+                    if(!role.getRoleName().equals("Super Admin")){
                     list.add(role.getRoleName());
+                    }
                 }
 
             } else {
@@ -79,6 +81,29 @@ public class RoleSessionBean implements RoleSessionBeanLocal {
         em.merge(employee);
         
        
+    }
+    
+    @Override
+    public String deleteRole(String roleName){
+        //String msg;
+        Role role = new Role();
+        role = getRole(roleName);
+        List<Employee> employees = role.getEmployees();
+        
+        for(Employee e : employees){
+            List<Role> roles = e.getRoles();
+            if(roles.size()==1 && roles.contains(role)){
+                return "Cannot Delete!";
+            }
+            roles.remove(role);
+            e.setRoles(roles);
+            em.merge(e);
+        }
+   
+        em.remove(role);
+        em.flush();
+        return "Successful!";
+        
     }
     
     public void addNewRole(Employee employee, String new_Role){

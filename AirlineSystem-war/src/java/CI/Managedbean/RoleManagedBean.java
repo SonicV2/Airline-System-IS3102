@@ -45,9 +45,12 @@ public class RoleManagedBean {
     List<String> newroles; // List<String> newroles
             
     String msg;
+    private String errorMsg; //msg from deleteRole in session Bean
     
     String new_Role; // user input to set new rows
     private List<String> deleteRoles;
+    private String deleteRoleName; // delete role 
+   
     
     public RoleManagedBean() {
     }
@@ -63,7 +66,9 @@ public class RoleManagedBean {
             name=employee.getEmployeeDisplayFirstName()+" "+employee.getEmployeeDisplayLastName();
             List<Role> r =employee.getRoles();
             for(Role r1: r){
+                if(!r1.getRoleName().equals("Super Admin")){
                 newroles.add(r1.getRoleName());
+                }
             }
         }
         
@@ -77,6 +82,10 @@ public class RoleManagedBean {
         setNewroles(null);
     }
     
+    public void deleteRole(ActionEvent event){
+        setErrorMsg(roleSessionBean.deleteRole(deleteRoleName));
+       
+    }
 
     //for admin to create new roles
     public void addRole(ActionEvent event){
@@ -88,6 +97,7 @@ public class RoleManagedBean {
     public void clear(){
         setRoleName("");
     }
+    
      @PostConstruct
     public void retrive(){
         setRoles(roleSessionBean.retrive());
@@ -213,6 +223,35 @@ public class RoleManagedBean {
         this.deleteRoles = deleteRoles;
     }
 
+    /**
+     * @return the deleteRoleName
+     */
+    public String getDeleteRoleName() {
+        return deleteRoleName;
+    }
+
+    /**
+     * @param deleteRoleName the deleteRoleName to set
+     */
+    public void setDeleteRoleName(String deleteRoleName) {
+        this.deleteRoleName = deleteRoleName;
+    }
+
+    /**
+     * @return the errorMsg
+     */
+    public String getErrorMsg() {
+        return errorMsg;
+    }
+
+    /**
+     * @param errorMsg the errorMsg to set
+     */
+    public void setErrorMsg(String errorMsg) {
+        this.errorMsg = errorMsg;
+    }
+
+   
     
     
 }
