@@ -8,4 +8,6 @@
 /AirlineSystem-war/dist/
 /AirlineSystem-war/build/
 /AirlineSystem-war/nbproject/project.xml
-
+/nbproject/project.properties
+/AirlineSystem-war/nbproject/build-impl.xml
+/AirlineSystem-war/nbproject/project.properties
