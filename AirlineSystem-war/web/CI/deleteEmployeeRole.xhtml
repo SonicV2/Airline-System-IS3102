@@ -19,6 +19,7 @@
             </p:selectManyCheckbox>
             
             <h:commandButton value="Delete" actionListener="#{roleManagedBean.deleteEmployeeRole}"/>
+            <h:outputLabel value="#{roleManagedBean.errorMsg}"/>
         </h:form>
     </h:body>
 </html>

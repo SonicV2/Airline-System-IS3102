@@ -67,19 +67,22 @@ public class RoleSessionBean implements RoleSessionBeanLocal {
     }
     
     @Override
-    public void deleteEmployeeRole(Employee employee, List<String> roles){
+    public String deleteEmployeeRole(Employee employee, List<String> roles){
         List<Role> roleList = employee.getRoles();
         for(String s : roles){
             Role r = new Role();
             r = getRole(s); //get role entity
             List<Employee> employeeLists = r.getEmployees(); // get all employee from one role
+            if(roleList.size()==1 && roleList.contains(r)){
+                return "Cannot Delete!";
+            }
             roleList.remove(r); // employee remove this role --> employee is the owner entity
             employeeLists.remove(employee); // remove employee from this role
             r.setEmployees(employeeLists);
         }
         employee.setRoles(roleList);
         em.merge(employee);
-        
+        return "Successful!";
        
     }
     

@@ -76,15 +76,16 @@ public class RoleManagedBean {
     }
     
     public void deleteEmployeeRole(ActionEvent event){
-        roleSessionBean.deleteEmployeeRole(employee, deleteRoles);
+        setErrorMsg(roleSessionBean.deleteEmployeeRole(employee, deleteRoles));
         setUserID("");
         setDeleteRoles(null);
         setNewroles(null);
+        setErrorMsg("");
     }
     
     public void deleteRole(ActionEvent event){
         setErrorMsg(roleSessionBean.deleteRole(deleteRoleName));
-       
+       setDeleteRoleName("");
     }
 
     //for admin to create new roles
