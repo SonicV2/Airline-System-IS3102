@@ -98,6 +98,7 @@ public class RoleManagedBean {
     /*clear input after submit*/
     public void clear(){
         setRoleName("");
+        setAccessRight(null);
     }
     
      @PostConstruct
