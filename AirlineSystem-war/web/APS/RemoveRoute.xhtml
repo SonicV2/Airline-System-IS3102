@@ -14,12 +14,28 @@
                 <h:outputText value="#{route.routeId}" />
             </p:column>
             
-            <p:column headerText="Origin">
-                <h:outputText value="#{route.origin}" />
+            <p:column headerText="Origin IATA">
+                <h:outputText value="#{route.originIATA}" />
+            </p:column>
+            
+            <p:column headerText="Origin Country">
+                <h:outputText value="#{route.originCountry}" />
+            </p:column>
+            
+            <p:column headerText="Origin City">
+                <h:outputText value="#{route.originCity}" />
             </p:column>
  
-            <p:column headerText="Destination">
-                <h:outputText value="#{route.destination}" />
+            <p:column headerText="Destination IATA">
+                <h:outputText value="#{route.destinationIATA}" />
+            </p:column>
+            
+            <p:column headerText="Destination Country">
+                <h:outputText value="#{route.destinationCountry}" />
+            </p:column>
+            
+            <p:column headerText="Destination City">
+                <h:outputText value="#{route.destinationCity}" />
             </p:column>
         
         </p:dataTable>

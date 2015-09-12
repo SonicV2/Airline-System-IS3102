@@ -26,15 +26,23 @@ public class Route implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long routeId;
     
-    private String origin;
-    private String destination;
+    private String originCountry;
+    private String originCity;
+    private String originIATA;
+    private String destinationCountry;
+    private String destinationCity;
+    private String destinationIATA;
     private double distance;
   //  @OneToMany(cascade={CascadeType.ALL}, mappedBy="route")
  //   private List<Flight> flights = new ArrayList<Flight>();
      
-    public void create(String origin, String destination, Double distance){
-        this.origin=origin;
-        this.destination=destination;
+    public void create(String originIATA, String destinationIATA, String originCountry, String destinationCountry, String originCity, String destinationCity, Double distance){
+        this.originIATA=originIATA;
+        this.destinationIATA=destinationIATA;
+        this.originCountry=originCountry;
+        this.destinationCountry=destinationCountry;
+        this.originCity=originCity;
+        this.destinationCity=destinationCity;
         this.distance = distance;
     }
     
@@ -47,20 +55,52 @@ public class Route implements Serializable {
         this.routeId = routeId;
     }
     
-    public String getOrigin() {
-        return origin;
+    public String getOriginCountry() {
+        return originCountry;
     }
     
-    public void setOrigin(String origin){
-        this.origin = origin;
+    public void setOriginCountry(String originCountry){
+        this.originCountry = originCountry;
     }
     
-    public String getDestination() {
-        return destination;
+    public String getDestinationCountry() {
+        return destinationCountry;
     }
     
-    public void setDestination(String destination){
-        this.destination = destination;
+    public void setDestinationCountry(String destinationCountry){
+        this.destinationCountry = destinationCountry;
+    }
+    
+    public String getOriginCity() {
+        return originCity;
+    }
+    
+    public void setOriginCity(String originCity){
+        this.originCity = originCity;
+    }
+    
+    public String getDestinationCity() {
+        return destinationCity;
+    }
+    
+    public void setDestinationCity(String destinationCity){
+        this.destinationCity = destinationCity;
+    }
+    
+    public String getOriginIATA() {
+        return originIATA;
+    }
+    
+    public void setOriginIATA(String originIATA){
+        this.originIATA = originIATA;
+    }
+    
+    public String getDestinationIATA() {
+        return destinationIATA;
+    }
+    
+    public void setDestinationIATA(String destinationIATA){
+        this.destinationIATA = destinationIATA;
     }
     
     public double getDistance() {

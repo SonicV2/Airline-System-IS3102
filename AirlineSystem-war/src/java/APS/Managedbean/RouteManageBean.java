@@ -31,8 +31,12 @@ public class RouteManageBean {
     
     
     Long routeId;
-    String origin;
-    String destination;
+    String originCountry;
+    String originCity;
+    String originIATA;
+    String destinationCountry;
+    String destinationCity;
+    String destinationIATA;
     
     private List<Location> locations;
     private List<Route> routes;
@@ -55,7 +59,7 @@ public class RouteManageBean {
     
     /*This is for admin to create new route*/
     public void addRoute(ActionEvent event){
-        routeSessionBean.addRoute(origin, destination);
+        routeSessionBean.addRoute(originIATA, destinationIATA);
     }
 
     public void removeRoute(ActionEvent event){
@@ -78,22 +82,6 @@ public class RouteManageBean {
         this.routeId = routeId;
     }
 
-    public String getOrigin() {
-        return origin;
-    }
-
-    public void setOrigin(String origin) {
-        this.origin = origin;
-    }
-
-    public String getDestination() {
-        return destination;
-    }
-
-    public void setDestination(String destination) {
-        this.destination = destination;
-    }
-    
     public List<Location> getLocations(){
          return locations;
      }
@@ -113,28 +101,55 @@ public class RouteManageBean {
     public String getCity() {
         return city;
     }
-
-    public void setCity(String city) {
-        this.city = city;
+    public String getOriginCountry() {
+        return originCountry;
     }
-
-    public String getCountry() {
-        return country;
+    
+    public void setOriginCountry(String originCountry){
+        this.originCountry = originCountry;
     }
-
-    public void setCountry(String country) {
-        this.country = country;
+    
+    public String getDestinationCountry() {
+        return destinationCountry;
     }
-
-    public String getIATA() {
-        return IATA;
+    
+    public void setDestinationCountry(String destinationCountry){
+        this.destinationCountry = destinationCountry;
     }
-
-    public void setIATA(String IATA) {
-        this.IATA = IATA;
+    
+    public String getOriginCity() {
+        return originCity;
+    }
+    
+    public void setOriginCity(String originCity){
+        this.originCity = originCity;
+    }
+    
+    public String getDestinationCity() {
+        return destinationCity;
+    }
+    
+    public void setDestinationCity(String destinationCity){
+        this.destinationCity = destinationCity;
+    }
+    
+    public String getOriginIATA() {
+        return originIATA;
+    }
+    
+    public void setOriginIATA(String originIATA){
+        this.originIATA = originIATA;
+    }
+    
+    public String getDestinationIATA() {
+        return destinationIATA;
+    }
+    
+    public void setDestinationIATA(String destinationIATA){
+        this.destinationIATA = destinationIATA;
     }
     
     
     
-    
+  
 }

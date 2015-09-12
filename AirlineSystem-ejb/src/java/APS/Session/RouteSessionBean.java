@@ -28,7 +28,7 @@ public class RouteSessionBean implements RouteSessionBeanLocal {
         Location end = findLocation(destination);
         System.out.println(start.getName());
         double distance = haversineDist(start.getLatitude(),start.getLongitude(),end.getLatitude(),end.getLongitude());              
-        route.create(origin,destination,distance);
+        route.create(start.getIATA(), end.getIATA(), start.getCountry(), end.getCountry(), start.getCity(), end.getCity(), distance);
         em.persist(route);
     }
     @Override
