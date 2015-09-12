@@ -1,23 +1,58 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package APS.Session;
 
+import APS.Entity.Flight;
+import java.util.Date;
+import java.util.List;
 import javax.ejb.Stateless;
-import javax.ejb.LocalBean;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
- * @author Family
+ * @author Yanlong
  */
 @Stateless
-@LocalBean
 public class FlightSessionBean implements FlightSessionBeanLocal {
     @PersistenceContext(unitName = "AirlineSystem-ejbPU")
     private EntityManager em;
+    
+    Flight flight = new Flight();
+    
+    @Override
+    public void addFlight(String flightNo, Date flightDate){
+        flight.createFlight(flightNo, flightDate);
+        em.persist(flight);
+    }
+    
+    @Override
+    public void deleteFlight(String flightNo){
+        flight = getflight(flightNo);
+        em.remove(flight);
+    }
+    
+    @Override
+    public Flight getflight(String flightNo){
+         flight = new Flight();   
+            try {
+
+            Query q = em.createQuery("SELECT a FROM Location " + "AS a WHERE a.flightNo=:flightNo");
+            q.setParameter("flightNo", flightNo);
+
+            List results = q.getResultList();
+            if (!results.isEmpty()) {
+                flight = (Flight) results.get(0);
+
+            } else {
+                flight = null;
+            }
+
+        } catch (EntityNotFoundException enfe) {
+            System.out.println("\nEntity not found error" + "enfe.getMessage()");
+        }
+            return flight;
+    }
+    
     
 }
