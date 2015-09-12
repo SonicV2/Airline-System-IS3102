@@ -11,8 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 
@@ -20,11 +22,11 @@ import javax.inject.Named;
  *
  * @author HOULIANG
  */
-
 @ManagedBean
 @ViewScoped
 @Named(value = "departmentManageBean")
 public class departmentManagedBean {
+
     @EJB
     private DepartmentSessionBeanLocal departmentSessionBean;
 
@@ -32,83 +34,92 @@ public class departmentManagedBean {
         this.departmentSessionBean = departmentSessionBean;
     }
 
-   
-    
-    
     String departmentName;
     String departmentLocation;
 
     private String department; // for dropdown selection
-    private List<String> departments=new ArrayList();
+    private List<String> departments = new ArrayList();
     private List<OrganizationUnit> orgUnits;
-    
+
     private String deleteDeptName;
     private String staffID;
     private String employeeDept; // dept from seachEmployee function in sessionbean
     private String changeDeptName; // change department name
-    private List<String> restDepts ;
-    
+    private List<String> restDepts;
+
     private String errorMsg;
-    
+
     public departmentManagedBean() {
-    
+
     }
-    
+
     /*This is for admin to create new department*/
-    public void addDepartment(ActionEvent event){
-    
+    public void addDepartment(ActionEvent event) {
+        FacesMessage message = null;
+
+//         departmentSessionBean.addDepartment(departmentName, departmentLocation);
+//            clear();
+       
+        List<OrganizationUnit> depts = departmentSessionBean.retrieveAllDepts();
+
+        for (OrganizationUnit ou : depts) {
+            if (ou.getDepartmentName().equals(departmentName) && ou.getLocation().equals(departmentLocation)) {
+
+                message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Department Exists", "");
+                FacesContext.getCurrentInstance().addMessage(null, message);
+                return;
+            }
+        }
         departmentSessionBean.addDepartment(departmentName, departmentLocation);
-        
         clear();
+        message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Department Created Successfully!", "");
+        FacesContext.getCurrentInstance().addMessage(null, message);
     }
-    
-    public void searchEmployee(ActionEvent event){
+
+    public void searchEmployee(ActionEvent event) {
         setEmployeeDept(departmentSessionBean.searchEmployee(staffID));
-        if(employeeDept.equals("User Not Exist!")){
+        if (employeeDept.equals("User Not Exist!")) {
             setErrorMsg("No User Exist!");
-        }else{
+        } else {
             getRestDepartment();
         }
     }
-    
-    public void changeDepartment(ActionEvent event){
-        departmentSessionBean.changeDepartment(staffID, changeDeptName,employeeDept);
+
+    public void changeDepartment(ActionEvent event) {
+        departmentSessionBean.changeDepartment(staffID, changeDeptName, employeeDept);
         setStaffID("");
         setRestDepts(null);
         setEmployeeDept("");
     }
-    public void clear(){
+
+    public void clear() {
         setDepartmentName("");
         setDepartmentLocation("");
     }
-    
-    public void getRestDepartment(){
+
+    public void getRestDepartment() {
         restDepts = new ArrayList();
         String deptName = employeeDept.substring(0, employeeDept.indexOf("("));
         System.out.println("DeparmentName: " + deptName);
-        int index = employeeDept.indexOf("(")+1;
+        int index = employeeDept.indexOf("(") + 1;
         String deptLocation = employeeDept.substring(index, employeeDept.indexOf(")"));
-        System.out.println("DeparmentLocation: " +deptLocation);
-        for(String s : departments){
-            if(!s.substring(0, s.indexOf("(")).equals(deptName) && !s.substring(s.indexOf("("), s.indexOf(")")).equals(deptLocation)){
+        System.out.println("DeparmentLocation: " + deptLocation);
+        for (String s : departments) {
+            if (!s.substring(0, s.indexOf("(")).equals(deptName) && !s.substring(s.indexOf("("), s.indexOf(")")).equals(deptLocation)) {
                 restDepts.add(s);
             }
         }
     }
-    
-    
+
     @PostConstruct
-    public void retrive(){
+    public void retrive() {
         setDepartments(departmentSessionBean.retrive());
         System.out.println("set org units");
-       
-        
+
         setOrgUnits(departmentSessionBean.retrieveAllDepts());
-       
+
     }
-   
-    
-    
+
     public String getDepartmentName() {
         return departmentName;
     }
@@ -124,8 +135,8 @@ public class departmentManagedBean {
     public void setDepartmentLocation(String departmentLocation) {
         this.departmentLocation = departmentLocation;
     }
-    
-     public DepartmentSessionBeanLocal getDepartmentSessionBean() {
+
+    public DepartmentSessionBeanLocal getDepartmentSessionBean() {
         return departmentSessionBean;
     }
 
@@ -232,17 +243,12 @@ public class departmentManagedBean {
     public void setErrorMsg(String errorMsg) {
         this.errorMsg = errorMsg;
     }
-    
-  
-    
-    
-     public List<OrganizationUnit> getOrgUnits(){
-         return orgUnits;
-     }
-     
+
+    public List<OrganizationUnit> getOrgUnits() {
+        return orgUnits;
+    }
+
     public void setOrgUnits(List<OrganizationUnit> orgUnits) {
         this.orgUnits = orgUnits;
     }
 }
-         
- 

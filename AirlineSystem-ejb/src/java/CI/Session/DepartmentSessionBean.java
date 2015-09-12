@@ -25,10 +25,10 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal {
     @PersistenceContext(unitName = "AirlineSystem-ejbPU")
     private EntityManager em;
 
-    OrganizationUnit department = new OrganizationUnit();
+    OrganizationUnit department;
 
     public void addDepartment(String departName, String departLocation) {
-
+        department = new OrganizationUnit();
         department.create(departName, departLocation);
         em.persist(department);
     }
@@ -120,6 +120,7 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal {
         
     }
     
+    @Override
     public OrganizationUnit getDepartment(String deptName){
         Query q = em.createQuery("SELECT a FROM OrganizationUnit a WHERE a.departmentName =:deptName");
         q.setParameter("deptName", deptName);

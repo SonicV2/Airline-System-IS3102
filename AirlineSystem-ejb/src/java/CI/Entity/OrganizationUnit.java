@@ -14,7 +14,10 @@ import javax.persistence.OneToMany;
 @Entity(name="OrganizationUnit")
 public class OrganizationUnit implements Serializable {
     private static final long serialVersionUID = 1L;
+    
     @Id
+    private Long departmentID;
+    
     private String departmentName;
     
     private String location;
@@ -35,6 +38,11 @@ public class OrganizationUnit implements Serializable {
     7.Customer service
     8.Finance
     */
+    
+    
+    public OrganizationUnit (){
+        setDepartmentID(System.nanoTime());
+    }
     
     public void create(String departName, String departLocation){
         this.departmentName=departName;
@@ -104,6 +112,20 @@ public class OrganizationUnit implements Serializable {
      */
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    /**
+     * @return the departmentID
+     */
+    public Long getDepartmentID() {
+        return departmentID;
+    }
+
+    /**
+     * @param departmentID the departmentID to set
+     */
+    public void setDepartmentID(Long departmentID) {
+        this.departmentID = departmentID;
     }
     
 }

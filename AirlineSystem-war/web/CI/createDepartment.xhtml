@@ -5,7 +5,7 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <h:head>
-
+        <p:growl id="growl" sticky="true" showDetail="true"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -28,20 +28,20 @@
                     <h2 class="page-header"> Add a new department</h2>
                 </div>
 
-            <p>Existing Departments: </p>
-            <p:dataTable var="depart" value="#{departmentManagedBean.orgUnits}">
+                <p>Existing Departments: </p>
+                <p:dataTable var="depart" value="#{departmentManagedBean.orgUnits}">
                     <p:column headerText="Department Name">
                         <h:outputText value="#{depart.departmentName}" />
                     </p:column>
- 
+
                     <p:column headerText="Department Location">
                         <h:outputText value="#{depart.location}" />
                     </p:column>
-<!--                </ui:repeat>-->
+                    <!--                </ui:repeat>-->
 
-            </p:dataTable>
-            
-            
+                </p:dataTable>
+
+
 
 
                 <div class="col-md-6 panel-body">
@@ -51,14 +51,19 @@
                         <div class="form-group">
                             <label class="control-label col-md-5">Department Name:   </label>
                             <!--                                <label value="Department Name: " />-->
-                            <p:inputText  class="form-inline" value="#{departmentManagedBean.departmentName}"  />
+                            <p:inputText id="deptName" required="true" requiredMessage="Please fill in Department Name!" class="form-inline" value="#{departmentManagedBean.departmentName}"  />
+                            <div class="missingfield">
+                                <h:message for="deptName"  />
+                            </div>
                             <br/>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-md-5">Department Location:   </label>
-                            <p:inputText  class="form-inline" value="#{departmentManagedBean.departmentLocation}" />
+                            <p:inputText id="deptLocation" required="true" requiredMessage="Please fill in Department Location!" class="form-inline" value="#{departmentManagedBean.departmentLocation}" />
                             <br/>
-
+                            <div class="missingfield">
+                                <h:message for="deptLocation"  />
+                            </div>
                         </div>
 
                         <div class="text-center">
