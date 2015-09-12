@@ -6,6 +6,7 @@
 package APS.Entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -27,15 +28,18 @@ public class Schedule implements Serializable {
     private Long scheduleId;
     
     @Temporal(TemporalType.DATE)
-    private Date departureDate;
+    private Date startDate;
     
     @Temporal(TemporalType.DATE)
-    private Date arrivalDate;
+    private Date endDate;
+    private Date[][] scheduleList;
    
     private Flight flight = new Flight();
     
-    public void createSchedule(Date startTime, String endTime){
-        
+    public void createSchedule(Date startDate, Date endDate, Date[][] scheduleList){
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.scheduleList = scheduleList;
     }
     
     public Long getScheduleId() {
@@ -45,21 +49,29 @@ public class Schedule implements Serializable {
     public void setScheduleId(Long scheduleId) {
         this.scheduleId = scheduleId;
     }
-    
-    public Date getDepartureDate() {
-        return departureDate;
+
+    public Date getStartDate() {
+        return startDate;
     }
 
-    public void setDepartureDate(Date departureDate) {
-        this.departureDate = departureDate;
-    }
-    
-    public Date getArrivalDate() {
-        return arrivalDate;
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
     }
 
-    public void setArrivalDate(Date arrivalDate) {
-        this.arrivalDate = arrivalDate;
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
+    public Date[][] getScheduleList() {
+        return scheduleList;
+    }
+
+    public void setScheduleList(Date[][] scheduleList) {
+        this.scheduleList = scheduleList;
     }
     
     public Flight getFlight() {

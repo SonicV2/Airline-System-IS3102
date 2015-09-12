@@ -22,10 +22,10 @@ public class Flight implements Serializable {
     
     @Id
     private String flightNo;
-    @Temporal(TemporalType.DATE)
     private String flightDay;
     private String timeslot;
     private double flightDuration;
+    @Temporal(TemporalType.DATE)
     private Date startDate;
     private int weeks;
     private Route route = new Route();
@@ -43,9 +43,16 @@ public class Flight implements Serializable {
         this.flightDuration = flightDuration;
         this.weeks = weeks;
         this.startDate = startDate;
-
+        
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(startDate);
+        cal.add(Calendar.WEEK_OF_YEAR, weeks);
+        Date endDate = cal.getTime();
+        
+        Date counter = startDate;
+        
         for (int i = 0; i<weeks; i++){
-             
+             cal.setTime(counter);
         }        
      }
     
