@@ -94,7 +94,7 @@ public class RoleManagedBean {
 
     //for admin to create new roles
     public void addRole(ActionEvent event) {
-        for (String s : roles) {
+        for (String s : roles) {                       //Comment out if first time add roles
             if (s.equals(roleName)) {
                 message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Role Exists", "");
                 FacesContext.getCurrentInstance().addMessage(null, message);
