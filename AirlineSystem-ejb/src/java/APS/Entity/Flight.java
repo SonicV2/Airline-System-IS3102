@@ -2,6 +2,7 @@ package APS.Entity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -22,7 +23,11 @@ public class Flight implements Serializable {
     @Id
     private String flightNo;
     @Temporal(TemporalType.DATE)
-    private Date flightDate;
+    private String flightDay;
+    private String timeslot;
+    private double flightDuration;
+    private Date startDate;
+    private int weeks;
     private Route route = new Route();
     
     @OneToMany(cascade = {CascadeType.PERSIST}, mappedBy = "flight")
@@ -31,10 +36,18 @@ public class Flight implements Serializable {
     //@OneToMany(cascade = {CascadeType.PERSIST}, mappedBy = "flight")
     //private List<Aircraft> aircraft = new ArrayList<Aircraft>();
     
-    public void createFlight(String flightNo, Date flghtDate){
+    public void createFlight(String flightNo, String flightDay, String timeslot, double flightDuration, Date startDate, int weeks){
         this.flightNo = flightNo;
-        this.flightDate = flightDate;
-    }
+        this.flightDay = flightDay;
+        this.timeslot = timeslot;
+        this.flightDuration = flightDuration;
+        this.weeks = weeks;
+        this.startDate = startDate;
+
+        for (int i = 0; i<weeks; i++){
+             
+        }        
+     }
     
     public String getFlightNo() {
         return flightNo;
@@ -44,13 +57,22 @@ public class Flight implements Serializable {
         this.flightNo = flightNo;
     }
 
-    public Date getFlightDate() {
-        return flightDate;
+    public String getFlightDay() {
+        return flightDay;
     }
 
-    public void setFlightDate(Date flightDate) {
-        this.flightDate = flightDate;
+    public void setFlightDay(String flightDay) {
+        this.flightDay = flightDay;
     }
+
+    public int getWeeks() {
+        return weeks;
+    }
+
+    public void setWeeks(int weeks) {
+        this.weeks = weeks;
+    }
+
 
     public List<Schedule> getSchedule() {
         return schedule;

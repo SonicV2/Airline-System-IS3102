@@ -17,7 +17,7 @@ import java.util.Date;
 
 /**
  *
- * @author Family
+ * @author Yanlong
  */
 @Entity
 public class Schedule implements Serializable {
@@ -31,10 +31,12 @@ public class Schedule implements Serializable {
     
     @Temporal(TemporalType.DATE)
     private Date arrivalDate;
-    
-    private int seatsAvailable;
-    
+   
     private Flight flight = new Flight();
+    
+    public void createSchedule(Date startTime, String endTime){
+        
+    }
     
     public Long getScheduleId() {
         return scheduleId;
@@ -58,14 +60,6 @@ public class Schedule implements Serializable {
 
     public void setArrivalDate(Date arrivalDate) {
         this.arrivalDate = arrivalDate;
-    }
-    
-    public int getSeatsAvailable() {
-        return seatsAvailable;
-    }
-    
-    public void setSeatsAvailable(int seatsAvailable) {
-        this.seatsAvailable = seatsAvailable;
     }
     
     public Flight getFlight() {

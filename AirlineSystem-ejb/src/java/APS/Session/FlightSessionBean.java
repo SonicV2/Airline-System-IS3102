@@ -18,11 +18,11 @@ public class FlightSessionBean implements FlightSessionBeanLocal {
     @PersistenceContext(unitName = "AirlineSystem-ejbPU")
     private EntityManager em;
     
-    Flight flight = new Flight();
+    Flight flight;
     
     @Override
-    public void addFlight(String flightNo, Date flightDate){
-        flight.createFlight(flightNo, flightDate);
+    public void addFlight(String flightNo, String flightDay, String timeslot, double flightDuration, Date startDate, int weeks){
+        flight.createFlight(flightNo, flightDay, timeslot, flightDuration, startDate, weeks);
         em.persist(flight);
     }
     
