@@ -9,6 +9,26 @@
         <title>Retire Aircraft</title>
     </h:head>
     <h:body>
+        
+        <p:dataTable var="aircraft" value="#{fleetManageBean.aircrafts}" style="margin-bottom:40px">
+            <p:column headerText="Aircraft Tail Number" sortBy="#{aircraft.tailNo}">
+                <h:outputText value="#{aircraft.tailNo}" />
+            </p:column>
+            
+            <p:column headerText="Aircraft Type" sortBy="#{aircraft.aircraftType.id}">
+                <h:outputText value="#{aircraft.aircraftType.id}" />
+            </p:column>
+            
+            <p:column headerText="Date of Purchase" sortBy="#{aircraft.datePurchased}">
+                <h:outputText value="#{aircraft.datePurchased}" />
+            </p:column>
+            
+            <p:column headerText="Date of Maintenance" sortBy="#{aircraft.lastMaintained}">
+                <h:outputText value="#{aircraft.lastMaintained}" />
+            </p:column>
+        
+        </p:dataTable>
+        
         <h:form>
             <h:outputLabel value="Enter Tail Number" />
             <h:inputText value="#{fleetManageBean.tailNo}"/>

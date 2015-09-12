@@ -59,26 +59,21 @@ public class departmentManagedBean {
 
 //         departmentSessionBean.addDepartment(departmentName, departmentLocation);
 //            clear();
-        OrganizationUnit ou = departmentSessionBean.getDepartment(departmentName);
+       
+        List<OrganizationUnit> depts = departmentSessionBean.retrieveAllDepts();
 
-        if (ou == null) {
-            departmentSessionBean.addDepartment(departmentName, departmentLocation);
-            clear();
-            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Create Deparment Successful!", "");
-            FacesContext.getCurrentInstance().addMessage(null, message);
-        } else {
-            if (ou.getLocation().equals(departmentLocation)) {
-                message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Create Deparment Fail", "Department Exists");
+        for (OrganizationUnit ou : depts) {
+            if (ou.getDepartmentName().equals(departmentName) && ou.getLocation().equals(departmentLocation)) {
+
+                message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Department Exists", "");
                 FacesContext.getCurrentInstance().addMessage(null, message);
-            } else {
-                System.out.println("Name: "+ departmentName + "Location: "+departmentLocation);
-                departmentSessionBean.addDepartment(departmentName, departmentLocation);
-                clear();
-                message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Create Deparment Successful!", "");
-                FacesContext.getCurrentInstance().addMessage(null, message);
+                return;
             }
         }
-
+        departmentSessionBean.addDepartment(departmentName, departmentLocation);
+        clear();
+        message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Department Created Successfully!", "");
+        FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
     public void searchEmployee(ActionEvent event) {
