@@ -6,6 +6,7 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
+        <p:growl id="growl" sticky="true" showDetail="true"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -43,17 +44,20 @@
                         <div class="form-group">
                             <label class="control-label col-md-5">Role Name:   </label>
 
-                            <p:inputText class="form-inline" value="#{roleManagedBean.roleName}"  />
+                            <p:inputText id="roleName" required="true" requiredMessage="Please fill in Role Name!" class="form-inline" value="#{roleManagedBean.roleName}"  />
+                            <div class="missingfield">
+                                <h:message for="deptName"  />
+                            </div>
                         </div>
-                        
+
                         <div>
-                        <p:selectManyCheckbox id="grid" value="#{roleManagedBean.accessRight}" layout="grid" columns="2">
-                            <f:selectItem itemLabel="Add" itemValue="accessAdd" />
-                            <f:selectItem itemLabel="Delete" itemValue="accessDelete" />
-                            <f:selectItem itemLabel="Create" itemValue="accessCreate" />
-                            <f:selectItem itemLabel="Assign" itemValue="accessAssign" />
-                            <f:selectItem itemLabel="View" itemValue="accessView" />
-                        </p:selectManyCheckbox>
+                            <p:selectManyCheckbox id="grid" value="#{roleManagedBean.accessRight}" layout="grid" columns="2">
+                                <f:selectItem itemLabel="Add" itemValue="accessAdd" />
+                                <f:selectItem itemLabel="Delete" itemValue="accessDelete" />
+                                <f:selectItem itemLabel="Create" itemValue="accessCreate" />
+                                <f:selectItem itemLabel="Assign" itemValue="accessAssign" />
+                                <f:selectItem itemLabel="View" itemValue="accessView" />
+                            </p:selectManyCheckbox>
                         </div>
 
                         <div class="text-center">
