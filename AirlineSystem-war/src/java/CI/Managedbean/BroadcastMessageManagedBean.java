@@ -12,10 +12,12 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.Dependent;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
 /**
@@ -27,14 +29,15 @@ import javax.faces.event.ActionEvent;
 @SessionScoped
 //@RequestScoped
 public class BroadcastMessageManagedBean {
+
     @EJB
     private MessageSessionBeanLocal messageSessionBean;
     @EJB
     private DepartmentSessionBeanLocal departmentSessionBean;
-    
+
     @ManagedProperty(value = "#{loginManageBean}")
     private LoginManageBean loginManageBean;
-    
+    FacesMessage message = null;
     private String sender;
     private List<String> departments; //departments from database
     private String broadcastMsg;
@@ -45,26 +48,28 @@ public class BroadcastMessageManagedBean {
      */
     public BroadcastMessageManagedBean() {
     }
-    
+
     @PostConstruct
-    public void retrieveDepartment(){
+    public void retrieveDepartment() {
         setDepartments(departmentSessionBean.retrive());
     }
 
-    public void sendMsg(ActionEvent evnet){
-       
+    public void sendMsg(ActionEvent evnet) {
+
         setSender(loginManageBean.employeeUserName);
-        System.out.println("BC: "+loginManageBean.employeeUserName + "message: "+broadcastMsg);
+        System.out.println("BC: " + loginManageBean.employeeUserName + "message: " + broadcastMsg);
         messageSessionBean.sendBroadcastMsg(sender, selectDepart, broadcastMsg);
+        message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Message Sent!", "");
+        FacesContext.getCurrentInstance().addMessage(null, message);
         clear();
     }
-    
-    
-    public void clear(){
+
+    public void clear() {
         setSelectDepart(null);
         setBroadcastMsg("");
 
     }
+
     /**
      * @return the departments
      */
@@ -162,5 +167,5 @@ public class BroadcastMessageManagedBean {
     public void setLoginManageBean(LoginManageBean loginManageBean) {
         this.loginManageBean = loginManageBean;
     }
-    
+
 }
