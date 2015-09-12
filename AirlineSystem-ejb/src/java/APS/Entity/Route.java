@@ -63,6 +63,14 @@ public class Route implements Serializable {
         this.destination = destination;
     }
     
+    public double getDistance() {
+        return distance;
+    }
+    
+    public void setDistance(double distance){
+        this.distance = distance;
+    }
+    
   /*  public List<Flight> getFlights() {
         return flights;
     }
@@ -95,5 +103,7 @@ public class Route implements Serializable {
     public String toString() {
         return "APS.Entity.Route[ id=" + routeId + " ]";
     }
+    
+    
     
 }
