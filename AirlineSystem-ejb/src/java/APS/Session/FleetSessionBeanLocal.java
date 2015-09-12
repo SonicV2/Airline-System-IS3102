@@ -23,5 +23,7 @@ public interface FleetSessionBeanLocal {
     public AircraftType getAircraftType(String aircraftTypeId);
     public Aircraft getAircraft(Long tailNum);
     public List<AircraftType> getAircraftTypeList(String filter);
+    public List<AircraftType> retrieveAircraftTypes();
+    public List<Aircraft> retrieveAircrafts();
 
 }
