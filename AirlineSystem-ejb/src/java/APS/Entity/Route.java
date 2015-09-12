@@ -28,13 +28,14 @@ public class Route implements Serializable {
     
     private String origin;
     private String destination;
-    @OneToMany(cascade={CascadeType.ALL}, mappedBy="route")
-    private List<Flight> flights = new ArrayList<Flight>();
-    
-    
-    public void create(String origin, String destination){
+    private double distance;
+  //  @OneToMany(cascade={CascadeType.ALL}, mappedBy="route")
+ //   private List<Flight> flights = new ArrayList<Flight>();
+     
+    public void create(String origin, String destination, Double distance){
         this.origin=origin;
         this.destination=destination;
+        this.distance = distance;
     }
     
     
@@ -62,14 +63,14 @@ public class Route implements Serializable {
         this.destination = destination;
     }
     
-    public List<Flight> getFlights() {
+  /*  public List<Flight> getFlights() {
         return flights;
     }
 
     public void setFlights(List<Flight> flights) {
         this.flights = flights;
     }
-    
+    */
     @Override
     public int hashCode() {
         int hash = 0;

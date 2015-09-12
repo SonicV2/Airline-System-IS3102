@@ -48,7 +48,7 @@ public class FleetManageBean {
     
     
     private List<AircraftType> aircraftTypes = new ArrayList<AircraftType>();
-    private List<Aircraft> aircrafts = new ArrayList<Aircraft>();
+    private List<Aircraft> aircrafts;
     
     
     public FleetManageBean() {
@@ -61,6 +61,8 @@ public class FleetManageBean {
         setAircrafts(fleetSessionBean.retrieveAircrafts());
         
     }
+   
+    
     
     /*This is for admin to acquire new aircraft*/
     public void acquireAircraft(ActionEvent event){
