@@ -110,4 +110,50 @@ public class FleetSessionBean implements FleetSessionBeanLocal {
         }
         return aircraft1;
     }
+    
+    public List<AircraftType> retrieveAircraftTypes(){
+        List<AircraftType> allTypes = new ArrayList<AircraftType>();
+        
+        try{
+            Query q = em.createQuery("SELECT a from AircraftType a");
+            
+            List<AircraftType> results = q.getResultList();
+            if (!results.isEmpty()){
+                
+                allTypes = results;
+                
+            }else
+            {
+                allTypes = null;
+                System.out.println("no aircraft type!");
+            }
+        }catch (EntityNotFoundException enfe) {
+            System.out.println("\nEntity not found error" + "enfe.getMessage()");
+        }
+       
+        return allTypes;
+    }
+    
+    public List<Aircraft> retrieveAircrafts(){
+        List<Aircraft> allAircrafts = new ArrayList<Aircraft>();
+        
+        try{
+            Query q = em.createQuery("SELECT a from Aircraft a");
+            
+            List<Aircraft> results = q.getResultList();
+            if (!results.isEmpty()){
+                
+                allAircrafts = results;
+                
+            }else
+            {
+                allAircrafts = null;
+                System.out.println("no aircraft!");
+            }
+        }catch (EntityNotFoundException enfe) {
+            System.out.println("\nEntity not found error" + "enfe.getMessage()");
+        }
+       
+        return allAircrafts;
+    }
 }
