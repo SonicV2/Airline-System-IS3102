@@ -26,7 +26,7 @@ public class RouteManageBean {
     private RouteSessionBeanLocal routeSessionBean;
     
     
-    
+    Long id;
     String origin;
     String destination;
     
@@ -36,6 +36,18 @@ public class RouteManageBean {
     /*This is for admin to create new route*/
     public void addRoute(ActionEvent event){
         routeSessionBean.addRoute(origin, destination);
+    }
+
+    public void removeRoute(ActionEvent event){
+        routeSessionBean.deleteRoute(id);
+    }
+    
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getOrigin() {
