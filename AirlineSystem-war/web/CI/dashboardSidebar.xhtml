@@ -45,5 +45,9 @@
        <ui:include src="HRSidebar.xhtml" />
     </ui:fragment>
     
+    <ui:fragment rendered ="#{loginManageBean.employee.organizationUnit.getDepartmentName() eq 'Finance'}">
+       <ui:include src="FinanceSidebar.xhtml" />
+    </ui:fragment>
+    
     
 </html>
