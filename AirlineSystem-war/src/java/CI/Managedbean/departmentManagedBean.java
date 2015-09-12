@@ -57,8 +57,8 @@ public class departmentManagedBean {
     public void addDepartment(ActionEvent event) {
         FacesMessage message = null;
 
-//         departmentSessionBean.addDepartment(departmentName, departmentLocation);
-//            clear();
+         departmentSessionBean.addDepartment(departmentName, departmentLocation);
+            clear();
        
         List<OrganizationUnit> depts = departmentSessionBean.retrieveAllDepts();
 

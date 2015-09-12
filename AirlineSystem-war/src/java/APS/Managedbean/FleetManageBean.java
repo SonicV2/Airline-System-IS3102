@@ -45,6 +45,7 @@ public class FleetManageBean {
     int economySeats;
     int totalStaff;
     double cost;
+    double fuelCost;
     
     
     private List<AircraftType> aircraftTypes = new ArrayList<AircraftType>();
@@ -167,6 +168,14 @@ public class FleetManageBean {
 
     public void setCost(double cost) {
         this.cost = cost;
+    }
+    
+    public double getFuelCost() {
+        return fuelCost;
+    }
+
+    public void setFuelCost(double cost) {
+        this.fuelCost = fuelCost;
     }
 
     public int getFirstSeats() {

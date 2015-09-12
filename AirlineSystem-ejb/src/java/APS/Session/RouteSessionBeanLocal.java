@@ -7,6 +7,7 @@ package APS.Session;
 
 import APS.Entity.Location;
 import APS.Entity.Route;
+import java.util.List;
 import javax.ejb.Local;
 
 /**
@@ -21,4 +22,6 @@ public interface RouteSessionBeanLocal {
     public Route getRoute(Long id);
 
     public void deleteRoute(Long id);
+    public List<Location> retrieveLocations();
+    public List<Route> retrieveRoutes();
 }

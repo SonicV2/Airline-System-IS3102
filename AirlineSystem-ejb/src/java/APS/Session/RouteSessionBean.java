@@ -2,6 +2,7 @@ package APS.Session;
 
 import APS.Entity.Location;
 import APS.Entity.Route;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -18,10 +19,11 @@ public class RouteSessionBean implements RouteSessionBeanLocal {
     @PersistenceContext(unitName = "AirlineSystem-ejbPU")
     private EntityManager em;
     
-    Route route=new Route();
+    Route route; 
     
     @Override
     public void addRoute(String origin, String destination){
+        route=new Route();
         Location start = findLocation(origin);
         Location end = findLocation(destination);
         System.out.println(start.getName());
@@ -30,8 +32,8 @@ public class RouteSessionBean implements RouteSessionBeanLocal {
         em.persist(route);
     }
     @Override
-    public void deleteRoute(Long id){
-        route = getRoute(id);
+    public void deleteRoute(Long routeId){
+        route = getRoute(routeId);
         em.remove(route);
     }
     
@@ -40,8 +42,8 @@ public class RouteSessionBean implements RouteSessionBeanLocal {
         route = new Route();   
             try {
 
-            Query q = em.createQuery("SELECT a FROM Location " + "AS a WHERE a.id=:id");
-            q.setParameter("id", id);
+            Query q = em.createQuery("SELECT a FROM Route " + "AS a WHERE a.routeId=:routeId");
+            q.setParameter("routeId", id);
 
             List results = q.getResultList();
             if (!results.isEmpty()) {
@@ -77,6 +79,52 @@ public class RouteSessionBean implements RouteSessionBeanLocal {
             System.out.println("\nEntity not found error" + "enfe.getMessage()");
         }
             return locationEntity;
+    }
+    
+    public List<Location> retrieveLocations(){
+        List<Location> allLocations = new ArrayList<Location>();
+        
+        try{
+            Query q = em.createQuery("SELECT a from Location a");
+            
+            List<Location> results = q.getResultList();
+            if (!results.isEmpty()){
+                
+                allLocations = results;
+                
+            }else
+            {
+                allLocations = null;
+                System.out.println("no location!");
+            }
+        }catch (EntityNotFoundException enfe) {
+            System.out.println("\nEntity not found error" + "enfe.getMessage()");
+        }
+       
+        return allLocations;
+    }
+    
+    public List<Route> retrieveRoutes(){
+        List<Route> allRoutes = new ArrayList<Route>();
+        
+        try{
+            Query q = em.createQuery("SELECT a from Route a");
+            
+            List<Route> results = q.getResultList();
+            if (!results.isEmpty()){
+                
+                allRoutes = results;
+                
+            }else
+            {
+                allRoutes = null;
+                System.out.println("no route!");
+            }
+        }catch (EntityNotFoundException enfe) {
+            System.out.println("\nEntity not found error" + "enfe.getMessage()");
+        }
+       
+        return allRoutes;
     }
     
     public static double haversineDist(double lat1, double long1, double lat2, double long2) {

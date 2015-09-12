@@ -5,7 +5,11 @@
  */
 package APS.Managedbean;
 
+import APS.Entity.Location;
+import APS.Entity.Route;
 import APS.Session.RouteSessionBeanLocal;
+import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.Dependent;
@@ -26,11 +30,27 @@ public class RouteManageBean {
     private RouteSessionBeanLocal routeSessionBean;
     
     
-    Long id;
+    Long routeId;
     String origin;
     String destination;
     
+    private List<Location> locations;
+    private List<Route> routes;
+    
+    String name;
+    String city;
+    String country;
+    String IATA;
+    
     public RouteManageBean() {
+    }
+    
+    @PostConstruct
+    public void retrieve(){
+        
+        setLocations(routeSessionBean.retrieveLocations());
+        setRoutes(routeSessionBean.retrieveRoutes());
+        
     }
     
     /*This is for admin to create new route*/
@@ -39,15 +59,23 @@ public class RouteManageBean {
     }
 
     public void removeRoute(ActionEvent event){
-        routeSessionBean.deleteRoute(id);
+        routeSessionBean.deleteRoute(routeId);
     }
     
-    public Long getId() {
-        return id;
+    public List<Route> getRoutes(){
+         return routes;
+     }
+     
+    public void setRoutes(List<Route> routes) {
+        this.routes = routes;
+    }
+    
+    public Long getRouteId() {
+        return routeId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setRouteId(Long routeId) {
+        this.routeId = routeId;
     }
 
     public String getOrigin() {
@@ -66,6 +94,45 @@ public class RouteManageBean {
         this.destination = destination;
     }
     
+    public List<Location> getLocations(){
+         return locations;
+     }
+     
+    public void setLocations(List<Location> locations) {
+        this.locations = locations;
+    }
+    
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getIATA() {
+        return IATA;
+    }
+
+    public void setIATA(String IATA) {
+        this.IATA = IATA;
+    }
     
     
     
