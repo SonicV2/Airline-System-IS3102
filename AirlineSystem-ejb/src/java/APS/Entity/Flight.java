@@ -31,6 +31,11 @@ public class Flight implements Serializable {
     //@OneToMany(cascade = {CascadeType.PERSIST}, mappedBy = "flight")
     //private List<Aircraft> aircraft = new ArrayList<Aircraft>();
     
+    public void createFlight(String flightNo, Date flghtDate){
+        this.flightNo = flightNo;
+        this.flightDate = flightDate;
+    }
+    
     public String getFlightNo() {
         return flightNo;
     }
