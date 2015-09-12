@@ -9,11 +9,14 @@ import CI.Session.EmployeeSessionBeanLocal;
 import java.util.Date;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.inject.Named;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -41,6 +44,10 @@ public class changeProfileManagedBean {
     private String employeePrivateEmail;
     
  
+    private String employeeNewPwd;
+    private String employeeNewPwdRe; 
+
+       
     public void updateInfo(ActionEvent event){
         
         setUserName(loginManageBean.employeeUserName);
@@ -91,6 +98,26 @@ public class changeProfileManagedBean {
         employeePrivateEmail = loginManageBean.getEmployee().getEmployeePrivateEmail();
     // Or here, especially if you depend on injected dependencies.
 }
+    
+    public void changePwd(){
+       
+         FacesMessage message = null;
+         String employeeUserName = loginManageBean.employeeUserName;
+         if(getEmployeeNewPwd().equals(getEmployeeNewPwdRe())){
+            employeeSessionBean.hashNewPwd(employeeUserName, getEmployeeNewPwd());
+            employeeSessionBean.employeeActivate(employeeUserName);
+           
+            employeeSessionBean.logPasswordChange(employeeUserName);
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Password Change Successfully!", "");
+             FacesContext.getCurrentInstance().addMessage(null, message);
+         }else{
+           message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Password Changed Fail", "");
+             FacesContext.getCurrentInstance().addMessage(null, message);
+         }
+    }
+
+    
+    
     /**
      * Creates a new instance of changeProfileManagedBean
      */
@@ -226,6 +253,34 @@ public class changeProfileManagedBean {
      */
     public void setLoginManageBean(LoginManageBean loginManageBean) {
         this.loginManageBean = loginManageBean;
+    }
+
+    /**
+     * @return the employeeNewPwd
+     */
+    public String getEmployeeNewPwd() {
+        return employeeNewPwd;
+    }
+
+    /**
+     * @param employeeNewPwd the employeeNewPwd to set
+     */
+    public void setEmployeeNewPwd(String employeeNewPwd) {
+        this.employeeNewPwd = employeeNewPwd;
+    }
+
+    /**
+     * @return the employeeNewPwdRe
+     */
+    public String getEmployeeNewPwdRe() {
+        return employeeNewPwdRe;
+    }
+
+    /**
+     * @param employeeNewPwdRe the employeeNewPwdRe to set
+     */
+    public void setEmployeeNewPwdRe(String employeeNewPwdRe) {
+        this.employeeNewPwdRe = employeeNewPwdRe;
     }
 
 }

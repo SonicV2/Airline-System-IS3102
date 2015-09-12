@@ -20,4 +20,5 @@ public interface DepartmentSessionBeanLocal {
      public String searchEmployee(String staffID);
      public String changeDepartment(String staffID,String deptName,String deptNameOld);
     public List<OrganizationUnit> retrieveAllDepts();
+     public OrganizationUnit getDepartment(String deptName);
 }

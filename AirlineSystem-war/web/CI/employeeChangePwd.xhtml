@@ -1,0 +1,87 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:jsf="http://xmlns.jcp.org/jsf"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+
+    <h:head>  
+
+        <p:growl id="growl" sticky="true" showDetail="true"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <h:outputStylesheet library ="css"  name="bootstrap.css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
+        <h:outputStylesheet library="css" name="admindb.css" />
+        <h:outputStylesheet library="css" name="morrisjs/morris.css" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js" />
+        <title>Change Password</title>
+    </h:head>
+
+
+
+    <h:body>
+        <!--    To add the same header on all dashboard pages  -->
+        <ui:include src="dashboardHeader.xhtml"/>
+        <!--    To add the same sidebar on all dashboard pages  -->
+        <ui:include src="dashboardSidebar.xhtml"/>
+
+        <div id="page-wrapper">
+        <br></br>
+        <div class="container">
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Please change your password.
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h:form role="form">
+                                    <p:growl id="growl" sticky="true" showDetail="true"/>   <!--****-->
+
+                                    <div class="form-group">
+                                        <label>New Password</label>
+
+                                        <p:password class="form-control" validatorMessage="Password required 6 to 20 characters string with at least one digit, one upper case letter, one lower case letter and one special symbol" value="#{changeProfileManagedBean.employeeNewPwd }">
+                                            <!--                                                <f:validateRegex pattern="((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%!?&]).{6,20})" />-->
+                                        </p:password>
+                                        <!--<input class="form-control"/>-->
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Please re-enter your new password</label>
+                                        <p:password class="form-control" value="#{changeProfileManagedBean.employeeNewPwdRe }"/>
+
+                                        <br></br>
+                                    </div>
+                                    <div class="form-group">
+<!--                                        <div class="col-sm-10">-->
+                                            <button type="submit" class="btn btn-default pull-right" jsf:action="#{changeProfileManagedBean.changePwd}" >Submit</button>
+<!--                                        </div>-->
+                                    
+<!--                                        <div class="col-sm-10">-->
+                                            <button type="submit" class="btn btn-default pull-left" jsf:action="employeeProfile.xhtml" >Back to Profile</button>
+<!--                                        </div>-->
+                                    </div>
+
+
+                                </h:form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--        </div>-->
+
+
+
+        </div>
+    </h:body>
+</html>
+
+

@@ -57,7 +57,7 @@ public class LoginFilter implements Filter {
             System.out.println("url0: " + url[0] + "url1: " + url[1] + "url: " + url[2]);
 
             if (url[2].equals("login.xhtml") || reqURI.contains("javax.faces.resource") || url[2].equals("forgetPassword.xhtml") || url[2].equals("APS")
-                    || url[2].equals("CI")/*Delete when necessary*/) {
+                   /* || url[2].equals("CI")/*Delete when necessary*/) {
                 System.out.println("Process ");
                 chain.doFilter(request, response);
 
@@ -65,7 +65,7 @@ public class LoginFilter implements Filter {
 
                 if (ses.getAttribute("role").equals("Super Admin")) { /* Super Admin could access all web pages*/
                     chain.doFilter(request, response);
-                } else if(url[3].equals("employeeDashBoard.xhtml") || url[3].equals("employeeProfile.xhtml") || url[3].equals("message.xhtml") || url[3].equals("changeProfile.xhtml") || url[3].equals("newUserChangePwd.xhtml")){
+                } else if(url[3].equals("employeeDashBoard.xhtml") || url[3].equals("employeeProfile.xhtml") || url[3].equals("message.xhtml") || url[3].equals("changeProfile.xhtml") || url[3].equals("newUserChangePwd.xhtml") || url[3].equals("employeeChangePwd.xhtml")){
                     chain.doFilter(request, response);
                 }
                 else if((url[3].equals("createRole.xhtml") || url[3].equals("createDepartment.xhtml") || url[3].equals("deleteRole.xhtml"))&&(ses.getAttribute("role").equals("Super Admin") || ses.getAttribute("department").equals("IT") )){

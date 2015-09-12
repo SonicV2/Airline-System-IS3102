@@ -13,9 +13,11 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.inject.Named;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
 /**
@@ -26,93 +28,102 @@ import javax.faces.event.ActionEvent;
 @ManagedBean
 @ViewScoped
 public class RoleManagedBean {
+
     @EJB
     private EmployeeSessionBeanLocal employeeSessionBean;
     @EJB
     private RoleSessionBeanLocal roleSessionBean;
 
-    
     String roleName; //fro admin create
-    
+
     String role; //for receiving value from employeeManagement.xhtml
-    
-    private List<String> roles=new ArrayList();
-     
+
+    private List<String> roles = new ArrayList();
+
     String userID; //NRIC
     Employee employee;
     String userName; //username
     String name; //full name
     List<String> newroles; // List<String> newroles
-            
+
     String msg;
     private String errorMsg; //msg from deleteRole in session Bean
-    
+
     String new_Role; // user input to set new rows
     private List<String> deleteRoles;
     private String deleteRoleName; // delete role 
-    
+
     private List<String> accessRight;
-    
+
+    FacesMessage message = null;
+
     public RoleManagedBean() {
     }
-    
-    public void search(ActionEvent event){
-        newroles=new ArrayList<String>(); //to return all the current roles 
-        employee=employeeSessionBean.getEmployeeUseID(userID);
-        if(employee==null){
+
+    public void search(ActionEvent event) {
+        newroles = new ArrayList<String>(); //to return all the current roles 
+        employee = employeeSessionBean.getEmployeeUseID(userID);
+        if (employee == null) {
             newroles.add("no such user!");
             //msg="no such user!";
-        }else{
-            userName=employee.getEmployeeUserName();
-            name=employee.getEmployeeDisplayFirstName()+" "+employee.getEmployeeDisplayLastName();
-            List<Role> r =employee.getRoles();
-            for(Role r1: r){
-                if(!r1.getRoleName().equals("Super Admin")){
-                newroles.add(r1.getRoleName());
+        } else {
+            userName = employee.getEmployeeUserName();
+            name = employee.getEmployeeDisplayFirstName() + " " + employee.getEmployeeDisplayLastName();
+            List<Role> r = employee.getRoles();
+            for (Role r1 : r) {
+                if (!r1.getRoleName().equals("Super Admin")) {
+                    newroles.add(r1.getRoleName());
                 }
             }
         }
-        
-        
+
     }
-    
-    public void deleteEmployeeRole(ActionEvent event){
+
+    public void deleteEmployeeRole(ActionEvent event) {
         setErrorMsg(roleSessionBean.deleteEmployeeRole(employee, deleteRoles));
         setUserID("");
         setDeleteRoles(null);
         setNewroles(null);
         setErrorMsg("");
     }
-    
-    public void deleteRole(ActionEvent event){
+
+    public void deleteRole(ActionEvent event) {
         setErrorMsg(roleSessionBean.deleteRole(deleteRoleName));
-       setDeleteRoleName("");
+        setDeleteRoleName("");
     }
 
     //for admin to create new roles
-    public void addRole(ActionEvent event){
-        roleSessionBean.addRole(roleName,accessRight);
+    public void addRole(ActionEvent event) {
+        for (String s : roles) {
+            if (s.equals(roleName)) {
+                message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Role Exists", "");
+                FacesContext.getCurrentInstance().addMessage(null, message);
+                return;
+            }
+        }
+        roleSessionBean.addRole(roleName, accessRight);
+        message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Role Addes Successfully", "");
+        FacesContext.getCurrentInstance().addMessage(null, message);
         clear();
     }
-    
+
     /*clear input after submit*/
-    public void clear(){
+    public void clear() {
         setRoleName("");
+        setAccessRight(null);
     }
-    
-     @PostConstruct
-    public void retrive(){
+
+    @PostConstruct
+    public void retrive() {
         setRoles(roleSessionBean.retrive());
     }
-    
-    
+
     //add new role to existing employee
-    public void addNewRole(){
-        roleSessionBean.addNewRole(employee,new_Role);
-    
+    public void addNewRole() {
+        roleSessionBean.addNewRole(employee, new_Role);
+
     }
-    
-    
+
     public RoleSessionBeanLocal getRoleSessionBean() {
         return roleSessionBean;
     }
@@ -144,8 +155,6 @@ public class RoleManagedBean {
     public void setRoles(List<String> roles) {
         this.roles = roles;
     }
-
-   
 
     public String getUserID() {
         return userID;
@@ -261,7 +270,4 @@ public class RoleManagedBean {
         this.accessRight = accessRight;
     }
 
-   
-    
-    
 }
