@@ -30,13 +30,15 @@
             <div class="row">
                 <div class="col-lg-12">
                     <h2 class="page-header"> Create a new role</h2>
-               
+                
+              
+                
                 <p:dataTable var="role" value="#{roleManagedBean.roles}">
                     <p:column headerText="Existing Roles">
                         <h:outputText value="#{role}" />
                     </p:column> 
                 </p:dataTable>
-                    </div>
+ </div>
                 <br></br>
                 <div class="col-md-6 panel-body">
 
@@ -51,13 +53,16 @@
                         </div>
 
                         <div>
-                            <p:selectManyCheckbox id="grid" value="#{roleManagedBean.accessRight}" layout="grid" columns="2">
-                                <f:selectItem itemLabel="Add" itemValue="accessAdd" />
-                                <f:selectItem itemLabel="Delete" itemValue="accessDelete" />
-                                <f:selectItem itemLabel="Create" itemValue="accessCreate" />
-                                <f:selectItem itemLabel="Assign" itemValue="accessAssign" />
-                                <f:selectItem itemLabel="View" itemValue="accessView" />
-                            </p:selectManyCheckbox>
+
+                        Assign access rights for this role:
+                        <p:selectManyCheckbox id="grid" value="#{roleManagedBean.accessRight}" layout="grid" columns="2">
+                            <f:selectItem itemLabel="Add An Employee" itemValue="accessAdd" />
+                            <f:selectItem itemLabel="Delete An Employee" itemValue="accessDelete" />
+                            <f:selectItem itemLabel="Create An Employee" itemValue="accessCreate" />
+                            <f:selectItem itemLabel="Assign Access Rights" itemValue="accessAssign" />
+                            <f:selectItem itemLabel="View An Employee" itemValue="accessView" />
+                        </p:selectManyCheckbox>
+
                         </div>
 
                         <div class="text-center">
