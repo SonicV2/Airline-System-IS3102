@@ -31,13 +31,13 @@ public class RouteSessionBean implements RouteSessionBeanLocal {
     }
     @Override
     public void deleteRoute(Long id){
-        Route route = getRoute(id);
+        route = getRoute(id);
         em.remove(route);
     }
     
     @Override
     public Route getRoute(Long id){
-        Route route = new Route();   
+        route = new Route();   
             try {
 
             Query q = em.createQuery("SELECT a FROM Location " + "AS a WHERE a.id=:id");
