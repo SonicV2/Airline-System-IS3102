@@ -8,6 +8,10 @@
     </h:head>
     <h:body>
         
+        <h:form>
+            <h:commandButton class="btn btn-primary btn-lg btn-block" value="Retrieve" actionListener="#{routeManageBean.retrieve}"/>
+        </h:form>
+        
         <p:dataTable var="route" value="#{routeManageBean.routes}">
             
             <p:column headerText="Route Id">

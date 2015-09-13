@@ -24,4 +24,7 @@ public interface RouteSessionBeanLocal {
     public void deleteRoute(Long id);
     public List<Location> retrieveLocations();
     public List<Route> retrieveRoutes();
+    public Location getLocation(String country1);
+    public List<Location> searchLocations(String searchCountry);
+    
 }
