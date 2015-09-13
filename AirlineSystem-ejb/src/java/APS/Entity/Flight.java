@@ -2,6 +2,7 @@ package APS.Entity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -21,8 +22,12 @@ public class Flight implements Serializable {
     
     @Id
     private String flightNo;
+    private String flightDay;
+    private String timeslot;
+    private double flightDuration;
     @Temporal(TemporalType.DATE)
-    private Date flightDate;
+    private Date startDate;
+    private int weeks;
     private Route route = new Route();
     
     @OneToMany(cascade = {CascadeType.PERSIST}, mappedBy = "flight")
@@ -30,6 +35,26 @@ public class Flight implements Serializable {
     
     //@OneToMany(cascade = {CascadeType.PERSIST}, mappedBy = "flight")
     //private List<Aircraft> aircraft = new ArrayList<Aircraft>();
+    
+    public void createFlight(String flightNo, String flightDay, String timeslot, double flightDuration, Date startDate, int weeks){
+        this.flightNo = flightNo;
+        this.flightDay = flightDay;
+        this.timeslot = timeslot;
+        this.flightDuration = flightDuration;
+        this.weeks = weeks;
+        this.startDate = startDate;
+        
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(startDate);
+        cal.add(Calendar.WEEK_OF_YEAR, weeks);
+        Date endDate = cal.getTime();
+        
+        Date counter = startDate;
+        
+        for (int i = 0; i<weeks; i++){
+             cal.setTime(counter);
+        }        
+     }
     
     public String getFlightNo() {
         return flightNo;
@@ -39,13 +64,22 @@ public class Flight implements Serializable {
         this.flightNo = flightNo;
     }
 
-    public Date getFlightDate() {
-        return flightDate;
+    public String getFlightDay() {
+        return flightDay;
     }
 
-    public void setFlightDate(Date flightDate) {
-        this.flightDate = flightDate;
+    public void setFlightDay(String flightDay) {
+        this.flightDay = flightDay;
     }
+
+    public int getWeeks() {
+        return weeks;
+    }
+
+    public void setWeeks(int weeks) {
+        this.weeks = weeks;
+    }
+
 
     public List<Schedule> getSchedule() {
         return schedule;

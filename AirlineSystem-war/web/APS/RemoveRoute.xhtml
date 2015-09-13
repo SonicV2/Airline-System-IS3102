@@ -7,10 +7,43 @@
         <title>Remove Route</title>
     </h:head>
     <h:body>
+        
+        <p:dataTable var="route" value="#{routeManageBean.routes}">
+            
+            <p:column headerText="Route Id">
+                <h:outputText value="#{route.routeId}" />
+            </p:column>
+            
+            <p:column headerText="Origin IATA">
+                <h:outputText value="#{route.originIATA}" />
+            </p:column>
+            
+            <p:column headerText="Origin Country">
+                <h:outputText value="#{route.originCountry}" />
+            </p:column>
+            
+            <p:column headerText="Origin City">
+                <h:outputText value="#{route.originCity}" />
+            </p:column>
+ 
+            <p:column headerText="Destination IATA">
+                <h:outputText value="#{route.destinationIATA}" />
+            </p:column>
+            
+            <p:column headerText="Destination Country">
+                <h:outputText value="#{route.destinationCountry}" />
+            </p:column>
+            
+            <p:column headerText="Destination City">
+                <h:outputText value="#{route.destinationCity}" />
+            </p:column>
+        
+        </p:dataTable>
+        
         <h:form>
             <h:outputLabel value="Enter Route ID" />
-            <h:inputText value="#{RouteManageBean.tailNo}"/>
-            <h:commandButton value="Delete" actionListener="#{RouteManageBean.removeRoute}"/>
+            <h:inputText value="#{routeManageBean.routeId}"/>
+            <h:commandButton value="Delete" actionListener="#{routeManageBean.removeRoute}"/>
         </h:form>
     </h:body>
 </html>

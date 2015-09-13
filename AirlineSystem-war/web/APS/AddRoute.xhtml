@@ -3,22 +3,33 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui">
+
     <h:head>
         <title>Add Route</title>
     </h:head>
+    
     <h:body>
-         <h:form class="form col-md-12 center-block">
-                            <div class="form-group">
+        
+        <p:dataList value="#{routeManageBean.locations}" var="location" type="unordered" itemType="none" paginator="true" rows="10" styleClass="paginated">
 
-                                <p:outputLabel value="Origin: " />
-                                <p:inputText class="form-control input-lg" value="#{routeManageBean.origin}"  />
+        <h:outputText value="#{location.city}, #{location.country}, #{location.IATA}" style="display:inline-block"/>
+
+        
+        </p:dataList>
+ 
+        <h:form class="form col-md-12 center-block">
+                            
+             
+                            <div class="form-group">                          
+                                <p:outputLabel value="Origin (in IATA): " />
+                                <p:inputText class="form-control input-lg" value="#{routeManageBean.originIATA}"  />
                                 <br/>
                                
                              </div>
                             
                             <div class="form-group">
-                                <p:outputLabel value="Destination " />
-                                <p:inputText class="form-control input-lg" value="#{routeManageBean.destination}" />
+                                <p:outputLabel value="Destination (in IATA):" />
+                                <p:inputText class="form-control input-lg" value="#{routeManageBean.destinationIATA}" />
                                 <br/>
                                 
                             </div>
