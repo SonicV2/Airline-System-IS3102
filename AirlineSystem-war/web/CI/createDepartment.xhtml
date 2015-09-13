@@ -13,13 +13,13 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
         <h:outputStylesheet library="css" name="admindb.css" />
         <h:outputStylesheet library="css" name="morrisjs/morris.css" />
-<!--        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js" />-->
+        <!--        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js" />-->
         <title>Add Department</title>
 
     </h:head>
     <h:body>
         <!--    To add the same header on all dashboard pages  -->
-        <ui:include src="dashboardHeader.xhtml"/>
+<!--        <ui:include src="dashboardHeader.xhtml"/>-->
         <!--    To add the same sidebar on all dashboard pages  -->
         <ui:include src="dashboardSidebar.xhtml"/>
         <div id="page-wrapper">
@@ -27,20 +27,38 @@
                 <div class="col-lg-12">
                     <h2 class="page-header"> Add a new department</h2>
                 </div>
+                <div class="col-lg-8">
+                    <div class="panel panel-green">
+                        <div class="panel-heading">Existing Departments: </div>
 
-                <p>Existing Departments: </p>
-                <p:dataTable var="depart" value="#{departmentManagedBean.orgUnits}">
-                    <p:column headerText="Department Name">
-                        <h:outputText value="#{depart.departmentName}" />
-                    </p:column>
+                        <div class="panel-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
 
-                    <p:column headerText="Department Location">
-                        <h:outputText value="#{depart.location}" />
-                    </p:column>
-                    <!--                </ui:repeat>-->
+                                    <thead>
+                                        <tr>
+                                            <th>Department Name</th>
+                                            <th>Department Location</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <ui:repeat value="#{departmentManagedBean.orgUnits}" var="depart">
+                                            <tr>  
+                                                <td>#{depart.departmentName}</td>
+                                                <td>#{depart.location}</td>
+                                            </tr>
+                                        </ui:repeat>
+                                    </tbody>
 
-                </p:dataTable>
+                                </table>
 
+
+
+                                <!--</p:dataTable>-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
 
 
@@ -55,9 +73,8 @@
                             <div class="missingfield">
                                 <h:message for="deptName"  />
                             </div>
-                            <br/>
-                        </div>
-                        <div class="form-group">
+                            <br></br>
+                            
                             <label class="control-label col-md-5">Department Location:   </label>
                             <p:inputText id="deptLocation" required="true" requiredMessage="Please fill in Department Location!" class="form-inline" value="#{departmentManagedBean.departmentLocation}" />
                             <br/>
@@ -67,6 +84,7 @@
                         </div>
 
                         <div class="text-center">
+                            <br></br>
                             <h:commandButton  class="btn btn-outline btn-success" value="Add Department" action="/CI/createDepartment" actionListener="#{departmentManagedBean.addDepartment}"/>
                         </div>
                     </h:form>

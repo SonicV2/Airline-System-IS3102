@@ -57,20 +57,20 @@ public class LoginFilter implements Filter {
             System.out.println("url0: " + url[0] + "url1: " + url[1] + "url: " + url[2]);
 
             if (url[2].equals("login.xhtml") || reqURI.contains("javax.faces.resource") || url[2].equals("forgetPassword.xhtml") || url[2].equals("APS")
-                    || url[2].equals("CI")/*Delete when necessary*/) {
+                    || url[2].equals("CI")|| url[2].equals("FOS")/*Delete when necessary*/) {
                 System.out.println("Process ");
                 chain.doFilter(request, response);
 
             } else if (!url[2].equals("login.xhtml")  && (ses != null && ses.getAttribute("isLogin") != null)) {
 
-                if (ses.getAttribute("role").equals("Super Admin")) { /* Super Admin could access all web pages*/
+                if (ses.getAttribute("role").equals("SUPER ADMIN")) { /* Super Admin could access all web pages*/
                     chain.doFilter(request, response);
                 } else if(url[3].equals("employeeDashBoard.xhtml") || url[3].equals("employeeProfile.xhtml") || url[3].equals("message.xhtml") || url[3].equals("changeProfile.xhtml") || url[3].equals("newUserChangePwd.xhtml") || url[3].equals("employeeChangePwd.xhtml")){
                     chain.doFilter(request, response);
                 }
-                else if((url[3].equals("createRole.xhtml") || url[3].equals("createDepartment.xhtml") || url[3].equals("deleteRole.xhtml"))&&(ses.getAttribute("role").equals("Super Admin") || ses.getAttribute("department").equals("IT") )){
+                else if((url[3].equals("createRole.xhtml") || url[3].equals("createDepartment.xhtml") || url[3].equals("deleteRole.xhtml"))&&(ses.getAttribute("role").equals("SUPER ADMIN") || ses.getAttribute("department").equals("IT") )){
                     chain.doFilter(request, response);
-                } else if((url[3].equals("addRole.xhtml") || url[3].equals("employeeManagement.xhtml") || url[3].equals("employeeInformation.xhtml") || url[3].equals("deleteEmployeeRole.xhtml") || url[3].equals("changeDepartment.xhtml") )&&(ses.getAttribute("role").equals("Super Admin") || ses.getAttribute("department").equals("HR"))){
+                } else if((url[3].equals("addRole.xhtml") || url[3].equals("employeeManagement.xhtml") || url[3].equals("employeeInformation.xhtml") || url[3].equals("deleteEmployeeRole.xhtml") || url[3].equals("changeDepartment.xhtml") )&&(ses.getAttribute("role").equals("SUPER ADMIN") || ses.getAttribute("department").equals("HR"))){
                     chain.doFilter(request, response);
                 }
 

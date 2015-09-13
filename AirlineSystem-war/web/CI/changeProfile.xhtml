@@ -57,13 +57,13 @@
 
                                 <tr>
                                     <td>Birthday</td>
-                                    <td><p:calendar id="button" value="#{changeProfileManagedBean.employeeDOB}" showOn="button"/></td>
+                                    <td><p:calendar id="button" value="#{changeProfileManagedBean.employeeDOB}" showOn="button" navigator="true" yearRange="c-100:c" /></td>
                                     <td></td>
                                 </tr>
 
                                 <tr>
                                     <td>Gender </td>
-                                    <td> <h:selectOneRadio id="gender" value="#{changeProfileManagedBean.employeeGender}">
+                                    <td> <h:selectOneRadio styleClass="checkbox-inline" id="gender" value="#{changeProfileManagedBean.employeeGender}">
                                             <f:selectItem itemLabel="Male" itemValue="Male" />
                                             <f:selectItem itemLabel="Female" itemValue="Female" />
                                         </h:selectOneRadio> </td>

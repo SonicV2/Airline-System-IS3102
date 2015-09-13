@@ -174,7 +174,7 @@ public class FleetManageBean {
         return fuelCost;
     }
 
-    public void setFuelCost(double cost) {
+    public void setFuelCost(double fuelCost) {
         this.fuelCost = fuelCost;
     }
 

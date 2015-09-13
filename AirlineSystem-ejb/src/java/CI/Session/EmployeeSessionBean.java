@@ -1,8 +1,10 @@
 package CI.Session;
 
+import CI.Entity.CabinCrew;
 import CI.Entity.Employee;
 import CI.Entity.Salt;
 import CI.Entity.OrganizationUnit;
+import CI.Entity.Pilot;
 import CI.Entity.Role;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -37,23 +39,134 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
     private List<Role> rolelist=new ArrayList<Role>();
     private Role role;
     
+    private CabinCrew cc;
+    private Pilot pp; //pilot
+    
+    @Override
+    public void addCabinCrew(String employeeID, String employeeDisplayFirstName, String employeeDisplayLastName,
+            String employeeDepartment,Date employeeDOB,String employeeGender, String employeeHpNumber, 
+            String employeeMailingAddress, String employeeOfficeNumber, String employeePrivateEmail,
+            String experience, List<String>language, String position){
+        
+         cc=new CabinCrew();
+        
+//        List<String> role=new ArrayList<String>();
+//        role.add("Cabin Crew");
+//        
+        cc.create(experience, language, position);
+        cc.setEmployeeID(employeeID);
+        cc.setEmployeeDisplayFirstName(employeeDisplayFirstName);
+        cc.setEmployeeDisplayLastName(employeeDisplayLastName);
+        cc.setEmployeeDOB(employeeDOB);
+        cc.setEmployeeGender(employeeGender);
+        cc.setEmployeeHpNumber(employeeHpNumber);
+        cc.setEmployeeMailingAddress(employeeMailingAddress);
+        cc.setEmployeeOfficeNumber(employeeOfficeNumber);
+        cc.setEmployeePrivateEmail(employeePrivateEmail);
+        cc.setEmployeeDepartment("Flight Crew");
+        cc.setEmployeeRole("Cabin Crew");
+        cc.setEmployeePassword("password");
+        
+        String userName = generateUserName(employeeDisplayFirstName, employeeDisplayLastName);
+        
+        cc.setEmployeeUserName(userName);
+        cc.setEmployeeEmailAddress(userName + "@merlion.com.sg");
+        
+        department= new OrganizationUnit();
+        department=getDepartment(employeeDepartment);
+        
+        employeelist=department.getEmployee();
+        employeelist.add(cc);
+        department.setEmployee(employeelist);
+        cc.setOrganizationUnit(department);
+        em.persist(cc);
+        
+        
+   
+        role=getRole("Cabin Crew");
+        List<Employee> employeelist_role=new ArrayList<Employee>();
+        
+        rolelist=cc.getRoles();
+        rolelist.add(role);
+        cc.setRoles(rolelist);
+        employeelist_role=role.getEmployees();
+        employeelist_role.add(cc);
+        role.setEmployees(employeelist_role);
+        
+        
+        em.persist(cc);
+    }
+    
+    @Override
+    public void addPilot(String employeeID, String employeeDisplayFirstName, String employeeDisplayLastName,
+            String employeeDepartment,Date employeeDOB,String employeeGender, String employeeHpNumber, 
+            String employeeMailingAddress, String employeeOfficeNumber, String employeePrivateEmail,
+            String experience, List<String>skills, String position){
+        
+         pp=new Pilot();
+        
+//        List<String> role=new ArrayList<String>();
+//        role.add("Cabin Crew");
+//        
+        pp.create(experience, skills, position);
+        pp.setEmployeeID(employeeID);
+        pp.setEmployeeDisplayFirstName(employeeDisplayFirstName);
+        pp.setEmployeeDisplayLastName(employeeDisplayLastName);
+        pp.setEmployeeDOB(employeeDOB);
+        pp.setEmployeeGender(employeeGender);
+        pp.setEmployeeHpNumber(employeeHpNumber);
+        pp.setEmployeeMailingAddress(employeeMailingAddress);
+        pp.setEmployeeOfficeNumber(employeeOfficeNumber);
+        pp.setEmployeePrivateEmail(employeePrivateEmail);
+        pp.setEmployeeDepartment("Flight Crew");
+        pp.setEmployeeRole("Pilot");
+        pp.setEmployeePassword("password");
+        
+        String userName = generateUserName(employeeDisplayFirstName, employeeDisplayLastName);
+        
+        pp.setEmployeeUserName(userName);
+        pp.setEmployeeEmailAddress(userName + "@merlion.com.sg");
+        
+        department= new OrganizationUnit();
+        department=getDepartment(employeeDepartment);
+        
+        employeelist=department.getEmployee();
+        employeelist.add(pp);
+        department.setEmployee(employeelist);
+        pp.setOrganizationUnit(department);
+        em.persist(pp);
+        
+        
+   
+        role=getRole("Pilot");
+        List<Employee> employeelist_role=new ArrayList<Employee>();
+        
+        rolelist=pp.getRoles();
+        rolelist.add(role);
+        pp.setRoles(rolelist);
+        employeelist_role=role.getEmployees();
+        employeelist_role.add(pp);
+        role.setEmployees(employeelist_role);
+        
+        
+        em.persist(pp);
+    }
+    
+    
     @Override
     public void addEmployee(String userID,String employeeID, String employeeDisplayFirstName, String employeeDisplayLastName,
             String employeeRole, String employeeDepartment, Date employeeDOB,
             String employeeGender, String employeeHpNumber, String employeeMailingAddress, String employeeOfficeNumber,
             String employeePrivateEmail) {
-        
-       
+    
         employee = new Employee();
         department= new OrganizationUnit();
-        department=getDepartment(employeeDepartment);
-        
+        department=getDepartment(employeeDepartment);        
         System.out.println(department.getDepartmentName());
         
         role=getRole(employeeRole);
         List<Employee> employeelist_role=new ArrayList<Employee>();
-        
-        
+            
         employee.createEmployee(employeeID, employeeDisplayFirstName, employeeDisplayLastName,/* employeeRole, employeeDepartment,*/
                 employeeDOB, employeeGender, employeeHpNumber, employeeMailingAddress, employeeOfficeNumber,
                 employeePrivateEmail);

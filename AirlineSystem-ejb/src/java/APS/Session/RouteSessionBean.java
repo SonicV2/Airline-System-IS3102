@@ -20,6 +20,7 @@ public class RouteSessionBean implements RouteSessionBeanLocal {
     private EntityManager em;
     
     Route route; 
+    Location location;
     
     @Override
     public void addRoute(String origin, String destination){
@@ -60,6 +61,28 @@ public class RouteSessionBean implements RouteSessionBeanLocal {
     }
     
     @Override
+    public Location getLocation(String country1){
+        location = new Location();   
+            try {
+
+            Query q = em.createQuery("SELECT a FROM Location " + "AS a WHERE a.country=:country");
+            q.setParameter("country", country1);
+
+            List results = q.getResultList();
+            if (!results.isEmpty()) {
+                location = (Location) results.get(0);
+
+            } else {
+                location = null;
+            }
+
+        } catch (EntityNotFoundException enfe) {
+            System.out.println("\nEntity not found error" + "enfe.getMessage()");
+        }
+            return location;
+    }
+    
+    @Override
     public Location findLocation(String location){ 
          Location locationEntity = new Location();   
             try {
@@ -86,6 +109,31 @@ public class RouteSessionBean implements RouteSessionBeanLocal {
         
         try{
             Query q = em.createQuery("SELECT a from Location a");
+            
+            List<Location> results = q.getResultList();
+            if (!results.isEmpty()){
+                
+                allLocations = results;
+                
+            }else
+            {
+                allLocations = null;
+                System.out.println("no location!");
+            }
+        }catch (EntityNotFoundException enfe) {
+            System.out.println("\nEntity not found error" + "enfe.getMessage()");
+        }
+       
+        return allLocations;
+    }
+    
+    public List<Location> searchLocations(String searchCountry){
+        
+        List<Location> allLocations = new ArrayList<Location>();
+        
+        try{
+            Query q = em.createQuery("SELECT a FROM Location " + "AS a WHERE a.country=:country");
+            q.setParameter("country", searchCountry);
             
             List<Location> results = q.getResultList();
             if (!results.isEmpty()){

@@ -11,6 +11,7 @@ import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import CI.Session.EmployeeSessionBeanLocal;
 import java.text.SimpleDateFormat;
+import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
@@ -54,7 +55,11 @@ public class EmployeeManageBean {
     //SimpleDateFormat format=new SimpleDateFormat("yyyy-mm-dd");
     Date employeeDOB;
     
-   
+   //For Cabin Crew and pilot
+    private String experience;
+    private String position;
+    private List<String> languages; //cabin crew
+     private List<String> skills; //pilot eg. licence to fly a380 etc
     
     
     private boolean pwdChangeStatus;
@@ -68,7 +73,7 @@ public class EmployeeManageBean {
         String userID;
         
         if(session.getAttribute("isLogin")==null){
-            userID="Super admin ";
+            userID="SUPER ADMIN ";
         }else{ userID= session.getAttribute("isLogin").toString();
         
         }
@@ -85,6 +90,25 @@ public class EmployeeManageBean {
         employeeSessionBean.hashPwd(employeeID);
 
     }
+    
+    public void addCabinCrew(ActionEvent event){
+  
+        employeeSessionBean.addCabinCrew(employeeID,employeeDisplayFirstName, employeeDisplayLastName
+                , employeeDepartment, employeeDOB, employeeGender, employeeHpNumber,
+                employeeMailingAddress, employeeOfficeNumber, employeePrivateEmail,experience,languages, position);
+   
+        employeeSessionBean.hashPwd(employeeID);
+    }
+    
+     public void addPilot(ActionEvent event){
+  
+        employeeSessionBean.addPilot(employeeID,employeeDisplayFirstName, employeeDisplayLastName
+                , employeeDepartment, employeeDOB, employeeGender, employeeHpNumber,
+                employeeMailingAddress, employeeOfficeNumber, employeePrivateEmail,experience,skills, position);
+   
+        employeeSessionBean.hashPwd(employeeID);
+    }
+    
 
     public String changePwd(){
         HttpSession session = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(false);
@@ -263,4 +287,40 @@ public class EmployeeManageBean {
     public void setEmployeeNewPwdRe(String employeeNewPwdRe) {
         this.employeeNewPwdRe = employeeNewPwdRe;
     }
+
+    public String getExperience() {
+        return experience;
+    }
+
+    public void setExperience(String experience) {
+        this.experience = experience;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
+    }
+
+    public List<String> getLanguages() {
+        return languages;
+    }
+
+    public void setLanguages(List<String> languages) {
+        this.languages = languages;
+    }
+
+    public List<String> getSkills() {
+        return skills;
+    }
+
+    public void setSkills(List<String> skills) {
+        this.skills = skills;
+    }
+    
+    
+    
+    
 }

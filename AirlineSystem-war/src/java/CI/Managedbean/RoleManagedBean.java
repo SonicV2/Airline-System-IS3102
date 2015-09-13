@@ -39,6 +39,9 @@ public class RoleManagedBean {
     String role; //for receiving value from employeeManagement.xhtml
 
     private List<String> roles = new ArrayList();
+    
+    
+    
 
     String userID; //NRIC
     Employee employee;
@@ -94,13 +97,13 @@ public class RoleManagedBean {
 
     //for admin to create new roles
     public void addRole(ActionEvent event) {
-        for (String s : roles) {                       //Comment out if first time add roles
-            if (s.equals(roleName)) {
+        /* for (String s : roles) {                       //Comment out if first time add roles
+            if (s.equals(roleName.toUpperCase())) {
                 message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Role Exists", "");
                 FacesContext.getCurrentInstance().addMessage(null, message);
                 return;
             }
-        }
+        }*/
         roleSessionBean.addRole(roleName, accessRight);
         message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Role Addes Successfully", "");
         FacesContext.getCurrentInstance().addMessage(null, message);
@@ -116,7 +119,10 @@ public class RoleManagedBean {
     @PostConstruct
     public void retrive() {
         setRoles(roleSessionBean.retrive());
+
     }
+    
+   
 
     //add new role to existing employee
     public void addNewRole() {
@@ -270,4 +276,6 @@ public class RoleManagedBean {
         this.accessRight = accessRight;
     }
 
+    
+    
 }
