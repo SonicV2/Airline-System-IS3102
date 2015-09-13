@@ -8,6 +8,7 @@ package APS.Managedbean;
 import APS.Entity.Location;
 import APS.Entity.Route;
 import APS.Session.RouteSessionBeanLocal;
+import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -38,13 +39,17 @@ public class RouteManageBean {
     String destinationCity;
     String destinationIATA;
     
-    private List<Location> locations;
-    private List<Route> routes;
-    
     String name;
     String city;
     String country;
     String IATA;
+    String searchCountry;
+    
+    private List<Location> locations;
+    private List<Route> routes;
+    
+    List<Location> searchedLocations;
+
     
     public RouteManageBean() {
     }
@@ -57,6 +62,13 @@ public class RouteManageBean {
         
     }
     
+    public void search(ActionEvent event) {
+        
+        setSearchLocations(routeSessionBean.searchLocations(searchCountry));
+
+    }
+
+    
     /*This is for admin to create new route*/
     public void addRoute(ActionEvent event){
         routeSessionBean.addRoute(originIATA, destinationIATA);
@@ -64,6 +76,14 @@ public class RouteManageBean {
 
     public void removeRoute(ActionEvent event){
         routeSessionBean.deleteRoute(routeId);
+    }
+    
+    public String getSearchCountry() {
+        return searchCountry;
+    }
+
+    public void setSearchCountry(String searchCountry) {
+        this.searchCountry = searchCountry;
     }
     
     public List<Route> getRoutes(){
@@ -88,6 +108,14 @@ public class RouteManageBean {
      
     public void setLocations(List<Location> locations) {
         this.locations = locations;
+    }
+    
+    public List<Location> getSearchLocations(){
+         return searchedLocations;
+     }
+     
+    public void setSearchLocations(List<Location> searchedLocations) {
+        this.searchedLocations = searchedLocations;
     }
     
     public String getName() {
