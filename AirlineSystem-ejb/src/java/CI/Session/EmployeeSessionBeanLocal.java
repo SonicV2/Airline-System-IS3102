@@ -41,4 +41,9 @@ public interface EmployeeSessionBeanLocal {
             String employeeMailingAddress, String employeeOfficeNumber, String employeePrivateEmail,
             String experience, List<String>language, String position);
     
+    public void addPilot(String employeeID, String employeeDisplayFirstName, String employeeDisplayLastName,
+            String employeeDepartment,Date employeeDOB,String employeeGender, String employeeHpNumber, 
+            String employeeMailingAddress, String employeeOfficeNumber, String employeePrivateEmail,
+            String experience, List<String>skills, String position);
+    
 }

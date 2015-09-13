@@ -14,7 +14,7 @@
         <h:outputStylesheet library="css" name="admindb.css" />
         <h:outputStylesheet library="css" name="morrisjs/morris.css" />
 
-        <title>Create Pilot</title>
+        <title>Create Cabin Crew</title>
         <style>
             .ui-inputfield {
                 margin: 0;
@@ -59,9 +59,9 @@
     <h:body>
 
         <!--    To add the same header on all dashboard pages  -->
-        <!--       <ui:include src="dashboardHeader.xhtml"/>-->
+        <!--       <ui:include src="/CI/dashboardHeader.xhtml"/>-->
         <!--    To add the same sidebar on all dashboard pages  -->
-        <ui:include src="dashboardSidebar.xhtml"/>
+        <ui:include src="/CI/dashboardSidebar.xhtml"/>
 
         <div id="page-wrapper">
 
@@ -240,9 +240,8 @@
                         </div>
 
                         <div class="text-center">
-                            <h:commandButton class="btn btn-outline btn-success" value="Save Information" actionListener="#{employeeManageBean.addCabinCrew}"/>
+                            <h:commandButton class="btn btn-outline btn-success" value="Save Information" actionListener="#{employeeManageBean.addCabinCrew}" />
                         </div>
-
 
                     </h:form>   
                     <br></br>

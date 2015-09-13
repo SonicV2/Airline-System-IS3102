@@ -28,8 +28,8 @@ public class Pilot extends Employee implements Serializable {
         super();
     }
     
-    public void create(String experience, String position, List<String> skillsets){
-        this.setExperience(experience);
+    public void create(String experience ,List<String> skillsets, String position){
+        this.experience=experience;
         this.position=position;
         this.skillsets=skillsets;
        
