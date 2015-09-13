@@ -35,26 +35,18 @@
             <h:form class="col-md-6">
                 <div class="panel-body">
                     <div class="row">
-                        <div class="col-lg-6">
+                        <div class="col-lg-8">
                             <div class="input-group custom-search-form">
-                                <p:inputText class="form-control" placeholder="Search..." value="#{roleManagedBean.userID}"/>
+                                <p:inputText class="form-control" placeholder="Please enter employee id..." value="#{roleManagedBean.userID}"/>
                                 <span class="input-group-btn">
                                     <h:commandButton class="btn btn-primary btn-block" value="Search" actionListener="#{roleManagedBean.search}"/>
                                 </span>
                             </div>
-                            <br/>                               
-
-
-
-                            <p:dataTable var="role" value="#{roleManagedBean.newroles}">
-                                <p:column headerText="Role Name">
-                                    <h:outputText value="#{role}" />
-                                </p:column>
-
-                            </p:dataTable>
-
-
-
+                            <br/>  
+                            
+                            <ui:repeat var ="role" value="#{roleManagedBean.newroles}">
+                                <h:outputText value="#{role}" />
+                            </ui:repeat>
                             <br></br>
                             
                             <div class="form-group">
@@ -70,7 +62,7 @@
                           
                             </div>
                               <div class="text-center">
-                            <h:commandButton class="btn btn-outline btn-success" value="Add" action="#{roleManagedBean.addNewRole}"/>
+                            <h:commandButton class="btn btn-outline btn-success" value="Add Role" action="#{roleManagedBean.addNewRole}"/>
                               </div>
                         </div>
 

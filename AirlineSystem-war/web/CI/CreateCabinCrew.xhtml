@@ -14,7 +14,7 @@
         <h:outputStylesheet library="css" name="admindb.css" />
         <h:outputStylesheet library="css" name="morrisjs/morris.css" />
 
-        <title>Employee Management</title>
+        <title>Create Cabin Crew</title>
         <style>
             .ui-inputfield {
                 margin: 0;
@@ -59,7 +59,7 @@
     <h:body>
 
         <!--    To add the same header on all dashboard pages  -->
-<!--       <ui:include src="dashboardHeader.xhtml"/>-->
+        <!--       <ui:include src="dashboardHeader.xhtml"/>-->
         <!--    To add the same sidebar on all dashboard pages  -->
         <ui:include src="dashboardSidebar.xhtml"/>
 
@@ -155,27 +155,18 @@
 
 
                                 <div class="form-group">
-                                    <p:outputLabel for="role" value="Role: " class="col-md-4 control-label" />
-                                    <h:selectOneMenu  id="role" styleClass="dropdown-menu select" value="#{employeeManageBean.employeeRole}"  >
-
-                                        <f:selectItem itemLabel="Select Role" itemValue="" noSelectionOption="true" />
-                                        <f:selectItems value="#{roleManagedBean.roles}" />
-                                    </h:selectOneMenu>
-
-
+                                    <p:outputLabel value="Role: Cabin Crew" class="col-md-4 control-label" />                                  
                                 </div>
-
+                                
+                                                                                             
 
                                 <div class="form-group">
                                     <p:outputLabel for="department" value="Department: " class="col-md-4 control-label" />
                                     <h:selectOneMenu id="department" styleClass="dropdown-menu select"  value="#{employeeManageBean.employeeDepartment}" >
 
                                         <f:selectItem itemLabel="Select department" itemValue="" noSelectionOption="true" />
-                                        <f:selectItems value="#{departmentManagedBean.departments}" />
+                                        <f:selectItems value="#{departmentManagedBean.CCdepartments}" />
                                     </h:selectOneMenu>
-
-
-
                                 </div>
 
                                 <div class="form-group">
@@ -208,11 +199,48 @@
                                     </div>
                                 </div>   
                                 
+                                <div class="form-group">
+                                    <p:outputLabel for="p" value="Position: " class="col-md-4 control-label" />
+                                    <h:selectOneMenu  id="p" styleClass="dropdown-menu select" value="#{employeeManageBean.position}"  >
+
+                                        <f:selectItem itemLabel="Select Position" itemValue="" noSelectionOption="true" />
+                                        <f:selectItem itemLabel="Lead Flight Stewardess" itemValue="Lead Flight Stewardess"  />
+                                        <f:selectItem itemLabel="Flight Stewardess" itemValue="Flight Stewardess"  />
+                                        <f:selectItem itemLabel="Flight Steward" itemValue="Flight Steward"  />
+                                    </h:selectOneMenu>
+
+
+                                </div>
+
+                                <div class="form-group">
+                                    <h:outputLabel value="Year of Experience: " class="col-md-4 control-label" />
+                                    <div class="col-md-8">
+                                        <h:inputText id="experience" required="true" requiredMessage="Please fill in year of experience field!" class="form-control" value="#{employeeManageBean.experience}" />
+                                    </div>
+                                    <div class="missingfield"> 
+                                        <h:message for="experience" />
+                                    </div>
+                                </div>
+
+
+
+
+                                <div class="form-group" style="margin-left:95px">
+                                    <b>Languages:</b>
+                                    <p:selectManyCheckbox id="grid" value="#{employeeManageBean.languages}" layout="grid" columns="4">
+                                        <f:selectItem itemLabel="Chinese" itemValue="Chinese" />
+                                        <f:selectItem itemLabel="Japanese" itemValue="Japanese" />
+                                        <f:selectItem itemLabel="Korean" itemValue="Korean" />
+                                        <f:selectItem itemLabel="French" itemValue="French" />
+                                        <f:selectItem itemLabel="Italian" itemValue="Italian" />
+                                    </p:selectManyCheckbox>
+
+                                </div>   
                             </div>
                         </div>
 
                         <div class="text-center">
-                            <h:commandButton class="btn btn-outline btn-success" value="Save Information" actionListener="#{employeeManageBean.addEmployee}" action="employeeInformation?faces-redirect=true"/>
+                            <h:commandButton class="btn btn-outline btn-success" value="Save Information" actionListener="#{employeeManageBean.addCabinCrew}"/>
                         </div>
 
 

@@ -73,8 +73,9 @@ public class LoginManageBean {
         }else if(employee.getOrganizationUnit().getDepartmentName().equals("IT")){
             session.setAttribute("department", "IT");
            // return "Department/IT" + "?faces-redirect=true";
+        }else if(employee.getOrganizationUnit().getDepartmentName().equals("Flight Crew")){
+            session.setAttribute("department", "Flight Crew");
         }
-
         return "CI/employeeDashBoard" + "?faces-redirect=true";
     }
     
@@ -107,8 +108,8 @@ public class LoginManageBean {
                 List<Role> role = employee.getRoles();
                 for (Role r : role) {
                     temp_roles += r.getRoleName() + " ";
-                    if(r.getRoleName().equals("Super Admin")){
-                        session.setAttribute("role", "Super Admin"); /*Add role --> SuperAdmin*/
+                    if(r.getRoleName().equals("SUPER ADMIN")){
+                        session.setAttribute("role", "SUPER ADMIN"); /*Add role --> SuperAdmin*/
                     }else{
                         session.setAttribute("role", "NSA");/*NSA--> Not Super Admin*/
                     }

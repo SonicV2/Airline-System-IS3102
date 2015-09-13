@@ -39,6 +39,9 @@ public class departmentManagedBean {
 
     private String department; // for dropdown selection
     private List<String> departments = new ArrayList();
+    
+     private List<String> CCdepartments = new ArrayList();
+    
     private List<OrganizationUnit> orgUnits;
 
     private String deleteDeptName;
@@ -57,13 +60,16 @@ public class departmentManagedBean {
     public void addDepartment(ActionEvent event) {
         FacesMessage message = null;
 
-         departmentSessionBean.addDepartment(departmentName, departmentLocation);
-            clear();
+//         departmentSessionBean.addDepartment(departmentName, departmentLocation);
+//            clear();
        
+       //Comment out if first time set up     
         List<OrganizationUnit> depts = departmentSessionBean.retrieveAllDepts();
+        
+        System.out.println("----------All Dept size: " + depts.size());
 
         for (OrganizationUnit ou : depts) {
-            if (ou.getDepartmentName().equals(departmentName) && ou.getLocation().equals(departmentLocation)) {
+            if (ou.getDepartmentName().equals(departmentName.toUpperCase()) && ou.getLocation().equals(departmentLocation.toUpperCase())) {
 
                 message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Department Exists", "");
                 FacesContext.getCurrentInstance().addMessage(null, message);
@@ -117,7 +123,18 @@ public class departmentManagedBean {
         System.out.println("set org units");
 
         setOrgUnits(departmentSessionBean.retrieveAllDepts());
-
+        
+        retriveCC();
+    }
+    
+    public void retriveCC(){
+        //setDepartments(departmentSessionBean.retrive());
+        for(String s : departments){
+            if(s.substring(0,s.indexOf("(")).equals("Flight Crew")){
+                CCdepartments.add(s);
+            }
+        }
+        
     }
 
     public String getDepartmentName() {
@@ -251,4 +268,14 @@ public class departmentManagedBean {
     public void setOrgUnits(List<OrganizationUnit> orgUnits) {
         this.orgUnits = orgUnits;
     }
+
+    public List<String> getCCdepartments() {
+        return CCdepartments;
+    }
+
+    public void setCCdepartments(List<String> CCdepartments) {
+        this.CCdepartments = CCdepartments;
+    }
+    
+    
 }

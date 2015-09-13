@@ -40,7 +40,7 @@ public class RoleSessionBean implements RoleSessionBeanLocal {
        AccessRight ar= new AccessRight();
         
         
-        role_db.create(roleName);
+        role_db.create(roleName.toUpperCase());
         
         if(accessRight.contains("accessAdd")){
             System.out.println("sessionBean: accessright");
@@ -69,9 +69,9 @@ public class RoleSessionBean implements RoleSessionBeanLocal {
             List<Role> results = q.getResultList();
             if (!results.isEmpty()) {
                 for (Role role : results) {
-                   if(!role.getRoleName().equals("Super Admin")){  //comment out if adding Super Admin
+                   //if(!role.getRoleName().equals("SUPER ADMIN")){  //comment out if adding Super Admin
                     list.add(role.getRoleName());
-                   }
+                  // }
                 }
 
             } else {

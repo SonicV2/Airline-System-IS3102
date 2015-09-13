@@ -7,6 +7,7 @@ package CI.Session;
 
 import CI.Entity.Employee;
 import java.util.Date;
+import java.util.List;
 import javax.ejb.Local;
 
 /**
@@ -34,5 +35,10 @@ public interface EmployeeSessionBeanLocal {
     
     public void updateInfo(String employeeUserName, Date employeeDOB,String employeeGender, String employeeHomeAddress, String employeeOfficeNumber,
     String employeeHpNumber, String employeePrivateEmail);
+    
+    public void addCabinCrew(String employeeID, String employeeDisplayFirstName, String employeeDisplayLastName,
+            String employeeDepartment,Date employeeDOB,String employeeGender, String employeeHpNumber, 
+            String employeeMailingAddress, String employeeOfficeNumber, String employeePrivateEmail,
+            String experience, List<String>language, String position);
     
 }
