@@ -6,7 +6,6 @@
 package APS.Entity;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -32,14 +31,12 @@ public class Schedule implements Serializable {
     
     @Temporal(TemporalType.DATE)
     private Date endDate;
-    private Date[][] scheduleList;
    
     private Flight flight = new Flight();
     
-    public void createSchedule(Date startDate, Date endDate, Date[][] scheduleList){
+    public void createSchedule(Date startDate, Date endDate){
         this.startDate = startDate;
         this.endDate = endDate;
-        this.scheduleList = scheduleList;
     }
     
     public Long getScheduleId() {
@@ -64,14 +61,6 @@ public class Schedule implements Serializable {
 
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
-    }
-
-    public Date[][] getScheduleList() {
-        return scheduleList;
-    }
-
-    public void setScheduleList(Date[][] scheduleList) {
-        this.scheduleList = scheduleList;
     }
     
     public Flight getFlight() {

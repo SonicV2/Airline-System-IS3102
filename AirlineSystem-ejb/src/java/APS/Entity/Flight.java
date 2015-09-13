@@ -2,7 +2,6 @@ package APS.Entity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -17,45 +16,36 @@ import javax.persistence.TemporalType;
  * @author Yanlong
  */
 @Entity
-public class Flight implements Serializable {  
+public class Flight implements Serializable {
+
     private static final long serialVersionUID = 1L;
-    
+
     @Id
     private String flightNo;
-    private String flightDay;
+    private String flightDays;
     private String timeslot;
     private double flightDuration;
+    private double basicFare;
+
     @Temporal(TemporalType.DATE)
-    private Date startDate;
-    private int weeks;
+    private Date planStartDate;
+
     private Route route = new Route();
-    
+
     @OneToMany(cascade = {CascadeType.PERSIST}, mappedBy = "flight")
     private List<Schedule> schedule = new ArrayList<Schedule>();
-    
+
     //@OneToMany(cascade = {CascadeType.PERSIST}, mappedBy = "flight")
     //private List<Aircraft> aircraft = new ArrayList<Aircraft>();
-    
-    public void createFlight(String flightNo, String flightDay, String timeslot, double flightDuration, Date startDate, int weeks){
+    public void createFlight(String flightNo, String flightDays, String timeslot, double flightDuration, double basicFare, Date planStartDate) {
         this.flightNo = flightNo;
-        this.flightDay = flightDay;
+        this.flightDays = flightDays;
         this.timeslot = timeslot;
         this.flightDuration = flightDuration;
-        this.weeks = weeks;
-        this.startDate = startDate;
-        
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(startDate);
-        cal.add(Calendar.WEEK_OF_YEAR, weeks);
-        Date endDate = cal.getTime();
-        
-        Date counter = startDate;
-        
-        for (int i = 0; i<weeks; i++){
-             cal.setTime(counter);
-        }        
-     }
-    
+        this.basicFare = basicFare;
+        this.planStartDate = planStartDate;
+    }
+
     public String getFlightNo() {
         return flightNo;
     }
@@ -64,22 +54,45 @@ public class Flight implements Serializable {
         this.flightNo = flightNo;
     }
 
-    public String getFlightDay() {
-        return flightDay;
+    public String getFlightDays() {
+        return flightDays;
     }
 
-    public void setFlightDay(String flightDay) {
-        this.flightDay = flightDay;
+    public void setFlightDays(String flightDays) {
+        this.flightDays = flightDays;
     }
 
-    public int getWeeks() {
-        return weeks;
+    public String getTimeslot() {
+        return timeslot;
     }
 
-    public void setWeeks(int weeks) {
-        this.weeks = weeks;
+    public void setTimeslot(String timeslot) {
+        this.timeslot = timeslot;
     }
 
+    public double getFlightDuration() {
+        return flightDuration;
+    }
+
+    public void setFlightDuration(double flightDuration) {
+        this.flightDuration = flightDuration;
+    }
+
+    public double getBasicFare() {
+        return basicFare;
+    }
+
+    public void setBasicFare(double basicFare) {
+        this.basicFare = basicFare;
+    }
+
+    public Date getPlanStartDate() {
+        return planStartDate;
+    }
+
+    public void setPlanStartDate(Date startDate) {
+        this.planStartDate = startDate;
+    }
 
     public List<Schedule> getSchedule() {
         return schedule;
@@ -98,13 +111,12 @@ public class Flight implements Serializable {
     }
 
     /*public List<Aircraft> getAircraft() {
-        return aircraft;
-    }
+     return aircraft;
+     }
 
-    public void setAircraft(List<Aircraft> aircraft) {
-        this.aircraft = aircraft;
-    }*/
-
+     public void setAircraft(List<Aircraft> aircraft) {
+     this.aircraft = aircraft;
+     }*/
     @Override
     public int hashCode() {
         int hash = 0;
@@ -129,5 +141,5 @@ public class Flight implements Serializable {
     public String toString() {
         return "APS.Entity.Flight[ flightNo=" + flightNo + " ]";
     }
-    
+
 }

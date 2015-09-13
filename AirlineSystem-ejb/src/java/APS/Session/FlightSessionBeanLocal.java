@@ -11,7 +11,7 @@ import javax.ejb.Local;
  */
 @Local
 public interface FlightSessionBeanLocal {
-    public void addFlight(String flightNo, String flightDay, String timeslot, double flightDuration, Date startDate, int weeks);
+    public void addFlight(String flightNo, String flightDays, String timeslot, double flightDuration, double basicFare, Date startDate);
 
     public void deleteFlight(String flightNo);
 
