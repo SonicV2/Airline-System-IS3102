@@ -19,6 +19,7 @@ import javax.persistence.Id;
 @Entity
 public class Pilot extends Employee implements Serializable {
     private static final long serialVersionUID = 1L;
+    
     private String experience;
    private String position;
    private List<String> skillsets;
@@ -34,44 +35,32 @@ public class Pilot extends Employee implements Serializable {
        
     }
 
-    /**
-     * @return the experience
-     */
+   
     public String getExperience() {
         return experience;
     }
 
-    /**
-     * @param experience the experience to set
-     */
+   
     public void setExperience(String experience) {
         this.experience = experience;
     }
 
-    /**
-     * @return the position
-     */
+   
     public String getPosition() {
         return position;
     }
 
-    /**
-     * @param position the position to set
-     */
+    
     public void setPosition(String position) {
         this.position = position;
     }
 
-    /**
-     * @return the skillsets
-     */
+    
     public List<String> getSkillsets() {
         return skillsets;
     }
 
-    /**
-     * @param skillsets the skillsets to set
-     */
+    
     public void setSkillsets(List<String> skillsets) {
         this.skillsets = skillsets;
     }

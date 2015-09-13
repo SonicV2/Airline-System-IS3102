@@ -17,20 +17,26 @@ import javax.persistence.Id;
  * @author smu
  */
 @Entity
-public class CabinCrew extends Employee implements Serializable {
+public class CabinCrew extends Employee implements Serializable{
 
     private static final long serialVersionUID = 1L;
+    
     private String experience;
     private List<String> languages;
     private String position;
+   
 
     public CabinCrew() {
         super();
     }
 
-    public void create(String experience, List<String> languages) {
+    public void create(String experience, List<String> languages,String position) {
+        
         this.experience = experience;
         this.languages = languages;
+        this.position=position;
+        
+        
     }
 
     /**
@@ -74,4 +80,8 @@ public class CabinCrew extends Employee implements Serializable {
     public void setPosition(String position) {
         this.position = position;
     }
+
+   
+    
+    
 }
