@@ -25,6 +25,7 @@ public interface RouteSessionBeanLocal {
     public List<Location> retrieveLocations();
     public List<Route> retrieveRoutes();
     public Location getLocation(String country1);
-    public List<Location> searchLocations(String searchCountry);
+    public List<Location> searchLocationsByCountry(String searchCountry);
+    public List<Location> searchLocationsByCity(String searchCity);
     
 }

@@ -14,8 +14,10 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.Dependent;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
 /**
@@ -44,6 +46,9 @@ public class RouteManageBean {
     String country;
     String IATA;
     String searchCountry;
+    String searchCity;
+    
+    FacesMessage message = null;
     
     private List<Location> locations;
     private List<Route> routes;
@@ -62,15 +67,26 @@ public class RouteManageBean {
         
     }
     
-    public void search(ActionEvent event) {
+    public void searchByCountry(ActionEvent event) {
         
-        setSearchLocations(routeSessionBean.searchLocations(searchCountry));
+        setSearchedLocations(routeSessionBean.searchLocationsByCountry(searchCountry));
+
+    }
+    
+    public void searchByCity(ActionEvent event) {
+        
+        setSearchedLocations(routeSessionBean.searchLocationsByCity(searchCity));
 
     }
 
     
     /*This is for admin to create new route*/
     public void addRoute(ActionEvent event){
+        if (routeSessionBean.findLocation(originIATA) == null || routeSessionBean.findLocation(destinationIATA) == null) {
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "No such IATA!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return;
+        }
         routeSessionBean.addRoute(originIATA, destinationIATA);
     }
 
@@ -84,6 +100,14 @@ public class RouteManageBean {
 
     public void setSearchCountry(String searchCountry) {
         this.searchCountry = searchCountry;
+    }
+    
+    public String getSearchCity() {
+        return searchCity;
+    }
+
+    public void setSearchCity(String searchCity) {
+        this.searchCity = searchCity;
     }
     
     public List<Route> getRoutes(){
@@ -110,11 +134,11 @@ public class RouteManageBean {
         this.locations = locations;
     }
     
-    public List<Location> getSearchLocations(){
+    public List<Location> getSearchedLocations(){
          return searchedLocations;
      }
      
-    public void setSearchLocations(List<Location> searchedLocations) {
+    public void setSearchedLocations(List<Location> searchedLocations) {
         this.searchedLocations = searchedLocations;
     }
     

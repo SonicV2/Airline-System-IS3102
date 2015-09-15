@@ -33,25 +33,31 @@
                     <div class="row">
                         <div class="col-lg-6">
                             <div class="input-group custom-search-form">
-                                <p:inputText class="form-control" placeholder="Search..." value="#{routeManageBean.searchCountry}"/>
+                                <p:inputText class="form-control" placeholder="Search by Country..." value="#{routeManageBean.searchCountry}"/>
                                 <span class="input-group-btn">
-                                    <h:commandButton class="btn btn-primary btn-block" value="Search" actionListener="#{routeManageBean.search}"/>
+                                    <h:commandButton class="btn btn-primary btn-block" value="Search" actionListener="#{routeManageBean.searchByCountry}"/>
+                                </span>
+                            </div>
+                            <div class="input-group custom-search-form">
+                                <p:inputText class="form-control" placeholder="Search by City..." value="#{routeManageBean.searchCity}"/>
+                                <span class="input-group-btn">
+                                    <h:commandButton class="btn btn-primary btn-block" value="Search" actionListener="#{routeManageBean.searchByCity}"/>
                                 </span>
                             </div>
                             <br/>                               
 
 
 
-                            <p:dataTable var="search" value="#{routeManageBean.searchedLocations}">
-                                <p:column headerText="Country">
+                            <p:dataTable var="search" value="#{routeManageBean.searchedLocations}" paginator="true" rows="10">
+                                <p:column headerText="Country" sortBy="#{search.country}">
                                     <h:outputText value="#{search.country}" />
                                 </p:column>
                                 
-                                <p:column headerText="City">
+                                <p:column headerText="City" sortBy="#{search.city}">
                                     <h:outputText value="#{search.city}" />
                                 </p:column>
                                 
-                                <p:column headerText="IATA">
+                                <p:column headerText="IATA" sortBy="#{search.IATA}">
                                     <h:outputText value="#{search.IATA}" />
                                 </p:column>
 
