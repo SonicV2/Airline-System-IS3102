@@ -14,7 +14,7 @@
         <h:outputStylesheet library="css" name="admindb.css" />
         <h:outputStylesheet library="css" name="morrisjs/morris.css" />
 
-        <title>Create Cabin Crew</title>
+        <title>Create Pilot</title>
         <style>
             .ui-inputfield {
                 margin: 0;
@@ -59,9 +59,9 @@
     <h:body>
 
         <!--    To add the same header on all dashboard pages  -->
-        <!--       <ui:include src="dashboardHeader.xhtml"/>-->
+        <!--       <ui:include src="/CI/dashboardHeader.xhtml"/>-->
         <!--    To add the same sidebar on all dashboard pages  -->
-        <ui:include src="dashboardSidebar.xhtml"/>
+        <ui:include src="/CI/dashboardSidebar.xhtml"/>
 
         <div id="page-wrapper">
 
@@ -155,7 +155,7 @@
 
 
                                 <div class="form-group">
-                                    <p:outputLabel value="Role: Cabin Crew" class="col-md-4 control-label" />                                  
+                                    <p:outputLabel value="Role: Pilot" class="col-md-4 control-label" />                                  
                                 </div>
                                 
                                                                                              
@@ -204,9 +204,9 @@
                                     <h:selectOneMenu  id="p" styleClass="dropdown-menu select" value="#{employeeManageBean.position}"  >
 
                                         <f:selectItem itemLabel="Select Position" itemValue="" noSelectionOption="true" />
-                                        <f:selectItem itemLabel="Lead Flight Stewardess" itemValue="Lead Flight Stewardess"  />
-                                        <f:selectItem itemLabel="Flight Stewardess" itemValue="Flight Stewardess"  />
-                                        <f:selectItem itemLabel="Flight Steward" itemValue="Flight Steward"  />
+                                        <f:selectItem itemLabel="Captain" itemValue="Captain"  />
+                                        <f:selectItem itemLabel="First Officer" itemValue="First Officer"  />
+                                        <f:selectItem itemLabel="Observer" itemValue="Observer"  />
                                     </h:selectOneMenu>
 
 
@@ -227,12 +227,12 @@
 
                                 <div class="form-group" style="margin-left:95px">
                                     <b>Languages:</b>
-                                    <p:selectManyCheckbox id="grid" value="#{employeeManageBean.languages}" layout="grid" columns="4">
-                                        <f:selectItem itemLabel="Chinese" itemValue="Chinese" />
-                                        <f:selectItem itemLabel="Japanese" itemValue="Japanese" />
-                                        <f:selectItem itemLabel="Korean" itemValue="Korean" />
-                                        <f:selectItem itemLabel="French" itemValue="French" />
-                                        <f:selectItem itemLabel="Italian" itemValue="Italian" />
+                                    <p:selectManyCheckbox id="grid" value="#{employeeManageBean.skills}" layout="grid" columns="4">
+                                        <f:selectItem itemLabel="A380" itemValue="A380" />
+                                        <f:selectItem itemLabel="A330" itemValue="A330" />
+                                        <f:selectItem itemLabel="A340" itemValue="A340" />
+                                        <f:selectItem itemLabel="B777" itemValue="B777" />
+                                        <f:selectItem itemLabel="B747" itemValue="B747" />
                                     </p:selectManyCheckbox>
 
                                 </div>   
@@ -240,7 +240,7 @@
                         </div>
 
                         <div class="text-center">
-                            <h:commandButton class="btn btn-outline btn-success" value="Save Information" actionListener="#{employeeManageBean.addCabinCrew}"/>
+                            <h:commandButton class="btn btn-outline btn-success" value="Save Information" actionListener="#{employeeManageBean.addPilot}"/>
                         </div>
 
 

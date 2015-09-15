@@ -55,10 +55,11 @@ public class EmployeeManageBean {
     //SimpleDateFormat format=new SimpleDateFormat("yyyy-mm-dd");
     Date employeeDOB;
     
-   //For Cabin Crew
+   //For Cabin Crew and pilot
     private String experience;
     private String position;
-    private List<String> languages;
+    private List<String> languages; //cabin crew
+     private List<String> skills; //pilot eg. licence to fly a380 etc
     
     
     private boolean pwdChangeStatus;
@@ -95,6 +96,15 @@ public class EmployeeManageBean {
         employeeSessionBean.addCabinCrew(employeeID,employeeDisplayFirstName, employeeDisplayLastName
                 , employeeDepartment, employeeDOB, employeeGender, employeeHpNumber,
                 employeeMailingAddress, employeeOfficeNumber, employeePrivateEmail,experience,languages, position);
+   
+        employeeSessionBean.hashPwd(employeeID);
+    }
+    
+     public void addPilot(ActionEvent event){
+  
+        employeeSessionBean.addPilot(employeeID,employeeDisplayFirstName, employeeDisplayLastName
+                , employeeDepartment, employeeDOB, employeeGender, employeeHpNumber,
+                employeeMailingAddress, employeeOfficeNumber, employeePrivateEmail,experience,skills, position);
    
         employeeSessionBean.hashPwd(employeeID);
     }
@@ -300,6 +310,14 @@ public class EmployeeManageBean {
 
     public void setLanguages(List<String> languages) {
         this.languages = languages;
+    }
+
+    public List<String> getSkills() {
+        return skills;
+    }
+
+    public void setSkills(List<String> skills) {
+        this.skills = skills;
     }
     
     

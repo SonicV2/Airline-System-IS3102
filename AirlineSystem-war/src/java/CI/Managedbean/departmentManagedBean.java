@@ -60,11 +60,11 @@ public class departmentManagedBean {
     public void addDepartment(ActionEvent event) {
         FacesMessage message = null;
 
-//         departmentSessionBean.addDepartment(departmentName, departmentLocation);
-//            clear();
+         departmentSessionBean.addDepartment(departmentName, departmentLocation);
+           clear();
        
        //Comment out if first time set up     
-        List<OrganizationUnit> depts = departmentSessionBean.retrieveAllDepts();
+       /* List<OrganizationUnit> depts = departmentSessionBean.retrieveAllDepts();
         
         System.out.println("----------All Dept size: " + depts.size());
 
@@ -77,7 +77,7 @@ public class departmentManagedBean {
             }
         }
         departmentSessionBean.addDepartment(departmentName, departmentLocation);
-        clear();
+        clear();*/
         message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Department Created Successfully!", "");
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
@@ -117,6 +117,7 @@ public class departmentManagedBean {
         }
     }
 
+   
     @PostConstruct
     public void retrive() {
         setDepartments(departmentSessionBean.retrive());
@@ -124,18 +125,20 @@ public class departmentManagedBean {
 
         setOrgUnits(departmentSessionBean.retrieveAllDepts());
         
-        retriveCC();
+        retriveCC();  //comment out first time adding
     }
     
     public void retriveCC(){
         //setDepartments(departmentSessionBean.retrive());
         for(String s : departments){
-            if(s.substring(0,s.indexOf("(")).equals("Flight Crew")){
+            if(s.substring(0,s.indexOf("(")).equals("FLIGHT CREW")){
                 CCdepartments.add(s);
             }
         }
         
     }
+    
+    
 
     public String getDepartmentName() {
         return departmentName;
