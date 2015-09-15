@@ -30,7 +30,7 @@ public class RevenueManagement implements RevenueManagementLocal{
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
     public int[] generateAvailability(int economy, int business, int firstClass){
-        int[] seats = new int[4];
+        int[] seats = new int[5];
         seats[0]= (economy/3)+5;
         seats[1]= (economy/3)+5;
         seats[2]= (economy/3)+5;
@@ -44,15 +44,31 @@ public class RevenueManagement implements RevenueManagementLocal{
         
         SeatAvailability sa = new SeatAvailability();
         int[] seats = generateAvailability(40,20,10);
+        System.out.println(flightDate);
         int day = Integer.parseInt(flightDate.substring(0,2));
+        System.out.println(day);
         int month = Integer.parseInt(flightDate.substring(2,4));
+        System.out.println(month);
         int year = Integer.parseInt(flightDate.substring(4));
+        System.out.println(year);
         int hour = Integer.parseInt(flightTime.substring(0,2));
+        System.out.println(hour);
         int min = Integer.parseInt(flightTime.substring(2));
-        cflightDate.set(year,month,day,hour,min);
+        System.out.println(min);
+        //cflightDate.set(year,month,day,hour,min);
+        System.out.println("Create Availability()!!!!!!");
+        createSQ001();
         Flight flight= em.find(Flight.class,flightNo);
         sa.createSeatAvail(flight, seats, rDate, cflightDate.getTime());
         em.persist(sa);
+        System.out.println("Seat Availability Persisted!!!!!!");
+    }
+    
+    public void createSQ001(){
+        Flight flight= new Flight();
+        
+        flight.createFlight("SQ001", "10", "10", 5.0, 100.0);
+        em.persist(flight);
     }
     
     public int getPrice(Date fDate, String serviceClass, int realSold){
