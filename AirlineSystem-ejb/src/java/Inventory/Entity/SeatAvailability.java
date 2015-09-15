@@ -44,8 +44,8 @@ public class SeatAvailability implements Serializable {
     private int firstClassBooked;
     @OneToMany(mappedBy="seatAvail")
     private List<Booking> bookings = new ArrayList<Booking>();
-    @OneToOne
-    private Flight flight;
+    
+    private String flightNo;
 
     /**
      * @return the id
@@ -53,11 +53,11 @@ public class SeatAvailability implements Serializable {
     public Long getId() {
         return id;
     }
-    public void createSeatAvail (Flight flight, int []seats, 
+    public void createSeatAvail (String flightNo, int []seats, 
             Date releaseDate, Date flightDate){
         this.releaseDate= releaseDate;
         this.flightDate= flightDate;
-        this.flight= flight;
+        this.flightNo= flightNo;
         this.economySaverTotal = seats[0];
         this.economyBasicTotal = seats[1];
         this.economyPremiumTotal = seats[2];
@@ -261,15 +261,15 @@ public class SeatAvailability implements Serializable {
     /**
      * @return the flight
      */
-    public Flight getFlight() {
-        return flight;
+    public String getFlight() {
+        return flightNo;
     }
 
     /**
      * @param flight the flight to set
      */
-    public void setFlight(Flight flight) {
-        this.flight = flight;
+    public void setFlight(String flightNo) {
+        this.flightNo = flightNo;
     }
 
    

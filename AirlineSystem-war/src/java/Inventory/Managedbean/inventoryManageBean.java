@@ -13,6 +13,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.event.ActionEvent;
 
+
 /**
  *
  * @author HOULIANG
@@ -24,6 +25,7 @@ import javax.faces.event.ActionEvent;
 public class inventoryManageBean {
     @EJB
     private RevenueManagementLocal rm;
+   
     
     
     private String flightNo;
@@ -31,8 +33,9 @@ public class inventoryManageBean {
     private String flightDate;
    
     
-    public void createFlightSession(){
-        rm.createAvailability(getFlightNo(), getFlightDate(), getFlightTime());
+    public void createFlightSession(ActionEvent event){
+        System.out.println("Managed Bean reached!");
+        rm.createAvailability(flightNo, flightDate, flightTime);
     }
 
     /**

@@ -30,7 +30,7 @@ public class FlightSessionBean implements FlightSessionBeanLocal {
     public void addFlight(String flightNo, String flightDays, String timeslot, double flightDuration, double basicFare, Date planStartDate) {
         ArrayList<Schedule> schedules = new ArrayList<Schedule>();
         Schedule sc = new Schedule();
-        flight.createFlight(flightNo, flightDays, timeslot, flightDuration, basicFare, planStartDate);
+        flight.createFlight(flightNo, flightDays, timeslot, flightDuration, basicFare);
         //Forecast the last date of the flight in 6 months
         TimeZone tz = getTimeZone("GMT+8:00"); //Set Timezone to Singapore
         Calendar cal = Calendar.getInstance(tz);

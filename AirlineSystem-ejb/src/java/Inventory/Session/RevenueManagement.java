@@ -12,7 +12,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import Inventory.Entity.SeatAvailability;
 import APS.Entity.Flight;
+import CI.Entity.Employee;
 import Inventory.Entity.BookingClass;
+import javax.persistence.PersistenceContext;
 
 
 /**
@@ -20,15 +22,18 @@ import Inventory.Entity.BookingClass;
  * @author YiQuan
  */
 @Stateless
-@LocalBean
 public class RevenueManagement implements RevenueManagementLocal{
     
-    private Calendar cflightDate;
-    private Date rDate;
+    
+    @PersistenceContext(unitName = "AirlineSystem-ejbPU")
     private EntityManager em;
+    private Date rDate;
+    
+    
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
+    @Override
     public int[] generateAvailability(int economy, int business, int firstClass){
         int[] seats = new int[5];
         seats[0]= (economy/3)+5;
@@ -39,6 +44,7 @@ public class RevenueManagement implements RevenueManagementLocal{
         return seats;
     }
     
+    @Override
     public void createAvailability(String flightNo, String flightDate, 
             String flightTime){
         
@@ -55,20 +61,22 @@ public class RevenueManagement implements RevenueManagementLocal{
         System.out.println(hour);
         int min = Integer.parseInt(flightTime.substring(2));
         System.out.println(min);
-        //cflightDate.set(year,month,day,hour,min);
+        Calendar cflightDate = Calendar.getInstance();
+        System.out.println(cflightDate.getTime());
+        cflightDate.set(year,month,day,hour,min);
+        System.out.println(cflightDate.getTime());
         System.out.println("Create Availability()!!!!!!");
-        createSQ001();
-        Flight flight= em.find(Flight.class,flightNo);
-        sa.createSeatAvail(flight, seats, rDate, cflightDate.getTime());
+        sa.createSeatAvail(flightNo, seats, rDate, cflightDate.getTime());
         em.persist(sa);
         System.out.println("Seat Availability Persisted!!!!!!");
     }
     
     public void createSQ001(){
         Flight flight= new Flight();
-        
+        Employee employee = new Employee();
+        employee.setEmployeeID("12345");
         flight.createFlight("SQ001", "10", "10", 5.0, 100.0);
-        em.persist(flight);
+        em.persist(employee);
     }
     
     public int getPrice(Date fDate, String serviceClass, int realSold){
@@ -95,6 +103,10 @@ public class RevenueManagement implements RevenueManagementLocal{
             return 100;
         }
         
+    }
+
+    public void persist(Object object) {
+        em.persist(object);
     }
     
     

@@ -11,14 +11,15 @@ import Inventory.Entity.BookingClass;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.EntityExistsException;
+import javax.persistence.PersistenceContext;
 /**
  *
  * @author YiQuan
  */
 @Stateless
-@LocalBean
 public class ClassManagement implements ClassManagementLocal {
     
+    @PersistenceContext(unitName = "AirlineSystem-ejbPU")
     private EntityManager em;
     
     public void addClassCode(String classcode, int pricePercent, int advancedSales
