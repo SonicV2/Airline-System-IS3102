@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    
+    <h:head>
+        <title>Create Flight Session</title>
+    </h:head>
+    <h:body>
+        <p:inputText placeholder="Flight No" value="#{inventoryManageBean.flightNo}"  />
+        <br/>
+        <p:inputText placeholder="Flight Date DDMMYYYY" value="#{inventoryManageBean.flightTime}"  />
+        <br/>
+        <p:inputText placeholder="Flight Time HHMM" value="#{inventoryManageBean.flightDate}"  />
+        <br/>
+        <p:commandButton class="btn btn-primary btn-lg btn-block" value="Submit" 
+                         action="#{inventoryManagedBean.createFlightSession}" />
+    </h:body>
+</html>
+
