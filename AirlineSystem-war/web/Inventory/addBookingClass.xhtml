@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Add Booking Class</title>
+    </h:head>
+    <h:body>
+         <h:form class="form col-md-12 center-block">
+                            <div class="form-group">
+                                <p:outputLabel value="Booking Class Code: " />
+                                <p:inputText class="form-control input-lg" value="#{classManageBean.classcode}"  />
+                                <br/>
+                               
+                             </div>
+                            
+                            <div class="form-group">
+                                <p:outputLabel value="Percentage of Base Fare" />
+                                <p:inputText class="form-control input-lg" value="#{classManageBean.pricePercent}" />
+                                <br/>
+                                
+                            </div>
+             
+                            <div class="form-group">
+                                <p:outputLabel value="Percentage of Base Fare" />
+                                <p:inputText class="form-control input-lg" value="#{classManageBean.pricePercent}" />
+                                <br/>
+                                
+                            </div>  
+                            <div class="form-group">
+                                <p:outputLabel value="Days of Advanced Sales" />
+                                <p:inputText class="form-control input-lg" value="#{classManageBean.advancedSales}" />
+                                <br/>
+                                
+                            </div> 
+                            <div class="form-group">
+                                <p:outputLabel value="Percentage of total tickets sold" />
+                                <p:inputText class="form-control input-lg" value="#{classManageBean.percentSold}" />
+                                <br/>
+                                
+                            </div> 
+                            <div class="form-group">
+                                <p:outputLabel value="Service Class" />
+                                <p:inputText class="form-control input-lg" value="#{classManageBean.serviceClass}" />
+                                <br/>
+                                
+                            </div> 
+                            <div class="form-group">
+                                <p:outputLabel value="Able to rebook without cost" />
+                                <p:inputText class="form-control input-lg" value="#{classManageBean.rebook}" />
+                                <br/>
+                                
+                            </div> 
+                            <div class="form-group">
+                                <p:outputLabel value="Baggage Class" />
+                                <p:inputText class="form-control input-lg" value="#{classManageBean.baggage}" />
+                                <br/>
+                                
+                            </div> 
+                            <div class="form-group">
+                                <p:outputLabel value="Amount of Mileage Accruable in Percentage" />
+                                <p:inputText class="form-control input-lg" value="#{classManageBean.millageAccru}" />
+                                <br/>
+                                
+                            </div> 
+           
+                             <div>
+                                 <h:commandButton class="btn btn-primary btn-lg btn-block" value="Add" actionListener="#{classManageBean.addClass}"/>
+
+                               
+                            </div>
+       </h:form>
+    </h:body>
+</html>
+
