@@ -21,7 +21,7 @@ import Inventory.Entity.BookingClass;
  */
 @Stateless
 @LocalBean
-public class RevenueManagement {
+public class RevenueManagement implements RevenueManagementLocal{
     
     private Calendar cflightDate;
     private Date rDate;

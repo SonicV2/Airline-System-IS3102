@@ -17,7 +17,7 @@ import javax.persistence.EntityExistsException;
  */
 @Stateless
 @LocalBean
-public class ClassManagement {
+public class ClassManagement implements ClassManagementLocal {
     
     private EntityManager em;
     
