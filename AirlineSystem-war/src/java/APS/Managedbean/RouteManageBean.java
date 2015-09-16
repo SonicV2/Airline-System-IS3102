@@ -52,7 +52,8 @@ public class RouteManageBean {
     
     private List<Location> locations;
     private List<Route> routes;
-    
+    private Route selectedRoute;
+
     List<Location> searchedLocations;
 
     
@@ -91,7 +92,9 @@ public class RouteManageBean {
     }
 
     public void removeRoute(ActionEvent event){
-        routeSessionBean.deleteRoute(routeId);
+        routes.remove(selectedRoute);
+        routeSessionBean.deleteRoute(selectedRoute.getRouteId());
+        selectedRoute = null;
     }
     
     public String getSearchCountry() {
@@ -116,6 +119,14 @@ public class RouteManageBean {
      
     public void setRoutes(List<Route> routes) {
         this.routes = routes;
+    }
+
+    public Route getSelectedRoute() {
+        return selectedRoute;
+    }
+ 
+    public void setSelectedRoute(Route selectedRoute) {
+        this.selectedRoute = selectedRoute;
     }
     
     public Long getRouteId() {

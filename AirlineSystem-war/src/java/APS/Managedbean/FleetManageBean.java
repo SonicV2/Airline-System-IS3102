@@ -15,8 +15,10 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.Dependent;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
 /**
@@ -46,10 +48,12 @@ public class FleetManageBean {
     int totalStaff;
     double cost;
     double fuelCost;
+    FacesMessage message;
     
     
     private List<AircraftType> aircraftTypes = new ArrayList<AircraftType>();
     private List<Aircraft> aircrafts;
+    private Aircraft selectedAircraft;
     
     
     public FleetManageBean() {
@@ -67,11 +71,19 @@ public class FleetManageBean {
     
     /*This is for admin to acquire new aircraft*/
     public void acquireAircraft(ActionEvent event){
+        if (fleetSessionBean.getAircraftType(aircraftTypeId) == null) {
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "No such aircraft type!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return;
+        }
         fleetSessionBean.acquireAircraft(datePurchased, lastMaintained, aircraftTypeId);
     }
 
     public void retireAircraft(ActionEvent event){
-        fleetSessionBean.retireAircraft(tailNo);
+        
+        aircrafts.remove(selectedAircraft);
+        fleetSessionBean.retireAircraft(selectedAircraft.getTailNo());
+        selectedAircraft = null;
     }
     
     public List<Aircraft> getAircrafts(){
@@ -80,6 +92,14 @@ public class FleetManageBean {
      
     public void setAircrafts(List<Aircraft> aircrafts) {
         this.aircrafts = aircrafts;
+    }
+    
+    public Aircraft getSelectedAircraft() {
+        return selectedAircraft;
+    }
+ 
+    public void setSelectedAircraft(Aircraft selectedAircraft) {
+        this.selectedAircraft = selectedAircraft;
     }
     
     public Date getDatePurchased() {

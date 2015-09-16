@@ -1,79 +1,46 @@
-<?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
-
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    
     <h:head>
-        <title>Add Route</title>
+    <title>Add Route</title>
     </h:head>
     
-    <h:body>
-  
-        <p:dataTable var="location" value="#{routeManageBean.locations}" paginator="true" rows="10">
-            
-            
-            <p:column headerText="Country">
-                <h:outputText value="#{location.country}" />
-            </p:column>
-            
-            <p:column headerText="City">
-                <h:outputText value="#{location.city}" />
-            </p:column>
-               
-            <p:column headerText="IATA">
-                <h:outputText value="#{location.IATA}" />
-            </p:column>
-
-        </p:dataTable>
+    <body>
         
-        
-        <h:form class="col-md-6">
-                <div class="panel-body">
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <div class="input-group custom-search-form">
-                                <p:inputText class="form-control" placeholder="Search by Country..." value="#{routeManageBean.searchCountry}"/>
-                                <span class="input-group-btn">
-                                    <h:commandButton class="btn btn-primary btn-block" value="Search" actionListener="#{routeManageBean.searchByCountry}"/>
-                                </span>
-                            </div>
-                            <div class="input-group custom-search-form">
-                                <p:inputText class="form-control" placeholder="Search by City..." value="#{routeManageBean.searchCity}"/>
-                                <span class="input-group-btn">
-                                    <h:commandButton class="btn btn-primary btn-block" value="Search" actionListener="#{routeManageBean.searchByCity}"/>
-                                </span>
-                            </div>
-                            <br/>                               
-
-
-
-                            <p:dataTable var="search" value="#{routeManageBean.searchedLocations}" paginator="true" rows="10">
-                                <p:column headerText="Country" sortBy="#{search.country}">
-                                    <h:outputText value="#{search.country}" />
-                                </p:column>
-                                
-                                <p:column headerText="City" sortBy="#{search.city}">
-                                    <h:outputText value="#{search.city}" />
-                                </p:column>
-                                
-                                <p:column headerText="IATA" sortBy="#{search.IATA}">
-                                    <h:outputText value="#{search.IATA}" />
-                                </p:column>
-
-                            </p:dataTable>
-
-                            <br></br>
-
-                        </div>
-
-                        <br/>                               
-
-                    </div>
-                </div>
-                       
-        </h:form>
+    <h:form>
+    <p:dataTable var="location" value="#{routeManageBean.locations}" widgetVar="locationsTable" paginator="true" rows="10">
  
+        <f:facet name="header">
+            <p:outputPanel>
+                <h:outputText value="Search all fields:" />
+                <p:inputText id="globalFilter" onkeyup="PF('locationsTable').filter()" style="width:150px" placeholder="Enter keyword"/>
+            </p:outputPanel>
+        </f:facet>
+ 
+        <p:column filterBy="#{location.country}" headerText="Country" filterMatchMode="contains">
+            <h:outputText value="#{location.country}" />
+        </p:column>
+ 
+        <p:column filterBy="#{location.city}" headerText="City" filterMatchMode="contains">
+            <h:outputText value="#{location.city}" />
+        </p:column>
+        
+        <p:column filterBy="#{location.IATA}" headerText="IATA" filterMatchMode="contains">
+            <h:outputText value="#{location.IATA}" />
+        </p:column>
+        
+    </p:dataTable>
+</h:form>
+        
         <h:form class="form col-md-12 center-block">
                             
              
@@ -95,8 +62,6 @@
                                  <h:commandButton class="btn btn-primary btn-lg btn-block" value="Add" actionListener="#{routeManageBean.addRoute}"/>
                              </div>
             
-            
        </h:form>
-    </h:body>
+    </body>
 </html>
-
