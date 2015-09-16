@@ -27,25 +27,25 @@ public class FlightSessionBean implements FlightSessionBeanLocal {
     Flight flight;
 
     @Override
-    public void addFlight(String flightNo, String flightDays, String timeslot, double flightDuration, double basicFare, Date planStartDate) {
+    public void addFlight(String flightNo, String flightDays, double flightDuration, double basicFare, Date startDateTime) {
         ArrayList<Schedule> schedules = new ArrayList<Schedule>();
         Schedule sc = new Schedule();
-        flight.createFlight(flightNo, flightDays, timeslot, flightDuration, basicFare, planStartDate);
+        flight.createFlight(flightNo, flightDays, flightDuration, basicFare, startDateTime);
         //Forecast the last date of the flight in 6 months
         TimeZone tz = getTimeZone("GMT+8:00"); //Set Timezone to Singapore
         Calendar cal = Calendar.getInstance(tz);
-        cal.setTime(planStartDate);
+        cal.setTime(startDateTime);
         cal.add(Calendar.MONTH, 6);
         Date planEndDate = cal.getTime();
 
         //Create the array of schedule
         Calendar curr = Calendar.getInstance(tz);
-        curr.setTime(planStartDate);
-        Date counter = planStartDate;
+        curr.setTime(startDateTime);
+        Date counter = startDateTime;
         //Break up the hour and minutes
         int flightHr = (int) flightDuration;
         int flightMin = (int) ((flightDuration - (double) flightHr) * 60);
-        
+
         //Add a list schedule until 6 months later
         while (curr.before(planEndDate)) {
             int day = curr.get(Calendar.DAY_OF_WEEK);
@@ -76,7 +76,7 @@ public class FlightSessionBean implements FlightSessionBeanLocal {
         flight = new Flight();
         try {
 
-            Query q = em.createQuery("SELECT a FROM Location " + "AS a WHERE a.flightNo=:flightNo");
+            Query q = em.createQuery("SELECT a FROM Flight " + "AS a WHERE a.flightNo=:flightNo");
             q.setParameter("flightNo", flightNo);
 
             List results = q.getResultList();
@@ -91,6 +91,28 @@ public class FlightSessionBean implements FlightSessionBeanLocal {
             System.out.println("\nEntity not found error" + "enfe.getMessage()");
         }
         return flight;
+    }
+
+    @Override
+    public List<Flight> getflights() {
+        List<Flight> flights = new ArrayList<Flight>();
+        try {
+
+            Query q = em.createQuery("SELECT a FROM Flight a");
+
+            List<Flight> results = q.getResultList();
+            if (!results.isEmpty()) {
+                flights = results;
+
+            } else {
+                flight = null;
+                System.out.println("No Flights Added!");
+            }
+
+        } catch (EntityNotFoundException enfe) {
+            System.out.println("\nEntity not found error" + "enfe.getMessage()");
+        }
+        return flights;
     }
 
 }
