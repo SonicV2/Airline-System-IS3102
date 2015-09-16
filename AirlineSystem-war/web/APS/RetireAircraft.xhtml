@@ -43,6 +43,10 @@
                 <p:column filterBy="#{aircraft.lastMaintained}" headerText="Date of Maintenance" filterMatchMode="contains">
                     <h:outputText value="#{aircraft.lastMaintained}" />
                 </p:column>
+                
+                <p:column filterBy="#{aircraft.status}" headerText="Status" filterMatchMode="contains">
+                    <h:outputText value="#{aircraft.status}" />
+                </p:column>
             
                 
             </p:dataTable>
