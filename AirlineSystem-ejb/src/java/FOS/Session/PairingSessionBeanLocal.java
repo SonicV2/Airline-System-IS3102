@@ -14,4 +14,5 @@ import javax.ejb.Local;
 @Local
 public interface PairingSessionBeanLocal {
    public void  legMain();
+     public void setPolicy();
 }

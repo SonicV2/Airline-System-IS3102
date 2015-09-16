@@ -5,15 +5,19 @@
  */
 package FOS.Session;
 
+import CI.Entity.OrganizationUnit;
 import FOS.Entity.Leg;
+import FOS.Entity.PairingPolicy;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -25,9 +29,13 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
     @PersistenceContext(unitName = "AirlineSystem-ejbPU")
     private EntityManager em;
 
-    final static int TIME_SCALE_MIN = 60;//minimum stop over time between two flight legs (2 hrs)
-    final static int NUM_MAX_LEGS = 3; // Maximum flight legs in a pair
-    final static int HOURS_MAX_FLIGHT = 1200; // Maximum flight hrs in a pair ( 12 hrs)
+//    final static int TIME_SCALE_MIN = 60;//minimum stop over time between two flight legs (2 hrs)
+//    final static int NUM_MAX_LEGS = 3; // Maximum flight legs in a pair
+//    final static int HOURS_MAX_FLIGHT = 1200; // Maximum flight hrs in a pair ( 12 hrs)
+    
+     private int time_scale_min; 
+     private int num_max_legs;
+     private int hours_max_flight;
 
     @Override
     public void legMain() {
@@ -130,25 +138,26 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
 
     }
 
-    private static void sortList(ArrayList<Leg> legs) {
+    private void sortList(ArrayList<Leg> legs) {
         Collections.sort(legs);
     }
 
     //it returns a leg the fulfills the condition
-    public static Leg searchSol(ArrayList<Leg> legs, String destination, int startHour, int finishHour, String date,
+    public  Leg searchSol(ArrayList<Leg> legs, String destination, int startHour, int finishHour, String date,
             int numLegs, int numHourFlight) {
         Leg sol = null;
         boolean found = false;
         int hours = 0;
         int sum = 0;
+         setPolicy();
         for (Leg i : legs) {
             if ((i.getDate1().equals(date)) && (i.getOrigin().equals(destination))
-                    && ((calcDifMin(finishHour, i.getStartHour())) > TIME_SCALE_MIN) && (i.getStartHour() > startHour)
-                    && (numLegs < NUM_MAX_LEGS) && (numHourFlight <= HOURS_MAX_FLIGHT)) {
+                    && ((calcDifMin(finishHour, i.getStartHour())) > getTime_scale_min()) && (i.getStartHour() > startHour)
+                    && (numLegs < getNum_max_legs()) && (numHourFlight <= getHours_max_flight())) {
                 hours = calcFlightHours(i.getStartHour(), i.getFinishHour());
                 sum = sum + hours;
                 sum = addFlightHours(sum, numHourFlight);
-                if ((found == false) && (sum <= HOURS_MAX_FLIGHT)) {
+                if ((found == false) && (sum <= getHours_max_flight())) {
                     sol = i;
                     found = true;
                 }
@@ -157,7 +166,7 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
         return sol;
     }
 
-    public static String showSol(ArrayList<Leg> leg, int numSol, int hFlight) {
+    public  String showSol(ArrayList<Leg> leg, int numSol, int hFlight) {
         String sol = "";
         String date = " date =  ";
         String f = "";
@@ -212,7 +221,7 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
         return sol;
     }
 
-    public static void saveSolution(String solution, String archive) {
+    public void saveSolution(String solution, String archive) {
         try {
             FileWriter flS = new FileWriter(archive, true);
             BufferedWriter fS = new BufferedWriter(flS);
@@ -223,7 +232,7 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
         }
     }
 
-    public static int calcFlightHours(int startHour, int finishHour) {
+    public  int calcFlightHours(int startHour, int finishHour) {
         int minStart = 0;
         int minFin = 0;
         int startHours = 0;
@@ -252,7 +261,7 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
     }
 
     //calculate the time difference in minutes between two last hours
-    public static int calcDifMin(int earlyHour, int FinalHour) {
+    public int calcDifMin(int earlyHour, int FinalHour) {
         int minStart = 0;
         int minFin = 0;
         int startHour = 0;
@@ -293,6 +302,61 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
         totalM = totalMin % 60;
         totalTime = (totalH * 100) + totalM;
         return totalTime;
+    }
+    
+    @Override
+    public void setPolicy(){
+        //PairingPolicy pp = new PairingPolicy();
+        
+        Query q = em.createQuery("SELECT p FROM PairingPolicy p");
+         List<PairingPolicy> results = q.getResultList();
+          PairingPolicy pp = (PairingPolicy) results.get(0);
+        
+        setTime_scale_min(pp.getTime_scale_min());
+        setNum_max_legs(pp.getNum_max_legs());
+        setHours_max_flight(pp.getHours_max_flight());
+    }
+
+    /**
+     * @return the time_scale_min
+     */
+    public int getTime_scale_min() {
+        return time_scale_min;
+    }
+
+    /**
+     * @param time_scale_min the time_scale_min to set
+     */
+    public void setTime_scale_min(int time_scale_min) {
+        this.time_scale_min = time_scale_min;
+    }
+
+    /**
+     * @return the num_max_legs
+     */
+    public int getNum_max_legs() {
+        return num_max_legs;
+    }
+
+    /**
+     * @param num_max_legs the num_max_legs to set
+     */
+    public void setNum_max_legs(int num_max_legs) {
+        this.num_max_legs = num_max_legs;
+    }
+
+    /**
+     * @return the hours_max_flight
+     */
+    public int getHours_max_flight() {
+        return hours_max_flight;
+    }
+
+    /**
+     * @param hours_max_flight the hours_max_flight to set
+     */
+    public void setHours_max_flight(int hours_max_flight) {
+        this.hours_max_flight = hours_max_flight;
     }
 
 }
