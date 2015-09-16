@@ -1,15 +1,61 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
     <h:head>
         <title>Crew Pairing</title>
     </h:head>
     <h:body>
         <h2> Welcome to Crew Pairing System</h2>
         <h:form>
-           <h:commandButton value="Show" actionListener="#{crewScheduleManagedBean.showPolicy}"/>
-        <h:commandButton value="Submit" actionListener="#{crewScheduleManagedBean.crewPairing}"/>
+            <p:growl id="growl" sticky="true" showDetail="true"/>
+            
+            
+            <h:outputLabel value="Max Flight Hours: "/>
+            <h:outputLabel value="#{crewScheduleManagedBean.pp.hours_max_flight}"/>
+            <br/><br/>
+
+            <h:outputLabel value="Max number of legs: "/>
+            <h:outputLabel value="#{crewScheduleManagedBean.pp.num_max_legs}"/>
+            <br/><br/>
+
+
+            <h:outputLabel value="Min stopover time: "/>
+            <h:outputLabel value="#{crewScheduleManagedBean.pp.time_scale_min}"/>
+            <br/><br/>
+            <h:commandButton value="Retrieve" actionListener="#{crewScheduleManagedBean.retrivePolicy}"/>
+
+
+            <br/><br/>
+
+            <p:outputLabel value="Max Flight Hours: " />
+            <p:inputText id="a" required="true" requiredMessage="Please fill in this field!" class="form-control input-lg" placeholder="Max Flight Hours" value="#{crewScheduleManagedBean.hours_max_flight}"  />
+            <div class="missingfield">
+                <h:message for="a" />
+            </div>
+
+            <br/>
+
+            <p:outputLabel value="Max number of legs: " />
+            <p:inputText id="b" required="true" requiredMessage="Please fill in this field!"  class="form-control input-lg" placeholder="Max number of legs" value="#{crewScheduleManagedBean.num_max_legs}"  />
+            <div class="missingfield">
+                <h:message for="b" />
+            </div>
+            <br/>
+
+            <p:outputLabel value="Min stopover time: " />
+            <p:inputText id="c" required="true" requiredMessage="Please fill in this field!" class="form-control input-lg" placeholder="Min stopover time" value="#{crewScheduleManagedBean.time_scale_min}"  />
+            <div class="missingfield">
+                <h:message for="c" />
+            </div>
+            <br/>
+
+
+            <h:commandButton value="Change" actionListener="#{crewScheduleManagedBean.changePolicy}"/>
+            <br/><br/>
+            <h:commandButton value="Submit" actionListener="#{crewScheduleManagedBean.crewPairing}"/>
+
         </h:form>
     </h:body>
 </html>

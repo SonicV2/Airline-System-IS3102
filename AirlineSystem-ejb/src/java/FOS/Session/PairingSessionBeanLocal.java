@@ -5,6 +5,7 @@
  */
 package FOS.Session;
 
+import FOS.Entity.PairingPolicy;
 import javax.ejb.Local;
 
 /**
@@ -15,4 +16,8 @@ import javax.ejb.Local;
 public interface PairingSessionBeanLocal {
    public void  legMain();
      public void setPolicy();
+
+    public PairingPolicy retrievePolicy();
+
+    void changePolicy(int maxLeg, int maxFlight, int minStopTime);
 }

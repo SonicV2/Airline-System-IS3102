@@ -5,12 +5,15 @@
  */
 package FOS.ManagedBean;
 
+import FOS.Entity.PairingPolicy;
 import FOS.Session.PairingSessionBeanLocal;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.Dependent;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
 /**
@@ -27,23 +30,38 @@ public class crewScheduleManagedBean {
      private int time_scale_min; 
      private int num_max_legs;
      private int hours_max_flight;
+     private PairingPolicy pp;
     
     /**
      * Creates a new instance of crewScheduleManagedBean
      */
     public crewScheduleManagedBean() {
+        
     }
     
     
-    public void showPolicy(ActionEvent event){
-        pairingSessionBean.setPolicy();
-        
+    public void changePolicy(ActionEvent event){
+         FacesMessage message = null;
+        if(num_max_legs==0 || hours_max_flight==0 ||  time_scale_min==0){
+            
+              message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Field cannot be 0!", "");
+        }else{
+        pairingSessionBean.changePolicy(num_max_legs, hours_max_flight, time_scale_min);
+        message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Change successfully!", "");
+        }
+        FacesContext.getCurrentInstance().addMessage(null, message);
     }
     
     public void crewPairing(ActionEvent event){
         pairingSessionBean.legMain();
     }
 
+    public void retrivePolicy(ActionEvent event){
+        setPp(pairingSessionBean.retrievePolicy());
+    }
+    
+    
+    
     /**
      * @return the time_scale_min
      */
@@ -84,6 +102,20 @@ public class crewScheduleManagedBean {
      */
     public void setHours_max_flight(int hours_max_flight) {
         this.hours_max_flight = hours_max_flight;
+    }
+
+    /**
+     * @return the pp
+     */
+    public PairingPolicy getPp() {
+        return pp;
+    }
+
+    /**
+     * @param pp the pp to set
+     */
+    public void setPp(PairingPolicy pp) {
+        this.pp = pp;
     }
     
 }

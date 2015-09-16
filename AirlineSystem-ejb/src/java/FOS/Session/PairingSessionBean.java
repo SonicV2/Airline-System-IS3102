@@ -305,7 +305,7 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
     }
     
     @Override
-    public void setPolicy(){
+    public void setPolicy(){  //retrive from data base and set the global variables
         //PairingPolicy pp = new PairingPolicy();
         
         Query q = em.createQuery("SELECT p FROM PairingPolicy p");
@@ -316,10 +316,40 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
         setNum_max_legs(pp.getNum_max_legs());
         setHours_max_flight(pp.getHours_max_flight());
     }
+    
+    
+     @Override
+    public void changePolicy(int maxLeg, int maxFlight, int minStopTime) {
+        Query q = em.createQuery("SELECT p FROM PairingPolicy p");
+         List<PairingPolicy> results = q.getResultList();
+          PairingPolicy pp = (PairingPolicy) results.get(0);
+        
+        pp.setNum_max_legs(maxLeg);
+        pp.setHours_max_flight(maxFlight);
+        pp.setTime_scale_min(minStopTime);
+        em.persist(pp);
+        
+        setTime_scale_min(pp.getTime_scale_min());
+        setNum_max_legs(pp.getNum_max_legs());
+        setHours_max_flight(pp.getHours_max_flight());
+        
+    }
+
+    
+    
+     @Override
+    public PairingPolicy retrievePolicy() {
+        Query q = em.createQuery("SELECT p FROM PairingPolicy p");
+         List<PairingPolicy> results = q.getResultList();
+          PairingPolicy pp = (PairingPolicy) results.get(0);
+        
+        return pp;
+    }
 
     /**
      * @return the time_scale_min
      */
+
     public int getTime_scale_min() {
         return time_scale_min;
     }
@@ -358,5 +388,8 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
     public void setHours_max_flight(int hours_max_flight) {
         this.hours_max_flight = hours_max_flight;
     }
+
+   
+   
 
 }
