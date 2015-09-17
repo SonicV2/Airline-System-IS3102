@@ -41,7 +41,7 @@ public class FleetSessionBean implements FleetSessionBeanLocal {
         
         aircraft.setAircraftType(aircraftType);
         
-        aircraft.createAircraft(datePurchased, lastMaintained);
+        aircraft.createAircraft(datePurchased, lastMaintained, "Stand-By");
         
         em.persist(aircraft);
     }
