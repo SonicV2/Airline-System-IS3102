@@ -7,6 +7,7 @@ package FOS.ManagedBean;
 
 import FOS.Entity.PairingPolicy;
 import FOS.Session.PairingSessionBeanLocal;
+import java.util.ArrayList;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.Dependent;
@@ -31,7 +32,8 @@ public class crewScheduleManagedBean {
      private int num_max_legs;
      private int hours_max_flight;
      private PairingPolicy pp;
-    
+    private ArrayList<ArrayList<String>> slns;
+    private String sln;
     /**
      * Creates a new instance of crewScheduleManagedBean
      */
@@ -60,6 +62,16 @@ public class crewScheduleManagedBean {
         setPp(pairingSessionBean.retrievePolicy());
     }
     
+    public void getSlns(ActionEvent event){
+        setSlns(pairingSessionBean.legMain());
+    }
+    
+    public void getSln(ActionEvent event){
+        System.out.println("Look Here! " +sln);
+        String[] str = sln.split(",");
+        System.out.println("1: " +str[0].substring(1)); //to remove the [
+        System.out.println("2: "+ str[3].substring(1)); // to remove the space
+    }
     
     
     /**
@@ -117,5 +129,29 @@ public class crewScheduleManagedBean {
     public void setPp(PairingPolicy pp) {
         this.pp = pp;
     }
+
+    public ArrayList<ArrayList<String>> getSlns() {
+        return slns;
+    }
+
+    public void setSlns(ArrayList<ArrayList<String>> slns) {
+        this.slns = slns;
+    }
+
+    /**
+     * @return the sln
+     */
+    public String getSln() {
+        return sln;
+    }
+
+    /**
+     * @param sln the sln to set
+     */
+    public void setSln(String sln) {
+        this.sln = sln;
+    }
+
+ 
     
 }

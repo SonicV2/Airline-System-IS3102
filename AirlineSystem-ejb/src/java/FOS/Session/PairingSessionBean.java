@@ -13,7 +13,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -32,13 +34,15 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
 //    final static int TIME_SCALE_MIN = 60;//minimum stop over time between two flight legs (2 hrs)
 //    final static int NUM_MAX_LEGS = 3; // Maximum flight legs in a pair
 //    final static int HOURS_MAX_FLIGHT = 1200; // Maximum flight hrs in a pair ( 12 hrs)
+    private int time_scale_min;
+    private int num_max_legs;
+    private int hours_max_flight;
+    private Map<Integer, String> info; // get date,flight
     
-     private int time_scale_min; 
-     private int num_max_legs;
-     private int hours_max_flight;
+    private ArrayList<String> sol1;
 
     @Override
-    public void legMain() {
+    public ArrayList<ArrayList<String>> legMain() {
         System.out.println("-------------Welcome to crew pairing system---------------\n\n\n");
         //long programStart = ElapsedTime.systemTime();
 
@@ -46,7 +50,7 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
         ArrayList<Leg> route = new ArrayList<Leg>();
         Leg l;
         boolean first = true;
-        String solution = "";
+        ArrayList<String> solution;
         int numSols = 0;
         int numLegs = 0;
         int numofFlightHours = 0;
@@ -73,7 +77,9 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
         int finishHour = legs.get(0).getFinishHour();
         String date = legs.get(0).getDate1();
 
-        do {
+        
+        ArrayList<ArrayList<String>> slns = new ArrayList<ArrayList<String>>(); //--- sln list
+         do {
 
             route.clear();
 
@@ -123,19 +129,23 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
                 } else {
 
                     numSols++;
-                    solution = showSol(route, numSols, totalFlightHours);
-
-                    saveSolution(solution, "/Users/smu/Desktop/output.txt");
+                    solution = showSoln(route, numSols, totalFlightHours);
+                    System.out.println("CONTENT: " + info.get(numSols) +"\n");
+                   
+                    slns.add(solution);
+//                    System.out.println("SOLUTIONS: " + slns.size());
+//                    saveSolution(solution, "/Users/smu/Desktop/output.txt");
                     first = true;
                     totalFlightHours = 0;
                 }
             } while (l != null);
         } while (legs.size() > 0);
 
+         
         System.out.println("\n**** END OF PROGRAM ****");
 //		long programEnd = ElapsedTime.systemTime();
 //		System.out.println("Total elapsed time = " + ElapsedTime.calcElapsedHMS(programStart, programEnd));
-
+return slns;
     }
 
     private void sortList(ArrayList<Leg> legs) {
@@ -143,13 +153,13 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
     }
 
     //it returns a leg the fulfills the condition
-    public  Leg searchSol(ArrayList<Leg> legs, String destination, int startHour, int finishHour, String date,
+    public Leg searchSol(ArrayList<Leg> legs, String destination, int startHour, int finishHour, String date,
             int numLegs, int numHourFlight) {
         Leg sol = null;
         boolean found = false;
         int hours = 0;
         int sum = 0;
-         setPolicy();
+        setPolicy();
         for (Leg i : legs) {
             if ((i.getDate1().equals(date)) && (i.getOrigin().equals(destination))
                     && ((calcDifMin(finishHour, i.getStartHour())) > getTime_scale_min()) && (i.getStartHour() > startHour)
@@ -166,34 +176,38 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
         return sol;
     }
 
-    public  String showSol(ArrayList<Leg> leg, int numSol, int hFlight) {
+    public String showSol(ArrayList<Leg> leg, int numSol, int hFlight) {
         String sol = "";
         String date = " date =  ";
+        String date1="";
         String f = "";
         String hoursFlight = " hours of flight performed = ";
         String nLines = " numLines =   ";
+        String nLines1="";
         String sections = "";
         String hours = "";
         String startHour = "";
         String finishHour = "";
         sol += "*******************************************************************" + "********\n";
         if (((numSol / 10) > 0) && ((numSol / 10) < 10)) {
-            sol += "*********************** S O L U T I O N " + numSol + " ***************************\n";
+            sol += "S O L U T I O N " + numSol + ": \n";
         } else if (((numSol / 10) > 9) && ((numSol / 10) < 100)) {
-            sol += "*********************** S O L U T I O N  " + numSol + " **************************\n";
+            sol += "S O L U T I O N  " + numSol + ":\n";
         } else if (((numSol / 10) > 99) && ((numSol / 10) < 1000)) {
-            sol += "*********************** S O L U T I O N  " + numSol + " *************************\n";
+            sol += "S O L U T I O N  " + numSol + ":\n";
         } else {
-            sol += "*********************** S O L U T I O N  " + numSol + " ****************************\n";
+            sol += "S O L U T I O N  " + numSol + ":\n";
         }
 
-        sol += "***************************************************************************\n";
+        sol += "***************************************************************************" +"\n";
         for (int i = 0; i < leg.size(); i++) {
             if (f == "") {
                 f = leg.get(i).getDate1();
                 date += f;
+                date1 +=f; // without the heading date
             }
-            nLines += leg.get(i).getLine() + "       ";
+            nLines += leg.get(i).getLine() + "     ";
+            nLines1  += "|"+leg.get(i).getLine() ;
             if (i == 0) {
                 sections += "         " + leg.get(i).getOrigin() + "------ " + leg.get(i).getDestination();
                 startHour = String.format("%04d", leg.get(i).getStartHour());
@@ -214,13 +228,87 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
         } else {
             resultMinDec = "" + minDecimal;
         }
+       
+        
         sol += "\n" + date + "\n" + hoursFlight + (hFlight / 100) + " hours " + (hFlight % 100) + " minutes" + " ("
                 + (hFlight / 100) + "." + resultMinDec + " hrs )" + "\n\n" + nLines + "\n" + sections + "\n" + hours
                 + "\n\n";
-        System.out.println(sol);
+        
+       // System.out.println(sol);
+        String content = date1+nLines1;
+        info = new HashMap<Integer,String>();
+        info.put(numSol, content);
+        
         return sol;
     }
+    
+    public ArrayList<String> showSoln(ArrayList<Leg> leg, int numSol, int hFlight) {  //unformated
+        String sol = "";
+        String date = "";
+    
+        String f = "";
+    
+        String nLines = "";
+       
+        String sections = "";
+        String hours = "";
+        String startHour = "";
+        String finishHour = "";
+      
+        sol1=new ArrayList<String>();
+        
+        for (int i = 0; i < leg.size(); i++) {
+            if (f == "") {
+                f = leg.get(i).getDate1();
+                date += f;
+            
+            }
+            nLines += leg.get(i).getLine() +" ";
+            
+            if (i == 0) {
+                sections +=leg.get(i).getOrigin() + "---------> " + leg.get(i).getDestination();
+                startHour = String.format("%04d", leg.get(i).getStartHour());
+                finishHour = String.format("%04d", leg.get(i).getFinishHour());
+                hours += " " +startHour + "-" + finishHour;
+            } else {
+                sections += " --------> " + leg.get(i).getDestination();
+                startHour = String.format("%04d", leg.get(i).getStartHour());
+                finishHour = String.format("%04d", leg.get(i).getFinishHour());
+                hours += " " + startHour + "-" + finishHour;
+            }
+        }
 
+        String resultMinDec;
+        int minDecimal = ((hFlight % 100) * 100) / 60;
+        if (minDecimal < 10) {
+            resultMinDec = "0" + minDecimal;
+        } else {
+            resultMinDec = "" + minDecimal;
+        }
+       
+        
+        sol +=  date +  (hFlight / 100)+" hours "+ (hFlight % 100) + " minutes" 
+                + nLines + sections  + hours;
+        
+        sol1.add(date);
+      
+        sol1.add((hFlight / 100)+" hours ");
+        sol1.add((hFlight % 100) + " minutes" );
+        sol1.add(nLines); //flight number
+        sol1.add(sections); //departure arrival
+        sol1.add(hours);
+                     
+       // System.out.println(sol);
+        String content = date+nLines;
+        info = new HashMap<Integer,String>();
+        info.put(numSol, content);
+        
+        return sol1;
+    }
+
+    
+    
+   
     public void saveSolution(String solution, String archive) {
         try {
             FileWriter flS = new FileWriter(archive, true);
@@ -232,7 +320,7 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
         }
     }
 
-    public  int calcFlightHours(int startHour, int finishHour) {
+    public int calcFlightHours(int startHour, int finishHour) {
         int minStart = 0;
         int minFin = 0;
         int startHours = 0;
@@ -303,53 +391,49 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
         totalTime = (totalH * 100) + totalM;
         return totalTime;
     }
-    
+
     @Override
-    public void setPolicy(){  //retrive from data base and set the global variables
+    public void setPolicy() {  //retrive from data base and set the global variables
         //PairingPolicy pp = new PairingPolicy();
-        
+
         Query q = em.createQuery("SELECT p FROM PairingPolicy p");
-         List<PairingPolicy> results = q.getResultList();
-          PairingPolicy pp = (PairingPolicy) results.get(0);
-        
+        List<PairingPolicy> results = q.getResultList();
+        PairingPolicy pp = (PairingPolicy) results.get(0);
+
         setTime_scale_min(pp.getTime_scale_min());
         setNum_max_legs(pp.getNum_max_legs());
         setHours_max_flight(pp.getHours_max_flight());
     }
-    
-    
-     @Override
+
+    @Override
     public void changePolicy(int maxLeg, int maxFlight, int minStopTime) {
         Query q = em.createQuery("SELECT p FROM PairingPolicy p");
-         List<PairingPolicy> results = q.getResultList();
-          PairingPolicy pp = (PairingPolicy) results.get(0);
-        
+        List<PairingPolicy> results = q.getResultList();
+        PairingPolicy pp = (PairingPolicy) results.get(0);
+
         pp.setNum_max_legs(maxLeg);
         pp.setHours_max_flight(maxFlight);
         pp.setTime_scale_min(minStopTime);
         em.persist(pp);
-        
+
         setTime_scale_min(pp.getTime_scale_min());
         setNum_max_legs(pp.getNum_max_legs());
         setHours_max_flight(pp.getHours_max_flight());
-        
+
     }
 
-    
-    
-     @Override
+    @Override
     public PairingPolicy retrievePolicy() {
         Query q = em.createQuery("SELECT p FROM PairingPolicy p");
-         List<PairingPolicy> results = q.getResultList();
-          PairingPolicy pp = (PairingPolicy) results.get(0);
-        
+        List<PairingPolicy> results = q.getResultList();
+        PairingPolicy pp = (PairingPolicy) results.get(0);
+
         return pp;
     }
 
     /**
      * @return the time_scale_min
      */
-
     public int getTime_scale_min() {
         return time_scale_min;
     }
@@ -388,8 +472,5 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
     public void setHours_max_flight(int hours_max_flight) {
         this.hours_max_flight = hours_max_flight;
     }
-
-   
-   
 
 }

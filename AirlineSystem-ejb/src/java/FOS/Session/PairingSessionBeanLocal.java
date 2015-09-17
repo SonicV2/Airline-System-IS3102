@@ -6,6 +6,7 @@
 package FOS.Session;
 
 import FOS.Entity.PairingPolicy;
+import java.util.ArrayList;
 import javax.ejb.Local;
 
 /**
@@ -14,7 +15,7 @@ import javax.ejb.Local;
  */
 @Local
 public interface PairingSessionBeanLocal {
-   public void  legMain();
+   public ArrayList<ArrayList<String>> legMain();
      public void setPolicy();
 
     public PairingPolicy retrievePolicy();
