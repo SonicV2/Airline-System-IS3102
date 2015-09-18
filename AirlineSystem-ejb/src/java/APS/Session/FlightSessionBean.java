@@ -51,7 +51,7 @@ public class FlightSessionBean implements FlightSessionBeanLocal {
             }
         }
         System.out.println(chosenSpeed);
-        flightDuration = route.getDistance()/chosenSpeed;
+        flightDuration = route.getDistance()/(chosenSpeed*1062);
         
         flight.createFlight(flightNo, flightDays, flightDuration, basicFare, startDateTime);
         flight.setRoute(route);
