@@ -7,16 +7,18 @@ package APS.Entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 /**
  *
- * @author Family
+ * @author Yanlong
  */
 @Entity
 public class Aircraft implements Serializable {
@@ -32,6 +34,9 @@ public class Aircraft implements Serializable {
     private String status;
       
     //private Flight flight = new Flight();
+    @ManyToOne(cascade = {CascadeType.PERSIST})
+    private Flight flight = new Flight();
+    @ManyToOne(cascade = {CascadeType.PERSIST})
     private AircraftType aircraftType = new AircraftType();
     
     public void createAircraft(Date datePurchased, Date lastMaintained, String status) {
@@ -72,15 +77,14 @@ public class Aircraft implements Serializable {
         this.status = status;
     }
 
-    /*public Flight getFlight() {
+    public Flight getFlight() {
         return flight;
     }
 
     public void setFlight(Flight flight) {
         this.flight = flight;
-    }*/
+    }
  
-
     public AircraftType getAircraftType() {
         return aircraftType;
     }

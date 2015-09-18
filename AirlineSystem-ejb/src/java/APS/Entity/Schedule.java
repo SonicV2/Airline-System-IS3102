@@ -26,10 +26,10 @@ public class Schedule implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long scheduleId;
     
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date startDate;
     
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date endDate;
    
     private Flight flight = new Flight();
@@ -37,6 +37,7 @@ public class Schedule implements Serializable {
     public void createSchedule(Date startDate, Date endDate){
         this.startDate = startDate;
         this.endDate = endDate;
+        //SET SECONDS TO ZERO
     }
     
     public Long getScheduleId() {
