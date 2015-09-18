@@ -60,11 +60,11 @@ public class departmentManagedBean {
     public void addDepartment(ActionEvent event) {
         FacesMessage message = null;
 
-         departmentSessionBean.addDepartment(departmentName, departmentLocation);
-           clear();
+//         departmentSessionBean.addDepartment(departmentName, departmentLocation);
+//           clear();
        
        //Comment out if first time set up     
-       /* List<OrganizationUnit> depts = departmentSessionBean.retrieveAllDepts();
+        List<OrganizationUnit> depts = departmentSessionBean.retrieveAllDepts();
         
         System.out.println("----------All Dept size: " + depts.size());
 
@@ -77,7 +77,7 @@ public class departmentManagedBean {
             }
         }
         departmentSessionBean.addDepartment(departmentName, departmentLocation);
-        clear();*/
+        clear();
         message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Department Created Successfully!", "");
         FacesContext.getCurrentInstance().addMessage(null, message);
     }

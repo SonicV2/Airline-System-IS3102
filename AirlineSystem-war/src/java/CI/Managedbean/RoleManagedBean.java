@@ -66,6 +66,7 @@ public class RoleManagedBean {
     public void search(ActionEvent event) {
         newroles = new ArrayList<String>(); //to return all the current roles 
         employee = employeeSessionBean.getEmployeeUseID(userID);
+        
         if (employee == null) {
             newroles.add("no such user!");
             //msg="no such user!";

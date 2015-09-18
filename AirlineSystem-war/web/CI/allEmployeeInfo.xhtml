@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <h:head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <h:outputStylesheet library ="css"  name="bootstrap.css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
+        <h:outputStylesheet library="css" name="admindb.css" />
+        <h:outputStylesheet library="css" name="morrisjs/morris.css" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js" />
+
+        <title>All Employee Information</title>
+    </h:head>
+
+    <style>
+        .fixed-size {
+            table-layout: fixed;
+            word-wrap: break-word;
+        }
+        .ui-datatable-tablewrapper {
+            font-size: 90%;
+        }
+    </style>
+
+    <h:body>
+        <!--            To add the same header on all dashboard pages  
+                <ui:include src="dashboardHeader.xhtml"/>-->
+        <!--    To add the same sidebar on all dashboard pages  -->
+        <ui:include src="dashboardSidebar.xhtml"/>
+        <div id="page-wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2 class="page-header">All Employees </h2>
+                </div>
+            </div>
+            <h:form id="employeeForm">
+                <p:growl id="msgs" showDetail="true"/>
+                <p:dataTable var="employee" value="#{adminManagedBean.allEmployees}" editable="true"  sortMode="multiple" widgetVar="employeesTable" >
+
+                    <p:ajax event="rowEdit" listener="#{adminManagedBean.onRowEdit}" update=":employeeForm:msgs" />
+                    <p:ajax event="rowEditCancel" listener="#{adminManagedBean.onRowCancel}" update=":employeeForm:msgs" />
+
+                    <f:facet name="header">
+                        <p:outputPanel>
+                            <h:outputText value="Search by name/department/role: " />
+                            <p:inputText id="globalFilter" onkeyup="PF('employeesTable').filter()" style="width:150px" placeholder="Search..."/>
+                        </p:outputPanel>
+                    </f:facet>
+
+
+                    <p:column headerText="Full Name" filterBy="#{employee.employeeDisplayFirstName} #{employee.employeeDisplayLastName}" filterMatchMode="contains" filterStyle="display:none">
+                        <h:outputText value="#{employee.employeeDisplayFirstName} #{employee.employeeDisplayLastName}" />
+                    </p:column>
+
+                    <p:column headerText="Gender" sortBy="#{employee.employeeGender}">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{employee.employeeGender}" /></f:facet>
+                            <f:facet name="input">
+                                <h:selectOneMenu value="#{employee.employeeGender}" style="width:100%">
+                                    <f:selectItems value="#{adminManagedBean.allGenders}" var="gender" itemLabel="#{gender}" itemValue="#{gender}" />
+                                </h:selectOneMenu>
+                            </f:facet>
+                        </p:cellEditor>
+
+                    </p:column>
+
+                    <p:column headerText = "Department" filterBy="#{employee.organizationUnit.departmentName}" filterMatchMode="contains" filterStyle="display:none">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{employee.organizationUnit.departmentName}" /></f:facet>
+                            <f:facet name="input">
+                                <h:selectOneMenu value="#{adminManagedBean.employeeNewDeptName}" style="width:100%">
+                                    <f:selectItems value="#{adminManagedBean.allDepts}" var="department" itemLabel="#{department}" itemValue="#{department}" />
+                                </h:selectOneMenu>
+                            </f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+
+                    <p:column headerText = "Department Location" sortBy="#{employee.organizationUnit.location}">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{employee.organizationUnit.location}" /></f:facet>
+                            <f:facet name="input">
+                                <h:selectOneMenu value="#{adminManagedBean.employeeNewDeptLocation}" style="width:100%">
+                                    <f:selectItems value="#{adminManagedBean.allDeptLocations}" var="department" itemLabel="#{department}" itemValue="#{department}" />
+                                </h:selectOneMenu>
+                            </f:facet>
+                        </p:cellEditor>
+
+                    </p:column>
+
+                    <p:column headerText = "Role" filterBy="#{employee.roles[0].roleName}" filterMatchMode="contains" filterStyle="display:none" styleClass="fixed-size">
+                        
+                        <ui:repeat var="role" value="#{employee.roles}" >
+                            <h:outputText value="#{role.roleName}" />
+                            <!--if the size is equal to 2, then will add a comma in between-->
+                            <h:outputText value="," rendered="#{employee.roles.size() ==2}"/>
+                        </ui:repeat>
+                    </p:column>
+
+
+                    <p:column headerText="Email Address" sortBy="#{employee.employeeEmailAddress}" styleClass="fixed-size">
+                        <h:outputText value="#{employee.employeeEmailAddress}" />
+                    </p:column>
+
+                    <p:column headerText="Office No">
+                        <h:outputText value="#{employee.employeeOfficeNumber}" />
+                    </p:column>
+
+                    <p:column headerText="Handphone No">
+                        <h:outputText value="#{employee.employeeHpNumber}" />
+                    </p:column>
+
+                    <p:column style="width:32px">
+                        <p:rowEditor />
+                    </p:column>
+
+                </p:dataTable>
+            </h:form>
+        </div>
+    </h:body>
+</html>
