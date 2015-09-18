@@ -16,7 +16,7 @@ import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.inject.Named;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.RowEditEvent;
@@ -30,7 +30,7 @@ import org.primefaces.event.RowEditEvent;
 
 @Named(value = "adminManagedBean")
 @ManagedBean
-@ViewScoped
+@SessionScoped
 public class AdminManagedBean {
 
     @EJB
@@ -48,6 +48,7 @@ public class AdminManagedBean {
     private String employeeNewDeptName;
     private String employeeNewRole;
     private String employeeNewDeptLocation;
+    private Employee anEmployee;
     /**
      * Creates a new instance of adminManagedBean
      */
@@ -82,6 +83,12 @@ public class AdminManagedBean {
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
     
+     
+    public String getEmployeeInfo(String employeeID){
+        anEmployee = employeeSessionBean.getEmployeeUseID(employeeID);
+        System.out.println("From admin managed bean: " + anEmployee.getEmployeeUserName());
+        return "singleEmployeeInfo";
+    }
     
     /**
      * @return the allEmployees
@@ -235,4 +242,19 @@ public class AdminManagedBean {
     public void setEmployeeNewDeptLocation(String employeeNewDeptLocation) {
         this.employeeNewDeptLocation = employeeNewDeptLocation;
     }
+
+    /**
+     * @return the anEmployee
+     */
+    public Employee getAnEmployee() {
+        return anEmployee;
+    }
+
+    /**
+     * @param anEmployee the anEmployee to set
+     */
+    public void setAnEmployee(Employee anEmployee) {
+        this.anEmployee = anEmployee;
+    }
+
 }

@@ -36,7 +36,7 @@ and open the template in the editor.
 
     <h:body>
         <!--            To add the same header on all dashboard pages  -->
-                <ui:include src="dashboardHeader.xhtml"/>
+        <ui:include src="dashboardHeader.xhtml"/>
         <!--    To add the same sidebar on all dashboard pages  -->
         <ui:include src="dashboardSidebar.xhtml"/>
         <div id="page-wrapper">
@@ -105,29 +105,40 @@ and open the template in the editor.
                         <ui:repeat var="role" value="#{employee.roles}" >
                             <h:outputText value="#{role.roleName}" />
                             <!--if the size is equal to 2, then will add a comma in between-->
-                            <h:outputText value="," rendered="#{employee.roles.size() ==2}"/>
+                            <h:outputText value=", " rendered="#{employee.roles.size() ==2}"/>
                         </ui:repeat>
                     </p:column>
 
 
-                    <p:column headerText="Email Address" sortBy="#{employee.employeeEmailAddress}" styleClass="fixed-size">
+<!--                    <p:column headerText="Email Address" sortBy="#{employee.employeeEmailAddress}" styleClass="fixed-size">
                         <h:outputText value="#{employee.employeeEmailAddress}" />
-                    </p:column>
-
-                    <p:column headerText="Office No">
-                        <h:outputText value="#{employee.employeeOfficeNumber}" />
-                    </p:column>
-
-                    <p:column headerText="Handphone No">
-                        <h:outputText value="#{employee.employeeHpNumber}" />
+                    </p:column>-->
+                    <p:column headerText="Access Rights">
+                        <h:selectBooleanCheckbox value="#{employee.roles[0].access.accessAdd}"/>
+                            <h:outputText value="Add"/>
+                        <h:selectBooleanCheckbox value="#{employee.roles[0].access.accessDelete}"/>
+                            <h:outputText value="Delete"/>
+                        <h:selectBooleanCheckbox value="#{employee.roles[0].access.accessCreate}"/>
+                            <h:outputText value="Create"/>
+                        <h:selectBooleanCheckbox value="#{employee.roles[0].access.accessAssign}"/>
+                            <h:outputText value="Update"/>
+                        <h:selectBooleanCheckbox value="#{employee.roles[0].access.accessView}"/>
+                            <h:outputText value="View"/>
                     </p:column>
 
                     <p:column style="width:32px">
                         <p:rowEditor />
                     </p:column>
+                    
+                    <p:column style="width:32px">
+                        <h:commandLink action="#{adminManagedBean.getEmployeeInfo(employee.employeeID)}"><i class="fa fa-eye"></i> </h:commandLink>
+                    </p:column> 
 
                 </p:dataTable>
             </h:form>
         </div>
+        <br></br>
+        
     </h:body>
+    
 </html>
