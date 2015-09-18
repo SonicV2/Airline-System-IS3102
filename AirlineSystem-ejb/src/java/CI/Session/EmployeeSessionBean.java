@@ -400,16 +400,17 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
         String firstName;
         String lastName;
 
+        
         if (firstNameLength >= 5) {
-            firstName = employeeFirstName.substring(0, 5);
+            firstName = employeeFirstName.substring(0, 5).replaceAll("\\s+", "").toLowerCase();
         } else {
-            firstName = employeeFirstName;
+            firstName = employeeFirstName.replaceAll("\\s+", "").toLowerCase();
         }
 
         if (lastNameLength >= 5) {
-            lastName = employeeLastName.substring(0, 5);
+            lastName = employeeLastName.substring(0, 5).replaceAll("\\s+", "").toLowerCase();
         } else {
-            lastName = employeeLastName;
+            lastName = employeeLastName.replaceAll("\\s+", "").toLowerCase();
         }
 
         String userName = firstName + lastName;
