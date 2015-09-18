@@ -37,6 +37,8 @@ public class FleetManageBean {
     Date lastMaintained;
     String aircraftTypeId;
     Long tailNo;
+    String status;
+
     AircraftType aircraftType = new AircraftType();
     
     String id;
@@ -65,9 +67,7 @@ public class FleetManageBean {
         setAircraftTypes(fleetSessionBean.retrieveAircraftTypes());
         setAircrafts(fleetSessionBean.retrieveAircrafts());
         
-    }
-   
-    
+    }   
     
     /*This is for admin to acquire new aircraft*/
     public void acquireAircraft(ActionEvent event){
@@ -80,6 +80,12 @@ public class FleetManageBean {
     }
 
     public void retireAircraft(ActionEvent event){
+        
+        if (!selectedAircraft.getStatus().equals("Stand-By")) {
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Aircraft is not in a status to delete!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return;
+        }
         
         aircrafts.remove(selectedAircraft);
         fleetSessionBean.retireAircraft(selectedAircraft.getTailNo());
@@ -140,6 +146,14 @@ public class FleetManageBean {
     
     public void setTailNo(Long tailNo) {
         this.tailNo = tailNo;
+    }
+    
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
     
     public List<AircraftType> getAircraftTypes(){

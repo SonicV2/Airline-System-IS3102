@@ -12,7 +12,7 @@ import javax.persistence.Query;
 
 /**
  *
- * @author HOULIANG
+ * @author Yunna
  */
 @Stateless
 public class RouteSessionBean implements RouteSessionBeanLocal {

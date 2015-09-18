@@ -30,14 +30,19 @@ public class Aircraft implements Serializable {
     private Date datePurchased;
     @Temporal(TemporalType.DATE)
     private Date lastMaintained;
+    
+    private String status;
+      
+    //private Flight flight = new Flight();
     @ManyToOne(cascade = {CascadeType.PERSIST})
     private Flight flight = new Flight();
     @ManyToOne(cascade = {CascadeType.PERSIST})
     private AircraftType aircraftType = new AircraftType();
     
-    public void createAircraft(Date datePurchased, Date lastMaintained) {
+    public void createAircraft(Date datePurchased, Date lastMaintained, String status) {
         this.datePurchased = datePurchased;
         this.lastMaintained = lastMaintained;
+        this.status = status;
     }
     
     public Long getTailNo() {
@@ -62,6 +67,14 @@ public class Aircraft implements Serializable {
 
     public void setLastMaintained(Date lastMaintained) {
         this.lastMaintained = lastMaintained;
+    }
+    
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public Flight getFlight() {
