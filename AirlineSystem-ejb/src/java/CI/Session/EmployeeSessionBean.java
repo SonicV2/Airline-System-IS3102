@@ -395,20 +395,20 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
 //    System generates user name for new employee Rule: Max letter of first and last name will be 5, repeated username will be append number behind
     @Override
     public String generateUserName(String employeeFirstName, String employeeLastName) {
-        int firstNameLength = employeeFirstName.length();
-        int lastNameLength = employeeLastName.length();
+        int firstNameLength = employeeFirstName.replaceAll("\\s+", "").toLowerCase().length();
+        int lastNameLength = employeeLastName.replaceAll("\\s+", "").toLowerCase().length();
         String firstName;
         String lastName;
-
         
-        if (firstNameLength >= 5) {
-            firstName = employeeFirstName.substring(0, 5).replaceAll("\\s+", "").toLowerCase();
+        
+        if (firstNameLength >= 7) {
+            firstName = employeeFirstName.replaceAll("\\s+", "").toLowerCase().substring(0, 7);
         } else {
             firstName = employeeFirstName.replaceAll("\\s+", "").toLowerCase();
         }
 
         if (lastNameLength >= 5) {
-            lastName = employeeLastName.substring(0, 5).replaceAll("\\s+", "").toLowerCase();
+            lastName = employeeLastName.replaceAll("\\s+", "").toLowerCase().substring(0, 5);
         } else {
             lastName = employeeLastName.replaceAll("\\s+", "").toLowerCase();
         }
