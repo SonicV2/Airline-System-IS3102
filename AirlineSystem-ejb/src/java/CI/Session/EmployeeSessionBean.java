@@ -43,6 +43,31 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
     private Pilot pp; //pilot
     
     @Override
+    public List<Employee> retrieveAllEmployees(){
+        List<Employee> allEmployees = new ArrayList<Employee>();
+        
+        try{
+            Query q = em.createQuery("SELECT a from Employee a");
+            
+            List<Employee> results = q.getResultList();
+            if (!results.isEmpty()){
+                
+                allEmployees = results;
+                
+            }else
+            {
+                allEmployees = null;
+                System.out.println("no employee found!");
+            }
+        }catch (EntityNotFoundException enfe) {
+            System.out.println("\nEntity not found error" + "enfe.getMessage()");
+        }
+       
+        return allEmployees;
+        
+    }
+    
+    @Override
     public void addCabinCrew(String employeeID, String employeeDisplayFirstName, String employeeDisplayLastName,
             String employeeDepartment,Date employeeDOB,String employeeGender, String employeeHpNumber, 
             String employeeMailingAddress, String employeeOfficeNumber, String employeePrivateEmail,
@@ -264,8 +289,6 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
         }
         return role1;
     }
-    
-    
     
     
     public void logLogIn(String userID){
