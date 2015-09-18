@@ -14,6 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import java.util.Date;
+import javax.persistence.CascadeType;
 
 /**
  *
@@ -31,7 +32,8 @@ public class Schedule implements Serializable {
     
     @Temporal(TemporalType.TIMESTAMP)
     private Date endDate;
-   
+    
+    @ManyToOne(cascade = {CascadeType.PERSIST})
     private Flight flight = new Flight();
     
     public void createSchedule(Date startDate, Date endDate){
