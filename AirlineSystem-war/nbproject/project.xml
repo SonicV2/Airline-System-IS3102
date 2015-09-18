@@ -18,11 +18,11 @@
                     <file>${file.reference.AirlineSystem-ejb.jar}</file>
                 </library>
                 <library dirs="200">
-                    <file>${libs.Bootstrap_Lib.classpath}</file>
+                    <file>${libs.Bootstrap Lib.classpath}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">
-                    <file>${libs.PrimeFAces_5.2.classpath}</file>
+                    <file>${libs.PrimeFaces_5.2.classpath}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
             </web-module-libraries>
