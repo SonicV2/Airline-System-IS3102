@@ -7,6 +7,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -28,14 +29,16 @@ public class Flight implements Serializable {
 
     @Temporal(TemporalType.DATE)
     private Date startDateTime;
-
+    
+    @ManyToOne(cascade = {CascadeType.PERSIST})
     private Route route = new Route();
 
     @OneToMany(cascade = {CascadeType.PERSIST}, mappedBy = "flight")
     private List<Schedule> schedule = new ArrayList<Schedule>();
 
-    //@OneToMany(cascade = {CascadeType.PERSIST}, mappedBy = "flight")
-    //private List<Aircraft> aircraft = new ArrayList<Aircraft>();
+    @OneToMany(cascade = {CascadeType.PERSIST}, mappedBy = "flight")
+    private List<Aircraft> aircraft = new ArrayList<Aircraft>();
+    
     public void createFlight(String flightNo, String flightDays, double flightDuration, double basicFare, Date startDateTime) {
         this.flightNo = flightNo;
         this.flightDays = flightDays;
@@ -100,13 +103,13 @@ public class Flight implements Serializable {
         this.route = route;
     }
 
-    /*public List<Aircraft> getAircraft() {
+    public List<Aircraft> getAircraft() {
      return aircraft;
      }
 
      public void setAircraft(List<Aircraft> aircraft) {
      this.aircraft = aircraft;
-     }*/
+     }
     @Override
     public int hashCode() {
         int hash = 0;

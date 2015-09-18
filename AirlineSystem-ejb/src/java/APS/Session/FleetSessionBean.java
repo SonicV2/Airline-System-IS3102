@@ -8,6 +8,7 @@ package APS.Session;
 import javax.ejb.Stateless;
 import APS.Entity.AircraftType;
 import APS.Entity.Aircraft;
+import APS.Entity.Flight;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -27,6 +28,7 @@ public class FleetSessionBean implements FleetSessionBeanLocal {
     private EntityManager em;
     
     private List<AircraftType> aircraftTypeList = new ArrayList<AircraftType>();
+    private Flight flight;
     private Aircraft aircraft;
     private AircraftType aircraftType;
     
@@ -42,7 +44,6 @@ public class FleetSessionBean implements FleetSessionBeanLocal {
         aircraft.setAircraftType(aircraftType);
         
         aircraft.createAircraft(datePurchased, lastMaintained);
-        
         em.persist(aircraft);
     }
 
