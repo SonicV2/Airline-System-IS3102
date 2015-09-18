@@ -41,16 +41,17 @@ public class FlightManageBean {
     private String destinationCity;
     private String destinationIATA;
     private double distance;
-
+    
+    private Route route;
     private List<Route> routes;
     private List<Schedule> schedule;
     
-    
+
     public FlightManageBean() {
     }
 
     public void createFlight(ActionEvent event){
-        flightSessionBean.addFlight(flightNo, flightDays, flightDuration, basicFare, startDateTime);
+        flightSessionBean.addFlight(flightNo, flightDays, flightDuration, basicFare, startDateTime,route);
     }
     
     public String getFlightNo() {

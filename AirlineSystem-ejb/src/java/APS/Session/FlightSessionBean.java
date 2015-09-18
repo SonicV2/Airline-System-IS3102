@@ -1,6 +1,7 @@
 package APS.Session;
 
 import APS.Entity.Flight;
+import APS.Entity.Route;
 import APS.Entity.Schedule;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -27,7 +28,7 @@ public class FlightSessionBean implements FlightSessionBeanLocal {
     Flight flight;
 
     @Override
-    public void addFlight(String flightNo, String flightDays, double flightDuration, double basicFare, Date startDateTime) {
+    public void addFlight(String flightNo, String flightDays, double flightDuration, double basicFare, Date startDateTime, Route route) {
         ArrayList<Schedule> schedules = new ArrayList<Schedule>();
         Schedule sc = new Schedule();
         flight.createFlight(flightNo, flightDays, flightDuration, basicFare, startDateTime);
@@ -62,6 +63,7 @@ public class FlightSessionBean implements FlightSessionBeanLocal {
             counter = curr.getTime();
         }
         flight.setSchedule(schedules);
+        flight.setRoute(route);
         em.persist(flight);
     }
 
