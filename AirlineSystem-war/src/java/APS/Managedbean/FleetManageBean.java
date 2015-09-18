@@ -15,8 +15,10 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.Dependent;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
 /**
@@ -35,6 +37,8 @@ public class FleetManageBean {
     Date lastMaintained;
     String aircraftTypeId;
     Long tailNo;
+    String status;
+
     AircraftType aircraftType = new AircraftType();
     
     String id;
@@ -46,10 +50,12 @@ public class FleetManageBean {
     int totalStaff;
     double cost;
     double fuelCost;
+    FacesMessage message;
     
     
     private List<AircraftType> aircraftTypes = new ArrayList<AircraftType>();
     private List<Aircraft> aircrafts;
+    private Aircraft selectedAircraft;
     
     
     public FleetManageBean() {
@@ -61,17 +67,29 @@ public class FleetManageBean {
         setAircraftTypes(fleetSessionBean.retrieveAircraftTypes());
         setAircrafts(fleetSessionBean.retrieveAircrafts());
         
-    }
-   
-    
+    }   
     
     /*This is for admin to acquire new aircraft*/
     public void acquireAircraft(ActionEvent event){
+        if (fleetSessionBean.getAircraftType(aircraftTypeId) == null) {
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "No such aircraft type!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return;
+        }
         fleetSessionBean.acquireAircraft(datePurchased, lastMaintained, aircraftTypeId);
     }
 
     public void retireAircraft(ActionEvent event){
-        fleetSessionBean.retireAircraft(tailNo);
+        
+        if (!selectedAircraft.getStatus().equals("Stand-By")) {
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Aircraft is not in a status to delete!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return;
+        }
+        
+        aircrafts.remove(selectedAircraft);
+        fleetSessionBean.retireAircraft(selectedAircraft.getTailNo());
+        selectedAircraft = null;
     }
     
     public List<Aircraft> getAircrafts(){
@@ -80,6 +98,14 @@ public class FleetManageBean {
      
     public void setAircrafts(List<Aircraft> aircrafts) {
         this.aircrafts = aircrafts;
+    }
+    
+    public Aircraft getSelectedAircraft() {
+        return selectedAircraft;
+    }
+ 
+    public void setSelectedAircraft(Aircraft selectedAircraft) {
+        this.selectedAircraft = selectedAircraft;
     }
     
     public Date getDatePurchased() {
@@ -120,6 +146,14 @@ public class FleetManageBean {
     
     public void setTailNo(Long tailNo) {
         this.tailNo = tailNo;
+    }
+    
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
     
     public List<AircraftType> getAircraftTypes(){

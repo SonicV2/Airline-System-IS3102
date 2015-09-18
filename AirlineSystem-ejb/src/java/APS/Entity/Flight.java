@@ -23,12 +23,11 @@ public class Flight implements Serializable {
     @Id
     private String flightNo;
     private String flightDays;
-    private String timeslot;
     private double flightDuration;
     private double basicFare;
 
     @Temporal(TemporalType.DATE)
-    private Date planStartDate;
+    private Date startDateTime;
 
     private Route route = new Route();
 
@@ -37,13 +36,12 @@ public class Flight implements Serializable {
 
     //@OneToMany(cascade = {CascadeType.PERSIST}, mappedBy = "flight")
     //private List<Aircraft> aircraft = new ArrayList<Aircraft>();
-    public void createFlight(String flightNo, String flightDays, String timeslot, double flightDuration, double basicFare, Date planStartDate) {
+    public void createFlight(String flightNo, String flightDays, double flightDuration, double basicFare, Date startDateTime) {
         this.flightNo = flightNo;
         this.flightDays = flightDays;
-        this.timeslot = timeslot;
         this.flightDuration = flightDuration;
         this.basicFare = basicFare;
-        this.planStartDate = planStartDate;
+        this.startDateTime = startDateTime;
     }
 
     public String getFlightNo() {
@@ -62,14 +60,6 @@ public class Flight implements Serializable {
         this.flightDays = flightDays;
     }
 
-    public String getTimeslot() {
-        return timeslot;
-    }
-
-    public void setTimeslot(String timeslot) {
-        this.timeslot = timeslot;
-    }
-
     public double getFlightDuration() {
         return flightDuration;
     }
@@ -86,12 +76,12 @@ public class Flight implements Serializable {
         this.basicFare = basicFare;
     }
 
-    public Date getPlanStartDate() {
-        return planStartDate;
+    public Date getStartDateTime() {
+        return startDateTime;
     }
 
-    public void setPlanStartDate(Date startDate) {
-        this.planStartDate = startDate;
+    public void setStartDateTime(Date startDateTime) {
+        this.startDateTime = startDateTime;
     }
 
     public List<Schedule> getSchedule() {

@@ -70,7 +70,10 @@ public class RoleSessionBean implements RoleSessionBeanLocal {
                 for (Role role : results) {
                    if(!role.getRoleName().equals("SUPER ADMIN")){  //comment out if adding Super Admin
                     list.add(role.getRoleName());
+
                    }
+
+
                 }
 
             } else {
