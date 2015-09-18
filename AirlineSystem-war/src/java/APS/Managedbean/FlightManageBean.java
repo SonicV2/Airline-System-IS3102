@@ -42,7 +42,6 @@ public class FlightManageBean {
     private String destinationIATA;
     private double distance;
     
-    private Route route;
     private List<Route> routes;
     private List<Schedule> schedule;
     
@@ -51,7 +50,7 @@ public class FlightManageBean {
     }
 
     public void createFlight(ActionEvent event){
-        flightSessionBean.addFlight(flightNo, flightDays, flightDuration, basicFare, startDateTime,route);
+        flightSessionBean.addFlight(flightNo, flightDays, flightDuration, basicFare, startDateTime,routeId);
     }
     
     public String getFlightNo() {

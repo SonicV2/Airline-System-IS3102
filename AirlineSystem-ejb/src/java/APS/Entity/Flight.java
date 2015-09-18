@@ -27,7 +27,7 @@ public class Flight implements Serializable {
     private double flightDuration;
     private double basicFare;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date startDateTime;
     
     @ManyToOne(cascade = {CascadeType.PERSIST})

@@ -39,7 +39,6 @@ public class Schedule implements Serializable {
     public void createSchedule(Date startDate, Date endDate){
         this.startDate = startDate;
         this.endDate = endDate;
-        //SET SECONDS TO ZERO
     }
     
     public Long getScheduleId() {

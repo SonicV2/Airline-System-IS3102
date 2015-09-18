@@ -46,4 +46,6 @@ public interface EmployeeSessionBeanLocal {
             String employeeMailingAddress, String employeeOfficeNumber, String employeePrivateEmail,
             String experience, List<String>skills, String position);
     
+    public List<Employee> retrieveAllEmployees();
+    
 }

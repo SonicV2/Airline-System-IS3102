@@ -33,7 +33,6 @@ public class Aircraft implements Serializable {
     
     private String status;
       
-    //private Flight flight = new Flight();
     @ManyToOne(cascade = {CascadeType.PERSIST})
     private Flight flight = new Flight();
     @ManyToOne(cascade = {CascadeType.PERSIST})

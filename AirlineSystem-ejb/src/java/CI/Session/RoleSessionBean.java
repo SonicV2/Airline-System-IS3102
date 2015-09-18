@@ -32,8 +32,7 @@ public class RoleSessionBean implements RoleSessionBeanLocal {
      private List<Role> rolelist=new ArrayList<Role>();
      private Role role;
      List<Employee> employeelist_role=new ArrayList<Employee>();
-     
-     
+          
     @Override
     public void addRole(String roleName,List<String> accessRight) {
 
@@ -71,7 +70,10 @@ public class RoleSessionBean implements RoleSessionBeanLocal {
                 for (Role role : results) {
                    if(!role.getRoleName().equals("SUPER ADMIN")){  //comment out if adding Super Admin
                     list.add(role.getRoleName());
-                  }
+
+                   }
+
+
                 }
 
             } else {
@@ -142,6 +144,54 @@ public class RoleSessionBean implements RoleSessionBeanLocal {
         em.merge(employee);
         em.merge(role);
      
+    }
+    
+    public String changeRole(String employeeID, String newRole, String oldRole){
+   
+        
+        Employee employee = getEmployeeUserID(employeeID);
+        Role roleOld = getRole(oldRole);
+        Role roleNew = getRole(newRole);
+        
+        
+        List<Employee> employees = roleOld.getEmployees();
+        employees.remove(employee);
+        roleOld.setEmployees(employees);
+        
+        List<Employee> employeesNew = roleNew.getEmployees();
+        employeesNew.add(employee);
+        roleNew.setEmployees(employeesNew);
+        
+//        employee.setOrganizationUnit(ouNew);
+        
+        employee.setRoles(rolelist);
+        em.merge(employee);
+        
+        
+        
+        
+        return "Changed role successful!";
+    }
+    
+    public Employee getEmployeeUserID(String employeeID) {
+        Employee employee = new Employee();
+        try {
+
+            Query q = em.createQuery("SELECT a FROM Employee " + "AS a WHERE a.employeeID=:id");
+            q.setParameter("id", employeeID);
+
+            List results = q.getResultList();
+            if (!results.isEmpty()) {
+                employee = (Employee) results.get(0);
+
+            } else {
+                employee = null;
+            }
+
+        } catch (EntityNotFoundException enfe) {
+            System.out.println("\nEntity not found error" + "enfe.getMessage()");
+        }
+        return employee;
     }
     
     public Role getRole(String role){
