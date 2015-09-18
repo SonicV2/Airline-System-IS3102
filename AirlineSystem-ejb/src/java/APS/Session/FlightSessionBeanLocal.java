@@ -13,11 +13,13 @@ import javax.ejb.Local;
 @Local
 public interface FlightSessionBeanLocal {
 
-    public void addFlight(String flightNo, String flightDays, double flightDuration, double basicFare, Date startDateTime, Route route);
+    public void addFlight(String flightNo, String flightDays, double flightDuration, double basicFare, Date startDateTime, Long routeId);
 
     public void deleteFlight(String flightNo);
 
     public Flight getflight(String flightNo);
 
     public List<Flight> getflights();
+
+    public Route getRoute(Long id);
 }

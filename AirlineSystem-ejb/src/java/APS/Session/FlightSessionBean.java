@@ -26,22 +26,26 @@ public class FlightSessionBean implements FlightSessionBeanLocal {
     private EntityManager em;
 
     Flight flight;
+    Route route;
 
     @Override
-    public void addFlight(String flightNo, String flightDays, double flightDuration, double basicFare, Date startDateTime, Route route) {
+    public void addFlight(String flightNo, String flightDays, double flightDuration, double basicFare, Date startDateTime, Long routeId) {
         ArrayList<Schedule> schedules = new ArrayList<Schedule>();
         Schedule sc = new Schedule();
         flight.createFlight(flightNo, flightDays, flightDuration, basicFare, startDateTime);
         //Forecast the last date of the flight in 6 months
         TimeZone tz = getTimeZone("GMT+8:00"); //Set Timezone to Singapore
         Calendar cal = Calendar.getInstance(tz);
+        route = getRoute(routeId);
         cal.setTime(startDateTime);
+        cal.set(Calendar.SECOND, 0);
         cal.add(Calendar.MONTH, 6);
         Date planEndDate = cal.getTime();
 
         //Create the array of schedule
         Calendar curr = Calendar.getInstance(tz);
         curr.setTime(startDateTime);
+        curr.set(Calendar.SECOND, 0);
         Date counter = startDateTime;
         //Break up the hour and minutes
         int flightHr = (int) flightDuration;
@@ -56,6 +60,7 @@ public class FlightSessionBean implements FlightSessionBeanLocal {
                 curr.add(Calendar.MINUTE, flightMin);
                 Date flightEnd = curr.getTime();
                 sc.createSchedule(flightStart, flightEnd);
+                sc.setFlight(flight);
                 schedules.add(sc);
             }
             curr.setTime(counter);
@@ -64,6 +69,7 @@ public class FlightSessionBean implements FlightSessionBeanLocal {
         }
         flight.setSchedule(schedules);
         flight.setRoute(route);
+        route.getFlights().add(flight);
         em.persist(flight);
     }
 
@@ -116,5 +122,26 @@ public class FlightSessionBean implements FlightSessionBeanLocal {
         }
         return flights;
     }
+    
+      @Override
+    public Route getRoute(Long id){
+        route = new Route();   
+            try {
 
+            Query q = em.createQuery("SELECT a FROM Route " + "AS a WHERE a.routeId=:routeId");
+            q.setParameter("routeId", id);
+
+            List results = q.getResultList();
+            if (!results.isEmpty()) {
+                route = (Route) results.get(0);
+
+            } else {
+                route = null;
+            }
+
+        } catch (EntityNotFoundException enfe) {
+            System.out.println("\nEntity not found error" + "enfe.getMessage()");
+        }
+            return route;
+    }
 }
