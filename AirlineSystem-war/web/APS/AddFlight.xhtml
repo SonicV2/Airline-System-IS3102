@@ -1,0 +1,89 @@
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:head>
+        <title>Add Flight</title>
+    </h:head>
+    
+    <h:body>
+  
+    <h:form>
+    <p:dataTable var="route" value="#{routeManageBean.routes}" widgetVar="routesTable" paginator="true" rows="10">
+ 
+        <f:facet name="header">
+            <p:outputPanel>
+                <h:outputText value="Search all fields:" />
+                <p:inputText id="globalFilter" onkeyup="PF('routesTable').filter()" style="width:150px" placeholder="Enter keyword"/>
+            </p:outputPanel>
+        </f:facet>
+        
+        <p:column filterBy="#{route.routeId}" headerText="Route ID" filterMatchMode="contains">
+            <h:outputText value="#{route.routeId}" />
+        </p:column>
+        <p:column filterBy="#{route.originCountry}" headerText="Origin Country" filterMatchMode="contains">
+            <h:outputText value="#{route.originCountry}" />
+        </p:column>
+ 
+        <p:column filterBy="#{route.originCity}" headerText="Origin City" filterMatchMode="contains">
+            <h:outputText value="#{route.originCity}" />
+        </p:column>
+        
+        <p:column filterBy="#{route.originIATA}" headerText="Origin IATA" filterMatchMode="contains">
+            <h:outputText value="#{route.originIATA}" />
+        </p:column>
+        
+        <p:column filterBy="#{route.destinationCountry}" headerText="Destination Country" filterMatchMode="contains">
+            <h:outputText value="#{route.destinationCountry}" />
+        </p:column>
+ 
+        <p:column filterBy="#{route.destinationCity}" headerText="Destination City" filterMatchMode="contains">
+            <h:outputText value="#{route.destinationCity}" />
+        </p:column>
+        
+        <p:column filterBy="#{route.destinationIATA}" headerText="Destination IATA" filterMatchMode="contains">
+            <h:outputText value="#{route.destinationIATA}" />
+        </p:column>
+        
+    </p:dataTable>
+</h:form>    
+        
+        <h:form class="form col-md-12 center-block">
+                            
+                            <div class="form-group">                          
+                                <p:outputLabel value="Route ID: " />
+                                <p:inputText class="form-control input-lg" value="#{flightManageBean.routeId}"  />
+                                <br/>
+                            </div>
+                            <div class="form-group">                          
+                                <p:outputLabel value="Flight Number: " />
+                                <p:inputText class="form-control input-lg" value="#{flightManageBean.flightNo}"  />
+                                <br/>
+                            </div>
+                            
+                            <div class="form-group">
+                                <p:outputLabel value="Flight Days (Days of the week):" />
+                                <p:inputText class="form-control input-lg" value="#{flightManageBean.flightDays}" />
+                                <br/>
+                            </div>
+            
+                            <h:panelGrid columns="2" cellpadding="5">
+                            <p:outputLabel for="datetime" value="Starting day and time of Flight:" />
+                            <p:calendar id="datetime" value="#{flightManageBean.startDateTime}" pattern="MM/dd/yyyy HH:mm" />
+                            </h:panelGrid>
+           
+                            <div class="form-group">
+                                <p:outputLabel value="Set basic fare for flight:" />
+                                <p:inputText class="form-control input-lg" value="#{flightManageBean.basicFare}" />
+                                <br/>
+                            </div>           
+           
+                             <div>
+                                 <h:commandButton class="btn btn-primary btn-lg btn-block" value="Add" actionListener="#{flightManageBean.createFlight}"/>
+                             </div>
+       </h:form>
+    </h:body>
+</html>
+

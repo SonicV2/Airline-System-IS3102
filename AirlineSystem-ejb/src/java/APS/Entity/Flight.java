@@ -7,6 +7,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -23,30 +24,27 @@ public class Flight implements Serializable {
     @Id
     private String flightNo;
     private String flightDays;
-    private String timeslot;
     private double flightDuration;
     private double basicFare;
 
-    @Temporal(TemporalType.DATE)
-    private Date planStartDate;
-
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date startDateTime;
+    
+    @ManyToOne(cascade = {CascadeType.PERSIST})
     private Route route = new Route();
 
     @OneToMany(cascade = {CascadeType.PERSIST}, mappedBy = "flight")
     private List<Schedule> schedule = new ArrayList<Schedule>();
 
-    //@OneToMany(cascade = {CascadeType.PERSIST}, mappedBy = "flight")
-    //private List<Aircraft> aircraft = new ArrayList<Aircraft>();
+    @OneToMany(cascade = {CascadeType.PERSIST}, mappedBy = "flight")
+    private List<Aircraft> aircraft = new ArrayList<Aircraft>();
     
-    public Flight(){}
-    
-    public void createFlight(String flightNo, String flightDays, String timeslot, double flightDuration, double basicFare) {
+    public void createFlight(String flightNo, String flightDays, double flightDuration, double basicFare, Date startDateTime) {
         this.flightNo = flightNo;
         this.flightDays = flightDays;
-        this.timeslot = timeslot;
         this.flightDuration = flightDuration;
         this.basicFare = basicFare;
-        this.planStartDate = null;
+        this.startDateTime = startDateTime;
     }
 
     public String getFlightNo() {
@@ -65,14 +63,6 @@ public class Flight implements Serializable {
         this.flightDays = flightDays;
     }
 
-    public String getTimeslot() {
-        return timeslot;
-    }
-
-    public void setTimeslot(String timeslot) {
-        this.timeslot = timeslot;
-    }
-
     public double getFlightDuration() {
         return flightDuration;
     }
@@ -89,12 +79,12 @@ public class Flight implements Serializable {
         this.basicFare = basicFare;
     }
 
-    public Date getPlanStartDate() {
-        return planStartDate;
+    public Date getStartDateTime() {
+        return startDateTime;
     }
 
-    public void setPlanStartDate(Date startDate) {
-        this.planStartDate = startDate;
+    public void setStartDateTime(Date startDateTime) {
+        this.startDateTime = startDateTime;
     }
 
     public List<Schedule> getSchedule() {
@@ -113,13 +103,13 @@ public class Flight implements Serializable {
         this.route = route;
     }
 
-    /*public List<Aircraft> getAircraft() {
+    public List<Aircraft> getAircraft() {
      return aircraft;
      }
 
      public void setAircraft(List<Aircraft> aircraft) {
      this.aircraft = aircraft;
-     }*/
+     }
     @Override
     public int hashCode() {
         int hash = 0;

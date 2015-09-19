@@ -12,7 +12,7 @@ import javax.persistence.Query;
 
 /**
  *
- * @author HOULIANG
+ * @author Yunna
  */
 @Stateless
 public class RouteSessionBean implements RouteSessionBeanLocal {
@@ -127,13 +127,38 @@ public class RouteSessionBean implements RouteSessionBeanLocal {
         return allLocations;
     }
     
-    public List<Location> searchLocations(String searchCountry){
+    public List<Location> searchLocationsByCountry(String searchCountry){
         
         List<Location> allLocations = new ArrayList<Location>();
         
         try{
             Query q = em.createQuery("SELECT a FROM Location " + "AS a WHERE a.country=:country");
             q.setParameter("country", searchCountry);
+            
+            List<Location> results = q.getResultList();
+            if (!results.isEmpty()){
+                
+                allLocations = results;
+                
+            }else
+            {
+                allLocations = null;
+                System.out.println("no location!");
+            }
+        }catch (EntityNotFoundException enfe) {
+            System.out.println("\nEntity not found error" + "enfe.getMessage()");
+        }
+       
+        return allLocations;
+    }
+    
+    public List<Location> searchLocationsByCity(String searchCity){
+        
+        List<Location> allLocations = new ArrayList<Location>();
+        
+        try{
+            Query q = em.createQuery("SELECT a FROM Location " + "AS a WHERE a.city=:city");
+            q.setParameter("city", searchCity);
             
             List<Location> results = q.getResultList();
             if (!results.isEmpty()){

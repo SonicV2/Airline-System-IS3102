@@ -66,6 +66,7 @@ public class RoleManagedBean {
     public void search(ActionEvent event) {
         newroles = new ArrayList<String>(); //to return all the current roles 
         employee = employeeSessionBean.getEmployeeUseID(userID);
+        
         if (employee == null) {
             newroles.add("no such user!");
             //msg="no such user!";
@@ -97,13 +98,13 @@ public class RoleManagedBean {
 
     //for admin to create new roles
     public void addRole(ActionEvent event) {
-        /* for (String s : roles) {                       //Comment out if first time add roles
+        for (String s : roles) {                       //Comment out if first time add roles
             if (s.equals(roleName.toUpperCase())) {
                 message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Role Exists", "");
                 FacesContext.getCurrentInstance().addMessage(null, message);
                 return;
             }
-        }*/
+        }
         roleSessionBean.addRole(roleName, accessRight);
         message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Role Addes Successfully", "");
         FacesContext.getCurrentInstance().addMessage(null, message);
