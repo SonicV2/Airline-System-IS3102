@@ -43,6 +43,42 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
     private Pilot pp; //pilot
     
     @Override
+    public Boolean lockoutEmployee(String employeeID){
+        
+        employee = getEmployeeUseID(employeeID);
+        System.out.println("Locking out employee: " + employee.getEmployeeUserName());
+        employee.setEmployeeLockOut(true);
+        
+        return true;
+    }
+    
+    //get a list of employess who are not locked out
+    @Override
+    public List<Employee> retrieveAllActiveEmployees(){
+        List<Employee> allActiveEmployees = new ArrayList<Employee>();
+        try{
+            Query q = em.createQuery("SELECT a from Employee " + "AS a WHERE a.employeeLockOut=:employeeLockOut");
+            q.setParameter("employeeLockOut", false);
+            List<Employee> results = q.getResultList();
+            
+            if (!results.isEmpty()){
+                
+                allActiveEmployees = results;
+                
+            }else
+            {
+                allActiveEmployees = null;
+                System.out.println("no employee found!");
+            }
+        }catch (EntityNotFoundException enfe) {
+            System.out.println("\nEntity not found error" + enfe.getMessage());
+        }
+                
+        
+        return allActiveEmployees;
+    }
+    
+    @Override
     public List<Employee> retrieveAllEmployees(){
         List<Employee> allEmployees = new ArrayList<Employee>();
         
