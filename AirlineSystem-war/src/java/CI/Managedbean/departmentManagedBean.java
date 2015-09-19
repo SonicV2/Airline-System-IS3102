@@ -125,7 +125,7 @@ public class departmentManagedBean {
 
         setOrgUnits(departmentSessionBean.retrieveAllDepts());
         
-        retriveCC();  //comment out first time adding
+       retriveCC();  //comment out first time adding
     }
     
     public void retriveCC(){

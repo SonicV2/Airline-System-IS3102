@@ -31,6 +31,8 @@ public class AircraftType implements Serializable {
     private int totalStaff;
     private double cost;
     private double fuelCost;
+    private int numCabin;
+    private int numCockpit;
     
     @OneToMany(cascade = {CascadeType.PERSIST}, mappedBy = "aircraftType")
     private List<Aircraft> aircraft = new ArrayList<Aircraft>();
@@ -65,6 +67,22 @@ public class AircraftType implements Serializable {
 
     public void setTotalStaff(int totalStaff) {
         this.totalStaff = totalStaff;
+    }
+    
+    public int getNumCabin() {
+        return numCabin;
+    }
+
+    public void setNumCabin(int numCabin) {
+        this.numCabin = numCabin;
+    }
+    
+    public int getNumCockpit() {
+        return numCockpit;
+    }
+
+    public void setNumCockpit(int numCockpit) {
+        this.numCockpit = numCockpit;
     }
 
     public double getCost() {

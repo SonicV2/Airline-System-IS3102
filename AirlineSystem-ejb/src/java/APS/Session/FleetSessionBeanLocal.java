@@ -7,6 +7,7 @@ package APS.Session;
 
 import APS.Entity.Aircraft;
 import APS.Entity.AircraftType;
+import APS.Entity.Flight;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.Local;
@@ -25,5 +26,6 @@ public interface FleetSessionBeanLocal {
     public List<AircraftType> getAircraftTypeList(String filter);
     public List<AircraftType> retrieveAircraftTypes();
     public List<Aircraft> retrieveAircrafts();
+    public void scheduleFlights();
 
 }

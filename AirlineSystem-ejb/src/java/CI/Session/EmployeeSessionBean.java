@@ -43,6 +43,67 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
     private Pilot pp; //pilot
     
     @Override
+    public Boolean lockoutEmployee(String employeeID){
+        
+        employee = getEmployeeUseID(employeeID);
+        System.out.println("Locking out employee: " + employee.getEmployeeUserName());
+        employee.setEmployeeLockOut(true);
+        
+        return true;
+    }
+    
+    //get a list of employess who are not locked out
+    @Override
+    public List<Employee> retrieveAllActiveEmployees(){
+        List<Employee> allActiveEmployees = new ArrayList<Employee>();
+        try{
+            Query q = em.createQuery("SELECT a from Employee " + "AS a WHERE a.employeeLockOut=:employeeLockOut");
+            q.setParameter("employeeLockOut", false);
+            List<Employee> results = q.getResultList();
+            
+            if (!results.isEmpty()){
+                
+                allActiveEmployees = results;
+                
+            }else
+            {
+                allActiveEmployees = null;
+                System.out.println("no employee found!");
+            }
+        }catch (EntityNotFoundException enfe) {
+            System.out.println("\nEntity not found error" + enfe.getMessage());
+        }
+                
+        
+        return allActiveEmployees;
+    }
+    
+    @Override
+    public List<Employee> retrieveAllEmployees(){
+        List<Employee> allEmployees = new ArrayList<Employee>();
+        
+        try{
+            Query q = em.createQuery("SELECT a from Employee a");
+            
+            List<Employee> results = q.getResultList();
+            if (!results.isEmpty()){
+                
+                allEmployees = results;
+                
+            }else
+            {
+                allEmployees = null;
+                System.out.println("no employee found!");
+            }
+        }catch (EntityNotFoundException enfe) {
+            System.out.println("\nEntity not found error" + "enfe.getMessage()");
+        }
+       
+        return allEmployees;
+        
+    }
+    
+    @Override
     public void addCabinCrew(String employeeID, String employeeDisplayFirstName, String employeeDisplayLastName,
             String employeeDepartment,Date employeeDOB,String employeeGender, String employeeHpNumber, 
             String employeeMailingAddress, String employeeOfficeNumber, String employeePrivateEmail,
@@ -260,12 +321,10 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
             }
 
         } catch (EntityNotFoundException enfe) {
-            System.out.println("\nEntity not found error" + "enfe.getMessage()");
+            System.out.println("\nEntity not found error" + enfe.getMessage());
         }
         return role1;
     }
-    
-    
     
     
     public void logLogIn(String userID){
@@ -372,21 +431,22 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
 //    System generates user name for new employee Rule: Max letter of first and last name will be 5, repeated username will be append number behind
     @Override
     public String generateUserName(String employeeFirstName, String employeeLastName) {
-        int firstNameLength = employeeFirstName.length();
-        int lastNameLength = employeeLastName.length();
+        int firstNameLength = employeeFirstName.replaceAll("\\s+", "").toLowerCase().length();
+        int lastNameLength = employeeLastName.replaceAll("\\s+", "").toLowerCase().length();
         String firstName;
         String lastName;
-
-        if (firstNameLength >= 5) {
-            firstName = employeeFirstName.substring(0, 5);
+        
+        
+        if (firstNameLength >= 7) {
+            firstName = employeeFirstName.replaceAll("\\s+", "").toLowerCase().substring(0, 7);
         } else {
-            firstName = employeeFirstName;
+            firstName = employeeFirstName.replaceAll("\\s+", "").toLowerCase();
         }
 
         if (lastNameLength >= 5) {
-            lastName = employeeLastName.substring(0, 5);
+            lastName = employeeLastName.replaceAll("\\s+", "").toLowerCase().substring(0, 5);
         } else {
-            lastName = employeeLastName;
+            lastName = employeeLastName.replaceAll("\\s+", "").toLowerCase();
         }
 
         String userName = firstName + lastName;

@@ -46,4 +46,8 @@ public interface EmployeeSessionBeanLocal {
             String employeeMailingAddress, String employeeOfficeNumber, String employeePrivateEmail,
             String experience, List<String>skills, String position);
     
+    public List<Employee> retrieveAllEmployees();
+    public Boolean lockoutEmployee(String employeeID);
+    public List<Employee> retrieveAllActiveEmployees();
+    
 }
