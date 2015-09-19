@@ -5,9 +5,12 @@
  */
 package FOS.ManagedBean;
 
+import FOS.Entity.Pairing;
 import FOS.Entity.PairingPolicy;
 import FOS.Session.PairingSessionBeanLocal;
 import java.util.ArrayList;
+import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.Dependent;
@@ -32,8 +35,9 @@ public class crewScheduleManagedBean {
      private int num_max_legs;
      private int hours_max_flight;
      private PairingPolicy pp;
-    private ArrayList<ArrayList<String>> slns;
-    private String sln;
+    private List<Pairing> slns;
+    private Pairing sln;  //selected from the webpage
+    private String sln1;
     /**
      * Creates a new instance of crewScheduleManagedBean
      */
@@ -62,16 +66,21 @@ public class crewScheduleManagedBean {
         setPp(pairingSessionBean.retrievePolicy());
     }
     
+
     public void getSlns(ActionEvent event){
-        setSlns(pairingSessionBean.legMain());
+        pairingSessionBean.legMain();
+        setSlns(pairingSessionBean.getPairings());
     }
     
-    public void getSln(ActionEvent event){
-        System.out.println("Look Here! " +sln);
-        String[] str = sln.split(",");
-        System.out.println("1: " +str[0].substring(1)); //to remove the [
-        System.out.println("2: "+ str[3].substring(1)); // to remove the space
+    public void test(ActionEvent event){
+        
+        String pairingID=sln1.substring(sln1.indexOf("=")+1, sln1.indexOf("]")-1);
+        System.out.println("--------"+sln1.substring(sln1.indexOf("=")+1, sln1.indexOf("]")));
+        sln = pairingSessionBean.getPairingByID(pairingID);
+        
+        
     }
+  
     
     
     /**
@@ -130,27 +139,52 @@ public class crewScheduleManagedBean {
         this.pp = pp;
     }
 
-    public ArrayList<ArrayList<String>> getSlns() {
+   
+
+
+    /**
+     * @return the slns
+     */
+    public List<Pairing> getSlns() {
         return slns;
     }
 
-    public void setSlns(ArrayList<ArrayList<String>> slns) {
+    /**
+     * @param slns the slns to set
+     */
+    public void setSlns(List<Pairing> slns) {
         this.slns = slns;
     }
 
     /**
      * @return the sln
      */
-    public String getSln() {
+    public Pairing getSln() {
         return sln;
     }
 
     /**
      * @param sln the sln to set
      */
-    public void setSln(String sln) {
+    public void setSln(Pairing sln) {
         this.sln = sln;
     }
+
+    /**
+     * @return the sln1
+     */
+    public String getSln1() {
+        return sln1;
+    }
+
+    /**
+     * @param sln1 the sln1 to set
+     */
+    public void setSln1(String sln1) {
+        this.sln1 = sln1;
+    }
+
+   
 
  
     

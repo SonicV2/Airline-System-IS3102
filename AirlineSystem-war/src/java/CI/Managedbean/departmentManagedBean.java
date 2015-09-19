@@ -64,7 +64,7 @@ public class departmentManagedBean {
 //           clear();
        
        //Comment out if first time set up     
-        List<OrganizationUnit> depts = departmentSessionBean.retrieveAllDepts();
+       List<OrganizationUnit> depts = departmentSessionBean.retrieveAllDepts();
         
         System.out.println("----------All Dept size: " + depts.size());
 

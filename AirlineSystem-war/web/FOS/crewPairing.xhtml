@@ -56,25 +56,57 @@
 
             <h:commandButton value="Change" actionListener="#{crewScheduleManagedBean.changePolicy}"/>
             <br/><br/>
-            <h:commandButton value="Submit" actionListener="#{crewScheduleManagedBean.crewPairing}"/>
+            <h:commandButton value="Assign" action="/FOS/choosePairing" />
 
 
-<!--            <p:dataList value="#{crewScheduleManagedBean.slns}" var="sln" type="ordered">
-                <f:facet name="header">
-                    Basic
-                </f:facet>
-                #{sln.get(0)} #{sln.get(1)}   #{sln.get(2)}  <br/>&nbsp; &nbsp; &nbsp; &nbsp;  #{sln.get(3)} <br/>    #{sln.get(4)} <br/> &nbsp; &nbsp; #{sln.get(5)}
-            </p:dataList>-->
+            <p:dataTable id="tbl" var="sln" value="#{crewScheduleManagedBean.slns}"
+                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} "
+                         paginator="true" rows="10" style="margin-bottom:20px">
 
-           
-            <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
-                <p:outputLabel for="sln" value="" />
-                <p:selectOneRadio id="sln" value="#{crewScheduleManagedBean.sln}"  layout="grid" columns="2">
-                    <f:selectItems itemLabelEscaped="false" value="#{crewScheduleManagedBean.slns}" var="sln" itemLabel="#{sln.get(0)} #{sln.get(1)}  #{sln.get(2)}  &lt;br/&gt; &nbsp; &nbsp; &nbsp; &nbsp;   #{sln.get(3)}  &lt;br/&gt;   #{sln.get(4)}  &lt;br/&gt;  &nbsp; &nbsp; #{sln.get(5)}" itemValue="#{sln}"/>
-                </p:selectOneRadio>
-            </h:panelGrid>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Pairing ID" />
+                    </f:facet>
+                    <h:outputText value="#{sln.id}" />
+                </p:column>
 
-            <h:commandButton value="try" actionListener="#{crewScheduleManagedBean.getSln}"/>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Flight Date"/>
+                    </f:facet>
+                    <h:outputText value="#{sln.FDate}" />
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Flight Hour" />
+                    </f:facet>
+                    <h:outputText value="#{sln.flightHour}" />
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Flight Number" />
+                    </f:facet>
+                    <h:outputText value="#{sln.flightNumbers}" />
+                </p:column>
+                
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Flight Time" />
+                    </f:facet>
+                    <h:outputText value="#{sln.flightTimes}" />
+                </p:column>
+                
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Flight City" />
+                    </f:facet>
+                    <h:outputText value="#{sln.flightCities}" />
+                </p:column>
+            </p:dataTable>
+
+
             <h:commandButton value="Display" actionListener="#{crewScheduleManagedBean.getSlns}"/>
 
         </h:form>

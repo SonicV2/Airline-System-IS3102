@@ -5,8 +5,10 @@
  */
 package FOS.Session;
 
+import FOS.Entity.Pairing;
 import FOS.Entity.PairingPolicy;
 import java.util.ArrayList;
+import java.util.List;
 import javax.ejb.Local;
 
 /**
@@ -15,10 +17,14 @@ import javax.ejb.Local;
  */
 @Local
 public interface PairingSessionBeanLocal {
-   public ArrayList<ArrayList<String>> legMain();
+   public void legMain();
      public void setPolicy();
 
     public PairingPolicy retrievePolicy();
 
     void changePolicy(int maxLeg, int maxFlight, int minStopTime);
+    
+    public List<Pairing> getPairings();
+    
+    public Pairing getPairingByID(String id);
 }
