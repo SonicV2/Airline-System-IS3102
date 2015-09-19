@@ -6,12 +6,17 @@
 package Inventory.Managedbean;
 
 import Inventory.Session.RevenueManagementLocal;
+import java.util.ArrayList;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.Dependent;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.event.ActionEvent;
+import java.util.ArrayList;
+import java.util.Date;
+import javax.annotation.PostConstruct;
+import java.util.List;
 
 
 /**
@@ -24,18 +29,20 @@ import javax.faces.event.ActionEvent;
 
 public class inventoryManageBean {
     @EJB
-    private RevenueManagementLocal rm;
-   
-    
+    private RevenueManagementLocal rm; 
     
     private String flightNo;
     private String flightTime;
     private String flightDate;
+    
+    private int[] realSold;
+
    
+   
+  
     
     public void createFlightSession(ActionEvent event){
-        System.out.println("Managed Bean reached!");
-        rm.createAvailability(flightNo, flightDate, flightTime);
+        rm.createAvailability(getFlightNo(), getFlightDate(), getFlightTime());
     }
 
     /**
@@ -79,9 +86,21 @@ public class inventoryManageBean {
     public void setFlightDate(String flightDate) {
         this.flightDate = flightDate;
     }
-    
-    
-    
-    
+
+    /**
+     * @return the realSold
+     */
+    public int[] getRealSold() {
+        return realSold;
+    }
+
+    /**
+     * @param realSold the realSold to set
+     */
+    public void setRealSold(int[] realSold) {
+        this.realSold = realSold;
+    }
+
+   
     
 }

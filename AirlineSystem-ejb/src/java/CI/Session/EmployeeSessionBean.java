@@ -260,7 +260,7 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
             }
 
         } catch (EntityNotFoundException enfe) {
-            System.out.println("\nEntity not found error" + "enfe.getMessage()");
+            System.out.println("\nEntity not found error" + enfe.getMessage());
         }
         return role1;
     }

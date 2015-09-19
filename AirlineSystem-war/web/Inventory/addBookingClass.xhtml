@@ -2,7 +2,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core" >
     <h:head>
         <title>Add Booking Class</title>
     </h:head>
@@ -21,13 +22,7 @@
                                 <br/>
                                 
                             </div>
-             
-                            <div class="form-group">
-                                <p:outputLabel value="Percentage of Base Fare" />
-                                <p:inputText class="form-control input-lg" value="#{classManageBean.pricePercent}" />
-                                <br/>
-                                
-                            </div>  
+              
                             <div class="form-group">
                                 <p:outputLabel value="Days of Advanced Sales" />
                                 <p:inputText class="form-control input-lg" value="#{classManageBean.advancedSales}" />
@@ -42,19 +37,42 @@
                             </div> 
                             <div class="form-group">
                                 <p:outputLabel value="Service Class" />
-                                <p:inputText class="form-control input-lg" value="#{classManageBean.serviceClass}" />
+                                <p:selectOneMenu id="serviceClass" value="#{classManageBean.serviceClass}" style="width:150px">
+                                <f:selectItem itemLabel="Select One" itemValue="" />
+                                <f:selectItem itemLabel="Economy Saver" itemValue="Economy Saver" />
+                                <f:selectItem itemLabel="Economy Basic" itemValue="Economy Basic" />
+                                <f:selectItem itemLabel="Economy Premium" itemValue="Economy Premium" />
+                                <f:selectItem itemLabel="Business" itemValue="Business" />
+                                <f:selectItem itemLabel="First Class" itemValue="First Class" />
+                                </p:selectOneMenu>
+                                <br/>
                                 <br/>
                                 
                             </div> 
                             <div class="form-group">
-                                <p:outputLabel value="Able to rebook without cost" />
-                                <p:inputText class="form-control input-lg" value="#{classManageBean.rebook}" />
+                                <p:outputLabel value="Able to rebook without cost  " />
+                                <p:selectBooleanCheckbox value="#{classManageBean.rebook}" />
+                                <br/>
+                                <br/>
+                                
+                            </div> 
+             
+                            <div class="form-group">
+                                <p:outputLabel value="Able to Cancel without cost  " />
+                                <p:selectBooleanCheckbox value="#{classManageBean.cancel}" />
+                                <br/>
                                 <br/>
                                 
                             </div> 
                             <div class="form-group">
                                 <p:outputLabel value="Baggage Class" />
-                                <p:inputText class="form-control input-lg" value="#{classManageBean.baggage}" />
+                                <p:selectOneMenu id="baggageClass" value="#{classManageBean.baggage}" style="width:150px">
+                                <f:selectItem itemLabel="Select One" itemValue="" />
+                                <f:selectItem itemLabel="1" itemValue="1" />
+                                <f:selectItem itemLabel="2" itemValue="2" />
+                                <f:selectItem itemLabel="3" itemValue="3" />
+    
+                                </p:selectOneMenu>
                                 <br/>
                                 
                             </div> 

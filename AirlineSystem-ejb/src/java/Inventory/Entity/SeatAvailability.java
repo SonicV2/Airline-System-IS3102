@@ -33,9 +33,7 @@ public class SeatAvailability implements Serializable {
     private int economyPremiumTotal;
     private int businessTotal;
     private int firstClassTotal;
-    @Temporal(TemporalType.DATE)
-    private Date releaseDate;
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date flightDate;
     private int economySaverBooked;
     private int economyBasicBooked;
@@ -53,9 +51,7 @@ public class SeatAvailability implements Serializable {
     public Long getId() {
         return id;
     }
-    public void createSeatAvail (String flightNo, int []seats, 
-            Date releaseDate, Date flightDate){
-        this.releaseDate= releaseDate;
+    public void createSeatAvail (String flightNo, int []seats, Date flightDate){
         this.flightDate= flightDate;
         this.flightNo= flightNo;
         this.economySaverTotal = seats[0];
@@ -144,20 +140,6 @@ public class SeatAvailability implements Serializable {
      */
     public void setFirstClassTotal(int firstClassTotal) {
         this.firstClassTotal = firstClassTotal;
-    }
-
-    /**
-     * @return the releaseDate
-     */
-    public Date getReleaseDate() {
-        return releaseDate;
-    }
-
-    /**
-     * @param releaseDate the releaseDate to set
-     */
-    public void setReleaseDate(Date releaseDate) {
-        this.releaseDate = releaseDate;
     }
 
     /**
