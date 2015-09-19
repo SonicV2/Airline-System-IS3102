@@ -6,6 +6,7 @@
 package CI.Session;
 
 import CI.Entity.Employee;
+import CI.Entity.Role;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -19,5 +20,6 @@ public interface RoleSessionBeanLocal {
     public List<String> retrive();
     public void addNewRole(Employee employee,String new_Role);
     public String deleteEmployeeRole(Employee employee, List<String> roles);
-     public String deleteRole(String roleName);
+    public String deleteRole(String roleName);
+    public List<Role> retrieveAllRoles();
 }

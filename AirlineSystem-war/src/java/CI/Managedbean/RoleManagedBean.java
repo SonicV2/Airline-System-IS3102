@@ -39,7 +39,7 @@ public class RoleManagedBean {
     String role; //for receiving value from employeeManagement.xhtml
 
     private List<String> roles = new ArrayList();
-    
+    private List<Role> allRoles;
     
     
 
@@ -98,6 +98,8 @@ public class RoleManagedBean {
 
     //for admin to create new roles
     public void addRole(ActionEvent event) {
+        
+        
         for (String s : roles) {                       //Comment out if first time add roles
             if (s.equals(roleName.toUpperCase())) {
                 message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Role Exists", "");
@@ -120,7 +122,7 @@ public class RoleManagedBean {
     @PostConstruct
     public void retrive() {
         setRoles(roleSessionBean.retrive());
-
+        setAllRoles(roleSessionBean.retrieveAllRoles());
     }
     
    
@@ -275,6 +277,20 @@ public class RoleManagedBean {
 
     public void setAccessRight(List<String> accessRight) {
         this.accessRight = accessRight;
+    }
+
+    /**
+     * @return the allRoles
+     */
+    public List<Role> getAllRoles() {
+        return allRoles;
+    }
+
+    /**
+     * @param allRoles the allRoles to set
+     */
+    public void setAllRoles(List<Role> allRoles) {
+        this.allRoles = allRoles;
     }
 
     
