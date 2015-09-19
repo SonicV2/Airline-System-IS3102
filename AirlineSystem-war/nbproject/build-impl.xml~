@@ -1014,11 +1014,17 @@ exists or setup the property manually. For example like this:
         <copyfiles files="${libs.PrimeFAces_5.2.classpath}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
 <<<<<<< HEAD
 =======
+<<<<<<< HEAD
 =======
         <copyfiles files="${libs.Bootstrap Lib.classpath}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${libs.PrimeFaces_5.2.classpath}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
 >>>>>>> ec376b25832b21afc7d713ec48088bdfe79281f7
 >>>>>>> origin/master
+=======
+        <copyfiles files="${libs.Bootstrap Lib.classpath}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${libs.PrimeFaces_5.2.classpath}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
+>>>>>>> ec376b25832b21afc7d713ec48088bdfe79281f7
+>>>>>>> 0db351fbe2d1b630cb5c755b04df6072208ce964
         <mkdir dir="${build.web.dir}/META-INF"/>
         <manifest file="${build.web.dir}/META-INF/MANIFEST.MF" mode="update"/>
     </target>
@@ -1029,11 +1035,17 @@ exists or setup the property manually. For example like this:
         <copyfiles files="${libs.PrimeFAces_5.2.classpath}" todir="${build.web.dir}/WEB-INF/lib"/>
 <<<<<<< HEAD
 =======
+<<<<<<< HEAD
 =======
         <copyfiles files="${libs.Bootstrap Lib.classpath}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${libs.PrimeFaces_5.2.classpath}" todir="${build.web.dir}/WEB-INF/lib"/>
 >>>>>>> ec376b25832b21afc7d713ec48088bdfe79281f7
 >>>>>>> origin/master
+=======
+        <copyfiles files="${libs.Bootstrap Lib.classpath}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${libs.PrimeFaces_5.2.classpath}" todir="${build.web.dir}/WEB-INF/lib"/>
+>>>>>>> ec376b25832b21afc7d713ec48088bdfe79281f7
+>>>>>>> 0db351fbe2d1b630cb5c755b04df6072208ce964
     </target>
     <target depends="init" if="dist.ear.dir" name="-clean-webinf-lib">
         <delete dir="${build.web.dir}/WEB-INF/lib"/>
