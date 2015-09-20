@@ -51,7 +51,8 @@ public class departmentManagedBean {
     private List<String> restDepts;
 
     private String errorMsg;
-
+    private String deleteOUName;
+    
     public departmentManagedBean() {
 
     }
@@ -97,6 +98,21 @@ public class departmentManagedBean {
         setRestDepts(null);
         setEmployeeDept("");
     }
+    
+    public String deleteDepartment (String ouName){
+//        setDeleteOUName(ouName);
+        setErrorMsg(departmentSessionBean.deleteOrgUnit(ouName));
+//        setErrorMsg(roleSessionBean.deleteRole(deleteRoleName));
+//        setDeleteRoleName("");
+//        setDelete
+        
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, errorMsg, "");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+        return "createDepartment";
+        
+    }
+    
+    
 
     public void clear() {
         setDepartmentName("");
@@ -278,6 +294,20 @@ public class departmentManagedBean {
 
     public void setCCdepartments(List<String> CCdepartments) {
         this.CCdepartments = CCdepartments;
+    }
+
+    /**
+     * @return the deleteOUName
+     */
+    public String getDeleteOUName() {
+        return deleteOUName;
+    }
+
+    /**
+     * @param deleteOUName the deleteOUName to set
+     */
+    public void setDeleteOUName(String deleteOUName) {
+        this.deleteOUName = deleteOUName;
     }
     
     

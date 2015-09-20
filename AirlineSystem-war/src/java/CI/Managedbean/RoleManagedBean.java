@@ -19,6 +19,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import org.primefaces.event.RowEditEvent;
 
 /**
  *
@@ -59,7 +60,14 @@ public class RoleManagedBean {
     private List<String> accessRight;
 
     FacesMessage message = null;
-
+    
+    
+    //the different access rights values retrieve from frontend
+    private Boolean newAccessCreate;
+    private Boolean newAccessDelete;
+    private Boolean newAccessAssign;
+    private Boolean newAccessView;
+    
     public RoleManagedBean() {
     }
 
@@ -91,9 +99,21 @@ public class RoleManagedBean {
         setErrorMsg("");
     }
 
-    public void deleteRole(ActionEvent event) {
+//    public void deleteRole(ActionEvent event) {
+//        setErrorMsg(roleSessionBean.deleteRole(deleteRoleName));
+//        setDeleteRoleName("");
+//    }
+    
+    public String deleteRole (String roleName){
+        setDeleteRoleName(roleName);
         setErrorMsg(roleSessionBean.deleteRole(deleteRoleName));
         setDeleteRoleName("");
+        
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, errorMsg, "");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+        
+        return "createRole";
+        
     }
 
     //for admin to create new roles
@@ -125,6 +145,30 @@ public class RoleManagedBean {
         setAllRoles(roleSessionBean.retrieveAllRoles());
     }
     
+    public void onRowEdit(RowEditEvent event) {
+        
+        Role role = (Role) event.getObject();
+        
+        System.out.println("role access create original:" + role.getAccess().isAccessCreate());
+        System.out.println("role access create after:" + newAccessCreate);
+        
+        if (role.getAccess().isAccessCreate() != newAccessCreate ||role.getAccess().isAccessDelete() != newAccessDelete 
+                || role.getAccess().isAccessAssign() != newAccessAssign || role.getAccess().isAccessView() != newAccessView ){
+            
+            
+            FacesMessage msg = new FacesMessage("Role edited for: ", ((Role) event.getObject()).getRoleName());
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        }
+        else{
+            FacesMessage msg = new FacesMessage("Nothing edited for: ", ((Role) event.getObject()).getRoleName());
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        }
+    }
+     
+    public void onRowCancel(RowEditEvent event) {
+        FacesMessage msg = new FacesMessage("Edit Cancelled", ((Role) event.getObject()).getRoleName());
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
    
 
     //add new role to existing employee
@@ -291,6 +335,62 @@ public class RoleManagedBean {
      */
     public void setAllRoles(List<Role> allRoles) {
         this.allRoles = allRoles;
+    }
+
+    /**
+     * @return the newAccessCreate
+     */
+    public Boolean getNewAccessCreate() {
+        return newAccessCreate;
+    }
+
+    /**
+     * @param newAccessCreate the newAccessCreate to set
+     */
+    public void setNewAccessCreate(Boolean newAccessCreate) {
+        this.newAccessCreate = newAccessCreate;
+    }
+
+    /**
+     * @return the newAccessDelete
+     */
+    public Boolean getNewAccessDelete() {
+        return newAccessDelete;
+    }
+
+    /**
+     * @param newAccessDelete the newAccessDelete to set
+     */
+    public void setNewAccessDelete(Boolean newAccessDelete) {
+        this.newAccessDelete = newAccessDelete;
+    }
+
+    /**
+     * @return the newAccessAssign
+     */
+    public Boolean getNewAccessAssign() {
+        return newAccessAssign;
+    }
+
+    /**
+     * @param newAccessAssign the newAccessAssign to set
+     */
+    public void setNewAccessAssign(Boolean newAccessAssign) {
+        this.newAccessAssign = newAccessAssign;
+    }
+
+    /**
+     * @return the newAccessView
+     */
+    public Boolean getNewAccessView() {
+        return newAccessView;
+    }
+
+    /**
+     * @param newAccessView the newAccessView to set
+     */
+    public void setNewAccessView(Boolean newAccessView) {
+        this.newAccessView = newAccessView;
     }
 
     
