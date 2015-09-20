@@ -5,6 +5,8 @@
  */
 package FOS.Entity;
 
+import APS.Entity.Flight;
+import APS.Entity.Schedule;
 import CI.Entity.CabinCrew;
 import CI.Entity.Pilot;
 import java.io.Serializable;
@@ -40,6 +42,9 @@ public class Team implements Serializable {
     
     @OneToMany(cascade={CascadeType.PERSIST}, mappedBy="team")
     private List<Pairing> pairing = new ArrayList<Pairing>();
+    
+    @OneToMany(cascade={CascadeType.PERSIST}, mappedBy="team")
+    private List<Schedule> schedule= new ArrayList<Schedule>();
     
     public Long getId() {
         return id;
@@ -172,5 +177,23 @@ public class Team implements Serializable {
     public void setPairing(List<Pairing> pairing) {
         this.pairing = pairing;
     }
+
+    /**
+     * @return the schedule
+     */
+    public List<Schedule> getSchedule() {
+        return schedule;
+    }
+
+    /**
+     * @param schedule the schedule to set
+     */
+    public void setSchedule(List<Schedule> schedule) {
+        this.schedule = schedule;
+    }
+
+   
     
 }
+
+

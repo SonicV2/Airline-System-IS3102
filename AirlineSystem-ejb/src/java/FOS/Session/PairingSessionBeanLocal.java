@@ -7,6 +7,7 @@ package FOS.Session;
 
 import FOS.Entity.Pairing;
 import FOS.Entity.PairingPolicy;
+import FOS.Entity.Team;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Local;
@@ -27,4 +28,8 @@ public interface PairingSessionBeanLocal {
     public List<Pairing> getPairings();
     
     public Pairing getPairingByID(String id);
+    
+    public Team generateTeam(Pairing pairing);
 }
+
+

@@ -5,11 +5,11 @@
  */
 package APS.Session;
 
-import APS.Entity.Aircraft;
 import APS.Entity.AircraftType;
 import APS.Entity.Flight;
 import APS.Entity.Route;
 import APS.Entity.Schedule;
+import FOS.Entity.Team;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -37,6 +37,7 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
     private List<AircraftType> aircraftTypes;
     private Schedule schedule;
     private List<Schedule> schedules;
+    private Team team;
 
     @Override
     public void scheduleFlights(String flightId) {
@@ -92,6 +93,7 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
                 Date flightEnd = curr.getTime();
                 schedule.createSchedule(flightStart, flightEnd);
                 schedule.setFlight(flight);
+                schedule.setTeam(team);
                 em.persist(schedule);
                 schedules.add(schedule);
             }

@@ -7,7 +7,37 @@
     </h:head>
     <h:body>
          <h:outputLabel value="Max number of legs: "/>
-         <h:outputLabel value="#{crewScheduleManagedBean.sln.FDate}"/>
+         <h:outputLabel value="#{crewScheduleManagedBean.sln.FDate}"/> <br/>
+         <h:outputLabel value="#{crewScheduleManagedBean.sln.flightCities}"/><br/>
+         <h:outputLabel value="#{crewScheduleManagedBean.sln.flightHour}"/><br/>
+         <h:outputLabel value="#{crewScheduleManagedBean.sln.flightNumbers}"/><br/>
+         <h:outputLabel value="#{crewScheduleManagedBean.sln.flightTimes}"/><br/>
+         <h:outputLabel value="#{crewScheduleManagedBean.sln.id}"/><br/>
+         
+         <h:commandButton value="Generate Team"  actionListener="#{crewScheduleManagedBean.generateTeam}"/>
+         <h:outputLabel value="Captain : "/>
+         <h:outputLabel value="#{crewScheduleManagedBean.team.pilots.get(0)}"/><br/>
+         <h:outputLabel value="First Officer : "/>
+         <h:outputLabel value="#{crewScheduleManagedBean.team.pilots.get(1)}"/><br/>
+         
+         <h:outputLabel value="Lead : "/>
+         <h:outputLabel value="#{crewScheduleManagedBean.team.cabinCrews.get(0)}"/><br/>   
+         
+         <h:outputLabel value="Flight Stewardess : "/>
+         <h:outputLabel value="#{crewScheduleManagedBean.team.cabinCrews.get(1)}"/><br/>
+         <h:outputLabel value="#{crewScheduleManagedBean.team.cabinCrews.get(2)}"/><br/>
+         <h:outputLabel value="#{crewScheduleManagedBean.team.cabinCrews.get(3)}"/><br/>
+         <h:outputLabel value="#{crewScheduleManagedBean.team.cabinCrews.get(4)}"/><br/>
+         <h:outputLabel value="#{crewScheduleManagedBean.team.cabinCrews.get(5)}"/><br/>
+         <h:outputLabel value="#{crewScheduleManagedBean.team.cabinCrews.get(6)}"/><br/>
+        
+         <h:outputLabel value="Flight Steward : "/>
+         <h:outputLabel value="#{crewScheduleManagedBean.team.cabinCrews.get(7)}"/><br/>
+         
+         
+         
     </h:body>
 </html>
+
+
 

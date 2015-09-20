@@ -18,43 +18,11 @@
                 </p:selectOneRadio>
             </h:panelGrid>
             
-            <h:commandButton value="Assign Team"  action="displayAssignedTeam" actionListener="#{crewScheduleManagedBean.test}"/>
+            <h:commandButton value="Assign Team"  action="displayAssignedTeam" actionListener="#{crewScheduleManagedBean.getSelectPairingID}"/>
             
-<!--
-            <h:outputLabel value=" Choose Available Captain"/>
-            <p:selectManyCheckbox id="grid" value="#{assignTeamManagedBean.selectedCC}" layout="grid" columns="1">
-                <f:selectItems value="#{assignTeamManagedBean.unAssignCaptain}" var="cabin" itemLabel="FirstName : #{cabin.employeeDisplayFirstName}   &nbsp; LastName: #{cabin.employeeDisplayLastName} &nbsp; Year Of Experience:  #{cabin.experience}" itemValue="#{cabin}" />
-            </p:selectManyCheckbox>
 
-            <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
-                <p:outputLabel for="cap" value="Captain:" />
-                <p:selectOneRadio id="cap" value="#{assignTeamManagedBean.selectedCC}"  layout="grid" columns="2">
-                    <f:selectItems value="#{assignTeamManagedBean.unAssignCaptain}" var="cap" itemLabel="FirstName : #{cabin.employeeDisplayFirstName}   &nbsp; LastName: #{cabin.employeeDisplayLastName} &nbsp; Year Of Experience:  #{cabin.experience}" itemValue="#{cabin}" />
-                </p:selectOneRadio>
-            </h:panelGrid>
-
-            <h:outputLabel value=" Choose Available Fisrt Officer"/>
-            <p:selectManyCheckbox id="grid1" value="#{assignTeamManagedBean.selectedCC}" layout="grid" columns="1">
-                <f:selectItems value="#{assignTeamManagedBean.unAssignFO}" var="cabin" itemLabel="FirstName : #{cabin.employeeDisplayFirstName}   &nbsp; LastName: #{cabin.employeeDisplayLastName} &nbsp; Year Of Experience:  #{cabin.experience}" itemValue="#{cabin}" />
-            </p:selectManyCheckbox>
-
-            <h:outputLabel value=" Choose Available Lead Stewardess"/>
-            <p:selectManyCheckbox id="grid2" value="#{assignTeamManagedBean.selectedCC}" layout="grid" columns="1">
-                <f:selectItems value="#{assignTeamManagedBean.unAssignLeadStewardess}" var="cabin" itemLabel="FirstName : #{cabin.employeeDisplayFirstName}   &nbsp; LastName: #{cabin.employeeDisplayLastName} &nbsp; Year Of Experience:  #{cabin.experience}" itemValue="#{cabin}" />
-            </p:selectManyCheckbox>
-
-            <h:outputLabel value=" Choose Available Stewardess:"/>
-            <p:selectManyCheckbox id="grid4" value="#{assignTeamManagedBean.selectedCC}" layout="grid" columns="1">
-                <f:selectItems value="#{assignTeamManagedBean.unAssignSteward}" var="cabin" itemLabel="FirstName : #{cabin.employeeDisplayFirstName}   &nbsp; LastName: #{cabin.employeeDisplayLastName} &nbsp; Year Of Experience:  #{cabin.experience}" itemValue="#{cabin}" />
-            </p:selectManyCheckbox>
-
-
-            <h:outputLabel value=" Choose Available Steward:"/>
-            <p:selectManyCheckbox id="grid3" value="#{assignTeamManagedBean.selectedCC}" layout="grid" columns="1">
-                <f:selectItems value="#{assignTeamManagedBean.unAssignSteward}" var="cabin" itemLabel="FirstName : #{cabin.employeeDisplayFirstName}   &nbsp; LastName: #{cabin.employeeDisplayLastName} &nbsp; Year Of Experience:  #{cabin.experience}" itemValue="#{cabin}" />
-            </p:selectManyCheckbox>
-            </h:panelGrid>-->
         </h:form>
     </h:body>
 </html>
+
 
