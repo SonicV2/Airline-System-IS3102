@@ -62,8 +62,8 @@ public class Employee implements Serializable {
         this.employeeID = employeeID;
         this.employeeDisplayFirstName = employeeDisplayFirstName;
         this.employeeDisplayLastName = employeeDisplayLastName;
-        //this.employeeRole = employeeRole;
-        //this.employeeDepartment = employeeDepartment;
+//        this.employeeRole = employeeRole;
+//        this.employeeDepartment = employeeDepartment;
         this.employeeDOB = employeeDOB;
         this.employeeGender = employeeGender;
         this.employeeHpNumber = employeeHpNumber;

@@ -9,11 +9,17 @@ import APS.Entity.Aircraft;
 import APS.Entity.AircraftType;
 import APS.Entity.Flight;
 import APS.Entity.Route;
+import APS.Entity.Schedule;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -22,52 +28,119 @@ import javax.persistence.PersistenceContext;
 @Stateless
 public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal {
 
-    private FleetSessionBeanLocal fleetSessionBean;
-    private FlightSessionBeanLocal flightSessionBean;
     @PersistenceContext(unitName = "AirlineSystem-ejbPU")
     private EntityManager em;
+    
+    private Flight flight;
+    private Route route;
+    private AircraftType aircraftType;
+    private List<AircraftType> aircraftTypes;
+    private Schedule schedule;
+    private List<Schedule> schedules;
 
     @Override
-    public void scheduleFlights() {
-        List<Flight> flights = new ArrayList<Flight>();
-        System.out.println("1");
-        List<Aircraft> aircrafts = new ArrayList<Aircraft>();
-        System.out.println("1");
-        aircrafts = fleetSessionBean.retrieveAircrafts();
-        flights = flightSessionBean.getflights();
-        System.out.println(aircrafts);
-        System.out.println(flights);
-        List<Aircraft> result = new ArrayList<Aircraft>();
-
-        int aircraftSize = aircrafts.size();
-        int flightSize = flights.size();
-        double minFuel = aircrafts.get(0).getAircraftType().getFuelCost();
-        String bestCraft = aircrafts.get(0).getAircraftType().getId();
-
-        for (int i = 0; i < flightSize; i++) {
-            Flight flight = flights.get(i);
-            if (!flight.getFlightNo().equals("MAXXX")) {
-                Route route = flight.getRoute();
-                double currRouteDist = route.getDistance();
-                for (int j = 0; j < aircraftSize; j++) {
-                    AircraftType aircraftType = aircrafts.get(j).getAircraftType();
-                    int aircraftRange = aircraftType.getTravelRange();
-                    double fuel = aircraftType.getFuelCost();
-                    if (aircraftRange > (int) (currRouteDist * 1.1) && fuel <= minFuel) {
-                        bestCraft = aircraftType.getId();
-                        minFuel = aircraftType.getFuelCost();
-                    }
-                }
-                for (int k = 0; k < aircraftSize; k++) {
-                    Aircraft aircraft = aircrafts.get(k);
-                    if (aircraft.getAircraftType().getId().equals(bestCraft)) {
-                        result.add(aircraft);
-                        aircraft.setFlight(flight);
-                    }
-                }
-                flight.setAircraft(result);
-                em.persist(flight);
+    public void scheduleFlights(String flightId) {
+        flight = getFlight(flightId);
+        aircraftType = new AircraftType();
+        aircraftTypes = retrieveAircraftTypes();
+        route = flight.getRoute();
+        
+        //Find the best Aircraft for the flight
+        aircraftType = aircraftTypes.get(0);
+        double minFuel = aircraftTypes.get(0).getFuelCost();
+        
+        for (int i = 0; i<aircraftTypes.size();i++){
+            if ((route.getDistance()<(double)aircraftTypes.get(i).getTravelRange()*1.1) && (aircraftTypes.get(i).getFuelCost() < minFuel)){
+                aircraftType = aircraftTypes.get(i);
+                minFuel = aircraftTypes.get(i).getFuelCost();
             }
         }
+        
+        flight.setAircraftType(aircraftType);
+        flight.setFlightDuration(route.getDistance()/(aircraftType.getSpeed()*1062));
+        
+        //Create link with Schedules
+        Date startDateTime = flight.getStartDateTime();
+        String flightDays = flight.getFlightDays();
+        schedules = new ArrayList<Schedule>();
+        
+        //Forecast the last date of the flight in 6 months
+        TimeZone tz = TimeZone.getTimeZone("GMT+8:00"); //Set Timezone to Singapore
+        Calendar endTime = Calendar.getInstance(tz);
+        endTime.setTime(startDateTime);
+        endTime.set(Calendar.SECOND, 0);
+        endTime.add(Calendar.MONTH, 6);
+
+        Calendar curr = Calendar.getInstance(tz);
+        curr.setTime(startDateTime);
+        curr.set(Calendar.SECOND, 0);
+        Date counter = startDateTime;
+        //Break up the hour and minutes
+        int flightHr = (int) flight.getFlightDuration();
+        int flightMin = (int) ((flight.getFlightDuration() - (double) flightHr) * 60);
+
+        //Add a list schedule until 6 months later
+        while (curr.before(endTime)) {
+            schedule = new Schedule();
+            int day = curr.get(Calendar.DAY_OF_WEEK);
+            if (flightDays.charAt(day - 1) == '1') {
+                Date flightStart = curr.getTime();
+                curr.add(Calendar.HOUR, flightHr);
+                curr.add(Calendar.MINUTE, flightMin);
+                Date flightEnd = curr.getTime();
+                schedule.createSchedule(flightStart, flightEnd);
+                schedule.setFlight(flight);
+                em.persist(schedule);
+                schedules.add(schedule);
+            }
+            curr.setTime(counter);
+            curr.add(Calendar.DATE, 1);
+            counter = curr.getTime();
+        }
+        flight.setSchedule(schedules);
+        em.persist(flight);
+    }
+
+    private Flight getFlight(String flightNo) {
+        flight = new Flight();
+        try {
+
+            Query q = em.createQuery("SELECT a FROM Flight " + "AS a WHERE a.flightNo=:flightNo");
+            q.setParameter("flightNo", flightNo);
+
+            List results = q.getResultList();
+            if (!results.isEmpty()) {
+                flight = (Flight) results.get(0);
+
+            } else {
+                flight = null;
+            }
+
+        } catch (EntityNotFoundException enfe) {
+            System.out.println("\nEntity not found error" + "enfe.getMessage()");
+        }
+        return flight;
+    }
+    
+    private List<AircraftType> retrieveAircraftTypes() {
+        List<AircraftType> allTypes = new ArrayList<AircraftType>();
+
+        try {
+            Query q = em.createQuery("SELECT a from AircraftType a");
+
+            List<AircraftType> results = q.getResultList();
+            if (!results.isEmpty()) {
+
+                allTypes = results;
+
+            } else {
+                allTypes = null;
+                System.out.println("no aircraft type!");
+            }
+        } catch (EntityNotFoundException enfe) {
+            System.out.println("\nEntity not found error" + "enfe.getMessage()");
+        }
+
+        return allTypes;
     }
 }

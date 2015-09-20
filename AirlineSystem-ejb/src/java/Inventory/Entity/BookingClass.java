@@ -43,6 +43,8 @@ public class BookingClass implements Serializable {
         this.serviceClass= serviceClass;
         this.rebook = rebook;
         this.cancel = cancel;
+        this.baggage = baggage;
+        this.millageAccru = millageAccru;
     }
     /**
      * @return the classcode

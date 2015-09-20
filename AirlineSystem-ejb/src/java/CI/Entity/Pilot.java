@@ -5,12 +5,15 @@
  */
 package CI.Entity;
 
+import FOS.Entity.Team;
 import java.io.Serializable;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 /**
  *
@@ -23,6 +26,10 @@ public class Pilot extends Employee implements Serializable {
     private String experience;
    private String position;
    private List<String> skillsets;
+   private boolean assigned;
+   
+   @ManyToOne (cascade={CascadeType.PERSIST})
+   private Team team = new Team();
    
     public Pilot() {
         super();
@@ -32,6 +39,7 @@ public class Pilot extends Employee implements Serializable {
         this.experience=experience;
         this.position=position;
         this.skillsets=skillsets;
+        this.assigned=false;
        
     }
 
@@ -63,6 +71,34 @@ public class Pilot extends Employee implements Serializable {
     
     public void setSkillsets(List<String> skillsets) {
         this.skillsets = skillsets;
+    }
+
+    /**
+     * @return the team
+     */
+    public Team getTeam() {
+        return team;
+    }
+
+    /**
+     * @param team the team to set
+     */
+    public void setTeam(Team team) {
+        this.team = team;
+    }
+
+    /**
+     * @return the assigned
+     */
+    public boolean isAssigned() {
+        return assigned;
+    }
+
+    /**
+     * @param assigned the assigned to set
+     */
+    public void setAssigned(boolean assigned) {
+        this.assigned = assigned;
     }
     
 }

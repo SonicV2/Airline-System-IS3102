@@ -35,7 +35,10 @@ public class AircraftType implements Serializable {
     private int numCockpit;
     
     @OneToMany(cascade = {CascadeType.PERSIST}, mappedBy = "aircraftType")
-    private List<Aircraft> aircraft = new ArrayList<Aircraft>();
+    private List<Aircraft> aircrafts = new ArrayList<Aircraft>();
+    
+    @OneToMany(cascade = {CascadeType.PERSIST}, mappedBy = "aircraftType")
+    private List<Flight> flights = new ArrayList<Flight>();
 
     public String getId() {
         return id;
@@ -125,12 +128,12 @@ public class AircraftType implements Serializable {
         this.economySeats = economySeats;
     }
 
-    public List<Aircraft> getAircraft() {
-        return aircraft;
+    public List<Aircraft> getAircrafts() {
+        return aircrafts;
     }
 
-    public void setAircraft(List<Aircraft> aircraft) {
-        this.aircraft = aircraft;
+    public void setAircrafts(List<Aircraft> aircrafts) {
+        this.aircrafts = aircrafts;
     }
     
     @Override

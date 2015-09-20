@@ -68,12 +68,9 @@ public class RoleSessionBean implements RoleSessionBeanLocal {
             List<Role> results = q.getResultList();
             if (!results.isEmpty()) {
                 for (Role role : results) {
-                   if(!role.getRoleName().equals("SUPER ADMIN")){  //comment out if adding Super Admin
+                 if(!role.getRoleName().equals("SUPER ADMIN")){  //comment out if adding Super Admin
                     list.add(role.getRoleName());
-
                    }
-
-
                 }
 
             } else {
@@ -84,6 +81,28 @@ public class RoleSessionBean implements RoleSessionBeanLocal {
             System.out.println("\nEntity not found error" + "enfe.getMessage()");
         }
         return list;
+    }
+    
+    @Override
+    public List<Role> retrieveAllRoles(){
+        List <Role> allRoles = new ArrayList<Role>();
+        
+        try{
+        Query q = em.createQuery("SELECT a FROM Role a");
+        List<Role> results = q.getResultList();
+        
+        if (!results.isEmpty()) {
+                allRoles = results;
+
+            } else {
+                allRoles = null;
+            }
+        } catch (EntityNotFoundException enfe) {
+            System.out.println("\nEntity not found error" + "enfe.getMessage()");
+        }
+                
+        
+        return allRoles;
     }
     
     @Override

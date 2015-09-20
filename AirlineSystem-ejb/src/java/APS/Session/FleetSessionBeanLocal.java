@@ -18,14 +18,12 @@ import javax.ejb.Local;
  */
 @Local
 public interface FleetSessionBeanLocal {
-    
+
     public void acquireAircraft(Date datePurchased, Date lastMaintained, String aircraftTypeId);
     public void retireAircraft(Long tailNo);
     public AircraftType getAircraftType(String aircraftTypeId);
     public Aircraft getAircraft(Long tailNum);
-    public List<AircraftType> getAircraftTypeList(String filter);
     public List<AircraftType> retrieveAircraftTypes();
     public List<Aircraft> retrieveAircrafts();
-    public void scheduleFlights();
 
 }
