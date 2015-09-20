@@ -40,6 +40,7 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
 
     @Override
     public void scheduleFlights(String flightId) {
+        System.out.println("LOL");
         flight = getFlight(flightId);
         aircraftType = new AircraftType();
         aircraftTypes = retrieveAircraftTypes();

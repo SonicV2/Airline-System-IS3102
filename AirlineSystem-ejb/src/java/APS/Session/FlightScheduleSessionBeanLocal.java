@@ -13,5 +13,5 @@ import javax.ejb.Local;
  */
 @Local
 public interface FlightScheduleSessionBeanLocal {
-    public void scheduleFlights(String flightId);   
+    public void scheduleFlights(String flightId);
 }

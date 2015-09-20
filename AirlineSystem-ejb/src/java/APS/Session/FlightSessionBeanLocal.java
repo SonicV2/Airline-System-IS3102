@@ -17,4 +17,5 @@ public interface FlightSessionBeanLocal {
     public void deleteFlight(String flightNo);
     public Flight getFlight(String flightNo);
     public List<Flight> getFlights();
+    public Route getRoute(Long id);
 }

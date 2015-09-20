@@ -92,8 +92,9 @@ public class FlightSessionBean implements FlightSessionBeanLocal {
         }
         return flights;
     }
-
-    private Route getRoute(Long id) {
+    
+    @Override
+    public Route getRoute(Long id) {
         route = new Route();
         try {
 
