@@ -4,6 +4,8 @@
  * and open the template in the editor.
  */
 package Inventory.Session;
+import Inventory.Entity.BookingClass;
+import java.util.List;
 import javax.ejb.Local;
 
 /**
@@ -21,4 +23,6 @@ public interface ClassManagementLocal {
      public void editClassCode(String classcode, int pricePercent, int advancedSales
     , int percentSold, String serviceClass, boolean rebook, boolean cancel, 
     int baggage, int millageAccru);
+     
+     public List<BookingClass> retrieveBookingClasses();
 }

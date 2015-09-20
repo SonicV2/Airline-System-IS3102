@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    
+    <h:head>
+        <title>Display Booking Classes</title>
+    </h:head>
+    <table>
+
+        <p:dataTable var="bookingclass" value="#{classManageBean.bookingClass}" paginator="true" rows="10">
+            
+            
+            <p:column headerText="Class Code">
+                <h:outputText value="#{bookingclass.classcode}" />
+            </p:column>
+            <p:column headerText="Service Class">
+                <h:outputText value="#{bookingclass.serviceClass}" />
+            </p:column>
+            <p:column headerText="Advanced Sales">
+                <h:outputText value="#{bookingclass.advancedSales}" />
+            </p:column>
+            <p:column headerText="Percent Sold">
+                <h:outputText value="#{bookingclass.percentSold}" />
+            </p:column>
+            <p:column headerText="Percentage of Base Fare">
+                <h:outputText value="#{bookingclass.pricePercent}" />
+            </p:column>
+            <p:column headerText="Millage Accrual Percentage">
+                <h:outputText value="#{bookingclass.millageAccru}" />
+            </p:column>
+            <p:column headerText="Baggae Class">
+                <h:outputText value="#{bookingclass.baggage}" />
+            </p:column>
+            <p:column headerText="Rebook">
+                <h:outputText value="#{bookingclass.rebook}" />
+            </p:column>
+            <p:column headerText="Cancel">
+                <h:outputText value="#{bookingclass.cancel}" />
+            </p:column>
+            <p:column headerText="Delete">
+               <p:commandButton type="button" title="Delete" icon="ui-icon-trash"
+                                actionListener="#{classManageBean.deleteClass}"/>
+            </p:column>
+            
+          
+
+        </p:dataTable>
+    			
+          <a href="#{request.contextPath}/Inventory/addBookingClass.xhtml">Add Booking Class</a>
+          <a href="#{request.contextPath}/Inventory/addBookingClass.xhtml">Edit Booking Class</a>
+          
+</table>
+</html>

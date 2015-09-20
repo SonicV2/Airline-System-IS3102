@@ -18,6 +18,7 @@
         <title>Create Role</title>
 
     </h:head>
+
     <h:body>
         <!--    To add the same header on all dashboard pages  -->
         <ui:include src="dashboardHeader.xhtml"/>
@@ -41,12 +42,27 @@
                                         <thead>
                                             <tr>
                                                 <th>Role Title</th>
+                                                <th>Access Rights</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <ui:repeat value="#{roleManagedBean.roles}" var="role">
+                                            <ui:repeat value="#{roleManagedBean.allRoles}" var="role">
                                                 <tr>  
-                                                    <td>#{role}</td>
+                                                    <td>#{role.roleName}</td>
+                                                    <td>
+                            
+                                                        <h:form>                           
+                        <h:selectBooleanCheckbox value="#{role.access.accessAdd}" onclick="return false;" onkeydown="return false"/>   
+                                                <h:outputText value="Create"/>    
+                        <h:selectBooleanCheckbox value="#{role.access.accessDelete}" onclick="return false;" onkeydown="return false"/>
+                            <h:outputText value="Delete"/>
+                            
+                        <h:selectBooleanCheckbox value="#{role.access.accessAssign}" onclick="return false;" onkeydown="return false"/>
+                            <h:outputText value="Update"/>
+                        <h:selectBooleanCheckbox value="#{role.access.accessView}" onclick="return false;" onkeydown="return false"/>
+                        <h:outputText value="View"/>
+                                                        </h:form>
+                                                    </td>
                                                 </tr>
                                             </ui:repeat>
                                         </tbody>
@@ -75,10 +91,10 @@
                             <div class="form-group" style="padding-left: 15px">
                                 Assign access rights for this role:
                                 <p:selectManyCheckbox id="grid" value="#{roleManagedBean.accessRight}" layout="grid" columns="5">
-                                    <f:selectItem itemLabel="Add" itemValue="accessAdd" />
+<!--                                    <f:selectItem itemLabel="Add" itemValue="accessAdd" />-->
+                                    <f:selectItem itemLabel="Create" itemValue="accessCreate" />                                    
                                     <f:selectItem itemLabel="Delete" itemValue="accessDelete" />
-                                    <f:selectItem itemLabel="Create" itemValue="accessCreate" />
-                                    <f:selectItem itemLabel="Assign" itemValue="accessAssign" />
+                                    <f:selectItem itemLabel="Update" itemValue="accessAssign" />
                                     <f:selectItem itemLabel="View" itemValue="accessView" />
                                 </p:selectManyCheckbox>
 

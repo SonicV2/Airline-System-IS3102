@@ -104,7 +104,7 @@
             <div class="text-center">
                 <h:form>
                     <h:commandButton class="btn btn-success pull-left" value="Update Information" action="employeeDashBoard?faces-redirect=true" />
-                    <h:commandButton class="btn btn-danger pull-right" value="Delete User" />
+                    <h:commandButton class="btn btn-danger pull-right" onclick="if (! confirm('Do you really want to deactivate this user?') ) { return false;}; return true; " value="Lock out user" action ="#{adminManagedBean.lockoutEmployee(adminManagedBean.anEmployee.employeeID)}" />
                 </h:form>  
             </div>
         

@@ -40,6 +40,7 @@ public class AdminManagedBean {
     private DepartmentSessionBeanLocal departmentSessionBean;
     
     private List<Employee> allEmployees;
+    private List<Employee> allActiveEmployees;
     private List<OrganizationUnit> allOUs;
     private List<String> allGenders;
     private List<String> allDepts = new ArrayList();
@@ -57,7 +58,8 @@ public class AdminManagedBean {
     
     @PostConstruct
     public void retreive(){
-        setAllEmployees(employeeSessionBean.retrieveAllEmployees());
+//        setAllEmployees(employeeSessionBean.retrieveAllEmployees());
+        setAllActiveEmployees(employeeSessionBean.retrieveAllActiveEmployees());
         setAllOUs(departmentSessionBean.retrieveAllDepts());
     }
     
@@ -69,6 +71,7 @@ public class AdminManagedBean {
 //        employeeSessionBean.updateInfo(employee.getEmployeeUserName(), employee.getEmployeeDOB(), employee.getEmployeeGender(),employee.getEmployeeMailingAddress(), employee.getEmployeeOfficeNumber(), employee.getEmployeeHpNumber(), employee.getEmployeePrivateEmail() );
         if (!employee.getOrganizationUnit().getDepartmentName().equals(employeeNewDeptName)){
             departmentSessionBean.adminChangeDepartment(employee.getEmployeeID(), employeeNewDeptName, employee.getOrganizationUnit().getDepartmentName());
+            setAllActiveEmployees(employeeSessionBean.retrieveAllActiveEmployees());
             System.out.println("changed department successful");
         }
         
@@ -83,9 +86,24 @@ public class AdminManagedBean {
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
     
+    public String lockoutEmployee(String employeeID){
+        System.out.println("managed bean - lock out employee name:" + employeeID);
+        Boolean lockSuccess = employeeSessionBean.lockoutEmployee(employeeID);
+        
+        System.out.println("lockout success:" + lockSuccess);
+        if (lockSuccess){
+            setAllActiveEmployees(employeeSessionBean.retrieveAllActiveEmployees());
+            return "allEmployeeInfo";
+        }
+        
+        else{
+            return "singleEmployeeInfo";
+        }
+    }
      
     public String getEmployeeInfo(String employeeID){
         anEmployee = employeeSessionBean.getEmployeeUseID(employeeID);
+        
         System.out.println("From admin managed bean: " + anEmployee.getEmployeeUserName());
         return "singleEmployeeInfo";
     }
@@ -255,6 +273,20 @@ public class AdminManagedBean {
      */
     public void setAnEmployee(Employee anEmployee) {
         this.anEmployee = anEmployee;
+    }
+
+    /**
+     * @return the allActiveEmployees
+     */
+    public List<Employee> getAllActiveEmployees() {
+        return allActiveEmployees;
+    }
+
+    /**
+     * @param allActiveEmployees the allActiveEmployees to set
+     */
+    public void setAllActiveEmployees(List<Employee> allActiveEmployees) {
+        this.allActiveEmployees = allActiveEmployees;
     }
 
 }
