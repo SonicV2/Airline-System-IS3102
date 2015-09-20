@@ -9,11 +9,9 @@ import javax.ejb.Local;
 
 /**
  *
- * @author Family
+ * @author Yanlong
  */
 @Local
 public interface FlightScheduleSessionBeanLocal {
-
-    public void scheduleFlights();
-    
+    public void scheduleFlights(String flightId);
 }

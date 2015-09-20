@@ -7,6 +7,7 @@ package FOS.ManagedBean;
 
 import FOS.Entity.Pairing;
 import FOS.Entity.PairingPolicy;
+import FOS.Entity.Team;
 import FOS.Session.PairingSessionBeanLocal;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,11 +39,19 @@ public class crewScheduleManagedBean {
     private List<Pairing> slns;
     private Pairing sln;  //selected from the webpage
     private String sln1;
+    private Team team;
+    
+
+    
     /**
      * Creates a new instance of crewScheduleManagedBean
      */
     public crewScheduleManagedBean() {
         
+    }
+    
+    public void getAssignedTeam(){
+        setTeam(pairingSessionBean.generateTeam(sln));
     }
     
     
@@ -72,15 +81,17 @@ public class crewScheduleManagedBean {
         setSlns(pairingSessionBean.getPairings());
     }
     
-    public void test(ActionEvent event){
+    public void getSelectPairingID(ActionEvent event){
         
         String pairingID=sln1.substring(sln1.indexOf("=")+1, sln1.indexOf("]")-1);
         System.out.println("--------"+sln1.substring(sln1.indexOf("=")+1, sln1.indexOf("]")));
-        sln = pairingSessionBean.getPairingByID(pairingID);
-        
+        sln =pairingSessionBean.getPairingByID(pairingID);   
         
     }
   
+    public void generateTeam(ActionEvent event){
+        pairingSessionBean.generateTeam(sln);
+    }
     
     
     /**
@@ -184,8 +195,25 @@ public class crewScheduleManagedBean {
         this.sln1 = sln1;
     }
 
+    /**
+     * @return the team
+     */
+    public Team getTeam() {
+        return team;
+    }
+
+    /**
+     * @param team the team to set
+     */
+    public void setTeam(Team team) {
+        this.team = team;
+    }
+
+ 
    
 
  
     
 }
+
+

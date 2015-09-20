@@ -5,6 +5,7 @@
  */
 package APS.Entity;
 
+import FOS.Entity.Team;
 import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -35,6 +36,10 @@ public class Schedule implements Serializable {
     
     @ManyToOne(cascade = {CascadeType.PERSIST})
     private Flight flight = new Flight();
+    
+    @ManyToOne(cascade = {CascadeType.PERSIST})
+    private Team team = new Team();
+
     
     public void createSchedule(Date startDate, Date endDate){
         this.startDate = startDate;
@@ -92,6 +97,15 @@ public class Schedule implements Serializable {
         }
         return true;
     }
+
+    public Team getTeam() {
+        return team;
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
+    }
+    
 
     @Override
     public String toString() {

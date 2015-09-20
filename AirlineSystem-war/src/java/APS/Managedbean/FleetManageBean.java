@@ -56,6 +56,7 @@ public class FleetManageBean {
     private List<AircraftType> aircraftTypes = new ArrayList<AircraftType>();
     private List<Aircraft> aircrafts;
     private Aircraft selectedAircraft;
+    private List<String> aircraftTypeIds = new ArrayList<String> ();
     
     
     public FleetManageBean() {
@@ -66,16 +67,25 @@ public class FleetManageBean {
         
         setAircraftTypes(fleetSessionBean.retrieveAircraftTypes());
         setAircrafts(fleetSessionBean.retrieveAircrafts());
+        aircraftTypeIds.add("Airbus A330-300");
+        aircraftTypeIds.add("Airbus A380-800");
+        aircraftTypeIds.add("Boeing 777-200");
+        aircraftTypeIds.add("Boeing 777-200ER");
+        aircraftTypeIds.add("Boeing 777-300");
+        aircraftTypeIds.add("Boeing 777-300ER");
         
-    }   
+        
+    }
     
     /*This is for admin to acquire new aircraft*/
     public void acquireAircraft(ActionEvent event){
+        
         if (fleetSessionBean.getAircraftType(aircraftTypeId) == null) {
-            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "No such aircraft type!", "");
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please select aircraft type!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
             return;
         }
+       
         fleetSessionBean.acquireAircraft(datePurchased, lastMaintained, aircraftTypeId);
     }
 
@@ -92,6 +102,15 @@ public class FleetManageBean {
         selectedAircraft = null;
     }
     
+    public List<String> getAircraftTypeIds(){
+         return aircraftTypeIds;
+     }
+     
+    public void setAircraftTypeIds(List<String> aircraftTypeIds) {
+        this.aircraftTypeIds = aircraftTypeIds;
+    }
+   
+    
     public List<Aircraft> getAircrafts(){
          return aircrafts;
      }
@@ -107,7 +126,7 @@ public class FleetManageBean {
     public void setSelectedAircraft(Aircraft selectedAircraft) {
         this.selectedAircraft = selectedAircraft;
     }
-    
+
     public Date getDatePurchased() {
         return datePurchased;
     }

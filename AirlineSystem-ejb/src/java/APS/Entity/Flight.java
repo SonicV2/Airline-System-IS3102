@@ -25,24 +25,24 @@ public class Flight implements Serializable {
     private String flightNo;
     private String flightDays;
     private double flightDuration;
-    private double basicFare;
+    private Double basicFare;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date startDateTime;
     
     @ManyToOne(cascade = {CascadeType.PERSIST})
     private Route route = new Route();
-
+    
+    @ManyToOne(cascade = {CascadeType.PERSIST})
+    private AircraftType aircraftType = new AircraftType();
+    
     @OneToMany(cascade = {CascadeType.PERSIST}, mappedBy = "flight")
     private List<Schedule> schedule = new ArrayList<Schedule>();
-
-    @OneToMany(cascade = {CascadeType.PERSIST}, mappedBy = "flight")
-    private List<Aircraft> aircraft = new ArrayList<Aircraft>();
     
-    public void createFlight(String flightNo, String flightDays, double flightDuration, double basicFare, Date startDateTime) {
+    public void createFlight(String flightNo, String flightDays, Double basicFare, Date startDateTime) {
         this.flightNo = flightNo;
         this.flightDays = flightDays;
-        this.flightDuration = flightDuration;
+        flightDuration = 0.0;
         this.basicFare = basicFare;
         this.startDateTime = startDateTime;
     }
@@ -67,11 +67,11 @@ public class Flight implements Serializable {
         return flightDuration;
     }
 
-    public void setFlightDuration(double flightDuration) {
+    public void setFlightDuration(Double flightDuration) {
         this.flightDuration = flightDuration;
     }
 
-    public double getBasicFare() {
+    public Double getBasicFare() {
         return basicFare;
     }
 
@@ -103,13 +103,14 @@ public class Flight implements Serializable {
         this.route = route;
     }
 
-    public List<Aircraft> getAircraft() {
-     return aircraft;
-     }
+    public AircraftType getAircraftType() {
+        return aircraftType;
+    }
 
-     public void setAircraft(List<Aircraft> aircraft) {
-     this.aircraft = aircraft;
-     }
+    public void setAircraftType(AircraftType aircraftType) {
+        this.aircraftType = aircraftType;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;

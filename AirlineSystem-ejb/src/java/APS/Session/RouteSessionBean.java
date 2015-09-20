@@ -28,7 +28,7 @@ public class RouteSessionBean implements RouteSessionBeanLocal {
         Location start = findLocation(origin);
         Location end = findLocation(destination);
         System.out.println(start.getName());
-        double distance = haversineDist(start.getLatitude(),start.getLongitude(),end.getLatitude(),end.getLongitude());              
+        Double distance = haversineDist(start.getLatitude(),start.getLongitude(),end.getLatitude(),end.getLongitude());              
         route.create(start.getIATA(), end.getIATA(), start.getCountry(), end.getCountry(), start.getCity(), end.getCity(), distance);
         em.persist(route);
     }
@@ -200,14 +200,14 @@ public class RouteSessionBean implements RouteSessionBeanLocal {
         return allRoutes;
     }
     
-    public static double haversineDist(double lat1, double long1, double lat2, double long2) {
-    double earthRadius = 6372.8; //kilometers
-    double dLat = Math.toRadians(lat2-lat1);
-    double dLong = Math.toRadians(long2-long1);
-    double a = Math.pow(Math.sin(dLat/2),2) +
+    public static Double haversineDist(Double lat1, Double long1, Double lat2, Double long2) {
+    Double earthRadius = 6372.8; //kilometers
+    Double dLat = Math.toRadians(lat2-lat1);
+    Double dLong = Math.toRadians(long2-long1);
+    Double a = Math.pow(Math.sin(dLat/2),2) +
                Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) *
                Math.pow(Math.sin(dLong/2),2);
-    double c = 2 * Math.asin(Math.sqrt(a));
+    Double c = 2 * Math.asin(Math.sqrt(a));
     return earthRadius * c;
     }    
 }
