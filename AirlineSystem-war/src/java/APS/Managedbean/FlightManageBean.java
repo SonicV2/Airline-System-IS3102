@@ -1,11 +1,18 @@
 package APS.Managedbean;
 
+import APS.Entity.Flight;
 import APS.Entity.Route;
 import APS.Entity.Schedule;
+import APS.Entity.AircraftType;
+import APS.Entity.Aircraft;
 import APS.Session.FlightScheduleSessionBeanLocal;
 import APS.Session.FlightSessionBeanLocal;
+import APS.Session.RouteSessionBeanLocal;
+import APS.Session.FleetSessionBeanLocal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.inject.Named;
@@ -13,6 +20,8 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 /**
  *
@@ -28,13 +37,21 @@ public class FlightManageBean {
     private FlightSessionBeanLocal flightSessionBean;
     @EJB
     private FlightScheduleSessionBeanLocal flightScheduleSessionBean;
+    @EJB
+    private RouteSessionBeanLocal routeSessionBean;
+    @EJB
+    private FleetSessionBeanLocal fleetSessionBean;
+    
+    @PersistenceContext(unitName = "AirlineSystem-ejbPU")
+    private EntityManager em;
+    
 
     private String flightNo;
-    private String flightDays = "";
     private String[] selectedFlightDays;
-    private double flightDuration;
-    private double basicFare;
+    private Double flightDuration;
+    private Double basicFare;
     private Date startDateTime;
+    String flightDays = "";
 
     private Long routeId;
     private String originCountry;
@@ -43,18 +60,58 @@ public class FlightManageBean {
     private String destinationCountry;
     private String destinationCity;
     private String destinationIATA;
-    private double distance;
+    private Double distance;
 
     FacesMessage message = null;
 
     private List<Route> routes;
     private List<Schedule> schedule;
+    private List<Flight> flights;
+    
+    private Flight selectedFlight;
 
     public FlightManageBean() {
     }
+    
+    @PostConstruct
+    public void retrieve(){
+        
+        setFlights(flightSessionBean.retrieveFlights());
+        
+    }
 
     public void createFlight(ActionEvent event) {
-
+        
+        if (routeId == null) {
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please enter Route ID!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return;
+        }
+        
+        if (flightNo.isEmpty()) {
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please enter Flight Number!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return;
+        }
+        
+        if (selectedFlightDays.length == 0) {
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please select Flight Days!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return;
+        }
+        
+        if (startDateTime == null) {
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please enter starting day and time!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return;
+        }
+        
+        if (basicFare == null) {
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please enter Basic Fare!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return;
+        }
+        
         if (flightSessionBean.getRoute(routeId) == null) {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "No such route!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
@@ -72,9 +129,10 @@ public class FlightManageBean {
                 return;
             }
         }
+        
 
         for (int i = 0; i < selectedFlightDays.length; i++) {
-            if (selectedFlightDays[i].equals("Monday")) {
+            if (selectedFlightDays[i].equals("Sunday")) {
                 setString("1");
             }
         }
@@ -84,7 +142,7 @@ public class FlightManageBean {
         }
 
         for (int i = 0; i < selectedFlightDays.length; i++) {
-            if (selectedFlightDays[i].equals("Tuesday")) {
+            if (selectedFlightDays[i].equals("Monday")) {
                 setString("1");
             }
         }
@@ -94,7 +152,7 @@ public class FlightManageBean {
         }
 
         for (int i = 0; i < selectedFlightDays.length; i++) {
-            if (selectedFlightDays[i].equals("Wednesday")) {
+            if (selectedFlightDays[i].equals("Tuesday")) {
                 setString("1");
             }
         }
@@ -104,7 +162,7 @@ public class FlightManageBean {
         }
 
         for (int i = 0; i < selectedFlightDays.length; i++) {
-            if (selectedFlightDays[i].equals("Thursday")) {
+            if (selectedFlightDays[i].equals("Wednesday")) {
                 setString("1");
             }
         }
@@ -114,7 +172,7 @@ public class FlightManageBean {
         }
 
         for (int i = 0; i < selectedFlightDays.length; i++) {
-            if (selectedFlightDays[i].equals("Friday")) {
+            if (selectedFlightDays[i].equals("Thursday")) {
                 setString("1");
             }
         }
@@ -124,7 +182,7 @@ public class FlightManageBean {
         }
 
         for (int i = 0; i < selectedFlightDays.length; i++) {
-            if (selectedFlightDays[i].equals("Saturday")) {
+            if (selectedFlightDays[i].equals("Friday")) {
                 setString("1");
             }
         }
@@ -134,7 +192,7 @@ public class FlightManageBean {
         }
 
         for (int i = 0; i < selectedFlightDays.length; i++) {
-            if (selectedFlightDays[i].equals("Sunday")) {
+            if (selectedFlightDays[i].equals("Saturday")) {
                 setString("1");
             }
         }
@@ -144,8 +202,36 @@ public class FlightManageBean {
         }
 
         flightSessionBean.addFlight(flightNo, flightDays, basicFare, startDateTime, routeId);
-        System.out.println(flightNo);
         flightScheduleSessionBean.scheduleFlights(flightNo);
+        flightDays = "";
+    }
+    
+    public void deleteFlight(ActionEvent event) {
+        
+        flights.remove(selectedFlight);
+        System.out.println("HI");
+        
+        //search for Flight Num in Flight lists linked to the Route
+        int i = selectedFlight.getRoute().getFlights().indexOf(selectedFlight);
+        selectedFlight.getRoute().getFlights().remove(i);
+        System.out.println("HIHI");
+        selectedFlight.setRoute(null);
+        
+        //delete schedule
+        for (int j=0; j<selectedFlight.getSchedule().size(); j++) {
+            flightSessionBean.deleteSchedule(selectedFlight.getSchedule().get(j));
+        }
+        System.out.println("HIHIHI");
+        
+        //search for Flight Num in Flight lists linked to the Aircraft Type
+        int k = selectedFlight.getAircraftType().getFlights().indexOf(selectedFlight);
+        selectedFlight.getAircraftType().getFlights().remove(k);
+        selectedFlight.setAircraftType(null);
+        
+        
+        flightSessionBean.deleteFlight(selectedFlight.getFlightNo());
+        selectedFlight = null;
+        
     }
 
     public void setString(String value) {
@@ -178,19 +264,19 @@ public class FlightManageBean {
         this.selectedFlightDays = selectedFlightDays;
     }
 
-    public double getFlightDuration() {
+    public Double getFlightDuration() {
         return flightDuration;
     }
 
-    public void setFlightDuration(double flightDuration) {
+    public void setFlightDuration(Double flightDuration) {
         this.flightDuration = flightDuration;
     }
 
-    public double getBasicFare() {
+    public Double getBasicFare() {
         return basicFare;
     }
 
-    public void setBasicFare(double basicFare) {
+    public void setBasicFare(Double basicFare) {
         this.basicFare = basicFare;
     }
 
@@ -258,11 +344,11 @@ public class FlightManageBean {
         this.destinationIATA = destinationIATA;
     }
 
-    public double getDistance() {
+    public Double getDistance() {
         return distance;
     }
 
-    public void setDistance(double distance) {
+    public void setDistance(Double distance) {
         this.distance = distance;
     }
 
@@ -280,5 +366,21 @@ public class FlightManageBean {
 
     public void setSchedule(List<Schedule> schedule) {
         this.schedule = schedule;
+    }
+    
+    public List<Flight> getFlights() {
+        return flights;
+    }
+
+    public void setFlights(List<Flight> flights) {
+        this.flights = flights;
+    }
+    
+    public Flight getSelectedFlight() {
+        return selectedFlight;
+    }
+ 
+    public void setSelectedFlight(Flight selectedFlight) {
+        this.selectedFlight = selectedFlight;
     }
 }
