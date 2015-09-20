@@ -5,6 +5,17 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <h:head>
+        
+         <p:growl id="growl" sticky="true" showDetail="true"/>
+<!--        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <h:outputStylesheet library ="css"  name="bootstrap.css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
+        <h:outputStylesheet library="css" name="admindb.css" />
+        <h:outputStylesheet library="css" name="morrisjs/morris.css" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js" />
+      -->
         <title>Add Flight</title>
     </h:head>
     
@@ -65,7 +76,15 @@
                             
                             <div class="form-group">
                                 <p:outputLabel value="Flight Days (Days of the week):" />
-                                <p:inputText class="form-control input-lg" value="#{flightManageBean.flightDays}" />
+                                <p:selectManyCheckbox id="basic" value="#{flightManageBean.selectedFlightDays}" layout="grid" columns="3">
+                                    <f:selectItem itemLabel="Monday" itemValue="Monday" />
+                                    <f:selectItem itemLabel="Tuesday" itemValue="Tuesday" />
+                                    <f:selectItem itemLabel="Wednesday" itemValue="Wednesday" />
+                                    <f:selectItem itemLabel="Thursday" itemValue="Thursday" />
+                                    <f:selectItem itemLabel="Friday" itemValue="Friday" />
+                                    <f:selectItem itemLabel="Saturday" itemValue="Saturday" />
+                                    <f:selectItem itemLabel="Sunday" itemValue="Sunday" />
+                                </p:selectManyCheckbox>
                                 <br/>
                             </div>
             

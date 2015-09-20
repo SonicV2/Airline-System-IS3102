@@ -39,8 +39,8 @@ public class FleetSessionBean implements FleetSessionBeanLocal {
     @Override
     public void acquireAircraft(Date datePurchased, Date lastMaintained, String aircraftTypeId) {
         //Create dummy flight before allocation
-        Flight flight = new Flight();
-        flight = getflight("MAXXX");
+        //Flight flight = new Flight();
+        //flight = getflight("MAXXX");
         //Add processes
         aircraft = new Aircraft();
         aircraftType = new AircraftType();
@@ -52,9 +52,9 @@ public class FleetSessionBean implements FleetSessionBeanLocal {
 
         aircraftType.getAircraft().add(aircraft);
         aircraft.setFlight(flight);
-        flight.getAircraft().add(aircraft);
+        //flight.getAircraft().add(aircraft);
         em.persist(aircraft);
-        scheduleFlights();
+        //scheduleFlights();
         //flightScheduleSessionBeanLocal.scheduleFlights();
     }
 

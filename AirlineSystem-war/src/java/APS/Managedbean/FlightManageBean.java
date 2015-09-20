@@ -8,9 +8,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.inject.Named;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
 /**
@@ -28,7 +30,8 @@ public class FlightManageBean {
     private RouteSessionBeanLocal routeSessionBean;
 
     private String flightNo;
-    private String flightDays;
+    private String flightDays = "";
+    private String[] selectedFlightDays;
     private double flightDuration;
     private double basicFare;
     private Date startDateTime;
@@ -42,6 +45,8 @@ public class FlightManageBean {
     private String destinationIATA;
     private double distance;
     
+    FacesMessage message = null;
+
     private List<Route> routes;
     private List<Schedule> schedule;
     
@@ -50,7 +55,88 @@ public class FlightManageBean {
     }
 
     public void createFlight(ActionEvent event){
-        flightSessionBean.addFlight(flightNo, flightDays, flightDuration, basicFare, startDateTime,routeId);
+        
+        if (flightSessionBean.getRoute(routeId) == null) {
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "No such route!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return;
+        }
+        
+        if (flightSessionBean.getflight(flightNo)!=null) {
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Flight number is already in use!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return;
+        }
+        
+        if (flightSessionBean.getflight(flightNo).getRoute() == flightSessionBean.getRoute(routeId)) {
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Flight already exists!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return;
+        }
+        
+        for (int i=0; i<selectedFlightDays.length; i++) {
+        if (selectedFlightDays[i].equals("Monday"))
+            setString("1");
+        }
+        
+        if (flightDays.isEmpty())
+            setString("0");
+        
+        for (int i=0; i<selectedFlightDays.length; i++) {
+        if (selectedFlightDays[i].equals("Tuesday"))
+            setString("1");
+        }
+        
+        if (flightDays.length()==1)
+            setString("0");
+        
+        for (int i=0; i<selectedFlightDays.length; i++) {
+        if (selectedFlightDays[i].equals("Wednesday"))
+            setString("1");
+        }
+        
+        if (flightDays.length()==2)
+            setString("0");
+        
+        for (int i=0; i<selectedFlightDays.length; i++) {
+        if (selectedFlightDays[i].equals("Thursday"))
+            setString("1");
+        }
+        
+        if (flightDays.length()==3)
+            setString("0");
+        
+        for (int i=0; i<selectedFlightDays.length; i++) {
+        if (selectedFlightDays[i].equals("Friday"))
+            setString("1");
+        }
+        
+        if (flightDays.length()==4)
+            setString("0");
+        
+        for (int i=0; i<selectedFlightDays.length; i++) {
+        if (selectedFlightDays[i].equals("Saturday"))
+            setString("1");
+        }
+        
+        if (flightDays.length()==5)
+            setString("0");
+        
+        for (int i=0; i<selectedFlightDays.length; i++) {
+        if (selectedFlightDays[i].equals("Sunday"))
+            setString("1");
+        }
+        
+        if (flightDays.length()==6)
+            setString("0");
+        
+        flightSessionBean.addFlight(flightNo, flightDays, flightDuration, basicFare, startDateTime, routeId);
+    }
+    
+    public void setString(String value) {
+        
+        flightDays = flightDays + value;
+
     }
     
     public String getFlightNo() {
@@ -67,6 +153,14 @@ public class FlightManageBean {
 
     public void setFlightDays(String flightDays) {
         this.flightDays = flightDays;
+    }
+    
+    public String[] getSelectedFlightDays() {
+        return selectedFlightDays;
+    }
+ 
+    public void setSelectedFlightDays(String[] selectedFlightDays) {
+        this.selectedFlightDays = selectedFlightDays;
     }
 
     public double getFlightDuration() {
