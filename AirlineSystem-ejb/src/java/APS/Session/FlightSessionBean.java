@@ -27,15 +27,17 @@ public class FlightSessionBean implements FlightSessionBeanLocal {
     @PersistenceContext(unitName = "AirlineSystem-ejbPU")
     private EntityManager em;
 
-    Flight flight;
-    Route route;
+    private Flight flight;
+    private Route route;
+    private List<Schedule> schedules;
+    private List<Aircraft> aircrafts;
 
     @Override
     public void addFlight(String flightNo, String flightDays, double flightDuration, double basicFare, Date startDateTime, Long routeId) {
-        List<Schedule> schedules = new ArrayList<Schedule>();
+        schedules = new ArrayList<Schedule>();
         Schedule sc = new Schedule();
         flight = new Flight();
-        List<Aircraft> aircrafts = new ArrayList<Aircraft>(); 
+        aircrafts = new ArrayList<Aircraft>(); 
         route = getRoute(routeId);
         
         //*NEED IMPROVEMENT
@@ -50,7 +52,6 @@ public class FlightSessionBean implements FlightSessionBeanLocal {
                 chosenSpeed = act.getSpeed();
             }
         }
-        System.out.println(chosenSpeed);
         flightDuration = route.getDistance()/(chosenSpeed*1062);
         
         flight.createFlight(flightNo, flightDays, flightDuration, basicFare, startDateTime);
@@ -59,17 +60,14 @@ public class FlightSessionBean implements FlightSessionBeanLocal {
         
         //Forecast the last date of the flight in 6 months
         TimeZone tz = getTimeZone("GMT+8:00"); //Set Timezone to Singapore
-        Calendar cal = Calendar.getInstance(tz);
-        cal.setTime(startDateTime);
-        cal.set(Calendar.SECOND, 0);
-        cal.add(Calendar.MONTH, 6);
-        Date planEndDate = cal.getTime();
-        System.out.println(planEndDate);
+        Calendar endTime = Calendar.getInstance(tz);
+        endTime.setTime(startDateTime);
+        endTime.set(Calendar.SECOND, 0);
+        endTime.add(Calendar.MONTH, 6);
 
         //Create the array of schedule
         Calendar curr = Calendar.getInstance(tz);
         curr.setTime(startDateTime);
-        System.out.println(curr.getTime());
         curr.set(Calendar.SECOND, 0);
         Date counter = startDateTime;
         //Break up the hour and minutes
@@ -77,7 +75,7 @@ public class FlightSessionBean implements FlightSessionBeanLocal {
         int flightMin = (int) ((flightDuration - (double) flightHr) * 60);
 
         //Add a list schedule until 6 months later
-        while (curr.before(cal)) {
+        while (curr.before(endTime)) {
             sc = new Schedule();
             int day = curr.get(Calendar.DAY_OF_WEEK);
             if (flightDays.charAt(day - 1) == '1') {
@@ -97,7 +95,6 @@ public class FlightSessionBean implements FlightSessionBeanLocal {
 
         flight.setSchedule(schedules);
         em.persist(flight);
-
     }
 
     @Override
