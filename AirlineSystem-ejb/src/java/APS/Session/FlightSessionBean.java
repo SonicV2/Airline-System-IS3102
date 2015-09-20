@@ -1,16 +1,12 @@
 package APS.Session;
 
-import APS.Entity.Aircraft;
 import APS.Entity.AircraftType;
 import APS.Entity.Flight;
 import APS.Entity.Route;
 import APS.Entity.Schedule;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
-import static java.util.TimeZone.getTimeZone;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
@@ -29,82 +25,32 @@ public class FlightSessionBean implements FlightSessionBeanLocal {
 
     private Flight flight;
     private Route route;
+    private AircraftType aircraftType;
     private List<Schedule> schedules;
-    private List<Aircraft> aircrafts;
 
     @Override
-    public void addFlight(String flightNo, String flightDays, double flightDuration, double basicFare, Date startDateTime, Long routeId) {
-        schedules = new ArrayList<Schedule>();
-        Schedule sc = new Schedule();
+    public void addFlight(String flightNo, String flightDays, double basicFare, Date startDateTime, Long routeId) {
         flight = new Flight();
-        aircrafts = new ArrayList<Aircraft>(); 
         route = getRoute(routeId);
-        
-        //*NEED IMPROVEMENT
-        //Calculate the duration according to the recommended aircraft
-        aircrafts = retrieveAircrafts();
-        double minFuel = aircrafts.get(0).getAircraftType().getFuelCost();
-        double chosenSpeed = aircrafts.get(0).getAircraftType().getSpeed();
-        for (int i = 0; i<aircrafts.size();i++){
-            AircraftType act = aircrafts.get(0).getAircraftType();
-            if ((route.getDistance()<(double)act.getTravelRange()*1.1) && (act.getFuelCost() < minFuel)){
-                minFuel = act.getFuelCost();
-                chosenSpeed = act.getSpeed();
-            }
-        }
-        flightDuration = route.getDistance()/(chosenSpeed*1062);
-        
-        flight.createFlight(flightNo, flightDays, flightDuration, basicFare, startDateTime);
+
+        //Create link with route
+        flight.createFlight(flightNo, flightDays, basicFare, startDateTime);
         flight.setRoute(route);
         route.getFlights().add(flight);
         
-        //Forecast the last date of the flight in 6 months
-        TimeZone tz = getTimeZone("GMT+8:00"); //Set Timezone to Singapore
-        Calendar endTime = Calendar.getInstance(tz);
-        endTime.setTime(startDateTime);
-        endTime.set(Calendar.SECOND, 0);
-        endTime.add(Calendar.MONTH, 6);
-
-        //Create the array of schedule
-        Calendar curr = Calendar.getInstance(tz);
-        curr.setTime(startDateTime);
-        curr.set(Calendar.SECOND, 0);
-        Date counter = startDateTime;
-        //Break up the hour and minutes
-        int flightHr = (int) flightDuration;
-        int flightMin = (int) ((flightDuration - (double) flightHr) * 60);
-
-        //Add a list schedule until 6 months later
-        while (curr.before(endTime)) {
-            sc = new Schedule();
-            int day = curr.get(Calendar.DAY_OF_WEEK);
-            if (flightDays.charAt(day - 1) == '1') {
-                Date flightStart = curr.getTime();
-                curr.add(Calendar.HOUR, flightHr);
-                curr.add(Calendar.MINUTE, flightMin);
-                Date flightEnd = curr.getTime();
-                sc.createSchedule(flightStart, flightEnd);
-                sc.setFlight(flight);
-                em.persist(sc);
-                schedules.add(sc);
-            }
-            curr.setTime(counter);
-            curr.add(Calendar.DATE, 1);
-            counter = curr.getTime();
-        }
-
+        flight.setAircraftType(aircraftType);
         flight.setSchedule(schedules);
         em.persist(flight);
     }
 
     @Override
     public void deleteFlight(String flightNo) {
-        flight = getflight(flightNo);
+        flight = getFlight(flightNo);
         em.remove(flight);
     }
 
     @Override
-    public Flight getflight(String flightNo) {
+    public Flight getFlight(String flightNo) {
         flight = new Flight();
         try {
 
@@ -126,7 +72,7 @@ public class FlightSessionBean implements FlightSessionBeanLocal {
     }
 
     @Override
-    public List<Flight> getflights() {
+    public List<Flight> getFlights() {
         List<Flight> flights = new ArrayList<Flight>();
         try {
 
@@ -147,8 +93,7 @@ public class FlightSessionBean implements FlightSessionBeanLocal {
         return flights;
     }
 
-    @Override
-    public Route getRoute(Long id) {
+    private Route getRoute(Long id) {
         route = new Route();
         try {
 
@@ -168,26 +113,5 @@ public class FlightSessionBean implements FlightSessionBeanLocal {
         }
         return route;
     }
-    
-   private List<Aircraft> retrieveAircrafts() {
-        List<Aircraft> allAircrafts = new ArrayList<Aircraft>();
 
-        try {
-            Query q = em.createQuery("SELECT a from Aircraft a");
-
-            List<Aircraft> results = q.getResultList();
-            if (!results.isEmpty()) {
-
-                allAircrafts = results;
-
-            } else {
-                allAircrafts = null;
-                System.out.println("no aircraft!");
-            }
-        } catch (EntityNotFoundException enfe) {
-            System.out.println("\nEntity not found error" + "enfe.getMessage()");
-        }
-
-        return allAircrafts;
-    }
 }

@@ -6,13 +6,16 @@
 package APS.Entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -32,11 +35,12 @@ public class Aircraft implements Serializable {
     private Date lastMaintained;
     
     private String status;
-      
-    @ManyToOne(cascade = {CascadeType.PERSIST})
-    private Flight flight = new Flight();
+
     @ManyToOne(cascade = {CascadeType.PERSIST})
     private AircraftType aircraftType = new AircraftType();
+    
+    @OneToMany(cascade = {CascadeType.PERSIST})
+    private List<Schedule> schedules = new ArrayList<Schedule>();
     
     public void createAircraft(Date datePurchased, Date lastMaintained, String status) {
         this.datePurchased = datePurchased;
@@ -76,20 +80,20 @@ public class Aircraft implements Serializable {
         this.status = status;
     }
 
-    public Flight getFlight() {
-        return flight;
-    }
-
-    public void setFlight(Flight flight) {
-        this.flight = flight;
-    }
- 
     public AircraftType getAircraftType() {
         return aircraftType;
     }
 
     public void setAircraftType(AircraftType aircraftType) {
         this.aircraftType = aircraftType;
+    }
+
+    public List<Schedule> getSchedules() {
+        return schedules;
+    }
+
+    public void setSchedules(List<Schedule> schedules) {
+        this.schedules = schedules;
     }
     
     @Override

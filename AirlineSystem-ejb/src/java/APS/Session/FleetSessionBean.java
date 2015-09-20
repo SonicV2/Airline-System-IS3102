@@ -1,22 +1,15 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package APS.Session;
 
 import javax.ejb.Stateless;
 import APS.Entity.AircraftType;
 import APS.Entity.Aircraft;
 import APS.Entity.Flight;
-import APS.Entity.Route;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -28,11 +21,8 @@ public class FleetSessionBean implements FleetSessionBeanLocal {
 
     @PersistenceContext(unitName = "AirlineSystem-ejbPU")
     private EntityManager em;
-    private FlightScheduleSessionBeanLocal flightScheduleSessionBeanLocal;
-    private FlightSessionBeanLocal flightSessionBean;
 
     private List<AircraftType> aircraftTypeList = new ArrayList<AircraftType>();
-    private Flight flight;
     private Aircraft aircraft;
     private AircraftType aircraftType;
 
@@ -43,9 +33,7 @@ public class FleetSessionBean implements FleetSessionBeanLocal {
         aircraftType = getAircraftType(aircraftTypeId);
         aircraft.setAircraftType(aircraftType);
         aircraft.createAircraft(datePurchased, lastMaintained, "Stand-By");
-        
-        aircraftType.getAircraft().add(aircraft);
-        aircraft.setFlight(flight);
+        aircraftType.getAircrafts().add(aircraft);
         em.persist(aircraft);
     }
 
@@ -55,14 +43,6 @@ public class FleetSessionBean implements FleetSessionBeanLocal {
         aircraft = getAircraft(tailNo);
         em.remove(aircraft);
 
-    }
-
-    @Override
-    public List<AircraftType> getAircraftTypeList(String filter) {
-
-        List<AircraftType> aircraftTypeList = new ArrayList();
-
-        return aircraftTypeList;
     }
 
     // get aircraftType object when searching with aircraftTypeId
@@ -113,7 +93,8 @@ public class FleetSessionBean implements FleetSessionBeanLocal {
         }
         return aircraft1;
     }
-
+    
+    @Override
     public List<AircraftType> retrieveAircraftTypes() {
         List<AircraftType> allTypes = new ArrayList<AircraftType>();
 
@@ -135,7 +116,8 @@ public class FleetSessionBean implements FleetSessionBeanLocal {
 
         return allTypes;
     }
-
+    
+    @Override
     public List<Aircraft> retrieveAircrafts() {
         List<Aircraft> allAircrafts = new ArrayList<Aircraft>();
 
@@ -157,93 +139,4 @@ public class FleetSessionBean implements FleetSessionBeanLocal {
 
         return allAircrafts;
     }
-
-    @Override
-    public void scheduleFlights() {
-        List<Flight> flights = new ArrayList<Flight>();
-        System.out.println("1");
-        List<Aircraft> aircrafts = new ArrayList<Aircraft>();
-        System.out.println("2");
-        aircrafts = retrieveAircrafts();
-        System.out.println("3");
-        flights = getflights();
-        System.out.println("4");
-        System.out.println(aircrafts);
-        System.out.println(flights);
-        List<Aircraft> result = new ArrayList<Aircraft>();
-
-        int aircraftSize = aircrafts.size();
-        int flightSize = flights.size();
-        double minFuel = aircrafts.get(0).getAircraftType().getFuelCost();
-        String bestCraft = aircrafts.get(0).getAircraftType().getId();
-
-        for (int i = 0; i < flightSize; i++) {
-            Flight flight = flights.get(i);
-            if (!flight.getFlightNo().equals("MAXXX")) {
-                Route route = flight.getRoute();
-                double currRouteDist = route.getDistance();
-                for (int j = 0; j < aircraftSize; j++) {
-                    AircraftType aircraftType = aircrafts.get(j).getAircraftType();
-                    int aircraftRange = aircraftType.getTravelRange();
-                    double fuel = aircraftType.getFuelCost();
-                    if (aircraftRange > (int) (currRouteDist * 1.1) && fuel <= minFuel) {
-                        bestCraft = aircraftType.getId();
-                        minFuel = aircraftType.getFuelCost();
-                    }
-                }
-                for (int k = 0; k < aircraftSize; k++) {
-                    Aircraft aircraft = aircrafts.get(k);
-                    if (aircraft.getAircraftType().getId().equals(bestCraft)) {
-                        result.add(aircraft);
-                        aircraft.setFlight(flight);
-                    }
-                }
-                flight.setAircraft(result);
-                em.persist(flight);
-            }
-        }
-    }
-
-    public Flight getflight(String flightNo) {
-        flight = new Flight();
-        try {
-
-            Query q = em.createQuery("SELECT a FROM Flight " + "AS a WHERE a.flightNo=:flightNo");
-            q.setParameter("flightNo", flightNo);
-
-            List results = q.getResultList();
-            if (!results.isEmpty()) {
-                flight = (Flight) results.get(0);
-
-            } else {
-                flight = null;
-            }
-
-        } catch (EntityNotFoundException enfe) {
-            System.out.println("\nEntity not found error" + "enfe.getMessage()");
-        }
-        return flight;
-    }
-
-    public List<Flight> getflights() {
-        List<Flight> flights = new ArrayList<Flight>();
-        try {
-
-            Query q = em.createQuery("SELECT a FROM Flight a");
-
-            List<Flight> results = q.getResultList();
-            if (!results.isEmpty()) {
-                flights = results;
-
-            } else {
-                flights = null;
-                System.out.println("No Flights Added!");
-            }
-
-        } catch (EntityNotFoundException enfe) {
-            System.out.println("\nEntity not found error" + "enfe.getMessage()");
-        }
-        return flights;
-    }
-
 }
