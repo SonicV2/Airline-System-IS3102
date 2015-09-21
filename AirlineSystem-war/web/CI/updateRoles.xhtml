@@ -23,7 +23,7 @@
 
     <h:body>
         <!--    To add the same header on all dashboard pages  -->
-        <ui:include src="dashboardHeader.xhtml"/>
+<!--                <ui:include src="dashboardHeader.xhtml"/>-->
         <!--    To add the same sidebar on all dashboard pages  -->
         <ui:include src="dashboardSidebar.xhtml"/>
         <div id="page-wrapper">
@@ -32,7 +32,7 @@
 
             <div class="row">
                 <div class="col-lg-12">
-                    <h2 class="page-header"> Create a new role</h2>
+                    <h2 class="page-header"> Update existing roles</h2>
                     <h:form id="roleForm"> 
                         <p:growl id="msgs" showDetail="true"/>
                         <!--<div class="table-responsive">-->
@@ -44,13 +44,11 @@
                             <p:ajax event="rowEditCancel" listener="#{roleManagedBean.onRowCancel}" update=":roleForm:msgs" />
 
                             <p:column headerText="Role Name" style="width:200px">
-                                <!--<p:cellEditor>-->
+                                <p:cellEditor>
                                     
-                                   <!--<f:facet name="output">-->
-                                       <h:outputText value="#{role.roleName}" />
-                                   <!--</f:facet>-->
-                                   <!--<f:facet name="input"><p:inputText  id="modelInput" value="#{roleManagedBean.newRoleName}" /></f:facet>-->
-                                <!--</p:cellEditor>-->
+                                   <f:facet name="output"><h:outputText value="#{role.roleName}" /></f:facet>
+                                   <f:facet name="input"><p:inputText  id="modelInput" value="#{roleManagedBean.newRoleName}" /></f:facet>
+                                </p:cellEditor>
                             </p:column>
 
                             <p:column headerText="Access Rights">
@@ -97,35 +95,7 @@
                     </h:form>
 
                     <br></br>
-                    <div class="col-md-6 panel-body">
-
-                        <h:form>
-                            <div class="form-group">
-                                <label class="control-label col-md-5">Role Name:   </label>
-
-                                <p:inputText id="roleName" required="true" requiredMessage="Please fill in Role Name!" class="form-inline" value="#{roleManagedBean.roleName}"  />
-                                <div class="missingfield">
-                                    <h:message for="deptName"  />
-                                </div>
-                            </div>
-
-                            <br></br>
-                            <div class="form-group" style="padding-left: 15px">
-                                Assign access rights for this role:
-                                <p:selectManyCheckbox id="grid" value="#{roleManagedBean.accessRight}" layout="grid" columns="5">
-                                    <f:selectItem itemLabel="Create" itemValue="accessCreate" />                                    
-                                    <f:selectItem itemLabel="Delete" itemValue="accessDelete" />
-                                    <f:selectItem itemLabel="Update" itemValue="accessAssign" />
-                                    <f:selectItem itemLabel="View" itemValue="accessView" />
-                                </p:selectManyCheckbox>
-
-                            </div>
-                            <br></br>
-                            <div class="text-center">
-                                <h:commandButton class="btn btn-outline btn-success" value="Create Role" action="#{roleManagedBean.addRole(roleManagedBean.roleName)}"/>
-                            </div>
-                        </h:form>
-                    </div>
+                   
                 </div>
             </div>
         </div>

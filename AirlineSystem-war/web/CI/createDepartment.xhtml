@@ -18,7 +18,7 @@
         <title>Add Department</title>
 
     </h:head>
-    
+
     <h:body>
         <!--    To add the same header on all dashboard pages  -->
         <ui:include src="dashboardHeader.xhtml"/>
@@ -31,18 +31,32 @@
                 </div>
                 <div class="col-lg-8">
 
-                        <h:form id="deptForm">
+                    <h:form id="deptForm">
+                        <p:growl id="msgs" showDetail="true"/>
                         <p:dataTable id="department1" var="depart" value="#{departmentManagedBean.orgUnits}" editable="true" style="margin-bottom:20px">
                             <f:facet name="header">
                                 Existing Departments
                             </f:facet>
-                            
+                            <p:ajax event="rowEdit" listener="#{departmentManagedBean.onRowEdit}" update=":deptForm:msgs" />
+                            <p:ajax event="rowEditCancel" listener="#{departmentManagedBean.onRowCancel}" update=":deptForm:msgs" />
                             <p:column headerText="Department Name">
-                                <h:outputText value="#{depart.departmentName}" />
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{depart.departmentName}" />
+                                    </f:facet>
+                                    <f:facet name="input"><p:inputText value="#{depart.departmentName}" /></f:facet>
+                                </p:cellEditor>
                             </p:column>
 
                             <p:column headerText="Department Location">
-                                <h:outputText value="#{depart.location}" />
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{depart.location}" />
+                                    </f:facet>
+                                    <f:facet name="input"><p:inputText value="#{depart.location}" /></f:facet>
+                                </p:cellEditor>
+
+                            </p:column>
+                            <p:column style="width:32px">
+                                <p:rowEditor />
                             </p:column>
                             <p:column style="width:32px">
 
@@ -53,40 +67,40 @@
                                         return true;
                                                " action="#{departmentManagedBean.deleteDepartment(depart.departmentName)}"><i class="fa fa-trash-o"></i> </h:commandLink>
                             </p:column>
-                           </p:dataTable>  
-                        </h:form>
-<!--                        </div>-->
-<!--                        <div class="panel-body">
-                            <div class="table-responsive">
-                                <table class="table table-striped">
-
-                                    <thead>
-                                        <tr>
-                                            <th>Department Name</th>
-                                            <th>Department Location</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <ui:repeat value="#{departmentManagedBean.orgUnits}" var="depart">
-                                            <tr>  
-                                                <td>#{depart.departmentName}</td>
-                                                <td>#{depart.location}</td>
-                                            </tr>
-                                        </ui:repeat>
-                                    </tbody>
-
-                                </table>
-
-
-
-                                </p:dataTable>
-                            </div>
-                        </div>-->
-<!--                    </div>-->
+                        </p:dataTable>  
+                    </h:form>
+                    <!--                        </div>-->
+                    <!--                        <div class="panel-body">
+                                                <div class="table-responsive">
+                                                    <table class="table table-striped">
+                    
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Department Name</th>
+                                                                <th>Department Location</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <ui:repeat value="#{departmentManagedBean.orgUnits}" var="depart">
+                                                                <tr>  
+                                                                    <td>#{depart.departmentName}</td>
+                                                                    <td>#{depart.location}</td>
+                                                                </tr>
+                                                            </ui:repeat>
+                                                        </tbody>
+                    
+                                                    </table>
+                    
+                    
+                    
+                                                    </p:dataTable>
+                                                </div>
+                                            </div>-->
+                    <!--                    </div>-->
                 </div>
 
 
-<div class="col-lg-12">
+                <div class="col-lg-12">
                     <h2 class="page-header"> Add A Department</h2>
                 </div>
                 <div class="col-md-6 panel-body">
@@ -101,7 +115,7 @@
                                 <h:message for="deptName"  />
                             </div>
                             <br></br>
-                            
+
                             <label class="control-label col-md-5">Department Location:   </label>
                             <p:inputText id="deptLocation" required="true" requiredMessage="Please fill in Department Location!" class="form-inline" value="#{departmentManagedBean.departmentLocation}" />
                             <br/>

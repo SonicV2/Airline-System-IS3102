@@ -17,6 +17,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.inject.Named;
+import org.primefaces.event.RowEditEvent;
 
 /**
  *
@@ -53,8 +54,36 @@ public class departmentManagedBean {
     private String errorMsg;
     private String deleteOUName;
     
+    private OrganizationUnit newOrgUnit;
+    
     public departmentManagedBean() {
 
+    }
+    
+    public void onRowEdit(RowEditEvent event) {
+        
+        OrganizationUnit orgUnit = (OrganizationUnit) event.getObject();
+
+        
+        OrganizationUnit oldOrgUnit = departmentSessionBean.getDepartmentUseID(orgUnit.getDepartmentID());
+        
+        if (!orgUnit.getDepartmentName().equals(oldOrgUnit.getDepartmentName()) || !orgUnit.getLocation().equals(oldOrgUnit.getLocation())){
+            departmentSessionBean.updateOrgUnit(oldOrgUnit, orgUnit);
+            
+            FacesMessage msg = new FacesMessage("Edited for: ", ((OrganizationUnit) event.getObject()).getDepartmentName());
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+     
+        }
+            else{
+            
+            FacesMessage msg = new FacesMessage("Nothing edited for: ", ((OrganizationUnit) event.getObject()).getDepartmentName());
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        }
+    }
+    
+     public void onRowCancel(RowEditEvent event) {
+        FacesMessage msg = new FacesMessage("Edit Cancelled", ((OrganizationUnit) event.getObject()).getDepartmentName());
+        FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
     /*This is for admin to create new department*/
@@ -133,11 +162,10 @@ public class departmentManagedBean {
         }
     }
 
-   
+    
     @PostConstruct
     public void retrive() {
         setDepartments(departmentSessionBean.retrive());
-        System.out.println("set org units");
 
         setOrgUnits(departmentSessionBean.retrieveAllDepts());
         
@@ -313,6 +341,20 @@ public class departmentManagedBean {
      */
     public void setDeleteOUName(String deleteOUName) {
         this.deleteOUName = deleteOUName;
+    }
+
+    /**
+     * @return the newOrgUnit
+     */
+    public OrganizationUnit getNewOrgUnit() {
+        return newOrgUnit;
+    }
+
+    /**
+     * @param newOrgUnit the newOrgUnit to set
+     */
+    public void setNewOrgUnit(OrganizationUnit newOrgUnit) {
+        this.newOrgUnit = newOrgUnit;
     }
     
     

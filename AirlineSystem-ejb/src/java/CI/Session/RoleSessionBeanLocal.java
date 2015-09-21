@@ -22,4 +22,6 @@ public interface RoleSessionBeanLocal {
     public String deleteEmployeeRole(Employee employee, List<String> roles);
     public String deleteRole(String roleName);
     public List<Role> retrieveAllRoles();
+    public String updateRoleAccessRight(String roleName, Boolean accessCreate, Boolean accessDelete, Boolean accessAssign, Boolean accessView );
+    public String updateRoleName(String roleName, String newRoleName, Boolean accessCreate, Boolean accessDelete, Boolean accessAssign, Boolean accessView);
 }

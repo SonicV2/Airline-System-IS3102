@@ -90,7 +90,7 @@ public class EmployeeManageBean {
         employeeEmailAddress = employee.getEmployeeEmailAddress();
         employeeSessionBean.hashPwd(employeeID);
         
-        clearAll();
+//        clearAll();
 
     }
     

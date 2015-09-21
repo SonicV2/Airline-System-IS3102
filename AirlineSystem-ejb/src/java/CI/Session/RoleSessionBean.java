@@ -55,12 +55,60 @@ public class RoleSessionBean implements RoleSessionBeanLocal {
         }
         role_db.setAccess(ar);
         em.persist(role_db);
+        em.flush();
     }
     
+    @Override
     public String updateRoleAccessRight(String roleName, Boolean accessCreate, Boolean accessDelete, Boolean accessAssign, Boolean accessView ){
+        Role oneRole = getRole(roleName);
+        oneRole.getAccess().setAccessCreate(accessCreate);
+        oneRole.getAccess().setAccessDelete(accessDelete);
+        oneRole.getAccess().setAccessAssign(accessAssign);
+        oneRole.getAccess().setAccessView(accessView);
         
+        em.persist(oneRole);
         
         return "Update success";
+    }
+    
+    @Override
+    public String updateRoleName(String roleName, String newRoleName, Boolean accessCreate, Boolean accessDelete, Boolean accessAssign, Boolean accessView){
+        Role oneRole = getRole(roleName);
+
+        List<Employee> allEmployees = oneRole.getEmployees();
+        
+        role_db.create(newRoleName.toUpperCase());
+        AccessRight ar= new AccessRight();
+                
+        if(accessCreate){
+            ar.setAccessCreate(true);
+        }if(accessDelete){
+            ar.setAccessDelete(true);
+        }if(accessAssign){
+            ar.setAccessAssign(true);
+        }if(accessView){
+            ar.setAccessView(true);
+        }
+        role_db.setAccess(ar);
+        em.persist(role_db);
+        
+        Role newRole = getRole(newRoleName);
+        
+        if (allEmployees.size()>0){
+            System.out.println("allEmployees not null");
+            for (Employee e : allEmployees){
+                int index = e.getRoles().indexOf(oneRole);
+                e.getRoles().set(index, null);
+                e.getRoles().set(index, newRole);
+                em.persist(e);
+            }
+        }
+        
+        em.remove(oneRole);
+        em.flush(); 
+        
+        em.persist(role_db);
+        return "Update Sucess";
     }
     
     @Override

@@ -16,7 +16,7 @@ import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.inject.Named;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import org.primefaces.event.RowEditEvent;
@@ -27,7 +27,7 @@ import org.primefaces.event.RowEditEvent;
  */
 @Named(value = "roleManagedBean")
 @ManagedBean
-@ViewScoped
+@SessionScoped
 public class RoleManagedBean {
 
     @EJB
@@ -67,6 +67,8 @@ public class RoleManagedBean {
     private Boolean newAccessDelete;
     private Boolean newAccessAssign;
     private Boolean newAccessView;
+    
+    private String newRoleName;
     
     public RoleManagedBean() {
     }
@@ -111,27 +113,31 @@ public class RoleManagedBean {
         
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, errorMsg, "");
         FacesContext.getCurrentInstance().addMessage(null, message);
+        setAllRoles(roleSessionBean.retrieveAllRoles());
         
         return "createRole";
         
     }
 
     //for admin to create new roles
-    public void addRole(ActionEvent event) {
+    public String addRole(String roleName) {
         
         if (roles != null){
             for (String s : roles) {                       //Comment out if first time add roles
                 if (s.equals(roleName.toUpperCase())) {
-                    message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Role Exists", "");
+                    FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Role Exists", "");
                     FacesContext.getCurrentInstance().addMessage(null, message);
-                    return;
+                    return "createRole";
                 }
             }
         }
         roleSessionBean.addRole(roleName, accessRight);
-        message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Role Addes Successfully", "");
+        setAllRoles(roleSessionBean.retrieveAllRoles());
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Role Added Successfully", "");
         FacesContext.getCurrentInstance().addMessage(null, message);
         clear();
+        
+        return "createRole";
     }
 
     /*clear input after submit*/
@@ -149,21 +155,37 @@ public class RoleManagedBean {
     public void onRowEdit(RowEditEvent event) {
         
         Role role = (Role) event.getObject();
-        
-        System.out.println("role access create original:" + role.getAccess().isAccessCreate());
-        System.out.println("role access create after:" + newAccessCreate);
-        
-        if (role.getAccess().isAccessCreate() != newAccessCreate ||role.getAccess().isAccessDelete() != newAccessDelete 
-                || role.getAccess().isAccessAssign() != newAccessAssign || role.getAccess().isAccessView() != newAccessView ){
+              
+//        if (!role.getRoleName().equals(newRoleName)){
+//            System.out.println("updating role name...");
+//            
+//            roleSessionBean.updateRoleName(role.getRoleName(), newRoleName, newAccessCreate, newAccessDelete, newAccessAssign, newAccessView);
+////            roleSessionBean.updateRoleAccessRight(role.getRoleName(), newAccessCreate, newAccessDelete, newAccessAssign, newAccessView);
+//            setAllRoles(roleSessionBean.retrieveAllRoles());
+//            
+//            FacesMessage msg = new FacesMessage("Role edited for: ", ((Role) event.getObject()).getRoleName());
+//            FacesContext.getCurrentInstance().addMessage(null, msg);
+          
+        if(role.getAccess().isAccessCreate() != newAccessCreate ||role.getAccess().isAccessDelete() != newAccessDelete 
+                || role.getAccess().isAccessAssign() != newAccessAssign || role.getAccess().isAccessView() != newAccessView){
             
+            System.out.println("updating access rights...");
+            roleSessionBean.updateRoleAccessRight(role.getRoleName(), newAccessCreate, newAccessDelete, newAccessAssign, newAccessView);
+            setAllRoles(roleSessionBean.retrieveAllRoles());
             
             FacesMessage msg = new FacesMessage("Role edited for: ", ((Role) event.getObject()).getRoleName());
             FacesContext.getCurrentInstance().addMessage(null, msg);
+     
         }
-        else{
+            else{
+            
             FacesMessage msg = new FacesMessage("Nothing edited for: ", ((Role) event.getObject()).getRoleName());
             FacesContext.getCurrentInstance().addMessage(null, msg);
+            
         }
+        
+        
+        
     }
      
     public void onRowCancel(RowEditEvent event) {
@@ -392,6 +414,20 @@ public class RoleManagedBean {
      */
     public void setNewAccessView(Boolean newAccessView) {
         this.newAccessView = newAccessView;
+    }
+
+    /**
+     * @return the newRoleName
+     */
+    public String getNewRoleName() {
+        return newRoleName;
+    }
+
+    /**
+     * @param newRoleName the newRoleName to set
+     */
+    public void setNewRoleName(String newRoleName) {
+        this.newRoleName = newRoleName;
     }
 
     
