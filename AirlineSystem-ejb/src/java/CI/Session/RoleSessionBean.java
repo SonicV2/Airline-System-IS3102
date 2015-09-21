@@ -57,6 +57,12 @@ public class RoleSessionBean implements RoleSessionBeanLocal {
         em.persist(role_db);
     }
     
+    public String updateRoleAccessRight(String roleName, Boolean accessCreate, Boolean accessDelete, Boolean accessAssign, Boolean accessView ){
+        
+        
+        return "Update success";
+    }
+    
     @Override
     public List<String> retrive() {
         ArrayList<String> list = new ArrayList();
@@ -113,7 +119,7 @@ public class RoleSessionBean implements RoleSessionBeanLocal {
             r = getRole(s); //get role entity
             List<Employee> employeeLists = r.getEmployees(); // get all employee from one role
             if(roleList.size()==1 && roleList.contains(r)){
-                return "Cannot Delete!";
+                return "You cannot delete this role!";
             }
             roleList.remove(r); // employee remove this role --> employee is the owner entity
             employeeLists.remove(employee); // remove employee from this role
@@ -121,7 +127,7 @@ public class RoleSessionBean implements RoleSessionBeanLocal {
         }
         employee.setRoles(roleList);
         em.merge(employee);
-        return "Successful!";
+        return "Delete role successful!";
        
     }
     

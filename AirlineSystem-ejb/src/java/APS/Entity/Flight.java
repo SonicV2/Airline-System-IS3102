@@ -25,7 +25,7 @@ public class Flight implements Serializable {
     private String flightNo;
     private String flightDays;
     private double flightDuration;
-    private double basicFare;
+    private Double basicFare;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date startDateTime;
@@ -39,7 +39,7 @@ public class Flight implements Serializable {
     @OneToMany(cascade = {CascadeType.PERSIST}, mappedBy = "flight")
     private List<Schedule> schedule = new ArrayList<Schedule>();
     
-    public void createFlight(String flightNo, String flightDays, double basicFare, Date startDateTime) {
+    public void createFlight(String flightNo, String flightDays, Double basicFare, Date startDateTime) {
         this.flightNo = flightNo;
         this.flightDays = flightDays;
         flightDuration = 0.0;
@@ -67,11 +67,11 @@ public class Flight implements Serializable {
         return flightDuration;
     }
 
-    public void setFlightDuration(double flightDuration) {
+    public void setFlightDuration(Double flightDuration) {
         this.flightDuration = flightDuration;
     }
 
-    public double getBasicFare() {
+    public Double getBasicFare() {
         return basicFare;
     }
 

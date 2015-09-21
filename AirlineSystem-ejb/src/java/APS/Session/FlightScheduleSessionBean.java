@@ -41,7 +41,6 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
 
     @Override
     public void scheduleFlights(String flightId) {
-        System.out.println("LOL");
         flight = getFlight(flightId);
         aircraftType = new AircraftType();
         aircraftTypes = retrieveAircraftTypes();
@@ -49,7 +48,7 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
         
         //Find the best Aircraft for the flight
         aircraftType = aircraftTypes.get(0);
-        double minFuel = aircraftTypes.get(0).getFuelCost();
+        Double minFuel = aircraftTypes.get(0).getFuelCost();
         
         for (int i = 0; i<aircraftTypes.size();i++){
             if ((route.getDistance()<(double)aircraftTypes.get(i).getTravelRange()*1.1) && (aircraftTypes.get(i).getFuelCost() < minFuel)){
@@ -59,6 +58,7 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
         }
         
         flight.setAircraftType(aircraftType);
+        aircraftType.getFlights().add(flight);
         flight.setFlightDuration(route.getDistance()/(aircraftType.getSpeed()*1062));
         
         //Create link with Schedules

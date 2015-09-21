@@ -17,9 +17,10 @@ import javax.ejb.Local;
 public interface DepartmentSessionBeanLocal {
     public void addDepartment(String departName, String departLocation);
     public List<String> retrive();
-     public String searchEmployee(String staffID);
-     public String changeDepartment(String staffID,String deptName,String deptNameOld);
-     public String adminChangeDepartment(String staffID,String deptName,String deptNameOld);
+    public String searchEmployee(String staffID);
+    public String changeDepartment(String staffID,String deptName,String deptNameOld);
+    public String adminChangeDepartment(String staffID,String deptName,String deptNameOld);
     public List<OrganizationUnit> retrieveAllDepts();
-     public OrganizationUnit getDepartment(String deptName);
+    public OrganizationUnit getDepartment(String deptName);
+    public String deleteOrgUnit(String OUName);
 }
