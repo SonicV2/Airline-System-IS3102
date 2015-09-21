@@ -16,9 +16,10 @@ public interface FlightSessionBeanLocal {
 
     public void addFlight(String flightNo, String flightDays, Double basicFare, Date startDateTime, Long routeId);
     public void deleteFlight(String flightNo);
-    public void deleteSchedule(Schedule schedule1);
+    public void deleteSchedule(Long scheduleId);
     public Flight getFlight(String flightNo);
     public List<Flight> getFlights();
     public Route getRoute(Long id);
     public List<Flight> retrieveFlights();
+    public Schedule getSchedule(Long scheduleId);
 }
