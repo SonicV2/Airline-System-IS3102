@@ -60,9 +60,8 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
     public void deleteSchedule(Long id) {
         //NEED TO REMOVE RELATION WITH AIRCRAFT TOO
         schedule = getSchedule(id);
-        schedule.setFlight(flight);
-        schedule.setTeam(team);
         em.remove(schedule);
+        em.flush();
     }
 
     @Override
@@ -86,7 +85,29 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
         }
         return schedule;
     }
+    
+    @Override
+    public Schedule getScheduleByDate(Date startDate) {
+        schedule = new Schedule();
+        try {
 
+            Query q = em.createQuery("SELECT a FROM Schedule " + "AS a WHERE a.startDate=:startDate");
+            q.setParameter("startDate", startDate);
+
+            List results = q.getResultList();
+            if (!results.isEmpty()) {
+                schedule = (Schedule) results.get(0);
+
+            } else {
+                schedule = null;
+            }
+
+        } catch (EntityNotFoundException enfe) {
+            System.out.println("\nEntity not found error" + "enfe.getMessage()");
+        }
+        return schedule;
+    }
+    
     @Override
     public List<Schedule> getSchedules() {
         schedules = new ArrayList<Schedule>();
@@ -109,7 +130,7 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
         return schedules;
     }
 
-    private Flight getFlight(String flightNo) {
+    public Flight getFlight(String flightNo) {
         flight = new Flight();
         try {
 
@@ -128,5 +149,64 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
             System.out.println("\nEntity not found error" + "enfe.getMessage()");
         }
         return flight;
+    }
+    
+    @Override
+    public void changeFlightDays (List<Flight> flights) {
+        
+        for (int i=0; i<flights.size(); i++) {
+            String temp = "";
+            String flightDays = flights.get(i).getFlightDays();
+            
+            for (int j=0; j<flightDays.length(); j++) {
+                if (flightDays.charAt(j) == '1' && j==0)
+                    temp += "Sunday";
+                
+                if (flightDays.charAt(j) == '1' && j==1) {
+                    if (temp.isEmpty())
+                        temp += "Monday";
+                    else
+                        temp += ", Monday";
+                }
+                if (flightDays.charAt(j) == '1' && j==2) {
+                    if (temp.isEmpty())
+                        temp += "Tuesday";
+                    else
+                        temp += ", Tuesday";
+                }
+                
+                if (flightDays.charAt(j) == '1' && j==3) {
+                    if (temp.isEmpty())
+                        temp += "Wednesday";
+                    else
+                        temp += ", Wednesday";
+                }
+                
+                if (flightDays.charAt(j) == '1' && j==4) {
+                    if (temp.isEmpty())
+                        temp += "Thursday";
+                    else
+                        temp += ", Thursday";
+                }
+                
+                if (flightDays.charAt(j) == '1' && j==5) {
+                    if (temp.isEmpty())
+                        temp += "Friday";
+                    else
+                        temp += ", Friday";
+                }
+                
+                if (flightDays.charAt(j) == '1' && j==6) {
+                    if (temp.isEmpty())
+                        temp += "Saturday";
+                    else
+                        temp += ", Saturday";
+                }
+                
+            }
+            
+            flights.get(i).setFlightDaysString(temp);
+        }
+
     }
 }

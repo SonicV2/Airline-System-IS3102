@@ -34,9 +34,25 @@
                 <p:column filterBy="#{flight.flightNo}" headerText="Flight ID" filterMatchMode="contains">
                     <h:outputText value="#{flight.flightNo}" />
                 </p:column>
-                <p:column filterBy="#{flight.flightDays}" headerText="Flight Days" filterMatchMode="contains">
-                    <h:outputText value="#{flight.flightDays}" />
+                <p:column filterBy="#{flight.flightDaysString}" headerText="Flight Days" filterMatchMode="contains">
+                    <h:outputText value="#{flight.flightDaysString}" />
                 </p:column>
+                
+                <p:column filterBy="#{flight.route.originCountry}" headerText="Origin Country" filterMatchMode="contains">
+                <h:outputText value="#{flight.route.originCountry}" />
+            </p:column>
+                
+            <p:column filterBy="#{flight.route.originCity}" headerText="Origin City" filterMatchMode="contains">
+                <h:outputText value="#{flight.route.originCity}" />
+            </p:column>
+            
+            <p:column filterBy="#{flight.route.destinationCountry}" headerText="Destination Country" filterMatchMode="contains">
+                <h:outputText value="#{flight.route.destinationCountry}" />
+            </p:column>
+            
+            <p:column filterBy="#{flight.route.destinationCity}" headerText="Destination City" filterMatchMode="contains">
+                <h:outputText value="#{flight.route.destinationCity}" />
+            </p:column>
 
                 <p:column filterBy="#{flight.flightDuration}" headerText="Duration of Flight" filterMatchMode="contains">
                     <h:outputText value="#{flight.flightDuration} Hours" />
