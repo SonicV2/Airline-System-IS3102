@@ -4,46 +4,46 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
-    
+
     <h:head>
         <title>Delete Schedule Entry</title>
     </h:head>
-    
+
     <body>
-        
+
         <h:form>
             <h:commandButton class="btn btn-primary btn-lg btn-block" value="Retrieve" actionListener="#{scheduleManageBean.retrieve}"/>
         </h:form>
-        
+
         <h:form id="form">
             <p:contextMenu for="schedules">
                 <p:menuitem value="Delete" update="schedules" icon="ui-icon-close" actionListener="#scheduleManageBean.removeSchedule}"/>
             </p:contextMenu>
- 
+
             <p:dataTable id="schedules" var="schedule" value="#{scheduleManageBean.schedules}" rowKey="#{schedule.scheduleId}"
-                 selection="#{scheduleManageBean.selectedSchedule}" selectionMode="single" paginator="true" rows="10" widgetVar="schedulesTable">
-                
+                         selection="#{scheduleManageBean.selectedSchedule}" selectionMode="single" paginator="true" rows="10" widgetVar="schedulesTable">
+
                 <f:facet name="header">
                     Right Click to Delete the Schedule Entry
                     <p:outputPanel>
                         <h:outputText value="Search all fields:" />
-                    <p:inputText id="globalFilter" onkeyup="PF('schedulesTable').filter()" style="width:150px" placeholder="Enter keyword"/>
+                        <p:inputText id="globalFilter" onkeyup="PF('schedulesTable').filter()" style="width:150px" placeholder="Enter keyword"/>
                     </p:outputPanel>
                 </f:facet>
                 
                 <p:column filterBy="#{schedule.scheduleId}" headerText="Schedule ID" filterMatchMode="contains">
                     <h:outputText value="#{schedule.scheduleId}" />
                 </p:column>
-            
-            <p:column filterBy="#{schedule.startDate}" headerText="Start Date" filterMatchMode="contains">
-                <h:outputText value="#{schedule.startDate}" />
-            </p:column>
-            
-            <p:column filterBy="#{schedule.endDate}" headerText="Origin Country" filterMatchMode="contains">
-                <h:outputText value="#{schedule.endDate}" />
-            </p:column>
+
+                <p:column filterBy="#{schedule.startDate}" headerText="Start Date" filterMatchMode="contains">
+                    <h:outputText value="#{schedule.startDate}" />
+                </p:column>
+
+                <p:column filterBy="#{schedule.endDate}" headerText="Origin Country" filterMatchMode="contains">
+                    <h:outputText value="#{schedule.endDate}" />
+                </p:column>
             </p:dataTable>
-            </h:form>
-        
+        </h:form>
+
     </body>
 </html>
