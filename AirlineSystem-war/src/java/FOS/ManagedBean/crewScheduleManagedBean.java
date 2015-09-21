@@ -5,10 +5,12 @@
  */
 package FOS.ManagedBean;
 
+import CI.Entity.Pilot;
 import FOS.Entity.Pairing;
 import FOS.Entity.PairingPolicy;
 import FOS.Entity.Team;
 import FOS.Session.PairingSessionBeanLocal;
+import FOS.Session.testSessionBeanLocal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -32,95 +34,71 @@ import javax.faces.event.ActionEvent;
 @SessionScoped
 public class crewScheduleManagedBean {
     @EJB
-    private PairingSessionBeanLocal pairingSessionBean;
+    private testSessionBeanLocal testSessionBean;
 
-     private int time_scale_min; 
-     private int num_max_legs;
-     private int hours_max_flight;
-     private PairingPolicy pp;
+    @EJB
+    private PairingSessionBeanLocal pairingSessionBean;
+    
+
+    private int time_scale_min;
+    private int num_max_legs;
+    private int hours_max_flight;
+    private PairingPolicy pp;
     private List<Pairing> slns;
     private Pairing sln;  //selected from the webpage
     private String sln1;
     private Team team;
     private String selectMonth; //month choosen to get pairing
-    
-    private String date1;
 
-    public String getDate1() {
-        return date1;
-    }
-
-    public void setDate1(String date1) {
-        this.date1 = date1;
-    }
-    
-    
     /**
      * Creates a new instance of crewScheduleManagedBean
      */
     public crewScheduleManagedBean() {
-        
+
     }
-    
-    
-    public void getDate(ActionEvent event){
-        SimpleDateFormat formatter;
-        Date date=new Date();
-        
-        //String newstring = new SimpleDateFormat("dd/MM/yyyy").format(date);
-         String newstring = new SimpleDateFormat("MM").format(date);
-        date1=newstring;
-        
-    }
-    
-    
-    
-    
-    
-    public void getAssignedTeam(){
+
+    public void getAssignedTeam() {
         setTeam(pairingSessionBean.generateTeam(sln));
+
     }
-    
-    
-    public void changePolicy(ActionEvent event){
-         FacesMessage message = null;
-        if(num_max_legs==0 || hours_max_flight==0 ||  time_scale_min==0){
-            
-              message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Field cannot be 0!", "");
-        }else{
-        pairingSessionBean.changePolicy(num_max_legs, hours_max_flight, time_scale_min);
-        message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Change successfully!", "");
+
+    public void changePolicy(ActionEvent event) {
+        FacesMessage message = null;
+        if (num_max_legs == 0 || hours_max_flight == 0 || time_scale_min == 0) {
+
+            message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Field cannot be 0!", "");
+        } else {
+            pairingSessionBean.changePolicy(num_max_legs, hours_max_flight, time_scale_min);
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Change successfully!", "");
         }
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
-    
+
 //    public void crewPairing(ActionEvent event){
 //        pairingSessionBean.legMain(selectMonth);
 //    }
-
-    public void retrivePolicy(ActionEvent event){
+    public void retrivePolicy(ActionEvent event) {
         setPp(pairingSessionBean.retrievePolicy());
     }
-    
+
 // crew pairing.html --> display all legs
-    public void getSlns(ActionEvent event){
+    public void getSlns(ActionEvent event) {
         pairingSessionBean.legMain(selectMonth);
         setSlns(pairingSessionBean.getPairings());
     }
-    
-    public void getSelectPairingID(ActionEvent event){
-        
-        String pairingID=sln1.substring(sln1.indexOf("=")+1, sln1.indexOf("]")-1);
-        System.out.println("--------"+sln1.substring(sln1.indexOf("=")+1, sln1.indexOf("]")));
-        sln =pairingSessionBean.getPairingByID(pairingID);   
-        
+
+    public void getSelectPairingID(ActionEvent event) {
+
+        String pairingID = sln1.substring(sln1.indexOf("=") + 1, sln1.indexOf("]") - 1);
+        System.out.println("--------" + sln1.substring(sln1.indexOf("=") + 1, sln1.indexOf("]")));
+        sln = pairingSessionBean.getPairingByID(pairingID);
+
     }
-  
-    public void generateTeam(ActionEvent event){
-        pairingSessionBean.generateTeam(sln);
+
+    public void generateTeam(ActionEvent event) {
+        setTeam(pairingSessionBean.generateTeam(sln));
     }
-    
-    
+
     /**
      * @return the time_scale_min
      */
@@ -176,9 +154,6 @@ public class crewScheduleManagedBean {
     public void setPp(PairingPolicy pp) {
         this.pp = pp;
     }
-
-   
-
 
     /**
      * @return the slns
@@ -249,12 +224,9 @@ public class crewScheduleManagedBean {
     public void setSelectMonth(String selectMonth) {
         this.selectMonth = selectMonth;
     }
-
- 
-   
-
- 
     
+    public void test(ActionEvent event){
+        testSessionBean.test();
+    }
+
 }
-
-

@@ -7,7 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class Leg implements Serializable, Comparable {
+public class Leg implements Comparable,Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -20,13 +20,11 @@ public class Leg implements Serializable, Comparable {
     private int startHour;
     private int finishHour;
     private String date1;
-
-    public Leg() {
-        // setId();
-    }
+    
+    public Leg(){super();}
 
     public Leg(int line, String origin, String destination, int startHour, int finishHour, String date1) {
-
+        super();
         this.line = line;
         this.origin = origin;
         this.destination = destination;
@@ -43,31 +41,7 @@ public class Leg implements Serializable, Comparable {
         this.id = id;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Leg)) {
-            return false;
-        }
-        Leg other = (Leg) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "FOS.Entity.Leg[ id=" + id + " ]";
-    }
-
+ 
     /**
      * @return the line
      */
@@ -75,9 +49,7 @@ public class Leg implements Serializable, Comparable {
         return line;
     }
 
-    /**
-     * @param line the line to set
-     */
+ 
     public void setLine(int line) {
         this.line = line;
     }
@@ -89,9 +61,7 @@ public class Leg implements Serializable, Comparable {
         return origin;
     }
 
-    /**
-     * @param origin the origin to set
-     */
+  
     public void setOrigin(String origin) {
         this.origin = origin;
     }
@@ -103,9 +73,7 @@ public class Leg implements Serializable, Comparable {
         return destination;
     }
 
-    /**
-     * @param destination the destination to set
-     */
+ 
     public void setDestination(String destination) {
         this.destination = destination;
     }
@@ -117,9 +85,7 @@ public class Leg implements Serializable, Comparable {
         return startHour;
     }
 
-    /**
-     * @param startHour the startHour to set
-     */
+   
     public void setStartHour(int startHour) {
         this.startHour = startHour;
     }
@@ -145,9 +111,7 @@ public class Leg implements Serializable, Comparable {
         return date1;
     }
 
-    /**
-     * @param date1 the date to set
-     */
+    
     public void setDate1(String date1) {
         this.date1 = date1;
     }

@@ -46,6 +46,7 @@ public class Team implements Serializable {
     @OneToMany(cascade={CascadeType.PERSIST}, mappedBy="team")
     private List<Schedule> schedule= new ArrayList<Schedule>();
     
+    
     public Long getId() {
         return id;
     }
