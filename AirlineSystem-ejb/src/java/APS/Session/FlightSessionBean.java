@@ -51,6 +51,7 @@ public class FlightSessionBean implements FlightSessionBeanLocal {
         em.flush();
     }
     
+    @Override
     public void deleteSchedule(Long scheduleId) {
         schedule = getSchedule(scheduleId);
         em.remove(schedule);
