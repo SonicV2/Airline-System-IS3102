@@ -59,6 +59,7 @@
             <h:commandButton value="Assign" action="/FOS/choosePairing" />
 
 
+            
             <p:dataTable id="tbl" var="sln" value="#{crewScheduleManagedBean.slns}"
                          paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} "
                          paginator="true" rows="10" style="margin-bottom:20px">
@@ -106,7 +107,8 @@
                 </p:column>
             </p:dataTable>
 
-
+            <p:outputLabel value="Choose Month: " />
+            <p:inputText  required="true" requiredMessage="Please fill in this field!" class="form-control input-lg" placeholder="Choose Month" value="#{crewScheduleManagedBean.selectMonth}"  />
             <h:commandButton value="Display" actionListener="#{crewScheduleManagedBean.getSlns}"/>
 
         </h:form>

@@ -37,7 +37,10 @@
          <h:outputLabel value="#{crewScheduleManagedBean.team.cabinCrews.get(7)}"/><br/>
          
          
-         
+         <h:form>
+         <h:commandButton value="Generate Date"  actionListener="#{crewScheduleManagedBean.getDate}"/>
+         <h:outputLabel value="#{crewScheduleManagedBean.date1}"/><br/>
+         </h:form>
     </h:body>
 </html>
 

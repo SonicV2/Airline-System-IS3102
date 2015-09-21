@@ -23,14 +23,14 @@ public class AircraftType implements Serializable {
     @Id
     private String id;
     
-    private double speed;
+    private Double speed;
     private int travelRange;
     private int firstSeats;
     private int businessSeats;
     private int economySeats;
     private int totalStaff;
-    private double cost;
-    private double fuelCost;
+    private Double cost;
+    private Double fuelCost;
     private int numCabin;
     private int numCockpit;
     
@@ -48,11 +48,11 @@ public class AircraftType implements Serializable {
         this.id = id;
     }
 
-    public double getSpeed() {
+    public Double getSpeed() {
         return speed;
     }
 
-    public void setSpeed(double speed) {
+    public void setSpeed(Double speed) {
         this.speed = speed;
     }
 
@@ -88,20 +88,20 @@ public class AircraftType implements Serializable {
         this.numCockpit = numCockpit;
     }
 
-    public double getCost() {
+    public Double getCost() {
         return cost;
     }
 
-    public void setCost(double cost) {
+    public void setCost(Double cost) {
         this.cost = cost;
     }
     
-    public double getFuelCost() {
+    public Double getFuelCost() {
         return fuelCost;
     }
 
-    public void setFuelCost(double cost) {
-        this.fuelCost = fuelCost;
+    public void setFuelCost(Double cost) {
+        this.fuelCost = cost;
     }
 
     public int getFirstSeats() {
@@ -134,6 +134,14 @@ public class AircraftType implements Serializable {
 
     public void setAircrafts(List<Aircraft> aircrafts) {
         this.aircrafts = aircrafts;
+    }
+    
+    public List<Flight> getFlights() {
+        return flights;
+    }
+
+    public void setFlights(List<Flight> flights) {
+        this.flights = flights;
     }
     
     @Override

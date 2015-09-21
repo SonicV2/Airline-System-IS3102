@@ -7,6 +7,7 @@ package APS.Session;
 
 import APS.Entity.Flight;
 import APS.Entity.Schedule;
+import FOS.Entity.Team;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -31,6 +32,7 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
     private Flight flight;
     private Schedule schedule;
     private List<Schedule> schedules;
+    private Team team;
 
     @Override
     public void addSchedule(Date startDate, String flightNo) {
@@ -50,6 +52,7 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
         schedule.createSchedule(startDate, endDate.getTime());
         flight.getSchedule().add(schedule);
         schedule.setFlight(flight);
+        schedule.setTeam(team);
         em.persist(schedule);
     }
 
@@ -58,6 +61,7 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
         //NEED TO REMOVE RELATION WITH AIRCRAFT TOO
         schedule = getSchedule(id);
         schedule.setFlight(flight);
+        schedule.setTeam(team);
         em.remove(schedule);
     }
 

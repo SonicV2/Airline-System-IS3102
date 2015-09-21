@@ -91,7 +91,7 @@ public class RouteManageBean {
         
         List<Route> allroutes = routeSessionBean.retrieveRoutes();
         int size = allroutes.size();
-        
+
         for (int i=0; i<size; i++) {
             if (allroutes.get(i).getDestinationIATA().equals(destinationIATA) && allroutes.get(i).getOriginIATA().equals(originIATA)){
                 message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Route already exists!", "");

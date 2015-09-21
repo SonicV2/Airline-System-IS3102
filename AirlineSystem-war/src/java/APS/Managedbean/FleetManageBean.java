@@ -79,12 +79,13 @@ public class FleetManageBean {
     
     /*This is for admin to acquire new aircraft*/
     public void acquireAircraft(ActionEvent event){
-
+        
         if (fleetSessionBean.getAircraftType(aircraftTypeId) == null) {
-            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "No such aircraft type!", "");
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please select aircraft type!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
             return;
         }
+       
         fleetSessionBean.acquireAircraft(datePurchased, lastMaintained, aircraftTypeId);
     }
 

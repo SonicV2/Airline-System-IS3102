@@ -33,6 +33,27 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal{
         em.persist(department);
     }
     
+    
+    @Override
+    public String deleteOrgUnit(String OUName){
+        //String msg;
+        OrganizationUnit orgUnit = new OrganizationUnit();
+        orgUnit = getDepartment(OUName);
+        List<Employee> employees = orgUnit.getEmployee();
+        
+        for (Employee e: employees){
+            OrganizationUnit eOrgUnit = e.getOrganizationUnit(); //get a list of organization unit that the employee has
+            if (orgUnit == eOrgUnit){
+                return "Cannot Delete!";
+            }
+        }
+        
+        em.remove(orgUnit);
+        em.flush();
+        return "Delete successful!";    
+    }
+    
+    
     @Override
     public List<String> retrive() {
         ArrayList<String> list = new ArrayList();

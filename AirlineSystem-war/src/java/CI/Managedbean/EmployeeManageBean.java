@@ -11,6 +11,7 @@ import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import CI.Session.EmployeeSessionBeanLocal;
 import java.text.SimpleDateFormat;
+import java.util.HashSet;
 import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -88,7 +89,25 @@ public class EmployeeManageBean {
         employeeUserName = employee.getEmployeeUserName();
         employeeEmailAddress = employee.getEmployeeEmailAddress();
         employeeSessionBean.hashPwd(employeeID);
+        
+        clearAll();
 
+    }
+    
+
+    //clear all input after keying in
+    public void clearAll(){
+        setEmployeeDisplayFirstName("");
+        setEmployeeDisplayLastName("");
+        setEmployeeDOB(null);
+        setEmployeeGender("");
+        setEmployeeHpNumber("");
+        setEmployeeMailingAddress("");
+        setEmployeeDepartment("");
+        setEmployeeRole("");
+        setEmployeeOfficeNumber("");
+        setEmployeePrivateEmail("");
+         
     }
     
     public void addCabinCrew(ActionEvent event){
@@ -109,6 +128,8 @@ public class EmployeeManageBean {
         employeeSessionBean.hashPwd(employeeID);
     }
     
+     
+     
 
     public String changePwd(){
         HttpSession session = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(false);
