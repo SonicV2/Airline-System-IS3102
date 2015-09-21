@@ -34,6 +34,7 @@
                 <p:column filterBy="#{schedule.scheduleId}" headerText="Schedule ID" filterMatchMode="contains">
                     <h:outputText value="#{schedule.scheduleId}" />
                 </p:column>
+<<<<<<< HEAD
             
             <p:column filterBy="#{schedule.startDate}" headerText="Start Date" filterMatchMode="contains">
                 <h:outputText value="#{schedule.startDate}" />
@@ -63,6 +64,16 @@
                 <h:outputText value="#{schedule.flight.route.destinationCity}" />
             </p:column>
                 
+=======
+
+                <p:column filterBy="#{schedule.startDate}" headerText="Start Date" filterMatchMode="contains">
+                    <h:outputText value="#{schedule.startDate}" />
+                </p:column>
+
+                <p:column filterBy="#{schedule.endDate}" headerText="Origin Country" filterMatchMode="contains">
+                    <h:outputText value="#{schedule.endDate}" />
+                </p:column>
+>>>>>>> b190483e3a6b41769f39dd84656e67fda7754d75
             </p:dataTable>
         </h:form>
 
