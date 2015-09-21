@@ -9,7 +9,9 @@ import FOS.Entity.Pairing;
 import FOS.Entity.PairingPolicy;
 import FOS.Entity.Team;
 import FOS.Session.PairingSessionBeanLocal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -40,8 +42,18 @@ public class crewScheduleManagedBean {
     private Pairing sln;  //selected from the webpage
     private String sln1;
     private Team team;
+    private String selectMonth; //month choosen to get pairing
     
+    private String date1;
 
+    public String getDate1() {
+        return date1;
+    }
+
+    public void setDate1(String date1) {
+        this.date1 = date1;
+    }
+    
     
     /**
      * Creates a new instance of crewScheduleManagedBean
@@ -49,6 +61,21 @@ public class crewScheduleManagedBean {
     public crewScheduleManagedBean() {
         
     }
+    
+    
+    public void getDate(ActionEvent event){
+        SimpleDateFormat formatter;
+        Date date=new Date();
+        
+        //String newstring = new SimpleDateFormat("dd/MM/yyyy").format(date);
+         String newstring = new SimpleDateFormat("MM").format(date);
+        date1=newstring;
+        
+    }
+    
+    
+    
+    
     
     public void getAssignedTeam(){
         setTeam(pairingSessionBean.generateTeam(sln));
@@ -67,17 +94,17 @@ public class crewScheduleManagedBean {
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
     
-    public void crewPairing(ActionEvent event){
-        pairingSessionBean.legMain();
-    }
+//    public void crewPairing(ActionEvent event){
+//        pairingSessionBean.legMain(selectMonth);
+//    }
 
     public void retrivePolicy(ActionEvent event){
         setPp(pairingSessionBean.retrievePolicy());
     }
     
-
+// crew pairing.html --> display all legs
     public void getSlns(ActionEvent event){
-        pairingSessionBean.legMain();
+        pairingSessionBean.legMain(selectMonth);
         setSlns(pairingSessionBean.getPairings());
     }
     
@@ -207,6 +234,20 @@ public class crewScheduleManagedBean {
      */
     public void setTeam(Team team) {
         this.team = team;
+    }
+
+    /**
+     * @return the selectMonth
+     */
+    public String getSelectMonth() {
+        return selectMonth;
+    }
+
+    /**
+     * @param selectMonth the selectMonth to set
+     */
+    public void setSelectMonth(String selectMonth) {
+        this.selectMonth = selectMonth;
     }
 
  
