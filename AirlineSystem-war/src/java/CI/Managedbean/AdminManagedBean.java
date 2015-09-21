@@ -66,9 +66,7 @@ public class AdminManagedBean {
     public void onRowEdit(RowEditEvent event) {
         Employee employee = (Employee) event.getObject();
 
-        System.out.println("gender changed to: "+employee.getEmployeeGender());  //New name
-        System.out.println("department changed to: " + employeeNewDeptName);
-//        employeeSessionBean.updateInfo(employee.getEmployeeUserName(), employee.getEmployeeDOB(), employee.getEmployeeGender(),employee.getEmployeeMailingAddress(), employee.getEmployeeOfficeNumber(), employee.getEmployeeHpNumber(), employee.getEmployeePrivateEmail() );
+        //if the department is changed:
         if (!employee.getOrganizationUnit().getDepartmentName().equals(employeeNewDeptName)){
             departmentSessionBean.adminChangeDepartment(employee.getEmployeeID(), employeeNewDeptName, employee.getOrganizationUnit().getDepartmentName());
             setAllActiveEmployees(employeeSessionBean.retrieveAllActiveEmployees());
