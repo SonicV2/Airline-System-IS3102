@@ -14,7 +14,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.util.*;
 import javax.persistence.CascadeType;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  *
@@ -26,13 +29,21 @@ public class Booking implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String bookingDate;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date bookingDate;
     private double price;
-    @OneToOne
-    private BookingClass bookingClass;
-    @OneToOne
+    private String serviceType;
+    @ManyToOne
     private SeatAvailability seatAvail = new SeatAvailability(); 
 
+    
+    public void createBooking(double price, String serviceType, 
+            SeatAvailability seatAvail){
+        this.price=price;
+        this.serviceType = serviceType;
+        this.seatAvail = seatAvail;
+        bookingDate= new Date();
+    }
     /**
      * @return the id
      */
@@ -50,14 +61,14 @@ public class Booking implements Serializable {
     /**
      * @return the bookingDate
      */
-    public String getBookingDate() {
+    public Date getBookingDate() {
         return bookingDate;
     }
 
     /**
      * @param bookingDate the bookingDate to set
      */
-    public void setBookingDate(String bookingDate) {
+    public void setBookingDate(Date bookingDate) {
         this.bookingDate = bookingDate;
     }
 
@@ -78,15 +89,13 @@ public class Booking implements Serializable {
     /**
      * @return the bookingClass
      */
-    public BookingClass getBookingClass() {
-        return bookingClass;
+    public String getServiceType() {
+        return serviceType;
     }
 
-    /**
-     * @param bookingClass the bookingClass to set
-     */
-    public void setBookingClass(BookingClass bookingClass) {
-        this.bookingClass = bookingClass;
+    
+    public void setServiceType(String serviceType) {
+        this.serviceType = serviceType;
     }
 
     /**

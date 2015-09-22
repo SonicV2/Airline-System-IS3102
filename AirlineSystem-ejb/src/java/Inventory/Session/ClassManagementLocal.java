@@ -14,15 +14,15 @@ import javax.ejb.Local;
  */
 @Local
 public interface ClassManagementLocal {
-     public void addClassCode(String classcode, int pricePercent, int advancedSales
+     public String addClassCode(String classcode, int pricePercent, int advancedSales
     , int percentSold, String serviceClass, boolean rebook, boolean cancel, 
     int baggage, int millageAccru);
      
      public void deleteClassCode(String classcode);
      
-     public void editClassCode(String classcode, int pricePercent, int advancedSales
-    , int percentSold, String serviceClass, boolean rebook, boolean cancel, 
-    int baggage, int millageAccru);
+     public void editClassCode(BookingClass bc);
      
      public List<BookingClass> retrieveBookingClasses();
+     
+     public BookingClass findClass(String classCode);
 }

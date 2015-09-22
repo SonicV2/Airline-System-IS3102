@@ -43,15 +43,34 @@ public class RevenueManagement implements RevenueManagementLocal{
         return seats;
     }
     
+    public SeatAvailability findSA(Date fDate,String flightNo){
+        Query q = em.createQuery("SELECT o from SeatAvailability o WHERE o.flightNo = :flightNo");
+         q.setParameter("flightNo",flightNo);
+         List<SeatAvailability> saList = q.getResultList();
+         int size = saList.size();
+         SeatAvailability sa = saList.get(0);
+         for(int i =0; i<size; i++){
+             if(saList.get(i).getFlightDate().equals(fDate)){
+                 sa= saList.get(i);
+                 System.out.println("Date Check Successful!");
+             }
+                 
+         }
+         return sa;
+    }
     
+    /**
+     *
+     * @param flightNo
+     * @param fDate
+     * @return
+     */
+    @Override
     public int[] getAvail(String flightNo,Date fDate){
         
         try{
-         System.out.println(fDate);
-         Query q = em.createQuery("SELECT o from SeatAvailability o WHERE o.flightNo = :flightNo");
-         q.setParameter("flightNo",flightNo);
-         List<SeatAvailability> saList = q.getResultList();
-         SeatAvailability sa = saList.get(0);
+         
+         SeatAvailability sa = findSA(fDate, flightNo);
          int[] avail = new int[10];
          avail[0]= sa.getEconomySaverTotal()-sa.getEconomySaverBooked();
          avail[1]= sa.getEconomyBasicTotal() - sa.getEconomyBasicBooked();
@@ -82,7 +101,6 @@ public class RevenueManagement implements RevenueManagementLocal{
         int min = Integer.parseInt(flightTime.substring(2));
         Calendar cflightDate = Calendar.getInstance();
         cflightDate.set(year,month,day,hour,min,0);
-        System.out.println(cflightDate.getTime());
         date= cflightDate.getTime();
         return date;
     }
@@ -112,29 +130,44 @@ public class RevenueManagement implements RevenueManagementLocal{
             int size = classList.size();
             long days = (fDate.getTime()-current.getTime())/ 1000 / 60 / 60 / 24;
             System.out.println("Service Type: "+ serviceClass + " " + days);
-            BookingClass c = classList.get(0);
-            System.out.println("Starting Class: " + c.getClasscode());
+            List<BookingClass> updatedList = new ArrayList();
+            
             for(int i=0;i<size;i++){
                 BookingClass b = classList.get(i);
                 int daysOut = b.getAdvancedSales();
+                if (days<=daysOut){
+                    updatedList.add(classList.get(i));
+                    System.out.println("Fare Class qualified: " + b.getClasscode());
+                }
+            }
+
+            size = updatedList.size();
+            
+            BookingClass c = updatedList.get(0);
+            for(int i=0;i<size;i++){
+                BookingClass b = updatedList.get(i);
+                int daysOut = b.getAdvancedSales();
                 int sold = b.getPercentSold();
-                if (days<=daysOut && (b.getPricePercent()<= c.getPricePercent())){
+                if (b.getPricePercent()<= c.getPricePercent()){
                     c=b;
                 }
             }
+            
+            System.out.println("Lowest Fare Class: " + c.getClasscode());
             for(int i=0;i<size;i++){
-                BookingClass b = classList.get(i);
+                BookingClass b = updatedList.get(i);
                 int daysOut = b.getAdvancedSales();
                 int sold = b.getPercentSold();
-                if (realSold >= sold && days<=daysOut){
+                if (realSold >= sold){
                     c=b;
                     System.out.println("Higher Class Triggered ");
                 }
             }
+            
             double doubleprice = (c.getPricePercent() * getBasePrice(flightNo))/100;
             String price= Double.toString(doubleprice);
             System.out.println("Price: "+ price);
-            System.out.println("Booking Class:" + c.getClasscode());
+            System.out.println("Final Booking Class:" + c.getClasscode());
             return price;
         }
        catch (EntityNotFoundException enfe) {
