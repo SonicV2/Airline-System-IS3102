@@ -15,6 +15,8 @@ import java.util.*;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
+import APS.Entity.Schedule;
+import javax.persistence.CascadeType;
 import javax.persistence.TemporalType;
 
 
@@ -33,8 +35,6 @@ public class SeatAvailability implements Serializable {
     private int economyPremiumTotal;
     private int businessTotal;
     private int firstClassTotal;
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date flightDate;
     private int economySaverBooked;
     private int economyBasicBooked;
     private int economyPremiumBooked;
@@ -43,7 +43,8 @@ public class SeatAvailability implements Serializable {
     @OneToMany(mappedBy="seatAvail")
     private List<Booking> bookings = new ArrayList<Booking>();
     
-    private String flightNo;
+    @OneToOne(mappedBy="seatAvail")
+    private Schedule schedule;
 
     /**
      * @return the id
@@ -51,25 +52,18 @@ public class SeatAvailability implements Serializable {
     public Long getId() {
         return id;
     }
-    public void createSeatAvail (String flightNo, int []seats, Date flightDate){
-        this.flightDate= flightDate;
-        this.flightNo= flightNo;
-        this.economySaverTotal = seats[0];
-        this.economyBasicTotal = seats[1];
-        this.economyPremiumTotal = seats[2];
-        this.businessTotal = seats[3];
-        this.firstClassTotal=seats[4];
-        this.firstClassBooked=0;
-        this.economySaverBooked =0;
-        this.economyBasicBooked =0;
-        this.businessBooked=0;
-        this.economyPremiumBooked=0;
-    }
-    /**
-     * @param id the id to set
-     */
-    public void setId(Long id) {
-        this.id = id;
+    public void createSeatAvail (Schedule schedule, int []seats){
+        this.setSchedule(schedule);
+        this.setEconomySaverTotal(seats[0]);
+        this.setEconomyBasicTotal(seats[1]);
+        this.setEconomyPremiumTotal(seats[2]);
+        this.setBusinessTotal(seats[3]);
+        this.setFirstClassTotal(seats[4]);
+        this.setFirstClassBooked(0);
+        this.setEconomySaverBooked(0);
+        this.setEconomyBasicBooked(0);
+        this.setBusinessBooked(0);
+        this.setEconomyPremiumBooked(0);
     }
 
     /**
@@ -142,23 +136,7 @@ public class SeatAvailability implements Serializable {
         this.firstClassTotal = firstClassTotal;
     }
 
-    /**
-     * @return the flightDate
-     */
-    public Date getFlightDate() {
-        return flightDate;
-    }
-
-    /**
-     * @param flightDate the flightDate to set
-     */
-    public void setFlightDate(Date flightDate) {
-        this.flightDate = flightDate;
-    }
-
-    /**
-     * @return the economySaverBooked
-     */
+    
     public int getEconomySaverBooked() {
         return economySaverBooked;
     }
@@ -241,19 +219,19 @@ public class SeatAvailability implements Serializable {
     }
 
     /**
-     * @return the flight
+     * @return the schedule
      */
-    public String getFlight() {
-        return flightNo;
+    public Schedule getSchedule() {
+        return schedule;
     }
 
     /**
-     * @param flight the flight to set
+     * @param schedule the schedule to set
      */
-    public void setFlight(String flightNo) {
-        this.flightNo = flightNo;
+    public void setSchedule(Schedule schedule) {
+        this.schedule = schedule;
     }
-
+    
    
     
 }
