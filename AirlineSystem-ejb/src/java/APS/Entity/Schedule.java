@@ -44,8 +44,8 @@ public class Schedule implements Serializable {
     @ManyToOne(cascade = {CascadeType.PERSIST})
     private Team team = new Team();
     
-   
-    private SeatAvailability seatAvail = new SeatAvailability();
+    @OneToOne(cascade = {CascadeType.ALL})
+    private SeatAvailability seatAvail;
 
     
     public void createSchedule(Date startDate, Date endDate){
