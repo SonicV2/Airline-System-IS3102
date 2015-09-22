@@ -50,7 +50,7 @@ public class RevenueManagement implements RevenueManagementLocal{
          int size = saList.size();
          SeatAvailability sa = saList.get(0);
          for(int i =0; i<size; i++){
-             if(saList.get(i).getFlightDate().equals(fDate)){
+             if(saList.get(i).getSchedule().getStartDate().equals(fDate)){
                  sa= saList.get(i);
                  System.out.println("Date Check Successful!");
              }
@@ -105,14 +105,6 @@ public class RevenueManagement implements RevenueManagementLocal{
         return date;
     }
     
-    @Override
-    public void createAvailability(String flightNo, String flightDate, 
-            String flightTime){
-        int [] seats = generateAvailability(40,20,10);
-        SeatAvailability sa = new SeatAvailability();
-        sa.createSeatAvail(flightNo, seats, convertToDate(flightDate,flightTime));
-        em.persist(sa);
-    }
     
     public double getBasePrice(String flightNo){
         double baseprice=100.0;

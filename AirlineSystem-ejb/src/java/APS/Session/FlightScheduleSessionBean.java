@@ -24,6 +24,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import Inventory.Entity.SeatAvailability;
+import Inventory.Session.RevenueManagementLocal;
 
 /**
  *
@@ -34,6 +36,8 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
 
     @PersistenceContext(unitName = "AirlineSystem-ejbPU")
     private EntityManager em;
+    
+    private RevenueManagementLocal rm;
 
     private Flight flight;
     private List<Flight> flights;
@@ -100,7 +104,15 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
                 schedule.createSchedule(flightStart, flightEnd);
                 schedule.setFlight(flight);
                 schedule.setTeam(team);
+                SeatAvailability sa = new SeatAvailability ();
+                schedule.setSeatAvailability(sa);
+                int economy = flight.getAircraftType().getEconomySeats();
+                int business = flight.getAircraftType().getBusinessSeats();
+                int firstClass = flight.getAircraftType().getFirstSeats();
+                int[] seats = rm.generateAvailability(economy, business, firstClass);
                 em.persist(schedule);
+                sa.createSeatAvail(schedule, seats);
+                em.persist(sa);
                 schedules.add(schedule);
             }
             curr.setTime(counter);

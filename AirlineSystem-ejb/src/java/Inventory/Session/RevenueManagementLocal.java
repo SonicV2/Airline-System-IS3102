@@ -14,8 +14,6 @@ import javax.ejb.Local;
  */
 @Local
 public interface RevenueManagementLocal {
-    public void createAvailability(String flightNo, String flightDate, 
-            String flightTime);
     
     public int[] generateAvailability(int economy, int business, int firstClass);
     public String getPrice(String flightNo,Date fDate, String serviceClass, int realSold);
