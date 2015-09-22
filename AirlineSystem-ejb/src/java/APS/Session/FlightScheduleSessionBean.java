@@ -36,7 +36,7 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
 
     @PersistenceContext(unitName = "AirlineSystem-ejbPU")
     private EntityManager em;
-    
+
     private RevenueManagementLocal rm;
 
     private Flight flight;
@@ -88,23 +88,17 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
         curr.setTime(startDateTime);
         curr.set(Calendar.SECOND, 0);
         Date counter = startDateTime;
-        //Break up the hour and minutes
-        int flightHr = (int) flight.getFlightDuration();
-        int flightMin = (int) ((flight.getFlightDuration() - (double) flightHr) * 60);
 
         //Add a list schedule until 6 months later
         while (curr.before(endTime)) {
             schedule = new Schedule();
             int day = curr.get(Calendar.DAY_OF_WEEK);
             if (flightDays.charAt(day - 1) == '1') {
-                Date flightStart = curr.getTime();
-                curr.add(Calendar.HOUR, flightHr);
-                curr.add(Calendar.MINUTE, flightMin);
-                Date flightEnd = curr.getTime();
-                schedule.createSchedule(flightStart, flightEnd);
+                Date flightEnd = calcEndTime(curr.getTime(), flight);
+                schedule.createSchedule(curr.getTime(), flightEnd);
                 schedule.setFlight(flight);
                 schedule.setTeam(team);
-                SeatAvailability sa = new SeatAvailability ();
+                SeatAvailability sa = new SeatAvailability();
                 schedule.setSeatAvailability(sa);
                 int economy = flight.getAircraftType().getEconomySeats();
                 int business = flight.getAircraftType().getBusinessSeats();
@@ -311,5 +305,19 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
             }
         }
         return true;
+    }
+
+    private Date calcEndTime(Date startTime, Flight flight) {
+        //Break up the hour and minutes
+        int flightHr = (int) flight.getFlightDuration();
+        int flightMin = (int) ((flight.getFlightDuration() - (double) flightHr) * 60);
+
+        TimeZone tz = TimeZone.getTimeZone("GMT+8:00"); //Set Timezone to Singapore
+        Calendar endTime = Calendar.getInstance(tz);
+        endTime.setTime(startTime);
+        endTime.add(Calendar.HOUR, flightHr);
+        endTime.add(Calendar.MINUTE, flightMin);
+
+        return endTime.getTime();
     }
 }
