@@ -33,7 +33,13 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
     private Schedule schedule;
     private List<Schedule> schedules;
     private Team team;
-
+    
+    
+    @Override
+    public void edit(Schedule schedule){
+        em.merge(schedule);
+    }
+    
     @Override
     public void addSchedule(Date startDate, String flightNo) {
         schedule = new Schedule();

@@ -6,7 +6,7 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <h:head>
-        <title>Delete Schedule</title>
+        <title>Update Schedule</title>
     </h:head>
 
     <body>
@@ -16,34 +16,32 @@
         </h:form>
 
         <h:form id="form">
-            <p:contextMenu for="schedules">
-                <p:menuitem value="Delete" update="schedules" icon="ui-icon-close" actionListener="#{scheduleManageBean.deleteSchedule}"/>
-            </p:contextMenu>
-
-            <p:dataTable id="schedules" var="schedule" value="#{scheduleManageBean.schedules}" rowKey="#{schedule.scheduleId}"
-                         selection="#{scheduleManageBean.selectedSchedule}" selectionMode="single" paginator="true" rows="10" widgetVar="schedulesTable">
-
+            <p:growl id="msgs" showDetail="true"/>
+            
+            <p:dataTable id="schedules" var="schedule" value="#{scheduleManageBean.schedules}" editable="true" style="margin-bottom:20px" paginator="true" rows="10" widgetVar="schedulesTable">
                 <f:facet name="header">
-                    Right Click to Delete the Schedule Entry
+                    Click the icon on right column to Edit
                     <p:outputPanel>
                         <h:outputText value="Search all fields:" />
                         <p:inputText id="globalFilter" onkeyup="PF('schedulesTable').filter()" style="width:150px" placeholder="Enter keyword"/>
                     </p:outputPanel>
                 </f:facet>
-                
-                <p:column filterBy="#{schedule.scheduleId}" headerText="Schedule ID" filterMatchMode="contains">
-                    <h:outputText value="#{schedule.scheduleId}" />
-                </p:column>
-
-            <p:column filterBy="#{schedule.startDate}" headerText="Start Date" filterMatchMode="contains">
-                <h:outputText value="#{schedule.startDate}" />
-            </p:column>
-            
-            <p:column filterBy="#{schedule.endDate}" headerText="End Date" filterMatchMode="contains">
-                <h:outputText value="#{schedule.endDate}" />
-            </p:column>
-                
-                <p:column filterBy="#{schedule.flight.flightNo}" headerText="Flight No." filterMatchMode="contains">
+ 
+       <p:ajax event="rowEdit" listener="#{scheduleManageBean.onRowEdit}" update=":form:msgs" />
+       <p:ajax event="rowEditCancel" listener="#{scheduleManageBean.onRowCancel}" update=":form:msgs" />
+ 
+       <p:column filterBy="#{schedule.scheduleId}" headerText="Schedule ID" filterMatchMode="contains">
+            <h:outputText value="#{schedule.scheduleId}" />
+       </p:column>
+ 
+       <p:column headerText="Scheduled Date and Time" filterBy="#{schedule.startDate}" filterMatchMode="contains">
+           <p:cellEditor>
+               <f:facet name="output"><h:outputText value="#{schedule.startDate}" /></f:facet>
+               <f:facet name="input"><p:calendar id="startDate" value="#{schedule.startDate}" pattern="MM/dd/yyyy HH:mm"/></f:facet>
+           </p:cellEditor>
+       </p:column>
+       
+       <p:column filterBy="#{schedule.flight.flightNo}" headerText="Flight No." filterMatchMode="contains">
                 <h:outputText value="#{schedule.flight.flightNo}" />
             </p:column>
                 
@@ -62,6 +60,21 @@
             <p:column filterBy="#{schedule.flight.route.destinationCity}" headerText="Destination City" filterMatchMode="contains">
                 <h:outputText value="#{schedule.flight.route.destinationCity}" />
             </p:column>
+ 
+<!--       <p:column headerText="Aircraft">
+           <p:cellEditor>
+               <f:facet name="output"><h:outputText value="#{scheduleManageBean.aircrafts.tailNo}" /></f:facet>
+               <f:facet name="input">
+                   <h:selectOneMenu value="#{scheduleManageBean.aircrafts.tailNo}" style="width:100%">
+                       <f:selectItems value="#{scheduleManageBean.aircraftlist}" var="aircraft" itemLabel="#{aircraft}" itemValue="#{aircraft}" />
+                   </h:selectOneMenu>
+               </f:facet>
+           </p:cellEditor>
+       </p:column>-->
+       
+       <p:column style="width:32px">
+           <p:rowEditor />
+       </p:column>
 
             </p:dataTable>
         </h:form>
