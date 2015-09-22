@@ -130,7 +130,8 @@ public class FlightManageBean {
             }
         }
         
-
+        flightDays = "";
+        
         for (int i = 0; i < selectedFlightDays.length; i++) {
             if (selectedFlightDays[i].equals("Sunday")) {
                 setString("1");

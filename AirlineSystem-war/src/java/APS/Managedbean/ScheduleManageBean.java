@@ -126,7 +126,6 @@ public class ScheduleManageBean {
         Schedule original= scheduleSessionBean.getSchedule(scheduleId);
         if(!edited.equals(original)){
             scheduleSessionBean.edit(edited);
-            
             FacesMessage msg = new FacesMessage("Schedule Edited");
             FacesContext.getCurrentInstance().addMessage(null, msg);
         }

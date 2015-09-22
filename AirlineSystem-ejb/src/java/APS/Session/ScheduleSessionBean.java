@@ -39,10 +39,9 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
     
     @Override
     public void edit(Schedule schedule){
+        schedule.setEndDate(calcEndTime(schedule.getStartDate(), schedule.getFlight()));
         em.merge(schedule);
     }
-    
-    private Aircraft aircraft;
 
     @Override
     public void addSchedule(Date startDate, String flightNo) {
@@ -229,8 +228,6 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
     @Override
     public List<Schedule> getSchedules(String tailNo) {
         aircraft = new Aircraft();
-<<<<<<< HEAD
-
         try {
             Query q = em.createQuery("SELECT a FROM Aircraft " + "AS a WHERE a.tailNo=:tailNo");
             q.setParameter("tailNo", tailNo);
@@ -256,34 +253,6 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
         int flightHr = (int) flight.getFlightDuration();
         int flightMin = (int) ((flight.getFlightDuration() - (double) flightHr) * 60);
 
-=======
-
-        try {
-            Query q = em.createQuery("SELECT a FROM Aircraft " + "AS a WHERE a.tailNo=:tailNo");
-            q.setParameter("tailNo", tailNo);
-
-            List results = q.getResultList();
-            if (!results.isEmpty()) {
-                aircraft = (Aircraft) results.get(0);
-
-            } else {
-                aircraft = null;
-            }
-
-        } catch (EntityNotFoundException enfe) {
-            System.out.println("\nEntity not found error" + "enfe.getMessage()");
-        }
-
-        return aircraft.getSchedules();
-    }
-
-    @Override
-    public Date calcEndTime(Date startTime, Flight flight) {
-        //Break up the hour and minutes
-        int flightHr = (int) flight.getFlightDuration();
-        int flightMin = (int) ((flight.getFlightDuration() - (double) flightHr) * 60);
-
->>>>>>> ae84d48dedf5d54ded0603d07af31bc4ff1aa4e1
         TimeZone tz = TimeZone.getTimeZone("GMT+8:00"); //Set Timezone to Singapore
         Calendar endTime = Calendar.getInstance(tz);
         endTime.setTime(startTime);
