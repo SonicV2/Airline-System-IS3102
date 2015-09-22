@@ -110,7 +110,7 @@ public class RevenueManagement implements RevenueManagementLocal{
             String flightTime){
         int [] seats = generateAvailability(40,20,10);
         SeatAvailability sa = new SeatAvailability();
-        sa.createSeatAvail(flightNo, seats, convertToDate(flightDate,flightTime));
+        sa.createSeatAvail(flightNo,seats,convertToDate(flightDate,flightTime));
         em.persist(sa);
     }
     
