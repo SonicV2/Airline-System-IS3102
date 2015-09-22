@@ -240,4 +240,19 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
 
         return aircraft.getSchedules();
     }
+
+    @Override
+    public Date calcEndTime(Date startTime, Flight flight) {
+        //Break up the hour and minutes
+        int flightHr = (int) flight.getFlightDuration();
+        int flightMin = (int) ((flight.getFlightDuration() - (double) flightHr) * 60);
+
+        TimeZone tz = TimeZone.getTimeZone("GMT+8:00"); //Set Timezone to Singapore
+        Calendar endTime = Calendar.getInstance(tz);
+        endTime.setTime(startTime);
+        endTime.add(Calendar.HOUR, flightHr);
+        endTime.add(Calendar.MINUTE, flightMin);
+        
+        return endTime.getTime();
+    }
 }
