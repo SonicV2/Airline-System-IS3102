@@ -36,6 +36,13 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
     private Team team;
     private Aircraft aircraft;
 
+    
+    @Override
+    public void edit(Schedule schedule){
+        schedule.setEndDate(calcEndTime(schedule.getStartDate(), schedule.getFlight()));
+        em.merge(schedule);
+    }
+
     @Override
     public void addSchedule(Date startDate, String flightNo) {
         schedule = new Schedule();
@@ -221,7 +228,6 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
     @Override
     public List<Schedule> getSchedules(String tailNo) {
         aircraft = new Aircraft();
-
         try {
             Query q = em.createQuery("SELECT a FROM Aircraft " + "AS a WHERE a.tailNo=:tailNo");
             q.setParameter("tailNo", tailNo);
