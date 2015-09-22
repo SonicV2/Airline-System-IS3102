@@ -31,7 +31,7 @@ public class Team implements Serializable {
     private Long id;
     private int pilotNo;
     private int cCrewNo; //cabin crew
-    private String status;
+    private String status="Not Assigned";
     private String location;    // all default location is at Singapore
     
     @OneToMany(cascade={CascadeType.PERSIST}, mappedBy="team")
@@ -48,6 +48,13 @@ public class Team implements Serializable {
     
     
     public Team(){}
+    
+    public void create(int pilotNo, int cCrewNo, String status, String location){
+        this.cCrewNo=cCrewNo;
+        this.location="SINGAPORE";
+        this.pilotNo=pilotNo;
+        this.status=status;
+    }
     
     public Long getId() {
         return id;
