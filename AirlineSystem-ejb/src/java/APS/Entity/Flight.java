@@ -1,6 +1,7 @@
 package APS.Entity;
 
 import java.io.Serializable;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -26,6 +27,7 @@ public class Flight implements Serializable {
     private String flightDays;
     private double flightDuration;
     private Double basicFare;
+    private String flightDaysString;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date startDateTime;
@@ -61,6 +63,14 @@ public class Flight implements Serializable {
 
     public void setFlightDays(String flightDays) {
         this.flightDays = flightDays;
+    }
+    
+    public String getFlightDaysString() {
+        return flightDaysString;
+    }
+
+    public void setFlightDaysString(String flightDaysString) {
+        this.flightDaysString = flightDaysString;
     }
 
     public double getFlightDuration() {

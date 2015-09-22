@@ -18,18 +18,18 @@ import javax.ejb.Local;
  */
 @Local
 public interface PairingSessionBeanLocal {
-   public void legMain();
-     public void setPolicy();
+
+    public void legMain(String selectMonth);
+
+    public void setPolicy();
 
     public PairingPolicy retrievePolicy();
 
     void changePolicy(int maxLeg, int maxFlight, int minStopTime);
-    
+
     public List<Pairing> getPairings();
-    
+
     public Pairing getPairingByID(String id);
-    
+
     public Team generateTeam(Pairing pairing);
 }
-
-

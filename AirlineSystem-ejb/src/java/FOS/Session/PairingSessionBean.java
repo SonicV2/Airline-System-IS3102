@@ -19,6 +19,7 @@ import FOS.Entity.Team;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -36,64 +37,84 @@ import javax.persistence.Query;
  */
 @Stateless
 public class PairingSessionBean implements PairingSessionBeanLocal {
-    
+
     @PersistenceContext(unitName = "AirlineSystem-ejbPU")
     private EntityManager em;
-    
+
     private int time_scale_min;
     private int num_max_legs;
     private int hours_max_flight;
-    private Map<Integer, String> info; // get date,flight
+    SimpleDateFormat formatter;
+    ArrayList<Leg> legss; 
 
-    private ArrayList<String> sol1;
-    
     @Override
-    public void legMain() {
+    public void legMain(String selectMonth) {
         ArrayList<Leg> legs = new ArrayList<Leg>();
         ArrayList<Leg> route = new ArrayList<Leg>();
         Leg l;
         boolean first = true;
-        ArrayList<String> solution;
         int numSols = 0;
         int numLegs = 0;
         int numofFlightHours = 0;
         int totalFlightHours = 0;
+
+//        Leg l1 = new Leg(123, "Singapore", "MAL", 1100, 1454, "07/09/2015");
+//
+//        Leg l2 = new Leg(124, "MAL", "Singapore", 2000, 2354, "07/09/2015");
+//
+//        Leg l3 = new Leg(123, "Singapore", "MAL", 1100, 1454, "14/09/2015");
+//
+//        Leg l4 = new Leg(124, "MAL", "Singapore", 2000, 2354, "14/09/2015");
+//
+//        Leg l5 = new Leg(123, "Singapore", "MAL", 1100, 1454, "21/09/2015");
+//
+//        Leg l6 = new Leg(124, "MAL", "Singapore", 2000, 2354, "21/09/2015");
+//        
+//         Leg l7 = new Leg(123, "Singapore", "MAL", 1100, 1454, "28/09/2015");
+//
+//        Leg l8 = new Leg(124, "MAL", "Singapore", 2000, 2354, "28/09/2015");
+//
+//        legs.add(l1);
+//
+//        legs.add(l2);
+//
+//        legs.add(l3);
+//        legs.add(l4);
+//        legs.add(l5);
+//        legs.add(l6);
+//        legs.add(l7);
+//        legs.add(l8);
+
         
-        
-        
-        Leg l1 = new Leg(3028, " MXP", "BCN", 1850, 1950, "2015-03-09");
-        Leg l2 = new Leg(2050, "BCN", "MAD", 2100, 2140, "03/09/2012");
-        Leg l3 = new Leg(2240, "MAD", "BCN", 2240, 2310, "03/09/2012");
-        Leg l4 = new Leg(1010, "BCN", "VLC", 1420, 1440, "03/09/2012");
-        legs.add(l1);
-        legs.add(l2);
-        legs.add(l3);
-        legs.add(l4);
-        
+      legs = addLeg(selectMonth);   
+      
         sortList(legs);
-        
         String destination = legs.get(0).getDestination();
         int startHour = legs.get(0).getStartHour();
         int finishHour = legs.get(0).getFinishHour();
         String date = legs.get(0).getDate1();
-        
-        ArrayList<ArrayList<String>> slns = new ArrayList<ArrayList<String>>(); //--- sln list
-        do {
+
+        do {// while leg.size()>0
             route.clear();
             numLegs = 1;
             if (first == true) {
                 destination = legs.get(0).getDestination();
+
                 startHour = legs.get(0).getStartHour();
+
                 finishHour = legs.get(0).getFinishHour();
+
                 date = legs.get(0).getDate1();
+
                 //add the first element of the section if used
                 route.add(legs.get(0));
+   
                 numofFlightHours = calcFlightHours(startHour, finishHour);
                 totalFlightHours = addFlightHours(totalFlightHours, numofFlightHours);
                 legs.remove(0);
                 first = false;
             }
-            
+
             do {
                 //we seek a sln leg
                 l = searchSol(legs, destination, startHour, finishHour, date, numLegs, totalFlightHours);
@@ -102,79 +123,147 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
                     route.add(l);
                     numLegs++;
                     destination = l.getDestination();
+
                     startHour = l.getStartHour();
+
                     finishHour = l.getFinishHour();
+
                     date = l.getDate1();
+
                     numofFlightHours = calcFlightHours(startHour, finishHour);
                     totalFlightHours = addFlightHours(totalFlightHours, numofFlightHours);
                     //delete the leg used
                     int indice = legs.indexOf(l);
-                    legs.remove(indice);
+                   
+                    legs.remove(indice);             
                 } else {
                     numSols++;
                     showSoln(route, numSols, totalFlightHours);
+
                     first = true;
                     totalFlightHours = 0;
                 }
             } while (l != null);
+            System.out.println("LEG SIZE: " + legs.size());
         } while (legs.size() > 0);
+        // }
     }
-    
+
     private void sortList(ArrayList<Leg> legs) {
         Collections.sort(legs);
     }
 
+//    String selectMonth
+    public ArrayList<Leg> addLeg(String selectMonth) {
+        
+                
+     legss = new ArrayList<Leg>();
+
+        Query q = em.createQuery("SELECT s FROM Schedule s");
+
+        List<Schedule> scheds = q.getResultList();
+
+        for (Schedule s : scheds) {
+            String formattedMonth = new SimpleDateFormat("MM").format(s.getStartDate());
+
+            if (formattedMonth.equals(selectMonth)) {
+
+                String formattedDate = new SimpleDateFormat("dd/MM/yyyy").format(s.getStartDate());
+               // System.out.println("h------------------formate Date: " + formattedDate);
+
+                String formattedStartTime = new SimpleDateFormat("HHmm").format(s.getStartDate());
+                //System.out.println("h------------------formate Start Time: " + formattedStartTime);
+
+                String formattedEndTime = new SimpleDateFormat("HHmm").format(s.getEndDate());
+               // System.out.println("h------------------formate Start Time: " + formattedEndTime);
+
+                int formatStartTime = (int) Integer.parseInt(formattedStartTime);// use
+                //System.out.println("h*****" + formatStartTime);
+
+                int formatEndTime = (int) Integer.parseInt(formattedEndTime);//use
+                //System.out.println("h******" + formatEndTime);
+
+                Flight flight = new Flight();
+
+                flight = s.getFlight();
+
+                int flightNumber = (int)Integer.parseInt(flight.getFlightNo().substring(2));
+
+               // System.out.println("h%%%%%%%Flight Number: " + flightNumber);
+
+                String deptCity = flight.getRoute().getOriginCity();
+
+                //System.out.println("h%%%%%%%Depart " + deptCity);
+                String destCity = flight.getRoute().getDestinationCity();
+
+                //System.out.println("h%%%%%%%dest: " + destCity);
+               
+                Leg l= new Leg(flightNumber, deptCity, destCity, formatStartTime, formatEndTime, formattedDate);
+                legss.add(l);
+             
+
+            }
+        }
+           System.out.println("NUM: " + legss.size());
+        return legss;
+        
+    }
+
     //it returns a leg the fulfills the condition
-    public Leg searchSol(ArrayList<Leg> legs, String destination, int startHour, int finishHour, String date,
+    public Leg searchSol(ArrayList<Leg> legs, String destination, int startHour, int finishHour, String date2,
             int numLegs, int numHourFlight) {
+        System.out.println("STARTHOUR: " + startHour);
+        System.out.println("ENDHOUR: " + finishHour);
         Leg sol = null;
         boolean found = false;
         int hours = 0;
         int sum = 0;
         setPolicy();
         for (Leg i : legs) {
-            if ((i.getDate1().equals(date)) && (i.getOrigin().equals(destination))
+            if ((i.getDate1().equals(date2)) && (i.getOrigin().equals(destination))
                     && ((calcDifMin(finishHour, i.getStartHour())) > getTime_scale_min()) && (i.getStartHour() > startHour)
-                    && (numLegs < getNum_max_legs()) && (numHourFlight <= getHours_max_flight())) {
+                    && (numLegs < getNum_max_legs()) && (numHourFlight <= hours_max_flight)) {
+
                 hours = calcFlightHours(i.getStartHour(), i.getFinishHour());
                 sum = sum + hours;
                 sum = addFlightHours(sum, numHourFlight);
-                if ((found == false) && (sum <= getHours_max_flight())) {
+                if ((found == false) && (sum <= hours_max_flight)) {
                     sol = i;
                     found = true;
                 }
             }
         }
+
         return sol;
+
     }
-    
+
     public void showSoln(ArrayList<Leg> leg, int numSol, int hFlight) {  //unformated
 
         Pairing pr = new Pairing();
         String sol = "";
         String date = "";
         String f = "";
-        List<String> flightNos = new ArrayList<String>();
-        List<String> flightCities = new ArrayList<String>();
-        List<String> flightTimes = new ArrayList<String>();
-        sol1 = new ArrayList<String>();
-        
+        ArrayList<String> flightNos = new ArrayList<String>();
+        ArrayList<String> flightCities = new ArrayList<String>();
+        ArrayList<String> flightTimes = new ArrayList<String>();
+
         String sections = "";
         String hours = "";
         String startHour = "";
         String finishHour = "";
-        
+
         for (int i = 0; i < leg.size(); i++) {
             if (f == "") {
                 f = leg.get(i).getDate1();
                 date += f;
-                
+
             }
             flightNos.add(leg.get(i).getLine() + "");
-            
+
             if (i == 0) {
                 flightCities.add(leg.get(i).getOrigin());
-                flightCities.add(leg.get(i).getDestination());                
+                flightCities.add(leg.get(i).getDestination());
                 startHour = String.format("%04d", leg.get(i).getStartHour());
                 finishHour = String.format("%04d", leg.get(i).getFinishHour());
                 hours = startHour + "-" + finishHour;
@@ -187,7 +276,7 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
                 flightTimes.add(hours);
             }
         }
-        
+
         String resultMinDec;
         int minDecimal = ((hFlight % 100) * 100) / 60;
         if (minDecimal < 10) {
@@ -195,7 +284,7 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
         } else {
             resultMinDec = "" + minDecimal;
         }
-        
+
         String totalFlightHour = (hFlight / 100) + " hours " + (hFlight % 100) + " minutes";
         pr.create(date, totalFlightHour, flightNos, flightCities, flightTimes);
         List<Pairing> check = getPairings();
@@ -209,19 +298,19 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
                 isContain = true;
             }
         }
-        
+
         if (isContain == false) {
             em.persist(pr);
         }
-        
+
     }
-    
+
     @Override
     public List<Pairing> getPairings() {
         Query q = em.createQuery("SELECT p FROM Pairing p");
         return q.getResultList();
     }
-    
+
     @Override
     public Pairing getPairingByID(String id) {
         Query q = em.createQuery("SELECT p FROM Pairing p");
@@ -231,10 +320,10 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
                 return p;
             }
         }
-        
+
         return null;
     }
-    
+
     @Override
     public Team generateTeam(Pairing pairing) {
         String flightDate = pairing.getFDate();
@@ -242,19 +331,19 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
         List<String> flightCities = pairing.getFlightCities();
         List<String> flightNumbers = pairing.getFlightNumbers();
 //        List<String> flightTimes = pairing.getFlightTimes();
-        
+
         Team team = new Team();
         Flight flight;
         List<Schedule> schedules;
         List<Schedule> teamSchedule;
-        
+
         List<Pilot> captainList = new ArrayList<Pilot>();
         List<Pilot> FOList = new ArrayList<Pilot>();
-        
+
         List<CabinCrew> leadCCList = new ArrayList<CabinCrew>(); //lead female
         List<CabinCrew> CCList = new ArrayList<CabinCrew>(); //female
         List<CabinCrew> FSList = new ArrayList<CabinCrew>(); // male
-        
+
         String lastCity = flightCities.get(flightCities.size() - 1); //set all the team location attribure to lastCity
         team.setLocation(lastCity);
         team.setPilotNo(2);
@@ -263,7 +352,7 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
         //Add crews to the team
         List<Pilot> pilots = new ArrayList<Pilot>();
         Query q = em.createQuery("SELECT p FROM Pilot p");
-        
+
         List<Pilot> ps = q.getResultList();
         for (Pilot pi : ps) {
             if (pi.isAssigned() == false) {
@@ -275,20 +364,20 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
                 }
             }
         }
-        
+
         pilots.add(captainList.get(0)); //select 2 captains from the table
         captainList.get(0).setAssigned(true);
         em.persist(captainList.get(0));
-        
+
         pilots.add(FOList.get(0));  //select 2 first officer fromt he table
         FOList.get(0).setAssigned(true);
         em.persist(FOList.get(0));
-        
+
         team.setPilots(pilots);
-        
+
         List<CabinCrew> CCs = new ArrayList<CabinCrew>();
         Query q1 = em.createQuery("SELECT p FROM CabinCrew p");
-        
+
         List<CabinCrew> ps1 = q1.getResultList();
         for (CabinCrew cc : ps1) {
             if (cc.isAssigned() == false) {
@@ -303,32 +392,31 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
                 }
             }
         }
-        
+
         CCs.add(leadCCList.get(0));
         leadCCList.get(0).setAssigned(true);
         em.persist(leadCCList.get(0));
-        
+
         for (int i = 0; i < 6; i++) {
             CCs.add(CCList.get(i));
             CCList.get(i).setAssigned(true);
             em.persist(CCList.get(i));
         }
-        
+
         CCs.add(FSList.get(0));
         FSList.get(0).setAssigned(true);
         em.persist(FSList.get(0));
-        
+
         team.setCabinCrews(CCs);
         em.persist(team);
-        
-        
+
         for (String s : flightNumbers) {
             flight = new Flight();
-            flight = getFlight(s);
-            
+            flight = getFlight("MA" + s);
+
             schedules = new ArrayList<Schedule>();
             schedules = flight.getSchedule();
-            
+
             for (Schedule sh : schedules) {
                 if (sh.getStartDate().toString().equals(flightDate)) {
                     teamSchedule = team.getSchedule();
@@ -337,18 +425,17 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
                 }
             }
             em.persist(team);
-            
+
         }
-        
+
         return team;
     }
-    
-    
+
     public Flight getFlight(String flightNumber) {
-        
+
         Query q = em.createQuery("SELECT f FROM Flight f");
         List<Flight> flights = q.getResultList();
-        
+
         for (Flight f : flights) {
             if (f.getFlightNo().equals(flightNumber)) {
                 return f;
@@ -356,7 +443,7 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
         }
         return null;
     }
-    
+
     public void saveSolution(String solution, String archive) {
         try {
             FileWriter flS = new FileWriter(archive, true);
@@ -367,7 +454,7 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
             System.out.println("Error E/S en fichero escritura");
         }
     }
-    
+
     public int calcFlightHours(int startHour, int finishHour) {
         int minStart = 0;
         int minFin = 0;
@@ -385,7 +472,7 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
         finishHours = finishHour / 100;
         minTotalStart = (startHours * 60) + minStart;
         minTotalFin = (finishHours * 60) + minFin;
-        
+
         if (finishHour < startHour) {
             minTotalFin = minTotalFin + 1440;
         }
@@ -439,42 +526,42 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
         totalTime = (totalH * 100) + totalM;
         return totalTime;
     }
-    
+
     @Override
     public void setPolicy() {  //retrive from data base and set the global variables
-        
+
         Query q = em.createQuery("SELECT p FROM PairingPolicy p");
         List<PairingPolicy> results = q.getResultList();
         PairingPolicy pp = (PairingPolicy) results.get(0);
-        
+
         setTime_scale_min(pp.getTime_scale_min());
         setNum_max_legs(pp.getNum_max_legs());
         setHours_max_flight(pp.getHours_max_flight());
     }
-    
+
     @Override
     public void changePolicy(int maxLeg, int maxFlight, int minStopTime) {
         Query q = em.createQuery("SELECT p FROM PairingPolicy p");
         List<PairingPolicy> results = q.getResultList();
         PairingPolicy pp = (PairingPolicy) results.get(0);
-        
+
         pp.setNum_max_legs(maxLeg);
         pp.setHours_max_flight(maxFlight);
         pp.setTime_scale_min(minStopTime);
         em.persist(pp);
-        
+
         setTime_scale_min(pp.getTime_scale_min());
         setNum_max_legs(pp.getNum_max_legs());
         setHours_max_flight(pp.getHours_max_flight());
-        
+
     }
-    
+
     @Override
     public PairingPolicy retrievePolicy() {
         Query q = em.createQuery("SELECT p FROM PairingPolicy p");
         List<PairingPolicy> results = q.getResultList();
         PairingPolicy pp = (PairingPolicy) results.get(0);
-        
+
         return pp;
     }
 
@@ -541,7 +628,5 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
     public void setHours_max_flight(int hours_max_flight) {
         this.hours_max_flight = hours_max_flight;
     }
-    
+
 }
-
-
