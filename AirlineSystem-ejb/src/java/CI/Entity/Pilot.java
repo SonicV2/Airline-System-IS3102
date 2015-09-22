@@ -28,7 +28,7 @@ public class Pilot extends Employee implements Serializable {
    private List<String> skillsets;
    private boolean assigned;
    
-   @ManyToOne (cascade={CascadeType.PERSIST})
+   @ManyToOne (cascade={CascadeType.ALL})
    private Team team = new Team();
    
     public Pilot() {

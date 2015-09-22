@@ -14,6 +14,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.Dependent;
+import javax.faces.bean.SessionScoped;
 import javax.faces.event.ActionEvent;
 
 /**
@@ -21,7 +22,7 @@ import javax.faces.event.ActionEvent;
  * @author smu
  */
 @Named(value = "assignTeamManagedBean")
-@Dependent
+@SessionScoped
 public class assignTeamManagedBean {
     @EJB
     private CrewAssignSessionBeanLocal crewAssignSessionBean;
