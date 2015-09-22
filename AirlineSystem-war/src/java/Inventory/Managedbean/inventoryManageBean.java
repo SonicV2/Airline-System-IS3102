@@ -40,10 +40,6 @@ public class inventoryManageBean {
    
    
   
-    
-    public void createFlightSession(ActionEvent event){
-        rm.createAvailability(getFlightNo(), getFlightDate(), getFlightTime());
-    }
 
     /**
      * @return the flightNo
