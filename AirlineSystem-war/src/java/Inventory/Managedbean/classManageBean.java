@@ -7,11 +7,17 @@ package Inventory.Managedbean;
 import Inventory.Session.ClassManagementLocal;
 import javax.ejb.EJB;
 import javax.inject.Named;
-import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import java.util.List;
 import Inventory.Entity.BookingClass;
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+import org.primefaces.event.CellEditEvent;
+import org.primefaces.event.RowEditEvent;
 
 /**
  *
@@ -43,15 +49,41 @@ public class classManageBean {
     }
     
     public void addClass(){
-    cm.addClassCode(getClasscode(), getPricePercent(), getAdvancedSales(), getPercentSold(), getServiceClass(), isRebook(), isCancel(), getBaggage(), getMillageAccru());
+    String message = cm.addClassCode(getClasscode(), getPricePercent(), getAdvancedSales(), 
+            getPercentSold(), getServiceClass(), isRebook(), isCancel(), 
+            getBaggage(), getMillageAccru());
+            FacesMessage msg = new FacesMessage(message);
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+    
     }
     
-    public void deleteClass(){
-        cm.deleteClassCode(getClasscode());
+    public void deleteClass(String classC){
+        cm.deleteClassCode(classC);
+        setBookingClass(cm.retrieveBookingClasses());
     }
      
-    public void editClass(){
-        cm.editClassCode(getClasscode(), getPricePercent(), getAdvancedSales(), getPercentSold(), getServiceClass(), isRebook(), isCancel(), getBaggage(), getMillageAccru());
+
+    
+    public void onRowEdit(RowEditEvent event) {
+        BookingClass edited = (BookingClass)event.getObject();
+        classcode = edited.getClasscode();
+        BookingClass original = cm.findClass(classcode);
+        
+        
+        if(!edited.equals(original))
+        {
+            cm.editClassCode(edited);
+            FacesMessage msg = new FacesMessage("Fare Class Edited" );
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        }else{
+           FacesMessage msg = new FacesMessage("Edit Cancelled" ); 
+           FacesContext.getCurrentInstance().addMessage(null, msg);
+        }
+    }
+     
+    public void onRowCancel(RowEditEvent event) {
+        FacesMessage msg = new FacesMessage("Edit Cancelled");
+        FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
     /**

@@ -34,6 +34,8 @@ public class Schedule implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date endDate;
     
+    private boolean Assigned;
+    
     @ManyToOne(cascade = {CascadeType.PERSIST})
     private Flight flight = new Flight();
     
@@ -44,6 +46,7 @@ public class Schedule implements Serializable {
     public void createSchedule(Date startDate, Date endDate){
         this.startDate = startDate;
         this.endDate = endDate;
+        Assigned = false;
     }
     
     public Long getScheduleId() {
@@ -68,6 +71,14 @@ public class Schedule implements Serializable {
 
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
+    }
+
+    public boolean isAssigned() {
+        return Assigned;
+    }
+
+    public void setAssigned(boolean Assigned) {
+        this.Assigned = Assigned;
     }
     
     public Flight getFlight() {

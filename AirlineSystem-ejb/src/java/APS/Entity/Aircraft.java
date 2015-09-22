@@ -33,7 +33,7 @@ public class Aircraft implements Serializable {
     private Date datePurchased;
     @Temporal(TemporalType.DATE)
     private Date lastMaintained;
-    
+    private String hub;
     private String status;
 
     @ManyToOne(cascade = {CascadeType.PERSIST})
@@ -70,6 +70,14 @@ public class Aircraft implements Serializable {
 
     public void setLastMaintained(Date lastMaintained) {
         this.lastMaintained = lastMaintained;
+    }
+
+    public String getHub() {
+        return hub;
+    }
+
+    public void setHub(String hub) {
+        this.hub = hub;
     }
     
     public String getStatus() {

@@ -26,20 +26,26 @@ public class ClassManagement implements ClassManagementLocal {
     @PersistenceContext(unitName = "AirlineSystem-ejbPU")
     private EntityManager em;
     
-    public void addClassCode(String classcode, int pricePercent, int advancedSales
+    public String addClassCode(String classcode, int pricePercent, int advancedSales
     , int percentSold, String serviceClass, boolean rebook, boolean cancel, 
     int baggage, int millageAccru){
         BookingClass bc = new BookingClass();
-        try{
-        bc.createClass(classcode, pricePercent, advancedSales, percentSold, 
-                serviceClass, rebook, cancel, baggage, millageAccru);
-        em.persist(bc);
+        BookingClass bc1 = em.find(BookingClass.class,classcode);
+        if (bc1==null){
+            bc.createClass(classcode, pricePercent, advancedSales, percentSold,
+                    serviceClass, rebook, cancel, baggage, millageAccru);
+            em.persist(bc);
+            return "Fare Class Added";
         }
-        catch(EntityExistsException ex){
-            System.out.println("\nEntity Already Exists" );
-            System.out.println(ex);
+        else{
+            return "Fare Class Already Exists";
         }
         
+    }
+    
+    public BookingClass findClass(String classCode){
+        BookingClass bc = em.find(BookingClass.class, classCode);
+        return bc;
     }
     
     public List<BookingClass> retrieveBookingClasses(){
@@ -76,13 +82,8 @@ public class ClassManagement implements ClassManagementLocal {
         }
     }
     
-    public void editClassCode(String classcode, int pricePercent, int advancedSales
-    , int percentSold, String serviceClass, boolean rebook, boolean cancel, 
-    int baggage, int millageAccru){
-        deleteClassCode(classcode);
-        addClassCode(classcode, pricePercent, advancedSales, percentSold, 
-                serviceClass, rebook, cancel, baggage, millageAccru);
-        
+    public void editClassCode(BookingClass bc){
+        em.merge(bc);
     }
     
 }
