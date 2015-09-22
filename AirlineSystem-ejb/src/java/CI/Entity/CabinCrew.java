@@ -29,7 +29,7 @@ public class CabinCrew extends Employee implements Serializable{
     private String position;
    private boolean assigned;
    
-    @ManyToOne(cascade={CascadeType.PERSIST})
+   @ManyToOne(cascade={CascadeType.PERSIST})
    private Team team = new Team();
 
     public CabinCrew() {

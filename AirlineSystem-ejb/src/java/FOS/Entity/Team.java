@@ -37,7 +37,7 @@ public class Team implements Serializable {
     @OneToMany(cascade={CascadeType.PERSIST}, mappedBy="team")
     private List<CabinCrew> cabinCrews = new ArrayList<CabinCrew>();
     
-      @OneToMany(cascade={CascadeType.PERSIST}, mappedBy="team")
+    @OneToMany(cascade={CascadeType.PERSIST}, mappedBy="team")
     private List<Pilot> pilots = new ArrayList<Pilot>();
     
     @OneToMany(cascade={CascadeType.PERSIST}, mappedBy="team")
@@ -45,6 +45,9 @@ public class Team implements Serializable {
     
     @OneToMany(cascade={CascadeType.PERSIST}, mappedBy="team")
     private List<Schedule> schedule= new ArrayList<Schedule>();
+    
+    
+    public Team(){}
     
     public Long getId() {
         return id;

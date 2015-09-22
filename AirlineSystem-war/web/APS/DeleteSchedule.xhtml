@@ -17,7 +17,7 @@
 
         <h:form id="form">
             <p:contextMenu for="schedules">
-                <p:menuitem value="Delete" update="schedules" icon="ui-icon-close" actionListener="#scheduleManageBean.removeSchedule}"/>
+                <p:menuitem value="Delete" update="schedules" icon="ui-icon-close" actionListener="#{scheduleManageBean.deleteSchedule}"/>
             </p:contextMenu>
 
             <p:dataTable id="schedules" var="schedule" value="#{scheduleManageBean.schedules}" rowKey="#{schedule.scheduleId}"
@@ -34,6 +34,37 @@
                 <p:column filterBy="#{schedule.scheduleId}" headerText="Schedule ID" filterMatchMode="contains">
                     <h:outputText value="#{schedule.scheduleId}" />
                 </p:column>
+<<<<<<< HEAD
+            
+            <p:column filterBy="#{schedule.startDate}" headerText="Start Date" filterMatchMode="contains">
+                <h:outputText value="#{schedule.startDate}" />
+            </p:column>
+            
+            <p:column filterBy="#{schedule.endDate}" headerText="End Date" filterMatchMode="contains">
+                <h:outputText value="#{schedule.endDate}" />
+            </p:column>
+                
+                <p:column filterBy="#{schedule.flight.flightNo}" headerText="Flight No." filterMatchMode="contains">
+                <h:outputText value="#{schedule.flight.flightNo}" />
+            </p:column>
+                
+            <p:column filterBy="#{schedule.flight.route.originCountry}" headerText="Origin Country" filterMatchMode="contains">
+                <h:outputText value="#{schedule.flight.route.originCountry}" />
+            </p:column>
+                
+            <p:column filterBy="#{schedule.flight.route.originCity}" headerText="Origin City" filterMatchMode="contains">
+                <h:outputText value="#{schedule.flight.route.originCity}" />
+            </p:column>
+            
+            <p:column filterBy="#{schedule.flight.route.destinationCountry}" headerText="Destination Country" filterMatchMode="contains">
+                <h:outputText value="#{schedule.flight.route.destinationCountry}" />
+            </p:column>
+            
+            <p:column filterBy="#{schedule.flight.route.destinationCity}" headerText="Destination City" filterMatchMode="contains">
+                <h:outputText value="#{schedule.flight.route.destinationCity}" />
+            </p:column>
+                
+=======
 
                 <p:column filterBy="#{schedule.startDate}" headerText="Start Date" filterMatchMode="contains">
                     <h:outputText value="#{schedule.startDate}" />
@@ -42,6 +73,7 @@
                 <p:column filterBy="#{schedule.endDate}" headerText="Origin Country" filterMatchMode="contains">
                     <h:outputText value="#{schedule.endDate}" />
                 </p:column>
+>>>>>>> b190483e3a6b41769f39dd84656e67fda7754d75
             </p:dataTable>
         </h:form>
 
