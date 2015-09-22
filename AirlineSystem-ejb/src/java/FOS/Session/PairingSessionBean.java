@@ -46,6 +46,8 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
     private int hours_max_flight;
     SimpleDateFormat formatter;
     ArrayList<Leg> legss; 
+    
+    private Team team;
 
     @Override
     public void legMain(String selectMonth) {
@@ -287,6 +289,8 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
 
         String totalFlightHour = (hFlight / 100) + " hours " + (hFlight % 100) + " minutes";
         pr.create(date, totalFlightHour, flightNos, flightCities, flightTimes);
+        pr.setTeam(null);
+        
         List<Pairing> check = getPairings();
         boolean isContain = false;
         if (check.isEmpty()) {
@@ -332,7 +336,7 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
         List<String> flightNumbers = pairing.getFlightNumbers();
 //        List<String> flightTimes = pairing.getFlightTimes();
 
-        Team team = new Team();
+        team = new Team();
         Flight flight;
         List<Schedule> schedules;
         List<Schedule> teamSchedule;
@@ -367,6 +371,7 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
 
         pilots.add(captainList.get(0)); //select 2 captains from the table
         captainList.get(0).setAssigned(true);
+        captainList.get(0).setTeam(team);
         em.persist(captainList.get(0));
 
         pilots.add(FOList.get(0));  //select 2 first officer fromt he table
@@ -395,16 +400,20 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
 
         CCs.add(leadCCList.get(0));
         leadCCList.get(0).setAssigned(true);
+        leadCCList.get(0).setTeam(team);
+        
         em.persist(leadCCList.get(0));
 
         for (int i = 0; i < 6; i++) {
             CCs.add(CCList.get(i));
             CCList.get(i).setAssigned(true);
+            CCList.get(i).setTeam(team);
             em.persist(CCList.get(i));
         }
 
         CCs.add(FSList.get(0));
         FSList.get(0).setAssigned(true);
+        FSList.get(0).setTeam(team);
         em.persist(FSList.get(0));
 
         team.setCabinCrews(CCs);
@@ -424,7 +433,18 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
                     sh.setTeam(team);
                 }
             }
+            team.setStatus("Formed");
+            
+            pairing.setPaired(true);
+            pairing.setTeam(team);
+            List<Pairing> par=team.getPairing();
+            par.add(pairing);
+            team.setPairing(par);
+            
+            em.persist(pairing);
             em.persist(team);
+            
+            
 
         }
 

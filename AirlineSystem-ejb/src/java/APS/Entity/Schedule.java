@@ -12,10 +12,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import java.util.Date;
 import javax.persistence.CascadeType;
+import Inventory.Entity.SeatAvailability;
 
 /**
  *
@@ -41,6 +43,9 @@ public class Schedule implements Serializable {
     
     @ManyToOne(cascade = {CascadeType.PERSIST})
     private Team team = new Team();
+    
+   
+    private SeatAvailability seatAvail = new SeatAvailability();
 
     
     public void createSchedule(Date startDate, Date endDate){
@@ -122,5 +127,21 @@ public class Schedule implements Serializable {
     public String toString() {
         return "APS.Entity.Schedule[ id=" + scheduleId + " ]";
     }
+
+    /**
+     * @return the seatAvailability
+     */
+    public SeatAvailability getSeatAvailability() {
+        return seatAvail;
+    }
+
+    /**
+     * @param seatAvailability the seatAvailability to set
+     */
+    public void setSeatAvailability(SeatAvailability seatAvailability) {
+        this.seatAvail = seatAvailability;
+    }
+
+ 
     
 }
