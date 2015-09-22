@@ -5,6 +5,7 @@
  */
 package APS.Session;
 
+import APS.Entity.Aircraft;
 import APS.Entity.Flight;
 import APS.Entity.Schedule;
 import FOS.Entity.Team;
@@ -33,6 +34,7 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
     private Schedule schedule;
     private List<Schedule> schedules;
     private Team team;
+    private Aircraft aircraft;
 
     @Override
     public void addSchedule(Date startDate, String flightNo) {
@@ -42,13 +44,13 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
         Calendar endDate = Calendar.getInstance(tz);
         endDate.setTime(startDate);
         endDate.set(Calendar.SECOND, 0);
-        
+
         //Break up the hour and minutes
         int flightHr = (int) flight.getFlightDuration();
         int flightMin = (int) ((flight.getFlightDuration() - (double) flightHr) * 60);
         endDate.add(Calendar.HOUR, flightHr);
         endDate.add(Calendar.MINUTE, flightMin);
-        
+
         schedule.createSchedule(startDate, endDate.getTime());
         flight.getSchedule().add(schedule);
         schedule.setFlight(flight);
@@ -85,7 +87,7 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
         }
         return schedule;
     }
-    
+
     @Override
     public Schedule getScheduleByDate(Date startDate) {
         schedule = new Schedule();
@@ -107,7 +109,7 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
         }
         return schedule;
     }
-    
+
     @Override
     public List<Schedule> getSchedules() {
         schedules = new ArrayList<Schedule>();
@@ -150,63 +152,107 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
         }
         return flight;
     }
-    
+
     @Override
-    public void changeFlightDays (List<Flight> flights) {
-        
-        for (int i=0; i<flights.size(); i++) {
+    public void changeFlightDays(List<Flight> flights) {
+
+        for (int i = 0; i < flights.size(); i++) {
             String temp = "";
             String flightDays = flights.get(i).getFlightDays();
-            
-            for (int j=0; j<flightDays.length(); j++) {
-                if (flightDays.charAt(j) == '1' && j==0)
+
+            for (int j = 0; j < flightDays.length(); j++) {
+                if (flightDays.charAt(j) == '1' && j == 0) {
                     temp += "Sunday";
-                
-                if (flightDays.charAt(j) == '1' && j==1) {
-                    if (temp.isEmpty())
+                }
+
+                if (flightDays.charAt(j) == '1' && j == 1) {
+                    if (temp.isEmpty()) {
                         temp += "Monday";
-                    else
+                    } else {
                         temp += ", Monday";
+                    }
                 }
-                if (flightDays.charAt(j) == '1' && j==2) {
-                    if (temp.isEmpty())
+                if (flightDays.charAt(j) == '1' && j == 2) {
+                    if (temp.isEmpty()) {
                         temp += "Tuesday";
-                    else
+                    } else {
                         temp += ", Tuesday";
+                    }
                 }
-                
-                if (flightDays.charAt(j) == '1' && j==3) {
-                    if (temp.isEmpty())
+
+                if (flightDays.charAt(j) == '1' && j == 3) {
+                    if (temp.isEmpty()) {
                         temp += "Wednesday";
-                    else
+                    } else {
                         temp += ", Wednesday";
+                    }
                 }
-                
-                if (flightDays.charAt(j) == '1' && j==4) {
-                    if (temp.isEmpty())
+
+                if (flightDays.charAt(j) == '1' && j == 4) {
+                    if (temp.isEmpty()) {
                         temp += "Thursday";
-                    else
+                    } else {
                         temp += ", Thursday";
+                    }
                 }
-                
-                if (flightDays.charAt(j) == '1' && j==5) {
-                    if (temp.isEmpty())
+
+                if (flightDays.charAt(j) == '1' && j == 5) {
+                    if (temp.isEmpty()) {
                         temp += "Friday";
-                    else
+                    } else {
                         temp += ", Friday";
+                    }
                 }
-                
-                if (flightDays.charAt(j) == '1' && j==6) {
-                    if (temp.isEmpty())
+
+                if (flightDays.charAt(j) == '1' && j == 6) {
+                    if (temp.isEmpty()) {
                         temp += "Saturday";
-                    else
+                    } else {
                         temp += ", Saturday";
+                    }
                 }
-                
+
             }
-            
+
             flights.get(i).setFlightDaysString(temp);
         }
+    }
 
+    @Override
+    public List<Schedule> getSchedules(String tailNo) {
+        aircraft = new Aircraft();
+
+        try {
+            Query q = em.createQuery("SELECT a FROM Aircraft " + "AS a WHERE a.tailNo=:tailNo");
+            q.setParameter("tailNo", tailNo);
+
+            List results = q.getResultList();
+            if (!results.isEmpty()) {
+                aircraft = (Aircraft) results.get(0);
+
+            } else {
+                aircraft = null;
+            }
+
+        } catch (EntityNotFoundException enfe) {
+            System.out.println("\nEntity not found error" + "enfe.getMessage()");
+        }
+
+        return aircraft.getSchedules();
+    }
+
+    @Override
+    public Date calcEndTime(Date startTime, Flight flight) {
+        //Break up the hour and minutes
+        int flightHr = (int) flight.getFlightDuration();
+        int flightMin = (int) ((flight.getFlightDuration() - (double) flightHr) * 60);
+
+        TimeZone tz = TimeZone.getTimeZone("GMT+8:00"); //Set Timezone to Singapore
+        Calendar endTime = Calendar.getInstance(tz);
+        endTime.setTime(startTime);
+        endTime.add(Calendar.HOUR, flightHr);
+        endTime.add(Calendar.MINUTE, flightMin);
+        
+        return endTime.getTime();
     }
 }

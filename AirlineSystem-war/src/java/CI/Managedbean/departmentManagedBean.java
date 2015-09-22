@@ -61,8 +61,8 @@ public class departmentManagedBean {
     public void addDepartment(ActionEvent event) {
         FacesMessage message = null;
 
-//         departmentSessionBean.addDepartment(departmentName, departmentLocation);
-//           clear();
+ //        departmentSessionBean.addDepartment(departmentName, departmentLocation);
+ //          clear();
        
        //Comment out if first time set up     
        List<OrganizationUnit> depts = departmentSessionBean.retrieveAllDepts();
@@ -142,7 +142,7 @@ public class departmentManagedBean {
         setOrgUnits(departmentSessionBean.retrieveAllDepts());
         
         
-        retriveCC();  //comment out first time adding
+       retriveCC();  //comment out first time adding
         
     }
     

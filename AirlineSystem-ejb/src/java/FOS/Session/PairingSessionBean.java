@@ -298,7 +298,7 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
         }
         for (Pairing p : check) {
             if (p.getFDate().equals(pr.getFDate()) && p.getFlightHour().equals(pr.getFlightHour()) && p.getFlightNumbers().equals(pr.getFlightNumbers())
-                    && p.getFlightCities().equals(pr.getFlightCities()) && p.getFlightTimes().equals(pr.getFlightTimes()) && p.isPaired() == pr.isPaired()) {
+                    && p.getFlightCities().equals(pr.getFlightCities()) && p.getFlightTimes().equals(pr.getFlightTimes())) {
                 isContain = true;
             }
         }
@@ -441,8 +441,8 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
             par.add(pairing);
             team.setPairing(par);
             
-            em.persist(pairing);
-            em.persist(team);
+            em.merge(pairing);
+            em.merge(team);
             
             
 

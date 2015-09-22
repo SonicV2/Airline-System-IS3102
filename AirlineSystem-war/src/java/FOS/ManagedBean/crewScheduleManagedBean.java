@@ -49,6 +49,9 @@ public class crewScheduleManagedBean {
     private String sln1;
     private Team team;
     private String selectMonth; //month choosen to get pairing
+    
+    private List<Pairing> restPairing;
+    
 
     /**
      * Creates a new instance of crewScheduleManagedBean
@@ -85,10 +88,21 @@ public class crewScheduleManagedBean {
     public void getSlns(ActionEvent event) {
         pairingSessionBean.legMain(selectMonth);
         setSlns(pairingSessionBean.getPairings());
+        
+        
+        restPairing=new ArrayList<Pairing>();
+        for(Pairing ppp: slns ){
+            if(ppp.isPaired()==false)
+                restPairing.add(ppp);
+        }
+        
+        
+        
     }
 
     public void getSelectPairingID(ActionEvent event) {
-
+        
+        
         String pairingID = sln1.substring(sln1.indexOf("=") + 1, sln1.indexOf("]") - 1);
         System.out.println("--------" + sln1.substring(sln1.indexOf("=") + 1, sln1.indexOf("]")));
         sln = pairingSessionBean.getPairingByID(pairingID);
@@ -228,5 +242,16 @@ public class crewScheduleManagedBean {
     public void test(ActionEvent event){
         testSessionBean.test();
     }
+
+    public List<Pairing> getRestPairing() {
+        return restPairing;
+    }
+
+    public void setRestPairing(List<Pairing> restPairing) {
+        this.restPairing = restPairing;
+    }
+    
+    
+    
 
 }
