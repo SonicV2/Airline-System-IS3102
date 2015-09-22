@@ -24,6 +24,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import Inventory.Entity.SeatAvailability;
+import Inventory.Session.RevenueManagementLocal;
 
 /**
  *
@@ -34,6 +36,8 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
 
     @PersistenceContext(unitName = "AirlineSystem-ejbPU")
     private EntityManager em;
+    
+    private RevenueManagementLocal rm;
 
     private Flight flight;
     private List<Flight> flights;
@@ -78,7 +82,7 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
         Calendar endTime = Calendar.getInstance(tz);
         endTime.setTime(startDateTime);
         endTime.set(Calendar.SECOND, 0);
-        endTime.add(Calendar.MONTH, 6);
+        endTime.add(Calendar.YEAR, 1);
 
         Calendar curr = Calendar.getInstance(tz);
         curr.setTime(startDateTime);
@@ -100,7 +104,15 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
                 schedule.createSchedule(flightStart, flightEnd);
                 schedule.setFlight(flight);
                 schedule.setTeam(team);
+                SeatAvailability sa = new SeatAvailability ();
+                schedule.setSeatAvailability(sa);
+                int economy = flight.getAircraftType().getEconomySeats();
+                int business = flight.getAircraftType().getBusinessSeats();
+                int firstClass = flight.getAircraftType().getFirstSeats();
+                int[] seats = rm.generateAvailability(economy, business, firstClass);
                 em.persist(schedule);
+                sa.createSeatAvail(schedule, seats);
+                em.persist(sa);
                 schedules.add(schedule);
             }
             curr.setTime(counter);
@@ -116,9 +128,8 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
         aircrafts = retrieveAircrafts();
         schedules = getSchedules();
         aircraftType = new AircraftType();
-        flights = new ArrayList<Flight>();
-        List<Schedule> curr = new ArrayList<Schedule>();
-        List<Schedule> result = new ArrayList<Schedule>();
+        List<Schedule> curr;
+        List<Schedule> result;
         Schedule earliestSchedule = new Schedule();
         TimeZone tz = TimeZone.getTimeZone("GMT+8:00"); //Set Timezone to Singapore
         Calendar currTime = Calendar.getInstance(tz);
@@ -140,11 +151,21 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
         //Assign flights to schedules until all schedules are assigned
         while (isAllAssigned(schedules)) {
             for (Aircraft aircraft : aircrafts) {
-                aircraftType = aircraft.getAircraftType();
-                flights = aircraftType.getFlights();
                 Route incoming = new Route();
                 Route currRoute = new Route();
-                
+                flights = new ArrayList<Flight>();
+                curr = new ArrayList<Schedule>();
+                result = new ArrayList<Schedule>();
+                aircraftType = aircraft.getAircraftType();
+
+                //Add flights according to hubs
+                for (int i = 0; i < aircraftType.getFlights().size(); i++) {
+                    currRoute = aircraftType.getFlights().get(i).getRoute();
+                    if (currRoute.getOriginIATA().equals(aircraft.getHub()) || currRoute.getDestinationIATA().equals(aircraft.getHub())) {
+                        flights.add(aircraftType.getFlights().get(i));
+                    }
+                }
+
                 //Precond: All the flights start from the hubs i.e. flight with early start time are from hubs
                 //Add all avaliable schedules to the curr List
                 for (Flight flight1 : flights) {
@@ -154,39 +175,41 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
                         }
                     }
                 }
-                //Sort the curr ArrayList according to startTime
-                Collections.sort(curr, comparator);
-                earliestSchedule = curr.get(0);
-                for (int j = 0; j < curr.size(); j++) {
-                    //Store the status for the earliest schedule
-                    result.add(earliestSchedule);
-                    earliestSchedule.setAssigned(true);
-                    curr.remove(earliestSchedule);
-                    em.persist(earliestSchedule);
-                    currTime.setTime(earliestSchedule.getEndDate());
-                    incoming = earliestSchedule.getFlight().getRoute();
+                if (!curr.isEmpty()) {
+                    //Sort the curr ArrayList according to startTime
+                    Collections.sort(curr, comparator);
+                    earliestSchedule = curr.get(0);
+                    for (int j = 0; j < curr.size(); j++) {
+                        //Store the status for the earliest schedule
+                        result.add(earliestSchedule);
+                        earliestSchedule.setAssigned(true);
+                        curr.remove(earliestSchedule);
+                        em.persist(earliestSchedule);
+                        currTime.setTime(earliestSchedule.getEndDate());
+                        incoming = earliestSchedule.getFlight().getRoute();
 
-                    //Remove all the schedules before the endTime of the earliest schedule
-                    for (int k = 0; k < curr.size(); k++) {
-                        tmp.setTime(curr.get(k).getStartDate());
-                        if (tmp.before(currTime)) {
-                            curr.remove(curr.get(k));
-                            k--;
-                        } else {
-                            break;
+                        //Remove all the schedules before the endTime of the earliest schedule
+                        for (int k = 0; k < curr.size(); k++) {
+                            tmp.setTime(curr.get(k).getStartDate());
+                            if (tmp.before(currTime)) {
+                                curr.remove(curr.get(k));
+                                k--;
+                            } else {
+                                break;
+                            }
                         }
-                    }
 
-                    //Set the buffer time of 1 hours after the flight arrives
-                    currTime.add(Calendar.HOUR, 1);
+                        //Set the buffer time of 1 hours after the flight arrives
+                        currTime.add(Calendar.HOUR, 1);
 
-                    //Find the first occurance of the return flight
-                    for (int k = 0; k < curr.size(); k++) {
-                        currRoute = curr.get(k).getFlight().getRoute();
-                        if (currRoute.getOriginIATA().equals(incoming.getDestinationIATA()) && incoming.getOriginIATA().equals(currRoute.getOriginIATA())) {
-                            currTime.setTime(curr.get(j).getStartDate());
-                            earliestSchedule = curr.get(k);
-                            break;
+                        //Find the first occurance of the return flight
+                        for (int k = 0; k < curr.size(); k++) {
+                            currRoute = curr.get(k).getFlight().getRoute();
+                            if (currRoute.getOriginIATA().equals(incoming.getDestinationIATA()) && incoming.getOriginIATA().equals(currRoute.getOriginIATA())) {
+                                currTime.setTime(curr.get(j).getStartDate());
+                                earliestSchedule = curr.get(k);
+                                break;
+                            }
                         }
                     }
                 }
