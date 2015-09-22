@@ -30,39 +30,42 @@
                         <p:inputText id="globalFilter" onkeyup="PF('schedulesTable').filter()" style="width:150px" placeholder="Enter keyword"/>
                     </p:outputPanel>
                 </f:facet>
-                
+
                 <p:column filterBy="#{schedule.scheduleId}" headerText="Schedule ID" filterMatchMode="contains">
                     <h:outputText value="#{schedule.scheduleId}" />
                 </p:column>
 
-            <p:column filterBy="#{schedule.startDate}" headerText="Start Date" filterMatchMode="contains">
-                <h:outputText value="#{schedule.startDate}" />
-            </p:column>
-            
-            <p:column filterBy="#{schedule.endDate}" headerText="End Date" filterMatchMode="contains">
-                <h:outputText value="#{schedule.endDate}" />
-            </p:column>
-                
-                <p:column filterBy="#{schedule.flight.flightNo}" headerText="Flight No." filterMatchMode="contains">
-                <h:outputText value="#{schedule.flight.flightNo}" />
-            </p:column>
-                
-            <p:column filterBy="#{schedule.flight.route.originCountry}" headerText="Origin Country" filterMatchMode="contains">
-                <h:outputText value="#{schedule.flight.route.originCountry}" />
-            </p:column>
-                
-            <p:column filterBy="#{schedule.flight.route.originCity}" headerText="Origin City" filterMatchMode="contains">
-                <h:outputText value="#{schedule.flight.route.originCity}" />
-            </p:column>
-            
-            <p:column filterBy="#{schedule.flight.route.destinationCountry}" headerText="Destination Country" filterMatchMode="contains">
-                <h:outputText value="#{schedule.flight.route.destinationCountry}" />
-            </p:column>
-            
-            <p:column filterBy="#{schedule.flight.route.destinationCity}" headerText="Destination City" filterMatchMode="contains">
-                <h:outputText value="#{schedule.flight.route.destinationCity}" />
-            </p:column>
+<<<<<<< HEAD (7537fb6) - update schedule - edit
 
+=======
+                <p:column filterBy="#{schedule.startDate}" headerText="Start Date" filterMatchMode="contains">
+                    <h:outputText value="#{schedule.startDate}" />
+                </p:column>
+
+                <p:column filterBy="#{schedule.endDate}" headerText="End Date" filterMatchMode="contains">
+                    <h:outputText value="#{schedule.endDate}" />
+                </p:column>
+
+                <p:column filterBy="#{schedule.flight.flightNo}" headerText="Flight No." filterMatchMode="contains">
+                    <h:outputText value="#{schedule.flight.flightNo}" />
+                </p:column>
+
+                <p:column filterBy="#{schedule.flight.route.originCountry}" headerText="Origin Country" filterMatchMode="contains">
+                    <h:outputText value="#{schedule.flight.route.originCountry}" />
+                </p:column>
+
+                <p:column filterBy="#{schedule.flight.route.originCity}" headerText="Origin City" filterMatchMode="contains">
+                    <h:outputText value="#{schedule.flight.route.originCity}" />
+                </p:column>
+
+                <p:column filterBy="#{schedule.flight.route.destinationCountry}" headerText="Destination Country" filterMatchMode="contains">
+                    <h:outputText value="#{schedule.flight.route.destinationCountry}" />
+                </p:column>
+
+                <p:column filterBy="#{schedule.flight.route.destinationCity}" headerText="Destination City" filterMatchMode="contains">
+                    <h:outputText value="#{schedule.flight.route.destinationCity}" />
+                </p:column>
+>>>>>>> origin/master (ae84d48) - Added calcEndT
             </p:dataTable>
         </h:form>
 
