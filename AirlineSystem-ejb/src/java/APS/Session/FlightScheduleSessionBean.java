@@ -26,6 +26,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import Inventory.Entity.SeatAvailability;
 import Inventory.Session.RevenueManagementLocal;
+import javax.ejb.EJB;
 
 /**
  *
@@ -37,6 +38,7 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
     @PersistenceContext(unitName = "AirlineSystem-ejbPU")
     private EntityManager em;
     
+    @EJB
     private RevenueManagementLocal rm;
 
     private Flight flight;
@@ -105,13 +107,13 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
                 schedule.setFlight(flight);
                 schedule.setTeam(team);
                 SeatAvailability sa = new SeatAvailability ();
-                schedule.setSeatAvailability(sa);
                 int economy = flight.getAircraftType().getEconomySeats();
                 int business = flight.getAircraftType().getBusinessSeats();
                 int firstClass = flight.getAircraftType().getFirstSeats();
                 int[] seats = rm.generateAvailability(economy, business, firstClass);
-                em.persist(schedule);
                 sa.createSeatAvail(schedule, seats);
+                schedule.setSeatAvailability(sa);
+                em.persist(schedule);
                 em.persist(sa);
                 schedules.add(schedule);
             }
