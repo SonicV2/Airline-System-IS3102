@@ -434,7 +434,17 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
                 }
             }
             team.setStatus("Formed");
+            
+            pairing.setPaired(true);
+            pairing.setTeam(team);
+            List<Pairing> par=team.getPairing();
+            par.add(pairing);
+            team.setPairing(par);
+            
+            em.persist(pairing);
             em.persist(team);
+            
+            
 
         }
 
