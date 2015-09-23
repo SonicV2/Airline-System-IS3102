@@ -409,7 +409,9 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
                 if (sh.getStartDate().toString().equals(flightDate)) {
                     teamSchedule = team.getSchedule();
                     teamSchedule.add(sh);
+                    sh.setAssigned(true);
                     sh.setTeam(team);
+                    em.merge(sh);
                 }
             }
             team.setStatus("Formed");
@@ -422,6 +424,7 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
             
             em.merge(pairing);
             em.merge(team);
+            
             
         }
         
