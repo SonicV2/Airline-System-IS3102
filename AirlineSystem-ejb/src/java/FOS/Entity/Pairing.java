@@ -31,6 +31,8 @@ public class Pairing implements Serializable {
     private List<String> flightTimes;
     private boolean paired;
     
+    private boolean isA380;
+    
    @ManyToOne(cascade={CascadeType.PERSIST})
    private Team team = new Team();
    
@@ -176,5 +178,15 @@ public class Pairing implements Serializable {
     public void setTeam(Team team) {
         this.team = team;
     }
+
+    public boolean isIsA380() {
+        return isA380;
+    }
+
+    public void setIsA380(boolean isA380) {
+        this.isA380 = isA380;
+    }
+    
+    
     
 }
