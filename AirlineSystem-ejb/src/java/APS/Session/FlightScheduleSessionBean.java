@@ -37,7 +37,7 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
 
     @PersistenceContext(unitName = "AirlineSystem-ejbPU")
     private EntityManager em;
-    
+
     @EJB
     private RevenueManagementLocal rm;
 
@@ -100,7 +100,7 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
                 schedule.createSchedule(curr.getTime(), flightEnd);
                 schedule.setFlight(flight);
                 schedule.setTeam(team);
-                SeatAvailability sa = new SeatAvailability ();
+                SeatAvailability sa = new SeatAvailability();
                 int economy = flight.getAircraftType().getEconomySeats();
                 int business = flight.getAircraftType().getBusinessSeats();
                 int firstClass = flight.getAircraftType().getFirstSeats();
@@ -124,12 +124,21 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
         aircrafts = retrieveAircrafts();
         schedules = getSchedules();
         aircraftType = new AircraftType();
-        List<Schedule> curr;
+        List<Schedule> curr = new ArrayList<Schedule>();
         List<Schedule> result;
         Schedule earliestSchedule = new Schedule();
         TimeZone tz = TimeZone.getTimeZone("GMT+8:00"); //Set Timezone to Singapore
         Calendar currTime = Calendar.getInstance(tz);
         Calendar tmp = Calendar.getInstance(tz);
+        
+        //Remove the schedules that are after current time Note: May be replaced by new getSchedule algo
+        for (int i = 0; i < schedules.size(); i++) {
+            tmp.setTime(schedules.get(i).getStartDate());
+            if (tmp.after(currTime)) {
+                curr.add(schedules.get(i));
+            }
+        }
+        schedules = curr;
 
         //Create comparator for sorting of Schedules according to starting time
         Comparator<Schedule> comparator = new Comparator<Schedule>() {
@@ -145,7 +154,7 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
         };
 
         //Assign flights to schedules until all schedules are assigned
-        while (isAllAssigned(schedules)) {
+        while (!isAllAssigned(schedules)) {
             for (Aircraft aircraft : aircrafts) {
                 Route incoming = new Route();
                 Route currRoute = new Route();
@@ -213,7 +222,32 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
             }
         }
     }
-
+    
+    @Override
+    public void dummyRotate(){
+        aircrafts = retrieveAircrafts();
+        schedules = getSchedules();
+        List<Schedule> curr = new ArrayList<Schedule>();
+        Schedule sc = new Schedule();
+        Aircraft ac = new Aircraft();
+        int i = 0;
+        int j = 0;
+        int k = 0;
+        
+         while (!isAllAssigned(schedules)) {
+                ac = aircrafts.get(k);
+                for (i = j ; i < j+5; i++){
+                    sc = schedules.get(i);
+                    curr.add(sc);
+                    sc.setAircraft(aircrafts.get(k));
+                    em.persist(sc);
+                }
+                ac.setSchedules(curr);
+                j=i;
+                k++;
+         }
+    }
+    
     private Flight getFlight(String flightNo) {
         flight = new Flight();
         try {
@@ -284,6 +318,28 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
         try {
 
             Query q = em.createQuery("SELECT a FROM Schedule a");
+
+            List<Schedule> results = q.getResultList();
+            if (!results.isEmpty()) {
+                schedules = results;
+
+            } else {
+                schedules = null;
+                System.out.println("No Schedules Added!");
+            }
+
+        } catch (EntityNotFoundException enfe) {
+            System.out.println("\nEntity not found error" + "enfe.getMessage()");
+        }
+        return schedules;
+    }
+    //Alternate getSchedules algo
+    private List<Schedule> getSchedules( Date currTime) {
+        schedules = new ArrayList<Schedule>();
+        try {
+
+            Query q = em.createQuery("SELECT a FROM Schedule a"+ "AS a WHERE a.startDate>:startDate");
+             q.setParameter("startDate", currTime);
 
             List<Schedule> results = q.getResultList();
             if (!results.isEmpty()) {
