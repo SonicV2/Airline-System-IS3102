@@ -41,8 +41,6 @@ public class RoleManagedBean {
 
     private List<String> roles = new ArrayList();
     private List<Role> allRoles;
-    
-    
 
     String userID; //NRIC
     Employee employee;
@@ -60,21 +58,20 @@ public class RoleManagedBean {
     private List<String> accessRight;
 
     FacesMessage message = null;
-    
-    
+
     //the different access rights values retrieve from frontend
     private Boolean newAccessCreate;
     private Boolean newAccessDelete;
     private Boolean newAccessAssign;
     private Boolean newAccessView;
-    
+
     public RoleManagedBean() {
     }
 
     public void search(ActionEvent event) {
         newroles = new ArrayList<String>(); //to return all the current roles 
         employee = employeeSessionBean.getEmployeeUseID(userID);
-        
+
         if (employee == null) {
             newroles.add("no such user!");
             //msg="no such user!";
@@ -103,24 +100,23 @@ public class RoleManagedBean {
 //        setErrorMsg(roleSessionBean.deleteRole(deleteRoleName));
 //        setDeleteRoleName("");
 //    }
-    
-    public String deleteRole (String roleName){
+    public String deleteRole(String roleName) {
         setDeleteRoleName(roleName);
         setErrorMsg(roleSessionBean.deleteRole(deleteRoleName));
         setDeleteRoleName("");
-        
+
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, errorMsg, "");
         FacesContext.getCurrentInstance().addMessage(null, message);
-        
+
         return "createRole";
-        
+
     }
 
     //for admin to create new roles
     public void addRole(ActionEvent event) {
-        
-        if (roles != null){
-            for (String s : roles) {                       //Comment out if first time add roles
+
+        if (roles != null) {//Comment out if first time add roles
+            for (String s : roles) {                       
                 if (s.equals(roleName.toUpperCase())) {
                     message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Role Exists", "");
                     FacesContext.getCurrentInstance().addMessage(null, message);
@@ -145,32 +141,29 @@ public class RoleManagedBean {
         setRoles(roleSessionBean.retrive());
         setAllRoles(roleSessionBean.retrieveAllRoles());
     }
-    
+
     public void onRowEdit(RowEditEvent event) {
-        
+
         Role role = (Role) event.getObject();
-        
+
         System.out.println("role access create original:" + role.getAccess().isAccessCreate());
         System.out.println("role access create after:" + newAccessCreate);
-        
-        if (role.getAccess().isAccessCreate() != newAccessCreate ||role.getAccess().isAccessDelete() != newAccessDelete 
-                || role.getAccess().isAccessAssign() != newAccessAssign || role.getAccess().isAccessView() != newAccessView ){
-            
-            
+
+        if (role.getAccess().isAccessCreate() != newAccessCreate || role.getAccess().isAccessDelete() != newAccessDelete
+                || role.getAccess().isAccessAssign() != newAccessAssign || role.getAccess().isAccessView() != newAccessView) {
+
             FacesMessage msg = new FacesMessage("Role edited for: ", ((Role) event.getObject()).getRoleName());
             FacesContext.getCurrentInstance().addMessage(null, msg);
-        }
-        else{
+        } else {
             FacesMessage msg = new FacesMessage("Nothing edited for: ", ((Role) event.getObject()).getRoleName());
             FacesContext.getCurrentInstance().addMessage(null, msg);
         }
     }
-     
+
     public void onRowCancel(RowEditEvent event) {
         FacesMessage msg = new FacesMessage("Edit Cancelled", ((Role) event.getObject()).getRoleName());
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
-   
 
     //add new role to existing employee
     public void addNewRole() {
@@ -394,6 +387,4 @@ public class RoleManagedBean {
         this.newAccessView = newAccessView;
     }
 
-    
-    
 }

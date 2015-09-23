@@ -1,0 +1,74 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Search Crew</title>
+    </h:head>
+    <h:body>
+        <h1>Search Cabin Crew</h1>
+        <h:form>
+            <p:dataTable var="crew" value="#{searchCrewManagedBean.ccs}" widgetVar="crewsTable" paginator="true" rows="10">
+
+                <f:facet name="header">
+                    <p:outputPanel>
+                        <h:outputText value="Search all fields:" />
+                        <p:inputText id="globalFilter" onkeyup="PF('crewsTable').filter()" style="width:150px" placeholder="Enter keyword"/>
+                    </p:outputPanel>
+                </f:facet>
+
+                <p:column filterBy="#{crew.employeeDisplayFirstName}" headerText="First Name" filterMatchMode="contains">
+                    <h:outputText value="#{crew.employeeDisplayFirstName}" />
+                </p:column>
+                <p:column filterBy="#{crew.employeeDisplayLastName}" headerText="Last Name" filterMatchMode="contains">
+                    <h:outputText value="#{crew.employeeDisplayLastName}" />
+                </p:column>
+
+                <p:column filterBy="#{crew.position}" headerText="Position" filterMatchMode="exact">
+                    <f:facet name="filter">
+                        <p:selectOneMenu onchange="PF('crewsTable').filter()" >
+                            <f:selectItem itemLabel="Select One" itemValue="#{null}" noSelectionOption="true" />
+                            <f:selectItems value="#{searchCrewManagedBean.ccPosition}" />
+                        </p:selectOneMenu>
+                    </f:facet>
+                    <h:outputText value="#{crew.position}" />
+                </p:column>
+
+                <p:column filterBy="#{crew.team.id}" headerText="Team ID" filterMatchMode="contains">
+                    <h:outputText value="#{crew.team.id}" />
+                </p:column>
+
+                <p:column filterBy="#{crew.experience}" headerText="Experience" filterMatchMode="contains">
+                    <h:outputText value="#{crew.experience}" />
+                </p:column>
+
+                <p:column filterBy="#{crew.languages.get(0)}" headerText="Main Language" filterMatchMode="in">
+                    <f:facet name="filter">
+                        <p:selectCheckboxMenu label="Language" onchange="PF('crewsTable').filter()" panelStyle="width:125px" scrollHeight="150">
+                            <f:selectItems value="#{searchCrewManagedBean.languages}" />
+                        </p:selectCheckboxMenu>
+                    </f:facet>
+                    <h:outputText value="#{crew.languages.get(0)}" />
+                </p:column>
+
+                <p:column filterBy="#{crew.assigned}" headerText="Assigned" filterMatchMode="equals">
+                    <f:facet name="filter">
+                        <p:selectOneButton onchange="PF('crewsTable').filter()">
+                            <f:converter converterId="javax.faces.Boolean" />
+                            <f:selectItem itemLabel="All" itemValue="" />
+                            <f:selectItem itemLabel="Assigned" itemValue="true" />
+                            <f:selectItem itemLabel="Unassigned" itemValue="false" />
+                        </p:selectOneButton>
+                    </f:facet>
+                    <h:outputText value="#{crew.assigned ? 'Assigned': 'Unassigned'}" />
+
+                </p:column>
+
+            </p:dataTable>
+        </h:form>    
+
+    </h:body>
+</html>
+

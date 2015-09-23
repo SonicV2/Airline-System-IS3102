@@ -39,9 +39,9 @@ public class departmentManagedBean {
 
     private String department; // for dropdown selection
     private List<String> departments = new ArrayList();
-    
-     private List<String> CCdepartments = new ArrayList();
-    
+
+    private List<String> CCdepartments = new ArrayList();
+
     private List<OrganizationUnit> orgUnits;
 
     private String deleteDeptName;
@@ -52,7 +52,7 @@ public class departmentManagedBean {
 
     private String errorMsg;
     private String deleteOUName;
-    
+
     public departmentManagedBean() {
 
     }
@@ -61,22 +61,21 @@ public class departmentManagedBean {
     public void addDepartment(ActionEvent event) {
         FacesMessage message = null;
 
- //        departmentSessionBean.addDepartment(departmentName, departmentLocation);
- //          clear();
-       
-       //Comment out if first time set up     
-       List<OrganizationUnit> depts = departmentSessionBean.retrieveAllDepts();
-       
-       if (depts != null){
-        for (OrganizationUnit ou : depts) {
-            if (ou.getDepartmentName().equals(departmentName.toUpperCase()) && ou.getLocation().equals(departmentLocation.toUpperCase())) {
+//         departmentSessionBean.addDepartment(departmentName, departmentLocation);
+//           clear();
+        //Comment out if first time set up     
+        List<OrganizationUnit> depts = departmentSessionBean.retrieveAllDepts();
 
-                message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Department Exists", "");
-                FacesContext.getCurrentInstance().addMessage(null, message);
-                return;
+        if (depts != null) {
+            for (OrganizationUnit ou : depts) {
+                if (ou.getDepartmentName().equals(departmentName.toUpperCase()) && ou.getLocation().equals(departmentLocation.toUpperCase())) {
+
+                    message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Department Exists", "");
+                    FacesContext.getCurrentInstance().addMessage(null, message);
+                    return;
+                }
             }
         }
-       }
         departmentSessionBean.addDepartment(departmentName, departmentLocation);
         clear();
         message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Department Created Successfully!", "");
@@ -98,21 +97,19 @@ public class departmentManagedBean {
         setRestDepts(null);
         setEmployeeDept("");
     }
-    
-    public String deleteDepartment (String ouName){
+
+    public String deleteDepartment(String ouName) {
 //        setDeleteOUName(ouName);
         setErrorMsg(departmentSessionBean.deleteOrgUnit(ouName));
 //        setErrorMsg(roleSessionBean.deleteRole(deleteRoleName));
 //        setDeleteRoleName("");
 //        setDelete
-        
+
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, errorMsg, "");
         FacesContext.getCurrentInstance().addMessage(null, message);
         return "createDepartment";
-        
+
     }
-    
-    
 
     public void clear() {
         setDepartmentName("");
@@ -133,33 +130,29 @@ public class departmentManagedBean {
         }
     }
 
-   
     @PostConstruct
     public void retrive() {
         setDepartments(departmentSessionBean.retrive());
         System.out.println("set org units");
 
         setOrgUnits(departmentSessionBean.retrieveAllDepts());
-        
-        
-       retriveCC();  //comment out first time adding
-        
+
+        retriveCC();  //comment out first time adding
+
     }
-    
-    public void retriveCC(){
+
+    public void retriveCC() {
         //setDepartments(departmentSessionBean.retrive());
-        if (departments != null){
-        
-            for(String s : departments){
-            if(s.substring(0,s.indexOf("(")).equals("FLIGHT CREW")){
-                CCdepartments.add(s);
+        if (departments != null) {
+
+            for (String s : departments) {
+                if (s.substring(0, s.indexOf("(")).equals("FLIGHT CREW")) {
+                    CCdepartments.add(s);
+                }
             }
         }
-        }
-        
+
     }
-    
-    
 
     public String getDepartmentName() {
         return departmentName;
@@ -314,6 +307,5 @@ public class departmentManagedBean {
     public void setDeleteOUName(String deleteOUName) {
         this.deleteOUName = deleteOUName;
     }
-    
-    
+
 }
