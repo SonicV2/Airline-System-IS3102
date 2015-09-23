@@ -11,6 +11,7 @@ import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import CI.Session.EmployeeSessionBeanLocal;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import javax.faces.application.FacesMessage;
@@ -115,6 +116,7 @@ public class EmployeeManageBean {
     
     public void addCabinCrew(ActionEvent event){
   
+       languages=new ArrayList<String>();
         languages.add(firstLang);
         languages.add(secondLang);
         employeeSessionBean.addCabinCrew(employeeID,employeeDisplayFirstName, employeeDisplayLastName
