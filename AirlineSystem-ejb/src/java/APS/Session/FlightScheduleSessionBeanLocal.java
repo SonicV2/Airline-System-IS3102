@@ -15,4 +15,5 @@ import javax.ejb.Local;
 public interface FlightScheduleSessionBeanLocal {
     public void scheduleFlights(String flightId);
     public void rotateFlights();
+    public void dummyRotate();
 }
