@@ -50,6 +50,7 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
     private List<Schedule> schedules;
     private Team team;
     private List<Aircraft> aircrafts;
+    private SeatAvailability sa;
 
     @Override
     public void scheduleFlights(String flightId) {
@@ -68,9 +69,11 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
                 minFuel = aircraftType1.getFuelCost();
             }
         }
-
+        
+        System.out.println(aircraftType);
         flight.setAircraftType(aircraftType);
         aircraftType.getFlights().add(flight);
+        em.persist(aircraftType); 
         DecimalFormat df = new DecimalFormat("0.##");
         flight.setFlightDuration(Double.valueOf(df.format(route.getDistance() / (aircraftType.getSpeed() * 1062))));
 
@@ -91,20 +94,29 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
         curr.set(Calendar.SECOND, 0);
         Date counter = startDateTime;
 
+        int economy = aircraftType.getEconomySeats();
+        int business = aircraftType.getBusinessSeats();
+        int firstClass = aircraftType.getFirstSeats();
+        int[] seats = generateAvailability(economy, business, firstClass);
+
+        //Break up the hour and minutes
+        int flightHr = (int) flight.getFlightDuration();
+        int flightMin = (int) ((flight.getFlightDuration() - (double) flightHr) * 60);
+
         //Add a list schedule until 6 months later
         while (curr.before(endTime)) {
             schedule = new Schedule();
+            sa = new SeatAvailability();
             int day = curr.get(Calendar.DAY_OF_WEEK);
             if (flightDays.charAt(day - 1) == '1') {
-                Date flightEnd = calcEndTime(curr.getTime(), flight);
-                schedule.createSchedule(curr.getTime(), flightEnd);
+                Date flightStart = curr.getTime();
+                curr.add(Calendar.HOUR, flightHr);
+                curr.add(Calendar.MINUTE, flightMin);
+                Date flightEnd = curr.getTime();
+                schedule.createSchedule(flightStart, flightEnd);
                 schedule.setFlight(flight);
                 schedule.setTeam(team);
-                SeatAvailability sa = new SeatAvailability();
-                int economy = flight.getAircraftType().getEconomySeats();
-                int business = flight.getAircraftType().getBusinessSeats();
-                int firstClass = flight.getAircraftType().getFirstSeats();
-                int[] seats = rm.generateAvailability(economy, business, firstClass);
+                schedule.setAircraft(null);
                 sa.createSeatAvail(schedule, seats);
                 schedule.setSeatAvailability(sa);
                 em.persist(schedule);
@@ -115,7 +127,11 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
             curr.add(Calendar.DATE, 1);
             counter = curr.getTime();
         }
+
         flight.setSchedule(schedules);
+        System.out.println(flight.getAircraftType().getId());
+        System.out.println(flight);
+        System.out.println(flight.getAircraftType());
         em.persist(flight);
     }
 
@@ -130,7 +146,7 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
         TimeZone tz = TimeZone.getTimeZone("GMT+8:00"); //Set Timezone to Singapore
         Calendar currTime = Calendar.getInstance(tz);
         Calendar tmp = Calendar.getInstance(tz);
-        
+
         //Remove the schedules that are after current time Note: May be replaced by new getSchedule algo
         for (int i = 0; i < schedules.size(); i++) {
             tmp.setTime(schedules.get(i).getStartDate());
@@ -222,9 +238,9 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
             }
         }
     }
-    
+
     @Override
-    public void dummyRotate(){
+    public void dummyRotate() {
         aircrafts = retrieveAircrafts();
         schedules = getSchedules();
         List<Schedule> curr = new ArrayList<Schedule>();
@@ -233,21 +249,21 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
         int i = 0;
         int j = 0;
         int k = 0;
-        
-         while (!isAllAssigned(schedules)) {
-                ac = aircrafts.get(k);
-                for (i = j ; i < j+5; i++){
-                    sc = schedules.get(i);
-                    curr.add(sc);
-                    sc.setAircraft(aircrafts.get(k));
-                    em.persist(sc);
-                }
-                ac.setSchedules(curr);
-                j=i;
-                k++;
-         }
+
+        while (!isAllAssigned(schedules)) {
+            ac = aircrafts.get(k);
+            for (i = j; i < j + 5; i++) {
+                sc = schedules.get(i);
+                curr.add(sc);
+                sc.setAircraft(aircrafts.get(k));
+                em.persist(sc);
+            }
+            ac.setSchedules(curr);
+            j = i;
+            k++;
+        }
     }
-    
+
     private Flight getFlight(String flightNo) {
         flight = new Flight();
         try {
@@ -333,13 +349,14 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
         }
         return schedules;
     }
+
     //Alternate getSchedules algo
-    private List<Schedule> getSchedules( Date currTime) {
+    private List<Schedule> getSchedules(Date currTime) {
         schedules = new ArrayList<Schedule>();
         try {
 
-            Query q = em.createQuery("SELECT a FROM Schedule a"+ "AS a WHERE a.startDate>:startDate");
-             q.setParameter("startDate", currTime);
+            Query q = em.createQuery("SELECT a FROM Schedule a" + "AS a WHERE a.startDate>:startDate");
+            q.setParameter("startDate", currTime);
 
             List<Schedule> results = q.getResultList();
             if (!results.isEmpty()) {
@@ -365,17 +382,27 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
         return true;
     }
 
-    private Date calcEndTime(Date startTime, Flight flight) {
-        //Break up the hour and minutes
-        int flightHr = (int) flight.getFlightDuration();
-        int flightMin = (int) ((flight.getFlightDuration() - (double) flightHr) * 60);
-
-        TimeZone tz = TimeZone.getTimeZone("GMT+8:00"); //Set Timezone to Singapore
-        Calendar endTime = Calendar.getInstance(tz);
-        endTime.setTime(startTime);
-        endTime.add(Calendar.HOUR, flightHr);
-        endTime.add(Calendar.MINUTE, flightMin);
-
-        return endTime.getTime();
+    private int[] generateAvailability(int economy, int business, int firstClass) {
+        int[] seats = new int[5];
+        seats[0] = (economy / 3) + 5;
+        seats[1] = (economy / 3) + 5;
+        seats[2] = (economy / 3) + 5;
+        seats[3] = business + 5;
+        seats[4] = business + 5;
+        return seats;
     }
+    /*
+     private Date calcEndTime(Date startTime, Flight flight) {
+     //Break up the hour and minutes
+     int flightHr = (int) flight.getFlightDuration();
+     int flightMin = (int) ((flight.getFlightDuration() - (double) flightHr) * 60);
+
+     TimeZone tz = TimeZone.getTimeZone("GMT+8:00"); //Set Timezone to Singapore
+     Calendar endTime = Calendar.getInstance(tz);
+     endTime.setTime(startTime);
+     endTime.add(Calendar.HOUR, flightHr);
+     endTime.add(Calendar.MINUTE, flightMin);
+
+     return endTime.getTime();
+     }*/
 }
