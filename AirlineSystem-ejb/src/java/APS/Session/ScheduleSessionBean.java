@@ -39,8 +39,20 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
     private SeatAvailability seatAvail;
 
     @Override
-    public void edit(Schedule schedule) {
-        schedule.setEndDate(calcEndTime(schedule.getStartDate(), schedule.getFlight()));
+    public void edit(Schedule schedule, Schedule original) {
+        schedule.setEndDate(calcEndTime(schedule.getStartDate(), schedule.getFlight())); 
+        
+        if (!schedule.getAircraft().getTailNo().equals(original.getAircraft().getTailNo())) {
+            
+            List<Schedule> temp1 = schedule.getAircraft().getSchedules();
+            temp1.add(schedule);
+            schedule.getAircraft().setSchedules(temp1);
+            
+            List<Schedule> temp = original.getAircraft().getSchedules();
+            temp.remove(original);
+            original.getAircraft().setSchedules(temp);
+        }
+ 
         em.merge(schedule);
     }
 

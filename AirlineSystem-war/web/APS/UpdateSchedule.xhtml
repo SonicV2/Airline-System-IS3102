@@ -61,16 +61,17 @@
                 <h:outputText value="#{schedule.flight.route.destinationCity}" />
             </p:column>
        
-       <p:column filterBy="#{schedule.flight.aircraftType}" headerText="Aircraft Type" filterMatchMode="contains">
-                <h:outputText value="#{schedule.flight.aircraftType}" />
+       <p:column filterBy="#{schedule.flight.aircraftType.id}" headerText="Aircraft Type" filterMatchMode="contains">
+                <h:outputText value="#{schedule.flight.aircraftType.id}" />
             </p:column>
  
        <p:column headerText="Aircraft">
            <p:cellEditor>
-               <f:facet name="output"><h:outputText value="#{scheduleManageBean.aircraft.tailNo}" /></f:facet>
+               <f:facet name="output"><h:outputText value="#{schedule.aircraft.tailNo}" /></f:facet>
                <f:facet name="input">
-                   <h:selectOneMenu value="#{scheduleManageBean.aircraft.tailNo}" style="width:100%">
-                       <f:selectItems value="#{scheduleManageBean.aircraftlist}" var="aircrafts" itemLabel="#{aircrafts}" itemValue="#{aircrafts}" />
+                   <h:selectOneMenu value="#{schedule.aircraft.tailNo}" style="width:100%">
+                       <f:selectItem itemLabel="#{schedule.aircraft.tailNo}" itemValue="#{schedule.aircraft.tailNo}" />
+                       <f:selectItems value="#{scheduleManageBean.aircraftlist}" var="aircrafts" itemLabel="#{aircrafts.tailNo}" itemValue="#{aircrafts.tailNo}" />
                    </h:selectOneMenu>
                </f:facet>
            </p:cellEditor>
