@@ -162,7 +162,7 @@
 
                                 <div class="form-group">
                                     <p:outputLabel for="department" value="Department: " class="col-md-4 control-label" />
-                                    <h:selectOneMenu id="department" styleClass="dropdown-menu select"  value="#{employeeManageBean.employeeDepartment}" >
+                                    <h:selectOneMenu required="true" id="department" styleClass="dropdown-menu select"  value="#{employeeManageBean.employeeDepartment}" >
 
                                         <f:selectItem itemLabel="Select department" itemValue="" noSelectionOption="true" />
                                         <f:selectItems value="#{departmentManagedBean.CCdepartments}" />
@@ -201,7 +201,7 @@
                                 
                                 <div class="form-group">
                                     <p:outputLabel for="p" value="Position: " class="col-md-4 control-label" />
-                                    <h:selectOneMenu  id="p" styleClass="dropdown-menu select" value="#{employeeManageBean.position}"  >
+                                    <h:selectOneMenu  required="true" id="p" styleClass="dropdown-menu select" value="#{employeeManageBean.position}"  >
 
                                         <f:selectItem itemLabel="Select Position" itemValue="" noSelectionOption="true" />
                                         <f:selectItem itemLabel="Captain" itemValue="Captain"  />
@@ -226,8 +226,8 @@
 
 
                                 <div class="form-group" style="margin-left:95px">
-                                    <b>Languages:</b>
-                                    <p:selectManyCheckbox id="grid" value="#{employeeManageBean.skills}" layout="grid" columns="4">
+                                    <b>Skills:</b>
+                                    <p:selectManyCheckbox required="true" id="grid" value="#{employeeManageBean.skills}" layout="grid" columns="4">
                                         <f:selectItem itemLabel="A380" itemValue="A380" />
                                         <f:selectItem itemLabel="A330" itemValue="A330" />
                                         <f:selectItem itemLabel="A340" itemValue="A340" />
