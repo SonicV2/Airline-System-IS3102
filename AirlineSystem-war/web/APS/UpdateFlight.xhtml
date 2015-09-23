@@ -4,15 +4,15 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
-
+    
     <h:head>
-        <title>Update Schedule</title>
+        <title>Update Flight</title>
     </h:head>
-
+    
     <body>
-
+        
         <h:form>
-            <h:commandButton class="btn btn-primary btn-lg btn-block" value="Retrieve" actionListener="#{scheduleManageBean.retrieve}"/>
+            <h:commandButton class="btn btn-primary btn-lg btn-block" value="Retrieve" actionListener="#{flightManageBean.retrieve}"/>
         </h:form>
 
         <h:form id="form">
@@ -82,6 +82,63 @@
 
             </p:dataTable>
         </h:form>
-
+        
+        
+        
+        
+        ----------------
+        <h:form>
+            <h:commandButton class="btn btn-primary btn-lg btn-block" value="Retrieve" actionListener="#{flightManageBean.retrieve}"/>
+        </h:form>
+        
+        <h:form id="form">
+            <p:contextMenu for="flights">
+                <p:menuitem value="Delete" update="flights" icon="ui-icon-close" actionListener="#{flightManageBean.deleteFlight}"/>
+            </p:contextMenu>
+ 
+            <p:dataTable id="flights" var="flight" value="#{flightManageBean.flights}" rowKey="#{flight.flightNo}"
+                 selection="#{flightManageBean.selectedFlight}" selectionMode="single" paginator="true" rows="10" widgetVar="flightsTable">
+                
+                <f:facet name="header">
+                    RightClick to Delete the Flight
+                    <p:outputPanel>
+                        <h:outputText value="Search all fields:" />
+                    <p:inputText id="globalFilter" onkeyup="PF('flightsTable').filter()" style="width:150px" placeholder="Enter keyword"/>
+                    </p:outputPanel>
+                </f:facet>
+                
+                <p:column filterBy="#{flight.flightNo}" headerText="Flight Number" filterMatchMode="contains">
+                    <h:outputText value="#{flight.flightNo}" />
+                </p:column>
+            
+                <p:column filterBy="#{flight.route.routeId}" headerText="Route ID" filterMatchMode="contains">
+                <h:outputText value="#{flight.route.routeId}" />
+            </p:column>
+            
+                <p:column filterBy="#{flight.route.originCountry}" headerText="Origin Country" filterMatchMode="contains">
+                <h:outputText value="#{flight.route.originCountry}" />
+            </p:column>
+                
+                <p:column filterBy="#{flight.route.originCity}" headerText="Origin City" filterMatchMode="contains">
+                <h:outputText value="#{flight.route.originCity}" />
+            </p:column>
+            
+            <p:column filterBy="#{flight.route.destinationCountry}" headerText="Destination Country" filterMatchMode="contains">
+                <h:outputText value="#{flight.route.destinationCountry}" />
+            </p:column>
+            
+            <p:column filterBy="#{flight.route.destinationCity}" headerText="Destination City" filterMatchMode="contains">
+                <h:outputText value="#{flight.route.destinationCity}" />
+            </p:column>
+                
+                        
+            <p:column filterBy="#{flight.aircraftType.id}" headerText="Aircraft Type" filterMatchMode="contains">
+                <h:outputText value="#{flight.aircraftType.id}" />
+            </p:column>
+                
+            </p:dataTable>
+            </h:form>
+        
     </body>
 </html>
+

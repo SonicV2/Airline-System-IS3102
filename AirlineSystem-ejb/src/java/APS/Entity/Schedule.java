@@ -46,6 +46,9 @@ public class Schedule implements Serializable {
     
     @OneToOne(cascade = {CascadeType.ALL})
     private SeatAvailability seatAvail;
+            
+    @ManyToOne(cascade = {CascadeType.PERSIST})
+    private Aircraft aircraft = new Aircraft();
 
     
     public void createSchedule(Date startDate, Date endDate){
@@ -92,6 +95,14 @@ public class Schedule implements Serializable {
     
     public void setFlight(Flight flight) {
         this.flight = flight;
+    }
+    
+    public Aircraft getAircraft() {
+        return aircraft;
+    }
+    
+    public void setAircraft(Aircraft aircraft) {
+        this.aircraft = aircraft;
     }
 
     @Override

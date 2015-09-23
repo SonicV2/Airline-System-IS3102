@@ -139,4 +139,30 @@ public class FleetSessionBean implements FleetSessionBeanLocal {
 
         return allAircrafts;
     }
+    
+    @Override
+    public List<Aircraft> getReserveAircrafts(String status){
+        
+        List<Aircraft> reserveAircrafts = new ArrayList<Aircraft>();
+        
+        try{
+            Query q = em.createQuery("SELECT a FROM Aircraft " + "AS a WHERE a.status=:status");
+            q.setParameter("status", status);
+            
+            List<Aircraft> results = q.getResultList();
+            if (!results.isEmpty()){
+                
+                reserveAircrafts = results;
+                
+            }else
+            {
+                reserveAircrafts = null;
+                System.out.println("no reserve aircraft!");
+            }
+        }catch (EntityNotFoundException enfe) {
+            System.out.println("\nEntity not found error" + "enfe.getMessage()");
+        }
+       
+        return reserveAircrafts;
+    }
 }

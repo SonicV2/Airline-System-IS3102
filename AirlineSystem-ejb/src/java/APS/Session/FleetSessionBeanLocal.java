@@ -24,5 +24,6 @@ public interface FleetSessionBeanLocal {
     public Aircraft getAircraft(Long tailNum);
     public List<AircraftType> retrieveAircraftTypes();
     public List<Aircraft> retrieveAircrafts();
+    public List<Aircraft> getReserveAircrafts(String status);
 
 }
