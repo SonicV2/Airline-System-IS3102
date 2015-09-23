@@ -61,8 +61,6 @@ public class departmentManagedBean {
     public void addDepartment(ActionEvent event) {
         FacesMessage message = null;
 
-//         departmentSessionBean.addDepartment(departmentName, departmentLocation);
-//           clear();
         //Comment out if first time set up     
         List<OrganizationUnit> depts = departmentSessionBean.retrieveAllDepts();
 
