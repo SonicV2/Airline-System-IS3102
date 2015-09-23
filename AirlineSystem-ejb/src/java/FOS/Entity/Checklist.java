@@ -53,6 +53,10 @@ public class Checklist implements Serializable {
     public void setChecklistItems(Collection<ChecklistItem> checklistItems) {
         this.checklistItems = checklistItems;
     }
+    
+    public void addChecklistItem (ChecklistItem checklistItem){
+        checklistItems.add(checklistItem);
+    }
 
    
     

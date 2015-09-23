@@ -25,6 +25,10 @@ public class ChecklistItem implements Serializable {
     private String name;
     private boolean checked;
     
+    public ChecklistItem (){
+        
+    }
+    
     public void createChecklistItem (String name){
         this.name = name;
         this.checked = false;
