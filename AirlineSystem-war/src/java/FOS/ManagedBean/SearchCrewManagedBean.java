@@ -83,6 +83,7 @@ public class SearchCrewManagedBean {
         pilotSkillsets.add("B777");
     }
 
+  
     /**
      * @return the pilots
      */
@@ -193,6 +194,36 @@ public class SearchCrewManagedBean {
      */
     public void setSelectTeam(Team selectTeam) {
         this.selectTeam = selectTeam;
+        setTeamPilots(selectTeam.getPilots());
+        setTeamCC(selectTeam.getCabinCrews());
+    }
+
+    /**
+     * @return the teamPilots
+     */
+    public List<Pilot> getTeamPilots() {
+        return teamPilots;
+    }
+
+    /**
+     * @param teamPilots the teamPilots to set
+     */
+    public void setTeamPilots(List<Pilot> teamPilots) {
+        this.teamPilots = teamPilots;
+    }
+
+    /**
+     * @return the teamCC
+     */
+    public List<CabinCrew> getTeamCC() {
+        return teamCC;
+    }
+
+    /**
+     * @param teamCC the teamCC to set
+     */
+    public void setTeamCC(List<CabinCrew> teamCC) {
+        this.teamCC = teamCC;
     }
 
 }

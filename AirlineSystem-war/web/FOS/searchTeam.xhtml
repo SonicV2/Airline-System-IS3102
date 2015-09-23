@@ -5,11 +5,11 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
-        <title>Search Crew</title>
+        <title>Search Team</title>
     </h:head>
     <h:body>
         <h1>Search Team</h1>
-        <h:form>
+        <h:form id="form">
             <p:dataGrid var="team" value="#{searchCrewManagedBean.teams}" columns="3" layout="grid"
                         rows="12" paginator="true" id="cars"
                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
@@ -21,7 +21,7 @@
 
                 <p:panel header="#{team.id}" style="text-align:center">
                     <h:panelGrid columns="1" style="width:100%">
-                        
+
                         <h:outputText value="#{team.location}" />
                         <h:outputText value="Show Member Details" />
 
@@ -37,18 +37,22 @@
             <p:dialog header="Team Info" widgetVar="teamDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
                 <p:outputPanel id="teamDetail" style="text-align:center;">
                     <p:panelGrid  columns="2" rendered="#{not empty searchCrewManagedBean.selectTeam}" columnClasses="label,value">
-                       
+
                         <h:outputText value="Team Id:" />
-                        <h:outputText value="#{team.id}" />
+                        <h:outputText value="#{searchCrewManagedBean.selectTeam.id}" />
 
-                        <h:outputText value="Year" />
-                        <h:outputText value="#{dataGridView.selectedCar.year}" />
+                        <h:outputText value="Pilot" />
+                         <p:dataList value="#{searchCrewManagedBean.teamPilots}" var="p" type="ordered">
+                            #{p.employeeDisplayFirstName} #{p.employeeDisplayLastName} ( #{p.position} )
+                        </p:dataList>
+                        
+                        <h:outputText value="Cabin Crew" />
+                        <p:dataList value="#{searchCrewManagedBean.teamCC}" var="c" type="ordered">
+                            #{c.employeeDisplayFirstName} #{c.employeeDisplayLastName} ( #{c.position} )
+                        </p:dataList>
 
-                        <h:outputText value="Color:" />
-                        <h:outputText value="#{dataGridView.selectedCar.color}" style="color:#{dataGridView.selectedCar.color}"/>
-
-                        <h:outputText value="Price" />
-                        <h:outputText value="$#{dataGridView.selectedCar.price}" />
+                         
+                        
                     </p:panelGrid>
                 </p:outputPanel>
             </p:dialog>

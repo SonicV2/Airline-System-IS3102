@@ -5,7 +5,7 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
-        <title>Search Crew</title>
+        <title>Search Pilot</title>
     </h:head>
     <h:body>
         <h1>Search Pilot</h1>
@@ -51,12 +51,12 @@
                             <f:selectItems value="#{searchCrewManagedBean.pilotSkillsets}" />
                         </p:selectCheckboxMenu>
                     </f:facet>
-                    <h:outputText value="#{pilot.skillsets.get(0)}" />
+                    <h:outputText value="#{pilot.skillsets}" />
                 </p:column>
 
                 <p:column filterBy="#{pilot.assigned}" headerText="Assigned" filterMatchMode="equals">
                     <f:facet name="filter">
-                        <p:selectOneButton onchange="PF('crewsTable').filter()">
+                        <p:selectOneButton onchange="PF('pilotsTable').filter()">
                             <f:converter converterId="javax.faces.Boolean" />
                             <f:selectItem itemLabel="All" itemValue="" />
                             <f:selectItem itemLabel="Assigned" itemValue="true" />

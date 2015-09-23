@@ -5,7 +5,7 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
-        <title>Search Crew</title>
+        <title>Search Pilot</title>
     </h:head>
     <h:body>
         <h1>Search Cabin Crew</h1>
@@ -50,7 +50,8 @@
                             <f:selectItems value="#{searchCrewManagedBean.languages}" />
                         </p:selectCheckboxMenu>
                     </f:facet>
-                    <h:outputText value="#{crew.languages.get(0)}" />
+                   
+                    <h:outputText value="#{crew.languages}" />
                 </p:column>
 
                 <p:column filterBy="#{crew.assigned}" headerText="Assigned" filterMatchMode="equals">
