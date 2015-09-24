@@ -3,68 +3,93 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <h:head>
+        <p:growl id="growl" sticky="true" showDetail="true"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <h:outputStylesheet library ="css"  name="bootstrap.css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
+        <h:outputStylesheet library="css" name="admindb.css" />
+        <h:outputStylesheet library="css" name="morrisjs/morris.css" />
         <title>Delete Schedule</title>
     </h:head>
 
     <body>
+        <!--            To add the same header on all dashboard pages  
+                <ui:include src="/CI/dashboardHeader.xhtml"/>
+                    To add the same sidebar on all dashboard pages -->  
+        <ui:include src="/CI/dashboardSidebar.xhtml"/>
 
-        <h:form>
-            <h:commandButton class="btn btn-primary btn-lg btn-block" value="Retrieve" actionListener="#{scheduleManageBean.retrieve}"/>
-        </h:form>
 
-        <h:form id="form">
-            <p:contextMenu for="schedules">
-                <p:menuitem value="Delete" update="schedules" icon="ui-icon-close" actionListener="#{scheduleManageBean.deleteSchedule}"/>
-            </p:contextMenu>
+        <div id="page-wrapper">
 
-            <p:dataTable id="schedules" var="schedule" value="#{scheduleManageBean.schedules}" rowKey="#{schedule.scheduleId}"
-                         selection="#{scheduleManageBean.selectedSchedule}" selectionMode="single" paginator="true" rows="10" widgetVar="schedulesTable">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2 class="page-header">Delete Schedules</h2>
+                </div>
 
-                <f:facet name="header">
-                    Right Click to Delete the Schedule Entry
-                    <p:outputPanel>
-                        <h:outputText value="Search all fields:" />
-                        <p:inputText id="globalFilter" onkeyup="PF('schedulesTable').filter()" style="width:150px" placeholder="Enter keyword"/>
-                    </p:outputPanel>
-                </f:facet>
+                <div class="col-lg-12">
+                    <p class="pull-right"> * Right click to delete the flight</p>
+                    <h:form>
+                        <h:commandButton value="Retrieve" actionListener="#{scheduleManageBean.retrieve}"/>
+                    </h:form>
 
-                <p:column filterBy="#{schedule.scheduleId}" headerText="Schedule ID" filterMatchMode="contains">
-                    <h:outputText value="#{schedule.scheduleId}" />
-                </p:column>
+                    <h:form id="form">
+                        <p:contextMenu for="schedules">
+                            <p:menuitem value="Delete" update="schedules" icon="ui-icon-close" actionListener="#{scheduleManageBean.deleteSchedule}"/>
+                        </p:contextMenu>
 
-                <p:column filterBy="#{schedule.startDate}" headerText="Start Date" filterMatchMode="contains">
-                    <h:outputText value="#{schedule.startDate}" />
-                </p:column>
+                        <p:dataTable id="schedules" var="schedule" value="#{scheduleManageBean.schedules}" rowKey="#{schedule.scheduleId}"
+                                     selection="#{scheduleManageBean.selectedSchedule}" selectionMode="single" paginator="true" rows="10" widgetVar="schedulesTable">
 
-                <p:column filterBy="#{schedule.endDate}" headerText="End Date" filterMatchMode="contains">
-                    <h:outputText value="#{schedule.endDate}" />
-                </p:column>
+                            <f:facet name="header">
 
-                <p:column filterBy="#{schedule.flight.flightNo}" headerText="Flight No." filterMatchMode="contains">
-                    <h:outputText value="#{schedule.flight.flightNo}" />
-                </p:column>
+                                <p:outputPanel>
+                                    <h:outputText value="Search all fields:" />
+                                    <p:inputText id="globalFilter" onkeyup="PF('schedulesTable').filter()" style="width:150px" placeholder="Enter keyword"/>
+                                </p:outputPanel>
+                            </f:facet>
 
-                <p:column filterBy="#{schedule.flight.route.originCountry}" headerText="Origin Country" filterMatchMode="contains">
-                    <h:outputText value="#{schedule.flight.route.originCountry}" />
-                </p:column>
+                            <p:column filterBy="#{schedule.scheduleId}" headerText="Schedule ID" filterMatchMode="contains">
+                                <h:outputText value="#{schedule.scheduleId}" />
+                            </p:column>
 
-                <p:column filterBy="#{schedule.flight.route.originCity}" headerText="Origin City" filterMatchMode="contains">
-                    <h:outputText value="#{schedule.flight.route.originCity}" />
-                </p:column>
+                            <p:column filterBy="#{schedule.startDate}" headerText="Start Date" filterMatchMode="contains">
+                                <h:outputText value="#{schedule.startDate}" />
+                            </p:column>
 
-                <p:column filterBy="#{schedule.flight.route.destinationCountry}" headerText="Destination Country" filterMatchMode="contains">
-                    <h:outputText value="#{schedule.flight.route.destinationCountry}" />
-                </p:column>
+                            <p:column filterBy="#{schedule.endDate}" headerText="End Date" filterMatchMode="contains">
+                                <h:outputText value="#{schedule.endDate}" />
+                            </p:column>
 
-                <p:column filterBy="#{schedule.flight.route.destinationCity}" headerText="Destination City" filterMatchMode="contains">
-                    <h:outputText value="#{schedule.flight.route.destinationCity}" />
-                </p:column>
+                            <p:column filterBy="#{schedule.flight.flightNo}" headerText="Flight No." filterMatchMode="contains">
+                                <h:outputText value="#{schedule.flight.flightNo}" />
+                            </p:column>
 
-            </p:dataTable>
-        </h:form>
+                            <p:column filterBy="#{schedule.flight.route.originCountry}" headerText="Origin Country" filterMatchMode="contains">
+                                <h:outputText value="#{schedule.flight.route.originCountry}" />
+                            </p:column>
 
+                            <p:column filterBy="#{schedule.flight.route.originCity}" headerText="Origin City" filterMatchMode="contains">
+                                <h:outputText value="#{schedule.flight.route.originCity}" />
+                            </p:column>
+
+                            <p:column filterBy="#{schedule.flight.route.destinationCountry}" headerText="Destination Country" filterMatchMode="contains">
+                                <h:outputText value="#{schedule.flight.route.destinationCountry}" />
+                            </p:column>
+
+                            <p:column filterBy="#{schedule.flight.route.destinationCity}" headerText="Destination City" filterMatchMode="contains">
+                                <h:outputText value="#{schedule.flight.route.destinationCity}" />
+                            </p:column>
+
+                        </p:dataTable>
+                    </h:form>
+                </div>
+            </div>
+        </div>
     </body>
 </html>

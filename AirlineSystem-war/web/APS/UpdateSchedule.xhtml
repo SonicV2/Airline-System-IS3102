@@ -3,86 +3,119 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <h:head>
+        <p:growl id="growl" sticky="true" showDetail="true"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <h:outputStylesheet library ="css"  name="bootstrap.css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
+        <h:outputStylesheet library="css" name="admindb.css" />
+        <h:outputStylesheet library="css" name="morrisjs/morris.css" />
         <title>Update Schedule</title>
     </h:head>
-
+    <style>
+        .fixed-size {
+            table-layout: fixed;
+            word-wrap: break-word;
+        }
+        .ui-datatable-tablewrapper {
+            font-size: 90%;
+        }
+        .ui-datatable .ui-column-filter {
+            width:80px;
+        }
+    </style>
     <body>
+        <!--            To add the same header on all dashboard pages  
+        <ui:include src="/CI/dashboardHeader.xhtml"/>
+            To add the same sidebar on all dashboard pages -->  
+        <ui:include src="/CI/dashboardSidebar.xhtml"/>
+        <div id="page-wrapper">
 
-        <h:form>
-            <h:commandButton class="btn btn-primary btn-lg btn-block" value="Retrieve" actionListener="#{scheduleManageBean.retrieve}"/>
-        </h:form>
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2 class="page-header">Update Schedule</h2>
+                </div>
 
-        <h:form id="form">
-            <p:growl id="msgs" showDetail="true"/>
-            
-            <p:dataTable id="schedules" var="schedule" value="#{scheduleManageBean.schedules}" editable="true" style="margin-bottom:20px" paginator="true" rows="10" widgetVar="schedulesTable">
-                <f:facet name="header">
-                    Click the icon on right column to Edit
-                    <p:outputPanel>
-                        <h:outputText value="Search all fields:" />
-                        <p:inputText id="globalFilter" onkeyup="PF('schedulesTable').filter()" style="width:150px" placeholder="Enter keyword"/>
-                    </p:outputPanel>
-                </f:facet>
- 
-       <p:ajax event="rowEdit" listener="#{scheduleManageBean.onRowEdit}" update=":form:msgs" />
-       <p:ajax event="rowEditCancel" listener="#{scheduleManageBean.onRowCancel}" update=":form:msgs" />
- 
-       <p:column filterBy="#{schedule.scheduleId}" headerText="Schedule ID" filterMatchMode="contains">
-            <h:outputText value="#{schedule.scheduleId}" />
-       </p:column>
- 
-       <p:column headerText="Scheduled Date and Time" filterBy="#{schedule.startDate}" filterMatchMode="contains">
-           <p:cellEditor>
-               <f:facet name="output"><h:outputText value="#{schedule.startDate}" /></f:facet>
-               <f:facet name="input"><p:calendar id="startDate" value="#{schedule.startDate}" pattern="MM/dd/yyyy HH:mm"/></f:facet>
-           </p:cellEditor>
-       </p:column>
-       
-       <p:column filterBy="#{schedule.flight.flightNo}" headerText="Flight No." filterMatchMode="contains">
-                <h:outputText value="#{schedule.flight.flightNo}" />
-            </p:column>
-                
-            <p:column filterBy="#{schedule.flight.route.originCountry}" headerText="Origin Country" filterMatchMode="contains">
-                <h:outputText value="#{schedule.flight.route.originCountry}" />
-            </p:column>
-                
-            <p:column filterBy="#{schedule.flight.route.originCity}" headerText="Origin City" filterMatchMode="contains">
-                <h:outputText value="#{schedule.flight.route.originCity}" />
-            </p:column>
-            
-            <p:column filterBy="#{schedule.flight.route.destinationCountry}" headerText="Destination Country" filterMatchMode="contains">
-                <h:outputText value="#{schedule.flight.route.destinationCountry}" />
-            </p:column>
-            
-            <p:column filterBy="#{schedule.flight.route.destinationCity}" headerText="Destination City" filterMatchMode="contains">
-                <h:outputText value="#{schedule.flight.route.destinationCity}" />
-            </p:column>
-       
-       <p:column filterBy="#{schedule.flight.aircraftType.id}" headerText="Aircraft Type" filterMatchMode="contains">
-                <h:outputText value="#{schedule.flight.aircraftType.id}" />
-            </p:column>
- 
-       <p:column headerText="Aircraft">
-           <p:cellEditor>
-               <f:facet name="output"><h:outputText value="#{schedule.aircraft.tailNo}" /></f:facet>
-               <f:facet name="input">
-                   <h:selectOneMenu value="#{schedule.aircraft.tailNo}" style="width:100%">
-                       <f:selectItem itemLabel="#{schedule.aircraft.tailNo}" itemValue="#{schedule.aircraft.tailNo}" />
-                       <f:selectItems value="#{scheduleManageBean.aircraftlist}" var="aircrafts" itemLabel="#{aircrafts.tailNo}" itemValue="#{aircrafts.tailNo}" />
-                   </h:selectOneMenu>
-               </f:facet>
-           </p:cellEditor>
-       </p:column>
-       
-       <p:column style="width:32px">
-           <p:rowEditor />
-       </p:column>
+                <div class="col-lg-12"> 
+                    <p class="pull-right"> * Right click to delete the flight</p>
+                    <h:form>
+                        <h:commandButton value="Retrieve" actionListener="#{scheduleManageBean.retrieve}"/>
+                    </h:form>
 
-            </p:dataTable>
-        </h:form>
+                    <h:form id="form">
+                        <p:growl id="msgs" showDetail="true"/>
 
+                        <p:dataTable id="schedules" var="schedule" value="#{scheduleManageBean.schedules}" editable="true" style="margin-bottom:20px" paginator="true" rows="10" widgetVar="schedulesTable">
+                            <f:facet name="header">
+                                <p:outputPanel>
+                                    <h:outputText value="Search all fields:" />
+                                    <p:inputText id="globalFilter" onkeyup="PF('schedulesTable').filter()" style="width:150px" placeholder="Enter keyword"/>
+                                </p:outputPanel>
+                            </f:facet>
+
+                            <p:ajax event="rowEdit" listener="#{scheduleManageBean.onRowEdit}" update=":form:msgs" />
+                            <p:ajax event="rowEditCancel" listener="#{scheduleManageBean.onRowCancel}" update=":form:msgs" />
+
+                            <p:column filterBy="#{schedule.scheduleId}" headerText="Schedule ID" filterMatchMode="contains" style="width:10%">
+                                <h:outputText value="#{schedule.scheduleId}" />
+                            </p:column>
+
+                            <p:column headerText="Scheduled Date and Time" filterBy="#{schedule.startDate}" filterMatchMode="contains" style="width:10%">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{schedule.startDate}" /></f:facet>
+                                    <f:facet name="input"><p:calendar id="startDate" value="#{schedule.startDate}" pattern="MM/dd/yyyy HH:mm"/></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+                            <p:column filterBy="#{schedule.flight.flightNo}" headerText="Flight No." filterMatchMode="contains" style="width:10%">
+                                <h:outputText value="#{schedule.flight.flightNo}" />
+                            </p:column>
+
+                            <p:column filterBy="#{schedule.flight.route.originCountry}" headerText="Origin Country" filterMatchMode="contains" style="width:10%">
+                                <h:outputText value="#{schedule.flight.route.originCountry}" />
+                            </p:column>
+
+                            <p:column filterBy="#{schedule.flight.route.originCity}" headerText="Origin City" filterMatchMode="contains" style="width:10%">
+                                <h:outputText value="#{schedule.flight.route.originCity}" />
+                            </p:column>
+
+                            <p:column filterBy="#{schedule.flight.route.destinationCountry}" headerText="Destination Country" filterMatchMode="contains" style="width:10%">
+                                <h:outputText value="#{schedule.flight.route.destinationCountry}" />
+                            </p:column>
+
+                            <p:column filterBy="#{schedule.flight.route.destinationCity}" headerText="Destination City" filterMatchMode="contains" style="width:10%">
+                                <h:outputText value="#{schedule.flight.route.destinationCity}" />
+                            </p:column>
+
+                            <p:column filterBy="#{schedule.flight.aircraftType.id}" headerText="Aircraft Type" filterMatchMode="contains" style="width:10%">
+                                <h:outputText value="#{schedule.flight.aircraftType.id}" />
+                            </p:column>
+
+                            <p:column headerText="Aircraft" style="width:5%">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{schedule.aircraft.tailNo}" /></f:facet>
+                                    <f:facet name="input">
+                                        <h:selectOneMenu value="#{schedule.aircraft.tailNo}" style="width:100%">
+                                            <f:selectItem itemLabel="#{schedule.aircraft.tailNo}" itemValue="#{schedule.aircraft.tailNo}" />
+                                            <f:selectItems value="#{scheduleManageBean.aircraftlist}" var="aircrafts" itemLabel="#{aircrafts.tailNo}" itemValue="#{aircrafts.tailNo}" />
+                                        </h:selectOneMenu>
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+                            <p:column headerText="Edit" style="width:5%">
+                                <p:rowEditor />
+                            </p:column>
+
+                        </p:dataTable>
+                    </h:form>
+                </div>
+            </div>
+        </div>
     </body>
 </html>
