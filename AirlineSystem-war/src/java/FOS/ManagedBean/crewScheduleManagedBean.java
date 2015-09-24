@@ -9,8 +9,8 @@ import CI.Entity.Pilot;
 import FOS.Entity.Pairing;
 import FOS.Entity.PairingPolicy;
 import FOS.Entity.Team;
+import FOS.Session.A380PairingSessionBeanLocal;
 import FOS.Session.PairingSessionBeanLocal;
-import FOS.Session.testSessionBeanLocal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -34,8 +34,7 @@ import javax.faces.event.ActionEvent;
 @SessionScoped
 public class crewScheduleManagedBean {
     @EJB
-    private testSessionBeanLocal testSessionBean;
-
+    private A380PairingSessionBeanLocal a380PairingSessionBean;
     @EJB
     private PairingSessionBeanLocal pairingSessionBean;
     
@@ -51,6 +50,8 @@ public class crewScheduleManagedBean {
     private String selectMonth; //month choosen to get pairing
     
     private List<Pairing> restPairing;
+    private List<Pairing> slnA380;
+    private List<Pairing> restPairingA380;
     
 
     /**
@@ -95,11 +96,24 @@ public class crewScheduleManagedBean {
             if(ppp.isPaired()==false)
                 restPairing.add(ppp);
         }
-        
-        
-        
+
     }
 
+    
+    
+    public void getA380Slns(ActionEvent event) {
+        a380PairingSessionBean.legMain(selectMonth);
+        setSlns(a380PairingSessionBean.getPairings());
+        
+        restPairingA380=new ArrayList<Pairing>();
+        for(Pairing ppp: slnA380 ){
+            if(ppp.isPaired()==false)
+                restPairingA380.add(ppp);
+        } 
+    }
+    
+    
+    
     public void getSelectPairingID(ActionEvent event) {
         
         
@@ -111,6 +125,11 @@ public class crewScheduleManagedBean {
 
     public void generateTeam(ActionEvent event) {
         setTeam(pairingSessionBean.generateTeam(sln));
+    }
+
+    
+     public void generateA380Team(ActionEvent event) {
+        setTeam(a380PairingSessionBean.generateA380Team(sln));
     }
 
     /**
@@ -239,16 +258,41 @@ public class crewScheduleManagedBean {
         this.selectMonth = selectMonth;
     }
     
-    public void test(ActionEvent event){
-        testSessionBean.test();
-    }
-
+  
     public List<Pairing> getRestPairing() {
         return restPairing;
     }
 
     public void setRestPairing(List<Pairing> restPairing) {
         this.restPairing = restPairing;
+    }
+
+    /**
+     * @return the slnA380
+     */
+    public List<Pairing> getSlnA380() {
+        return slnA380;
+    }
+
+    /**
+     * @param slnA380 the slnA380 to set
+     */
+    public void setSlnA380(List<Pairing> slnA380) {
+        this.slnA380 = slnA380;
+    }
+
+    /**
+     * @return the restPairingA380
+     */
+    public List<Pairing> getRestPairingA380() {
+        return restPairingA380;
+    }
+
+    /**
+     * @param restPairingA380 the restPairingA380 to set
+     */
+    public void setRestPairingA380(List<Pairing> restPairingA380) {
+        this.restPairingA380 = restPairingA380;
     }
     
     

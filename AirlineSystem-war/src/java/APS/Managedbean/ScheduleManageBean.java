@@ -5,8 +5,10 @@
  */
 package APS.Managedbean;
 
+import APS.Entity.Aircraft;
 import APS.Entity.Flight;
 import APS.Entity.Schedule;
+import APS.Session.FleetSessionBeanLocal;
 import APS.Session.FlightSessionBeanLocal;
 import APS.Session.ScheduleSessionBeanLocal;
 import FOS.Entity.Team;
@@ -20,6 +22,7 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.inject.Named;
+import org.primefaces.event.RowEditEvent;
 
 /**
  *
@@ -35,19 +38,26 @@ public class ScheduleManageBean {
     
     @EJB
     private FlightSessionBeanLocal flightSessionBean;
+    
+    @EJB
+    private FleetSessionBeanLocal fleetSessionBean;
 
     private Long scheduleId;
     private Date startDate;
+    private Date newStartDate;
     private Date endDate;
     private Flight flight;
     private List<Flight> flights;
     private Team team;
+    private Aircraft aircraft;
     
     private String flightNo;
     private String flightDays;
     private double flightDuration;
     private double basicFare;
     private List<Schedule> schedules;
+    
+    private List<Aircraft> aircraftlist;
     
     private String flightDaysString;
     
@@ -60,6 +70,7 @@ public class ScheduleManageBean {
         setFlights(flightSessionBean.getFlights());
         setSchedules(scheduleSessionBean.getSchedules());
         scheduleSessionBean.changeFlightDays(flights);
+        setAircraftlist(fleetSessionBean.getReserveAircrafts("Reserve"));
     }
     
     public void addSchedule(ActionEvent event){
@@ -111,8 +122,31 @@ public class ScheduleManageBean {
         scheduleSessionBean.deleteSchedule(selectedSchedule.getScheduleId());
         selectedSchedule = null;
         
-    }    
+    }
     
+    public void onRowEdit(RowEditEvent event) {
+        Schedule edited = (Schedule)event.getObject();
+        Long id = edited.getScheduleId();
+        Schedule original= scheduleSessionBean.getSchedule(id);
+
+        if(edited.getStartDate().equals(original.getStartDate()) && edited.getAircraft().getTailNo().equals(original.getAircraft().getTailNo())){
+            
+            FacesMessage msg = new FacesMessage("Edit Cancelled");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        }
+        else {
+            scheduleSessionBean.edit(edited, original);
+            FacesMessage msg = new FacesMessage("Schedule Edited");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        }
+        
+    }
+     
+    public void onRowCancel(RowEditEvent event) {
+        FacesMessage msg = new FacesMessage("Edit Cancelled");
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+
     public Long getScheduleId() {
         return scheduleId;
     }
@@ -136,6 +170,14 @@ public class ScheduleManageBean {
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
+    
+    public Date getNewStartDate() {
+        return newStartDate;
+    }
+
+    public void setNewStartDate(Date newStartDate) {
+        this.newStartDate = newStartDate;
+    }
 
     public List<Flight> getFlights() {
         return flights;
@@ -151,6 +193,14 @@ public class ScheduleManageBean {
 
     public void setFlight(Flight flight) {
         this.flight = flight;
+    }
+    
+    public Aircraft getAircraft() {
+        return aircraft;
+    }
+
+    public void setAircraft(Aircraft aircraft) {
+        this.aircraft = aircraft;
     }
 
     public Team getTeam() {
@@ -199,6 +249,14 @@ public class ScheduleManageBean {
 
     public void setSchedules(List<Schedule> schedules) {
         this.schedules = schedules;
+    }
+    
+    public List<Aircraft> getAircraftlist() {
+        return aircraftlist;
+    }
+
+    public void setAircraftlist(List<Aircraft> aircraftlist) {
+        this.aircraftlist = aircraftlist;
     }
     
     public Schedule getSelectedSchedule() {

@@ -16,12 +16,44 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
         <h:outputStylesheet library="css" name="admindb.css" />
         <h:outputStylesheet library="css" name="morrisjs/morris.css" />
-<!--        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js" />-->
+        <!--        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js" />-->
         <title>Admin Dashboard</title>
 
 
     </h:head>
+    <style>
+        
+        .input-group-btn:last-child > .btn, .input-group-btn:last-child > .btn-group {
+            margin-top: 29px;
+        }
+        ui-selectonemenu ui-widget ui-state-default ui-corner-all{
+            float:left;
+        }
+        .ui-selectonemenu {
+            display: inline-block;
+            position: relative;
+            width: auto;
+            zoom: 1;
+            cursor: pointer;
+        }
+        .ui-selectonemenu .ui-selectonemenu-trigger {
+            width: 23px;
+        }
 
+        .ui-inputfield {
+            padding:3px;
+        }
+
+        .ui-selectonemenu-panel .ui-selectonemenu-table {
+            width: 160%;
+        }
+        
+        #sent-message{
+            height: 430px;
+
+        }
+        
+    </style>
 
     <h:body>
 
@@ -32,15 +64,12 @@
         <ui:include src="dashboardSidebar.xhtml"/>
 
         <div id="page-wrapper">
-
+          <div class="col-lg-6">
             <br></br>
-
-
-
             <div class="chat-panel panel panel-default">
                 <div class="panel-heading">
                     <i class="fa fa-comments fa-fw"></i>
-                    My messages
+                    My received messages
                     <div class="btn-group pull-right">
                         <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
                             <i class="fa fa-chevron-down"></i>
@@ -84,6 +113,8 @@
                                 </span>
                                 <div class="chat-body clearfix">
                                     <div class="header">
+
+
                                         <strong class="primary-font"><h:outputText value="#{message.sender}"/></strong>
                                         <small class="pull-right text-muted">
                                             <i class="fa fa-clock-o fa-fw"></i><h:outputText value="#{message.sendTime}"/>
@@ -97,19 +128,31 @@
                         </ui:repeat>
                     </ul>
                 </div>
+
                 <!-- /.panel-body -->
                 <h:form id="panel">
                     <p:growl id="growl" sticky="true" showDetail="true"/>
                     <div class="panel-footer">
-                        To: 
+                        <p:outputLabel class="pull-left" for="advanced" value="To:"  />
                         <div class="input-group">
 
-                            <p:inputText class="col-sm-3 input-sm" pt:placeholder="Username of receiver" value="#{messageManagedBean.receiver}"/>
+                            <p:selectOneMenu id="advanced" value="#{messageManagedBean.oneEmployee}" panelStyle="width:180px" converter="themeConverter"
+                                             effect="fade" var="e" style="width:160px; float:left;" filter="true" filterMatchMode="contains">
+                                <f:selectItems value="#{messageManagedBean.allActiveEmployees}" var="employee" itemLabel="#{employee.employeeUserName}" itemValue="#{employee}" />
 
-                            <p:inputText id="btn-input" class="col-sm-9 input-sm" pt:placeholder="Type your message here..." value="#{messageManagedBean.msgText}"/>
+                                <!--                                <p:column style="width:10%">
+                                                                    <h:outputText styleClass="ui-theme ui-theme-#{t.name}" />
+                                                                </p:column>-->
+
+                                <p:column style="width:20%">
+                                    <h:outputText value="#{e.employeeDisplayFirstName} #{e.employeeDisplayLastName} (#{e.organizationUnit.departmentName})" />
+                                </p:column>
+                            </p:selectOneMenu> 
+
+                            <p:inputText id="btn-input" class="col-sm-12 input-sm" pt:placeholder="Type your message here..." value="#{messageManagedBean.msgText}"/>
                             <!--<input id="btn-input" type="text" class="form-control input-sm" placeholder="Type your message here..." />-->
                             <span class="input-group-btn">
-                                <button class="btn btn-warning btn-sm" id="btn-chat" jsf:update="growl" jsf:action="message" jsf:actionListener="#{messageManagedBean.sendMsg}">
+                                <button class="btn btn-warning btn-sm" id="btn-chat" jsf:update="growl" jsf:action="#{messageManagedBean.sendMsg(messageManagedBean.oneEmployee.employeeUserName)}">
                                     Send
 
                                 </button>
@@ -121,10 +164,50 @@
                 </h:form>
                 <!-- /.panel-footer -->
             </div>
+          </div>
+
+        <div class="col-md-6">
+             <br></br>
+            <div class="chat-panel panel panel-default">
+                <div class="panel-heading">
+                    <i class="fa fa-comments fa-fw"></i>
+                    My sent messages
+                </div>
 
 
+                <div id="sent-message" class="panel-body">
+                    <ul class="chat">
+                        <ui:repeat value="#{messageManagedBean.sentMsg}" var="message">
+                            <li class="right clearfix">
+                                <span class="chat-img pull-right">
+                                    <img src="http://placehold.it/50/FA6F57/fff" alt="User Avatar" class="img-circle" />
+                                </span>
+                                <div class="chat-body clearfix">
+                                    <div class="header">
+                                        <small class=" text-muted">
+                                            <i class="fa fa-clock-o fa-fw"></i> #{message.sendTime}</small>
+                                        <strong class="pull-right primary-font">#{message.receiver}</strong>
+                                    </div>
+                                    <p>
+                                        <h:outputText value="#{message.msgText}"/>
+                                    </p>
+                                </div>
+                            </li>
+                        </ui:repeat>
+                    </ul>
+                </div>
+            </div>
         </div>
-<!--        <h:outputScript library="js" name="jQuery/jQuery-2.1.4.min.js" />-->
+        </div>
+
+
+
+
+
+
+
+
+        <!--        <h:outputScript library="js" name="jQuery/jQuery-2.1.4.min.js" />-->
         <h:outputScript library="js" name="bootstrap.min.js" /> 
         <h:outputScript library="js" name="metisMenu/metisMenu.min.js" />
         <h:outputScript library="js" name="sb-admin-2.js" />

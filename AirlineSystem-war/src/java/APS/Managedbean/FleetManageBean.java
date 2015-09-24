@@ -30,7 +30,8 @@ import javax.faces.event.ActionEvent;
 @SessionScoped
 
 public class FleetManageBean {
-@EJB
+    
+    @EJB
     private FleetSessionBeanLocal fleetSessionBean;
 
     Date datePurchased;
@@ -38,6 +39,7 @@ public class FleetManageBean {
     String aircraftTypeId;
     Long tailNo;
     String status;
+    String hub;
 
     AircraftType aircraftType = new AircraftType();
     
@@ -80,22 +82,59 @@ public class FleetManageBean {
     /*This is for admin to acquire new aircraft*/
     public void acquireAircraft(ActionEvent event){
         
-        if (fleetSessionBean.getAircraftType(aircraftTypeId) == null) {
+        if (aircraftTypeId == null) {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please select aircraft type!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
             return;
         }
+        
+        if (hub == null) {
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please select location of the aircraft!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return;
+        }
+        
+        if (datePurchased == null) {
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please enter date of purchase!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return;
+        }
+        
+        if (lastMaintained == null) {
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please enter date of last maintenance!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return;
+        }
        
-        fleetSessionBean.acquireAircraft(datePurchased, lastMaintained, aircraftTypeId);
+        fleetSessionBean.acquireAircraft(datePurchased, lastMaintained, aircraftTypeId, hub);
     }
 
     public void retireAircraft(ActionEvent event){
-        
-        if (!selectedAircraft.getStatus().equals("Stand-By")) {
+        System.out.println("HIHI");
+        if (!selectedAircraft.getStatus().equals("Stand-By") || !selectedAircraft.getStatus().equals("Reserve")) {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Aircraft is not in a status to delete!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
             return;
         }
+
+        List<Aircraft> reserves = new ArrayList<Aircraft>();
+        reserves = fleetSessionBean.getReserveAircrafts("Reserve");
+        
+        System.out.println(reserves);
+        
+        for (int i=0; i<selectedAircraft.getSchedules().size(); i++) {
+            selectedAircraft.getSchedules().get(i).setAircraft(reserves.get(1));
+            fleetSessionBean.persist(selectedAircraft.getSchedules().get(i));
+            
+            System.out.println(selectedAircraft.getSchedules().get(i).getAircraft());
+        }
+
+        List<Aircraft> temp1 = selectedAircraft.getAircraftType().getAircrafts();
+        temp1.remove(selectedAircraft);
+        selectedAircraft.getAircraftType().setAircrafts(temp1);
+        selectedAircraft.setAircraftType(null);
+        
+        System.out.println("Hurray");
         
         aircrafts.remove(selectedAircraft);
         fleetSessionBean.retireAircraft(selectedAircraft.getTailNo());
@@ -173,6 +212,14 @@ public class FleetManageBean {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+    
+    public String getHub() {
+        return hub;
+    }
+
+    public void setHub(String hub) {
+        this.hub = hub;
     }
     
     public List<AircraftType> getAircraftTypes(){

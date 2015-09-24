@@ -32,4 +32,6 @@ public interface PairingSessionBeanLocal {
     public Pairing getPairingByID(String id);
 
     public Team generateTeam(Pairing pairing);
+
+
 }

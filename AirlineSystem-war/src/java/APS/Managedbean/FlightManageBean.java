@@ -130,7 +130,8 @@ public class FlightManageBean {
             }
         }
         
-
+        flightDays = "";
+        
         for (int i = 0; i < selectedFlightDays.length; i++) {
             if (selectedFlightDays[i].equals("Sunday")) {
                 setString("1");
@@ -203,6 +204,7 @@ public class FlightManageBean {
 
         flightSessionBean.addFlight(flightNo, flightDays, basicFare, startDateTime, routeId);
         flightScheduleSessionBean.scheduleFlights(flightNo);
+        flightScheduleSessionBean.dummyRotate();
         flightDays = "";
     }
     

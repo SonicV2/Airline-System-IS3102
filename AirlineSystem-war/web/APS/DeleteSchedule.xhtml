@@ -6,7 +6,7 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <h:head>
-        <title>Delete Schedule Entry</title>
+        <title>Delete Schedule</title>
     </h:head>
 
     <body>
@@ -62,6 +62,7 @@
                 <p:column filterBy="#{schedule.flight.route.destinationCity}" headerText="Destination City" filterMatchMode="contains">
                     <h:outputText value="#{schedule.flight.route.destinationCity}" />
                 </p:column>
+
             </p:dataTable>
         </h:form>
 
