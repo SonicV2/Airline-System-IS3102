@@ -88,19 +88,12 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
     @Override
     public void deleteSchedule(Long id) {
         schedule = getSchedule(id);
-        //Remove link with aircraft
-        schedule.getAircraft().getSchedules().remove(schedule);
-        schedule.setAircraft(null);
-        //Remove link with flight
-        schedule.getFlight().getSchedule().remove(schedule);
-        schedule.setFlight(null);
-        //Remove link with Team
-        schedule.getTeam().getSchedule().remove(schedule);
-        schedule.setTeam(null);
-        //Remove related seatAvailability
+        
         seatAvail = schedule.getSeatAvailability();
         seatAvail.setSchedule(null);
+        
         schedule.setSeatAvailability(null);
+        
         em.remove(seatAvail); //Ask Quan Ge add in code!!!
         em.remove(schedule);
         em.flush();

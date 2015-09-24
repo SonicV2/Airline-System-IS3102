@@ -5,6 +5,7 @@
  */
 package APS.Entity;
 
+import FOS.Entity.Checklist;
 import FOS.Entity.Team;
 import java.io.Serializable;
 import javax.persistence.Entity;
@@ -18,6 +19,9 @@ import javax.persistence.TemporalType;
 import java.util.Date;
 import javax.persistence.CascadeType;
 import Inventory.Entity.SeatAvailability;
+import java.util.ArrayList;
+import java.util.Collection;
+import javax.persistence.OneToMany;
 
 /**
  *
@@ -50,6 +54,8 @@ public class Schedule implements Serializable {
     @ManyToOne(cascade = {CascadeType.PERSIST})
     private Aircraft aircraft = new Aircraft();
 
+    @OneToMany(cascade = {CascadeType.PERSIST})
+    private Collection <Checklist> checklists = new ArrayList<Checklist>();
     
     public void createSchedule(Date startDate, Date endDate){
         this.startDate = startDate;
@@ -153,6 +159,15 @@ public class Schedule implements Serializable {
         this.seatAvail = seatAvailability;
     }
 
+    public Collection<Checklist> getChecklists() {
+        return checklists;
+    }
+
+    public void setChecklists(Collection<Checklist> checklists) {
+        this.checklists = checklists;
+    }
+
+    
  
     
 }
