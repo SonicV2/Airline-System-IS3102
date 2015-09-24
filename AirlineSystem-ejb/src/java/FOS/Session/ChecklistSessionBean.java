@@ -76,9 +76,9 @@ public class ChecklistSessionBean implements ChecklistSessionBeanLocal {
     }
     
     @Override
-    public List<String> retrieveChecklistItems (String checklistName){
-        ArrayList<String> list = new ArrayList();
-        Collection <ChecklistItem> checklistItems = new ArrayList (); 
+    
+    public List<ChecklistItem> retrieveChecklistItems (String checklistName){
+        List <ChecklistItem> checklistItems = new ArrayList (); 
     
         try {
             
@@ -90,19 +90,53 @@ public class ChecklistSessionBean implements ChecklistSessionBeanLocal {
                 for (Checklist checklist : results) {
                     checklistItems = checklist.getChecklistItems();
                 }
-                for (ChecklistItem items: checklistItems){
-                    list.add (items.getName());
-                }
                   
             } else {
-                list = null;
+                checklistItems = null;
             }
 
         } catch (EntityNotFoundException enfe) {
             System.out.println("\nEntity not found error" + enfe.getMessage());
         }
-        return list;
+        return checklistItems;
     
+    }
+    
+    @Override
+    public ChecklistItem findItem (Long key){
+        return em.find(ChecklistItem.class, key);
+    }
+    
+    @Override
+    public void deleteChecklistItem (Long key, String checklistName){
+        Checklist checklist = new Checklist();
+        try {
+            
+            Query q = em.createQuery("SELECT a FROM Checklist a where a.name = :nameChecklist ");
+            q.setParameter("nameChecklist", checklistName);
+            
+            List<Checklist> results = q.getResultList();
+            if (!results.isEmpty()) {
+                for (Checklist eachChecklist : results) {
+                    checklist = eachChecklist;
+                }
+                  
+            } else {
+                checklist = null;
+            }
+
+        } catch (EntityNotFoundException enfe) {
+            System.out.println("\nEntity not found error" + enfe.getMessage());
+        }
+        ChecklistItem item = findItem(key);
+        checklist.removeChecklistItem(item);
+        em.remove(item);
+
+    }
+    
+    @Override
+    public void editChecklistItem (ChecklistItem item){
+        em.merge(item);
     }
 
 }

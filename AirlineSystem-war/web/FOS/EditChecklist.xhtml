@@ -10,16 +10,49 @@ and open the template in the editor.
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets">
-    <head>
-        <title>Edit Checklist</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    </head>
+<h:head>
+        <p:growl id="growl" sticky="true" showDetail="true"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <h:outputStylesheet library ="css"  name="bootstrap.css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
+        <h:outputStylesheet library="css" name="admindb.css" />
+        <h:outputStylesheet library="css" name="morrisjs/morris.css" />
+        <title>Display Booking Classes</title>
+</h:head>
     
-    
-    <body>
-        
-        <h1> Edit #{checklistManagedBean.checklistName} checklist </h1>
-    
-        
-    </body>
+        <h:form id="iform">
+        <p:growl id="msgs" showDetail="true"/>
+
+        <p:dataTable id="editChecklist" var="item" value="#{checklistManagedBean.checklistItemsForChecklist}" editable="true" style="margin-bottom:20px">
+            <f:facet name="header">
+                Edit #{checklistManagedBean.checklistName} checklist
+            </f:facet>
+
+            <p:ajax event="rowEdit" listener="#{checklistManagedBean.onRowEdit}" update=":iform:msgs" />
+            <p:ajax event="rowEditCancel" listener="#{checklistManagedBean.onRowCancel}" update=":iform:msgs" />
+            
+            <p:column headerText="Items">
+                <p:cellEditor>
+                    <f:facet name="output"><h:outputText value="#{item.name}" /></f:facet>
+                    <f:facet name="input"><p:inputText value="#{item.name}" style="width:100%" /></f:facet>
+                </p:cellEditor>
+            </p:column>
+            <p:column style="width:32px">
+                <p:rowEditor />
+            </p:column>
+
+            <p:column style="width:32px">
+
+                <h:commandLink onclick="if (!confirm('Do you really want to delete this item?')) {
+                            return false;
+                        }
+                        ;
+                        return true;" action="#{checklistManagedBean.deleteItem(item.id)}"><i class="fa fa-trash-o"></i> </h:commandLink>
+            </p:column>
+            
+        </p:dataTable>
+        </h:form>
+
 </html>
