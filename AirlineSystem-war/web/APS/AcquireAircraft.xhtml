@@ -100,11 +100,22 @@
                                 <br/>
                                 
                             </div>
+             
+              <div class="form-group">
+        <p:outputLabel for="status" value="Status of the aircraft:" />
+        <p:selectOneMenu id="status" value="#{fleetManageBean.status}" style="width:125px">
+            <f:selectItem itemLabel="Select One" itemValue="" />
+            <f:selectItem itemLabel="Stand-By" itemValue="Stand-By" />
+            <f:selectItem itemLabel="Reserve" itemValue="Reserve" />
+        </p:selectOneMenu>
+         </div>
            
                              <div>
                                  <h:commandButton class="btn btn-primary btn-lg btn-block" value="Add" actionListener="#{fleetManageBean.acquireAircraft}"/>
                                 
                             </div>
+             
+             
        </h:form>
         </div>
     </h:body>
