@@ -23,60 +23,177 @@ import javax.persistence.Query;
  */
 @Stateless
 public class RoleSessionBean implements RoleSessionBeanLocal {
-     @PersistenceContext(unitName = "AirlineSystem-ejbPU")
-    private EntityManager em;
-     
-     Role role_db=new Role();
-     
-     
-     private List<Role> rolelist=new ArrayList<Role>();
-     private Role role;
-     List<Employee> employeelist_role=new ArrayList<Employee>();
-          
-    @Override
-    public void addRole(String roleName,List<String> accessRight) {
 
-       AccessRight ar= new AccessRight();
-        
-        
+    @PersistenceContext(unitName = "AirlineSystem-ejbPU")
+    private EntityManager em;
+
+    Role role_db = new Role();
+
+    private List<Role> rolelist = new ArrayList<Role>();
+    private Role role;
+    List<Employee> employeelist_role = new ArrayList<Employee>();
+
+//    @Override
+//    public void addRole(String roleName, String accessRightName) {
+//
+//       AccessRight ar= new AccessRight();
+//       role_db.create(roleName.toUpperCase());
+//        if(accessRight.contains("accessAdd")){
+//            System.out.println("sessionBean: accessright");
+//            ar.setAccessAdd(true);         
+//        if(accessRight.contains("accessDelete")){
+//            ar.setAccessDelete(true);
+//        }if(accessRight.contains("accessAssign")){
+//            ar.setAccessAssign(true);
+//        }if(accessRight.contains("accessCreate")){
+//            ar.setAccessCreate(true);
+//        }if(accessRight.contains("accessView")){
+//            ar.setAccessView(true);
+//        }
+//        role_db.setAccess(ar);
+//        em.persist(role_db);
+//        em.flush();
+//    }
+    @Override
+    public void addRole(String roleName, List<AccessRight> allAccessRights) {
+
+//        List<AccessRight> addedAccessRights = new ArrayList<AccessRight>();
         role_db.create(roleName.toUpperCase());
-        
-        if(accessRight.contains("accessAdd")){
-            System.out.println("sessionBean: accessright");
-            ar.setAccessAdd(true);         
-        }if(accessRight.contains("accessDelete")){
-            ar.setAccessDelete(true);
-        }if(accessRight.contains("accessAssign")){
-            ar.setAccessAssign(true);
-        }if(accessRight.contains("accessCreate")){
-            ar.setAccessCreate(true);
-        }if(accessRight.contains("accessView")){
-            ar.setAccessView(true);
+        role_db.setAccessRights(allAccessRights);
+
+        if (allAccessRights != null) {
+            for (AccessRight aar : allAccessRights) {
+                System.out.println("session bean: " + aar);
+            }
         }
-        role_db.setAccess(ar);
-        em.persist(role_db);
+        em.merge(role_db);
+
     }
     
-    public String updateRoleAccessRight(String roleName, Boolean accessCreate, Boolean accessDelete, Boolean accessAssign, Boolean accessView ){
+    @Override
+    public List<AccessRight> getAccessRights(Long roleID){
+        Role oneRole = new Role();
+        List<AccessRight> roleAccessRights = new ArrayList<AccessRight>();
         
+        try {
+
+            Query q = em.createQuery("SELECT a FROM Role " + "AS a WHERE a.roleID=:id");
+            q.setParameter("id", roleID);
+
+            List results = q.getResultList();
+            if (!results.isEmpty()) {
+                oneRole = (Role) results.get(0);
+
+            } else {
+                oneRole = null;
+            }
+            
+            if (oneRole.getAccessRights() !=null){
+                roleAccessRights = oneRole.getAccessRights();
+                
+                System.out.println("sessionbean success!" + roleAccessRights.size());
+                
+            }
+            else{
+                roleAccessRights = null;
+            }
+            
+            
+
+        } catch (EntityNotFoundException enfe) {
+            System.out.println("\nEntity not found error" + "enfe.getMessage()");
+        }
+        return roleAccessRights;
         
-        return "Update success";
     }
+
+//    @Override
+//    public String updateRoleAccessRight(String roleName, Boolean accessCreate, Boolean accessDelete, Boolean accessAssign, Boolean accessView ){
+//        Role oneRole = getRole(roleName);
+//        oneRole.getAccess().setAccessCreate(accessCreate);
+//        oneRole.getAccess().setAccessDelete(accessDelete);
+//        oneRole.getAccess().setAccessAssign(accessAssign);
+//        oneRole.getAccess().setAccessView(accessView);
+//        
+//        em.persist(oneRole);
+//        
+//        return "Update success";
+//    }
     
+    
+    
+//    @Override
+//    public String updateRoleName(OrganizationUnit oldOUnit, OrganizationUnit newOUnit){
+//        if(
+//           em.find(OrganizationUnit.class, oldOUnit.getDepartmentID()) == null){
+//           throw new IllegalArgumentException("Unknown Organization id");
+//        }
+//        
+//        newOUnit.setDepartmentName(newOUnit.getDepartmentName().toUpperCase());
+//        newOUnit.setLocation(newOUnit.getLocation().toUpperCase());
+//        em.merge(newOUnit);
+//        System.out.println("merged organization unit");
+//        return "Updated successfully!";
+//    }
+    
+    
+    @Override
+    public String updateRoleName(String roleName, String newRoleName) {
+        Role oldRole = getRole(roleName);
+        System.out.println("from session bean:" + oldRole.getRoleID() + oldRole.getRoleName());
+        Role newRole = new Role();
+        if(em.find(Role.class, oldRole.getRoleID()) == null ){
+            throw new IllegalArgumentException("Unknown Role id");
+        }
+        
+        newRole.setRoleName(newRoleName.toUpperCase());
+//        newRole.setEmployees(oldRole.getEmployees());
+//        newRole.setAccessRights(oldRole.getAccessRights());
+        em.merge(newRole);
+        
+        
+
+//        List<Employee> allEmployees = oneRole.getEmployees();
+        
+        
+//        role_db.create(newRoleName.toUpperCase());
+
+//        em.persist(role_db);
+
+        
+       
+
+//        if (allEmployees.size() > 0) {
+//            System.out.println("allEmployees not null");
+//            for (Employee e : allEmployees) {
+//                int index = e.getRoles().indexOf(oneRole);
+//                e.getRoles().set(index, null);
+//                e.getRoles().set(index, newRole);
+//                em.persist(e);
+//            }
+//        }
+
+//        em.remove(oneRole);
+//        em.flush();
+//
+//        em.persist(role_db);
+        return "Update Sucess";
+    }
+
     @Override
     public List<String> retrive() {
         ArrayList<String> list = new ArrayList();
         try {
-            
+
             System.out.println("Look Look Here retrive");
             Query q = em.createQuery("SELECT a FROM Role a");
 
             List<Role> results = q.getResultList();
             if (!results.isEmpty()) {
                 for (Role role : results) {
-                 if(!role.getRoleName().equals("SUPER ADMIN")){  //comment out if adding Super Admin
+//                 if(!role.getRoleName().equals("SUPER ADMIN")){  //comment out if adding Super Admin
                     list.add(role.getRoleName());
-                   }
+//                   }
                 }
 
             } else {
@@ -88,16 +205,16 @@ public class RoleSessionBean implements RoleSessionBeanLocal {
         }
         return list;
     }
-    
+
     @Override
-    public List<Role> retrieveAllRoles(){
-        List <Role> allRoles = new ArrayList<Role>();
-        
-        try{
-        Query q = em.createQuery("SELECT a FROM Role a");
-        List<Role> results = q.getResultList();
-        
-        if (!results.isEmpty()) {
+    public List<Role> retrieveAllRoles() {
+        List<Role> allRoles = new ArrayList<Role>();
+
+        try {
+            Query q = em.createQuery("SELECT a FROM Role a");
+            List<Role> results = q.getResultList();
+
+            if (!results.isEmpty()) {
                 allRoles = results;
 
             } else {
@@ -106,19 +223,18 @@ public class RoleSessionBean implements RoleSessionBeanLocal {
         } catch (EntityNotFoundException enfe) {
             System.out.println("\nEntity not found error" + "enfe.getMessage()");
         }
-                
-        
+
         return allRoles;
     }
-    
+
     @Override
-    public String deleteEmployeeRole(Employee employee, List<String> roles){
+    public String deleteEmployeeRole(Employee employee, List<String> roles) {
         List<Role> roleList = employee.getRoles();
-        for(String s : roles){
+        for (String s : roles) {
             Role r = new Role();
             r = getRole(s); //get role entity
             List<Employee> employeeLists = r.getEmployees(); // get all employee from one role
-            if(roleList.size()==1 && roleList.contains(r)){
+            if (roleList.size() == 1 && roleList.contains(r)) {
                 return "You cannot delete this role!";
             }
             roleList.remove(r); // employee remove this role --> employee is the owner entity
@@ -128,76 +244,70 @@ public class RoleSessionBean implements RoleSessionBeanLocal {
         employee.setRoles(roleList);
         em.merge(employee);
         return "Delete role successful!";
-       
+
     }
-    
+
     @Override
-    public String deleteRole(String roleName){
+    public String deleteRole(String roleName) {
         //String msg;
         Role role = new Role();
         role = getRole(roleName);
         List<Employee> employees = role.getEmployees();
-        
-        for(Employee e : employees){
+
+        for (Employee e : employees) {
             List<Role> roles = e.getRoles();
-            if(roles.size()==1 && roles.contains(role)){
+            if (roles.size() == 1 && roles.contains(role)) {
                 return "Cannot Delete!";
             }
             roles.remove(role);
             e.setRoles(roles);
             em.merge(e);
         }
-   
+
         em.remove(role);
         em.flush();
         return "Successful!";
-        
-    }
-    
-    public void addNewRole(Employee employee, String new_Role){
-       rolelist=employee.getRoles();
 
-       role=getRole(new_Role);
-       rolelist.add(role);
-       employee.setRoles(rolelist);
-       
-       employeelist_role=role.getEmployees();
-       
-       employeelist_role.add(employee);
-       role.setEmployees(employeelist_role);
-  
+    }
+
+    public void addNewRole(Employee employee, String new_Role) {
+        rolelist = employee.getRoles();
+
+        role = getRole(new_Role);
+        rolelist.add(role);
+        employee.setRoles(rolelist);
+
+        employeelist_role = role.getEmployees();
+
+        employeelist_role.add(employee);
+        role.setEmployees(employeelist_role);
+
         em.merge(employee);
         em.merge(role);
-     
+
     }
-    
-    public String changeRole(String employeeID, String newRole, String oldRole){
-   
-        
+
+    public String changeRole(String employeeID, String newRole, String oldRole) {
+
         Employee employee = getEmployeeUserID(employeeID);
         Role roleOld = getRole(oldRole);
         Role roleNew = getRole(newRole);
-        
-        
+
         List<Employee> employees = roleOld.getEmployees();
         employees.remove(employee);
         roleOld.setEmployees(employees);
-        
+
         List<Employee> employeesNew = roleNew.getEmployees();
         employeesNew.add(employee);
         roleNew.setEmployees(employeesNew);
-        
+
 //        employee.setOrganizationUnit(ouNew);
-        
         employee.setRoles(rolelist);
         em.merge(employee);
-        
-        
-        
-        
+
         return "Changed role successful!";
     }
-    
+
     public Employee getEmployeeUserID(String employeeID) {
         Employee employee = new Employee();
         try {
@@ -218,9 +328,9 @@ public class RoleSessionBean implements RoleSessionBeanLocal {
         }
         return employee;
     }
-    
-    public Role getRole(String role){
-        
+
+    public Role getRole(String role) {
+
         Role role1 = new Role();
         try {
 
@@ -240,5 +350,5 @@ public class RoleSessionBean implements RoleSessionBeanLocal {
         }
         return role1;
     }
-    
+
 }

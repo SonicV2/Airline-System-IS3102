@@ -5,6 +5,7 @@
  */
 package CI.Session;
 
+import CI.Entity.AccessRight;
 import CI.Entity.Employee;
 import CI.Entity.Role;
 import java.util.List;
@@ -16,10 +17,14 @@ import javax.ejb.Local;
  */
 @Local
 public interface RoleSessionBeanLocal {
-    public void addRole(String roleName,List<String> accessRight);
+//    public void addRole(String roleName,String accessRightName);
+    public void addRole(String roleName, List<AccessRight> allAccessRights);
     public List<String> retrive();
     public void addNewRole(Employee employee,String new_Role);
     public String deleteEmployeeRole(Employee employee, List<String> roles);
     public String deleteRole(String roleName);
     public List<Role> retrieveAllRoles();
+//    public String updateRoleAccessRight(String roleName, Boolean accessCreate, Boolean accessDelete, Boolean accessAssign, Boolean accessView );
+    public String updateRoleName(String roleName, String newRoleName);
+    public List<AccessRight> getAccessRights(Long roleID);
 }

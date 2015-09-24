@@ -134,6 +134,23 @@ public class MessageSessionBean implements MessageSessionBeanLocal {
 
         return readMsgs;
     }
+    
+    
+    //get a list of messages sent by the user
+    @Override
+    public List<Message> sentMsg(String sender){
+        Employee sendUser = getEmployee(sender);
+        List<Message> msgs = sendUser.getMsgs();
+        System.out.println("Sender: " + sender + "number: " + msgs.size());
+        List<Message> sentMsgs = new ArrayList<Message>();
+        for (Message m: msgs)
+            if (m.getSender().equals(sender)){
+                sentMsgs.add(m);
+            }
+        return sentMsgs;
+    }
+    
+    
 
     //to set a list of messages as read
     @Override
