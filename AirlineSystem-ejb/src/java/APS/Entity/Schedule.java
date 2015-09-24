@@ -29,28 +29,29 @@ import javax.persistence.OneToMany;
  */
 @Entity
 public class Schedule implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long scheduleId;
-    
+
     @Temporal(TemporalType.TIMESTAMP)
     private Date startDate;
-    
+
     @Temporal(TemporalType.TIMESTAMP)
     private Date endDate;
-    
+
     private boolean Assigned;
-    
+
     @ManyToOne(cascade = {CascadeType.PERSIST})
     private Flight flight = new Flight();
-    
+
     @ManyToOne(cascade = {CascadeType.PERSIST})
     private Team team = new Team();
-    
+
     @OneToOne(cascade = {CascadeType.ALL})
     private SeatAvailability seatAvail;
-            
+
     @ManyToOne(cascade = {CascadeType.PERSIST})
     private Aircraft aircraft = new Aircraft();
 
@@ -62,7 +63,7 @@ public class Schedule implements Serializable {
         this.endDate = endDate;
         Assigned = false;
     }
-    
+
     public Long getScheduleId() {
         return scheduleId;
     }
@@ -94,19 +95,19 @@ public class Schedule implements Serializable {
     public void setAssigned(boolean Assigned) {
         this.Assigned = Assigned;
     }
-    
+
     public Flight getFlight() {
         return flight;
     }
-    
+
     public void setFlight(Flight flight) {
         this.flight = flight;
     }
-    
+
     public Aircraft getAircraft() {
         return aircraft;
     }
-    
+
     public void setAircraft(Aircraft aircraft) {
         this.aircraft = aircraft;
     }
@@ -138,7 +139,6 @@ public class Schedule implements Serializable {
     public void setTeam(Team team) {
         this.team = team;
     }
-    
 
     @Override
     public String toString() {
@@ -159,15 +159,4 @@ public class Schedule implements Serializable {
         this.seatAvail = seatAvailability;
     }
 
-    public Collection<Checklist> getChecklists() {
-        return checklists;
-    }
-
-    public void setChecklists(Collection<Checklist> checklists) {
-        this.checklists = checklists;
-    }
-
-    
- 
-    
 }

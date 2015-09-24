@@ -39,38 +39,31 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
     private SeatAvailability seatAvail;
 
     @Override
-    public void edit(Schedule schedule, Schedule original) {
-        schedule.setEndDate(calcEndTime(schedule.getStartDate(), schedule.getFlight())); 
+    public void edit(Schedule edited, Schedule original) {
         
-        System.out.println(schedule.getAircraft().getSchedules());
-        
-        Aircraft originalAircraft = original.getAircraft();
-        Aircraft editedAircraft = schedule.getAircraft();
-        
-        
-        if (!editedAircraft.getTailNo().equals(originalAircraft.getTailNo())) {
-            
-            List<Schedule> temp1 = new ArrayList<Schedule>();
-            temp1.add(schedule);
-            editedAircraft.setSchedules(temp1);
-            editedAircraft.setStatus("Stand-by");
-            em.merge(editedAircraft);
-            
-            System.out.println("LOOK HERE");
-            System.out.println(original);
-            System.out.println(schedule);
-            
-            List<Schedule> temp = originalAircraft.getSchedules();
-            temp.remove(original);
-            originalAircraft.setSchedules(temp);
-            originalAircraft.setStatus("Out-of-order");
-            em.merge(originalAircraft);
+        if(!edited.getStartDate().equals(original.getStartDate())){
+        edited.setEndDate(calcEndTime(edited.getStartDate(), edited.getFlight())); 
+        em.merge(edited);
         }
         
-        System.out.println(original.getAircraft());
-        System.out.println(schedule.getAircraft());
-        System.out.println(schedule.getAircraft().getSchedules());
-        em.merge(schedule);
+        if (!edited.getAircraft().getTailNo().equals(original.getAircraft().getTailNo())) {
+            
+            System.out.println("Line 1 Reached!!!");
+            Aircraft ac= em.find(Aircraft.class, edited.getAircraft().getTailNo());
+            List<Schedule> temp1 = ac.getSchedules();
+            temp1.remove(original);
+            temp1.add(edited);
+            ac.setSchedules(temp1);
+            System.out.println("Line 2 Reached!!!");
+            System.out.println(em.contains(ac));
+            System.out.println("Line 3 Reached!!!");    
+            System.out.println("Line 4 Reached!!!");
+            Long id = edited.getScheduleId();
+            Schedule change = em.find(Schedule.class,id);
+            System.out.println(em.contains(change));
+            change.setAircraft(ac);
+            em.flush();
+        }  
     }
 
     @Override
