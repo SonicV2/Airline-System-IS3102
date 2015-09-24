@@ -237,6 +237,7 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
         schedules = getSchedules();
         List<Schedule> curr = new ArrayList<Schedule>();
         int size = schedules.size() / aircrafts.size();
+        int remaining = schedules.size()%aircrafts.size();
         int k = 0;
         int j = 0;
 
@@ -249,6 +250,12 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
             k = j;
             aircrafts.get(i).setSchedules(curr);
             em.persist(aircrafts.get(i));
+        }
+        
+        for (int i = 0; i<remaining; i++){
+            aircrafts.get(i).getSchedules().add(schedules.get(j));
+            em.persist(aircrafts.get(i));
+            j++;
         }
     }
 
