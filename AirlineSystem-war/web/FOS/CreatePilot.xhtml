@@ -226,7 +226,7 @@
 
 
                                 <div class="form-group" style="margin-left:95px">
-                                    <b>Languages:</b>
+                                    <b>Specialises in:</b>
                                     <p:selectManyCheckbox id="grid" value="#{employeeManageBean.skills}" layout="grid" columns="4">
                                         <f:selectItem itemLabel="A380" itemValue="A380" />
                                         <f:selectItem itemLabel="A330" itemValue="A330" />
@@ -240,7 +240,7 @@
                         </div>
 
                         <div class="text-center">
-                            <h:commandButton class="btn btn-outline btn-success" value="Save Information" actionListener="#{employeeManageBean.addPilot}"/>
+                            <h:commandButton class="btn btn-outline btn-success" value="Save Information" actionListener="#{employeeManageBean.addPilot}" action="/CI/employeeInformation?faces-redirect=true"/>
                         </div>
 
 

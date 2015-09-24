@@ -49,5 +49,7 @@ public interface EmployeeSessionBeanLocal {
     public List<Employee> retrieveAllEmployees();
     public Boolean lockoutEmployee(String employeeID);
     public List<Employee> retrieveAllActiveEmployees();
+    public String getEmployeeFullName(String employeeUserName);
+    public String getEmployeeDepartmentName(String employeeUserName);
     
 }

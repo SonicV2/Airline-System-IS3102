@@ -96,7 +96,8 @@ public class EmployeeManageBean {
     
 
     //clear all input after keying in
-    public void clearAll(){
+    public String clearAll(){
+        setEmployeeID("");
         setEmployeeDisplayFirstName("");
         setEmployeeDisplayLastName("");
         setEmployeeDOB(null);
@@ -107,24 +108,36 @@ public class EmployeeManageBean {
         setEmployeeRole("");
         setEmployeeOfficeNumber("");
         setEmployeePrivateEmail("");
+        setExperience("");
+        setLanguages(null);
+        setPosition("");
+        setSkills(null);
+        
+        return "employeeDashBoard";
          
     }
     
     public void addCabinCrew(ActionEvent event){
-  
+        setEmployeeRole("Cabin Crew");
         employeeSessionBean.addCabinCrew(employeeID,employeeDisplayFirstName, employeeDisplayLastName
                 , employeeDepartment, employeeDOB, employeeGender, employeeHpNumber,
                 employeeMailingAddress, employeeOfficeNumber, employeePrivateEmail,experience,languages, position);
-   
+        
+        employee = getEmployee(employeeID);
+        employeeUserName = employee.getEmployeeUserName();
+        employeeEmailAddress = employee.getEmployeeEmailAddress();
         employeeSessionBean.hashPwd(employeeID);
     }
     
      public void addPilot(ActionEvent event){
-  
+        setEmployeeRole("Pilot");
         employeeSessionBean.addPilot(employeeID,employeeDisplayFirstName, employeeDisplayLastName
                 , employeeDepartment, employeeDOB, employeeGender, employeeHpNumber,
                 employeeMailingAddress, employeeOfficeNumber, employeePrivateEmail,experience,skills, position);
-   
+        
+        employee = getEmployee(employeeID);
+        employeeUserName = employee.getEmployeeUserName();
+        employeeEmailAddress = employee.getEmployeeEmailAddress();
         employeeSessionBean.hashPwd(employeeID);
     }
     

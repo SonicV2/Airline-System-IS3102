@@ -42,6 +42,7 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal{
         
         newOUnit.setDepartmentName(newOUnit.getDepartmentName().toUpperCase());
         newOUnit.setLocation(newOUnit.getLocation().toUpperCase());
+
         em.merge(newOUnit);
         System.out.println("merged organization unit");
         return "Updated successfully!";
