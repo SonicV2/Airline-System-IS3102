@@ -47,20 +47,20 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
         }
         
         if (!edited.getAircraft().getTailNo().equals(original.getAircraft().getTailNo())) {
-            
-            System.out.println("Line 1 Reached!!!");
+
             Aircraft ac= em.find(Aircraft.class, edited.getAircraft().getTailNo());
             List<Schedule> temp1 = ac.getSchedules();
             temp1.remove(original);
             temp1.add(edited);
             ac.setSchedules(temp1);
-            System.out.println("Line 2 Reached!!!");
-            System.out.println(em.contains(ac));
-            System.out.println("Line 3 Reached!!!");    
-            System.out.println("Line 4 Reached!!!");
+            ac.setStatus("Stand-By");
+            
+            Aircraft or = em.find(Aircraft.class, original.getAircraft().getTailNo());
+            or.setStatus("Out-of-Order");
+            em.flush();
+            
             Long id = edited.getScheduleId();
             Schedule change = em.find(Schedule.class,id);
-            System.out.println(em.contains(change));
             change.setAircraft(ac);
             em.flush();
         }  
