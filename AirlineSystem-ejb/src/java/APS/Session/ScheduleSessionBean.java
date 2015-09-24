@@ -63,10 +63,7 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
             System.out.println(em.contains(change));
             change.setAircraft(ac);
             em.flush();
-        }
-                   
-       
-        
+        }  
     }
 
     @Override
