@@ -71,6 +71,14 @@ public class FleetManageBean {
 
         setAircraftTypes(fleetSessionBean.retrieveAircraftTypes());
         setAircrafts(fleetSessionBean.retrieveAircrafts());
+        aircraftTypeIds.add("Airbus A330-300");
+        aircraftTypeIds.add("Airbus A380-800");
+        aircraftTypeIds.add("Boeing 777-200");
+        aircraftTypeIds.add("Boeing 777-200ER");
+        aircraftTypeIds.add("Boeing 777-300");
+        aircraftTypeIds.add("Boeing 777-300ER");
+        
+        
     }
 
     /*This is for admin to acquire new aircraft*/
