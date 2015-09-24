@@ -18,4 +18,5 @@ public interface ChecklistSessionBeanLocal {
 
     public void addChecklistItem (String checklistName, String itemName);
     public List<String> retrieveAllChecklists();
+    public List<String> retrieveChecklistItems (String checklistName);
 }

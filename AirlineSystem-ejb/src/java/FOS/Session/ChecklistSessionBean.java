@@ -8,6 +8,7 @@ package FOS.Session;
 import FOS.Entity.Checklist;
 import FOS.Entity.ChecklistItem;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -29,7 +30,6 @@ public class ChecklistSessionBean implements ChecklistSessionBeanLocal {
         ArrayList<String> list = new ArrayList();
         try {
             
-
             Query q = em.createQuery("SELECT a FROM Checklist a");
 
             List<Checklist> results = q.getResultList();
@@ -53,8 +53,6 @@ public class ChecklistSessionBean implements ChecklistSessionBeanLocal {
     @Override
     public void addChecklistItem (String checklistName, String itemName){
         
-        System.out.println ("Session Bean: the checklist selected is " + checklistName + " and the item name is " + itemName);
-        
         ChecklistItem checklistItem = new ChecklistItem ();
         checklistItem.createChecklistItem(itemName);
         
@@ -74,8 +72,38 @@ public class ChecklistSessionBean implements ChecklistSessionBeanLocal {
         }
         checklist.addChecklistItem(checklistItem);
         em.persist (checklistItem);
-        em.merge(checklist);
-        
-      
+        em.merge(checklist);      
     }
+    
+    @Override
+    public List<String> retrieveChecklistItems (String checklistName){
+        ArrayList<String> list = new ArrayList();
+        Collection <ChecklistItem> checklistItems = new ArrayList (); 
+    
+        try {
+            
+            Query q = em.createQuery("SELECT a FROM Checklist a where a.name = :nameChecklist ");
+            q.setParameter("nameChecklist", checklistName);
+            
+            List<Checklist> results = q.getResultList();
+            if (!results.isEmpty()) {
+                for (Checklist checklist : results) {
+                    checklistItems = checklist.getChecklistItems();
+                }
+                for (ChecklistItem items: checklistItems){
+                    list.add (items.getName());
+                }
+                  
+            } else {
+                list = null;
+            }
+
+        } catch (EntityNotFoundException enfe) {
+            System.out.println("\nEntity not found error" + enfe.getMessage());
+        }
+        return list;
+    
+    }
+
 }
+

@@ -28,6 +28,7 @@ public class checklistManagedBean {
 private String checklistItemName; 
 private String checklistName;
 private List <String> checklistTypes;
+private List <String> checklistItemsForChecklist;
 
 public checklistManagedBean(){
     
@@ -41,6 +42,11 @@ public void init(){
 public String addItem(){
     checklistSessionBean.addChecklistItem(checklistName, checklistItemName);
     return "CreateChecklistItem";
+}
+
+public String editParticularChecklist (){
+    setChecklistItemsForChecklist(checklistSessionBean.retrieveChecklistItems(checklistName));
+    return "EditChecklist";
 }
 
 
@@ -72,6 +78,14 @@ public String addItem(){
      */
     public void setChecklistTypes(List <String> checklistTypes) {
         this.checklistTypes = checklistTypes;
+    }
+
+    public List<String> getChecklistItemsForChecklist() {
+        return checklistItemsForChecklist;
+    }
+
+    public void setChecklistItemsForChecklist(List<String> checklistItemsForChecklist) {
+        this.checklistItemsForChecklist = checklistItemsForChecklist;
     }
             
     
