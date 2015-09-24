@@ -21,7 +21,7 @@
                  selection="#{fleetManageBean.selectedAircraft}" selectionMode="single" paginator="true" rows="10" widgetVar="aircraftsTable">
                 
                 <f:facet name="header">
-                    RightClick to Retire the Aircraft
+                    Right Click to Retire the Aircraft
                     <p:outputPanel>
                         <h:outputText value="Search all fields:" />
                     <p:inputText id="globalFilter" onkeyup="PF('aircraftsTable').filter()" style="width:150px" placeholder="Enter keyword"/>
@@ -36,12 +36,16 @@
                     <h:outputText value="#{aircraft.aircraftType.id}" />
                 </p:column>
                 
-                <p:column filterBy="#{aircraft.datePurchased}" headerText="Date of Purchase" filterMatchMode="contains">
-                    <h:outputText value="#{aircraft.datePurchased}" />
+                <p:column filterBy="#{aircraft.hub}" headerText="Status" filterMatchMode="contains">
+                    <h:outputText value="#{aircraft.hub}" />
                 </p:column>
                 
-                <p:column filterBy="#{aircraft.lastMaintained}" headerText="Date of Maintenance" filterMatchMode="contains">
-                    <h:outputText value="#{aircraft.lastMaintained}" />
+                <p:column filterBy="#{fleetManageBean.getDateFormat(aircraft.datePurchased)}" headerText="Date of Purchase" filterMatchMode="contains">
+                    <h:outputText value="#{fleetManageBean.getDateFormat(aircraft.datePurchased)}" />
+                </p:column>
+                
+                <p:column filterBy="#{fleetManageBean.getDateFormat(aircraft.lastMaintained)}" headerText="Date of Maintenance" filterMatchMode="contains">
+                    <h:outputText value="#{fleetManageBean.getDateFormat(aircraft.lastMaintained)}" />
                 </p:column>
                 
                 <p:column filterBy="#{aircraft.status}" headerText="Status" filterMatchMode="contains">

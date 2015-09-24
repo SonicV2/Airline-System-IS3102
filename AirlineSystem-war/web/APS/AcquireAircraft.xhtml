@@ -36,16 +36,16 @@
                 <h:outputText value="#{aircraftType.travelRange}" />
             </p:column>
             
-            <p:column headerText="Speed" sortBy="#{aircraftType.speed}">
+            <p:column headerText="Speed in Mach" sortBy="#{aircraftType.speed}">
                 <h:outputText value="#{aircraftType.speed}" />
             </p:column>
             
             <p:column headerText="Fuel Cost per km" sortBy="#{aircraftType.cost}">
-                <h:outputText value="#{aircraftType.cost}" />
+                <h:outputText value="$#{aircraftType.cost}" />
             </p:column>
             
             <p:column headerText="Cost in millions" sortBy="#{aircraftType.fuelCost}">
-                <h:outputText value="#{aircraftType.fuelCost}" />
+                <h:outputText value="$#{aircraftType.fuelCost}" />
             </p:column>
  
             <p:column headerText="Number of First Class Seats" sortBy="#{aircraftType.firstSeats}">
