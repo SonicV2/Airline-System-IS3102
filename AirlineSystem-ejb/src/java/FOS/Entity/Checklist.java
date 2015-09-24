@@ -25,8 +25,9 @@ public class Checklist implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    private String name;
+    private String comments;
     
-    public String name;
     @OneToMany(cascade = {CascadeType.PERSIST})
     private List<ChecklistItem> checklistItems = new ArrayList<ChecklistItem>();
     
@@ -61,6 +62,23 @@ public class Checklist implements Serializable {
     
      public void removeChecklistItem (ChecklistItem item){
         checklistItems.remove(item);
+    }
+
+    public String getComments() {
+        return comments;
+    }
+
+    public void setComments(String comments) {
+        this.comments = comments;
+    }   
+    
+    public void checkItemAsCompleted(ChecklistItem item){
+        long id = item.getId();
+        for (ChecklistItem eachItem: checklistItems){
+            if (eachItem.getId()==id)
+                eachItem.setChecked(true);
+        }
+        
     }
     
 

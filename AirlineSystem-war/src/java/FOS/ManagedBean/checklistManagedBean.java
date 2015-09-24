@@ -35,6 +35,9 @@ private String checklistName;
 private List <String> checklistTypes;
 private List <ChecklistItem> checklistItemsForChecklist;
 private long itemKey;
+private List <String> selectedItemNames;
+private List <ChecklistItem> selectedItems;
+private String comments;
 
 public checklistManagedBean(){
     
@@ -54,6 +57,13 @@ public String editParticularChecklist (){
     setChecklistItemsForChecklist(checklistSessionBean.retrieveChecklistItems(checklistName));
     return "EditChecklist";
 }
+
+public String fillParticularChecklist (){
+    setChecklistItemsForChecklist(checklistSessionBean.retrieveChecklistItems(checklistName));
+    return "FillChecklist";
+}
+
+
 
   public void onRowEdit(RowEditEvent event) {
         ChecklistItem edited = (ChecklistItem)event.getObject();
@@ -81,6 +91,12 @@ public String editParticularChecklist (){
         checklistSessionBean.deleteChecklistItem(id, checklistName);
         setChecklistItemsForChecklist(checklistSessionBean.retrieveChecklistItems(checklistName));
         return "EditChecklist";
+    }
+    
+    public String submitChecklist(){
+        setSelectedItems(checklistSessionBean.getItemsFromNames(selectedItemNames));
+        checklistSessionBean.updateFilledChecklist(checklistName, selectedItems, comments);
+        return "chooseChecklistToFill";
     }
 
 
@@ -130,6 +146,34 @@ public String editParticularChecklist (){
     public void setItemKey(long itemKey) {
         this.itemKey = itemKey;
     }
+
+    public List<String> getSelectedItemNames() {
+        return selectedItemNames;
+    }
+
+    public void setSelectedItemNames(List<String> selectedItemNames) {
+        this.selectedItemNames = selectedItemNames;
+    }
+
+    public List<ChecklistItem> getSelectedItems() {
+        return selectedItems;
+    }
+
+    public void setSelectedItems(List<ChecklistItem> selectedItems) {
+        this.selectedItems = selectedItems;
+    }
+
+  
+
+    public String getComments() {
+        return comments;
+    }
+
+    public void setComments(String comments) {
+        this.comments = comments;
+    }
+    
+    
    
     
             
