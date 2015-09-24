@@ -117,6 +117,17 @@ public class FlightManageBean {
             FacesContext.getCurrentInstance().addMessage(null, message);
             return;
         }
+        
+        for (int i=0; i<flights.size(); i++) {
+            
+            Flight temp = flightSessionBean.retrieveFlights().get(i);
+            if (temp.getRoute() == flightSessionBean.getRoute(routeId)) {
+                message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Flight already exists!", "");
+                FacesContext.getCurrentInstance().addMessage(null, message);
+                return;
+            }
+            
+        }
 
         if (flightSessionBean.getFlight(flightNo) != null) {
             if (flightSessionBean.getFlight(flightNo).getRoute() == flightSessionBean.getRoute(routeId)) {
