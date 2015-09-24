@@ -5,8 +5,8 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
-    
-    
+
+
     <h:head>
         <p:growl id="growl" sticky="true" showDetail="true"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -16,96 +16,122 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
         <h:outputStylesheet library="css" name="admindb.css" />
         <h:outputStylesheet library="css" name="morrisjs/morris.css" />
-<!--        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js" />-->
+        <!--        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js" />-->
         <title>Acquire Aircraft</title>
     </h:head>
+    
+    <style>
+        .form-control {
+            display:inline;
+        }
+        </style>
     <h:body>
-<!--            To add the same header on all dashboard pages  
-        <ui:include src="/CI/dashboardHeader.xhtml"/>
-            To add the same sidebar on all dashboard pages  
-        <ui:include src="/CI/dashboardSidebar.xhtml"/>-->
-        
-        <div id="page-wrapper">
-        
-            <p:dataTable id="radioDT" var="aircraftType" value="#{fleetManageBean.aircraftTypes}" style="margin-bottom:40px">
-                <p:column headerText="Aircraft Type" sortBy="#{aircraftType.id}">
-                    <h:outputText value="#{aircraftType.id}" />
-                </p:column>
-            
-            <p:column headerText="Travel Range in km" sortBy="#{aircraftType.travelRange}">
-                <h:outputText value="#{aircraftType.travelRange}" />
-            </p:column>
-            
-            <p:column headerText="Speed" sortBy="#{aircraftType.speed}">
-                <h:outputText value="#{aircraftType.speed}" />
-            </p:column>
-            
-            <p:column headerText="Fuel Cost per km" sortBy="#{aircraftType.cost}">
-                <h:outputText value="#{aircraftType.cost}" />
-            </p:column>
-            
-            <p:column headerText="Cost in millions" sortBy="#{aircraftType.fuelCost}">
-                <h:outputText value="#{aircraftType.fuelCost}" />
-            </p:column>
- 
-            <p:column headerText="Number of First Class Seats" sortBy="#{aircraftType.firstSeats}">
-                <h:outputText value="#{aircraftType.firstSeats}" />
-            </p:column>
-            
-            <p:column headerText="Number of Business Class Seats" sortBy="#{aircraftType.businessSeats}">
-                <h:outputText value="#{aircraftType.businessSeats}" />
-            </p:column>
-            
-            <p:column headerText="Number of Economy Class Seats" sortBy="#{aircraftType.economySeats}">
-                <h:outputText value="#{aircraftType.economySeats}" />
-            </p:column>
-            
-            <p:column headerText="Total Number of Staff" sortBy="#{aircraftType.totalStaff}">
-                <h:outputText value="#{aircraftType.totalStaff}" />
-            </p:column>
-            </p:dataTable>
-        
-         <h:form class="form col-md-12 center-block">
-             
-        <div class="form-group">
-        <p:outputLabel for="aircraftTypeId" value="Aircraft Type:" />
-        <p:selectOneMenu id="aircraftTypeId" value="#{fleetManageBean.aircraftTypeId}" style="width:125px">
-            <f:selectItem itemLabel="Select One" itemValue="" />
-            <f:selectItems value="#{fleetManageBean.aircraftTypeIds}" />
-        </p:selectOneMenu>
-         </div>
-             
-             <div class="form-group">
-        <p:outputLabel for="hub" value="Location of the aircraft:" />
-        <p:selectOneMenu id="hub" value="#{fleetManageBean.hub}" style="width:125px">
-            <f:selectItem itemLabel="Select One" itemValue="" />
-            <f:selectItem itemLabel="Singapore" itemValue="SIN" />
-            <f:selectItem itemLabel="Tokyo" itemValue="NRT" />
-            <f:selectItem itemLabel="Frankfurt" itemValue="FRA" />
-        </p:selectOneMenu>
-         </div>
-             
-                            <div class="form-group">
+        <!--            To add the same header on all dashboard pages  
+                <ui:include src="/CI/dashboardHeader.xhtml"/>
+                    To add the same sidebar on all dashboard pages -->  
+                <ui:include src="/CI/dashboardSidebar.xhtml"/>
 
-                                <p:outputLabel value="Date Purchased: " />
-                                <p:calendar id="button" required="true" requiredMessage="Please fill in Date of Purchase!" value="#{fleetManageBean.datePurchased}" showOn="button"/>
-                                <br/>
-                               
-                             </div>
-             
-                            
-                            <div class="form-group">
-                                <p:outputLabel value="Last Maintained: " />
-                                <p:calendar id="button1" required="true" requiredMessage="Please fill in Date of Maintenance!" value="#{fleetManageBean.lastMaintained}" showOn="button"/>
-                                <br/>
-                                
-                            </div>
-           
-                             <div>
-                                 <h:commandButton class="btn btn-primary btn-lg btn-block" value="Add" actionListener="#{fleetManageBean.acquireAircraft}"/>
-                                
-                            </div>
-       </h:form>
+        <div id="page-wrapper">
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2 class="page-header">Acquire Aircrafts</h2>
+                </div>
+
+                <div class="col-lg-12">
+                    <p:dataTable id="radioDT" var="aircraftType" value="#{fleetManageBean.aircraftTypes}" style="margin-bottom:40px">
+                        <p:column headerText="Aircraft Type" sortBy="#{aircraftType.id}">
+                            <h:outputText value="#{aircraftType.id}" />
+                        </p:column>
+
+                        <p:column headerText="Travel Range in km" sortBy="#{aircraftType.travelRange}">
+                            <h:outputText value="#{aircraftType.travelRange}" />
+                        </p:column>
+
+                        <p:column headerText="Speed" sortBy="#{aircraftType.speed}">
+                            <h:outputText value="#{aircraftType.speed}" />
+                        </p:column>
+
+                        <p:column headerText="Fuel Cost per km" sortBy="#{aircraftType.cost}">
+                            <h:outputText value="#{aircraftType.cost}" />
+                        </p:column>
+
+                        <p:column headerText="Cost in millions" sortBy="#{aircraftType.fuelCost}">
+                            <h:outputText value="#{aircraftType.fuelCost}" />
+                        </p:column>
+
+                        <p:column headerText="Number of First Class Seats" sortBy="#{aircraftType.firstSeats}">
+                            <h:outputText value="#{aircraftType.firstSeats}" />
+                        </p:column>
+
+                        <p:column headerText="Number of Business Class Seats" sortBy="#{aircraftType.businessSeats}">
+                            <h:outputText value="#{aircraftType.businessSeats}" />
+                        </p:column>
+
+                        <p:column headerText="Number of Economy Class Seats" sortBy="#{aircraftType.economySeats}">
+                            <h:outputText value="#{aircraftType.economySeats}" />
+                        </p:column>
+
+                        <p:column headerText="Total Number of Staff" sortBy="#{aircraftType.totalStaff}">
+                            <h:outputText value="#{aircraftType.totalStaff}" />
+                        </p:column>
+                    </p:dataTable>
+                </div>
+
+                <h:form class="form col-md-8 center-block">
+
+                    <div class="form-group">
+                        <h:outputLabel for="aircraftTypeId" value="Aircraft Type:" />
+                        <span>
+                        <h:selectOneMenu class="form-control" id="aircraftTypeId" value="#{fleetManageBean.aircraftTypeId}" style="width:125px">
+                            <f:selectItem itemLabel="Select One" itemValue="" />
+                            <f:selectItems value="#{fleetManageBean.aircraftTypeIds}" />
+                        </h:selectOneMenu>
+                        </span>
+                    </div>
+
+                    <div class="form-group">
+                        <h:outputLabel for="hub" value="Location of the aircraft:" />
+                        <span>
+                        <h:selectOneMenu class="form-control" id="hub" value="#{fleetManageBean.hub}" style="width:125px">
+                            <f:selectItem itemLabel="Select One" itemValue="" />
+                            <f:selectItem itemLabel="Singapore" itemValue="SIN" />
+                            <f:selectItem itemLabel="Tokyo" itemValue="NRT" />
+                            <f:selectItem itemLabel="Frankfurt" itemValue="FRA" />
+                        </h:selectOneMenu>
+                        </span>
+                    </div>
+
+                    <div class="form-group">
+
+                        <h:outputLabel value="Date Purchased: " />
+                        <span>
+                        <p:calendar id="button" required="true" requiredMessage="Please fill in Date of Purchase!" value="#{fleetManageBean.datePurchased}" navigator="true" pattern="yyyy-MMM-dd"/>
+                        </span>
+                        <br/>
+                        
+
+                    </div>
+
+
+                    <div class="form-group">
+                        <h:outputLabel value="Last Maintained: " />
+                        <span>
+                        <p:calendar id="button1" required="true" requiredMessage="Please fill in Date of Maintenance!" value="#{fleetManageBean.lastMaintained}" navigator="true" pattern="yyyy-MMM-dd"/>
+                        </span>
+                        <br/>
+
+                    </div>
+
+                    <div class="text-center">
+                        <h:commandButton class="btn btn-outline btn-success" value="Aquire Aircraft" actionListener="#{fleetManageBean.acquireAircraft}"/>
+
+                    </div>
+                    
+                    <br></br>
+                    <br></br>
+                </h:form>
+            </div>
         </div>
     </h:body>
 </html>

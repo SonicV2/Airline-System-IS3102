@@ -18,13 +18,13 @@
         <title>Create Role</title>
 
     </h:head>
-    
+
     <style>
         .ui-state-highlight .ui-icon {
-}
-.ui-state-active .ui-icon {
-}
-        </style>
+        }
+        .ui-state-active .ui-icon {
+        }
+    </style>
 
 
 
@@ -57,67 +57,67 @@
                     </h:form>
                 </div>
 
-                    <br></br>
-                    <div class="col-md-10">
+                <br></br>
+                <div class="col-md-10">
 
-                        <h:form id="accessForm">
-                            <div class="form-group">
-                                <label class="control-label col-md-5">New Role Name:   </label>
+                    <h:form id="accessForm">
+                        <div class="form-group">
+                            <label class="control-label col-md-5">New Role Name:   </label>
 
-                                <p:inputText id="roleName" required="true" requiredMessage="Please fill in Role Name!" class="form-inline" value="#{roleManagedBean.roleName}"  />
-                                <div class="missingfield">
-                                    <h:message for="roleName"  />
-                                </div>
+                            <p:inputText id="roleName" required="true" requiredMessage="Please fill in Role Name!" class="form-inline" value="#{roleManagedBean.roleName}"  />
+                            <div class="missingfield">
+                                <h:message for="roleName"  />
                             </div>
+                        </div>
 
-                            <br></br>
-<!--                            <div class="form-group" style="padding-left: 15px">-->
-                                Assign access rights for this role:
-                                <p:dataTable id="checkboxDT" var="accessRight" value="#{accessRightManagedBean.allAccessRights}" selection="#{roleManagedBean.selectedAccessRights}" rowKey="#{accessRight.id}" style="margin-bottom:0">
-                                    <f:facet name="header">
-                                        All Existing Access Rights
-                                    </f:facet>
-                                    <p:column selectionMode="multiple" style="width:10%;text-align:center"/>
-                                    <p:column headerText="Accessible Functions" style="width: 30%">
-                                        <h:outputText value="#{accessRight.accessRightName}" />
-                                    </p:column>
-                                    <p:column headerText="Access Rights" style="width: 60%">
-                                        <h:selectBooleanCheckbox value="#{accessRight.accessCreate}" onclick="return false;" onkeydown="return false"/>
-                                        <h:outputText value="Create"/>
-                                        <h:selectBooleanCheckbox value="#{accessRight.accessDelete}" onclick="return false;" onkeydown="return false"/>
-                                        <h:outputText value="Delete"/>
-                                        <h:selectBooleanCheckbox value="#{accessRight.accessUpdate}" onclick="return false;" onkeydown="return false"/>
-                                        <h:outputText value="Update"/>
-                                        <h:selectBooleanCheckbox value="#{accessRight.accessView}" onclick="return false;" onkeydown="return false"/>
-                                        <h:outputText value="View"/>
-                                    </p:column>
-</p:dataTable>
-<!--                                    <f:facet name="footer">
-                                        <p:commandButton process="checkboxDT" update=":accessForm:multiCarDetail" icon="ui-icon-search" value="View" oncomplete="PF('multiCarDialog').show()" />
-                                    </f:facet>
-                                </p:dataTable>
+                        <br></br>
+                        <!--                            <div class="form-group" style="padding-left: 15px">-->
+                        Assign access rights for this role:
+                        <p:dataTable id="checkboxDT" var="accessRight" value="#{accessRightManagedBean.allAccessRights}" selection="#{roleManagedBean.selectedAccessRights}" rowKey="#{accessRight.id}" style="margin-bottom:0">
+                            <f:facet name="header">
+                                All Existing Access Rights
+                            </f:facet>
+                            <p:column selectionMode="multiple" style="width:10%;text-align:center"/>
+                            <p:column headerText="Accessible Functions" style="width: 30%">
+                                <h:outputText value="#{accessRight.accessRightName}" />
+                            </p:column>
+                            <p:column headerText="Access Rights" style="width: 60%">
+                                <h:selectBooleanCheckbox value="#{accessRight.accessCreate}" onclick="return false;" onkeydown="return false"/>
+                                <h:outputText value="Create"/>
+                                <h:selectBooleanCheckbox value="#{accessRight.accessDelete}" onclick="return false;" onkeydown="return false"/>
+                                <h:outputText value="Delete"/>
+                                <h:selectBooleanCheckbox value="#{accessRight.accessUpdate}" onclick="return false;" onkeydown="return false"/>
+                                <h:outputText value="Update"/>
+                                <h:selectBooleanCheckbox value="#{accessRight.accessView}" onclick="return false;" onkeydown="return false"/>
+                                <h:outputText value="View"/>
+                            </p:column>
+                        </p:dataTable>
+                        <!--                                    <f:facet name="footer">
+                                                                <p:commandButton process="checkboxDT" update=":accessForm:multiCarDetail" icon="ui-icon-search" value="View" oncomplete="PF('multiCarDialog').show()" />
+                                                            </f:facet>
+                                                        </p:dataTable>
+                        
+                                                        <p:dialog header="Selected Access Rights" widgetVar="multiCarDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" width="200">
+                                                            <p:outputPanel id="multiCarDetail" style="text-align:center;">
+                                                                <ui:repeat value="#{roleManagedBean.selectedAccessRights}" var="accessRight">
+                                                                    <h:outputText value="#{accessRight.id} - #{accessRight.accessRightName}" style="display:block"/>
+                                                                </ui:repeat>
+                                                            </p:outputPanel>
+                                                        </p:dialog>        -->
 
-                                <p:dialog header="Selected Access Rights" widgetVar="multiCarDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" width="200">
-                                    <p:outputPanel id="multiCarDetail" style="text-align:center;">
-                                        <ui:repeat value="#{roleManagedBean.selectedAccessRights}" var="accessRight">
-                                            <h:outputText value="#{accessRight.id} - #{accessRight.accessRightName}" style="display:block"/>
-                                        </ui:repeat>
-                                    </p:outputPanel>
-                                </p:dialog>        -->
 
+                        <br></br>
+                        <div class="text-center">
+                            <h:commandButton class="btn btn-outline btn-success" value="Create Role" action="#{roleManagedBean.addRole}"/>
+                        </div>
+                        <br></br>
+                        <br></br>
 
-                            <br></br>
-                            <div class="text-center">
-                                <h:commandButton class="btn btn-outline btn-success" value="Create Role" action="#{roleManagedBean.addRole}"/>
-                            </div>
-                            <br></br>
-                            <br></br>
-                            
-                        </h:form>
-                    </div>
+                    </h:form>
                 </div>
             </div>
-       
+        </div>
+
     </h:body>
 </html>
 
