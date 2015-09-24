@@ -33,7 +33,7 @@
                 </div>
 
                 <div class="col-lg-12">
-                    <p class="pull-right"> * Right click to delete the flight</p>
+                    <p class="pull-right"> * Right click to delete the schedule</p>
                     <h:form>
                         <h:commandButton value="Retrieve" actionListener="#{scheduleManageBean.retrieve}"/>
                     </h:form>
@@ -57,12 +57,12 @@
                                 <h:outputText value="#{schedule.scheduleId}" />
                             </p:column>
 
-                            <p:column filterBy="#{scheduleManageBean.getDateFormat(schedule.startDate)}" headerText="Start Date" filterMatchMode="contains">
-                                <h:outputText value="#{scheduleManageBean.getDateFormat(schedule.startDate)}" />
+                            <p:column filterBy="#{schedule.startDate}" headerText="Start Date" filterMatchMode="contains">
+                                <h:outputText value="#{schedule.startDate}" />
                             </p:column>
 
-                            <p:column filterBy="#{scheduleManageBean.getDateFormat(schedule.endDate)}" headerText="End Date" filterMatchMode="contains">
-                                <h:outputText value="#{scheduleManageBean.getDateFormat(schedule.endDate)}" />
+                            <p:column filterBy="#{schedule.endDate}" headerText="End Date" filterMatchMode="contains">
+                                <h:outputText value="#{schedule.endDate}" />
                             </p:column>
 
                             <p:column filterBy="#{schedule.flight.flightNo}" headerText="Flight No." filterMatchMode="contains">
