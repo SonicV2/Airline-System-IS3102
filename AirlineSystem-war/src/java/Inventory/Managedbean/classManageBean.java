@@ -48,12 +48,26 @@ public class classManageBean {
         
     }
     
+    public void clear(){
+        this.classcode = null;
+        this.pricePercent = 0;
+        this.advancedSales = 0;
+        this.percentSold =0;
+        this.serviceClass = null;
+        this.rebook = false;
+        this.cancel = false;
+        this.baggage = 0;
+        this.millageAccru =0;
+    }
+    
     public void addClass(){
     String message = cm.addClassCode(getClasscode(), getPricePercent(), getAdvancedSales(), 
             getPercentSold(), getServiceClass(), isRebook(), isCancel(), 
             getBaggage(), getMillageAccru());
             FacesMessage msg = new FacesMessage(message);
             FacesContext.getCurrentInstance().addMessage(null, msg);
+            setBookingClass(cm.retrieveBookingClasses());
+            clear();
     
     }
     
