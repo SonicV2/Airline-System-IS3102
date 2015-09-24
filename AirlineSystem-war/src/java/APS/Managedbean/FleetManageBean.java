@@ -7,6 +7,7 @@ package APS.Managedbean;
 
 import APS.Entity.Aircraft;
 import APS.Entity.AircraftType;
+import APS.Entity.Schedule;
 import APS.Session.FleetSessionBeanLocal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -59,6 +60,7 @@ public class FleetManageBean {
     private List<Aircraft> aircrafts;
     private Aircraft selectedAircraft;
     private List<String> aircraftTypeIds = new ArrayList<String> ();
+    private List<Aircraft> reserves = new ArrayList<Aircraft> ();
     
     
     public FleetManageBean() {
@@ -105,29 +107,39 @@ public class FleetManageBean {
             FacesContext.getCurrentInstance().addMessage(null, message);
             return;
         }
-       
-        fleetSessionBean.acquireAircraft(datePurchased, lastMaintained, aircraftTypeId, hub);
-    }
-
-    public void retireAircraft(ActionEvent event){
-        System.out.println("HIHI");
-        if (!selectedAircraft.getStatus().equals("Stand-By") || !selectedAircraft.getStatus().equals("Reserve")) {
-            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Aircraft is not in a status to delete!", "");
+        
+        if (status == null) {
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please select status of the aircraft!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
             return;
         }
+       
+        fleetSessionBean.acquireAircraft(datePurchased, lastMaintained, aircraftTypeId, hub, status);
+    }
 
-        List<Aircraft> reserves = new ArrayList<Aircraft>();
+    public void retireAircraft(ActionEvent event){
+        
+//        if (!selectedAircraft.getStatus().equals("Stand-By") || !selectedAircraft.getStatus().equals("Reserve")) {
+//            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Aircraft is not in a status to delete!", "");
+//            FacesContext.getCurrentInstance().addMessage(null, message);
+//            return;
+//        }
+
         reserves = fleetSessionBean.getReserveAircrafts("Reserve");
         
-        System.out.println(reserves);
+        System.out.println("LOOK HERE");
+        System.out.println(reserves.get(1));
         
         for (int i=0; i<selectedAircraft.getSchedules().size(); i++) {
             selectedAircraft.getSchedules().get(i).setAircraft(reserves.get(1));
-            fleetSessionBean.persist(selectedAircraft.getSchedules().get(i));
-            
+            fleetSessionBean.persistSchedule(selectedAircraft.getSchedules().get(i));
+            System.out.println("LOOK HERE");
             System.out.println(selectedAircraft.getSchedules().get(i).getAircraft());
         }
+        reserves.get(1).setStatus("Stand-By");
+        List<Schedule> temp = selectedAircraft.getSchedules();
+        reserves.get(1).setSchedules(temp);
+        fleetSessionBean.persistAircraft(reserves.get(1));
 
         List<Aircraft> temp1 = selectedAircraft.getAircraftType().getAircrafts();
         temp1.remove(selectedAircraft);
@@ -156,6 +168,14 @@ public class FleetManageBean {
      
     public void setAircrafts(List<Aircraft> aircrafts) {
         this.aircrafts = aircrafts;
+    }
+    
+    public List<Aircraft> getReserves(){
+         return reserves;
+     }
+     
+    public void setReserves(List<Aircraft> reserves) {
+        this.reserves = reserves;
     }
     
     public Aircraft getSelectedAircraft() {

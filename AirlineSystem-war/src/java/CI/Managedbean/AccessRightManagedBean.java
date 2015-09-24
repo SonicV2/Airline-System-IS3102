@@ -39,7 +39,7 @@ public class AccessRightManagedBean {
     
     @PostConstruct
     public void init(){
-        setAllAccessRights(accessRightSession.retrieveAllAccessRight());
+//        setAllAccessRights(accessRightSession.retrieveAllAccessRight());
     }
     
     public String addAccessRight(){

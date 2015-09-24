@@ -14,6 +14,7 @@ import Inventory.Entity.SeatAvailability;
 import Inventory.Entity.BookingClass;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
+import APS.Entity.Flight;
 
 
 /**
@@ -44,7 +45,8 @@ public class RevenueManagement implements RevenueManagementLocal{
     }
     
     public SeatAvailability findSA(Date fDate,String flightNo){
-        Query q = em.createQuery("SELECT o from SeatAvailability o WHERE o.flightNo = :flightNo");
+        System.out.println(flightNo);
+        Query q = em.createQuery("SELECT o from SeatAvailability o WHERE o.schedule.flight.flightNo = :flightNo");
          q.setParameter("flightNo",flightNo);
          List<SeatAvailability> saList = q.getResultList();
          int size = saList.size();
@@ -107,14 +109,14 @@ public class RevenueManagement implements RevenueManagementLocal{
     
     
     public double getBasePrice(String flightNo){
-        double baseprice=100.0;
+        Flight flight = em.find(Flight.class, flightNo);
+        double baseprice= flight.getBasicFare();
         return baseprice;
     }
     public String getPrice(String flightNo,Date fDate, String serviceClass, int realSold){
         int pricePercent=100;
         Date current = new Date();
         System.out.println("Percent Sold: "+ realSold);
-        String haha="No Class";
         try{
             Query q = em.createQuery("SELECT o from BookingClass o WHERE o.serviceClass = :serviceClass");
             q.setParameter("serviceClass", serviceClass);

@@ -29,12 +29,12 @@ public class FleetSessionBean implements FleetSessionBeanLocal {
     private AircraftType aircraftType;
 
     @Override
-    public void acquireAircraft(Date datePurchased, Date lastMaintained, String aircraftTypeId, String hub) {
+    public void acquireAircraft(Date datePurchased, Date lastMaintained, String aircraftTypeId, String hub, String status) {
         aircraft = new Aircraft();
         aircraftType = new AircraftType();
         aircraftType = getAircraftType(aircraftTypeId);
         aircraft.setAircraftType(aircraftType);
-        aircraft.createAircraft(datePurchased, lastMaintained, "Stand-By", hub);
+        aircraft.createAircraft(datePurchased, lastMaintained, hub, status);
         aircraftType.getAircrafts().add(aircraft);
         em.persist(aircraft);
     }
@@ -48,8 +48,13 @@ public class FleetSessionBean implements FleetSessionBeanLocal {
     }
     
     @Override
-    public void persist(Schedule schedule){
-        em.persist(schedule);
+    public void persistSchedule(Schedule schedule){
+        em.merge(schedule);
+    }
+    
+    @Override
+    public void persistAircraft(Aircraft aircraft){
+        em.merge(aircraft);
     }
 
     // get aircraftType object when searching with aircraftTypeId

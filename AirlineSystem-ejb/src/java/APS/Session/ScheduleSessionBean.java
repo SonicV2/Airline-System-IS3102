@@ -39,21 +39,34 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
     private SeatAvailability seatAvail;
 
     @Override
-    public void edit(Schedule schedule, Schedule original) {
-        schedule.setEndDate(calcEndTime(schedule.getStartDate(), schedule.getFlight())); 
+    public void edit(Schedule edited, Schedule original) {
         
-        if (!schedule.getAircraft().getTailNo().equals(original.getAircraft().getTailNo())) {
-            
-            List<Schedule> temp1 = schedule.getAircraft().getSchedules();
-            temp1.add(schedule);
-            schedule.getAircraft().setSchedules(temp1);
-            
-            List<Schedule> temp = original.getAircraft().getSchedules();
-            temp.remove(original);
-            original.getAircraft().setSchedules(temp);
+        if(!edited.getStartDate().equals(original.getStartDate())){
+        edited.setEndDate(calcEndTime(edited.getStartDate(), edited.getFlight())); 
+        em.merge(edited);
         }
- 
-        em.merge(schedule);
+        
+        if (!edited.getAircraft().getTailNo().equals(original.getAircraft().getTailNo())) {
+            
+            System.out.println("Line 1 Reached!!!");
+            Aircraft ac= em.find(Aircraft.class, edited.getAircraft().getTailNo());
+            List<Schedule> temp1 = ac.getSchedules();
+            temp1.remove(original);
+            temp1.add(edited);
+            ac.setSchedules(temp1);
+            System.out.println("Line 2 Reached!!!");
+            System.out.println(em.contains(ac));
+            System.out.println("Line 3 Reached!!!");    
+            System.out.println("Line 4 Reached!!!");
+            Long id = edited.getScheduleId();
+            Schedule change = em.find(Schedule.class,id);
+            System.out.println(em.contains(change));
+            change.setAircraft(ac);
+            em.flush();
+        }
+                   
+       
+        
     }
 
     @Override
@@ -75,19 +88,12 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
     @Override
     public void deleteSchedule(Long id) {
         schedule = getSchedule(id);
-        //Remove link with aircraft
-        schedule.getAircraft().getSchedules().remove(schedule);
-        schedule.setAircraft(null);
-        //Remove link with flight
-        schedule.getFlight().getSchedule().remove(schedule);
-        schedule.setFlight(null);
-        //Remove link with Team
-        schedule.getTeam().getSchedule().remove(schedule);
-        schedule.setTeam(null);
-        //Remove related seatAvailability
+        
         seatAvail = schedule.getSeatAvailability();
         seatAvail.setSchedule(null);
+        
         schedule.setSeatAvailability(null);
+        
         em.remove(seatAvail); //Ask Quan Ge add in code!!!
         em.remove(schedule);
         em.flush();
