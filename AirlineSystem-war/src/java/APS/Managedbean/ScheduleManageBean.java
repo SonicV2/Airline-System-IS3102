@@ -12,6 +12,8 @@ import APS.Session.FleetSessionBeanLocal;
 import APS.Session.FlightSessionBeanLocal;
 import APS.Session.ScheduleSessionBeanLocal;
 import FOS.Entity.Team;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -171,6 +173,11 @@ public class ScheduleManageBean {
     public void onRowCancel(RowEditEvent event) {
         FacesMessage msg = new FacesMessage("Edit Cancelled");
         FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+    
+    public String getDateFormat(Date date){
+        DateFormat df = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm z");
+        return df.format(date);
     }
     
     /*clear input after submit*/
