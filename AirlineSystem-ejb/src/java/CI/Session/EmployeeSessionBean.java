@@ -6,6 +6,7 @@ import CI.Entity.Salt;
 import CI.Entity.OrganizationUnit;
 import CI.Entity.Pilot;
 import CI.Entity.Role;
+import FOS.Entity.Team;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -127,6 +128,7 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
         cc.setEmployeeDepartment("Flight Crew");
         cc.setEmployeeRole("Cabin Crew");
         cc.setEmployeePassword("password");
+        cc.setTeam(null);
         
         String userName = generateUserName(employeeDisplayFirstName, employeeDisplayLastName);
         
@@ -140,6 +142,8 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
         employeelist.add(cc);
         department.setEmployee(employeelist);
         cc.setOrganizationUnit(department);
+        
+        
         em.persist(cc);
         
         
@@ -182,6 +186,7 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
         pp.setEmployeeDepartment("Flight Crew");
         pp.setEmployeeRole("Pilot");
         pp.setEmployeePassword("password");
+        pp.setTeam(null);
         
         String userName = generateUserName(employeeDisplayFirstName, employeeDisplayLastName);
         

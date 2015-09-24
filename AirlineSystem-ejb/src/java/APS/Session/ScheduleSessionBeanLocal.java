@@ -22,4 +22,9 @@ public interface ScheduleSessionBeanLocal {
     public void deleteSchedule(Long id);
     public Schedule getSchedule(Long id);
     public List<Schedule> getSchedules();
+    public Schedule getScheduleByDate(Date startDate);
+    public void changeFlightDays(List<Flight> flights);
+    public List<Schedule> getSchedules(String tailNo);
+    public Date calcEndTime(Date startTime, Flight flight);
+    public void edit(Schedule schedule, Schedule original);
 }

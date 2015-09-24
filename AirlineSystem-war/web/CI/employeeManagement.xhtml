@@ -158,7 +158,7 @@
 
                                 <div class="form-group">
                                     <p:outputLabel for="role" value="Role: " class="col-md-4 control-label" />
-                                    <h:selectOneMenu  id="role" styleClass="dropdown-menu select" value="#{employeeManageBean.employeeRole}"  >
+                                    <h:selectOneMenu required="true" id="role" styleClass="dropdown-menu select" value="#{employeeManageBean.employeeRole}"  >
 
                                         <f:selectItem itemLabel="Select Role" itemValue="" noSelectionOption="true" />
                                         <f:selectItems value="#{roleManagedBean.roles}" />
@@ -170,7 +170,7 @@
 
                                 <div class="form-group">
                                     <p:outputLabel for="department" value="Department: " class="col-md-4 control-label" />
-                                    <h:selectOneMenu id="department" styleClass="dropdown-menu select"  value="#{employeeManageBean.employeeDepartment}" >
+                                    <h:selectOneMenu required="true" id="department" styleClass="dropdown-menu select"  value="#{employeeManageBean.employeeDepartment}" >
 
                                         <f:selectItem itemLabel="Select department" itemValue="" noSelectionOption="true" />
                                         <f:selectItems value="#{departmentManagedBean.departments}" />

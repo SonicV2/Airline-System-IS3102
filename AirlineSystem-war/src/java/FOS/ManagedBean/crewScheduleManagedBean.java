@@ -5,11 +5,15 @@
  */
 package FOS.ManagedBean;
 
+import CI.Entity.Pilot;
 import FOS.Entity.Pairing;
 import FOS.Entity.PairingPolicy;
 import FOS.Entity.Team;
+import FOS.Session.A380PairingSessionBeanLocal;
 import FOS.Session.PairingSessionBeanLocal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -30,70 +34,104 @@ import javax.faces.event.ActionEvent;
 @SessionScoped
 public class crewScheduleManagedBean {
     @EJB
+    private A380PairingSessionBeanLocal a380PairingSessionBean;
+    @EJB
     private PairingSessionBeanLocal pairingSessionBean;
+    
 
-     private int time_scale_min; 
-     private int num_max_legs;
-     private int hours_max_flight;
-     private PairingPolicy pp;
+    private int time_scale_min;
+    private int num_max_legs;
+    private int hours_max_flight;
+    private PairingPolicy pp;
     private List<Pairing> slns;
     private Pairing sln;  //selected from the webpage
     private String sln1;
     private Team team;
+    private String selectMonth; //month choosen to get pairing
+    
+    private List<Pairing> restPairing;
+    private List<Pairing> slnA380;
+    private List<Pairing> restPairingA380;
     
 
-    
     /**
      * Creates a new instance of crewScheduleManagedBean
      */
     public crewScheduleManagedBean() {
-        
+
     }
-    
-    public void getAssignedTeam(){
+
+    public void getAssignedTeam() {
         setTeam(pairingSessionBean.generateTeam(sln));
+
     }
-    
-    
-    public void changePolicy(ActionEvent event){
-         FacesMessage message = null;
-        if(num_max_legs==0 || hours_max_flight==0 ||  time_scale_min==0){
-            
-              message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Field cannot be 0!", "");
-        }else{
-        pairingSessionBean.changePolicy(num_max_legs, hours_max_flight, time_scale_min);
-        message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Change successfully!", "");
+
+    public void changePolicy(ActionEvent event) {
+        FacesMessage message = null;
+        if (num_max_legs == 0 || hours_max_flight == 0 || time_scale_min == 0) {
+
+            message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Field cannot be 0!", "");
+        } else {
+            pairingSessionBean.changePolicy(num_max_legs, hours_max_flight, time_scale_min);
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Change successfully!", "");
         }
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
-    
-    public void crewPairing(ActionEvent event){
-        pairingSessionBean.legMain();
-    }
 
-    public void retrivePolicy(ActionEvent event){
+//    public void crewPairing(ActionEvent event){
+//        pairingSessionBean.legMain(selectMonth);
+//    }
+    public void retrivePolicy(ActionEvent event) {
         setPp(pairingSessionBean.retrievePolicy());
     }
-    
 
-    public void getSlns(ActionEvent event){
-        pairingSessionBean.legMain();
+// crew pairing.html --> display all legs
+    public void getSlns(ActionEvent event) {
+        pairingSessionBean.legMain(selectMonth);
         setSlns(pairingSessionBean.getPairings());
-    }
-    
-    public void getSelectPairingID(ActionEvent event){
         
-        String pairingID=sln1.substring(sln1.indexOf("=")+1, sln1.indexOf("]")-1);
-        System.out.println("--------"+sln1.substring(sln1.indexOf("=")+1, sln1.indexOf("]")));
-        sln =pairingSessionBean.getPairingByID(pairingID);   
         
+        restPairing=new ArrayList<Pairing>();
+        for(Pairing ppp: slns ){
+            if(ppp.isPaired()==false)
+                restPairing.add(ppp);
+        }
+
     }
-  
-    public void generateTeam(ActionEvent event){
-        pairingSessionBean.generateTeam(sln);
+
+    
+    
+    public void getA380Slns(ActionEvent event) {
+        a380PairingSessionBean.legMain(selectMonth);
+        setSlns(a380PairingSessionBean.getPairings());
+        
+        restPairingA380=new ArrayList<Pairing>();
+        for(Pairing ppp: slnA380 ){
+            if(ppp.isPaired()==false)
+                restPairingA380.add(ppp);
+        } 
     }
     
     
+    
+    public void getSelectPairingID(ActionEvent event) {
+        
+        
+        String pairingID = sln1.substring(sln1.indexOf("=") + 1, sln1.indexOf("]") - 1);
+        System.out.println("--------" + sln1.substring(sln1.indexOf("=") + 1, sln1.indexOf("]")));
+        sln = pairingSessionBean.getPairingByID(pairingID);
+
+    }
+
+    public void generateTeam(ActionEvent event) {
+        setTeam(pairingSessionBean.generateTeam(sln));
+    }
+
+    
+     public void generateA380Team(ActionEvent event) {
+        setTeam(a380PairingSessionBean.generateA380Team(sln));
+    }
+
     /**
      * @return the time_scale_min
      */
@@ -149,9 +187,6 @@ public class crewScheduleManagedBean {
     public void setPp(PairingPolicy pp) {
         this.pp = pp;
     }
-
-   
-
 
     /**
      * @return the slns
@@ -209,11 +244,58 @@ public class crewScheduleManagedBean {
         this.team = team;
     }
 
- 
-   
+    /**
+     * @return the selectMonth
+     */
+    public String getSelectMonth() {
+        return selectMonth;
+    }
 
- 
+    /**
+     * @param selectMonth the selectMonth to set
+     */
+    public void setSelectMonth(String selectMonth) {
+        this.selectMonth = selectMonth;
+    }
     
+  
+    public List<Pairing> getRestPairing() {
+        return restPairing;
+    }
+
+    public void setRestPairing(List<Pairing> restPairing) {
+        this.restPairing = restPairing;
+    }
+
+    /**
+     * @return the slnA380
+     */
+    public List<Pairing> getSlnA380() {
+        return slnA380;
+    }
+
+    /**
+     * @param slnA380 the slnA380 to set
+     */
+    public void setSlnA380(List<Pairing> slnA380) {
+        this.slnA380 = slnA380;
+    }
+
+    /**
+     * @return the restPairingA380
+     */
+    public List<Pairing> getRestPairingA380() {
+        return restPairingA380;
+    }
+
+    /**
+     * @param restPairingA380 the restPairingA380 to set
+     */
+    public void setRestPairingA380(List<Pairing> restPairingA380) {
+        this.restPairingA380 = restPairingA380;
+    }
+    
+    
+    
+
 }
-
-

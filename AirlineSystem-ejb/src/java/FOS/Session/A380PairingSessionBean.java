@@ -36,7 +36,7 @@ import javax.persistence.Query;
  * @author smu
  */
 @Stateless
-public class PairingSessionBean implements PairingSessionBeanLocal {
+public class A380PairingSessionBean implements A380PairingSessionBeanLocal {
 
     @PersistenceContext(unitName = "AirlineSystem-ejbPU")
     private EntityManager em;
@@ -60,7 +60,7 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
         int numofFlightHours = 0;
         int totalFlightHours = 0;
 
-        legs = addLeg(selectMonth);
+        legs = addLeg380(selectMonth);
 
         sortList(legs);
         String destination = legs.get(0).getDestination();
@@ -127,8 +127,8 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
         Collections.sort(legs);
     }
 
-//    String selectMonth for non-A380
-    public ArrayList<Leg> addLeg(String selectMonth) {
+    //Pairing for A380
+    public ArrayList<Leg> addLeg380(String selectMonth) {
 
         legss = new ArrayList<Leg>();
 
@@ -137,41 +137,43 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
         List<Schedule> scheds = q.getResultList();
 
         for (Schedule s : scheds) {
-            String formattedMonth = new SimpleDateFormat("MM").format(s.getStartDate());
+            if (s.getFlight().getAircraftType().equals("A380-800")) {
+                String formattedMonth = new SimpleDateFormat("MM").format(s.getStartDate());
 
-            if (formattedMonth.equals(selectMonth)) {
+                if (formattedMonth.equals(selectMonth)) {
 
-                String formattedDate = new SimpleDateFormat("dd/MM/yyyy").format(s.getStartDate());
-                // System.out.println("h------------------formate Date: " + formattedDate);
+                    String formattedDate = new SimpleDateFormat("dd/MM/yyyy").format(s.getStartDate());
+                    // System.out.println("h------------------formate Date: " + formattedDate);
 
-                String formattedStartTime = new SimpleDateFormat("HHmm").format(s.getStartDate());
-                //System.out.println("h------------------formate Start Time: " + formattedStartTime);
+                    String formattedStartTime = new SimpleDateFormat("HHmm").format(s.getStartDate());
+                    //System.out.println("h------------------formate Start Time: " + formattedStartTime);
 
-                String formattedEndTime = new SimpleDateFormat("HHmm").format(s.getEndDate());
-                // System.out.println("h------------------formate Start Time: " + formattedEndTime);
+                    String formattedEndTime = new SimpleDateFormat("HHmm").format(s.getEndDate());
+                    // System.out.println("h------------------formate Start Time: " + formattedEndTime);
 
-                int formatStartTime = (int) Integer.parseInt(formattedStartTime);// use
-                //System.out.println("h*****" + formatStartTime);
+                    int formatStartTime = (int) Integer.parseInt(formattedStartTime);// use
+                    //System.out.println("h*****" + formatStartTime);
 
-                int formatEndTime = (int) Integer.parseInt(formattedEndTime);//use
-                //System.out.println("h******" + formatEndTime);
+                    int formatEndTime = (int) Integer.parseInt(formattedEndTime);//use
+                    //System.out.println("h******" + formatEndTime);
 
-                Flight flight = new Flight();
+                    Flight flight = new Flight();
 
-                flight = s.getFlight();
+                    flight = s.getFlight();
 
-                int flightNumber = (int) Integer.parseInt(flight.getFlightNo().substring(2));
+                    int flightNumber = (int) Integer.parseInt(flight.getFlightNo().substring(2));
 
-                // System.out.println("h%%%%%%%Flight Number: " + flightNumber);
-                String deptCity = flight.getRoute().getOriginCity();
+                    // System.out.println("h%%%%%%%Flight Number: " + flightNumber);
+                    String deptCity = flight.getRoute().getOriginCity();
 
-                //System.out.println("h%%%%%%%Depart " + deptCity);
-                String destCity = flight.getRoute().getDestinationCity();
+                    //System.out.println("h%%%%%%%Depart " + deptCity);
+                    String destCity = flight.getRoute().getDestinationCity();
 
-                //System.out.println("h%%%%%%%dest: " + destCity);
-                Leg l = new Leg(flightNumber, deptCity, destCity, formatStartTime, formatEndTime, formattedDate);
-                legss.add(l);
+                    //System.out.println("h%%%%%%%dest: " + destCity);
+                    Leg l = new Leg(flightNumber, deptCity, destCity, formatStartTime, formatEndTime, formattedDate);
+                    legss.add(l);
 
+                }
             }
         }
         System.out.println("NUM: " + legss.size());
@@ -259,7 +261,7 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
         pr.create(date, totalFlightHour, flightNos, flightCities, flightTimes);
         pr.setTeam(null);
 
-        pr.setIsA380(false);
+        pr.setIsA380(true);
 
         List<Pairing> check = getPairings();
         boolean isContain = false;
@@ -282,14 +284,14 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
     @Override
     public List<Pairing> getPairings() {
         Query q = em.createQuery("SELECT p FROM Pairing p");
-        List<Pairing> results = new ArrayList<Pairing>();
+        List<Pairing> a380 = new ArrayList<Pairing>();
         List<Pairing> allPairings = q.getResultList();
         for (Pairing p : allPairings) {
-            if (p.isIsA380() == false) {
-                results.add(p);
+            if (p.isIsA380()) {
+                a380.add(p);
             }
         }
-        return results;
+        return a380;
     }
 
     @Override
@@ -306,7 +308,7 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
     }
 
     @Override
-    public Team generateTeam(Pairing pairing) {
+    public Team generateA380Team(Pairing pairing) {
         String flightDate = pairing.getFDate();
 //        String flightHour = pairing.getFlightHour();
         List<String> flightCities = pairing.getFlightCities();
@@ -316,10 +318,11 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
         team = new Team();
         Flight flight;
         List<Schedule> schedules;
-        List<Schedule> teamSchedule = new ArrayList<Schedule>();
+        List<Schedule> teamSchedule;
 
         List<Pilot> captainList = new ArrayList<Pilot>();
         List<Pilot> FOList = new ArrayList<Pilot>();
+        List<Pilot> ObserverList = new ArrayList<Pilot>();
 
         List<CabinCrew> leadCCList = new ArrayList<CabinCrew>(); //lead female
         List<CabinCrew> CCList = new ArrayList<CabinCrew>(); //female
@@ -327,8 +330,8 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
 
         String lastCity = flightCities.get(flightCities.size() - 1); //set all the team location attribure to lastCity
         team.setLocation(lastCity);
-        team.setPilotNo(2);
-        team.setcCrewNo(8);
+        team.setPilotNo(3);
+        team.setcCrewNo(16);
 
         //Add crews to the team
         List<Pilot> pilots = new ArrayList<Pilot>();
@@ -337,10 +340,13 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
         List<Pilot> ps = q.getResultList();
         for (Pilot pi : ps) {
             if (pi.isAssigned() == false) {
-                if (pi.getPosition().equals("Captain")) {
+                if (pi.getPosition().equals("Captain") && pi.getSkillsets().contains("A380")) {
                     captainList.add(pi);
                 }
-                if (pi.getPosition().equals("First Officer")) {
+                if (pi.getPosition().equals("First Officer") && pi.getSkillsets().contains("A380")) {
+                    FOList.add(pi);
+                }
+                if (pi.getPosition().equals("Observer") && pi.getSkillsets().contains("A380")) {
                     FOList.add(pi);
                 }
             }
@@ -355,6 +361,11 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
         FOList.get(0).setAssigned(true);
         FOList.get(0).setTeam(team);
         em.persist(FOList.get(0));
+
+        pilots.add(ObserverList.get(0));  //select 2 first officer fromt he table
+        ObserverList.get(0).setAssigned(true);
+        ObserverList.get(0).setTeam(team);
+        em.persist(ObserverList.get(0));
 
         team.setPilots(pilots);
 
@@ -377,12 +388,16 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
         }
 
         CCs.add(leadCCList.get(0));
+        CCs.add(leadCCList.get(1));
         leadCCList.get(0).setAssigned(true);
         leadCCList.get(0).setTeam(team);
+        leadCCList.get(1).setAssigned(true);
+        leadCCList.get(1).setTeam(team);
 
         em.persist(leadCCList.get(0));
+        em.persist(leadCCList.get(1));
 
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 12; i++) {
             CCs.add(CCList.get(i));
             CCList.get(i).setAssigned(true);
             CCList.get(i).setTeam(team);
@@ -393,6 +408,11 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
         FSList.get(0).setAssigned(true);
         FSList.get(0).setTeam(team);
         em.persist(FSList.get(0));
+
+        CCs.add(FSList.get(1));
+        FSList.get(1).setAssigned(true);
+        FSList.get(1).setTeam(team);
+        em.persist(FSList.get(1));
 
         team.setCabinCrews(CCs);
         em.persist(team);
@@ -407,28 +427,16 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
             for (Schedule sh : schedules) {
                 String formattedDate = new SimpleDateFormat("dd/MM/yyyy").format(sh.getStartDate());
                 if (formattedDate.equals(flightDate)) {
-
                     teamSchedule = team.getSchedule();
-//                    System.out.println("Team Schedule: " + teamSchedule.size());
-
                     teamSchedule.add(sh);
-//                    System.out.println("Team Schedule Date: " + sh.getStartDate());
-
                     sh.setAssigned(true);
-//                    System.out.println("Team Schedule: " + sh.isAssigned());
-
                     team.setSchedule(teamSchedule);
-//                     System.out.println("Team Schedule1: " + teamSchedule.size());
-
                     sh.setTeam(team);
-//                    System.out.println("Team ID: " + team.getId());
-
                     em.merge(sh);
 
                     em.merge(team);
 
                     em.flush();
-
                 }
             }
             team.setStatus("Formed");
@@ -441,7 +449,6 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
 
             em.merge(pairing);
             em.merge(team);
-            em.flush();
 
         }
 
@@ -582,28 +589,6 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
         return pp;
     }
 
-//    // Get Flight Entity use flight number
-//    public Flight getFlight(String flightNo) {
-//        //Flight flight = new Flight();
-//        Query q = em.createQuery("SELECT f FROM Flight f WHERE f.flightNo =:flightNo");
-//        q.setParameter("flightNo", flightNo);
-//        List<Flight> results = q.getResultList();
-//        if (results != null) {
-//            return results.get(0);
-//        } else {
-//            return null;
-//        }
-//    }
-//    public Schedule getSchedule(String flightNo, String date) {
-//        Flight flight = getFlight(flightNo);
-//        List<Schedule> schedules = flight.getSchedule();
-//        for (Schedule s : schedules) {
-//            if (s.getStartDate().toString().equals(date)) {
-//                return s;
-//            }
-//        }
-//        return null;
-//    }
     /**
      * @return the time_scale_min
      */

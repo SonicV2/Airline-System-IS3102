@@ -38,7 +38,6 @@ public class FlightSessionBean implements FlightSessionBeanLocal {
         flight.createFlight(flightNo, flightDays, basicFare, startDateTime);
         flight.setRoute(route);
         route.getFlights().add(flight);
-        
         flight.setAircraftType(aircraftType);
         flight.setSchedule(schedules);
         em.persist(flight);
@@ -48,11 +47,36 @@ public class FlightSessionBean implements FlightSessionBeanLocal {
     public void deleteFlight(String flightNo) {
         flight = getFlight(flightNo);
         em.remove(flight);
+        em.flush();
     }
     
     @Override
-    public void deleteSchedule(Schedule schedule1) {
-        em.remove(schedule1);
+    public void deleteSchedule(Long scheduleId) {
+        schedule = getSchedule(scheduleId);
+        em.remove(schedule);
+        em.flush();
+    }
+    
+    @Override
+    public Schedule getSchedule(Long scheduleId) {
+        schedule = new Schedule();
+        try {
+
+            Query q = em.createQuery("SELECT a FROM Schedule " + "AS a WHERE a.scheduleId=:scheduleId");
+            q.setParameter("scheduleId", scheduleId);
+
+            List results = q.getResultList();
+            if (!results.isEmpty()) {
+                schedule = (Schedule) results.get(0);
+
+            } else {
+                flight = null;
+            }
+
+        } catch (EntityNotFoundException enfe) {
+            System.out.println("\nEntity not found error" + "enfe.getMessage()");
+        }
+        return schedule;
     }
 
     @Override

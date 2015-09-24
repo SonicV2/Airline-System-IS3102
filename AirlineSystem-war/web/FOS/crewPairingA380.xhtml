@@ -60,7 +60,7 @@
 
 
             
-            <p:dataTable id="tbl" var="sln" value="#{crewScheduleManagedBean.slns}"
+            <p:dataTable id="tbl" var="sln" value="#{crewScheduleManagedBean.slnA380}"
                          paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} "
                          paginator="true" rows="10" style="margin-bottom:20px">
 
@@ -109,7 +109,7 @@
 
              <p:outputLabel value="Choose Month: " />
             <p:inputText  required="true" requiredMessage="Please fill in this field!" class="form-control input-lg" placeholder="Choose Month" value="#{crewScheduleManagedBean.selectMonth}"  />
-            <h:commandButton value="Display" actionListener="#{crewScheduleManagedBean.getSlns}"/>
+            <h:commandButton value="Display" actionListener="#{crewScheduleManagedBean.getA380Slns}"/>
             
             
           

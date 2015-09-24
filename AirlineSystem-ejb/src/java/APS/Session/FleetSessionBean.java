@@ -4,6 +4,7 @@ import javax.ejb.Stateless;
 import APS.Entity.AircraftType;
 import APS.Entity.Aircraft;
 import APS.Entity.Flight;
+import APS.Entity.Schedule;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -11,6 +12,7 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.ArrayList;
+import javax.ejb.Schedules;
 
 /**
  *
@@ -27,12 +29,12 @@ public class FleetSessionBean implements FleetSessionBeanLocal {
     private AircraftType aircraftType;
 
     @Override
-    public void acquireAircraft(Date datePurchased, Date lastMaintained, String aircraftTypeId) {
+    public void acquireAircraft(Date datePurchased, Date lastMaintained, String aircraftTypeId, String hub) {
         aircraft = new Aircraft();
         aircraftType = new AircraftType();
         aircraftType = getAircraftType(aircraftTypeId);
         aircraft.setAircraftType(aircraftType);
-        aircraft.createAircraft(datePurchased, lastMaintained, "Stand-By");
+        aircraft.createAircraft(datePurchased, lastMaintained, "Stand-By", hub);
         aircraftType.getAircrafts().add(aircraft);
         em.persist(aircraft);
     }
@@ -43,6 +45,11 @@ public class FleetSessionBean implements FleetSessionBeanLocal {
         aircraft = getAircraft(tailNo);
         em.remove(aircraft);
 
+    }
+    
+    @Override
+    public void persist(Schedule schedule){
+        em.persist(schedule);
     }
 
     // get aircraftType object when searching with aircraftTypeId
@@ -138,5 +145,31 @@ public class FleetSessionBean implements FleetSessionBeanLocal {
         }
 
         return allAircrafts;
+    }
+    
+    @Override
+    public List<Aircraft> getReserveAircrafts(String status){
+        
+        List<Aircraft> reserveAircrafts = new ArrayList<Aircraft>();
+        
+        try{
+            Query q = em.createQuery("SELECT a FROM Aircraft " + "AS a WHERE a.status=:status");
+            q.setParameter("status", status);
+            
+            List<Aircraft> results = q.getResultList();
+            if (!results.isEmpty()){
+                
+                reserveAircrafts = results;
+                
+            }else
+            {
+                reserveAircrafts = null;
+                System.out.println("no reserve aircraft!");
+            }
+        }catch (EntityNotFoundException enfe) {
+            System.out.println("\nEntity not found error" + "enfe.getMessage()");
+        }
+       
+        return reserveAircrafts;
     }
 }

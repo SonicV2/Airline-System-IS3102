@@ -5,9 +5,11 @@
  */
 package APS.Session;
 
+import APS.Entity.Aircraft;
 import APS.Entity.Flight;
 import APS.Entity.Schedule;
 import FOS.Entity.Team;
+import Inventory.Entity.SeatAvailability;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -33,6 +35,26 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
     private Schedule schedule;
     private List<Schedule> schedules;
     private Team team;
+    private Aircraft aircraft;
+    private SeatAvailability seatAvail;
+
+    @Override
+    public void edit(Schedule schedule, Schedule original) {
+        schedule.setEndDate(calcEndTime(schedule.getStartDate(), schedule.getFlight())); 
+        
+        if (!schedule.getAircraft().getTailNo().equals(original.getAircraft().getTailNo())) {
+            
+            List<Schedule> temp1 = schedule.getAircraft().getSchedules();
+            temp1.add(schedule);
+            schedule.getAircraft().setSchedules(temp1);
+            
+            List<Schedule> temp = original.getAircraft().getSchedules();
+            temp.remove(original);
+            original.getAircraft().setSchedules(temp);
+        }
+ 
+        em.merge(schedule);
+    }
 
     @Override
     public void addSchedule(Date startDate, String flightNo) {
@@ -40,29 +62,35 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
         flight = getFlight(flightNo);
         TimeZone tz = TimeZone.getTimeZone("GMT+8:00"); //Set Timezone to Singapore
         Calendar endDate = Calendar.getInstance(tz);
-        endDate.setTime(startDate);
         endDate.set(Calendar.SECOND, 0);
-        
-        //Break up the hour and minutes
-        int flightHr = (int) flight.getFlightDuration();
-        int flightMin = (int) ((flight.getFlightDuration() - (double) flightHr) * 60);
-        endDate.add(Calendar.HOUR, flightHr);
-        endDate.add(Calendar.MINUTE, flightMin);
-        
+        endDate.setTime(calcEndTime(startDate, flight));
         schedule.createSchedule(startDate, endDate.getTime());
         flight.getSchedule().add(schedule);
         schedule.setFlight(flight);
         schedule.setTeam(team);
+        schedule.setSeatAvailability(seatAvail);
         em.persist(schedule);
     }
 
     @Override
     public void deleteSchedule(Long id) {
-        //NEED TO REMOVE RELATION WITH AIRCRAFT TOO
         schedule = getSchedule(id);
-        schedule.setFlight(flight);
-        schedule.setTeam(team);
+        //Remove link with aircraft
+        schedule.getAircraft().getSchedules().remove(schedule);
+        schedule.setAircraft(null);
+        //Remove link with flight
+        schedule.getFlight().getSchedule().remove(schedule);
+        schedule.setFlight(null);
+        //Remove link with Team
+        schedule.getTeam().getSchedule().remove(schedule);
+        schedule.setTeam(null);
+        //Remove related seatAvailability
+        seatAvail = schedule.getSeatAvailability();
+        seatAvail.setSchedule(null);
+        schedule.setSeatAvailability(null);
+        em.remove(seatAvail); //Ask Quan Ge add in code!!!
         em.remove(schedule);
+        em.flush();
     }
 
     @Override
@@ -72,6 +100,28 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
 
             Query q = em.createQuery("SELECT a FROM Schedule " + "AS a WHERE a.scheduleId=:scheduleId");
             q.setParameter("scheduleId", id);
+
+            List results = q.getResultList();
+            if (!results.isEmpty()) {
+                schedule = (Schedule) results.get(0);
+
+            } else {
+                schedule = null;
+            }
+
+        } catch (EntityNotFoundException enfe) {
+            System.out.println("\nEntity not found error" + "enfe.getMessage()");
+        }
+        return schedule;
+    }
+
+    @Override
+    public Schedule getScheduleByDate(Date startDate) {
+        schedule = new Schedule();
+        try {
+
+            Query q = em.createQuery("SELECT a FROM Schedule " + "AS a WHERE a.startDate=:startDate");
+            q.setParameter("startDate", startDate);
 
             List results = q.getResultList();
             if (!results.isEmpty()) {
@@ -109,7 +159,7 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
         return schedules;
     }
 
-    private Flight getFlight(String flightNo) {
+    public Flight getFlight(String flightNo) {
         flight = new Flight();
         try {
 
@@ -128,5 +178,107 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
             System.out.println("\nEntity not found error" + "enfe.getMessage()");
         }
         return flight;
+    }
+
+    @Override
+    public void changeFlightDays(List<Flight> flights) {
+
+        for (int i = 0; i < flights.size(); i++) {
+            String temp = "";
+            String flightDays = flights.get(i).getFlightDays();
+
+            for (int j = 0; j < flightDays.length(); j++) {
+                if (flightDays.charAt(j) == '1' && j == 0) {
+                    temp += "Sunday";
+                }
+
+                if (flightDays.charAt(j) == '1' && j == 1) {
+                    if (temp.isEmpty()) {
+                        temp += "Monday";
+                    } else {
+                        temp += ", Monday";
+                    }
+                }
+                if (flightDays.charAt(j) == '1' && j == 2) {
+                    if (temp.isEmpty()) {
+                        temp += "Tuesday";
+                    } else {
+                        temp += ", Tuesday";
+                    }
+                }
+
+                if (flightDays.charAt(j) == '1' && j == 3) {
+                    if (temp.isEmpty()) {
+                        temp += "Wednesday";
+                    } else {
+                        temp += ", Wednesday";
+                    }
+                }
+
+                if (flightDays.charAt(j) == '1' && j == 4) {
+                    if (temp.isEmpty()) {
+                        temp += "Thursday";
+                    } else {
+                        temp += ", Thursday";
+                    }
+                }
+
+                if (flightDays.charAt(j) == '1' && j == 5) {
+                    if (temp.isEmpty()) {
+                        temp += "Friday";
+                    } else {
+                        temp += ", Friday";
+                    }
+                }
+
+                if (flightDays.charAt(j) == '1' && j == 6) {
+                    if (temp.isEmpty()) {
+                        temp += "Saturday";
+                    } else {
+                        temp += ", Saturday";
+                    }
+                }
+
+            }
+
+            flights.get(i).setFlightDaysString(temp);
+        }
+    }
+
+    @Override
+    public List<Schedule> getSchedules(String tailNo) {
+        aircraft = new Aircraft();
+        try {
+            Query q = em.createQuery("SELECT a FROM Aircraft " + "AS a WHERE a.tailNo=:tailNo");
+            q.setParameter("tailNo", tailNo);
+
+            List results = q.getResultList();
+            if (!results.isEmpty()) {
+                aircraft = (Aircraft) results.get(0);
+
+            } else {
+                aircraft = null;
+            }
+
+        } catch (EntityNotFoundException enfe) {
+            System.out.println("\nEntity not found error" + "enfe.getMessage()");
+        }
+
+        return aircraft.getSchedules();
+    }
+
+    @Override
+    public Date calcEndTime(Date startTime, Flight flight) {
+        //Break up the hour and minutes
+        int flightHr = (int) flight.getFlightDuration();
+        int flightMin = (int) ((flight.getFlightDuration() - (double) flightHr) * 60);
+
+        TimeZone tz = TimeZone.getTimeZone("GMT+8:00"); //Set Timezone to Singapore
+        Calendar endTime = Calendar.getInstance(tz);
+        endTime.setTime(startTime);
+        endTime.add(Calendar.HOUR, flightHr);
+        endTime.add(Calendar.MINUTE, flightMin);
+
+        return endTime.getTime();
     }
 }

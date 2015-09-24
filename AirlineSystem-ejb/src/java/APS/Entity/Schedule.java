@@ -12,10 +12,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import java.util.Date;
 import javax.persistence.CascadeType;
+import Inventory.Entity.SeatAvailability;
 
 /**
  *
@@ -34,16 +36,25 @@ public class Schedule implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date endDate;
     
+    private boolean Assigned;
+    
     @ManyToOne(cascade = {CascadeType.PERSIST})
     private Flight flight = new Flight();
     
     @ManyToOne(cascade = {CascadeType.PERSIST})
     private Team team = new Team();
+    
+    @OneToOne(cascade = {CascadeType.ALL})
+    private SeatAvailability seatAvail;
+            
+    @ManyToOne(cascade = {CascadeType.PERSIST})
+    private Aircraft aircraft = new Aircraft();
 
     
     public void createSchedule(Date startDate, Date endDate){
         this.startDate = startDate;
         this.endDate = endDate;
+        Assigned = false;
     }
     
     public Long getScheduleId() {
@@ -69,6 +80,14 @@ public class Schedule implements Serializable {
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
+
+    public boolean isAssigned() {
+        return Assigned;
+    }
+
+    public void setAssigned(boolean Assigned) {
+        this.Assigned = Assigned;
+    }
     
     public Flight getFlight() {
         return flight;
@@ -76,6 +95,14 @@ public class Schedule implements Serializable {
     
     public void setFlight(Flight flight) {
         this.flight = flight;
+    }
+    
+    public Aircraft getAircraft() {
+        return aircraft;
+    }
+    
+    public void setAircraft(Aircraft aircraft) {
+        this.aircraft = aircraft;
     }
 
     @Override
@@ -111,5 +138,21 @@ public class Schedule implements Serializable {
     public String toString() {
         return "APS.Entity.Schedule[ id=" + scheduleId + " ]";
     }
+
+    /**
+     * @return the seatAvailability
+     */
+    public SeatAvailability getSeatAvailability() {
+        return seatAvail;
+    }
+
+    /**
+     * @param seatAvailability the seatAvailability to set
+     */
+    public void setSeatAvailability(SeatAvailability seatAvailability) {
+        this.seatAvail = seatAvailability;
+    }
+
+ 
     
 }

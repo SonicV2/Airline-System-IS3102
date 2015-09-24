@@ -130,7 +130,8 @@ public class FlightManageBean {
             }
         }
         
-
+        flightDays = "";
+        
         for (int i = 0; i < selectedFlightDays.length; i++) {
             if (selectedFlightDays[i].equals("Sunday")) {
                 setString("1");
@@ -203,32 +204,36 @@ public class FlightManageBean {
 
         flightSessionBean.addFlight(flightNo, flightDays, basicFare, startDateTime, routeId);
         flightScheduleSessionBean.scheduleFlights(flightNo);
+        flightScheduleSessionBean.dummyRotate();
         flightDays = "";
     }
     
     public void deleteFlight(ActionEvent event) {
         
         flights.remove(selectedFlight);
-        System.out.println("HI");
         
-        //search for Flight Num in Flight lists linked to the Route
-        int i = selectedFlight.getRoute().getFlights().indexOf(selectedFlight);
-        selectedFlight.getRoute().getFlights().remove(i);
-        System.out.println("HIHI");
+        //search for Flight Num in Flight lists linked to the Route and remove the Flight
+        List<Flight> temp = selectedFlight.getRoute().getFlights();
+        temp.remove(selectedFlight);
+        selectedFlight.getRoute().setFlights(temp);
         selectedFlight.setRoute(null);
+
+        //search for Flight Num in Flight lists linked to the Aircraft Type and remove the Flight
+        List<Flight> temp1 = selectedFlight.getAircraftType().getFlights();
+        temp1.remove(selectedFlight);
+        selectedFlight.getAircraftType().setFlights(temp1);
+        selectedFlight.setAircraftType(null);
+        
+        //search for Team in Schedule lists linked to the Schedule and remove
+        for (int i=0; i<selectedFlight.getSchedule().size(); i++) {
+            selectedFlight.getSchedule().get(i).setTeam(null);
+        }
         
         //delete schedule
         for (int j=0; j<selectedFlight.getSchedule().size(); j++) {
-            flightSessionBean.deleteSchedule(selectedFlight.getSchedule().get(j));
+            flightSessionBean.deleteSchedule(selectedFlight.getSchedule().get(j).getScheduleId());
         }
-        System.out.println("HIHIHI");
-        
-        //search for Flight Num in Flight lists linked to the Aircraft Type
-        int k = selectedFlight.getAircraftType().getFlights().indexOf(selectedFlight);
-        selectedFlight.getAircraftType().getFlights().remove(k);
-        selectedFlight.setAircraftType(null);
-        
-        
+
         flightSessionBean.deleteFlight(selectedFlight.getFlightNo());
         selectedFlight = null;
         

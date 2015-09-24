@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package Inventory.Session;
+import Inventory.Entity.SeatAvailability;
 import java.util.Date;
 import javax.ejb.Local;
 
@@ -13,13 +14,12 @@ import javax.ejb.Local;
  */
 @Local
 public interface RevenueManagementLocal {
-    public void createAvailability(String flightNo, String flightDate, 
-            String flightTime);
     
     public int[] generateAvailability(int economy, int business, int firstClass);
     public String getPrice(String flightNo,Date fDate, String serviceClass, int realSold);
     public int[] getAvail(String flightNo, Date fDate);
     public Date convertToDate(String flightDate, String flightTime);
+    public SeatAvailability findSA(Date fDate,String flightNo);
     
     
 }

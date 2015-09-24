@@ -11,6 +11,7 @@ import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import CI.Session.EmployeeSessionBeanLocal;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import javax.faces.application.FacesMessage;
@@ -60,6 +61,9 @@ public class EmployeeManageBean {
     private String experience;
     private String position;
     private List<String> languages; //cabin crew
+    
+    private String firstLang;
+    private String secondLang;
      private List<String> skills; //pilot eg. licence to fly a380 etc
     
     
@@ -118,7 +122,10 @@ public class EmployeeManageBean {
     }
     
     public void addCabinCrew(ActionEvent event){
-        setEmployeeRole("Cabin Crew");
+  
+       languages=new ArrayList<String>();
+        languages.add(firstLang);
+        languages.add(secondLang);
         employeeSessionBean.addCabinCrew(employeeID,employeeDisplayFirstName, employeeDisplayLastName
                 , employeeDepartment, employeeDOB, employeeGender, employeeHpNumber,
                 employeeMailingAddress, employeeOfficeNumber, employeePrivateEmail,experience,languages, position);
@@ -353,6 +360,23 @@ public class EmployeeManageBean {
     public void setSkills(List<String> skills) {
         this.skills = skills;
     }
+
+    public String getFirstLang() {
+        return firstLang;
+    }
+
+    public void setFirstLang(String firstLang) {
+        this.firstLang = firstLang;
+    }
+
+    public String getSecondLang() {
+        return secondLang;
+    }
+
+    public void setSecondLang(String secondLang) {
+        this.secondLang = secondLang;
+    }
+    
     
     
     

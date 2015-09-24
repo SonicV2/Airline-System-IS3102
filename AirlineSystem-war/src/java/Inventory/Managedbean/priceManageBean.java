@@ -4,6 +4,8 @@
  * and open the template in the editor.
  */
 package Inventory.Managedbean;
+import Inventory.Entity.BookingClass;
+import Inventory.Entity.SeatAvailability;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.faces.bean.ManagedBean;
@@ -15,6 +17,8 @@ import Inventory.Session.RevenueManagementLocal;
 import java.util.Date;
 import javax.annotation.PostConstruct;
 import java.io.Serializable;
+import Inventory.Session.BookingSessionBeanLocal;
+import java.util.Calendar;
 
 /**
  *
@@ -27,31 +31,40 @@ public class priceManageBean implements Serializable{
     
     @EJB
     private RevenueManagementLocal rm;
+    @EJB
+    private BookingSessionBeanLocal bm;
+    
     private static final long serialVersionUID = 1L;
-    private List<SeatPrice> spList;
+    private List<SeatPrice> spList = new ArrayList();
     private String flightNo;
     private String flightDate;
     private String flightTime;
+    private SeatAvailability sa;
     
     /**
      *
      */
     @PostConstruct
     public void get1Flight(){
-        
-         
          setFlightNo("SQ001");
-         setFlightDate("03032016");
+         setFlightDate("25092015");
          setFlightTime("0100");
-         System.out.println("Price Managed Bean Inititated");
-         getPriceList();
-         
-         
+         getPriceList();    
      }
+    
+    
+    public String makeBooking(String price, String serviceType){
+        double price1 = Double.parseDouble(price);
+        Date date = rm.convertToDate(flightDate, flightTime);
+        sa= rm.findSA(date, flightNo);
+        bm.addBooking(price1, serviceType, sa);
+        getPriceList();
+        return "displayPrices";
+    }
     
      
      public void getPriceList(){
-        spList = new ArrayList();
+        List<SeatPrice> spList1 = new ArrayList();
         Date date = rm.convertToDate(getFlightDate(), getFlightTime());
         int[] avail;
         String price;
@@ -74,13 +87,10 @@ public class priceManageBean implements Serializable{
             System.out.println(es.getServiceType());
             System.out.println(es.getPrice());
             System.out.println(es.getAvail());
-            spList.add(es);
+            spList1.add(es);
         }
         
-        System.out.println(spList.get(0).getServiceType());
-        System.out.println(spList.get(1).getServiceType());
-        System.out.println(spList.get(2).getServiceType());
-        
+        setSpList(spList1);
     }    
 
     /**
