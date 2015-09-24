@@ -19,6 +19,8 @@ import javax.annotation.PostConstruct;
 import java.io.Serializable;
 import Inventory.Session.BookingSessionBeanLocal;
 import java.util.Calendar;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 
 /**
  *
@@ -40,35 +42,35 @@ public class priceManageBean implements Serializable{
     private String flightDate;
     private String flightTime;
     private SeatAvailability sa;
-    
+    private Date fDate;
     /**
      *
      */
-    @PostConstruct
-    public void get1Flight(){
-         setFlightNo("SQ001");
-         setFlightDate("25092015");
-         setFlightTime("0100");
-         getPriceList();    
+    
+    public String get1Flight(String flightNo, Date fDate){
+         this.flightNo = flightNo;
+         this.fDate = fDate;
+         getPriceList();
+         return "displayPrices";
      }
     
     
     public String makeBooking(String price, String serviceType){
         double price1 = Double.parseDouble(price);
-        Date date = rm.convertToDate(flightDate, flightTime);
-        sa= rm.findSA(date, flightNo);
+        sa= rm.findSA(fDate, flightNo);
         bm.addBooking(price1, serviceType, sa);
         getPriceList();
+        FacesMessage msg = new FacesMessage(serviceType + "  ticket is booked");
+        FacesContext.getCurrentInstance().addMessage(null, msg);
         return "displayPrices";
     }
     
      
      public void getPriceList(){
         List<SeatPrice> spList1 = new ArrayList();
-        Date date = rm.convertToDate(getFlightDate(), getFlightTime());
         int[] avail;
         String price;
-        avail = rm.getAvail(getFlightNo(), date);
+        avail = rm.getAvail(getFlightNo(), fDate);
         System.out.println("Get Price List()");
         for(int i=0;i<5; i++){
             SeatPrice es = new SeatPrice();
@@ -83,7 +85,7 @@ public class priceManageBean implements Serializable{
                 es.setServiceType("Business");
             if(i==4)
                 es.setServiceType("First Class");
-            es.setPrice( rm.getPrice(getFlightNo(), date, es.getServiceType(), avail[i+5])  );
+            es.setPrice( rm.getPrice(getFlightNo(), fDate, es.getServiceType(), avail[i+5])  );
             System.out.println(es.getServiceType());
             System.out.println(es.getPrice());
             System.out.println(es.getAvail());

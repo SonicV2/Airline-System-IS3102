@@ -5,15 +5,16 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:f="http://java.sun.com/jsf/core">
-    
+
     <h:head>
+        
         <title>Display Flight Prices</title>
     </h:head>
     <table>
 
         <p:dataTable var="price" value="#{priceManageBean.spList}" paginator="true" rows="10">
-            
-            
+
+
             <p:column headerText="ServiceType">
                 <h:outputText value="#{price.serviceType}" />
             </p:column>
@@ -25,19 +26,18 @@
             </p:column>
             <p:column headerText ="Book" style="width:32px">
                 <h:form>           
-            <h:commandLink value= "Book" onclick="if (! confirm('Do you really want to book a seat?') ) 
-                { return false;}; return true; " action="#{priceManageBean.makeBooking(price.price, price.serviceType)}">
-                </h:commandLink>
+                    <h:commandLink value= "Book" action="#{priceManageBean.makeBooking(price.price, price.serviceType)}">
+                    </h:commandLink>
                 </h:form>
             </p:column>
 
-            
-          
+
+
 
         </p:dataTable>
-        
-        
-    			
-</table>
+
+
+
+    </table>
 </html>
 
