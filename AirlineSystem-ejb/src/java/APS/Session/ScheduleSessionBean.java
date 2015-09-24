@@ -57,7 +57,7 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
             
             Aircraft or = em.find(Aircraft.class, original.getAircraft().getTailNo());
             or.setStatus("Out-of-Order");
-            em.flush();
+
             
             Long id = edited.getScheduleId();
             Schedule change = em.find(Schedule.class,id);

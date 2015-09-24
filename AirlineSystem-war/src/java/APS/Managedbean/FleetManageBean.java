@@ -115,6 +115,9 @@ public class FleetManageBean {
         }
 
         fleetSessionBean.acquireAircraft(datePurchased, lastMaintained, aircraftTypeId, hub, status);
+        FacesMessage msg = new FacesMessage("Aircraft is Acquired Successfully!");
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+        clear();
     }
 
     public void retireAircraft(ActionEvent event) {
@@ -153,6 +156,14 @@ public class FleetManageBean {
         
         FacesMessage msg = new FacesMessage("Aircraft Retired");
         FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+    
+    public void clear() {
+        setAircraftTypeId("");
+        setHub("");
+        setDatePurchased(null);
+        setLastMaintained(null);
+        setStatus("");
     }
 
     public String getDateFormat(Date date) {
