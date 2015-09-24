@@ -65,9 +65,9 @@
                                 <h:outputText value="#{schedule.scheduleId}" />
                             </p:column>
 
-                            <p:column headerText="Scheduled Date and Time" filterBy="#{schedule.startDate}" filterMatchMode="contains" style="width:10%">
+                            <p:column headerText="Scheduled Date and Time" filterBy="#{scheduleManageBean.getDateFormat(schedule.startDate)}" filterMatchMode="contains" style="width:10%">
                                 <p:cellEditor>
-                                    <f:facet name="output"><h:outputText value="#{schedule.startDate}" /></f:facet>
+                                    <f:facet name="output"><h:outputText value="#{scheduleManageBean.getDateFormat(schedule.startDate)}" /></f:facet>
                                     <f:facet name="input"><p:calendar id="startDate" value="#{schedule.startDate}" pattern="MM/dd/yyyy HH:mm"/></f:facet>
                                 </p:cellEditor>
                             </p:column>

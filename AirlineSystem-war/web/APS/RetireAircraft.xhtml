@@ -59,11 +59,11 @@
                             </p:column>
 
                             <p:column filterBy="#{aircraft.datePurchased}" headerText="Date of Purchase" filterMatchMode="contains">
-                                <h:outputText value="#{aircraft.datePurchased}" />
+                                <h:outputText value="#{fleetManageBean.getDateFormat(aircraft.datePurchased)}" />
                             </p:column>
 
-                            <p:column filterBy="#{aircraft.lastMaintained}" headerText="Date of Maintenance" filterMatchMode="contains">
-                                <h:outputText value="#{aircraft.lastMaintained}" />
+                            <p:column filterBy="#{fleetManageBean.getDateFormat(aircraft.lastMaintained)}" headerText="Date of Maintenance" filterMatchMode="contains">
+                                <h:outputText value="#{fleetManageBean.getDateFormat(aircraft.lastMaintained)}" />
                             </p:column>
 
                             <p:column filterBy="#{aircraft.status}" headerText="Status" filterMatchMode="contains">

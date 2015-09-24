@@ -61,12 +61,12 @@
                                 <h:outputText value="#{schedule.scheduleId}" />
                             </p:column>
 
-                            <p:column filterBy="#{schedule.startDate}" headerText="Start Date" filterMatchMode="contains">
-                                <h:outputText value="#{schedule.startDate}" />
+                            <p:column filterBy="#{scheduleManageBean.getDateFormat(schedule.startDate)}" headerText="Start Date" filterMatchMode="contains">
+                                <h:outputText value="#{scheduleManageBean.getDateFormat(schedule.startDate)}" />
                             </p:column>
 
-                            <p:column filterBy="#{schedule.endDate}" headerText="End Date" filterMatchMode="contains">
-                                <h:outputText value="#{schedule.endDate}" />
+                            <p:column filterBy="#{scheduleManageBean.getDateFormat(schedule.endDate)}" headerText="End Date" filterMatchMode="contains">
+                                <h:outputText value="#{scheduleManageBean.getDateFormat(schedule.endDate)}" />
                             </p:column>
 
                             <p:column filterBy="#{schedule.flight.flightNo}" headerText="Flight No." filterMatchMode="contains">
