@@ -11,7 +11,6 @@ import FOS.Entity.PairingPolicy;
 import FOS.Entity.Team;
 import FOS.Session.A380PairingSessionBeanLocal;
 import FOS.Session.PairingSessionBeanLocal;
-import FOS.Session.testSessionBeanLocal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -36,9 +35,6 @@ import javax.faces.event.ActionEvent;
 public class crewScheduleManagedBean {
     @EJB
     private A380PairingSessionBeanLocal a380PairingSessionBean;
-    @EJB
-    private testSessionBeanLocal testSessionBean;
-
     @EJB
     private PairingSessionBeanLocal pairingSessionBean;
     
@@ -262,10 +258,7 @@ public class crewScheduleManagedBean {
         this.selectMonth = selectMonth;
     }
     
-    public void test(ActionEvent event){
-        testSessionBean.test();
-    }
-
+  
     public List<Pairing> getRestPairing() {
         return restPairing;
     }

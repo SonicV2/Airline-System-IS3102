@@ -204,6 +204,7 @@ public class FlightManageBean {
 
         flightSessionBean.addFlight(flightNo, flightDays, basicFare, startDateTime, routeId);
         flightScheduleSessionBean.scheduleFlights(flightNo);
+        flightScheduleSessionBean.dummyRotate();
         flightDays = "";
     }
     

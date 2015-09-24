@@ -33,6 +33,20 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal{
         em.persist(department);
     }
     
+    @Override
+    public String updateOrgUnit(OrganizationUnit oldOUnit, OrganizationUnit newOUnit){
+        if(
+           em.find(OrganizationUnit.class, oldOUnit.getDepartmentID()) == null){
+           throw new IllegalArgumentException("Unknown Organization id");
+        }
+        
+        newOUnit.setDepartmentName(newOUnit.getDepartmentName().toUpperCase());
+        newOUnit.setLocation(newOUnit.getLocation().toUpperCase());
+
+        em.merge(newOUnit);
+        System.out.println("merged organization unit");
+        return "Updated successfully!";
+    }
     
     @Override
     public String deleteOrgUnit(String OUName){
@@ -53,6 +67,14 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal{
         return "Delete successful!";    
     }
     
+    @Override
+    public OrganizationUnit getDepartmentUseID(Long deptID){
+        Query q = em.createQuery("SELECT a FROM OrganizationUnit a WHERE a.departmentID =:deptID");
+        q.setParameter("deptID", deptID);
+        List<OrganizationUnit> results = q.getResultList();
+
+        return results.get(0);
+    }
     
     @Override
     public List<String> retrive() {

@@ -22,5 +22,7 @@ public interface DepartmentSessionBeanLocal {
     public String adminChangeDepartment(String staffID,String deptName,String deptNameOld);
     public List<OrganizationUnit> retrieveAllDepts();
     public OrganizationUnit getDepartment(String deptName);
+    public OrganizationUnit getDepartmentUseID(Long deptID);
     public String deleteOrgUnit(String OUName);
+    public String updateOrgUnit(OrganizationUnit oldOUnit, OrganizationUnit newOUnit);
 }

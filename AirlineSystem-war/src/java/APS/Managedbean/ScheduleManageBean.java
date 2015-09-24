@@ -127,16 +127,17 @@ public class ScheduleManageBean {
     public void onRowEdit(RowEditEvent event) {
         Schedule edited = (Schedule)event.getObject();
         Long id = edited.getScheduleId();
-        Schedule original= scheduleSessionBean.getSchedule(scheduleId);
-        
-        if(!edited.equals(original)){
-            scheduleSessionBean.edit(edited);
-            FacesMessage msg = new FacesMessage("Schedule Edited");
+        Schedule original= scheduleSessionBean.getSchedule(id);
+
+        if(edited.getStartDate().equals(original.getStartDate()) && edited.getAircraft().getTailNo().equals(original.getAircraft().getTailNo())){
+            
+            FacesMessage msg = new FacesMessage("Edit Cancelled");
             FacesContext.getCurrentInstance().addMessage(null, msg);
         }
-        else{
-        FacesMessage msg = new FacesMessage("Edit Cancelled");
-        FacesContext.getCurrentInstance().addMessage(null, msg);
+        else {
+            scheduleSessionBean.edit(edited, original);
+            FacesMessage msg = new FacesMessage("Schedule Edited");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
         }
         
     }

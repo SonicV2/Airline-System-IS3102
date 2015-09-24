@@ -24,14 +24,20 @@ import javax.persistence.OneToOne;
 public class Role implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long roleID;
     private String roleName;
     
     @ManyToMany(cascade = {CascadeType.PERSIST}, mappedBy="roles")
     private List<Employee> employees= new ArrayList<Employee>(); 
     
     
-   @OneToOne(cascade = {CascadeType.PERSIST})
-    private AccessRight access=new AccessRight();
+//    @OneToOne(cascade = {CascadeType.PERSIST})
+//    private AccessRight access=new AccessRight();
+//    
+    @ManyToMany (cascade = {CascadeType.PERSIST})
+    private List<AccessRight> accessRights = new ArrayList<AccessRight>();
+
     
     public void create(String roleName){
         this.roleName=roleName;
@@ -78,12 +84,33 @@ public class Role implements Serializable {
         this.employees = employees;
     }
 
-    public AccessRight getAccess() {
-        return access;
+
+    /**
+     * @return the roleID
+     */
+    public Long getRoleID() {
+        return roleID;
     }
 
-    public void setAccess(AccessRight access) {
-        this.access = access;
+    /**
+     * @param roleID the roleID to set
+     */
+    public void setRoleID(Long roleID) {
+        this.roleID = roleID;
+    }
+
+    /**
+     * @return the accessRights
+     */
+    public List<AccessRight> getAccessRights() {
+        return accessRights;
+    }
+
+    /**
+     * @param accessRights the accessRights to set
+     */
+    public void setAccessRights(List<AccessRight> accessRights) {
+        this.accessRights = accessRights;
     }
     
     

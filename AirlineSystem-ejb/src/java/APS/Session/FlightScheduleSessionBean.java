@@ -93,27 +93,21 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
         curr.setTime(startDateTime);
         curr.set(Calendar.SECOND, 0);
         Date counter = startDateTime;
-
+        
+        //Create attributes for the seatAvail
         int economy = aircraftType.getEconomySeats();
         int business = aircraftType.getBusinessSeats();
         int firstClass = aircraftType.getFirstSeats();
-        int[] seats = generateAvailability(economy, business, firstClass);
-
-        //Break up the hour and minutes
-        int flightHr = (int) flight.getFlightDuration();
-        int flightMin = (int) ((flight.getFlightDuration() - (double) flightHr) * 60);
-
+        int[] seats = rm.generateAvailability(economy, business, firstClass);
+        
         //Add a list schedule until 6 months later
         while (curr.before(endTime)) {
             schedule = new Schedule();
             sa = new SeatAvailability();
             int day = curr.get(Calendar.DAY_OF_WEEK);
             if (flightDays.charAt(day - 1) == '1') {
-                Date flightStart = curr.getTime();
-                curr.add(Calendar.HOUR, flightHr);
-                curr.add(Calendar.MINUTE, flightMin);
-                Date flightEnd = curr.getTime();
-                schedule.createSchedule(flightStart, flightEnd);
+                Date flightEnd = calcEndTime(curr.getTime(), flight);
+                schedule.createSchedule(curr.getTime(), flightEnd);
                 schedule.setFlight(flight);
                 schedule.setTeam(team);
                 schedule.setAircraft(null);
@@ -146,6 +140,9 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
         TimeZone tz = TimeZone.getTimeZone("GMT+8:00"); //Set Timezone to Singapore
         Calendar currTime = Calendar.getInstance(tz);
         Calendar tmp = Calendar.getInstance(tz);
+        
+        //NOTE: ADD FUNCTIONALITIES
+        //Take into account available aircrafts
 
         //Remove the schedules that are after current time Note: May be replaced by new getSchedule algo
         for (int i = 0; i < schedules.size(); i++) {
@@ -244,23 +241,19 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
         aircrafts = retrieveAircrafts();
         schedules = getSchedules();
         List<Schedule> curr = new ArrayList<Schedule>();
-        Schedule sc = new Schedule();
-        Aircraft ac = new Aircraft();
-        int i = 0;
-        int j = 0;
+        int size = schedules.size()/aircrafts.size();
         int k = 0;
-
-        while (!isAllAssigned(schedules)) {
-            ac = aircrafts.get(k);
-            for (i = j; i < j + 5; i++) {
-                sc = schedules.get(i);
-                curr.add(sc);
-                sc.setAircraft(aircrafts.get(k));
-                em.persist(sc);
+        int j = 0;
+        
+        for (int i = 0; i<aircrafts.size(); i++){
+            for(j = k; j<size+k; j++){
+                curr.add(schedules.get(j));
+                schedules.get(j).setAircraft(aircrafts.get(i));
+                em.persist(schedules.get(j));
             }
-            ac.setSchedules(curr);
-            j = i;
-            k++;
+            k=j;
+            aircrafts.get(i).setSchedules(curr);
+            em.persist(aircrafts.get(i));
         }
     }
 
@@ -382,7 +375,7 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
         return true;
     }
 
-    private int[] generateAvailability(int economy, int business, int firstClass) {
+ /*   private int[] generateAvailability(int economy, int business, int firstClass) {
         int[] seats = new int[5];
         seats[0] = (economy / 3) + 5;
         seats[1] = (economy / 3) + 5;
@@ -390,8 +383,8 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
         seats[3] = business + 5;
         seats[4] = business + 5;
         return seats;
-    }
-    /*
+    }*/
+
      private Date calcEndTime(Date startTime, Flight flight) {
      //Break up the hour and minutes
      int flightHr = (int) flight.getFlightDuration();
@@ -404,5 +397,5 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
      endTime.add(Calendar.MINUTE, flightMin);
 
      return endTime.getTime();
-     }*/
+     }
 }

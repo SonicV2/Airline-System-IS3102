@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:head>
+        <p:growl id="growl" sticky="true" showDetail="true"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <h:outputStylesheet library ="css"  name="bootstrap.css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
+        <h:outputStylesheet library="css" name="admindb.css" />
+        <h:outputStylesheet library="css" name="morrisjs/morris.css" />
+
+        <title>Access Right Management</title>
+
+    </h:head>
+    <body>
+        <div id="page-wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2 class="page-header"> Create new access right</h2>
+                    <h:form> 
+
+                        <!--<div class="table-responsive">-->
+                        <p:dataTable var="accessRight" value="#{accessRightManagedBean.allAccessRights}" style="margin-bottom:20px">
+                            <f:facet name="header">
+                                All Existing Access Rights
+                            </f:facet>
+
+                            <p:column headerText="Function" style="width:200px">
+                                <h:outputText value="#{accessRight.accessRightName}" />
+                            </p:column>
+
+                            <p:column headerText="Access Rights">
+                                <h:selectBooleanCheckbox value="#{accessRight.accessCreate}" onclick="return false;" onkeydown="return false"/>
+                                <h:outputText value="Create"/>
+                                <h:selectBooleanCheckbox value="#{accessRight.accessDelete}" onclick="return false;" onkeydown="return false"/>
+                                <h:outputText value="Delete"/>
+                                <h:selectBooleanCheckbox value="#{accessRight.accessUpdate}" onclick="return false;" onkeydown="return false"/>
+                                <h:outputText value="Update"/>
+                                <h:selectBooleanCheckbox value="#{accessRight.accessView}" onclick="return false;" onkeydown="return false"/>
+                                <h:outputText value="View"/>
+                            </p:column>
+
+<!--<p:selectManyCheckbox id="basic" value="#{accessRightManagedBean.selectedAccessRights}">
+                                    <f:selectItems value="#{accessRight.accessRights}" var="city" itemLabel="#{city}" itemValue="#{city}" />
+                                </p:selectManyCheckbox>-->
+<!--                                        <h:selectBooleanCheckbox value="#{accessRight.accessCreate}" onclick="return false;" onkeydown="return false"/>
+            <h:outputText value="Create"/>
+            <h:selectBooleanCheckbox value="#{accessRight.accessDelete}" onclick="return false;" onkeydown="return false"/>
+            <h:outputText value="Delete"/>
+            <h:selectBooleanCheckbox value="#{accessRight.accessAssign}" onclick="return false;" onkeydown="return false"/>
+            <h:outputText value="Update"/>
+            <h:selectBooleanCheckbox value="#{accessRight.accessView}" onclick="return false;" onkeydown="return false"/>
+            <h:outputText value="View"/>-->
+<!-- <ui:repeat var="accessRight" value="#{accessRight.accessRights}">
+        <h:selectBooleanCheckbox value="#{accessRight}" onclick="return false;" onkeydown="return false"/>
+        <h:outputText value="#{accessRight}"/>
+                            </ui:repeat> -->
+
+
+                        </p:dataTable>
+
+                    </h:form>
+                </div>
+                <h:form>
+                    <div class="form-group">
+                        <label class="control-label col-md-5">Access Right Name:   </label>
+                        <p:inputText id="roleName" required="true" requiredMessage="Please fill in Role Name!" class="form-inline" value="#{accessRightManagedBean.accessRightName}"  />
+                        <div class="missingfield">
+                            <h:message for="accessRightName"  />
+                        </div>
+
+                    </div>
+
+<!--                    <label class="control-label col-md-5">Access Rights:   </label>
+                    <p:inputText id="accessRights" required="true" requiredMessage="Please fill in Role Name!" class="form-inline" value="#{accessRightManagedBean.accessRights}"  />
+
+                    <div class="missingfield">
+                        <h:message for="accessRights"  />
+                    </div>-->
+
+                    <div class="text-center">
+                        <h:commandButton class="btn btn-outline btn-success" value="Add Access Right" action="#{accessRightManagedBean.addAccessRight()}"/>
+                    </div>
+                </h:form>
+            </div>
+        </div>
+    </body>
+</html>

@@ -9,6 +9,7 @@ import APS.Entity.Aircraft;
 import APS.Entity.Flight;
 import APS.Entity.Schedule;
 import FOS.Entity.Team;
+import Inventory.Entity.SeatAvailability;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -35,11 +36,23 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
     private List<Schedule> schedules;
     private Team team;
     private Aircraft aircraft;
+    private SeatAvailability seatAvail;
 
-    
     @Override
-    public void edit(Schedule schedule){
-        schedule.setEndDate(calcEndTime(schedule.getStartDate(), schedule.getFlight()));
+    public void edit(Schedule schedule, Schedule original) {
+        schedule.setEndDate(calcEndTime(schedule.getStartDate(), schedule.getFlight())); 
+        
+        if (!schedule.getAircraft().getTailNo().equals(original.getAircraft().getTailNo())) {
+            
+            List<Schedule> temp1 = schedule.getAircraft().getSchedules();
+            temp1.add(schedule);
+            schedule.getAircraft().setSchedules(temp1);
+            
+            List<Schedule> temp = original.getAircraft().getSchedules();
+            temp.remove(original);
+            original.getAircraft().setSchedules(temp);
+        }
+ 
         em.merge(schedule);
     }
 
@@ -49,26 +62,33 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
         flight = getFlight(flightNo);
         TimeZone tz = TimeZone.getTimeZone("GMT+8:00"); //Set Timezone to Singapore
         Calendar endDate = Calendar.getInstance(tz);
-        endDate.setTime(startDate);
         endDate.set(Calendar.SECOND, 0);
-
-        //Break up the hour and minutes
-        int flightHr = (int) flight.getFlightDuration();
-        int flightMin = (int) ((flight.getFlightDuration() - (double) flightHr) * 60);
-        endDate.add(Calendar.HOUR, flightHr);
-        endDate.add(Calendar.MINUTE, flightMin);
-
+        endDate.setTime(calcEndTime(startDate, flight));
         schedule.createSchedule(startDate, endDate.getTime());
         flight.getSchedule().add(schedule);
         schedule.setFlight(flight);
         schedule.setTeam(team);
+        schedule.setSeatAvailability(seatAvail);
         em.persist(schedule);
     }
 
     @Override
     public void deleteSchedule(Long id) {
-        //NEED TO REMOVE RELATION WITH AIRCRAFT TOO
         schedule = getSchedule(id);
+        //Remove link with aircraft
+        schedule.getAircraft().getSchedules().remove(schedule);
+        schedule.setAircraft(null);
+        //Remove link with flight
+        schedule.getFlight().getSchedule().remove(schedule);
+        schedule.setFlight(null);
+        //Remove link with Team
+        schedule.getTeam().getSchedule().remove(schedule);
+        schedule.setTeam(null);
+        //Remove related seatAvailability
+        seatAvail = schedule.getSeatAvailability();
+        seatAvail.setSchedule(null);
+        schedule.setSeatAvailability(null);
+        em.remove(seatAvail); //Ask Quan Ge add in code!!!
         em.remove(schedule);
         em.flush();
     }
@@ -258,7 +278,7 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
         endTime.setTime(startTime);
         endTime.add(Calendar.HOUR, flightHr);
         endTime.add(Calendar.MINUTE, flightMin);
-        
+
         return endTime.getTime();
     }
 }

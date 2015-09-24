@@ -7,9 +7,11 @@ package APS.Session;
 
 import APS.Entity.Aircraft;
 import APS.Entity.AircraftType;
+import APS.Entity.Schedule;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.Local;
+import javax.ejb.Schedules;
 
 /**
  *
@@ -18,12 +20,15 @@ import javax.ejb.Local;
 @Local
 public interface FleetSessionBeanLocal {
 
-    public void acquireAircraft(Date datePurchased, Date lastMaintained, String aircraftTypeId);
+    public void acquireAircraft(Date datePurchased, Date lastMaintained, String aircraftTypeId, String hub);
     public void retireAircraft(Long tailNo);
     public AircraftType getAircraftType(String aircraftTypeId);
     public Aircraft getAircraft(Long tailNum);
     public List<AircraftType> retrieveAircraftTypes();
     public List<Aircraft> retrieveAircrafts();
     public List<Aircraft> getReserveAircrafts(String status);
+
+    public void persist(Schedule schedule);
+
 
 }
