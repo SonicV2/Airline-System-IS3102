@@ -56,6 +56,10 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
             editedAircraft.setStatus("Stand-by");
             em.merge(editedAircraft);
             
+            System.out.println("LOOK HERE");
+            System.out.println(original);
+            System.out.println(schedule);
+            
             List<Schedule> temp = originalAircraft.getSchedules();
             temp.remove(original);
             originalAircraft.setSchedules(temp);
