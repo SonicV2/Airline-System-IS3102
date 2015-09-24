@@ -75,7 +75,7 @@ public class RoleManagedBean {
     private List<AccessRight> accessRightsForRole;
     private String roleNameForAccessRight;
     private Long roleIDforAccessRight;
-
+    
     public RoleManagedBean() {
     }
 
@@ -211,7 +211,6 @@ public class RoleManagedBean {
             FacesContext.getCurrentInstance().addMessage(null, msg);
 
         } else {
-
             FacesMessage msg = new FacesMessage("Nothing edited for: ", ((Role) event.getObject()).getRoleName());
             FacesContext.getCurrentInstance().addMessage(null, msg);
 
@@ -445,6 +444,7 @@ public class RoleManagedBean {
     public void setNewAccessView(Boolean newAccessView) {
         this.newAccessView = newAccessView;
     }
+
 
     /**
      * @return the newRoleName

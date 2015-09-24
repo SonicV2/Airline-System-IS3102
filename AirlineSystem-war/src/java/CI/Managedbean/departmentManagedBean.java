@@ -158,8 +158,6 @@ public class departmentManagedBean {
         }
     }
 
-    
-    @PostConstruct
     public void retrive() {
         setDepartments(departmentSessionBean.retrive());
 
@@ -348,7 +346,5 @@ public class departmentManagedBean {
      */
     public void setNewOrgUnit(OrganizationUnit newOrgUnit) {
         this.newOrgUnit = newOrgUnit;
-    }
-    
-    
+    } 
 }
