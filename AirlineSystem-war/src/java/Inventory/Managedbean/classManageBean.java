@@ -44,6 +44,7 @@ public class classManageBean {
     
      @PostConstruct
     public void init() {
+        clear();
         setBookingClass(cm.retrieveBookingClasses());
         
     }
@@ -61,13 +62,43 @@ public class classManageBean {
     }
     
     public void addClass(){
-    String message = cm.addClassCode(getClasscode(), getPricePercent(), getAdvancedSales(), 
+        if(classcode.isEmpty()){
+            FacesMessage msg = new FacesMessage("Please fill in Booking Class Code");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        }
+        if(pricePercent==0){
+            FacesMessage msg = new FacesMessage("Please fill in Percentage of Base Fare");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        }
+        if(advancedSales==0){
+            FacesMessage msg = new FacesMessage("Please fill in Days of Advanced Sales");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        }
+        if(percentSold==0){
+            FacesMessage msg = new FacesMessage("Please fill in Percentage of Total Tickets Sold");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        }
+        if(serviceClass==null){
+            FacesMessage msg = new FacesMessage("Please Select Service Class");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        }
+        if(baggage==0){
+            FacesMessage msg = new FacesMessage("Please Select Baggage Class");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        }
+        if(millageAccru==0){
+            FacesMessage msg = new FacesMessage("Amount of Mileage Accruable in Percentage");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        }
+        else{
+            String message = cm.addClassCode(getClasscode(), getPricePercent(), getAdvancedSales(), 
             getPercentSold(), getServiceClass(), isRebook(), isCancel(), 
             getBaggage(), getMillageAccru());
             FacesMessage msg = new FacesMessage(message);
             FacesContext.getCurrentInstance().addMessage(null, msg);
             setBookingClass(cm.retrieveBookingClasses());
             clear();
+        }
     
     }
     
