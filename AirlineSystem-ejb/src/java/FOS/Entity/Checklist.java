@@ -81,6 +81,12 @@ public class Checklist implements Serializable {
         
     }
     
+    public void checkAllItemsAsNotCompleted(){
+        for (ChecklistItem eachItem: checklistItems){
+            eachItem.setChecked(false);
+        }
+    }
+    
 
     @Override
     public String toString() {
