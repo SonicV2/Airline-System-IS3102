@@ -21,7 +21,6 @@ import javax.persistence.CascadeType;
 import Inventory.Entity.SeatAvailability;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import javax.persistence.OneToMany;
 
 /**
@@ -57,9 +56,9 @@ public class Schedule implements Serializable {
     private Aircraft aircraft = new Aircraft();
 
     @OneToMany(cascade = {CascadeType.PERSIST})
-    private List<Checklist> checklists = new ArrayList<Checklist>();
-
-    public void createSchedule(Date startDate, Date endDate) {
+    private Collection <Checklist> checklists = new ArrayList<Checklist>();
+    
+    public void createSchedule(Date startDate, Date endDate){
         this.startDate = startDate;
         this.endDate = endDate;
         Assigned = false;
@@ -158,14 +157,6 @@ public class Schedule implements Serializable {
      */
     public void setSeatAvailability(SeatAvailability seatAvailability) {
         this.seatAvail = seatAvailability;
-    }
-
-    public List<Checklist> getChecklists() {
-        return checklists;
-    }
-
-    public void setChecklists(List<Checklist> checklists) {
-        this.checklists = checklists;
     }
 
 }

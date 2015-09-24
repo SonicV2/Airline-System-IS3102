@@ -89,6 +89,18 @@ public class RouteManageBean {
             return;
         }
         
+        if ((!originIATA.equals("SIN") && !originIATA.equals("NRT") && !originIATA.equals("FRA")) && (!destinationIATA.equals("SIN") && !destinationIATA.equals("NRT") && !destinationIATA.equals("FRA"))) {
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Route is not valid! It must involve a hub!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return;
+        }
+        
+        if (originIATA.equals(destinationIATA)){
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Route is not valid!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return;
+        }
+        
         List<Route> allroutes = routeSessionBean.retrieveRoutes();
         int size = allroutes.size();
 
@@ -102,11 +114,22 @@ public class RouteManageBean {
         }
         
         routeSessionBean.addRoute(originIATA, destinationIATA);
+        FacesMessage msg = new FacesMessage("Route Added Successfully!");
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+        clear();
+    }
+    
+    /*clear input after submit*/
+    public void clear() {
+        setOriginIATA("");
+        setDestinationIATA("");
     }
 
     public void removeRoute(ActionEvent event){
         routes.remove(selectedRoute);
         routeSessionBean.deleteRoute(selectedRoute.getRouteId());
+        FacesMessage msg = new FacesMessage("Route Removed");
+        FacesContext.getCurrentInstance().addMessage(null, msg);
         selectedRoute = null;
     }
     

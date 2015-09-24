@@ -142,6 +142,9 @@ public class FleetManageBean {
         aircrafts.remove(selectedAircraft);
         fleetSessionBean.retireAircraft(selectedAircraft.getTailNo());
         selectedAircraft = null;
+        
+        FacesMessage msg = new FacesMessage("Aircraft Retired");
+        FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
     public String getDateFormat(Date date) {

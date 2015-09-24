@@ -3,57 +3,78 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
+
     <h:head>
+        <p:growl id="growl" sticky="true" showDetail="true"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <h:outputStylesheet library ="css"  name="bootstrap.css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
+        <h:outputStylesheet library="css" name="admindb.css" />
+        <h:outputStylesheet library="css" name="morrisjs/morris.css" />
         <title>Retire Aircraft</title>
     </h:head>
     <h:body>
-        <h:form>
-            <h:commandButton class="btn btn-primary btn-lg btn-block" value="Retrieve" actionListener="#{fleetManageBean.retrieve}"/>
-        </h:form>
-        
-        <h:form id="form">
-            <p:contextMenu for="aircrafts">
-                <p:menuitem value="Delete" update="aircrafts" icon="ui-icon-close" actionListener="#{fleetManageBean.retireAircraft}"/>
-            </p:contextMenu>
- 
-            <p:dataTable id="aircrafts" var="aircraft" value="#{fleetManageBean.aircrafts}" rowKey="#{aircraft.tailNo}"
-                 selection="#{fleetManageBean.selectedAircraft}" selectionMode="single" paginator="true" rows="10" widgetVar="aircraftsTable">
-                
-                <f:facet name="header">
-                    Right Click to Retire the Aircraft
-                    <p:outputPanel>
-                        <h:outputText value="Search all fields:" />
-                    <p:inputText id="globalFilter" onkeyup="PF('aircraftsTable').filter()" style="width:150px" placeholder="Enter keyword"/>
-                    </p:outputPanel>
-                </f:facet>
-                
-                <p:column filterBy="#{aircraft.tailNo}" headerText="Tail Number" filterMatchMode="contains">
-                    <h:outputText value="#{aircraft.tailNo}" />
-                </p:column>
-                
-                <p:column filterBy="#{aircraft.aircraftType.id}" headerText="Aircraft Type" filterMatchMode="contains">
-                    <h:outputText value="#{aircraft.aircraftType.id}" />
-                </p:column>
-                
-                <p:column filterBy="#{aircraft.hub}" headerText="Status" filterMatchMode="contains">
-                    <h:outputText value="#{aircraft.hub}" />
-                </p:column>
-                
-                <p:column filterBy="#{fleetManageBean.getDateFormat(aircraft.datePurchased)}" headerText="Date of Purchase" filterMatchMode="contains">
-                    <h:outputText value="#{fleetManageBean.getDateFormat(aircraft.datePurchased)}" />
-                </p:column>
-                
-                <p:column filterBy="#{fleetManageBean.getDateFormat(aircraft.lastMaintained)}" headerText="Date of Maintenance" filterMatchMode="contains">
-                    <h:outputText value="#{fleetManageBean.getDateFormat(aircraft.lastMaintained)}" />
-                </p:column>
-                
-                <p:column filterBy="#{aircraft.status}" headerText="Status" filterMatchMode="contains">
-                    <h:outputText value="#{aircraft.status}" />
-                </p:column>
-            
-                
-            </p:dataTable>
-            </h:form>
+        <!--            To add the same header on all dashboard pages  
+<ui:include src="/CI/dashboardHeader.xhtml"/>
+    To add the same sidebar on all dashboard pages -->  
+        <ui:include src="/CI/dashboardSidebar.xhtml"/>
+        <div id="page-wrapper">
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2 class="page-header">Delete Routes</h2>
+                </div>
+
+                <div class="col-lg-12"> 
+                    <p class="pull-right"> * Right click to delete the flight</p>
+                    <h:form>
+                        <h:commandButton value="Retrieve" actionListener="#{fleetManageBean.retrieve}"/>
+                    </h:form>
+
+                    <h:form id="form">
+                        <p:contextMenu for="aircrafts">
+                            <p:menuitem value="Delete" update="aircrafts" icon="ui-icon-close" actionListener="#{fleetManageBean.retireAircraft}"/>
+                        </p:contextMenu>
+
+                        <p:dataTable id="aircrafts" var="aircraft" value="#{fleetManageBean.aircrafts}" rowKey="#{aircraft.tailNo}"
+                                     selection="#{fleetManageBean.selectedAircraft}" selectionMode="single" paginator="true" rows="10" widgetVar="aircraftsTable">
+
+                            <f:facet name="header">
+                                <p:outputPanel>
+                                    <h:outputText value="Search all fields:" />
+                                    <p:inputText id="globalFilter" onkeyup="PF('aircraftsTable').filter()" style="width:150px" placeholder="Enter keyword"/>
+                                </p:outputPanel>
+                            </f:facet>
+
+                            <p:column filterBy="#{aircraft.tailNo}" headerText="Tail Number" filterMatchMode="contains">
+                                <h:outputText value="#{aircraft.tailNo}" />
+                            </p:column>
+
+                            <p:column filterBy="#{aircraft.aircraftType.id}" headerText="Aircraft Type" filterMatchMode="contains">
+                                <h:outputText value="#{aircraft.aircraftType.id}" />
+                            </p:column>
+
+                            <p:column filterBy="#{aircraft.datePurchased}" headerText="Date of Purchase" filterMatchMode="contains">
+                                <h:outputText value="#{aircraft.datePurchased}" />
+                            </p:column>
+
+                            <p:column filterBy="#{aircraft.lastMaintained}" headerText="Date of Maintenance" filterMatchMode="contains">
+                                <h:outputText value="#{aircraft.lastMaintained}" />
+                            </p:column>
+
+                            <p:column filterBy="#{aircraft.status}" headerText="Status" filterMatchMode="contains">
+                                <h:outputText value="#{aircraft.status}" />
+                            </p:column>
+
+
+                        </p:dataTable>
+                    </h:form>
+                </div>
+            </div>
+        </div>
     </h:body>
 </html>

@@ -8,7 +8,6 @@ package FOS.Entity;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -29,7 +28,7 @@ public class Checklist implements Serializable {
     
     public String name;
     @OneToMany(cascade = {CascadeType.PERSIST})
-    private List<ChecklistItem> checklistItems = new ArrayList<ChecklistItem>();
+    private Collection <ChecklistItem> checklistItems = new ArrayList<ChecklistItem>();
     
     public Long getId() {
         return id;
@@ -47,11 +46,11 @@ public class Checklist implements Serializable {
         this.name = name;
     } 
 
-    public List<ChecklistItem> getChecklistItems() {
+    public Collection<ChecklistItem> getChecklistItems() {
         return checklistItems;
     }
 
-    public void setChecklistItems(List<ChecklistItem> checklistItems) {
+    public void setChecklistItems(Collection<ChecklistItem> checklistItems) {
         this.checklistItems = checklistItems;
     }
     

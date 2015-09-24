@@ -3,64 +3,91 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
-    
+
     <h:head>
+        <p:growl id="growl" sticky="true" showDetail="true"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <h:outputStylesheet library ="css"  name="bootstrap.css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
+        <h:outputStylesheet library="css" name="admindb.css" />
+        <h:outputStylesheet library="css" name="morrisjs/morris.css" />
+
         <title>Remove Route</title>
     </h:head>
-    
+
     <body>
-        
-        <h:form>
-            <h:commandButton class="btn btn-primary btn-lg btn-block" value="Retrieve" actionListener="#{routeManageBean.retrieve}"/>
-        </h:form>
-        
-        <h:form id="form">
-            <p:contextMenu for="routes">
-                <p:menuitem value="Delete" update="routes" icon="ui-icon-close" actionListener="#{routeManageBean.removeRoute}"/>
-            </p:contextMenu>
- 
-            <p:dataTable id="routes" var="route" value="#{routeManageBean.routes}" rowKey="#{route.routeId}"
-                 selection="#{routeManageBean.selectedRoute}" selectionMode="single" paginator="true" rows="10" widgetVar="routesTable">
-                
-                <f:facet name="header">
-                    RightClick to Delete the Route
-                    <p:outputPanel>
-                        <h:outputText value="Search all fields:" />
-                    <p:inputText id="globalFilter" onkeyup="PF('routesTable').filter()" style="width:150px" placeholder="Enter keyword"/>
-                    </p:outputPanel>
-                </f:facet>
-                
-                <p:column filterBy="#{route.routeId}" headerText="Route Id" filterMatchMode="contains">
-                    <h:outputText value="#{route.routeId}" />
-                </p:column>
-            
-            <p:column filterBy="#{route.originIATA}" headerText="Origin IATA" filterMatchMode="contains">
-                <h:outputText value="#{route.originIATA}" />
-            </p:column>
-            
-            <p:column filterBy="#{route.originCountry}" headerText="Origin Country" filterMatchMode="contains">
-                <h:outputText value="#{route.originCountry}" />
-            </p:column>
-            
-            <p:column filterBy="#{route.originCity}" headerText="Origin City" filterMatchMode="contains">
-                <h:outputText value="#{route.originCity}" />
-            </p:column>
- 
-            <p:column filterBy="#{route.destinationIATA}" headerText="Destination IATA" filterMatchMode="contains">
-                <h:outputText value="#{route.destinationIATA}" />
-            </p:column>
-            
-            <p:column filterBy="#{route.destinationCountry}" headerText="Destination Country" filterMatchMode="contains">
-                <h:outputText value="#{route.destinationCountry}" />
-            </p:column>
-            
-            <p:column filterBy="#{route.destinationCity}" headerText="Destination City" filterMatchMode="contains">
-                <h:outputText value="#{route.destinationCity}" />
-            </p:column>
-                
-            </p:dataTable>
-            </h:form>
-        
+                <!--            To add the same header on all dashboard pages  
+                <ui:include src="/CI/dashboardHeader.xhtml"/>
+                    To add the same sidebar on all dashboard pages -->  
+        <ui:include src="/CI/dashboardSidebar.xhtml"/>
+        <div id="page-wrapper">
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2 class="page-header">Delete Routes</h2>
+                </div>
+
+                <div class="col-lg-12"> 
+                    <p class="pull-right"> * Right click to delete the flight</p>
+
+                    <h:form>
+                        <h:commandButton value="Retrieve" actionListener="#{routeManageBean.retrieve}"/>
+                    </h:form>
+
+                    <h:form id="form">
+                        <p:contextMenu for="routes">
+                            <p:menuitem value="Delete" update="routes" icon="ui-icon-close" actionListener="#{routeManageBean.removeRoute}"/>
+                        </p:contextMenu>
+
+                        <p:dataTable id="routes" var="route" value="#{routeManageBean.routes}" rowKey="#{route.routeId}"
+                                     selection="#{routeManageBean.selectedRoute}" selectionMode="single" paginator="true" rows="10" widgetVar="routesTable">
+
+                            <f:facet name="header">
+                                <p:outputPanel>
+                                    <h:outputText value="Search all fields:" />
+                                    <p:inputText id="globalFilter" onkeyup="PF('routesTable').filter()" style="width:150px" placeholder="Enter keyword"/>
+                                </p:outputPanel>
+                            </f:facet>
+
+                            <p:column filterBy="#{route.routeId}" headerText="Route Id" filterMatchMode="contains">
+                                <h:outputText value="#{route.routeId}" />
+                            </p:column>
+
+                            <p:column filterBy="#{route.originIATA}" headerText="Origin IATA" filterMatchMode="contains">
+                                <h:outputText value="#{route.originIATA}" />
+                            </p:column>
+
+                            <p:column filterBy="#{route.originCountry}" headerText="Origin Country" filterMatchMode="contains">
+                                <h:outputText value="#{route.originCountry}" />
+                            </p:column>
+
+                            <p:column filterBy="#{route.originCity}" headerText="Origin City" filterMatchMode="contains">
+                                <h:outputText value="#{route.originCity}" />
+                            </p:column>
+
+                            <p:column filterBy="#{route.destinationIATA}" headerText="Destination IATA" filterMatchMode="contains">
+                                <h:outputText value="#{route.destinationIATA}" />
+                            </p:column>
+
+                            <p:column filterBy="#{route.destinationCountry}" headerText="Destination Country" filterMatchMode="contains">
+                                <h:outputText value="#{route.destinationCountry}" />
+                            </p:column>
+
+                            <p:column filterBy="#{route.destinationCity}" headerText="Destination City" filterMatchMode="contains">
+                                <h:outputText value="#{route.destinationCity}" />
+                            </p:column>
+
+                        </p:dataTable>
+                    </h:form>
+                </div>
+            </div>
+        </div>
+
+        <br></br>
+        <br></br>
     </body>
 </html>
