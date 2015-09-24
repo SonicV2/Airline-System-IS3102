@@ -45,10 +45,6 @@
 
                         <p:dataTable id="schedules" var="schedule" value="#{scheduleManageBean.schedules}" rowKey="#{schedule.scheduleId}"
                                      selection="#{scheduleManageBean.selectedSchedule}" selectionMode="single" paginator="true" rows="10" widgetVar="schedulesTable">
-
-                <p:column filterBy="#{scheduleManageBean.getDateFormat(schedule.endDate)}" headerText="End Date" filterMatchMode="contains">
-                    <h:outputText value="#{scheduleManageBean.getDateFormat(schedule.endDate)}" />
-                </p:column>
                             <f:facet name="header">
 
                                 <p:outputPanel>
