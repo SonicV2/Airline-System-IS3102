@@ -3,9 +3,18 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 
     <h:head>
+        <p:growl id="growl" sticky="true" showDetail="true"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <h:outputStylesheet library ="css"  name="bootstrap.css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
+        <h:outputStylesheet library="css" name="admindb.css" />
+        <h:outputStylesheet library="css" name="morrisjs/morris.css" />
         <style>
             .book{
                 background: url("#{resource['images/icon.png']}");
@@ -15,9 +24,20 @@
     </h:head>
 
     <body>
+ <!--            To add the same header on all dashboard pages  
+        <ui:include src="/CI/dashboardHeader.xhtml"/>
+            To add the same sidebar on all dashboard pages -->  
+        <ui:include src="/CI/dashboardSidebar.xhtml"/>
+        <div id="page-wrapper">
 
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2 class="page-header">Book Flights</h2>
+                </div>
+
+                <div class="col-lg-12">
         <h:form>
-            <h:commandButton class="btn btn-primary btn-lg btn-block" value="Retrieve" actionListener="#{scheduleManageBean.retrieve}"/>
+            <h:commandButton value="Retrieve" actionListener="#{scheduleManageBean.retrieve}"/>
         </h:form>
 
         <h:form id="form">
@@ -27,7 +47,7 @@
                          selection="#{scheduleManageBean.selectedSchedule}" selectionMode="single" paginator="true" rows="10" widgetVar="schedulesTable">
 
                 <f:facet name="header">
-                    Right Click to Delete the Schedule Entry
+                    
                     <p:outputPanel>
                         <h:outputText value="Search all fields:" />
                         <p:inputText id="globalFilter" onkeyup="PF('schedulesTable').filter()" style="width:150px" placeholder="Enter keyword"/>
@@ -59,13 +79,17 @@
                 </p:column>
                 
                 
-                <p:column style="width:32px">
-                <h:commandButton class="btn btn-primary btn-lg btn-block" value="Book" 
-                                 action="#{priceManageBean.get1Flight(schedule.flight.flightNo,schedule.startDate)}"/>
+                <p:column headerText="Book" style="width:60px;">
+                <h:commandLink
+                                 action="#{priceManageBean.get1Flight(schedule.flight.flightNo,schedule.startDate)}"><i class="fa fa-dollar"></i></h:commandLink>
                 </p:column>
                 
             </p:dataTable>
         </h:form>
-
+                    <br></br>
+                    <br></br>
+                </div>
+            </div>
+        </div>
     </body>
 </html>
