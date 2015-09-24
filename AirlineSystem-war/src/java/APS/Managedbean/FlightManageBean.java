@@ -118,6 +118,7 @@ public class FlightManageBean {
             return;
         }
         
+        if (flights!=null) {
         for (int i=0; i<flights.size(); i++) {
             
             Flight temp = flightSessionBean.retrieveFlights().get(i);
@@ -140,6 +141,7 @@ public class FlightManageBean {
                 FacesContext.getCurrentInstance().addMessage(null, message);
                 return;
             }
+        }
         }
         
         flightDays = "";
