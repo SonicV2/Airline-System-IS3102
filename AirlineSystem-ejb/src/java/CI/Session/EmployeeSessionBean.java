@@ -582,6 +582,23 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
         employee.setEmployeeAccountActivate(true);
         em.persist(employee);
     }
+    
+    public String getEmployeeFullName(String employeeUserName){
+       
+        String firstName = getEmployee(employeeUserName).getEmployeeDisplayFirstName();
+        String lastName = getEmployee(employeeUserName).getEmployeeDisplayLastName();
+        
+        String employeeFullName = firstName + " " + lastName;
+        return employeeFullName;
+    }
+    
+    public String getEmployeeDepartmentName(String employeeUserName){
+        
+        String employeeDeptName = getEmployee(employeeUserName).getOrganizationUnit().getDepartmentName();
+        return employeeDeptName;
+        
+    }
+            
         
     
 }

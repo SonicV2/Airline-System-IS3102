@@ -42,17 +42,30 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
     public void edit(Schedule schedule, Schedule original) {
         schedule.setEndDate(calcEndTime(schedule.getStartDate(), schedule.getFlight())); 
         
-        if (!schedule.getAircraft().getTailNo().equals(original.getAircraft().getTailNo())) {
+        System.out.println(schedule.getAircraft().getSchedules());
+        
+        Aircraft originalAircraft = original.getAircraft();
+        Aircraft editedAircraft = schedule.getAircraft();
+        
+        
+        if (!editedAircraft.getTailNo().equals(originalAircraft.getTailNo())) {
             
-            List<Schedule> temp1 = schedule.getAircraft().getSchedules();
+            List<Schedule> temp1 = new ArrayList<Schedule>();
             temp1.add(schedule);
-            schedule.getAircraft().setSchedules(temp1);
+            editedAircraft.setSchedules(temp1);
+            editedAircraft.setStatus("Stand-by");
+            em.merge(editedAircraft);
             
-            List<Schedule> temp = original.getAircraft().getSchedules();
+            List<Schedule> temp = originalAircraft.getSchedules();
             temp.remove(original);
-            original.getAircraft().setSchedules(temp);
+            originalAircraft.setSchedules(temp);
+            originalAircraft.setStatus("Out-of-order");
+            em.merge(originalAircraft);
         }
- 
+        
+        System.out.println(original.getAircraft());
+        System.out.println(schedule.getAircraft());
+        System.out.println(schedule.getAircraft().getSchedules());
         em.merge(schedule);
     }
 
@@ -75,19 +88,12 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
     @Override
     public void deleteSchedule(Long id) {
         schedule = getSchedule(id);
-        //Remove link with aircraft
-        schedule.getAircraft().getSchedules().remove(schedule);
-        schedule.setAircraft(null);
-        //Remove link with flight
-        schedule.getFlight().getSchedule().remove(schedule);
-        schedule.setFlight(null);
-        //Remove link with Team
-        schedule.getTeam().getSchedule().remove(schedule);
-        schedule.setTeam(null);
-        //Remove related seatAvailability
+        
         seatAvail = schedule.getSeatAvailability();
         seatAvail.setSchedule(null);
+        
         schedule.setSeatAvailability(null);
+        
         em.remove(seatAvail); //Ask Quan Ge add in code!!!
         em.remove(schedule);
         em.flush();

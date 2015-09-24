@@ -117,7 +117,17 @@ public class ScheduleManageBean {
 //        List<Schedule> temp = selectedSchedule.getTeam().getSchedule();
 //        temp.remove(selectedSchedule);
 //        selectedSchedule.getTeam().setSchedule(temp);
-//        selectedSchedule.setTeam(null);
+        selectedSchedule.setTeam(null);
+        
+        //remove the Aircraft linked to the Schedule
+        List<Schedule> temp2 = selectedSchedule.getAircraft().getSchedules();
+        temp2.remove(selectedSchedule);
+        selectedSchedule.getAircraft().setSchedules(temp2);
+        selectedSchedule.setAircraft(null);
+        
+        //remove the SeatAvail linked
+//        selectedSchedule.getSeatAvailability().setSchedule(null);
+//        selectedSchedule.setSeatAvailability(null);
 
         scheduleSessionBean.deleteSchedule(selectedSchedule.getScheduleId());
         selectedSchedule = null;

@@ -28,6 +28,8 @@ public class Message implements Serializable {
     private boolean isRead;
     private String msgText;
     
+    
+    
     public Message(){
         this.setMessageId(System.nanoTime());
     }

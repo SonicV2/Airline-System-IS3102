@@ -49,7 +49,7 @@ public class FleetSessionBean implements FleetSessionBeanLocal {
     
     @Override
     public void persist(Schedule schedule){
-        em.persist(schedule);
+        em.merge(schedule);
     }
 
     // get aircraftType object when searching with aircraftTypeId
