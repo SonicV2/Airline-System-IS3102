@@ -59,6 +59,7 @@ public class FleetManageBean {
     private List<Aircraft> aircrafts;
     private Aircraft selectedAircraft;
     private List<String> aircraftTypeIds = new ArrayList<String> ();
+    private List<Aircraft> reserves;
     
     
     public FleetManageBean() {
@@ -110,17 +111,15 @@ public class FleetManageBean {
     }
 
     public void retireAircraft(ActionEvent event){
-        System.out.println("HIHI");
-        if (!selectedAircraft.getStatus().equals("Stand-By") || !selectedAircraft.getStatus().equals("Reserve")) {
-            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Aircraft is not in a status to delete!", "");
-            FacesContext.getCurrentInstance().addMessage(null, message);
-            return;
-        }
+        
+//        if (!selectedAircraft.getStatus().equals("Stand-By") || !selectedAircraft.getStatus().equals("Reserve")) {
+//            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Aircraft is not in a status to delete!", "");
+//            FacesContext.getCurrentInstance().addMessage(null, message);
+//            return;
+//        }
 
-        List<Aircraft> reserves = new ArrayList<Aircraft>();
         reserves = fleetSessionBean.getReserveAircrafts("Reserve");
         
-        System.out.println(reserves);
         
         for (int i=0; i<selectedAircraft.getSchedules().size(); i++) {
             selectedAircraft.getSchedules().get(i).setAircraft(reserves.get(1));
@@ -156,6 +155,14 @@ public class FleetManageBean {
      
     public void setAircrafts(List<Aircraft> aircrafts) {
         this.aircrafts = aircrafts;
+    }
+    
+    public List<Aircraft> getReserves(){
+         return reserves;
+     }
+     
+    public void setReserves(List<Aircraft> reserves) {
+        this.reserves = reserves;
     }
     
     public Aircraft getSelectedAircraft() {
