@@ -13,6 +13,7 @@ import APS.Entity.Schedule;
 import FOS.Entity.Checklist;
 import FOS.Entity.ChecklistItem;
 import FOS.Entity.Team;
+import FOS.Session.ChecklistSessionBeanLocal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -42,6 +43,8 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
 
     @EJB
     private RevenueManagementLocal rm;
+    @EJB
+    private ChecklistSessionBeanLocal cs;
 
     private Flight flight;
     private List<Flight> flights;
@@ -53,10 +56,7 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
     private Team team;
     private List<Aircraft> aircrafts;
     private SeatAvailability sa;
-//    private Checklist checklist;
-//    private List<Checklist> checklists;
-//    private ChecklistItem checklistItem;
-//    private List<ChecklistItem> checklistItems;
+    private List<Checklist> checklists;
 
     @Override
     public void scheduleFlights(String flightId) {
@@ -122,15 +122,8 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
                 schedule.setAircraft(null);
                 sa.createSeatAvail(schedule, seats);
                 schedule.setSeatAvailability(sa);
-
-//                //Adding checklist
-//                checklistItems.add(checklistItem);
-//                checklist.setChecklistItems(checklistItems);
-//                for (int i = 0; i < 3; i++) {
-//                    checklists.add(checklist);
-//                }
-//                schedule.setChecklists(checklists);
-//                em.persist(checklist);
+                checklists = cs.createChecklistAndItems();
+                schedule.setChecklists(checklists);
                 em.persist(schedule);
                 em.persist(sa);
 

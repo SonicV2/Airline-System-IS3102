@@ -27,7 +27,7 @@
 
 
 <!--    To add the same header on all dashboard pages  -->
-        <ui:include src="dashboardHeader.xhtml"/>
+<!--        <ui:include src="dashboardHeader.xhtml"/>-->
 <!--    To add the same sidebar on all dashboard pages  -->
         <ui:include src="dashboardSidebar.xhtml"/>
         
@@ -39,6 +39,14 @@
                     <h:form>
                         <h:commandButton value="Sign In" action="/FOS/crewSignIn"/>
                          <h:commandButton value="View All Schedule" action="/FOS/viewSchedule" actionListener="#{crewSignInManagedBean.viewPairing}"/>
+                         <h:commandButton value="Fill Pilot Checklist" action="#{checklistManagedBean.fillParticularChecklist('Pilot')}"/>
+                         <h:commandButton value="Fill Cabin Crew Checklist" action="#{checklistManagedBean.fillParticularChecklist('Cabin Crew')}"/>
+                         <h:commandButton value="Fill Ground Staff Checklist" action="#{checklistManagedBean.fillParticularChecklist('Ground Staff')}"/>
+                         <h:commandButton value="Edit Pilot Checklist" action="#{checklistManagedBean.editParticularChecklist('Pilot')}"/>
+                         <h:commandButton value="Edit Cabin Crew Checklist" action="#{checklistManagedBean.editParticularChecklist('Cabin Crew')}"/>
+                         <h:commandButton value="Edit Ground Staff Checklist" action="#{checklistManagedBean.editParticularChecklist('Ground Staff')}"/>
+                         <h:commandButton value="Add Checklist Item" action="#{checklistManagedBean.directToCreateChecklistItem()}"/>
+                         <h:commandButton value="View filled checklists" action="#{checklistManagedBean.directToChooseChecklistToView()}"/>
                     </h:form>
                 </div>
 <!--                 /.col-lg-12 -->
@@ -97,16 +105,16 @@
             <p:column headerText="Sender">
                 <h:outputText value="#{message.sender}"/>
             </p:column>
-            
+        
               <p:column headerText="Message">
                   <h:outputText value="#{message.msgText}"/>
             </p:column>
-            
+        
               <p:column headerText="Time">
                   <h:outputText value="#{message.sendTime}"/>
             </p:column>
         </p:dataTable>
-        
+            
             
         </div>
     

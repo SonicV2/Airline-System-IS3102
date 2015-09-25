@@ -5,10 +5,10 @@
  */
 package FOS.Session;
 
+import APS.Entity.Schedule;
 import FOS.Entity.Checklist;
 import FOS.Entity.ChecklistItem;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -455,6 +455,19 @@ public class ChecklistSessionBean implements ChecklistSessionBeanLocal {
         return checklists;
         
     }
+    
+     public List<ChecklistItem> retrieveChecklistItemsByScheduleAndChecklistName (Schedule schedule, String checklistName){
+        Checklist matchedChecklist = new Checklist();
+        List<Checklist> checklistsForSchedule = schedule.getChecklists();
+        
+        for (Checklist eachChecklist: checklistsForSchedule){
+            if (eachChecklist.getName().equals(checklistName)){
+                matchedChecklist = eachChecklist;
+            }
+        }
+        return matchedChecklist.getChecklistItems();
+         
+     }
   
     
 

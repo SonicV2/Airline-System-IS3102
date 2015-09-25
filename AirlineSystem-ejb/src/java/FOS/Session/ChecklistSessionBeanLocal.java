@@ -6,6 +6,7 @@
 package FOS.Session;
 
 
+import APS.Entity.Schedule;
 import FOS.Entity.Checklist;
 import FOS.Entity.ChecklistItem;
 import java.util.List;
@@ -28,5 +29,7 @@ public interface ChecklistSessionBeanLocal {
     public List<ChecklistItem> getItemsFromNames(List<String> selectedItemNames);
     public String retrieveChecklistComments (String checklistName);
     public List<Checklist> createChecklistAndItems ();
+    public List<ChecklistItem> retrieveChecklistItemsByScheduleAndChecklistName (Schedule schedule, String checklistName);
+    
     
 }
