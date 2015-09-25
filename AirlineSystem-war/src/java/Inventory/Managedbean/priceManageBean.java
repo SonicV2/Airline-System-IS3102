@@ -55,7 +55,12 @@ public class priceManageBean implements Serializable{
      }
     
     
-    public String makeBooking(String price, String serviceType){
+    public String makeBooking(String price, String serviceType, int avail){
+        if(avail<=0){
+           FacesMessage msg = new FacesMessage(serviceType + " Tickets Sold Out");
+           FacesContext.getCurrentInstance().addMessage(null, msg);
+           return "displayPrices";
+        }
         double price1 = Double.parseDouble(price);
         sa= rm.findSA(fDate, flightNo);
         bm.addBooking(price1, serviceType, sa);
