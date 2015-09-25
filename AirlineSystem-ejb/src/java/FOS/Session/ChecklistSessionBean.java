@@ -160,6 +160,8 @@ public class ChecklistSessionBean implements ChecklistSessionBeanLocal {
         } catch (EntityNotFoundException enfe) {
             System.out.println("\nEntity not found error" + enfe.getMessage());
         }
+        
+        checklist.checkAllItemsAsNotCompleted();
         for (ChecklistItem eachCheckedItem : checkedItems){
             checklist.checkItemAsCompleted (eachCheckedItem);
         }
@@ -185,6 +187,30 @@ public class ChecklistSessionBean implements ChecklistSessionBeanLocal {
             } 
         }
         return list;
+    }
+     @Override   
+    public String retrieveChecklistComments (String checklistName){
+        Checklist checklist = new Checklist();
+        try {
+            
+            Query q = em.createQuery("SELECT a FROM Checklist a where a.name = :nameChecklist ");
+            q.setParameter("nameChecklist", checklistName);
+            
+            List<Checklist> results = q.getResultList();
+            if (!results.isEmpty()) {
+                for (Checklist eachChecklist : results) {
+                    checklist = eachChecklist;
+                }
+                  
+            } else {
+                checklist = null;
+            }
+
+        } catch (EntityNotFoundException enfe) {
+            System.out.println("\nEntity not found error" + enfe.getMessage());
+        }
+        return checklist.getComments();
+        
     }
     
 

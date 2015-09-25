@@ -26,11 +26,11 @@
 
             <div class="row">
                 <div class="col-lg-12">
-                    <h2 class="page-header">Delete Routes</h2>
+                    <h2 class="page-header">Retire Aircrafts</h2>
                 </div>
 
                 <div class="col-lg-12"> 
-                    <p class="pull-right"> * Right click to delete the flight</p>
+                    <p class="pull-right"> * Right click to retire the aircraft</p>
                     <h:form>
                         <h:commandButton value="Retrieve" actionListener="#{fleetManageBean.retrieve}"/>
                     </h:form>
@@ -59,11 +59,11 @@
                             </p:column>
 
                             <p:column filterBy="#{aircraft.datePurchased}" headerText="Date of Purchase" filterMatchMode="contains">
-                                <h:outputText value="#{fleetManageBean.getDateFormat(aircraft.datePurchased)}" />
+                                <h:outputText value="#{aircraft.datePurchased}" />
                             </p:column>
 
-                            <p:column filterBy="#{fleetManageBean.getDateFormat(aircraft.lastMaintained)}" headerText="Date of Maintenance" filterMatchMode="contains">
-                                <h:outputText value="#{fleetManageBean.getDateFormat(aircraft.lastMaintained)}" />
+                            <p:column filterBy="#{aircraft.lastMaintained}" headerText="Date of Maintenance" filterMatchMode="contains">
+                                <h:outputText value="#{aircraft.lastMaintained}" />
                             </p:column>
 
                             <p:column filterBy="#{aircraft.status}" headerText="Status" filterMatchMode="contains">
