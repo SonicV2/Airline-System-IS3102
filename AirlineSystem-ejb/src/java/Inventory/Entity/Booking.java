@@ -36,6 +36,7 @@ public class Booking implements Serializable {
     @ManyToOne(cascade = {CascadeType.PERSIST})
     public SeatAvailability seatAvail = new SeatAvailability();
     public String flightNo;
+    @Temporal(TemporalType.TIMESTAMP)
     public Date flightDate;
     public String bookingStatus;
 
