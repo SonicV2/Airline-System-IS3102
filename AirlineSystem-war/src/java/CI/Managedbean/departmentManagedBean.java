@@ -79,6 +79,17 @@ public class departmentManagedBean {
         message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Department Created Successfully!", "");
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
+    
+    @PostConstruct
+    public void retrive() {
+        setDepartments(departmentSessionBean.retrive());
+        System.out.println("set org units");
+
+        setOrgUnits(departmentSessionBean.retrieveAllDepts());
+
+       retriveCC();  //comment out first time adding
+
+    }
 
     public void searchEmployee(ActionEvent event) {
         setEmployeeDept(departmentSessionBean.searchEmployee(staffID));
@@ -128,16 +139,7 @@ public class departmentManagedBean {
         }
     }
 
-    @PostConstruct
-    public void retrive() {
-        setDepartments(departmentSessionBean.retrive());
-        System.out.println("set org units");
-
-        setOrgUnits(departmentSessionBean.retrieveAllDepts());
-
-        retriveCC();  //comment out first time adding
-
-    }
+    
 
     public void retriveCC() {
         //setDepartments(departmentSessionBean.retrive());

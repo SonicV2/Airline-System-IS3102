@@ -33,11 +33,11 @@ import javax.faces.event.ActionEvent;
 @ManagedBean
 @SessionScoped
 public class crewScheduleManagedBean {
+
     @EJB
     private A380PairingSessionBeanLocal a380PairingSessionBean;
     @EJB
     private PairingSessionBeanLocal pairingSessionBean;
-    
 
     private int time_scale_min;
     private int num_max_legs;
@@ -48,11 +48,10 @@ public class crewScheduleManagedBean {
     private String sln1;
     private Team team;
     private String selectMonth; //month choosen to get pairing
-    
+
     private List<Pairing> restPairing;
     private List<Pairing> slnA380;
     private List<Pairing> restPairingA380;
-    
 
     /**
      * Creates a new instance of crewScheduleManagedBean
@@ -87,36 +86,64 @@ public class crewScheduleManagedBean {
 
 // crew pairing.html --> display all legs
     public void getSlns(ActionEvent event) {
+        Date date = new Date();
         pairingSessionBean.legMain(selectMonth);
         setSlns(pairingSessionBean.getPairings());
+
+        restPairing = new ArrayList<Pairing>();
+      
         
-        
-        restPairing=new ArrayList<Pairing>();
-        for(Pairing ppp: slns ){
-            if(ppp.isPaired()==false)
+        for (Pairing ppp : slns) {
+           
+            String formattedDate2 = new SimpleDateFormat("dd/MM/yyyy").format( date);
+            System.out.println("Schedule Date2: " + formattedDate2);
+             System.out.println("ppp.getdate: " +ppp.getFDate());
+
+            if (checkTime(ppp.getFDate(), formattedDate2) <= 0  ) {
+                if(ppp.isPaired() == false){
                 restPairing.add(ppp);
+                }
+            }
+
         }
 
     }
 
-    
-    
+    public long checkTime(String time1, String time2) {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        Date date1;
+        Date date2;
+        try {
+            date1 = formatter.parse(time1);
+            date2 = formatter.parse(time2);
+            long diff = (date2.getTime() - date1.getTime());
+            long diffMinutes = diff / (60 * 1000) % 60;
+            long diffHours = diff / (60 * 60 * 1000) % 24;
+            long diffDays = diff / (24 * 60 * 60 * 1000);
+            long result = diffDays * 24 * 60 + diffHours * 60 + diffMinutes;
+            System.out.println("REsult: "+result);
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -1;
+        }
+
+    }
+
     public void getA380Slns(ActionEvent event) {
         a380PairingSessionBean.legMain(selectMonth);
         setSlns(a380PairingSessionBean.getPairings());
-        
-        restPairingA380=new ArrayList<Pairing>();
-        for(Pairing ppp: slnA380 ){
-            if(ppp.isPaired()==false)
+
+        restPairingA380 = new ArrayList<Pairing>();
+        for (Pairing ppp : slnA380) {
+            if (ppp.isPaired() == false) {
                 restPairingA380.add(ppp);
-        } 
+            }
+        }
     }
-    
-    
-    
+
     public void getSelectPairingID(ActionEvent event) {
-        
-        
+
         String pairingID = sln1.substring(sln1.indexOf("=") + 1, sln1.indexOf("]") - 1);
         System.out.println("--------" + sln1.substring(sln1.indexOf("=") + 1, sln1.indexOf("]")));
         sln = pairingSessionBean.getPairingByID(pairingID);
@@ -127,8 +154,7 @@ public class crewScheduleManagedBean {
         setTeam(pairingSessionBean.generateTeam(sln));
     }
 
-    
-     public void generateA380Team(ActionEvent event) {
+    public void generateA380Team(ActionEvent event) {
         setTeam(a380PairingSessionBean.generateA380Team(sln));
     }
 
@@ -257,8 +283,7 @@ public class crewScheduleManagedBean {
     public void setSelectMonth(String selectMonth) {
         this.selectMonth = selectMonth;
     }
-    
-  
+
     public List<Pairing> getRestPairing() {
         return restPairing;
     }
@@ -294,8 +319,5 @@ public class crewScheduleManagedBean {
     public void setRestPairingA380(List<Pairing> restPairingA380) {
         this.restPairingA380 = restPairingA380;
     }
-    
-    
-    
 
 }

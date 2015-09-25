@@ -41,7 +41,12 @@
 
                         <h:outputText value="Team Id:" />
                         <h:outputText value="#{searchCrewManagedBean.selectTeam.id}" />
-                        <h:outputText value="#{searchCrewManagedBean.selectTeam.schedule.size()}" />
+                        
+                        <h:outputText value="Schedule:" />
+                        <p:dataList value="#{searchCrewManagedBean.selectTeam.schedule}" var="ss" type="ordered">
+                            Flight Number: #{ss.flight.flightNo}  Date:#{ss.startDate} 
+                        </p:dataList>
+                        
                         <h:outputText value="Pilot" />
                          <p:dataList value="#{searchCrewManagedBean.teamPilots}" var="p" type="ordered">
                             #{p.employeeDisplayFirstName} #{p.employeeDisplayLastName} ( #{p.position} )
