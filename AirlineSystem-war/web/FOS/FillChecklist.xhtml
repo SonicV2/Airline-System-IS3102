@@ -10,7 +10,7 @@ and open the template in the editor.
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets">
-<h:head>
+    <h:head>
         <p:growl id="growl" sticky="true" showDetail="true"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
@@ -20,21 +20,21 @@ and open the template in the editor.
         <h:outputStylesheet library="css" name="admindb.css" />
         <h:outputStylesheet library="css" name="morrisjs/morris.css" />
         <title>Fill checklist</title>
-</h:head>
-    
-        <h:form id="iform">
-            <h3>Fill in #{checklistManagedBean.checklistName} checklist</h3>
+    </h:head>
+
+    <h:form id="iform">
+        <h3>Fill in #{checklistManagedBean.checklistName} checklist</h3>
         <p:selectManyCheckbox  value="#{checklistManagedBean.selectedItemNames}" layout="grid" columns="1">
             <f:selectItems value="#{checklistManagedBean.checklistItemsForChecklist}" var="item" itemLabel="#{item.name}" itemValue="#{item.name}"/>
         </p:selectManyCheckbox>
-        
+
         <h2>Comments</h2>
         <p:inputTextarea rows="30" cols="50" value ="#{checklistManagedBean.comments}" />
-        
+
         <div class="text-center">
             <h:commandButton class="btn btn-outline btn-success" value="Submit checklist"  action="#{checklistManagedBean.submitChecklist()}"/>
-            </div>
-            
-        </h:form>
+        </div>
+
+    </h:form>
 
 </html>
