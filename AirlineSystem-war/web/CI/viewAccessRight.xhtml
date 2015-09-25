@@ -26,7 +26,7 @@ and open the template in the editor.
     </h:head>
     <body>
         <!--    To add the same header on all dashboard pages  -->
-<!--                <ui:include src="dashboardHeader.xhtml"/>-->
+        <!--                <ui:include src="dashboardHeader.xhtml"/>-->
         <!--    To add the same sidebar on all dashboard pages  -->
         <ui:include src="dashboardSidebar.xhtml"/>
         <div id="page-wrapper">
@@ -52,18 +52,20 @@ and open the template in the editor.
                                 <h:selectBooleanCheckbox value="#{accessRight.accessView}" onclick="return false;" onkeydown="return false"/>
                                 <h:outputText value="View"/>
                             </p:column>
-                            <p:column headerText="Delete Access" style="width:32px">
+                            <p:column headerText="Delete Access" style="width:100px">
 
                                 <h:commandLink onclick="if (!confirm('Do you really want to delete this role?')) {
                                             return false;
                                         }
                                         ;
                                         return true;
-                                        " action="#{roleManagedBean.deleteRole(role.roleName)}"><i class="fa fa-trash-o"></i> </h:commandLink>
+                                               " action="#{roleManagedBean.deleteRole(role.roleName)}"><i class="fa fa-trash-o"></i> </h:commandLink>
                             </p:column>
-
-
+                            <!-- <p:column>-->
+                                <!--<h:commandButton action="#{roleManagedBean.addNewAccessRights(role.roleID)}" value="test"/>-->
+                            <!--</p:column>-->
                         </p:dataTable>
+                       
                     </h:form>
                 </div>
             </div>

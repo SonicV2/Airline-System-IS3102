@@ -168,9 +168,8 @@ public class departmentManagedBean {
             }
         }
     }
-
-  
-
+    
+    
     public void retriveCC() {
         //setDepartments(departmentSessionBean.retrive());
         if (departments != null) {

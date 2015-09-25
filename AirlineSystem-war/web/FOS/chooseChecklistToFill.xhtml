@@ -21,7 +21,8 @@ and open the template in the editor.
 
             <div class="form-group">
                 <p:outputLabel for="checklist" value="Checklist: " class="col-md-4 control-label" />
-                <h:selectOneMenu  id="checklist" styleClass="dropdown-menu select" value="#{checklistManagedBean.checklistName}"  >
+                <h:selectOneMenu  required="true" id="checklist" styleClass="dropdown-menu select" value="#{checklistManagedBean.checklistName}"  >
+                    
                     <f:selectItem itemLabel="Select Checklist" itemValue="" noSelectionOption="true" />
                     <f:selectItems value="#{checklistManagedBean.checklistTypes}" />
                 </h:selectOneMenu>
