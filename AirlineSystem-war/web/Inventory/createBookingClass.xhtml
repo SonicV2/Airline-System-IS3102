@@ -1,0 +1,118 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <h:head>
+        <p:growl id="growl" sticky="true" showDetail="true"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <h:outputStylesheet library ="css"  name="bootstrap.css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
+        <h:outputStylesheet library="css" name="admindb.css" />
+        <h:outputStylesheet library="css" name="morrisjs/morris.css" />
+        <title>Create a Booking Class</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </h:head>
+    <style>
+        .form-control {
+            display:inline;
+        }
+    </style>
+    
+    <body>
+
+        <!--            To add the same header on all dashboard pages  
+                <ui:include src="/CI/dashboardHeader.xhtml"/>
+                    To add the same sidebar on all dashboard pages -->  
+        <ui:include src="/CI/dashboardSidebar.xhtml"/>
+
+
+        <div id="page-wrapper">
+            <div class="col-lg-12">
+                <h2 class="page-header">Create a Booking Class</h2>
+            </div>
+            <h:form class="form col-md-10 center-block">
+                <div class="form-group">
+                    <h:outputLabel class="col-md-4 control-label" value="Booking Class Code: " />
+                    <p:inputText value="#{classManageBean.classcode}"  />
+                    <br/>
+
+                </div>
+
+                <div class="form-group">
+                    <h:outputLabel class="col-md-4 control-label" value="Percentage of Base Fare" />
+                    <p:inputText value="#{classManageBean.pricePercent}" />
+                    <br/>
+
+                </div>
+
+                <div class="form-group">
+                    <h:outputLabel class="col-md-4 control-label" value="Days of Advanced Sales" />
+                    <p:inputText value="#{classManageBean.advancedSales}" />
+                    <br/>
+
+                </div> 
+                <div class="form-group">
+                    <h:outputLabel class="col-md-4 control-label" value="Percentage of total tickets sold" />
+                    <p:inputText value="#{classManageBean.percentSold}" />
+                    <br/>
+
+                </div> 
+                <div class="form-group">
+                    <h:outputLabel class="col-md-4 control-label" value="Service Class" />
+                    <h:selectOneMenu class="form-control" id="serviceClass" value="#{classManageBean.serviceClass}" style="width:150px">
+                        <f:selectItem itemLabel="Select One" itemValue="" />
+                        <f:selectItem itemLabel="Economy Saver" itemValue="Economy Saver" />
+                        <f:selectItem itemLabel="Economy Basic" itemValue="Economy Basic" />
+                        <f:selectItem itemLabel="Economy Premium" itemValue="Economy Premium" />
+                        <f:selectItem itemLabel="Business" itemValue="Business" />
+                        <f:selectItem itemLabel="First Class" itemValue="First Class" />
+                    </h:selectOneMenu>
+                    <br/>
+
+                </div> 
+                <div class="form-group">
+                    <h:outputLabel class="col-md-4 control-label" value="Able to rebook without cost  " />
+                    <p:selectBooleanCheckbox value="#{classManageBean.rebook}" />
+                    <br/>
+                </div> 
+
+                <div class="form-group">
+                    <h:outputLabel class="col-md-4 control-label" value="Able to cancel without cost  " />
+                    <p:selectBooleanCheckbox value="#{classManageBean.cancel}" />
+                    <br/>
+
+                </div> 
+                <div class="form-group">
+                    <h:outputLabel class="col-md-4 control-label" value="Baggage Class" />
+                    <h:selectOneMenu class="form-control" id="baggageClass" value="#{classManageBean.baggage}" style="width:150px">
+                        <f:selectItem itemLabel="Select One" itemValue="" />
+                        <f:selectItem itemLabel="1" itemValue="1" />
+                        <f:selectItem itemLabel="2" itemValue="2" />
+                        <f:selectItem itemLabel="3" itemValue="3" />
+
+                    </h:selectOneMenu>
+                    <br/>
+
+                </div> 
+                <div class="form-group">
+                    <h:outputLabel class="col-md-4 control-label" value="Amount of Mileage Accruable in Percentage" />
+                    <p:inputText value="#{classManageBean.millageAccru}" />
+                    <br/>
+
+                </div> 
+
+                <div class="text-center">
+                    <h:commandButton class="btn btn-outline btn-success" value="Add Booking Class" actionListener="#{classManageBean.addClass}"/>
+                    <br></br>
+                    <br></br>
+                </div>
+            </h:form>
+        </div>
+    </body>
+</html>

@@ -159,8 +159,7 @@ public class ScheduleManageBean {
                 FacesMessage msg = new FacesMessage("You cannot delay flight more than one hour!");
                 FacesContext.getCurrentInstance().addMessage(null, msg);
                 clear(original);
-                return;
-                
+                return;                
             }
 
             scheduleSessionBean.edit(edited, original);

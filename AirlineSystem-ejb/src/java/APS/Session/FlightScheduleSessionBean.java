@@ -254,6 +254,8 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
         
         for (int i = 0; i<remaining; i++){
             aircrafts.get(i).getSchedules().add(schedules.get(j));
+            schedules.get(j).setAircraft(aircrafts.get(i));
+            em.persist(schedules.get(j));
             em.persist(aircrafts.get(i));
             j++;
         }
