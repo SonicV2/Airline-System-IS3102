@@ -9,6 +9,7 @@ import APS.Entity.Aircraft;
 import APS.Entity.Flight;
 import APS.Entity.Schedule;
 import FOS.Entity.Team;
+import Inventory.Entity.Booking;
 import Inventory.Entity.SeatAvailability;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -91,9 +92,24 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
         
         schedule.setSeatAvailability(null);
         
-        em.remove(seatAvail); 
+        deleteSeatAvail(seatAvail); 
         em.remove(schedule);
         em.flush();
+    }
+    
+    public void deleteSeatAvail(SeatAvailability sa){
+         Query q = em.createQuery("SELECT o from Booking o WHERE o.seatAvail = :sa");
+         q.setParameter("sa", sa);
+         List<Booking> bookingList = q.getResultList();
+         int size= bookingList.size();
+         for(int i=0; i<size; i++){
+             Long id= bookingList.get(i).getId();
+             Booking booking = em.find(Booking.class, id);
+             booking.setSeatAvail(null);
+             em.flush();
+         }
+         sa.setSchedule(null);
+         em.remove(sa);
     }
 
     @Override
