@@ -42,9 +42,11 @@ public class Aircraft implements Serializable {
     @OneToMany(cascade = {CascadeType.PERSIST}, mappedBy = "aircraft")
     private List<Schedule> schedules = new ArrayList<Schedule>();
     
-    public void createAircraft(Date datePurchased, Date lastMaintained, String status) {
+    public void createAircraft(Date datePurchased, Date lastMaintained, String hub, String status) {
         this.datePurchased = datePurchased;
         this.lastMaintained = lastMaintained;
+        this.status = status;
+        this.hub = hub;
         this.status = status;
     }
     

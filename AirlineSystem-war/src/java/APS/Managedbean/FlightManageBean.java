@@ -117,6 +117,19 @@ public class FlightManageBean {
             FacesContext.getCurrentInstance().addMessage(null, message);
             return;
         }
+        
+        if (flights!=null) {
+        for (int i=0; i<flights.size(); i++) {
+            
+            Flight temp = flightSessionBean.retrieveFlights().get(i);
+   
+            if (temp.getRoute().equals(flightSessionBean.getRoute(routeId))) {
+                message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Flight already exists!", "");
+                FacesContext.getCurrentInstance().addMessage(null, message);
+                return;
+            }
+            
+        }
 
         if (flightSessionBean.getFlight(flightNo) != null) {
             if (flightSessionBean.getFlight(flightNo).getRoute() == flightSessionBean.getRoute(routeId)) {
@@ -128,6 +141,7 @@ public class FlightManageBean {
                 FacesContext.getCurrentInstance().addMessage(null, message);
                 return;
             }
+        }
         }
         
         flightDays = "";
@@ -206,6 +220,9 @@ public class FlightManageBean {
         flightScheduleSessionBean.scheduleFlights(flightNo);
         flightScheduleSessionBean.dummyRotate();
         flightDays = "";
+        FacesMessage msg = new FacesMessage("Flight Added Successfully!");
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+        clear();
     }
     
     public void deleteFlight(ActionEvent event) {
@@ -236,6 +253,18 @@ public class FlightManageBean {
 
         flightSessionBean.deleteFlight(selectedFlight.getFlightNo());
         selectedFlight = null;
+        FacesMessage msg = new FacesMessage("Flight Removed");
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+        
+    }
+    
+     /*clear input after submit*/
+    public void clear() {
+        setRouteId(null);
+        setFlightNo("");
+        setSelectedFlightDays(null);
+        setStartDateTime(null);
+        setBasicFare(null);
         
     }
 

@@ -38,7 +38,6 @@ public class FlightSessionBean implements FlightSessionBeanLocal {
         flight.createFlight(flightNo, flightDays, basicFare, startDateTime);
         flight.setRoute(route);
         route.getFlights().add(flight);
-        
         flight.setAircraftType(aircraftType);
         flight.setSchedule(schedules);
         em.persist(flight);

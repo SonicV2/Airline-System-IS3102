@@ -102,7 +102,6 @@ public class AdminManagedBean {
     public String getEmployeeInfo(String employeeID){
         anEmployee = employeeSessionBean.getEmployeeUseID(employeeID);
         
-        System.out.println("From admin managed bean: " + anEmployee.getEmployeeUserName());
         return "singleEmployeeInfo";
     }
     

@@ -8,60 +8,90 @@ and open the template in the editor.
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
-    
+
+
+
     <h:head>
-    <title>Add Route</title>
+        <p:growl id="growl" sticky="true" showDetail="true"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <h:outputStylesheet library ="css"  name="bootstrap.css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
+        <h:outputStylesheet library="css" name="admindb.css" />
+        <h:outputStylesheet library="css" name="morrisjs/morris.css" />
+        <title>Add Route</title>
     </h:head>
-    
+
     <body>
-        
-    <h:form>
-    <p:dataTable var="location" value="#{routeManageBean.locations}" widgetVar="locationsTable" paginator="true" rows="10">
- 
-        <f:facet name="header">
-            <p:outputPanel>
-                <h:outputText value="Search all fields:" />
-                <p:inputText id="globalFilter" onkeyup="PF('locationsTable').filter()" style="width:150px" placeholder="Enter keyword"/>
-            </p:outputPanel>
-        </f:facet>
- 
-        <p:column filterBy="#{location.country}" headerText="Country" filterMatchMode="contains">
-            <h:outputText value="#{location.country}" />
-        </p:column>
- 
-        <p:column filterBy="#{location.city}" headerText="City" filterMatchMode="contains">
-            <h:outputText value="#{location.city}" />
-        </p:column>
-        
-        <p:column filterBy="#{location.IATA}" headerText="IATA" filterMatchMode="contains">
-            <h:outputText value="#{location.IATA}" />
-        </p:column>
-        
-    </p:dataTable>
-</h:form>
-        
-        <h:form class="form col-md-12 center-block">
-                            
-             
-                            <div class="form-group">                          
-                                <p:outputLabel value="Origin (in IATA): " />
-                                <p:inputText class="form-control input-lg" value="#{routeManageBean.originIATA}"  />
-                                <br/>
-                               
-                             </div>
-                            
-                            <div class="form-group">
-                                <p:outputLabel value="Destination (in IATA):" />
-                                <p:inputText class="form-control input-lg" value="#{routeManageBean.destinationIATA}" />
-                                <br/>
-                                
-                            </div>
-           
-                             <div>
-                                 <h:commandButton class="btn btn-primary btn-lg btn-block" value="Add" actionListener="#{routeManageBean.addRoute}"/>
-                             </div>
-            
-       </h:form>
+        <!--            To add the same header on all dashboard pages  
+        <ui:include src="/CI/dashboardHeader.xhtml"/>
+            To add the same sidebar on all dashboard pages -->  
+        <ui:include src="/CI/dashboardSidebar.xhtml"/>
+
+
+        <div id="page-wrapper">
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2 class="page-header">Add Routes</h2>
+                </div>
+
+                <div class="col-lg-12">
+
+                    <h:form>
+                        <p:dataTable var="location" value="#{routeManageBean.locations}" widgetVar="locationsTable" paginator="true" rows="10">
+
+                            <f:facet name="header">
+                                <p:outputPanel>
+                                    <h:outputText value="Search all fields:" />
+                                    <p:inputText id="globalFilter" onkeyup="PF('locationsTable').filter()" style="width:150px" placeholder="Enter keyword"/>
+                                </p:outputPanel>
+                            </f:facet>
+
+                            <p:column filterBy="#{location.country}" headerText="Country" filterMatchMode="contains">
+                                <h:outputText value="#{location.country}" />
+                            </p:column>
+
+                            <p:column filterBy="#{location.city}" headerText="City" filterMatchMode="contains">
+                                <h:outputText value="#{location.city}" />
+                            </p:column>
+
+                            <p:column filterBy="#{location.IATA}" headerText="IATA" filterMatchMode="contains">
+                                <h:outputText value="#{location.IATA}" />
+                            </p:column>
+
+                        </p:dataTable>
+                    </h:form>
+
+                    <h:form class="form col-md-8 center-block">
+
+                        <br></br>
+                        <br></br>
+                        <div class="form-group">                          
+                            <p:outputLabel class="col-md-4 control-label" value="Origin (in IATA): " />
+                            <p:inputText value="#{routeManageBean.originIATA}"  />
+                            <br/>
+
+                        </div>
+
+                        <div class="form-group">
+                            <p:outputLabel class="col-md-4 control-label" value="Destination (in IATA):" />
+                            <p:inputText value="#{routeManageBean.destinationIATA}" />
+                            <br/>
+
+                        </div>
+
+                        <div class="text-center">
+                            <h:commandButton class="btn btn-outline btn-success" value="Add Route" actionListener="#{routeManageBean.addRoute}"/>
+                        </div>
+                        <br></br>
+                        <br></br>
+                    </h:form>
+                </div>
+            </div>
+        </div>
     </body>
 </html>

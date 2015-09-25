@@ -12,8 +12,12 @@ import APS.Session.FleetSessionBeanLocal;
 import APS.Session.FlightSessionBeanLocal;
 import APS.Session.ScheduleSessionBeanLocal;
 import FOS.Entity.Team;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -102,6 +106,7 @@ public class ScheduleManageBean {
             }
         
         scheduleSessionBean.addSchedule(startDate, flightNo);
+        
     }
     
     public void deleteSchedule(ActionEvent event){
@@ -117,9 +122,17 @@ public class ScheduleManageBean {
 //        List<Schedule> temp = selectedSchedule.getTeam().getSchedule();
 //        temp.remove(selectedSchedule);
 //        selectedSchedule.getTeam().setSchedule(temp);
-//        selectedSchedule.setTeam(null);
-
+        selectedSchedule.setTeam(null);
+        
+        //remove the Aircraft linked to the Schedule
+        List<Schedule> temp2 = selectedSchedule.getAircraft().getSchedules();
+        temp2.remove(selectedSchedule);
+        selectedSchedule.getAircraft().setSchedules(temp2);
+        selectedSchedule.setAircraft(null);
+        
         scheduleSessionBean.deleteSchedule(selectedSchedule.getScheduleId());
+        message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Schedule deleted", "");
+        FacesContext.getCurrentInstance().addMessage(null, message);
         selectedSchedule = null;
         
     }
@@ -127,23 +140,50 @@ public class ScheduleManageBean {
     public void onRowEdit(RowEditEvent event) {
         Schedule edited = (Schedule)event.getObject();
         Long id = edited.getScheduleId();
-        Schedule original= scheduleSessionBean.getSchedule(scheduleId);
+        Schedule original= scheduleSessionBean.getSchedule(id);
         
-        if(!edited.equals(original)){
-            scheduleSessionBean.edit(edited);
+        if(edited.getStartDate().equals(original.getStartDate()) && edited.getAircraft().getTailNo().equals(original.getAircraft().getTailNo())){
+            
+            FacesMessage msg = new FacesMessage("Edit Cancelled");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+            clear(original);
+            return;
+        }
+
+            TimeZone tz = TimeZone.getTimeZone("GMT+8:00"); //Set Timezone to Singapore
+            Calendar temp = Calendar.getInstance(tz);
+            temp.setTime(original.getStartDate());
+            temp.add(Calendar.HOUR, 1);
+            
+            if (edited.getStartDate().after(temp.getTime())) {
+                FacesMessage msg = new FacesMessage("You cannot delay flight more than one hour!");
+                FacesContext.getCurrentInstance().addMessage(null, msg);
+                clear(original);
+                return;                
+            }
+
+            scheduleSessionBean.edit(edited, original);
             FacesMessage msg = new FacesMessage("Schedule Edited");
             FacesContext.getCurrentInstance().addMessage(null, msg);
-        }
-        else{
-        FacesMessage msg = new FacesMessage("Edit Cancelled");
-        FacesContext.getCurrentInstance().addMessage(null, msg);
-        }
+
         
     }
      
     public void onRowCancel(RowEditEvent event) {
         FacesMessage msg = new FacesMessage("Edit Cancelled");
         FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+    
+    public String getDateFormat(Date date){
+        DateFormat df = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm z");
+        return df.format(date);
+    }
+    
+    /*clear input after submit*/
+    public void clear(Schedule original) {
+        setStartDate(original.getStartDate());
+        setAircraft(original.getAircraft());
+        
     }
 
     public Long getScheduleId() {

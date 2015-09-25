@@ -39,9 +39,31 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
     private SeatAvailability seatAvail;
 
     @Override
-    public void edit(Schedule schedule) {
-        schedule.setEndDate(calcEndTime(schedule.getStartDate(), schedule.getFlight()));
-        em.merge(schedule);
+    public void edit(Schedule edited, Schedule original) {
+        
+        if(!edited.getStartDate().equals(original.getStartDate())){
+        edited.setEndDate(calcEndTime(edited.getStartDate(), edited.getFlight())); 
+        em.merge(edited);
+        }
+        
+        if (!edited.getAircraft().getTailNo().equals(original.getAircraft().getTailNo())) {
+
+            Aircraft ac= em.find(Aircraft.class, edited.getAircraft().getTailNo());
+            List<Schedule> temp1 = ac.getSchedules();
+            temp1.remove(original);
+            temp1.add(edited);
+            ac.setSchedules(temp1);
+            ac.setStatus("Stand-By");
+            
+            Aircraft or = em.find(Aircraft.class, original.getAircraft().getTailNo());
+            or.setStatus("Out-of-Order");
+
+            
+            Long id = edited.getScheduleId();
+            Schedule change = em.find(Schedule.class,id);
+            change.setAircraft(ac);
+            em.flush();
+        }  
     }
 
     @Override
@@ -63,19 +85,12 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
     @Override
     public void deleteSchedule(Long id) {
         schedule = getSchedule(id);
-        //Remove link with aircraft
-        schedule.getAircraft().getSchedules().remove(schedule);
-        schedule.setAircraft(null);
-        //Remove link with flight
-        schedule.getFlight().getSchedule().remove(schedule);
-        schedule.setFlight(null);
-        //Remove link with Team
-        schedule.getTeam().getSchedule().remove(schedule);
-        schedule.setTeam(null);
-        //Remove related seatAvailability
+        
         seatAvail = schedule.getSeatAvailability();
         seatAvail.setSchedule(null);
+        
         schedule.setSeatAvailability(null);
+        
         em.remove(seatAvail); //Ask Quan Ge add in code!!!
         em.remove(schedule);
         em.flush();

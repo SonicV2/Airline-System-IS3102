@@ -28,19 +28,25 @@ public class AccessRight implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     
-
-    private boolean accessAdd;
-    private boolean accessDelete;
-    private boolean accessCreate;
-    private boolean accessAssign;
-    private boolean accessView;
+    private String accessRightName;
+//    private List<String> accessRights;
+    private Boolean accessCreate;
+    private Boolean accessDelete;
+    private Boolean accessUpdate;
+    private Boolean accessView;
     
-    public void create(){
-       this.accessAdd=false;
-       this.accessAssign=false;
-       this.accessCreate=false;
-       this.accessDelete=false;
-       this.accessView=false;
+//    public void create(String name, List<String> accessRights){
+//        this.setAccessRightName(name);
+//       this.setAccessRights(accessRights);
+//    }
+    
+    public void create(String name){
+        this.setAccessRightName(name);
+        this.setAccessCreate(false);
+        this.setAccessDelete(false);
+        this.setAccessUpdate(false);
+        this.setAccessView(false);
+      
     }
     
     
@@ -77,73 +83,88 @@ public class AccessRight implements Serializable {
         return "CI.Entity.AccessRight[ id=" + id + " ]";
     }
 
-    /**
-     * @return the accessAdd
-     */
-    public boolean isAccessAdd() {
-        return accessAdd;
-    }
 
     /**
-     * @param accessAdd the accessAdd to set
+     * @param accessRightName the accessRightName to set
      */
-    public void setAccessAdd(boolean accessAdd) {
-        this.accessAdd = accessAdd;
+    public void setAccessRightName(String accessRightName) {
+        this.accessRightName = accessRightName;
     }
 
-    /**
-     * @return the accessDelete
-     */
-    public boolean isAccessDelete() {
-        return accessDelete;
-    }
+//    /**
+//     * @return the accessRights
+//     */
+//    public List<String> getAccessRights() {
+//        return accessRights;
+//    }
+//
+//    /**
+//     * @param accessRights the accessRights to set
+//     */
+//    public void setAccessRights(List<String> accessRights) {
+//        this.accessRights = accessRights;
+//    }
 
     /**
-     * @param accessDelete the accessDelete to set
+     * @return the accessRightName
      */
-    public void setAccessDelete(boolean accessDelete) {
-        this.accessDelete = accessDelete;
+    public String getAccessRightName() {
+        return accessRightName;
     }
 
     /**
      * @return the accessCreate
      */
-    public boolean isAccessCreate() {
+    public Boolean getAccessCreate() {
         return accessCreate;
     }
 
     /**
      * @param accessCreate the accessCreate to set
      */
-    public void setAccessCreate(boolean accessCreate) {
+    public void setAccessCreate(Boolean accessCreate) {
         this.accessCreate = accessCreate;
     }
 
     /**
-     * @return the accessAssign
+     * @return the accessDelete
      */
-    public boolean isAccessAssign() {
-        return accessAssign;
+    public Boolean getAccessDelete() {
+        return accessDelete;
     }
 
     /**
-     * @param accessAssign the accessAssign to set
+     * @param accessDelete the accessDelete to set
      */
-    public void setAccessAssign(boolean accessAssign) {
-        this.accessAssign = accessAssign;
+    public void setAccessDelete(Boolean accessDelete) {
+        this.accessDelete = accessDelete;
+    }
+
+    /**
+     * @return the accessUpdate
+     */
+    public Boolean getAccessUpdate() {
+        return accessUpdate;
+    }
+
+    /**
+     * @param accessUpdate the accessUpdate to set
+     */
+    public void setAccessUpdate(Boolean accessUpdate) {
+        this.accessUpdate = accessUpdate;
     }
 
     /**
      * @return the accessView
      */
-    public boolean isAccessView() {
+    public Boolean getAccessView() {
         return accessView;
     }
 
     /**
      * @param accessView the accessView to set
      */
-    public void setAccessView(boolean accessView) {
+    public void setAccessView(Boolean accessView) {
         this.accessView = accessView;
     }
 

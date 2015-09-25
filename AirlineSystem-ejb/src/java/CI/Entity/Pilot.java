@@ -41,9 +41,10 @@ public class Pilot extends Employee implements Serializable {
         this.position=position;
         this.skillsets=skillsets;
         this.assigned=false;
+
          this.status="NotSignIn";
    
-       
+
     }
 
    
