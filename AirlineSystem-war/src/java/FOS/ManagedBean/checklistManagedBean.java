@@ -48,6 +48,13 @@ public void init(){
    setChecklistTypes(checklistSessionBean.retrieveAllChecklists());
 }
 
+public void clear(){
+    setComments("");
+    for (ChecklistItem eachItem: checklistItemsForChecklist){
+        eachItem.setChecked(false);
+    }
+}
+
 public String addItem(){
     checklistSessionBean.addChecklistItem(checklistName, checklistItemName);
     setChecklistName("Select Checklist");
@@ -62,7 +69,7 @@ public String editParticularChecklist (){
 
 public String fillParticularChecklist (){
     setChecklistItemsForChecklist(checklistSessionBean.retrieveChecklistItems(checklistName));
-    setComments (checklistSessionBean.retrieveChecklistComments(checklistName));
+    clear();
     return "FillChecklist";
     //Page after filling checklist checklistName should be set as "Select Checklist"
 }
