@@ -11,43 +11,30 @@ and open the template in the editor.
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets">
     <head>
-        <title>Create new Checklist item</title>
+        <title>Select checklist</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     </head>
     <body>
-
         <h:form>
 
-            <h1> Create a new checklist item </h1>
+            <h1> Select checklist to fill </h1>
 
             <div class="form-group">
                 <p:outputLabel for="checklist" value="Checklist: " class="col-md-4 control-label" />
-                <h:selectOneMenu  required = "true" id="checklist" styleClass="dropdown-menu select" value="#{checklistManagedBean.checklistName}"  >
-
+                <h:selectOneMenu  required="true" id="checklist" styleClass="dropdown-menu select" value="#{checklistManagedBean.checklistName}"  >
+                    
                     <f:selectItem itemLabel="Select Checklist" itemValue="" noSelectionOption="true" />
                     <f:selectItems value="#{checklistManagedBean.checklistTypes}" />
                 </h:selectOneMenu>
 
             </div>
 
-            <div class="form-group">
-                <h:outputLabel value="Checklist Item Name: " class="col-md-4 control-label" />
-                <div class="col-md-8">
-                    <h:inputText id="itemname" required="true" requiredMessage="Please fill in the checklist item name" class="form-control" value="#{checklistManagedBean.checklistItemName}" />
-                </div>
-                <div class="missingfield">
-                    <h:message for="lastname"  />
-                </div>
-
-            </div>
 
             <div class="text-center">
-                <h:commandButton class="btn btn-outline btn-success" value="Create New Item"  action="#{checklistManagedBean.addItem()}"/>
+                <h:commandButton class="btn btn-outline btn-success" value="Fill Checklist"  action="#{checklistManagedBean.fillParticularChecklist()}"/>
             </div>
 
 
         </h:form>
-
-
     </body>
 </html>

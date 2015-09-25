@@ -7,7 +7,7 @@ package FOS.Entity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -25,10 +25,11 @@ public class Checklist implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    private String name;
+    private String comments;
     
-    public String name;
     @OneToMany(cascade = {CascadeType.PERSIST})
-    private Collection <ChecklistItem> checklistItems = new ArrayList<ChecklistItem>();
+    private List<ChecklistItem> checklistItems = new ArrayList<ChecklistItem>();
     
     public Long getId() {
         return id;
@@ -46,20 +47,47 @@ public class Checklist implements Serializable {
         this.name = name;
     } 
 
-    public Collection<ChecklistItem> getChecklistItems() {
+    public List<ChecklistItem> getChecklistItems() {
         return checklistItems;
     }
 
-    public void setChecklistItems(Collection<ChecklistItem> checklistItems) {
+    public void setChecklistItems(List<ChecklistItem> checklistItems) {
         this.checklistItems = checklistItems;
     }
-    
+
+  
     public void addChecklistItem (ChecklistItem checklistItem){
         checklistItems.add(checklistItem);
     }
-
-   
     
+     public void removeChecklistItem (ChecklistItem item){
+        checklistItems.remove(item);
+    }
+
+    public String getComments() {
+        return comments;
+    }
+
+    public void setComments(String comments) {
+        this.comments = comments;
+    }   
+    
+    public void checkItemAsCompleted(ChecklistItem item){
+        long id = item.getId();
+        for (ChecklistItem eachItem: checklistItems){
+            if (eachItem.getId()==id)
+                eachItem.setChecked(true);
+        }
+        
+    }
+    
+    public void checkAllItemsAsNotCompleted(){
+        for (ChecklistItem eachItem: checklistItems){
+            eachItem.setChecked(false);
+        }
+    }
+    
+
     @Override
     public String toString() {
         return "FOS.Entity.Checklist[ id=" + id + " ]";

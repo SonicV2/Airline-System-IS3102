@@ -6,6 +6,7 @@
 package FOS.Session;
 
 
+import FOS.Entity.ChecklistItem;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -18,5 +19,12 @@ public interface ChecklistSessionBeanLocal {
 
     public void addChecklistItem (String checklistName, String itemName);
     public List<String> retrieveAllChecklists();
-    public List<String> retrieveChecklistItems (String checklistName);
+    public List<ChecklistItem> retrieveChecklistItems (String checklistName);
+    public ChecklistItem findItem (Long key);
+    public void editChecklistItem (ChecklistItem item);
+    public void deleteChecklistItem (Long key, String checklistName);
+    public void updateFilledChecklist (String checklistName, List<ChecklistItem> checkedItems, String comments);
+    public List<ChecklistItem> getItemsFromNames(List<String> selectedItemNames);
+    public String retrieveChecklistComments (String checklistName);
+    
 }

@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Crew Sign In</title>
+    </h:head>
+     <p:growl id="growl" sticky="true" showDetail="true"/>
+    <h:body>
+        <h1>Welcome to Crew Sign In System</h1>
+        <h:form>
+
+            <h:outputLabel value="Your team ID is: "/>
+
+            <h:outputLabel value="#{crewSignInManagedBean.team.id}"/>
+            <br/>
+
+            <!--     view Team Members-->
+
+            <br/><br/>
+            <h:outputLabel value="#{crewSignInManagedBean.messages.get(0)}"/>
+
+            <br/>
+            <p:dataList value="#{crewSignInManagedBean.pilots}" var="p" type="ordered">
+                #{p.employeeDisplayFirstName} #{p.employeeDisplayLastName} ( #{p.position} )
+            </p:dataList>
+
+            <br/>
+            <h:outputLabel value="#{crewSignInManagedBean.messages.get(1)}"/>
+            <br/>
+            <p:dataList value="#{crewSignInManagedBean.ccs}" var="cs" type="ordered">
+                #{cs.employeeDisplayFirstName} #{cs.employeeDisplayLastName} ( #{cs.position} )
+            </p:dataList>    
+            <!--  view Team Members-->
+
+            <h:outputLabel value="Flight Date: "/>
+            <h:outputLabel value="#{crewSignInManagedBean.selectPairing.FDate}"/>
+            <br/>
+            <h:outputLabel value="Flight Cities: "/>
+            <h:outputLabel value="#{crewSignInManagedBean.selectPairing.flightCities}"/>
+            <br/>
+            <h:outputLabel value="Flight Hours: "/>
+            <h:outputLabel value="#{crewSignInManagedBean.selectPairing.flightHour}"/>
+            <br/>
+            <h:outputLabel value="Flight Number: "/>
+            <h:outputLabel value="#{crewSignInManagedBean.selectPairing.flightNumbers}"/>
+            <br/>
+            <h:outputLabel value="Flight Times: "/>
+            <h:outputLabel value="#{crewSignInManagedBean.selectPairing.flightTimes}"/>
+            <br/>
+            <h:commandButton value="Sign-In" actionListener="#{crewSignInManagedBean.scheduleSignIn}"/>
+        </h:form>
+    </h:body>
+</html>
+
