@@ -225,8 +225,9 @@ public class FlightManageBean {
         clear();
     }
     
-    public void deleteFlight(ActionEvent event) {
+    public String deleteFlight(String flightNo) {
         
+        selectedFlight = flightSessionBean.getFlight(flightNo);
         flights.remove(selectedFlight);
         
         //search for Flight Num in Flight lists linked to the Route and remove the Flight
@@ -253,8 +254,13 @@ public class FlightManageBean {
 
         flightSessionBean.deleteFlight(selectedFlight.getFlightNo());
         selectedFlight = null;
+        
         FacesMessage msg = new FacesMessage("Flight Removed");
         FacesContext.getCurrentInstance().addMessage(null, msg);
+        
+        setFlights(flightSessionBean.retrieveFlights());
+        
+        return "DeleteFlight";
         
     }
     

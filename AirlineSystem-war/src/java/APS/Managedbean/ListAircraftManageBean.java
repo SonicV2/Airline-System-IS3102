@@ -13,6 +13,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -40,11 +41,13 @@ public class ListAircraftManageBean {
     private Date startDate;
     private Date endDate;
     private boolean Assigned;
-
+    private String OriginIATA;
+    private String DestinationIATA;
+    
     public ListAircraftManageBean() {
     }
     
-    public void getSchedules(String tailNo) {
+    public void getSchedules(ActionEvent event) {
         setSchedules(scheduleSessionBean.getSchedules(tailNo));
     }
 
@@ -112,4 +115,21 @@ public class ListAircraftManageBean {
         this.Assigned = Assigned;
     }
 
+    public String getOriginIATA() {
+        return OriginIATA;
+    }
+
+    public void setOriginIATA(String OriginIATA) {
+        this.OriginIATA = OriginIATA;
+    }
+
+    public String getDestinationIATA() {
+        return DestinationIATA;
+    }
+
+    public void setDestinationIATA(String DestinationIATA) {
+        this.DestinationIATA = DestinationIATA;
+    }
+    
+    
 }

@@ -33,18 +33,15 @@
                 </div>
 
                 <div class="col-lg-12">
-                    <p class="pull-right"> * Right click to delete the schedule</p>
                     <h:form>
                         <h:commandButton value="Retrieve" actionListener="#{scheduleManageBean.retrieve}"/>
                     </h:form>
 
                     <h:form id="form">
-                        <p:contextMenu for="schedules">
-                            <p:menuitem value="Delete" update="schedules" icon="ui-icon-close" actionListener="#{scheduleManageBean.deleteSchedule}"/>
-                        </p:contextMenu>
+                        
+                        <p:growl id="message" showDetail="true"/>
+                        <p:dataTable id="schedules" var="schedule" value="#{scheduleManageBean.schedules}" style="margin-bottom:20px" paginator="true" rows="10" widgetVar="schedulesTable">
 
-                        <p:dataTable id="schedules" var="schedule" value="#{scheduleManageBean.schedules}" rowKey="#{schedule.scheduleId}"
-                                     selection="#{scheduleManageBean.selectedSchedule}" selectionMode="single" paginator="true" rows="10" widgetVar="schedulesTable">
                             <f:facet name="header">
 
                                 <p:outputPanel>
@@ -83,6 +80,10 @@
 
                             <p:column filterBy="#{schedule.flight.route.destinationCity}" headerText="Destination City" filterMatchMode="contains">
                                 <h:outputText value="#{schedule.flight.route.destinationCity}" />
+                            </p:column>
+                            
+                            <p:column headerText="Delete Schedule" style="width:100px">
+                                <h:commandLink action="#{scheduleManageBean.deleteSchedule(schedule.scheduleId)}"><i class="fa fa-trash-o"></i> </h:commandLink>
                             </p:column>
 
                         </p:dataTable>

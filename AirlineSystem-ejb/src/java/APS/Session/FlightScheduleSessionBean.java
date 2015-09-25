@@ -154,7 +154,7 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
         List<Schedule> result;
         Schedule earliestSchedule = new Schedule();
         TimeZone tz = TimeZone.getTimeZone("GMT+8:00"); //Set Timezone to Singapore
-        Calendar currTime = Calendar.getInstance(tz);
+        Calendar currTime = Calendar.getInstance(tz);   
         Calendar tmp = Calendar.getInstance(tz);
         System.out.println("Start");
         //NOTE: ADD FUNCTIONALITIES
@@ -184,84 +184,87 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
         System.out.println("Stage 2");
         //Assign flights to schedules until all schedules are assigned
 //        while (!isAllAssigned(schedules)) {
-//            for (Aircraft aircraft : aircrafts) {
-//                if (aircraft.getStatus().equals("Stand-By")) {
-//                    Route incoming = new Route();
-//                    Route currRoute = new Route();
-//                    flights = new ArrayList<Flight>();
-//                    curr = new ArrayList<Schedule>();
-//                    result = new ArrayList<Schedule>();
-//                    aircraftType = aircraft.getAircraftType();
-//                    System.out.println("Stage 3");
-//                    //Add flights according to hubs
-//                    for (int i = 0; i < aircraftType.getFlights().size(); i++) {
-//                        currRoute = aircraftType.getFlights().get(i).getRoute();
-//                        if (currRoute.getOriginIATA().equals(aircraft.getHub()) || currRoute.getDestinationIATA().equals(aircraft.getHub())) {
-//                            flights.add(aircraftType.getFlights().get(i));
-//                        }
-//                    }
-//                    System.out.println("Stage 4");
-//                    //Precond: There are enough aircraft to fly all the flights
-//                    //Add all avaliable schedules to the curr List
-//                    for (Flight flight1 : flights) {
-//                        for (int k = 0; k < flight1.getSchedule().size(); k++) {
-//                            if (!flight1.getSchedule().get(k).isAssigned()) {
-//                                curr.add(flight1.getSchedule().get(k));
-//                            }
-//                        }
-//                    }
-//
-//                    //Sort the curr ArrayList according to startTime
-//                    Collections.sort(curr, comparator);
-//                    if (!curr.isEmpty()) {
-//                        while (!curr.isEmpty()) {
-//                            //Find the earliest schedule that starts from the hub
-//                            for (int j = 0; j < curr.size(); j++) {
-//                                if (curr.get(j).getFlight().getRoute().getOriginIATA().equals(aircraft.getHub())) {
-//                                    earliestSchedule = curr.get(j);
-//                                    break;
-//                                }
-//                            }
-//                            //Store the status for the earliest schedule
-//                            result.add(earliestSchedule);
-//                            earliestSchedule.setAssigned(true);
-//                            curr.remove(earliestSchedule);
-//                            em.merge(earliestSchedule);
-//                            currTime.setTime(earliestSchedule.getEndDate());
-//                            //Set the buffer time of 2 hours after the flight arrives
-//                            currTime.add(Calendar.HOUR, 2);
-//                            incoming = earliestSchedule.getFlight().getRoute();
-//
-//                            //Remove all the schedules before the endTime+2hrs of the earliest schedule 
-//                            curr = removeScheduleBefore(curr, currTime.getTime());
-//
-//                            //Find the first occurance of the return flight
-//                            for (int k = 0; k < curr.size(); k++) {
-//                                currRoute = curr.get(k).getFlight().getRoute();
-//                                if (currRoute.getOriginIATA().equals(incoming.getDestinationIATA()) && incoming.getOriginIATA().equals(currRoute.getOriginIATA())) {
-//                                    earliestSchedule = curr.get(k);
-//                                    break;
-//                                }
-//                            }
-//                            //Store the status for the return schedule
-//                            result.add(earliestSchedule);
-//                            earliestSchedule.setAssigned(true);
-//                            curr.remove(earliestSchedule);
-//                            em.merge(earliestSchedule);
-//                            currTime.setTime(earliestSchedule.getEndDate());
-//
-//                            //Set the buffer time of 2 hours after the flight arrives
-//                            currTime.add(Calendar.HOUR, 2);
-//
-//                            //Remove all the schedules before the endTime+2hrs of the earliest schedule 
-//                            curr = removeScheduleBefore(curr, currTime.getTime());
-//                        }
-//                        System.out.println("Aircraft set!");
-//                        aircraft.setSchedules(result);
-//                        em.merge(aircraft);
-//                    }
-//                }
-//            }
+            for (Aircraft aircraft : aircrafts) {
+                if (aircraft.getStatus().equals("Stand-By")) {
+                    Route incoming = new Route();
+                    Route currRoute = new Route();
+                    flights = new ArrayList<Flight>();
+                    curr = new ArrayList<Schedule>();
+                    result = new ArrayList<Schedule>();
+                    aircraftType = aircraft.getAircraftType();
+                    System.out.println("Stage 3");
+                    //Add flights according to hubs
+                    for (int i = 0; i < aircraftType.getFlights().size(); i++) {
+                        currRoute = aircraftType.getFlights().get(i).getRoute();
+                        if (currRoute.getOriginIATA().equals(aircraft.getHub()) || currRoute.getDestinationIATA().equals(aircraft.getHub())) {
+                            flights.add(aircraftType.getFlights().get(i));
+                        }
+                    }
+                    System.out.println("Stage 4");
+                    //Precond: There are enough aircraft to fly all the flights
+                    //Add all avaliable schedules to the curr List
+                    for (Flight flight1 : flights) {
+                        for (int k = 0; k < flight1.getSchedule().size(); k++) {
+                            System.out.println(flight1.getSchedule().get(k).isAssigned());
+                            if (!flight1.getSchedule().get(k).isAssigned()) {
+                                curr.add(flight1.getSchedule().get(k));
+                                System.out.println(flight1.getSchedule().get(k));                            }
+                        }
+                    }
+
+                    //Sort the curr ArrayList according to startTime
+                    Collections.sort(curr, comparator);
+                    System.out.println(curr.isEmpty());
+                    if (!curr.isEmpty()) {
+                        while (!curr.isEmpty()) {
+                            //Find the earliest schedule that starts from the hub
+                            for (int j = 0; j < curr.size(); j++) {
+                                if (curr.get(j).getFlight().getRoute().getOriginIATA().equals(aircraft.getHub())) {
+                                    earliestSchedule = curr.get(j);
+                                    break;
+                                }
+                            }
+                            //Store the status for the earliest schedule
+                            result.add(earliestSchedule);
+                            earliestSchedule.setAssigned(true);
+                            curr.remove(earliestSchedule);
+                            em.merge(earliestSchedule);
+                            currTime.setTime(earliestSchedule.getEndDate());
+                            //Set the buffer time of 2 hours after the flight arrives
+                            currTime.add(Calendar.HOUR, 2);
+                            incoming = earliestSchedule.getFlight().getRoute();
+                            System.out.println("Stage 5");
+                            //Remove all the schedules before the endTime+2hrs of the earliest schedule 
+                            curr = removeScheduleBefore(curr, currTime.getTime());
+
+                            //Find the first occurance of the return flight
+                            for (int k = 0; k < curr.size(); k++) {
+                                currRoute = curr.get(k).getFlight().getRoute();
+                                if (currRoute.getOriginIATA().equals(incoming.getDestinationIATA()) && incoming.getOriginIATA().equals(currRoute.getOriginIATA())) {
+                                    earliestSchedule = curr.get(k);
+                                    break;
+                                }
+                            }
+                            //Store the status for the return schedule
+                            result.add(earliestSchedule);
+                            earliestSchedule.setAssigned(true);
+                            curr.remove(earliestSchedule);
+                            em.merge(earliestSchedule);
+                            currTime.setTime(earliestSchedule.getEndDate());
+
+                            //Set the buffer time of 2 hours after the flight arrives
+                            currTime.add(Calendar.HOUR, 2);
+
+                            //Remove all the schedules before the endTime+2hrs of the earliest schedule 
+                            curr = removeScheduleBefore(curr, currTime.getTime());
+                            System.out.println("Stage 6");
+                        }
+                        System.out.println("Aircraft set!");
+                        aircraft.setSchedules(result);
+                        em.merge(aircraft);
+                    }
+                }
+            }
 //        }
     }
 
