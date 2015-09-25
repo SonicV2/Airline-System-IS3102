@@ -160,11 +160,10 @@ public class RoleManagedBean {
 
         roleSessionBean.addRole(roleName, selectedAccessRights);
 
-        System.out.println("managedBean:" + selectedAccessRights.size());
+        setRoles(roleSessionBean.retrive());
         setAllRoles(roleSessionBean.retrieveAllRoles());
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Role Added Successfully", "");
         FacesContext.getCurrentInstance().addMessage(null, message);
-//        selectedAccessRights.clear();
         clear();
 
         return "createRole";
