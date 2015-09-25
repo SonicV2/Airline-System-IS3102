@@ -28,17 +28,17 @@ public class Booking implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    public Long id;
+    private Long id;
     @Temporal(TemporalType.TIMESTAMP)
-    public Date bookingDate;
-    public double price;
-    public String serviceType;
+    private Date bookingDate;
+    private double price;
+    private String serviceType;
     @ManyToOne(cascade = {CascadeType.PERSIST})
-    public SeatAvailability seatAvail = new SeatAvailability();
-    public String flightNo;
+    private SeatAvailability seatAvail = new SeatAvailability();
+    private String flightNo;
     @Temporal(TemporalType.TIMESTAMP)
-    public Date flightDate;
-    public String bookingStatus;
+    private Date flightDate;
+    private String bookingStatus;
 
     
     public void createBooking(double price, String serviceType, 

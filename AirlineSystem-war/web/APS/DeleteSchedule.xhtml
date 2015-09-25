@@ -33,9 +33,6 @@
                 </div>
 
                 <div class="col-lg-12">
-                    <h:form>
-                        <h:commandButton value="Retrieve" actionListener="#{scheduleManageBean.retrieve}"/>
-                    </h:form>
 
                     <h:form id="form">
                         
@@ -82,8 +79,13 @@
                                 <h:outputText value="#{schedule.flight.route.destinationCity}" />
                             </p:column>
                             
-                            <p:column headerText="Delete Schedule" style="width:100px">
-                                <h:commandLink action="#{scheduleManageBean.deleteSchedule(schedule.scheduleId)}"><i class="fa fa-trash-o"></i> </h:commandLink>
+                            <p:column style="width:50px">
+                                <h:commandLink onclick="if (!confirm('Do you really want to delete this schedule?')) {
+                                            return false;
+                                        }
+                                        ;
+                                        return true;"
+                                    action="#{scheduleManageBean.deleteSchedule(schedule.scheduleId)}"><i class="fa fa-trash-o"></i> </h:commandLink>
                             </p:column>
 
                         </p:dataTable>

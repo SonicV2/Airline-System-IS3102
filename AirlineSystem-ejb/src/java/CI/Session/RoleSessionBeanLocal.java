@@ -28,4 +28,6 @@ public interface RoleSessionBeanLocal {
     public String updateRoleName(Role oldRole, Role newRole);
     public List<AccessRight> getAccessRights(Long roleID);
     public Role getRoleUseID(Long roleID);
+    public void addNewAccessRight(Long roleID, List<AccessRight> newAccessRights);
+    public String deleteAccessRight(Long accessRightID, Long roleID);
 }

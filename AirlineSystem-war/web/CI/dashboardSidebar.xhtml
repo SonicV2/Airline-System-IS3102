@@ -12,6 +12,8 @@
                     <a href="#{request.contextPath}/CI/employeeProfile.xhtml" style="font-size: 15px; color:black;"><i class="fa fa-user fa-fw"></i> #{loginManageBean.employee.employeeDisplayFirstName} #{loginManageBean.employee.employeeDisplayLastName} ( #{loginManageBean.employee.organizationUnit.getDepartmentName()} )</a>
                 </li> 
 
+                
+                <!--                this is for employee management, create, delete, update, view-->
                 <ui:fragment rendered="#{loginManageBean.accessRightIDs.contains(1)}">
                     <li>
                         <a href="#"><i class="fa fa-plus fa-fw"></i> Add an employee<span class="fa arrow"></span></a>
@@ -31,20 +33,41 @@
                         <a href="#{request.contextPath}/CI/allEmployeeInfo.xhtml" action="#{adminManagedBean.retreive()}"><i class="fa fa-plus fa-fw"></i> View all employee information</a>
                     </li>    
                 </ui:fragment>
-
+                
+                <!--                this is for super admin for broadcast system-->
                 <ui:fragment rendered="#{loginManageBean.accessRightIDs.contains(2)}">
                     <li>
                         <a href="#{request.contextPath}/CI/allEmployeeInfo.xhtml" action="#{adminManagedBean.retreive()}"><i class="fa fa-plus fa-fw"></i> View all employee information</a>
                     </li> 
                 </ui:fragment>
+                
+                <!--                this is for employee management, update & view-->
+                <ui:fragment rendered="#{loginManageBean.accessRightIDs.contains(19)}">
+                    <li>
+                        <a href="#{request.contextPath}/CI/broadcastMsg.xhtml"><i class="fa fa-envelope fa-fw"></i> Make company announcement</a>
+                    </li>
+                </ui:fragment>
 
+                <!--                this is for anyone who can create department-->
                 <ui:fragment rendered="#{loginManageBean.accessRightIDs.contains(3)}">
                     <li>
-                        <a href="#{request.contextPath}/CI/createDepartment.xhtml"><i class="fa fa-plus fa-fw"></i> Create a department</a>
+                        <a href="#{request.contextPath}/CI/createDepartment.xhtml"><i class="fa fa-plus fa-fw"></i> Department Management</a>
                     </li>
 
                 </ui:fragment>
                 
+                <!--                this is for anyone who can create roles-->
+                <ui:fragment rendered="#{loginManageBean.accessRightIDs.contains(5)}">
+                    <li>
+                        <a href="#{request.contextPath}/CI/createRole.xhtml"><i class="fa fa-plus fa-fw"></i> Create Role</a>
+                    </li>
+                    <li>
+                        <a href="#{request.contextPath}/CI/updateRoles.xhtml"><i class="fa fa-plus fa-fw"></i> Role Management</a>
+                    </li>
+                </ui:fragment>
+                
+                
+                <!--                this is for Aircraft acquisition, finance manager -->
                 <ui:fragment rendered="#{loginManageBean.accessRightIDs.contains(9)}">
                     <li>
                         <a href="#{request.contextPath}/APS/AcquireAircraft.xhtml"><i class="fa fa-plus fa-fw"></i> Acquire Aircrafts</a>
@@ -99,10 +122,10 @@
                 
                 
 
-                
+<!--                
                 <ui:fragment rendered ="#{loginManageBean.employee.roles[0].roleName eq 'SUPER ADMIN'}">
                     <ui:include src="SuperAdminSidebar.xhtml" />
-                </ui:fragment>
+                </ui:fragment>-->
 
 
 
@@ -113,7 +136,6 @@
                                 <li>
                                     <a href="#{request.contextPath}/CI/employeeProfile.xhtml" style="font-size: 15px; color:black;"><i class="fa fa-user fa-fw"></i> #{loginManageBean.employee.employeeDisplayFirstName} #{loginManageBean.employee.employeeDisplayLastName} ( #{loginManageBean.employee.organizationUnit.getDepartmentName()} )</a>
                                 </li>
-
                                 <li>
                                     <a href="tables.html"><i class="fa fa-table fa-fw"></i> Tables</a>
                                 </li>
@@ -122,7 +144,6 @@
                                 </li>
                                 <li>
                                     <a href="#"><i class="fa fa-files-o fa-fw"></i> Sample Pages<span class="fa arrow"></span></a>
-
                                 </li>
                             </ul>
                         </div>
@@ -131,18 +152,6 @@
                 </ui:fragment>
 
 
-
-                <ui:fragment rendered="#{loginManageBean.employee.organizationUnit.getDepartmentName() eq 'IT' and loginManageBean.employee.roles[0] ne 'CI.Entity.Role[ id=SUPER ADMIN ]' }">
-                    <ui:include src="ITSidebar.xhtml" />
-                </ui:fragment>
-
-                <ui:fragment rendered ="#{loginManageBean.employee.organizationUnit.getDepartmentName() eq 'HR'}">
-                    <ui:include src="HRSidebar.xhtml" />
-                </ui:fragment>
-
-                <ui:fragment rendered ="#{loginManageBean.employee.organizationUnit.getDepartmentName() eq 'Finance'}">
-                    <ui:include src="FinanceSidebar.xhtml" />
-                </ui:fragment>
 
             </ul>
 

@@ -45,14 +45,26 @@ public class RoleSessionBean implements RoleSessionBeanLocal {
             }
         }
         em.merge(role_db);
+    }
+
+    @Override
+    public void addNewAccessRight(Long roleID, List<AccessRight> newAccessRights) {
+
+        Role thisRole = getRoleUseID(roleID);
+        List<AccessRight> currentARs = new ArrayList<AccessRight>();
+        currentARs = thisRole.getAccessRights();
+        currentARs.addAll(newAccessRights);
+        thisRole.setAccessRights(currentARs);
+
+        em.merge(thisRole);
 
     }
-    
+
     @Override
-    public List<AccessRight> getAccessRights(Long roleID){
+    public List<AccessRight> getAccessRights(Long roleID) {
         Role oneRole = new Role();
         List<AccessRight> roleAccessRights = new ArrayList<AccessRight>();
-        
+
         try {
 
             Query q = em.createQuery("SELECT a FROM Role " + "AS a WHERE a.roleID=:id");
@@ -65,44 +77,39 @@ public class RoleSessionBean implements RoleSessionBeanLocal {
             } else {
                 oneRole = null;
             }
-            
-            if (oneRole.getAccessRights() !=null){
+
+            if (oneRole.getAccessRights() != null) {
                 roleAccessRights = oneRole.getAccessRights();
-                
+
                 System.out.println("sessionbean success!" + roleAccessRights.size());
-                
-            }
-            else{
+
+            } else {
                 roleAccessRights = null;
             }
-            
-            
 
         } catch (EntityNotFoundException enfe) {
             System.out.println("\nEntity not found error" + "enfe.getMessage()");
         }
         return roleAccessRights;
-        
+
     }
 
-
     @Override
-    public String updateRoleName(Role oldRole, Role newRole){
+    public String updateRoleName(Role oldRole, Role newRole) {
 
         System.out.println("from session bean:" + oldRole.getRoleID() + oldRole.getRoleName());
-        
-        
-        if(em.find(Role.class, oldRole.getRoleID()) == null ){
+
+        if (em.find(Role.class, oldRole.getRoleID()) == null) {
             throw new IllegalArgumentException("Unknown Role id");
         }
-        
+
         newRole.setRoleName(newRole.getRoleName().toUpperCase());
         em.merge(newRole);
         return "Update Sucess";
     }
-    
+
     @Override
-    public Role getRoleUseID(Long roleID){
+    public Role getRoleUseID(Long roleID) {
         Query q = em.createQuery("SELECT a FROM Role a WHERE a.roleID =:roleID");
         q.setParameter("roleID", roleID);
         List<Role> results = q.getResultList();
@@ -199,8 +206,28 @@ public class RoleSessionBean implements RoleSessionBeanLocal {
         return "Successful!";
 
     }
-    
-    
+
+    @Override
+    public String deleteAccessRight(Long accessRightID, Long roleID) {
+
+        try {
+            Role thisRole = getRoleUseID(roleID);
+            List<AccessRight> currentARs = new ArrayList<AccessRight>();
+            currentARs = thisRole.getAccessRights();
+            for (AccessRight ar : currentARs) {
+                if (ar.getId().equals(accessRightID)) {
+                    currentARs.remove(ar);
+                }
+            }
+            thisRole.setAccessRights(currentARs);
+            em.merge(thisRole);
+            em.flush();
+        } catch (Exception ex) {
+            System.out.println(ex.toString());
+        }
+        return "Removed Access Right Successfully!";
+
+    }
 
     public void addNewRole(Employee employee, String new_Role) {
         rolelist = employee.getRoles();

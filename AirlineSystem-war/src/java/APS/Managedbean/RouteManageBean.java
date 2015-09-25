@@ -116,6 +116,7 @@ public class RouteManageBean {
         routeSessionBean.addRoute(originIATA, destinationIATA);
         FacesMessage msg = new FacesMessage("Route Added Successfully!");
         FacesContext.getCurrentInstance().addMessage(null, msg);
+        setRoutes(routeSessionBean.retrieveRoutes());
         clear();
     }
     

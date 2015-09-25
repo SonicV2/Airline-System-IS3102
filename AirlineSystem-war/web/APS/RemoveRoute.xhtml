@@ -79,7 +79,11 @@
                             
                             <p:column headerText="Delete Route" style="width:60px">
 
-                                <h:commandLink action="#{routeManageBean.removeRoute(route.routeId)}"><i class="fa fa-trash-o"></i> </h:commandLink>
+                                <h:commandLink onclick="if (!confirm('Do you really want to delete this route?')) {
+                                            return false;
+                                        }
+                                        ;
+                                        return true;" action="#{routeManageBean.removeRoute(route.routeId)}"><i class="fa fa-trash-o"></i> </h:commandLink>
                             </p:column>
 
                         </p:dataTable>

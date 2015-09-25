@@ -222,6 +222,7 @@ public class FlightManageBean {
         flightDays = "";
         FacesMessage msg = new FacesMessage("Flight Added Successfully!");
         FacesContext.getCurrentInstance().addMessage(null, msg);
+        setFlights(flightSessionBean.retrieveFlights());
         clear();
     }
     
