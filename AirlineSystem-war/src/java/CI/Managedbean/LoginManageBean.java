@@ -1,5 +1,6 @@
 package CI.Managedbean;
 
+import CI.Entity.AccessRight;
 import CI.Entity.Employee;
 import CI.Entity.Role;
 import javax.ejb.EJB;
@@ -10,11 +11,9 @@ import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import org.primefaces.context.RequestContext;
 import CI.Session.EmployeeSessionBeanLocal;
-import java.util.Date;
+import CI.Session.RoleSessionBeanLocal;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import javax.annotation.PostConstruct;
-import javax.faces.context.ExternalContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -28,6 +27,9 @@ public class LoginManageBean {
     @EJB
     private EmployeeSessionBeanLocal employeeSessionBean;
 
+    @EJB
+    private RoleSessionBeanLocal roleSessionBean;
+
     String employeeUserName;
     String employeePassword;
     Employee employee;
@@ -36,9 +38,12 @@ public class LoginManageBean {
     boolean firstTimer;
     HttpServletRequest req;
     String roles; // to get all roles in this string
+    private List<Long> accessRightIDs; //get a list of access right IDs from employee
+    private List<AccessRight> accessRightsForRole;
 
     public LoginManageBean() {
     }
+
 
     public String check() {
 
@@ -47,11 +52,12 @@ public class LoginManageBean {
         if (logInCheck == true) {
             employeeSessionBean.logLogIn(employeeUserName);
             session.setAttribute("isLogin", employeeUserName);
-            
+
             if (firstTimer == true) {
 
                 return "CI/newUserChangePwd" + "?faces-redirect=true";
             } else {
+                
                 return direct();
             }
 
@@ -64,27 +70,34 @@ public class LoginManageBean {
         return "";
     }
 
-    
-    public String direct(){
+    public String direct() {
         HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
-        if(employee.getOrganizationUnit().getDepartmentName().equals("HR")){
-           session.setAttribute("department", "HR");
+        if (employee.getOrganizationUnit().getDepartmentName().equals("HR")) {
+            session.setAttribute("department", "HR");
             //return "Department/HR" + "?faces-redirect=true";
-        }else if(employee.getOrganizationUnit().getDepartmentName().equals("IT")){
+        } else if (employee.getOrganizationUnit().getDepartmentName().equals("IT")) {
             session.setAttribute("department", "IT");
-           // return "Department/IT" + "?faces-redirect=true";
-        }else if(employee.getOrganizationUnit().getDepartmentName().equals("Flight Crew")){
+            // return "Department/IT" + "?faces-redirect=true";
+        } else if (employee.getOrganizationUnit().getDepartmentName().equals("Flight Crew")) {
             session.setAttribute("department", "Flight Crew");
         }
+                //get employee's access rights into a list of long
+                accessRightsForRole = new ArrayList<AccessRight>();
+                accessRightsForRole = getEmployee().getRoles().get(0).getAccessRights();
+
+                accessRightIDs = new ArrayList<Long>();
+                if (accessRightsForRole != null) {
+                    for (AccessRight ar : accessRightsForRole) {
+                        accessRightIDs.add(ar.getId());
+                    }
+                }
         return "CI/employeeDashBoard" + "?faces-redirect=true";
     }
-    
-    
-   public void refresh(){
-       setEmployee(employeeSessionBean.getEmployee(employeeUserName));
-   }
-    
-    
+
+    public void refresh() {
+        setEmployee(employeeSessionBean.getEmployee(employeeUserName));
+    }
+
     public void doLogin(String employeeUserName, String employeePassword) {
         HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
         String temp_roles = ""; // to get all roles in this string
@@ -108,10 +121,12 @@ public class LoginManageBean {
                 List<Role> role = employee.getRoles();
                 for (Role r : role) {
                     temp_roles += r.getRoleName() + " ";
-                    if(r.getRoleName().equals("SUPER ADMIN")){
+                    if (r.getRoleName().equals("SUPER ADMIN")) {
                         session.setAttribute("role", "SUPER ADMIN"); /*Add role --> SuperAdmin*/
-                    }else{
+
+                    } else {
                         session.setAttribute("role", "NSA");/*NSA--> Not Super Admin*/
+
                     }
                 }
 
@@ -180,6 +195,34 @@ public class LoginManageBean {
 
     public void setRoles(String roles) {
         this.roles = roles;
+    }
+
+    /**
+     * @return the accessRightIDs
+     */
+    public List<Long> getAccessRightIDs() {
+        return accessRightIDs;
+    }
+
+    /**
+     * @param accessRightIDs the accessRightIDs to set
+     */
+    public void setAccessRightIDs(List<Long> accessRightIDs) {
+        this.accessRightIDs = accessRightIDs;
+    }
+
+    /**
+     * @return the accessRightsForRole
+     */
+    public List<AccessRight> getAccessRightsForRole() {
+        return accessRightsForRole;
+    }
+
+    /**
+     * @param accessRightsForRole the accessRightsForRole to set
+     */
+    public void setAccessRightsForRole(List<AccessRight> accessRightsForRole) {
+        this.accessRightsForRole = accessRightsForRole;
     }
 
 }

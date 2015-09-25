@@ -157,7 +157,8 @@ public class departmentManagedBean {
             }
         }
     }
-
+    
+    @PostConstruct
     public void retrive() {
         setDepartments(departmentSessionBean.retrive());
 
