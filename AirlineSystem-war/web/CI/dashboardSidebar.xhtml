@@ -84,6 +84,19 @@
                     </li>
                 </ui:fragment>
                 
+                <!-- this is for price management, finance manager -->
+                <ui:fragment rendered="#{loginManageBean.accessRightIDs.contains(17)}">
+                    <li>
+                        <a href="#{request.contextPath}/Inventory/createBookingClass.xhtml"><i class="fa fa-plus fa-fw"></i>Create Booking Class</a>
+                    </li>
+                    <li>
+                        <a href="#{request.contextPath}/Inventory/displayBookingClasses.xhtml"><i class="fa fa-plus fa-fw"></i>Display Existing Pricing System</a>
+                    </li>
+                    <li>
+                        <a href="#{request.contextPath}/Inventory/viewFlights.xhtml"><i class="fa fa-plus fa-fw"></i>Book Flight</a>
+                    </li>
+                </ui:fragment>
+                
                 
 
                 

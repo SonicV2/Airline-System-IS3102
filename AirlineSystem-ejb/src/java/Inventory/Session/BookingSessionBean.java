@@ -41,7 +41,7 @@ public class BookingSessionBean implements BookingSessionBeanLocal {
         if(serviceType.equals("First Class"))
             seatAvail.setFirstClassBooked(seatAvail.getFirstClassBooked()+1);  
         
-        em.merge(seatAvail);
+       em.persist(booking);
     }
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
