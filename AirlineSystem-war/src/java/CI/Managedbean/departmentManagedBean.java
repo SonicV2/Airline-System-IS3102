@@ -159,6 +159,16 @@ public class departmentManagedBean {
         }
     }
     
+     @PostConstruct
+    public void retrive() {
+        setDepartments(departmentSessionBean.retrive());
+        System.out.println("set org units");
+
+        setOrgUnits(departmentSessionBean.retrieveAllDepts());
+
+       retriveCC();  //comment out first time adding
+
+    }
    
 
     public void retriveCC() {

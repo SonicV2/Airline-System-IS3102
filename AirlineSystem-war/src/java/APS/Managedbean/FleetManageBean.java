@@ -120,13 +120,15 @@ public class FleetManageBean {
 //        clear();
     }
 
-    public void retireAircraft(ActionEvent event) {
+    public String retireAircraft(Long tailNo) {
 
 //        if (!selectedAircraft.getStatus().equals("Stand-By") || !selectedAircraft.getStatus().equals("Reserve")) {
 //            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Aircraft is not in a status to delete!", "");
 //            FacesContext.getCurrentInstance().addMessage(null, message);
 //            return;
 //        }
+        selectedAircraft = fleetSessionBean.getAircraft(tailNo);
+        
         reserves = fleetSessionBean.getReserveAircrafts("Reserve");
 
         System.out.println("LOOK HERE");
@@ -156,6 +158,8 @@ public class FleetManageBean {
         
         FacesMessage msg = new FacesMessage("Aircraft Retired");
         FacesContext.getCurrentInstance().addMessage(null, msg);
+        
+        return "RetireAircraft";
     }
     
     public void clear() {

@@ -63,7 +63,7 @@ public class classManageBean {
     
     public void addClass(){
         if(classcode.isEmpty()){
-            FacesMessage msg = new FacesMessage("Please fill in Booking Class Code");
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please fill in Booking Class Code", "");
             FacesContext.getCurrentInstance().addMessage(null, msg);
         }
         if(pricePercent==0){

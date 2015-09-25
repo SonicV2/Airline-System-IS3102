@@ -36,7 +36,9 @@
                     <h2 class="page-header"> Update Profile</h2>
                 </div>
             </div>
-            <h:form>
+            
+            <h:form class="form center-block">
+                <div class="col-md-10">
                 <div class="panel panel-yellow">
                     <div class="panel-heading">
                         #{loginManageBean.employee.employeeDisplayFirstName} #{loginManageBean.employee.employeeDisplayLastName}
@@ -54,59 +56,68 @@
                                     <td>#{loginManageBean.roles} / #{loginManageBean.employee.organizationUnit.getDepartmentName()}</td>
                                     <td></td>
                                 </tr>
-
-                                <tr>
-                                    <td>Birthday</td>
-                                    <td><p:calendar id="button" value="#{changeProfileManagedBean.employeeDOB}" showOn="button" navigator="true" yearRange="c-100:c" /></td>
-                                    <td></td>
-                                </tr>
-
-                                <tr>
-                                    <td>Gender </td>
-                                    <td> <h:selectOneRadio styleClass="checkbox-inline" id="gender" value="#{changeProfileManagedBean.employeeGender}">
-                                            <f:selectItem itemLabel="Male" itemValue="Male" />
-                                            <f:selectItem itemLabel="Female" itemValue="Female" />
-                                        </h:selectOneRadio> </td>
-                                </tr>
-
-                                <tr>
-                                    <td>Home Address</td>
-                                    <td>
-                                        <h:inputText id="mobile" value="#{changeProfileManagedBean.employeeHomeAddress}" />
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>Office Number</td>
-                                    <td>
-                                        <h:inputText value="#{changeProfileManagedBean.employeeOfficeNumber}" />
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>Handphone Number</td>
-                                    <td>
-                                        <h:inputText value="#{changeProfileManagedBean.employeeHpNumber}" />
-                                    </td>
-                                </tr>
-                                
-                                 <tr>
-                                    <td>Personal Email</td>
-                                    <td>
-                                        <h:inputText value="#{changeProfileManagedBean.employeePrivateEmail}" />
-                                    </td>
-                                </tr>
+                                <div class="form-group">
+                                    <tr>
+                                        <td>Birthday</td>
+                                        <td><p:calendar id="button" value="#{changeProfileManagedBean.employeeDOB}" showOn="button" navigator="true" yearRange="c-100:c" /></td>
+                                        <td></td>
+                                    </tr>
+                                </div>
+                                <div class="form-group">
+                                    <tr>
+                                        <td>Gender </td>
+                                        <td> <h:selectOneRadio styleClass="checkbox-inline" id="gender" value="#{changeProfileManagedBean.employeeGender}">
+                                                <f:selectItem itemLabel="Male" itemValue="Male" />
+                                                <f:selectItem itemLabel="Female" itemValue="Female" />
+                                            </h:selectOneRadio> </td>
+                                    </tr>
+                                </div>
+                                <div class="form-group">
+                                    <tr>
+                                        <td>Home Address</td>
+                                        <td>
+                                            <h:inputText class="form-control" id="mobile" value="#{changeProfileManagedBean.employeeHomeAddress}" />
+                                        </td>
+                                    </tr>
+                                </div>
+                                <div class="form-group">
+                                    <tr>
+                                        <td>Office Number</td>
+                                        <td>
+                                            <h:inputText class="form-control" value="#{changeProfileManagedBean.employeeOfficeNumber}" />
+                                        </td>
+                                    </tr>
+                                </div>
+                                <div class="form-group">
+                                    <tr>
+                                        <td>Handphone Number</td>
+                                        <td>
+                                            <h:inputText class="form-control" value="#{changeProfileManagedBean.employeeHpNumber}" />
+                                        </td>
+                                    </tr>
+                                </div>
+                                <div class="form-group">
+                                    <tr>
+                                        <td>Personal Email</td>
+                                        <td>
+                                            <h:inputText class="form-control" value="#{changeProfileManagedBean.employeePrivateEmail}" />
+                                        </td>
+                                    </tr>
+                                </div>
                             </tbody>
-                            
-                            
+
+
                         </table>
                     </div>
                 </div>
                 <div class="text-center">
                     <h:commandButton class="btn btn-warning" value="Save Information" action="employeeProfile" actionListener="#{changeProfileManagedBean.updateInfo}" />
                 </div>
+                <br></br>
+                <br></br>
+                </div>
             </h:form>
-
+            
         </div>
     </h:body>
 </html>

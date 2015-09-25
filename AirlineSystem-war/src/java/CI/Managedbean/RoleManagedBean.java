@@ -75,7 +75,9 @@ public class RoleManagedBean {
     private List<AccessRight> accessRightsForRole;
     private String roleNameForAccessRight;
     private Long roleIDforAccessRight;
-    private List<AccessRight> newAccessRights; //if admin wants to add new access rights to a person
+    private List<AccessRight> newAccessRights;//if admin wants to add new access rights to a person
+    private List<AccessRight> selectedNewAccessRights; //the newly selected access rights for a role 
+    
     
     public RoleManagedBean() {
     }
@@ -104,12 +106,10 @@ public class RoleManagedBean {
         newAccessRights = new ArrayList<AccessRight>();
         roleSessionBean.getAccessRights(thisRoleID);
         newAccessRights = accessRightSession.retrieveAllAccessRight();
-        newAccessRights.removeAll(roleSessionBean.getAccessRights(roleIDforAccessRight));
-        for (AccessRight ar: newAccessRights){
-            System.out.println("from managed bean" + ar.getAccessRightName());
-        }
+        newAccessRights.removeAll(roleSessionBean.getAccessRights(getRoleIDforAccessRight()));
         
-        return "viewAccessRight";
+        
+        return "addNewAccessRight";
     }
 
     public void deleteEmployeeRole(ActionEvent event) {
@@ -134,7 +134,15 @@ public class RoleManagedBean {
         setAllRoles(roleSessionBean.retrieveAllRoles());
 
         return "updateRoles";
-
+    }
+    
+    public String deleteAccessRight(Long arID, Long roleID){
+        setErrorMsg(roleSessionBean.deleteAccessRight(arID, roleID));
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, errorMsg, "");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+        accessRightsForRole = roleSessionBean.getAccessRights(roleIDforAccessRight);
+        
+        return "viewAccessRight";
     }
    
     public String addRole() {
@@ -152,24 +160,31 @@ public class RoleManagedBean {
 
         roleSessionBean.addRole(roleName, selectedAccessRights);
 
-        System.out.println("managedBean:" + selectedAccessRights.size());
+        setRoles(roleSessionBean.retrive());
         setAllRoles(roleSessionBean.retrieveAllRoles());
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Role Added Successfully", "");
         FacesContext.getCurrentInstance().addMessage(null, message);
-//        selectedAccessRights.clear();
         clear();
 
         return "createRole";
     }
-
+    
+    public String addAdditionalAccessRights(){
+            roleSessionBean.addNewAccessRight(roleIDforAccessRight, selectedNewAccessRights);
+            accessRightsForRole = roleSessionBean.getAccessRights(roleIDforAccessRight);
+            return "viewAccessRight";
+    }
+    
     public String getAccessRightsPerRole(Long roleID, String roleName) {
         accessRightsForRole = new ArrayList<AccessRight>();
         accessRightsForRole = roleSessionBean.getAccessRights(roleID);
         roleNameForAccessRight = roleName;
-
+        setRoleIDforAccessRight(roleID);
         return "viewAccessRight";
 
     }
+    
+    
 
     /*clear input after submit*/
     public void clear() {
@@ -513,6 +528,20 @@ public class RoleManagedBean {
      */
     public void setNewAccessRights(List<AccessRight> newAccessRights) {
         this.newAccessRights = newAccessRights;
+    }
+
+    /**
+     * @return the selectedNewAccessRights
+     */
+    public List<AccessRight> getSelectedNewAccessRights() {
+        return selectedNewAccessRights;
+    }
+
+    /**
+     * @param selectedNewAccessRights the selectedNewAccessRights to set
+     */
+    public void setSelectedNewAccessRights(List<AccessRight> selectedNewAccessRights) {
+        this.selectedNewAccessRights = selectedNewAccessRights;
     }
 
 }
