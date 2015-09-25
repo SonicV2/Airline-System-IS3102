@@ -249,7 +249,7 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
     }
 
     @Override
-    public List<Schedule> getSchedules(String tailNo) {
+    public List<Schedule> getSchedules(Long tailNo) {
         aircraft = new Aircraft();
         try {
             Query q = em.createQuery("SELECT a FROM Aircraft " + "AS a WHERE a.tailNo=:tailNo");

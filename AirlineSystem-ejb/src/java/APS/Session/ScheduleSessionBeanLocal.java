@@ -24,7 +24,7 @@ public interface ScheduleSessionBeanLocal {
     public List<Schedule> getSchedules();
     public Schedule getScheduleByDate(Date startDate);
     public void changeFlightDays(List<Flight> flights);
-    public List<Schedule> getSchedules(String tailNo);
+    public List<Schedule> getSchedules(Long tailNo);
     public Date calcEndTime(Date startTime, Flight flight);
     public void edit(Schedule schedule, Schedule original);
 }

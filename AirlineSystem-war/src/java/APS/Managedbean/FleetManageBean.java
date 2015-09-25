@@ -117,7 +117,7 @@ public class FleetManageBean {
         fleetSessionBean.acquireAircraft(datePurchased, lastMaintained, aircraftTypeId, hub, status);
         FacesMessage msg = new FacesMessage("Aircraft is Acquired Successfully!");
         FacesContext.getCurrentInstance().addMessage(null, msg);
-        clear();
+//        clear();
     }
 
     public void retireAircraft(ActionEvent event) {
