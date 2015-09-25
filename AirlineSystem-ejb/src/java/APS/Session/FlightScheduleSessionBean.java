@@ -10,6 +10,8 @@ import APS.Entity.AircraftType;
 import APS.Entity.Flight;
 import APS.Entity.Route;
 import APS.Entity.Schedule;
+import FOS.Entity.Checklist;
+import FOS.Entity.ChecklistItem;
 import FOS.Entity.Team;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -51,6 +53,10 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
     private Team team;
     private List<Aircraft> aircrafts;
     private SeatAvailability sa;
+//    private Checklist checklist;
+//    private List<Checklist> checklists;
+//    private ChecklistItem checklistItem;
+//    private List<ChecklistItem> checklistItems;
 
     @Override
     public void scheduleFlights(String flightId) {
@@ -93,6 +99,11 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
         curr.set(Calendar.SECOND, 0);
         Date counter = startDateTime;
 
+//        //Prepare checklists
+//        checklists = new ArrayList<Checklist>();
+//        checklistItems = new ArrayList<ChecklistItem>();
+//        checklistItem = new ChecklistItem();
+
         //Create attributes for the seatAvail
         int economy = aircraftType.getEconomySeats();
         int business = aircraftType.getBusinessSeats();
@@ -112,8 +123,18 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
                 schedule.setAircraft(null);
                 sa.createSeatAvail(schedule, seats);
                 schedule.setSeatAvailability(sa);
+
+//                //Adding checklist
+//                checklistItems.add(checklistItem);
+//                checklist.setChecklistItems(checklistItems);
+//                for (int i = 0; i < 3; i++) {
+//                    checklists.add(checklist);
+//                }
+//                schedule.setChecklists(checklists);
+//                em.persist(checklist);
                 em.persist(schedule);
                 em.persist(sa);
+
                 schedules.add(schedule);
             }
             curr.setTime(counter);
@@ -202,18 +223,10 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
                         incoming = earliestSchedule.getFlight().getRoute();
 
                         //Remove all the schedules before the endTime of the earliest schedule
-                        for (int k = 0; k < curr.size(); k++) {
-                            tmp.setTime(curr.get(k).getStartDate());
-                            if (tmp.before(currTime)) {
-                                curr.remove(curr.get(k));
-                                k--;
-                            } else {
-                                break;
-                            }
-                        }
+                        curr = removeScheduleBefore(curr, earliestSchedule.getEndDate());
 
-                        //Set the buffer time of 1 hours after the flight arrives
-                        currTime.add(Calendar.HOUR, 1);
+                        //Set the buffer time of 2 hours after the flight arrives
+                        currTime.add(Calendar.HOUR, 2);
 
                         //Find the first occurance of the return flight
                         for (int k = 0; k < curr.size(); k++) {
@@ -237,7 +250,7 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
         schedules = getSchedules();
         List<Schedule> curr = new ArrayList<Schedule>();
         int size = schedules.size() / aircrafts.size();
-        int remaining = schedules.size()%aircrafts.size();
+        int remaining = schedules.size() % aircrafts.size();
         int k = 0;
         int j = 0;
 
@@ -251,8 +264,8 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
             aircrafts.get(i).setSchedules(curr);
             em.persist(aircrafts.get(i));
         }
-        
-        for (int i = 0; i<remaining; i++){
+
+        for (int i = 0; i < remaining; i++) {
             aircrafts.get(i).getSchedules().add(schedules.get(j));
             schedules.get(j).setAircraft(aircrafts.get(i));
             em.persist(schedules.get(j));
@@ -392,9 +405,14 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
 
         return endTime.getTime();
     }
-    
-    private List<Schedule> removeScheduleBefore(List<Schedule> sc, Date date){
+
+    private List<Schedule> removeScheduleBefore(List<Schedule> sc, Date date) {
         schedules = new ArrayList<Schedule>();
+        for (int i = 0; i < sc.size(); i++) {
+            if (sc.get(i).getStartDate().after(date)) {
+                schedules.add(sc.get(i));
+            }
+        }
         return schedules;
     }
 }
