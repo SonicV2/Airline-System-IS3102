@@ -57,12 +57,14 @@ public String addItem(){
 public String editParticularChecklist (){
     setChecklistItemsForChecklist(checklistSessionBean.retrieveChecklistItems(checklistName));
     return "EditChecklist";
+    //Page after editing checklistName should be set as "Select Checklist"
 }
 
 public String fillParticularChecklist (){
     setChecklistItemsForChecklist(checklistSessionBean.retrieveChecklistItems(checklistName));
     setComments (checklistSessionBean.retrieveChecklistComments(checklistName));
     return "FillChecklist";
+    //Page after filling checklist checklistName should be set as "Select Checklist"
 }
 
 
