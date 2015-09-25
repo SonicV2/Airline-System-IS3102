@@ -91,7 +91,7 @@ public class departmentManagedBean {
     public void addDepartment(ActionEvent event) {
         FacesMessage message = null;
 
-        //Comment out if first time set up     
+            
         List<OrganizationUnit> depts = departmentSessionBean.retrieveAllDepts();
 
         if (depts != null) {
@@ -110,16 +110,6 @@ public class departmentManagedBean {
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
     
-    @PostConstruct
-    public void retrive() {
-        setDepartments(departmentSessionBean.retrive());
-        System.out.println("set org units");
-
-        setOrgUnits(departmentSessionBean.retrieveAllDepts());
-
-       retriveCC();  //comment out first time adding
-
-    }
 
     public void searchEmployee(ActionEvent event) {
         setEmployeeDept(departmentSessionBean.searchEmployee(staffID));

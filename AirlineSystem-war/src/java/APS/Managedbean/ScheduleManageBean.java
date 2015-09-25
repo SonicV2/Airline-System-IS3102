@@ -109,7 +109,10 @@ public class ScheduleManageBean {
         
     }
     
-    public void deleteSchedule(ActionEvent event){
+    public String deleteSchedule(Long scheduleId){
+        
+        selectedSchedule = scheduleSessionBean.getSchedule(scheduleId);
+        
         schedules.remove(selectedSchedule);
         
         //remove the Flight linked to the Schedule
@@ -134,6 +137,9 @@ public class ScheduleManageBean {
         message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Schedule deleted", "");
         FacesContext.getCurrentInstance().addMessage(null, message);
         selectedSchedule = null;
+        setSchedules(scheduleSessionBean.getSchedules());
+        
+        return "DeleteSchedule";
         
     }
     
