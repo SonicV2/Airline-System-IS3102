@@ -91,7 +91,7 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
         
         schedule.setSeatAvailability(null);
         
-        em.remove(seatAvail); //Ask Quan Ge add in code!!!
+        em.remove(seatAvail); 
         em.remove(schedule);
         em.flush();
     }

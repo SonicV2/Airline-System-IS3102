@@ -33,7 +33,7 @@ public class Booking implements Serializable {
     private Date bookingDate;
     private double price;
     private String serviceType;
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST})
     private SeatAvailability seatAvail = new SeatAvailability(); 
 
     
