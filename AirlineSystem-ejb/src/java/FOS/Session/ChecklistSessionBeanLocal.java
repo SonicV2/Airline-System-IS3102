@@ -25,5 +25,6 @@ public interface ChecklistSessionBeanLocal {
     public void deleteChecklistItem (Long key, String checklistName);
     public void updateFilledChecklist (String checklistName, List<ChecklistItem> checkedItems, String comments);
     public List<ChecklistItem> getItemsFromNames(List<String> selectedItemNames);
+    public String retrieveChecklistComments (String checklistName);
     
 }

@@ -33,31 +33,9 @@ public class RoleSessionBean implements RoleSessionBeanLocal {
     private Role role;
     List<Employee> employeelist_role = new ArrayList<Employee>();
 
-//    @Override
-//    public void addRole(String roleName, String accessRightName) {
-//
-//       AccessRight ar= new AccessRight();
-//       role_db.create(roleName.toUpperCase());
-//        if(accessRight.contains("accessAdd")){
-//            System.out.println("sessionBean: accessright");
-//            ar.setAccessAdd(true);         
-//        if(accessRight.contains("accessDelete")){
-//            ar.setAccessDelete(true);
-//        }if(accessRight.contains("accessAssign")){
-//            ar.setAccessAssign(true);
-//        }if(accessRight.contains("accessCreate")){
-//            ar.setAccessCreate(true);
-//        }if(accessRight.contains("accessView")){
-//            ar.setAccessView(true);
-//        }
-//        role_db.setAccess(ar);
-//        em.persist(role_db);
-//        em.flush();
-//    }
     @Override
     public void addRole(String roleName, List<AccessRight> allAccessRights) {
 
-//        List<AccessRight> addedAccessRights = new ArrayList<AccessRight>();
         role_db.create(roleName.toUpperCase());
         role_db.setAccessRights(allAccessRights);
 
@@ -107,77 +85,29 @@ public class RoleSessionBean implements RoleSessionBeanLocal {
         
     }
 
-//    @Override
-//    public String updateRoleAccessRight(String roleName, Boolean accessCreate, Boolean accessDelete, Boolean accessAssign, Boolean accessView ){
-//        Role oneRole = getRole(roleName);
-//        oneRole.getAccess().setAccessCreate(accessCreate);
-//        oneRole.getAccess().setAccessDelete(accessDelete);
-//        oneRole.getAccess().setAccessAssign(accessAssign);
-//        oneRole.getAccess().setAccessView(accessView);
-//        
-//        em.persist(oneRole);
-//        
-//        return "Update success";
-//    }
-    
-    
-    
-//    @Override
-//    public String updateRoleName(OrganizationUnit oldOUnit, OrganizationUnit newOUnit){
-//        if(
-//           em.find(OrganizationUnit.class, oldOUnit.getDepartmentID()) == null){
-//           throw new IllegalArgumentException("Unknown Organization id");
-//        }
-//        
-//        newOUnit.setDepartmentName(newOUnit.getDepartmentName().toUpperCase());
-//        newOUnit.setLocation(newOUnit.getLocation().toUpperCase());
-//        em.merge(newOUnit);
-//        System.out.println("merged organization unit");
-//        return "Updated successfully!";
-//    }
-    
-    
+
     @Override
-    public String updateRoleName(String roleName, String newRoleName) {
-        Role oldRole = getRole(roleName);
+    public String updateRoleName(Role oldRole, Role newRole){
+
         System.out.println("from session bean:" + oldRole.getRoleID() + oldRole.getRoleName());
-        Role newRole = new Role();
+        
+        
         if(em.find(Role.class, oldRole.getRoleID()) == null ){
             throw new IllegalArgumentException("Unknown Role id");
         }
         
-        newRole.setRoleName(newRoleName.toUpperCase());
-//        newRole.setEmployees(oldRole.getEmployees());
-//        newRole.setAccessRights(oldRole.getAccessRights());
+        newRole.setRoleName(newRole.getRoleName().toUpperCase());
         em.merge(newRole);
-        
-        
-
-//        List<Employee> allEmployees = oneRole.getEmployees();
-        
-        
-//        role_db.create(newRoleName.toUpperCase());
-
-//        em.persist(role_db);
-
-        
-       
-
-//        if (allEmployees.size() > 0) {
-//            System.out.println("allEmployees not null");
-//            for (Employee e : allEmployees) {
-//                int index = e.getRoles().indexOf(oneRole);
-//                e.getRoles().set(index, null);
-//                e.getRoles().set(index, newRole);
-//                em.persist(e);
-//            }
-//        }
-
-//        em.remove(oneRole);
-//        em.flush();
-//
-//        em.persist(role_db);
         return "Update Sucess";
+    }
+    
+    @Override
+    public Role getRoleUseID(Long roleID){
+        Query q = em.createQuery("SELECT a FROM Role a WHERE a.roleID =:roleID");
+        q.setParameter("roleID", roleID);
+        List<Role> results = q.getResultList();
+
+        return results.get(0);
     }
 
     @Override
@@ -269,6 +199,8 @@ public class RoleSessionBean implements RoleSessionBeanLocal {
         return "Successful!";
 
     }
+    
+    
 
     public void addNewRole(Employee employee, String new_Role) {
         rolelist = employee.getRoles();
@@ -350,5 +282,4 @@ public class RoleSessionBean implements RoleSessionBeanLocal {
         }
         return role1;
     }
-
 }

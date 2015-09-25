@@ -50,17 +50,21 @@ public void init(){
 
 public String addItem(){
     checklistSessionBean.addChecklistItem(checklistName, checklistItemName);
+    setChecklistName("Select Checklist");
     return "CreateChecklistItem";
 }
 
 public String editParticularChecklist (){
     setChecklistItemsForChecklist(checklistSessionBean.retrieveChecklistItems(checklistName));
     return "EditChecklist";
+    //Page after editing checklistName should be set as "Select Checklist"
 }
 
 public String fillParticularChecklist (){
     setChecklistItemsForChecklist(checklistSessionBean.retrieveChecklistItems(checklistName));
+    setComments (checklistSessionBean.retrieveChecklistComments(checklistName));
     return "FillChecklist";
+    //Page after filling checklist checklistName should be set as "Select Checklist"
 }
 
 
@@ -96,6 +100,7 @@ public String fillParticularChecklist (){
     public String submitChecklist(){
         setSelectedItems(checklistSessionBean.getItemsFromNames(selectedItemNames));
         checklistSessionBean.updateFilledChecklist(checklistName, selectedItems, comments);
+        setChecklistName("Select Checklist");
         return "chooseChecklistToFill";
     }
 

@@ -75,6 +75,7 @@ public class RoleManagedBean {
     private List<AccessRight> accessRightsForRole;
     private String roleNameForAccessRight;
     private Long roleIDforAccessRight;
+    private List<AccessRight> newAccessRights; //if admin wants to add new access rights to a person
     
     public RoleManagedBean() {
     }
@@ -97,6 +98,18 @@ public class RoleManagedBean {
             }
         }
 
+    }
+    
+    public String addNewAccessRights(Long thisRoleID){
+        newAccessRights = new ArrayList<AccessRight>();
+        roleSessionBean.getAccessRights(thisRoleID);
+        newAccessRights = accessRightSession.retrieveAllAccessRight();
+        newAccessRights.removeAll(roleSessionBean.getAccessRights(roleIDforAccessRight));
+        for (AccessRight ar: newAccessRights){
+            System.out.println("from managed bean" + ar.getAccessRightName());
+        }
+        
+        return "viewAccessRight";
     }
 
     public void deleteEmployeeRole(ActionEvent event) {
@@ -196,24 +209,19 @@ public class RoleManagedBean {
 
     public void onRowEdit(RowEditEvent event) {
 
-        Role role = (Role) event.getObject();
+        Role newRole = (Role) event.getObject();
+        
+        Role oldRole = roleSessionBean.getRoleUseID(newRole.getRoleID());
 
-        if (!role.getRoleName().equals(newRoleName)) {
-            System.out.println("updating role name...");
-            System.out.println("name:" + role.getRoleName() + role.getRoleID());
-            
-
-            roleSessionBean.updateRoleName(role.getRoleName(), newRoleName);
-
+        if (!oldRole.getRoleName().equals(newRole.getRoleName())) {
+            roleSessionBean.updateRoleName(oldRole, newRole);
             setAllRoles(roleSessionBean.retrieveAllRoles());
 
             FacesMessage msg = new FacesMessage("Role edited for: ", ((Role) event.getObject()).getRoleName());
             FacesContext.getCurrentInstance().addMessage(null, msg);
-
         } else {
             FacesMessage msg = new FacesMessage("Nothing edited for: ", ((Role) event.getObject()).getRoleName());
             FacesContext.getCurrentInstance().addMessage(null, msg);
-
         }
 
     }
@@ -514,6 +522,20 @@ public class RoleManagedBean {
      */
     public void setRoleIDforAccessRight(Long roleIDforAccessRight) {
         this.roleIDforAccessRight = roleIDforAccessRight;
+    }
+
+    /**
+     * @return the newAccessRights
+     */
+    public List<AccessRight> getNewAccessRights() {
+        return newAccessRights;
+    }
+
+    /**
+     * @param newAccessRights the newAccessRights to set
+     */
+    public void setNewAccessRights(List<AccessRight> newAccessRights) {
+        this.newAccessRights = newAccessRights;
     }
 
 }

@@ -28,6 +28,7 @@ public class CabinCrew extends Employee implements Serializable{
     private List<String> languages;
     private String position;
    private boolean assigned;
+   private String status;
    
    @ManyToOne(cascade={CascadeType.PERSIST})
    private Team team = new Team();
@@ -42,6 +43,7 @@ public class CabinCrew extends Employee implements Serializable{
         this.languages = languages;
         this.position=position;
         this.assigned=false;
+        this.status="NotSignIn";
         
     }
 
@@ -113,6 +115,20 @@ public class CabinCrew extends Employee implements Serializable{
      */
     public void setAssigned(boolean assigned) {
         this.assigned = assigned;
+    }
+
+    /**
+     * @return the status
+     */
+    public String getStatus() {
+        return status;
+    }
+
+    /**
+     * @param status the status to set
+     */
+    public void setStatus(String status) {
+        this.status = status;
     }
 
    
