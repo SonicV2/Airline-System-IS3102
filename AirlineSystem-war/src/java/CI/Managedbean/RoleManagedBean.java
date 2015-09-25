@@ -136,30 +136,7 @@ public class RoleManagedBean {
         return "updateRoles";
 
     }
-
-//    //for admin to create new roles
-//    public String addRole(String roleName) {
-//        
-//        if (roles != null){
-//            for (String s : roles) {                       //Comment out if first time add roles
-//                if (s.equals(roleName.toUpperCase())) {
-//                    FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Role Exists", "");
-//                    FacesContext.getCurrentInstance().addMessage(null, message);
-//                    return "createRole";
-//                }
-//            }
-//        }
-//        
-////        roleSessionBean.addRole(roleName, deleteRoleName);
-////        roleSessionBean.addRole(roleName);
-//        setAllRoles(roleSessionBean.retrieveAllRoles());
-//        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Role Added Successfully", "");
-//        FacesContext.getCurrentInstance().addMessage(null, message);
-//        clear();
-//        
-//        return "createRole";
-//    }
-//    
+   
     public String addRole() {
 
         if (roles != null) {

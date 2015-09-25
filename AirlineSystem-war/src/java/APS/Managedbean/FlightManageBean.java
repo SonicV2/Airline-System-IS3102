@@ -119,7 +119,7 @@ public class FlightManageBean {
         }
         
         if (flights!=null) {
-        for (int i=0; i<flights.size(); i++) {
+        /*for (int i=0; i<flights.size(); i++) {
             
             Flight temp = flightSessionBean.retrieveFlights().get(i);
    
@@ -129,7 +129,7 @@ public class FlightManageBean {
                 return;
             }
             
-        }
+        }*/
 
         if (flightSessionBean.getFlight(flightNo) != null) {
             if (flightSessionBean.getFlight(flightNo).getRoute() == flightSessionBean.getRoute(routeId)) {

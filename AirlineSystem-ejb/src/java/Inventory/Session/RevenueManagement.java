@@ -15,6 +15,8 @@ import Inventory.Entity.BookingClass;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
 import APS.Entity.Flight;
+import Inventory.Entity.Booking;
+import APS.Entity.Schedule;
 
 
 /**
@@ -91,6 +93,7 @@ public class RevenueManagement implements RevenueManagementLocal{
             return null;
         }
     }
+    
     
     public Date convertToDate(String flightDate, String flightTime){
         Date date= new Date();

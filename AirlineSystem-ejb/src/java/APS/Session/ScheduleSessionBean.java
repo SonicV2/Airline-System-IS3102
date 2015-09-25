@@ -9,6 +9,7 @@ import APS.Entity.Aircraft;
 import APS.Entity.Flight;
 import APS.Entity.Schedule;
 import FOS.Entity.Team;
+import Inventory.Entity.Booking;
 import Inventory.Entity.SeatAvailability;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -47,20 +48,20 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
         }
         
         if (!edited.getAircraft().getTailNo().equals(original.getAircraft().getTailNo())) {
-
+            
+            System.out.println("Line 1 Reached!!!");
             Aircraft ac= em.find(Aircraft.class, edited.getAircraft().getTailNo());
             List<Schedule> temp1 = ac.getSchedules();
             temp1.remove(original);
             temp1.add(edited);
             ac.setSchedules(temp1);
-            ac.setStatus("Stand-By");
-            
-            Aircraft or = em.find(Aircraft.class, original.getAircraft().getTailNo());
-            or.setStatus("Out-of-Order");
-
-            
+            System.out.println("Line 2 Reached!!!");
+            System.out.println(em.contains(ac));
+            System.out.println("Line 3 Reached!!!");    
+            System.out.println("Line 4 Reached!!!");
             Long id = edited.getScheduleId();
             Schedule change = em.find(Schedule.class,id);
+            System.out.println(em.contains(change));
             change.setAircraft(ac);
             em.flush();
         }  
@@ -91,9 +92,24 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
         
         schedule.setSeatAvailability(null);
         
-        em.remove(seatAvail); //Ask Quan Ge add in code!!!
+        deleteSeatAvail(seatAvail); 
         em.remove(schedule);
         em.flush();
+    }
+    
+    public void deleteSeatAvail(SeatAvailability sa){
+         Query q = em.createQuery("SELECT o from Booking o WHERE o.seatAvail = :sa");
+         q.setParameter("sa", sa);
+         List<Booking> bookingList = q.getResultList();
+         int size= bookingList.size();
+         for(int i=0; i<size; i++){
+             Long id= bookingList.get(i).getId();
+             Booking booking = em.find(Booking.class, id);
+             booking.setSeatAvail(null);
+             em.flush();
+         }
+         sa.setSchedule(null);
+         em.remove(sa);
     }
 
     @Override
