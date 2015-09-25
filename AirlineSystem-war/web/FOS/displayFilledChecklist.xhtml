@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <head>
+        <title>Choose checklist</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </head>
+    <body>
+        <h:form>
+
+            <h1> #{checklistManagedBean.checklistName} checklist for #{checklistManagedBean.scheduleId}</h1>
+
+            <h:form>
+                <p:dataTable id="tbl" var="item" value="#{checklistManagedBean.checklistItemsForChecklist}"
+                             paginatorTemplate = "{Exporters}" style="margin-bottom:20px">
+
+                    <f:facet name="{Exporters}">
+                        <h:commandLink>
+                            <p:graphicImage name="/demo/images/pdf.png" width="24"/>
+                            <p:dataExporter type="pdf" target="tbl" fileName="checkListReport"/>
+                        </h:commandLink>
+                    </f:facet>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="ChecklistName" />
+                        </f:facet>
+                        <h:outputText value="#{item.name}" />
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Checked"/>
+                        </f:facet>
+                        <h:outputText value="#{item.checked}" />
+                    </p:column>
+
+                    
+                </p:dataTable>
+
+                <h3>Export Data </h3>               
+
+                <h:commandLink>
+                    <p:graphicImage name="/demo/images/pdf.png" />
+                    <p:dataExporter type="pdf" target="tbl" fileName="cars" pageOnly="true" />
+                </h:commandLink>
+                
+            </h:form>
+
+
+        </h:form>
+    </body>
+</html>
