@@ -32,19 +32,15 @@
                 </div>
 
                 <div class="col-lg-12"> 
-                    <p class="pull-right"> * Right click to delete the route</p>
 
                     <h:form>
                         <h:commandButton value="Retrieve" actionListener="#{routeManageBean.retrieve}"/>
                     </h:form>
 
                     <h:form id="form">
-                        <p:contextMenu for="routes">
-                            <p:menuitem value="Delete" update="routes" icon="ui-icon-close" actionListener="#{routeManageBean.removeRoute}"/>
-                        </p:contextMenu>
-
-                        <p:dataTable id="routes" var="route" value="#{routeManageBean.routes}" rowKey="#{route.routeId}"
-                                     selection="#{routeManageBean.selectedRoute}" selectionMode="single" paginator="true" rows="10" widgetVar="routesTable">
+              
+                        <p:growl id="message" showDetail="true"/>
+                        <p:dataTable id="routes" var="route" value="#{routeManageBean.routes}" style="margin-bottom:20px" paginator="true" rows="10" widgetVar="routesTable">
 
                             <f:facet name="header">
                                 <p:outputPanel>
@@ -79,6 +75,11 @@
 
                             <p:column filterBy="#{route.destinationCity}" headerText="Destination City" filterMatchMode="contains">
                                 <h:outputText value="#{route.destinationCity}" />
+                            </p:column>
+                            
+                            <p:column headerText="Delete Route" style="width:60px">
+
+                                <h:commandLink action="#{routeManageBean.removeRoute(route.routeId)}"><i class="fa fa-trash-o"></i> </h:commandLink>
                             </p:column>
 
                         </p:dataTable>

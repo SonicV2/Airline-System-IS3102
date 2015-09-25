@@ -7,19 +7,6 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 
     <h:head>
-        <p:growl id="growl" sticky="true" showDetail="true"/>
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <h:outputStylesheet library ="css"  name="bootstrap.css" />
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
-        <h:outputStylesheet library="css" name="admindb.css" />
-        <h:outputStylesheet library="css" name="morrisjs/morris.css" />
-        <style>
-            .book{
-                background: url("#{resource['images/icon.png']}");
-            }
-        </style>
         <title>View Flights</title>
     </h:head>
 
@@ -30,16 +17,7 @@
         <ui:include src="/CI/dashboardSidebar.xhtml"/>
         <div id="page-wrapper">
 
-            <div class="row">
-                <div class="col-lg-12">
-                    <h2 class="page-header">Book Flights</h2>
-                </div>
-
-                <div class="col-lg-12">
-        <h:form>
-            <h:commandButton value="Retrieve" actionListener="#{scheduleManageBean.retrieve}"/>
-        </h:form>
-
+    
         <h:form id="form">
             
 

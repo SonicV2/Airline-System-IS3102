@@ -44,8 +44,49 @@
                     </li>
 
                 </ui:fragment>
+                
+                <ui:fragment rendered="#{loginManageBean.accessRightIDs.contains(9)}">
+                    <li>
+                        <a href="#{request.contextPath}/APS/AcquireAircraft.xhtml"><i class="fa fa-plus fa-fw"></i> Acquire Aircrafts</a>
+                    </li>
+                    <li>
+                        <a href="#{request.contextPath}/APS/RetireAircraft.xhtml"><i class="fa fa-plus fa-fw"></i> Retire Aircrafts</a>
+                    </li>
+                </ui:fragment>
+                
+<!--                this is for flight management, operations manager -->
+                <ui:fragment rendered="#{loginManageBean.accessRightIDs.contains(11)}">
+                    <li>
+                        <a href="#{request.contextPath}/APS/AddFlight.xhtml"><i class="fa fa-plus fa-fw"></i> Add Flight</a>
+                    </li>
+                    <li>
+                        <a href="#{request.contextPath}/APS/DeleteFlight.xhtml"><i class="fa fa-plus fa-fw"></i> Delete Flights</a>
+                    </li>
+                </ui:fragment>
 
+                <!-- this is for route management, operations manager -->
+                <ui:fragment rendered="#{loginManageBean.accessRightIDs.contains(7)}">
+                    <li>
+                        <a href="#{request.contextPath}/APS/AddRoute.xhtml"><i class="fa fa-plus fa-fw"></i> Add Route</a>
+                    </li>
+                    <li>
+                        <a href="#{request.contextPath}/APS/RemoveRoute.xhtml"><i class="fa fa-plus fa-fw"></i> Delete Route</a>
+                    </li>
+                </ui:fragment>
 
+                <!-- this is for flight scheduling, operations manager -->
+                <ui:fragment rendered="#{loginManageBean.accessRightIDs.contains(13)}">
+                    <li>
+                        <a href="#{request.contextPath}/APS/DeleteSchedule.xhtml"><i class="fa fa-plus fa-fw"></i> Delete Schedule</a>
+                    </li>
+                    <li>
+                        <a href="#{request.contextPath}/APS/UpdateSchedule.xhtml"><i class="fa fa-plus fa-fw"></i> Update Schedule</a>
+                    </li>
+                </ui:fragment>
+                
+                
+
+                
                 <ui:fragment rendered ="#{loginManageBean.employee.roles[0].roleName eq 'SUPER ADMIN'}">
                     <ui:include src="SuperAdminSidebar.xhtml" />
                 </ui:fragment>
