@@ -119,7 +119,7 @@ public class FlightManageBean {
         }
         
         if (flights!=null) {
-        for (int i=0; i<flights.size(); i++) {
+       for (int i=0; i<flights.size(); i++) {
             
             Flight temp = flightSessionBean.retrieveFlights().get(i);
    
