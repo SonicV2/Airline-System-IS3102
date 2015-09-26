@@ -147,7 +147,7 @@ public class ScheduleManageBean {
         FacesContext.getCurrentInstance().addMessage(null, message);
         selectedSchedule = null;
         setSchedules(scheduleSessionBean.getSchedules());
-        
+        updateSchedules();
         return "DeleteSchedule";
         
     }
