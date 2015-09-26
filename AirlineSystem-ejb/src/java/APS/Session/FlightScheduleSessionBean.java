@@ -228,11 +228,12 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
                         System.out.println("Stage 5");
                         //Remove all the schedules before the endTime+2hrs of the earliest schedule 
                         curr = removeScheduleBefore(curr, currTime.getTime());
+
 //                        if (!curr.isEmpty()) {
                         //Find the first occurance of the return flight
                         for (int k = 0; k < curr.size(); k++) {
                             currRoute = curr.get(k).getFlight().getRoute();
-                            if (currRoute.getOriginIATA().equals(incoming.getDestinationIATA()) && incoming.getOriginIATA().equals(currRoute.getOriginIATA())) {
+                            if (currRoute.getOriginIATA().equals(incoming.getDestinationIATA()) && incoming.getOriginIATA().equals(currRoute.getDestinationIATA())) {
                                 earliestSchedule = curr.get(k);
                                 break;
                             }
@@ -428,7 +429,7 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
     private List<Schedule> removeScheduleBefore(List<Schedule> sc, Date date) {
         schedules = new ArrayList<Schedule>();
         for (int i = 0; i < sc.size(); i++) {
-            if (sc.get(i).getStartDate().after(date) && !sc.get(i).getStartDate().equals(date)) {
+            if (sc.get(i).getStartDate().after(date)) {
                 schedules.add(sc.get(i));
             }
         }
