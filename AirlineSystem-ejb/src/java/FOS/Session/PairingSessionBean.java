@@ -349,6 +349,7 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
 
         //to take out the duplicate dates
         for (String s : temp) {
+            System.out.println(">>>>>>>S: "+s);
             differentDates.add(s.substring(10, s.length() - 1));
         }
 
