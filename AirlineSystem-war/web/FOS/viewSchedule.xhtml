@@ -13,16 +13,8 @@
             <b> Flight Date: </b> #{pa.FDate} <br/>
             <b>Flight Duration: </b> #{pa.flightHour} <br/>
             <b>Flight Numbers: </b> 
-            <p:dataList value="#{pa.flightNumbers}" var="fn" type="ordered">
-                #{fn}
-            </p:dataList>
-
-            <p:dataList value="#{pa.flightCities} " var="fa" type="ordered">
-                #{fa}
-            </p:dataList>
-
-            <p:dataList value="#{pa.flightTimes} " var="ft" type="ordered">
-                #{ft}
+            <p:dataList value="#{crewSignInManagedBean.scheduleResult}" var="sr" type="ordered">
+                #{sr}
             </p:dataList>
 
         </p:dataList> 
