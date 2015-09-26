@@ -178,7 +178,7 @@ public String fillParticularChecklist (Long scheduleKey ){
     }
     
     public String submitChecklist(){
-        setSelectedItems(checklistSessionBean.getItemsFromNames(selectedItemNames));
+        setSelectedItems(checklistSessionBean.getItemsFromNames(schedule, checklistName, selectedItemNames));
         checklistSessionBean.updateFilledChecklist(schedule, checklistName, selectedItems, comments);
         return "/CI/employeeDashBoard";
     }
