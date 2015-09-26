@@ -21,20 +21,32 @@ and open the template in the editor.
         <h:outputStylesheet library="css" name="morrisjs/morris.css" />
         <title>Fill checklist</title>
     </h:head>
+    
+    <body>
+ <!--    To add the same header on all dashboard pages  -->
+        <!--       <ui:include src="/CI/dashboardHeader.xhtml"/>-->
+        <!--    To add the same sidebar on all dashboard pages  -->
+        <ui:include src="/CI/dashboardSidebar.xhtml"/>
 
+        <div id="page-wrapper">
+            <div class="row">
+                
+                
     <h:form id="iform">
         <h3>Fill in #{checklistManagedBean.checklistName} checklist</h3>
         <p:selectManyCheckbox  value="#{checklistManagedBean.selectedItemNames}" layout="grid" columns="1">
             <f:selectItems value="#{checklistManagedBean.checklistItemsForChecklist}" var="item" itemLabel="#{item.name}" itemValue="#{item.name}"/>
         </p:selectManyCheckbox>
 
-        <h2>Comments</h2>
-        <p:inputTextarea rows="30" cols="50" value ="#{checklistManagedBean.comments}" />
+        <h4>Comments</h4>
+        <p:inputTextarea rows="5" cols="50" value ="#{checklistManagedBean.comments}" />
 
         <div class="text-center">
             <h:commandButton class="btn btn-outline btn-success" value="Submit checklist"  action="#{checklistManagedBean.submitChecklist()}"/>
         </div>
 
     </h:form>
-
+            </div>
+        </div>
+    </body>
 </html>
