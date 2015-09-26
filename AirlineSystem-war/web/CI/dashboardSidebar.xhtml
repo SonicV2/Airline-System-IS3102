@@ -91,10 +91,6 @@
                     </li>
                 </ui:fragment>
 
-
-
-
-
                 <!--                this is for Aircraft acquisition, finance manager -->
                 <ui:fragment rendered="#{loginManageBean.accessRightIDs.contains(9)}">
                     <li>
@@ -198,56 +194,63 @@
                     <li>
                         <a href="#{request.contextPath}/FOS/crewSignIn.xhtml"><i class="fa fa-plus fa-eye"></i> Crew Sign-In</a>
                     </li>
+                    <h:form>
+                    <li>        
+                        <a><h:commandLink class="commandLink" action="/FOS/viewSchedule" actionListener="#{crewSignInManagedBean.viewPairing}"><i class="fa fa-plus fa-eye"></i> View My Schedules </h:commandLink></a>
+                    </li>
+                    </h:form>
                 </ui:fragment>
 
-                <!-- this is for pilot check list, pilot can have this access -->
-                <ui:fragment rendered="#{loginManageBean.accessRightIDs.contains(21)}">
+
+                <!--this is for operations manager to search for crew-->
+                <ui:fragment rendered="#{loginManageBean.accessRightIDs.contains(15)}">
                     <li>
-                        <a href="#{request.contextPath}/FOS/crewSignIn.xhtml"><i class="fa fa-plus fa-eye"></i> Crew Sign-In</a>
+                        <a href="#{request.contextPath}/FOS/searchCrew.xhtml"><i class="fa fa-plus fa-eye"></i> Search for Crew</a>
+                    </li>
+                    <li>
+                        <a href="#{request.contextPath}/FOS/searchPilot.xhtml"><i class="fa fa-plus fa-eye"></i> Search for Pilot</a>
                     </li>
                 </ui:fragment>
-
-                <!-- this is for crew check list, crew can have this access -->
-                <ui:fragment rendered="#{loginManageBean.accessRightIDs.contains(21)}">
-                    <h:form>
-                        <li>
-                            <a><h:commandLink class="commandLink" action="#{checklistManagedBean.fillParticularChecklist('Pilot')}"><i class="fa fa-plus fa-eye"></i> Crew Sign-In</h:commandLink></a>
-                        </li>
-
-                    </h:form>
-                </ui:fragment>
-
-                <!-- this is for crew check list, crew can have this access -->
-                <ui:fragment rendered="#{loginManageBean.accessRightIDs.contains(21)}">
-                    <h:form>
-                        <li>
-                            <a><h:commandLink class="commandLink" action="#{checklistManagedBean.fillParticularChecklist('Pilot')}"><i class="fa fa-plus fa-eye"></i> Crew Sign-In</h:commandLink></a>
-                        </li>
-
-                    </h:form>
-                </ui:fragment>
-
-                <!--this is for operations manager to manage crew scheduling-->
-                <ui:fragment rendered="#{loginManageBean.accessRightIDs.contains(15)}">
-                    <h:form>              
-                        <li>        
-                            <a><h:commandLink class="commandLink" action="/FOS/viewSchedule" actionListener="#{crewSignInManagedBean.viewPairing}"><i class="fa fa-plus fa-eye"></i> View All Crew Schedules </h:commandLink></a>
-                        </li>
-                    </h:form>
-                </ui:fragment>
-
-
+                
+                
                 <!--this is for operations manager or executive to manage checklist-->
                 <ui:fragment rendered="#{loginManageBean.accessRightIDs.contains(20)}">   
-                    <h:form>
-                        <li>
-                            <a><h:commandLink class="commandLink" action="#{checklistManagedBean.directToCreateChecklistItem()}"><i class="fa fa-plus fa-fw"></i>Add Checklist Item</h:commandLink></a>
-                        </li>
+
+                    <h:form>                        
                         <li>
                             <a><h:commandLink class="commandLink" action="#{checklistManagedBean.directToChooseChecklistToView()}"><i class="fa fa-plus fa-eye"></i>View filled checklists</h:commandLink></a>
                         </li>
                     </h:form>
                 </ui:fragment>
+
+                                <!-- this is for pilot checklist-->
+                <ui:fragment rendered="#{loginManageBean.accessRightIDs.contains(21)}">
+                    <h:form>
+                        <li>
+                            <a><h:commandLink class="commandLink" action="#{checklistManagedBean.fillParticularChecklist('Pilot')}"><i class="fa fa-plus fa-eye"></i> Crew Sign-In</h:commandLink></a>
+                        </li>
+
+                    </h:form>
+                </ui:fragment>
+                                
+                                                <!-- this is for crew checklist-->
+                <ui:fragment rendered="#{loginManageBean.accessRightIDs.contains(22)}">
+                    <h:form>
+                        <li>
+                            <a><h:commandLink class="commandLink" action="#{checklistManagedBean.fillParticularChecklist('Cabin Crew')}"><i class="fa fa-plus fa-eye"></i> Crew Sign-In</h:commandLink></a>
+                        </li>
+                    </h:form>
+                </ui:fragment>
+                                                
+                                                                                                <!-- this is for crew checklist-->
+                <ui:fragment rendered="#{loginManageBean.accessRightIDs.contains(23)}">
+                    <h:form>
+                        <li>
+                            <a><h:commandLink class="commandLink" action="#{checklistManagedBean.fillParticularChecklist('Ground Staff')}"><i class="fa fa-plus fa-eye"></i> Crew Sign-In</h:commandLink></a>
+                        </li>
+                    </h:form>
+                </ui:fragment>
+
             </ul>
 
         </div>
