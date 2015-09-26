@@ -55,6 +55,7 @@ public class CrewSignInManagedBean {
     private Pairing selectPairing;
     private String msg;
     private Schedule firstSchedule;
+    private List<String> scheduleResult;
 
     /**
      * Creates a new instance of CrewSignInManagedBean
@@ -71,7 +72,36 @@ public class CrewSignInManagedBean {
         setTeam(getCrewSignInSessionBean().getCCTeam(crewName));
         viewMembers();
         getCurrentPairing();
+        scheduleNew();
     }
+    
+    public void scheduleNew(){
+        String temp;
+        scheduleResult= new ArrayList<String>();
+        for(int i=0 ; i<pairings.size(); i++){
+            for(int j=0;j<pairings.get(i).getFlightNumbers().size();j++){
+                if(j!=0){
+                String temp1=pairings.get(i).getFlightTimes().get(j).substring(10);
+                
+                String temp2= pairings.get(i).getFlightTimes().get(j-1).substring(10);
+                
+                if(!temp1.equals(temp2)){
+                   scheduleResult.add("-----------------------------------------------------------"); 
+                }
+                
+                temp=pairings.get(i).getFlightNumbers().get(j) + "----" +
+                     pairings.get(i).getFlightCities().get(j)+ "\u2708" + pairings.get(i).getFlightCities().get(j+1)+
+                     "-----"+ pairings.get(i).getFlightTimes().get(j);
+                scheduleResult.add(temp);
+                
+                
+                }
+            }
+        }
+    
+    }
+    
+    
 
     public void viewMembers() {
         messages = new ArrayList<String>();
@@ -356,5 +386,15 @@ public class CrewSignInManagedBean {
     public void setFirstSchedule(Schedule firstSchedule) {
         this.firstSchedule = firstSchedule;
     }
+
+    public List<String> getScheduleResult() {
+        return scheduleResult;
+    }
+
+    public void setScheduleResult(List<String> scheduleResult) {
+        this.scheduleResult = scheduleResult;
+    }
+    
+    
 
 }
