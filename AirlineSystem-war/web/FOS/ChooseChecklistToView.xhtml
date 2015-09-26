@@ -26,7 +26,7 @@
         <div id="page-wrapper">
             <div class="row">
             <div class="col-lg-12">
-                <h2 class="page-header">View Existing Flights</h2>
+                <h2 class="page-header">Select Checklist for Flight</h2>
             </div>
             
             <div class="col-lg-12">
@@ -34,7 +34,7 @@
             <h:form id="form">
 
 
-                <p:dataTable id="schedules" var="schedule" value="#{scheduleManageBean.schedules}" rowKey="#{schedule.scheduleId}"
+                <p:dataTable id="schedules" var="schedule" value="#{scheduleManageBean.pastSchedules}" rowKey="#{schedule.scheduleId}"
                              selection="#{scheduleManageBean.selectedSchedule}" selectionMode="single" paginator="true" rows="10" widgetVar="schedulesTable">
 
                     <f:facet name="header">
@@ -67,9 +67,19 @@
                     </p:column>
 
 
-                    <p:column headerText="Book" style="width:60px;">
+                    <p:column headerText="Pilot list" style="width:60px;">
                         <h:commandLink
-                            action="#{priceManageBean.get1Flight(schedule.flight.flightNo,schedule.startDate)}"><i class="fa fa-dollar"></i></h:commandLink>
+                            action="#{checklistManagedBean.directToFilledChecklist(schedule.scheduleId, 'Pilot')}"><i class="fa fa-plane"></i></h:commandLink>
+                    </p:column>
+                    
+                    <p:column headerText="Cabin Crew list" style="width:60px;">
+                        <h:commandLink
+                            action="#{checklistManagedBean.directToFilledChecklist(schedule.scheduleId, 'Cabin Crew')}"><i class="fa fa-compass"></i></h:commandLink>
+                    </p:column>
+                    
+                    <p:column headerText="Ground Staff list" style="width:60px;">
+                        <h:commandLink
+                            action="#{checklistManagedBean.directToFilledChecklist(schedule.scheduleId, 'Ground Staff')}"><i class="fa fa-street-view"></i></h:commandLink>
                     </p:column>
 
                 </p:dataTable>

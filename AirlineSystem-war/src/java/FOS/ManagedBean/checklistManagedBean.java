@@ -5,9 +5,12 @@
  */
 package FOS.ManagedBean;
 
+import APS.Entity.Schedule;
+import APS.Session.ScheduleSessionBeanLocal;
+import FOS.Entity.Checklist;
 import FOS.Entity.ChecklistItem;
 import FOS.Session.ChecklistSessionBeanLocal;
-import Inventory.Entity.BookingClass;
+import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -29,6 +32,9 @@ import org.primefaces.event.RowEditEvent;
 public class checklistManagedBean {
      @EJB
     private ChecklistSessionBeanLocal checklistSessionBean;
+     
+     @EJB
+    private ScheduleSessionBeanLocal scheduleSessionBean;
    
 private String checklistItemName; 
 private String checklistName;
@@ -38,6 +44,9 @@ private long itemKey;
 private List <String> selectedItemNames;
 private List <ChecklistItem> selectedItems;
 private String comments;
+private long scheduleId;
+private Schedule schedule;
+private Checklist checklistForSchedule;
 
 public checklistManagedBean(){
     
@@ -45,26 +54,66 @@ public checklistManagedBean(){
 
 @PostConstruct
 public void init(){
-   setChecklistTypes(checklistSessionBean.retrieveAllChecklists());
+List<String> allChecklistTypes = new ArrayList();
+allChecklistTypes.add("Pilot");
+allChecklistTypes.add("Cabin Crew");
+allChecklistTypes.add("Ground Staff");
+setChecklistTypes(allChecklistTypes);
+
+//setChecklistTypes(checklistSessionBean.retrieveAllChecklists());
+}
+
+public void clear(){
+    setComments("");
+    for (ChecklistItem eachItem: checklistItemsForChecklist){
+        eachItem.setChecked(false);
+    }
+}
+
+public String directToChooseChecklistToAddTo(){
+    return"/FOS/ChooseChecklistToAddTo";
+}
+
+public String directToChooseChecklistToEdit(){
+    return"/FOS/ChooseChecklistToEdit";
+}
+
+public String editChecklist(Long scheduleKey, String checklistToEdit ){
+         setScheduleId(scheduleKey);
+         setChecklistName (checklistToEdit);
+         setSchedule(scheduleSessionBean.getSchedule(scheduleId));
+         setChecklistItemsForChecklist(checklistSessionBean.retrieveChecklistItemsByScheduleAndChecklistName(schedule, checklistName));
+         return "/FOS/EditChecklist";
+}
+
+public String addChecklistItem(Long scheduleKey, String checklistToAdd ){
+         setScheduleId(scheduleKey);
+         setChecklistName (checklistToAdd);
+         setSchedule(scheduleSessionBean.getSchedule(scheduleId));
+         return "/FOS/CreateChecklistItem";
+}
+
+public String homePage(){
+    setComments("");
+    return "/CI/employeeDashBoard";
 }
 
 public String addItem(){
-    checklistSessionBean.addChecklistItem(checklistName, checklistItemName);
-    setChecklistName("Select Checklist");
-    return "CreateChecklistItem";
+    checklistSessionBean.addChecklistItemByScheduleAndChecklistName(schedule,checklistName, checklistItemName);
+    return "/CI/employeeDashBoard";
 }
 
-public String editParticularChecklist (){
+public String editParticularChecklist (String checklistCanAccess){
+    setChecklistName(checklistCanAccess);
     setChecklistItemsForChecklist(checklistSessionBean.retrieveChecklistItems(checklistName));
-    return "EditChecklist";
-    //Page after editing checklistName should be set as "Select Checklist"
+    return "/FOS/EditChecklist";
 }
 
-public String fillParticularChecklist (){
+public String fillParticularChecklist (String checklistCanAccess){
+    setChecklistName(checklistCanAccess);
     setChecklistItemsForChecklist(checklistSessionBean.retrieveChecklistItems(checklistName));
-    setComments (checklistSessionBean.retrieveChecklistComments(checklistName));
-    return "FillChecklist";
-    //Page after filling checklist checklistName should be set as "Select Checklist"
+    clear();
+    return "/FOS/FillChecklist";
 }
 
 
@@ -92,16 +141,34 @@ public String fillParticularChecklist (){
     }
     
     public String deleteItem(Long id){
-        checklistSessionBean.deleteChecklistItem(id, checklistName);
-        setChecklistItemsForChecklist(checklistSessionBean.retrieveChecklistItems(checklistName));
+        setSchedule(scheduleSessionBean.getSchedule(scheduleId));
+        checklistSessionBean.deleteChecklistItem(schedule, id, checklistName);
+        setChecklistItemsForChecklist(checklistSessionBean.retrieveChecklistItemsByScheduleAndChecklistName(schedule, checklistName));
         return "EditChecklist";
+    }
+    
+    public String editChecklistDone(){
+        return "/CI/employeeDashBoard";
     }
     
     public String submitChecklist(){
         setSelectedItems(checklistSessionBean.getItemsFromNames(selectedItemNames));
         checklistSessionBean.updateFilledChecklist(checklistName, selectedItems, comments);
-        setChecklistName("Select Checklist");
-        return "chooseChecklistToFill";
+        return "/CI/employeeDashBoard";
+    }
+    
+    public String directToChooseChecklistToView(){
+        return "/FOS/ChooseChecklistToView";
+    }
+    
+     public String directToFilledChecklist(Long scheduleKey, String checklistToView){
+         //Have schedule ID and checklist name
+         setScheduleId(scheduleKey);
+         setChecklistName (checklistToView);
+         setSchedule(scheduleSessionBean.getSchedule(scheduleId));
+         setChecklistItemsForChecklist(checklistSessionBean.retrieveChecklistItemsByScheduleAndChecklistName(schedule, checklistName));
+         setComments(checklistSessionBean.retrieveChecklistCommentsByScheduleAndChecklistName(schedule, checklistName));
+         return "/FOS/displayFilledChecklist";
     }
 
 
@@ -177,6 +244,32 @@ public String fillParticularChecklist (){
     public void setComments(String comments) {
         this.comments = comments;
     }
+
+    public long getScheduleId() {
+        return scheduleId;
+    }
+
+    public void setScheduleId(long scheduleId) {
+        this.scheduleId = scheduleId;
+    }
+
+    public Schedule getSchedule() {
+        return schedule;
+    }
+
+    public void setSchedule(Schedule schedule) {
+        this.schedule = schedule;
+    }
+
+    public Checklist getChecklistForSchedule() {
+        return checklistForSchedule;
+    }
+
+    public void setChecklistForSchedule(Checklist checklistForSchedule) {
+        this.checklistForSchedule = checklistForSchedule;
+    }
+    
+    
     
     
    

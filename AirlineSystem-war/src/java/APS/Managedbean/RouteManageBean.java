@@ -116,6 +116,7 @@ public class RouteManageBean {
         routeSessionBean.addRoute(originIATA, destinationIATA);
         FacesMessage msg = new FacesMessage("Route Added Successfully!");
         FacesContext.getCurrentInstance().addMessage(null, msg);
+        setRoutes(routeSessionBean.retrieveRoutes());
         clear();
     }
     
@@ -125,12 +126,25 @@ public class RouteManageBean {
         setDestinationIATA("");
     }
 
-    public void removeRoute(ActionEvent event){
+    public String removeRoute(Long routeId){
+        
+        selectedRoute = routeSessionBean.getRoute(routeId);
+        
+        if (!selectedRoute.getFlights().isEmpty()){
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Route cannot be deleted!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return null;
+        }
+        
         routes.remove(selectedRoute);
         routeSessionBean.deleteRoute(selectedRoute.getRouteId());
         FacesMessage msg = new FacesMessage("Route Removed");
         FacesContext.getCurrentInstance().addMessage(null, msg);
         selectedRoute = null;
+        setRoutes(routeSessionBean.retrieveRoutes());
+        
+        return "RemoveRoute";
+        
     }
     
     public String getSearchCountry() {

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:head>
+        <p:growl id="growl" sticky="true" showDetail="true"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <h:outputStylesheet library ="css"  name="bootstrap.css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
+        <h:outputStylesheet library="css" name="admindb.css" />
+        <h:outputStylesheet library="css" name="morrisjs/morris.css" />
+        <title>Filled checklist</title>
+    </h:head>
+
+
+    <body>
+        <h:form>
+            <p:dataTable id="tbl" var="item" value="#{customizedDocumentsView.items}"
+                         style="margin-bottom:20px" >                           
+
+          
+                   
+                <f:facet name="header">    
+                    <h:outputText value="#{checklistManagedBean.checklistName} checklist for Flight No: #{checklistManagedBean.schedule.flight.flightNo}, Schedule Id:#{checklistManagedBean.schedule.scheduleId}"/> 
+                    </f:facet>
+                
+
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Item Name" />
+                    </f:facet>
+                    <h:outputText value="#{item.name}" />
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Checked"/>
+                    </f:facet>
+                    <h:selectBooleanCheckbox value="#{item.checked}" onclick="return false;" onkeydown="return false"/>
+                </p:column>
+
+
+            </p:dataTable>
+            
+            <h3>Comments:</h3>
+            <h:outputText value="#{customizedDocumentsView.comments}" />
+            
+            
+
+            <h3>Export Data</h3>          
+
+        <h:commandLink id="pdf">
+        <p:graphicImage name="images/pdf.png" />
+        <p:dataExporter type="pdf" target="tbl" fileName="Checklist" preProcessor="#{customizedDocumentsView.preProcessPDF}" />
+        </h:commandLink>
+            
+            <div class="text-center">
+                <h:commandButton class="btn btn-outline btn-success" value="Home Page"  action="#{checklistManagedBean.homePage()}"/>
+            </div>
+            
+
+        </h:form>
+    </body>
+</html>

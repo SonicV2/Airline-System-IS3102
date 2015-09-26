@@ -16,6 +16,7 @@ import FOS.Entity.Leg;
 import FOS.Entity.Pairing;
 import FOS.Entity.PairingPolicy;
 import FOS.Entity.Team;
+import static FOS.Session.PairingSessionBean.addFlightHours;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -24,6 +25,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import javax.ejb.Stateless;
@@ -61,7 +64,7 @@ public class A380PairingSessionBean implements A380PairingSessionBeanLocal {
         int totalFlightHours = 0;
 
         legs = addLeg380(selectMonth);
-
+        if(legs.size()==0){}else{
         sortList(legs);
         String destination = legs.get(0).getDestination();
         int startHour = legs.get(0).getStartHour();
@@ -122,14 +125,14 @@ public class A380PairingSessionBean implements A380PairingSessionBeanLocal {
         } while (legs.size() > 0);
         // }
     }
-
+    }
     private void sortList(ArrayList<Leg> legs) {
         Collections.sort(legs);
     }
 
     //Pairing for A380
     public ArrayList<Leg> addLeg380(String selectMonth) {
-
+        
         legss = new ArrayList<Leg>();
 
         Query q = em.createQuery("SELECT s FROM Schedule s");
@@ -193,8 +196,8 @@ public class A380PairingSessionBean implements A380PairingSessionBeanLocal {
         setPolicy();
         for (Leg i : legs) {
             if ((i.getDate1().equals(date2)) && (i.getOrigin().equals(destination))
-                    && ((calcDifMin(finishHour, i.getStartHour())) > getTime_scale_min()) && (i.getStartHour() > startHour)
-                    && (numLegs < getNum_max_legs()) && (numHourFlight <= hours_max_flight)) {
+                    && ((calcDifMin(finishHour, i.getStartHour())) > time_scale_min) && (i.getStartHour() > startHour)
+                    && (numLegs < num_max_legs) && (numHourFlight <= hours_max_flight)) {
 
                 hours = calcFlightHours(i.getStartHour(), i.getFinishHour());
                 sum = sum + hours;
@@ -204,11 +207,35 @@ public class A380PairingSessionBean implements A380PairingSessionBeanLocal {
                     found = true;
                 }
             }
+
+            if (getFormatted(i.getDate1()) > getFormatted(date2) && (i.getOrigin().equals(destination))
+                    && (i.getStartHour() + 2400 - finishHour > 600)
+                    && (numLegs < num_max_legs) && (numHourFlight <= hours_max_flight)) {
+                hours = calcFlightHours(i.getStartHour(), i.getFinishHour());
+                sum = sum + hours;
+                sum = addFlightHours(sum, numHourFlight);
+                if ((found == false) && (sum <= hours_max_flight)) {
+                    sol = i;
+                    found = true;
+
+                }
+            }
+
         }
 
         return sol;
 
     }
+    public Long getFormatted(String da) {
+        String d1 = da.split("/")[0];
+        String d2 = da.split("/")[1];
+        String d3 = da.split("/")[2];
+        String format = d3 + d2 + d1;
+        Long day = Long.parseLong(format);
+        return day;
+    }
+
+
 
     public void showSoln(ArrayList<Leg> leg, int numSol, int hFlight) {  //unformated
 
@@ -310,7 +337,27 @@ public class A380PairingSessionBean implements A380PairingSessionBeanLocal {
     @Override
     public Team generateA380Team(Pairing pairing) {
         String flightDate = pairing.getFDate();
-//        String flightHour = pairing.getFlightHour();
+        
+        List<String> flightDates = new ArrayList<String>();
+        List<String> temp = pairing.getFlightTimes();
+        List<String> differentDates = new ArrayList<String>();
+
+        //to take out the duplicate dates
+        
+        for (String s : temp) {
+            differentDates.add(s.substring(10, s.length() - 1));
+        }
+
+        HashSet<String> uniqueDates = new HashSet<>(differentDates);
+
+        Iterator itr = uniqueDates.iterator();
+
+        while (itr.hasNext()) {
+            flightDates.add(itr.next().toString());
+        }
+        
+        
+        
         List<String> flightCities = pairing.getFlightCities();
         List<String> flightNumbers = pairing.getFlightNumbers();
 //        List<String> flightTimes = pairing.getFlightTimes();
@@ -423,7 +470,7 @@ public class A380PairingSessionBean implements A380PairingSessionBeanLocal {
 
             schedules = new ArrayList<Schedule>();
             schedules = flight.getSchedule();
-
+             for(String ss : flightDates){ 
             for (Schedule sh : schedules) {
                 String formattedDate = new SimpleDateFormat("dd/MM/yyyy").format(sh.getStartDate());
                 if (formattedDate.equals(flightDate)) {
@@ -439,6 +486,7 @@ public class A380PairingSessionBean implements A380PairingSessionBeanLocal {
                     em.flush();
                 }
             }
+             }
             team.setStatus("Formed");
 
             pairing.setPaired(true);

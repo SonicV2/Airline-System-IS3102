@@ -10,6 +10,8 @@ import APS.Session.FlightScheduleSessionBeanLocal;
 import APS.Session.FlightSessionBeanLocal;
 import APS.Session.RouteSessionBeanLocal;
 import APS.Session.FleetSessionBeanLocal;
+import APS.Session.ScheduleSessionBeanLocal;
+import CI.Managedbean.LoginManageBean;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -18,6 +20,7 @@ import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.inject.Named;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
@@ -42,6 +45,11 @@ public class FlightManageBean {
     private RouteSessionBeanLocal routeSessionBean;
     @EJB
     private FleetSessionBeanLocal fleetSessionBean;
+    @EJB
+    private ScheduleSessionBeanLocal scheduleSessionBean;
+    
+//    @ManagedProperty(value="#{scheduleManageBean}")
+//    private ScheduleManageBean scheduleManageBean;
     
     @PersistenceContext(unitName = "AirlineSystem-ejbPU")
     private EntityManager em;
@@ -219,15 +227,19 @@ public class FlightManageBean {
 
         flightSessionBean.addFlight(flightNo, flightDays, basicFare, startDateTime, routeId);
         flightScheduleSessionBean.scheduleFlights(flightNo);
-        flightScheduleSessionBean.dummyRotate();
+        flightScheduleSessionBean.rotateFlights();
         flightDays = "";
         FacesMessage msg = new FacesMessage("Flight Added Successfully!");
         FacesContext.getCurrentInstance().addMessage(null, msg);
+        setFlights(flightSessionBean.retrieveFlights());
+        setSchedule(scheduleSessionBean.getSchedules());
         clear();
+//        scheduleManageBean.updateSchedules();
     }
     
-    public void deleteFlight(ActionEvent event) {
+    public String deleteFlight(String flightNo) {
         
+        selectedFlight = flightSessionBean.getFlight(flightNo);
         flights.remove(selectedFlight);
         
         //search for Flight Num in Flight lists linked to the Route and remove the Flight
@@ -254,8 +266,14 @@ public class FlightManageBean {
 
         flightSessionBean.deleteFlight(selectedFlight.getFlightNo());
         selectedFlight = null;
+        
         FacesMessage msg = new FacesMessage("Flight Removed");
         FacesContext.getCurrentInstance().addMessage(null, msg);
+        
+        setFlights(flightSessionBean.retrieveFlights());
+        setSchedule(scheduleSessionBean.getSchedules());
+        
+        return "DeleteFlight";
         
     }
     
@@ -418,4 +436,14 @@ public class FlightManageBean {
     public void setSelectedFlight(Flight selectedFlight) {
         this.selectedFlight = selectedFlight;
     }
+//
+//    public ScheduleManageBean getScheduleManageBean() {
+//        return scheduleManageBean;
+//    }
+//
+//    public void setScheduleManageBean(ScheduleManageBean scheduleManageBean) {
+//        this.scheduleManageBean = scheduleManageBean;
+//    }
+    
+    
 }

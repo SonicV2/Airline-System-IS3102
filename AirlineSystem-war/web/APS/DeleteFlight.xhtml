@@ -32,19 +32,11 @@
                 </div>
 
                 <div class="col-lg-12"> 
-                    <p class="pull-right"> * Right click to delete the flight</p>
-                    <h:form>
-                        <h:commandButton value="Retrieve" actionListener="#{flightManageBean.retrieve}"/>
-                    </h:form>
 
                     <h:form id="form">
-
-                        <p:contextMenu for="flights">
-                            <p:menuitem value="Delete" update="flights" icon="ui-icon-close" actionListener="#{flightManageBean.deleteFlight}"/>
-                        </p:contextMenu>
-
-                        <p:dataTable id="flights" var="flight" value="#{flightManageBean.flights}" rowKey="#{flight.flightNo}"
-                                     selection="#{flightManageBean.selectedFlight}" selectionMode="single" paginator="true" rows="10" widgetVar="flightsTable">
+              
+                       <p:growl id="message" showDetail="true"/>
+                        <p:dataTable id="flights" var="flight" value="#{flightManageBean.flights}" style="margin-bottom:20px" paginator="true" rows="10" widgetVar="flightsTable">
 
                             <f:facet name="header">
 
@@ -81,6 +73,17 @@
 
                             <p:column filterBy="#{flight.aircraftType.id}" headerText="Aircraft Type" filterMatchMode="contains">
                                 <h:outputText value="#{flight.aircraftType.id}" />
+                            </p:column>
+                            
+<!--                            only operations manager can delete flight-->
+                            <p:column headerText="Delete Flight" style="width:60px" rendered="#{loginManageBean.accessRightIDs.contains(11)}">
+
+                                <h:commandLink onclick="if (!confirm('Do you really want to delete this flight? It will delete all the related schedules!')) {
+                                            return false;
+                                        }
+                                        ;
+                                        return true;
+                                        " action="#{flightManageBean.deleteFlight(flight.flightNo)}"><i class="fa fa-trash-o"></i> </h:commandLink>
                             </p:column>
 
                         </p:dataTable>

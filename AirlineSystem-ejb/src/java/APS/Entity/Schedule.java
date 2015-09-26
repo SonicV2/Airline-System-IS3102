@@ -49,13 +49,13 @@ public class Schedule implements Serializable {
     @ManyToOne(cascade = {CascadeType.PERSIST})
     private Team team = new Team();
 
-    @OneToOne(cascade = {CascadeType.ALL})
+    @OneToOne
     private SeatAvailability seatAvail;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST})
+    @ManyToOne
     private Aircraft aircraft = new Aircraft();
 
-    @OneToMany(cascade = {CascadeType.PERSIST})
+    @OneToMany(cascade = {CascadeType.REMOVE})
     private List<Checklist> checklists = new ArrayList<Checklist>();
     
     public void createSchedule(Date startDate, Date endDate){

@@ -44,7 +44,7 @@
                         </p:column>
                         <p:column headerText ="Book" style="width:100px">
                             <h:form>           
-                                <h:commandLink value= "Book" action="#{priceManageBean.makeBooking(price.price, price.serviceType)}">
+                                <h:commandLink value= "Book" action="#{priceManageBean.makeBooking(price.price, price.serviceType,price.avail)}">
                                 </h:commandLink>
                             </h:form>
                         </p:column>
@@ -53,6 +53,8 @@
 
 
                     </p:dataTable>
+                    <br></br>
+            <br></br>
                 </div>
             </div>
         </div>

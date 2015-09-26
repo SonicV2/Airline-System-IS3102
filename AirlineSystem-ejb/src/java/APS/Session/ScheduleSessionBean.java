@@ -249,7 +249,7 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
     }
 
     @Override
-    public List<Schedule> getSchedules(String tailNo) {
+    public List<Schedule> getSchedules(Long tailNo) {
         aircraft = new Aircraft();
         try {
             Query q = em.createQuery("SELECT a FROM Aircraft " + "AS a WHERE a.tailNo=:tailNo");
@@ -284,4 +284,28 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
 
         return endTime.getTime();
     }
+    
+    @Override
+    public List<Schedule> filterForPastSchedules (List<Schedule> schedules){
+        List<Schedule> pastSchedules = new ArrayList();
+        Date currentDate = new Date();
+        for (Schedule eachSchedule : schedules){
+            if (eachSchedule.getEndDate().compareTo(currentDate)<0)
+                pastSchedules.add(eachSchedule);
+        }
+        return pastSchedules;
+    }
+    
+     @Override
+    public List<Schedule> filterForFutureSchedules (List<Schedule> schedules){
+        List<Schedule> futureSchedules = new ArrayList();
+        Date currentDate = new Date();
+        for (Schedule eachSchedule : schedules){
+            if (eachSchedule.getStartDate().compareTo(currentDate)>0)
+                futureSchedules.add(eachSchedule);
+        }
+        return futureSchedules;
+    }
+    
+    
 }

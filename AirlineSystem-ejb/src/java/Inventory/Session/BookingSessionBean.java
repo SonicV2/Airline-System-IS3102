@@ -28,6 +28,8 @@ public class BookingSessionBean implements BookingSessionBeanLocal {
     public void addBooking(double price, String serviceType, 
             SeatAvailability seatAvail){
         Booking booking = new Booking();
+        Long id = seatAvail.getId();
+        seatAvail= em.find(SeatAvailability.class, id);
         booking.createBooking(price, serviceType, seatAvail);
         em.persist(booking);
         if(serviceType.equals("Economy Saver"))
@@ -40,8 +42,9 @@ public class BookingSessionBean implements BookingSessionBeanLocal {
             seatAvail.setBusinessBooked(seatAvail.getBusinessBooked()+1);
         if(serviceType.equals("First Class"))
             seatAvail.setFirstClassBooked(seatAvail.getFirstClassBooked()+1);  
-        
-        em.merge(seatAvail);
+       
+       System.out.println(em.contains(seatAvail));
+       em.flush();
     }
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")

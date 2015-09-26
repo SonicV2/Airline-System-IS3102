@@ -33,17 +33,25 @@ public class Booking implements Serializable {
     private Date bookingDate;
     private double price;
     private String serviceType;
-    @ManyToOne
-    private SeatAvailability seatAvail = new SeatAvailability(); 
+    @ManyToOne(cascade = {CascadeType.PERSIST})
+    private SeatAvailability seatAvail = new SeatAvailability();
+    private String flightNo;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date flightDate;
+    private String bookingStatus;
 
     
     public void createBooking(double price, String serviceType, 
             SeatAvailability seatAvail){
-        this.price=price;
-        this.serviceType = serviceType;
-        this.seatAvail = seatAvail;
-        bookingDate= new Date();
+        this.setPrice(price);
+        this.setServiceType(serviceType);
+        this.setSeatAvail(seatAvail);
+        setBookingDate(new Date());
+        setBookingStatus("normal");
+        this.setFlightNo(seatAvail.getSchedule().getFlight().getFlightNo());
+        this.setFlightDate(seatAvail.getSchedule().getStartDate());
     }
+
     /**
      * @return the id
      */
@@ -87,13 +95,15 @@ public class Booking implements Serializable {
     }
 
     /**
-     * @return the bookingClass
+     * @return the serviceType
      */
     public String getServiceType() {
         return serviceType;
     }
 
-    
+    /**
+     * @param serviceType the serviceType to set
+     */
     public void setServiceType(String serviceType) {
         this.serviceType = serviceType;
     }
@@ -112,6 +122,47 @@ public class Booking implements Serializable {
         this.seatAvail = seatAvail;
     }
 
-    
+    /**
+     * @return the flightNo
+     */
+    public String getFlightNo() {
+        return flightNo;
+    }
+
+    /**
+     * @param flightNo the flightNo to set
+     */
+    public void setFlightNo(String flightNo) {
+        this.flightNo = flightNo;
+    }
+
+    /**
+     * @return the flightDate
+     */
+    public Date getFlightDate() {
+        return flightDate;
+    }
+
+    /**
+     * @param flightDate the flightDate to set
+     */
+    public void setFlightDate(Date flightDate) {
+        this.flightDate = flightDate;
+    }
+
+    /**
+     * @return the bookingStatus
+     */
+    public String getBookingStatus() {
+        return bookingStatus;
+    }
+
+    /**
+     * @param bookingStatus the bookingStatus to set
+     */
+    public void setBookingStatus(String bookingStatus) {
+        this.bookingStatus = bookingStatus;
+    }
+   
     
 }

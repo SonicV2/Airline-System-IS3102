@@ -60,6 +60,8 @@ public class ScheduleManageBean {
     private double flightDuration;
     private double basicFare;
     private List<Schedule> schedules;
+    private List<Schedule> futureSchedules;
+    private List<Schedule> pastSchedules;
     
     private List<Aircraft> aircraftlist;
     
@@ -75,6 +77,8 @@ public class ScheduleManageBean {
         setSchedules(scheduleSessionBean.getSchedules());
         scheduleSessionBean.changeFlightDays(flights);
         setAircraftlist(fleetSessionBean.getReserveAircrafts("Reserve"));
+        setFutureSchedules(scheduleSessionBean.filterForFutureSchedules(schedules));
+        setPastSchedules(scheduleSessionBean.filterForPastSchedules(schedules));
     }
     
     public void addSchedule(ActionEvent event){
@@ -108,8 +112,16 @@ public class ScheduleManageBean {
         scheduleSessionBean.addSchedule(startDate, flightNo);
         
     }
+    public void updateSchedules(){
+        setSchedules(scheduleSessionBean.getSchedules());
+        setFutureSchedules(scheduleSessionBean.filterForFutureSchedules(schedules));
+        setPastSchedules(scheduleSessionBean.filterForPastSchedules(schedules));
+    }
     
-    public void deleteSchedule(ActionEvent event){
+    public String deleteSchedule(Long scheduleId){
+        
+        selectedSchedule = scheduleSessionBean.getSchedule(scheduleId);
+        
         schedules.remove(selectedSchedule);
         
         //remove the Flight linked to the Schedule
@@ -134,6 +146,9 @@ public class ScheduleManageBean {
         message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Schedule deleted", "");
         FacesContext.getCurrentInstance().addMessage(null, message);
         selectedSchedule = null;
+        setSchedules(scheduleSessionBean.getSchedules());
+        updateSchedules();
+        return "DeleteSchedule";
         
     }
     
@@ -313,5 +328,22 @@ public class ScheduleManageBean {
     public void setFlightDaysString(String flightDaysString) {
         this.flightDaysString = flightDaysString;
     }
+
+    public List<Schedule> getFutureSchedules() {
+        return futureSchedules;
+    }
+
+    public void setFutureSchedules(List<Schedule> futureSchedules) {
+        this.futureSchedules = futureSchedules;
+    }
+
+    public List<Schedule> getPastSchedules() {
+        return pastSchedules;
+    }
+
+    public void setPastSchedules(List<Schedule> pastSchedules) {
+        this.pastSchedules = pastSchedules;
+    }
+    
 
 }

@@ -5,8 +5,8 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets">
-    
-    
+
+
     <h:head>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
@@ -17,7 +17,7 @@
         <h:outputStylesheet library="css" name="morrisjs/morris.css" />
 
         <title>Employee Management</title>
-        
+
         <style>
             .ui-inputfield {
                 margin: 0;
@@ -55,6 +55,10 @@
                 display: inline;
 
             }
+            .form-control{
+                display: inline;
+            }
+
         </style>
 
         <!--Add new employee to the database-->
@@ -131,7 +135,7 @@
                                     <div class="col-md-8">
                                         <h:panelGrid>
 
-                                            <h:selectOneRadio id="gender" required="true" requiredMessage="Please Select Gender!" value="#{employeeManageBean.employeeGender}">
+                                            <h:selectOneRadio id="gender" required="true" requiredMessage="Please Select Gender!" value="#{employeeManageBean.employeeGender}" style="margin-top: 5px;" >
                                                 <f:selectItem itemLabel="Male" itemValue="Male" />
                                                 <f:selectItem itemLabel="Female" itemValue="Female" />
                                             </h:selectOneRadio>
@@ -160,24 +164,26 @@
 
                                 <div class="form-group">
                                     <p:outputLabel for="role" value="Role: " class="col-md-4 control-label" />
-                                    <h:selectOneMenu required="true" id="role" styleClass="dropdown-menu select" value="#{employeeManageBean.employeeRole}"  >
+                                    <div class="col-md-6"> 
+                                        <h:selectOneMenu class="form-control" required="true" id="role" value="#{employeeManageBean.employeeRole}" style="margin-top: 5px;"  >
 
-                                        <f:selectItem itemLabel="Select Role" itemValue="" noSelectionOption="true" />
-                                        <f:selectItems value="#{roleManagedBean.roles}" />
-                                    </h:selectOneMenu>
-
+                                            <f:selectItem itemLabel="Select Role" itemValue="" noSelectionOption="true" />
+                                            <f:selectItems value="#{roleManagedBean.roles}" />
+                                        </h:selectOneMenu>
+                                    </div>
 
                                 </div>
 
 
                                 <div class="form-group">
                                     <p:outputLabel for="department" value="Department: " class="col-md-4 control-label" />
-                                    <h:selectOneMenu required="true" id="department" styleClass="dropdown-menu select"  value="#{employeeManageBean.employeeDepartment}" >
+                                    <div class="col-md-6"> 
+                                        <h:selectOneMenu class="form-control" required="true" id="department"  value="#{employeeManageBean.employeeDepartment}" style="margin-top: 5px;" >
 
-                                        <f:selectItem itemLabel="Select department" itemValue="" noSelectionOption="true" />
-                                        <f:selectItems value="#{departmentManagedBean.departments}" />
-                                    </h:selectOneMenu>
-
+                                            <f:selectItem itemLabel="Select department" itemValue="" noSelectionOption="true" />
+                                            <f:selectItems value="#{departmentManagedBean.departments}" />
+                                        </h:selectOneMenu>
+                                    </div> 
 
 
                                 </div>
@@ -211,12 +217,12 @@
                                         <h:message for="address"  />
                                     </div>
                                 </div>   
-                                
+
                             </div>
                         </div>
 
                         <div class="text-center">
-                        <h:commandButton class="btn btn-outline btn-success" value="Save Information" actionListener="#{employeeManageBean.addEmployee}" action="employeeInformation?faces-redirect=true"/>
+                            <h:commandButton class="btn btn-outline btn-success" value="Save Information" actionListener="#{employeeManageBean.addEmployee}" action="employeeInformation?faces-redirect=true"/>
                         </div>
 
 
