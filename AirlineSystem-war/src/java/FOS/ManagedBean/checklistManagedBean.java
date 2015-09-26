@@ -334,6 +334,30 @@ public String fillParticularChecklist (Long scheduleKey ){
     public void setPastSchedulesForTeam(List<Schedule> pastSchedulesForTeam) {
         this.pastSchedulesForTeam = pastSchedulesForTeam;
     }
+
+    public ChecklistSessionBeanLocal getChecklistSessionBean() {
+        return checklistSessionBean;
+    }
+
+    public void setChecklistSessionBean(ChecklistSessionBeanLocal checklistSessionBean) {
+        this.checklistSessionBean = checklistSessionBean;
+    }
+
+    public ScheduleSessionBeanLocal getScheduleSessionBean() {
+        return scheduleSessionBean;
+    }
+
+    public void setScheduleSessionBean(ScheduleSessionBeanLocal scheduleSessionBean) {
+        this.scheduleSessionBean = scheduleSessionBean;
+    }
+
+    public LoginManageBean getLoginManageBean() {
+        return loginManageBean;
+    }
+
+    public void setLoginManageBean(LoginManageBean loginManageBean) {
+        this.loginManageBean = loginManageBean;
+    }
     
     
     
