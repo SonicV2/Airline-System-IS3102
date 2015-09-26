@@ -33,5 +33,6 @@ public interface PairingSessionBeanLocal {
 
     public Team generateTeam(Pairing pairing);
 
+//    public List<List<Pairing>> addMonthlyPairing(List<Pairing> pairing);
 
 }

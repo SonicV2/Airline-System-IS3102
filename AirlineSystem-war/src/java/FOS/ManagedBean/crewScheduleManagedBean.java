@@ -53,6 +53,8 @@ public class crewScheduleManagedBean {
     private List<Pairing> slnA380;
     private List<Pairing> restPairingA380;
 
+//    private List<List<Pairing>> lists;
+
     /**
      * Creates a new instance of crewScheduleManagedBean
      */
@@ -89,19 +91,18 @@ public class crewScheduleManagedBean {
         Date date = new Date();
         pairingSessionBean.legMain(selectMonth);
         setSlns(pairingSessionBean.getPairings());
-
+//        bigBoss();
         restPairing = new ArrayList<Pairing>();
-      
-        
-        for (Pairing ppp : slns) {
-           
-            String formattedDate2 = new SimpleDateFormat("dd/MM/yyyy").format( date);
-            System.out.println("Schedule Date2: " + formattedDate2);
-             System.out.println("ppp.getdate: " +ppp.getFDate());
 
-            if (checkTime(ppp.getFDate(), formattedDate2) <= 0  ) {
-                if(ppp.isPaired() == false){
-                restPairing.add(ppp);
+        for (Pairing ppp : slns) {
+
+            String formattedDate2 = new SimpleDateFormat("dd/MM/yyyy").format(date);
+            System.out.println("Schedule Date2: " + formattedDate2);
+            System.out.println("ppp.getdate: " + ppp.getFDate());
+
+            if (checkTime(ppp.getFDate(), formattedDate2) <= 0) {
+                if (ppp.isPaired() == false) {
+                    restPairing.add(ppp);
                 }
             }
 
@@ -121,7 +122,7 @@ public class crewScheduleManagedBean {
             long diffHours = diff / (60 * 60 * 1000) % 24;
             long diffDays = diff / (24 * 60 * 60 * 1000);
             long result = diffDays * 24 * 60 + diffHours * 60 + diffMinutes;
-            System.out.println("REsult: "+result);
+            System.out.println("REsult: " + result);
             return result;
         } catch (Exception e) {
             e.printStackTrace();
@@ -157,6 +158,16 @@ public class crewScheduleManagedBean {
     public void generateA380Team(ActionEvent event) {
         setTeam(a380PairingSessionBean.generateA380Team(sln));
     }
+
+//    public void bigBoss() {
+//        System.out.println("HHHHHH");
+//        setLists(pairingSessionBean.addMonthlyPairing(slns));
+//        for(List<Pairing> p: lists){
+//            for(Pairing p1: p){
+//                System.out.println("%%%%%%%: "+p1.getFDate() +" " +p1.getFlightCities());
+//            }
+//        }
+//    }
 
     /**
      * @return the time_scale_min
@@ -319,5 +330,19 @@ public class crewScheduleManagedBean {
     public void setRestPairingA380(List<Pairing> restPairingA380) {
         this.restPairingA380 = restPairingA380;
     }
+
+//    /**
+//     * @return the lists
+//     */
+//    public List<List<Pairing>> getLists() {
+//        return lists;
+//    }
+//
+//    /**
+//     * @param lists the lists to set
+//     */
+//    public void setLists(List<List<Pairing>> lists) {
+//        this.lists = lists;
+//    }
 
 }
