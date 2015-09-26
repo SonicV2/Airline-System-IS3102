@@ -64,7 +64,7 @@ public class A380PairingSessionBean implements A380PairingSessionBeanLocal {
         int totalFlightHours = 0;
 
         legs = addLeg380(selectMonth);
-
+        if(legs.size()==0){}else{
         sortList(legs);
         String destination = legs.get(0).getDestination();
         int startHour = legs.get(0).getStartHour();
@@ -125,14 +125,14 @@ public class A380PairingSessionBean implements A380PairingSessionBeanLocal {
         } while (legs.size() > 0);
         // }
     }
-
+    }
     private void sortList(ArrayList<Leg> legs) {
         Collections.sort(legs);
     }
 
     //Pairing for A380
     public ArrayList<Leg> addLeg380(String selectMonth) {
-
+        
         legss = new ArrayList<Leg>();
 
         Query q = em.createQuery("SELECT s FROM Schedule s");

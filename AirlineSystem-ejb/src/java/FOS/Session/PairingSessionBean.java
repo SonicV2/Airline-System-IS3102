@@ -63,66 +63,68 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
         int totalFlightHours = 0;
 
         legs = addLeg(selectMonth);
+        if (legs.size() == 0) {
+        } else {
+            sortList(legs);
+            String destination = legs.get(0).getDestination();
+            int startHour = legs.get(0).getStartHour();
+            int finishHour = legs.get(0).getFinishHour();
+            String date = legs.get(0).getDate1();
 
-        sortList(legs);
-        String destination = legs.get(0).getDestination();
-        int startHour = legs.get(0).getStartHour();
-        int finishHour = legs.get(0).getFinishHour();
-        String date = legs.get(0).getDate1();
+            do {// while leg.size()>0
+                route.clear();
+                numLegs = 1;
+                if (first == true) {
+                    destination = legs.get(0).getDestination();
 
-        do {// while leg.size()>0
-            route.clear();
-            numLegs = 1;
-            if (first == true) {
-                destination = legs.get(0).getDestination();
+                    startHour = legs.get(0).getStartHour();
 
-                startHour = legs.get(0).getStartHour();
+                    finishHour = legs.get(0).getFinishHour();
 
-                finishHour = legs.get(0).getFinishHour();
+                    date = legs.get(0).getDate1();
 
-                date = legs.get(0).getDate1();
-
-                //add the first element of the section if used
-                route.add(legs.get(0));
-
-                numofFlightHours = calcFlightHours(startHour, finishHour);
-                totalFlightHours = addFlightHours(totalFlightHours, numofFlightHours);
-                legs.remove(0);
-                first = false;
-            }
-
-            do {
-                //we seek a sln leg
-                l = searchSol(legs, destination, startHour, finishHour, date, numLegs, totalFlightHours);
-                if (l != null) {
-                    //add the leg to route
-                    route.add(l);
-                    numLegs++;
-                    destination = l.getDestination();
-
-                    startHour = l.getStartHour();
-
-                    finishHour = l.getFinishHour();
-
-                    date = l.getDate1();
+                    //add the first element of the section if used
+                    route.add(legs.get(0));
 
                     numofFlightHours = calcFlightHours(startHour, finishHour);
                     totalFlightHours = addFlightHours(totalFlightHours, numofFlightHours);
-                    //delete the leg used
-                    int indice = legs.indexOf(l);
-
-                    legs.remove(indice);
-                } else {
-                    numSols++;
-                    showSoln(route, numSols, totalFlightHours);
-
-                    first = true;
-                    totalFlightHours = 0;
+                    legs.remove(0);
+                    first = false;
                 }
-            } while (l != null);
-            System.out.println("LEG SIZE: " + legs.size());
-        } while (legs.size() > 0);
-        // }
+
+                do {
+                    //we seek a sln leg
+                    l = searchSol(legs, destination, startHour, finishHour, date, numLegs, totalFlightHours);
+                    if (l != null) {
+                        //add the leg to route
+                        route.add(l);
+                        numLegs++;
+                        destination = l.getDestination();
+
+                        startHour = l.getStartHour();
+
+                        finishHour = l.getFinishHour();
+
+                        date = l.getDate1();
+
+                        numofFlightHours = calcFlightHours(startHour, finishHour);
+                        totalFlightHours = addFlightHours(totalFlightHours, numofFlightHours);
+                        //delete the leg used
+                        int indice = legs.indexOf(l);
+
+                        legs.remove(indice);
+                    } else {
+                        numSols++;
+                        showSoln(route, numSols, totalFlightHours);
+
+                        first = true;
+                        totalFlightHours = 0;
+                    }
+                } while (l != null);
+                System.out.println("LEG SIZE: " + legs.size());
+            } while (legs.size() > 0);
+            // }
+        }
     }
 
     private void sortList(ArrayList<Leg> legs) {
@@ -342,7 +344,6 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
         List<String> differentDates = new ArrayList<String>();
 
         //to take out the duplicate dates
-        
         for (String s : temp) {
             differentDates.add(s.substring(10, s.length() - 1));
         }
@@ -354,9 +355,7 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
         while (itr.hasNext()) {
             flightDates.add(itr.next().toString());
         }
-        
-        
-        
+
         List<String> flightCities = pairing.getFlightCities();
         List<String> flightNumbers = pairing.getFlightNumbers();
 //        List<String> flightTimes = pairing.getFlightTimes();
@@ -451,38 +450,37 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
 
             schedules = new ArrayList<Schedule>();
             schedules = flight.getSchedule();
-            
-            
-           for(String ss : flightDates){ 
-               
-            for (Schedule sh : schedules) {
-                String formattedDate = new SimpleDateFormat("dd/MM/yyyy").format(sh.getStartDate());
-                if (formattedDate.equals(ss)) {
 
-                    teamSchedule = team.getSchedule();
+            for (String ss : flightDates) {
+
+                for (Schedule sh : schedules) {
+                    String formattedDate = new SimpleDateFormat("dd/MM/yyyy").format(sh.getStartDate());
+                    if (formattedDate.equals(ss)) {
+
+                        teamSchedule = team.getSchedule();
 //                    System.out.println("Team Schedule: " + teamSchedule.size());
 
-                    teamSchedule.add(sh);
+                        teamSchedule.add(sh);
 //                    System.out.println("Team Schedule Date: " + sh.getStartDate());
 
-                    sh.setAssigned(true);
+                        sh.setAssigned(true);
 //                    System.out.println("Team Schedule: " + sh.isAssigned());
 
-                    team.setSchedule(teamSchedule);
+                        team.setSchedule(teamSchedule);
 //                     System.out.println("Team Schedule1: " + teamSchedule.size());
 
-                    sh.setTeam(team);
+                        sh.setTeam(team);
 //                    System.out.println("Team ID: " + team.getId());
 
-                    em.merge(sh);
+                        em.merge(sh);
 
-                    em.merge(team);
+                        em.merge(team);
 
-                    em.flush();
+                        em.flush();
 
+                    }
                 }
             }
-           }
             team.setStatus("Formed");
 
             pairing.setPaired(true);
