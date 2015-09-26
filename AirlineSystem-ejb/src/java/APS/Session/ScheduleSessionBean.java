@@ -307,5 +307,26 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
         return futureSchedules;
     }
     
+     @Override
+    public List<Schedule> filterForCurrentDaySchedules (List<Schedule> schedules){
+        long millisInDay = 60 * 60 * 24 * 1000;
+        long currentTime = new Date().getTime();
+        long dateOnly = (currentTime / millisInDay) * millisInDay;
+        Date todayDateWithoutTime = new Date(dateOnly);
+        
+        
+        List<Schedule> currentDaySchedules = new ArrayList();
+        for (Schedule eachSchedule : schedules){
+            long scheduleDateOnly = ((eachSchedule.getEndDate().getTime())/millisInDay)*millisInDay;
+            Date eachScheduleEndDateWithoutTime = new Date(scheduleDateOnly);
+            
+            
+            if ((currentTime>eachSchedule.getEndDate().getTime()) && eachScheduleEndDateWithoutTime.compareTo(todayDateWithoutTime)==0)
+                currentDaySchedules.add(eachSchedule);
+        }
+        return currentDaySchedules;
+    }
+    
+    
     
 }

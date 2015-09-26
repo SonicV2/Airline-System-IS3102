@@ -62,6 +62,7 @@ private String crewName;
 private Team team;
 private List<Schedule> schedulesForTeam;
 private List<Schedule> pastSchedulesForTeam;
+private List<Schedule> currentDaySchedulesForTeam;
 
 public checklistManagedBean(){
     
@@ -90,9 +91,8 @@ public String directToChooseChecklistToFill(String name){
     setChecklistName(name);
     setCrewName(loginManageBean.getEmployeeUserName());
     setTeam(getCrewSignInSessionBean().getCCTeam(crewName));
-    System.out.println("!!!!!!!!!"+team.getId());
     setSchedulesForTeam(team.getSchedule());
-    setPastSchedulesForTeam(scheduleSessionBean.filterForPastSchedules(schedulesForTeam));
+    setCurrentDaySchedulesForTeam(scheduleSessionBean.filterForCurrentDaySchedules(schedulesForTeam));
     return "/FOS/ChooseChecklistToFill";
 }
 
@@ -181,6 +181,10 @@ public String fillParticularChecklist (Long scheduleKey ){
     public String submitChecklist(){
         setSelectedItems(checklistSessionBean.getItemsFromNames(schedule, checklistName, selectedItemNames));
         checklistSessionBean.updateFilledChecklist(schedule, checklistName, selectedItems, comments);
+        //setSchedule(null);
+        //setChecklistName("");
+        //setSelectedItems(null);
+        //setComments("");
         return "/CI/employeeDashBoard";
     }
     
@@ -359,6 +363,15 @@ public String fillParticularChecklist (Long scheduleKey ){
     public void setLoginManageBean(LoginManageBean loginManageBean) {
         this.loginManageBean = loginManageBean;
     }
+
+    public List<Schedule> getCurrentDaySchedulesForTeam() {
+        return currentDaySchedulesForTeam;
+    }
+
+    public void setCurrentDaySchedulesForTeam(List<Schedule> currentDaySchedulesForTeam) {
+        this.currentDaySchedulesForTeam = currentDaySchedulesForTeam;
+    }
+
     
     
     
