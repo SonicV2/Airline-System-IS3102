@@ -24,12 +24,12 @@ public interface ChecklistSessionBeanLocal {
     public List<ChecklistItem> retrieveChecklistItems (String checklistName);
     public ChecklistItem findItem (Long key);
     public void editChecklistItem (ChecklistItem item);
-    public void deleteChecklistItem (Long key, String checklistName);
+    public void deleteChecklistItem (Schedule schedule, Long itemKey, String checklistName);
     public void updateFilledChecklist (String checklistName, List<ChecklistItem> checkedItems, String comments);
     public List<ChecklistItem> getItemsFromNames(List<String> selectedItemNames);
     public String retrieveChecklistComments (String checklistName);
     public List<Checklist> createChecklistAndItems ();
     public List<ChecklistItem> retrieveChecklistItemsByScheduleAndChecklistName (Schedule schedule, String checklistName);
-    
-    
+    public void addChecklistItemByScheduleAndChecklistName (Schedule schedule, String checklistName, String checklistItemName);
+
 }

@@ -9,6 +9,7 @@ import APS.Session.FlightScheduleSessionBeanLocal;
 import APS.Session.FlightSessionBeanLocal;
 import APS.Session.RouteSessionBeanLocal;
 import APS.Session.FleetSessionBeanLocal;
+import CI.Managedbean.LoginManageBean;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -17,6 +18,7 @@ import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.inject.Named;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
@@ -41,6 +43,9 @@ public class FlightManageBean {
     private RouteSessionBeanLocal routeSessionBean;
     @EJB
     private FleetSessionBeanLocal fleetSessionBean;
+    
+    @ManagedProperty(value="#{scheduleManageBean}")
+    private ScheduleManageBean scheduleManageBean;
     
     @PersistenceContext(unitName = "AirlineSystem-ejbPU")
     private EntityManager em;
@@ -224,6 +229,7 @@ public class FlightManageBean {
         FacesContext.getCurrentInstance().addMessage(null, msg);
         setFlights(flightSessionBean.retrieveFlights());
         clear();
+        scheduleManageBean.updateSchedules();
     }
     
     public String deleteFlight(String flightNo) {
@@ -424,4 +430,14 @@ public class FlightManageBean {
     public void setSelectedFlight(Flight selectedFlight) {
         this.selectedFlight = selectedFlight;
     }
+
+    public ScheduleManageBean getScheduleManageBean() {
+        return scheduleManageBean;
+    }
+
+    public void setScheduleManageBean(ScheduleManageBean scheduleManageBean) {
+        this.scheduleManageBean = scheduleManageBean;
+    }
+    
+    
 }
