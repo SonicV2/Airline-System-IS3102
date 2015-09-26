@@ -24,9 +24,8 @@ and open the template in the editor.
 
 
     <body>
-        <h:form>
-            <p:dataTable id="tbl" var="item" value="#{checklistManagedBean.checklistItemsForChecklist}"
-                         style="margin-bottom:20px" >                           
+
+
 
                 <!--    To add the same header on all dashboard pages  -->
                 <!--<ui:include src="/CI/dashboardHeader.xhtml"/>-->
@@ -42,17 +41,14 @@ and open the template in the editor.
 
                             <h:form>
                                 <div class="pull-right">
+                                     <i class="fa fa-plus fa-save"></i>
+                            <h:commandButton value="Export check list as report" class="btn btn-outline btn-info" id="pdf">
+                                <!--<p:graphicImage name="images/pdf.png" />-->
+
+                                <p:dataExporter type="pdf" target="tbl" fileName="Checklist" preProcessor="#{customizedDocumentsView.preProcessPDF}" />
+                            </h:commandButton>
 
 
-                                    </p:dataTable>
-
-                                    <h3>Comments:</h3>
-                                    <h:outputText value="#{checklistManagedBean.comments}" />
-
-
-
-                                    <p:dataExporter type="pdf" target="tbl" fileName="Checklist" preProcessor="#{customizedDocumentsView.preProcessPDF}" />
-                                    </h:commandButton>
 
 
                                 </div>
