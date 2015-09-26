@@ -284,4 +284,28 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
 
         return endTime.getTime();
     }
+    
+    @Override
+    public List<Schedule> filterForPastSchedules (List<Schedule> schedules){
+        List<Schedule> pastSchedules = new ArrayList();
+        Date currentDate = new Date();
+        for (Schedule eachSchedule : schedules){
+            if (eachSchedule.getEndDate().compareTo(currentDate)<0)
+                pastSchedules.add(eachSchedule);
+        }
+        return pastSchedules;
+    }
+    
+     @Override
+    public List<Schedule> filterForFutureSchedules (List<Schedule> schedules){
+        List<Schedule> futureSchedules = new ArrayList();
+        Date currentDate = new Date();
+        for (Schedule eachSchedule : schedules){
+            if (eachSchedule.getStartDate().compareTo(currentDate)>0)
+                futureSchedules.add(eachSchedule);
+        }
+        return futureSchedules;
+    }
+    
+    
 }

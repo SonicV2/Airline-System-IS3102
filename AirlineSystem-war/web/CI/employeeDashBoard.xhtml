@@ -42,10 +42,8 @@
                          <h:commandButton value="Fill Pilot Checklist" action="#{checklistManagedBean.fillParticularChecklist('Pilot')}"/>
                          <h:commandButton value="Fill Cabin Crew Checklist" action="#{checklistManagedBean.fillParticularChecklist('Cabin Crew')}"/>
                          <h:commandButton value="Fill Ground Staff Checklist" action="#{checklistManagedBean.fillParticularChecklist('Ground Staff')}"/>
-                         <h:commandButton value="Edit Pilot Checklist" action="#{checklistManagedBean.editParticularChecklist('Pilot')}"/>
-                         <h:commandButton value="Edit Cabin Crew Checklist" action="#{checklistManagedBean.editParticularChecklist('Cabin Crew')}"/>
-                         <h:commandButton value="Edit Ground Staff Checklist" action="#{checklistManagedBean.editParticularChecklist('Ground Staff')}"/>
-                         <h:commandButton value="Add Checklist Item" action="#{checklistManagedBean.directToCreateChecklistItem()}"/>
+                         <h:commandButton value="Edit Checklist" action="#{checklistManagedBean.directToChooseChecklistToEdit()}"/>
+                         <h:commandButton value="Add Checklist Item" action="#{checklistManagedBean.directToChooseChecklistToAddTo()}"/>
                          <h:commandButton value="View filled checklists" action="#{checklistManagedBean.directToChooseChecklistToView()}"/>
                     </h:form>
                 </div>
@@ -101,19 +99,7 @@
                     </div>
                 </div>
             </div>
-        <p:dataTable var="message" value="#{messageManagedBean.unReadMsg}">
-            <p:column headerText="Sender">
-                <h:outputText value="#{message.sender}"/>
-            </p:column>
         
-              <p:column headerText="Message">
-                  <h:outputText value="#{message.msgText}"/>
-            </p:column>
-        
-              <p:column headerText="Time">
-                  <h:outputText value="#{message.sendTime}"/>
-            </p:column>
-        </p:dataTable>
             
             
         </div>
