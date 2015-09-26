@@ -55,7 +55,7 @@ public class Schedule implements Serializable {
     @ManyToOne
     private Aircraft aircraft = new Aircraft();
 
-    @OneToMany(cascade = {CascadeType.PERSIST})
+    @OneToMany(cascade = {CascadeType.REMOVE})
     private List<Checklist> checklists = new ArrayList<Checklist>();
     
     public void createSchedule(Date startDate, Date endDate){

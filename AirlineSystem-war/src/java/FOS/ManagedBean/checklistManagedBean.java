@@ -10,6 +10,7 @@ import APS.Session.ScheduleSessionBeanLocal;
 import FOS.Entity.Checklist;
 import FOS.Entity.ChecklistItem;
 import FOS.Session.ChecklistSessionBeanLocal;
+import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -53,7 +54,13 @@ public checklistManagedBean(){
 
 @PostConstruct
 public void init(){
-   setChecklistTypes(checklistSessionBean.retrieveAllChecklists());
+List<String> allChecklistTypes = new ArrayList();
+allChecklistTypes.add("Pilot");
+allChecklistTypes.add("Cabin Crew");
+allChecklistTypes.add("Ground Staff");
+setChecklistTypes(allChecklistTypes);
+
+//setChecklistTypes(checklistSessionBean.retrieveAllChecklists());
 }
 
 public void clear(){
@@ -63,12 +70,36 @@ public void clear(){
     }
 }
 
-public String directToCreateChecklistItem(){
-    return"/FOS/CreateChecklistItem";
+public String directToChooseChecklistToAddTo(){
+    return"/FOS/ChooseChecklistToAddTo";
+}
+
+public String directToChooseChecklistToEdit(){
+    return"/FOS/ChooseChecklistToEdit";
+}
+
+public String editChecklist(Long scheduleKey, String checklistToEdit ){
+         setScheduleId(scheduleKey);
+         setChecklistName (checklistToEdit);
+         setSchedule(scheduleSessionBean.getSchedule(scheduleId));
+         setChecklistItemsForChecklist(checklistSessionBean.retrieveChecklistItemsByScheduleAndChecklistName(schedule, checklistName));
+         return "/FOS/EditChecklist";
+}
+
+public String addChecklistItem(Long scheduleKey, String checklistToAdd ){
+         setScheduleId(scheduleKey);
+         setChecklistName (checklistToAdd);
+         setSchedule(scheduleSessionBean.getSchedule(scheduleId));
+         return "/FOS/CreateChecklistItem";
+}
+
+public String homePage(){
+    setComments("");
+    return "/CI/employeeDashBoard";
 }
 
 public String addItem(){
-    checklistSessionBean.addChecklistItem(checklistName, checklistItemName);
+    checklistSessionBean.addChecklistItemByScheduleAndChecklistName(schedule,checklistName, checklistItemName);
     return "/CI/employeeDashBoard";
 }
 
@@ -76,7 +107,6 @@ public String editParticularChecklist (String checklistCanAccess){
     setChecklistName(checklistCanAccess);
     setChecklistItemsForChecklist(checklistSessionBean.retrieveChecklistItems(checklistName));
     return "/FOS/EditChecklist";
-    //Page after editing checklistName should be set as "Select Checklist"
 }
 
 public String fillParticularChecklist (String checklistCanAccess){
@@ -111,8 +141,9 @@ public String fillParticularChecklist (String checklistCanAccess){
     }
     
     public String deleteItem(Long id){
-        checklistSessionBean.deleteChecklistItem(id, checklistName);
-        setChecklistItemsForChecklist(checklistSessionBean.retrieveChecklistItems(checklistName));
+        setSchedule(scheduleSessionBean.getSchedule(scheduleId));
+        checklistSessionBean.deleteChecklistItem(schedule, id, checklistName);
+        setChecklistItemsForChecklist(checklistSessionBean.retrieveChecklistItemsByScheduleAndChecklistName(schedule, checklistName));
         return "EditChecklist";
     }
     
@@ -127,14 +158,16 @@ public String fillParticularChecklist (String checklistCanAccess){
     }
     
     public String directToChooseChecklistToView(){
-        
         return "/FOS/ChooseChecklistToView";
     }
     
-     public String directToFilledChecklist(){
+     public String directToFilledChecklist(Long scheduleKey, String checklistToView){
          //Have schedule ID and checklist name
+         setScheduleId(scheduleKey);
+         setChecklistName (checklistToView);
          setSchedule(scheduleSessionBean.getSchedule(scheduleId));
          setChecklistItemsForChecklist(checklistSessionBean.retrieveChecklistItemsByScheduleAndChecklistName(schedule, checklistName));
+         setComments(checklistSessionBean.retrieveChecklistCommentsByScheduleAndChecklistName(schedule, checklistName));
          return "/FOS/displayFilledChecklist";
     }
 
