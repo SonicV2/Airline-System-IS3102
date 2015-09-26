@@ -146,11 +146,24 @@ public class ChecklistSessionBean implements ChecklistSessionBeanLocal {
                 checklist = eachChecklist;
             }
         }
-        checklist.checkAllItemsAsNotCompleted();
-        for (ChecklistItem eachCheckedItem : checkedItems) {
-            checklist.checkItemAsCompleted(eachCheckedItem);
+        for (ChecklistItem eachItemInChecklist: checklist.getChecklistItems()){
+            eachItemInChecklist.setChecked(false);
+            em.merge(eachItemInChecklist);
         }
+
+        for (ChecklistItem eachCheckedItem : checkedItems) {
+            for (ChecklistItem eachItemInChecklist : checklist.getChecklistItems()){
+                if (eachCheckedItem.getName().equals(eachItemInChecklist.getName())){
+                    eachItemInChecklist.setChecked(true);
+                    em.merge(eachItemInChecklist);
+                }
+            }
+           
+        }
+        
         checklist.setComments(comments);
+        em.merge(checklist);
+        em.flush();
     }
 
     @Override
