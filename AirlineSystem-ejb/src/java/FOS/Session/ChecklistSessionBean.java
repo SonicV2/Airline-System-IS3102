@@ -464,6 +464,19 @@ public class ChecklistSessionBean implements ChecklistSessionBeanLocal {
         return matchedChecklist.getChecklistItems();
 
     }
+    
+    @Override
+    public String retrieveChecklistCommentsByScheduleAndChecklistName(Schedule schedule,String checklistName){
+        Checklist matchedChecklist = new Checklist();
+        List<Checklist> checklistsForSchedule = schedule.getChecklists();
+
+        for (Checklist eachChecklist : checklistsForSchedule) {
+            if (eachChecklist.getName().equals(checklistName)) {
+                matchedChecklist = eachChecklist;
+            }
+        }
+        return matchedChecklist.getComments();
+    }
 
     @Override
     public void addChecklistItemByScheduleAndChecklistName(Schedule schedule, String checklistName, String checklistItemName) {

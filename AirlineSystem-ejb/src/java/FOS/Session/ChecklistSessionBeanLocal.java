@@ -31,5 +31,5 @@ public interface ChecklistSessionBeanLocal {
     public List<Checklist> createChecklistAndItems ();
     public List<ChecklistItem> retrieveChecklistItemsByScheduleAndChecklistName (Schedule schedule, String checklistName);
     public void addChecklistItemByScheduleAndChecklistName (Schedule schedule, String checklistName, String checklistItemName);
-
+    public String retrieveChecklistCommentsByScheduleAndChecklistName(Schedule schedule,String checklistName);
 }

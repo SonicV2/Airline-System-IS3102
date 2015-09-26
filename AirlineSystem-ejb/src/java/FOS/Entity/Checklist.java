@@ -28,7 +28,7 @@ public class Checklist implements Serializable {
     private String name;
     private String comments;
     
-    @OneToMany(cascade = {CascadeType.PERSIST})
+    @OneToMany(cascade = {CascadeType.REMOVE})
     private List<ChecklistItem> checklistItems = new ArrayList<ChecklistItem>();
     
     

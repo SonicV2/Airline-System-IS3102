@@ -25,7 +25,7 @@ and open the template in the editor.
 
     <body>
         <h:form>
-            <p:dataTable id="tbl" var="item" value="#{checklistManagedBean.checklistItemsForChecklist}"
+            <p:dataTable id="tbl" var="item" value="#{customizedDocumentsView.items}"
                          style="margin-bottom:20px" >                           
 
           
@@ -47,22 +47,28 @@ and open the template in the editor.
                     <f:facet name="header">
                         <h:outputText value="Checked"/>
                     </f:facet>
-                    <h:outputText value="#{item.checked}" />
+                    <h:selectBooleanCheckbox value="#{item.checked}" onclick="return false;" onkeydown="return false"/>
                 </p:column>
 
 
             </p:dataTable>
             
+            <h3>Comments:</h3>
+            <h:outputText value="#{customizedDocumentsView.comments}" />
+            
+            
+
+            <h3>Export Data</h3>          
+
+        <h:commandLink id="pdf">
+        <p:graphicImage name="images/pdf.png" />
+        <p:dataExporter type="pdf" target="tbl" fileName="Checklist" preProcessor="#{customizedDocumentsView.preProcessPDF}" />
+        </h:commandLink>
+            
             <div class="text-center">
                 <h:commandButton class="btn btn-outline btn-success" value="Home Page"  action="#{checklistManagedBean.homePage()}"/>
             </div>
-
-<!--            <h3>Export Data </h3>               -->
-
-<!--            <h:commandLink>
-                <p:graphicImage name="images/pdf.png" />
-                <p:dataExporter type="pdf" target="tbl" fileName="checkListReport" pageOnly="true" />
-            </h:commandLink>-->
+            
 
         </h:form>
     </body>
