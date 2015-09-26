@@ -25,7 +25,7 @@ and open the template in the editor.
 
     <body>
         <h:form>
-            <p:dataTable id="tbl" var="item" value="#{customizedDocumentsView.items}"
+            <p:dataTable id="tbl" var="item" value="#{checklistManagedBean.checklistItemsForChecklist}"
                          style="margin-bottom:20px" >                           
 
           
@@ -54,7 +54,7 @@ and open the template in the editor.
             </p:dataTable>
             
             <h3>Comments:</h3>
-            <h:outputText value="#{customizedDocumentsView.comments}" />
+            <h:outputText value="#{checklistManagedBean.comments}" />
             
             
 

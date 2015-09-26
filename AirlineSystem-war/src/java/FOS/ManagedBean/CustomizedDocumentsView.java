@@ -39,10 +39,10 @@ public class CustomizedDocumentsView implements Serializable {
     }
      
     public void preProcessPDF(Object document) throws IOException, BadElementException, DocumentException {
-        
+        setComments(checkBean.getComments());
         String titleOfPage = checklistName + " checklist for Schedule Id: " + scheduleId +"\n\n\n";
         
-        String commentsOfChecklist = "Comments: \n" + comments + "\n";
+        String commentsOfChecklist = "Comments: \n" + comments + "\n\n\n";
         
         Document pdf = (Document) document;
         pdf.open();
@@ -59,7 +59,7 @@ public class CustomizedDocumentsView implements Serializable {
         ServletContext servletContext = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
         //String logo = servletContext.getRealPath("") + File.separator + "resources" +"images" + File.separator + "pdf.png";         
         //pdf.add(Image.getInstance(logo));
-        
+         
     }
 
     public checklistManagedBean getCheckBean() {

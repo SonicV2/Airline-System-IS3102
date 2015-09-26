@@ -25,8 +25,8 @@ public interface ChecklistSessionBeanLocal {
     public ChecklistItem findItem (Long key);
     public void editChecklistItem (ChecklistItem item);
     public void deleteChecklistItem (Schedule schedule, Long itemKey, String checklistName);
-    public void updateFilledChecklist (String checklistName, List<ChecklistItem> checkedItems, String comments);
-    public List<ChecklistItem> getItemsFromNames(List<String> selectedItemNames);
+    public void updateFilledChecklist (Schedule schedule, String checklistName, List<ChecklistItem> checkedItems, String comments);
+    public List<ChecklistItem> getItemsFromNames(Schedule schedule, String checklistName, List<String> selectedItemNames);
     public String retrieveChecklistComments (String checklistName);
     public List<Checklist> createChecklistAndItems ();
     public List<ChecklistItem> retrieveChecklistItemsByScheduleAndChecklistName (Schedule schedule, String checklistName);

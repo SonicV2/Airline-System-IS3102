@@ -7,15 +7,19 @@ package FOS.ManagedBean;
 
 import APS.Entity.Schedule;
 import APS.Session.ScheduleSessionBeanLocal;
+import CI.Managedbean.LoginManageBean;
 import FOS.Entity.Checklist;
 import FOS.Entity.ChecklistItem;
+import FOS.Entity.Team;
 import FOS.Session.ChecklistSessionBeanLocal;
+import FOS.Session.CrewSignInSessionBeanLocal;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
@@ -35,6 +39,13 @@ public class checklistManagedBean {
      
      @EJB
     private ScheduleSessionBeanLocal scheduleSessionBean;
+     
+     @ManagedProperty(value = "#{loginManageBean}")
+    private LoginManageBean loginManageBean;
+     
+     @EJB
+    private CrewSignInSessionBeanLocal crewSignInSessionBean;
+
    
 private String checklistItemName; 
 private String checklistName;
@@ -47,6 +58,10 @@ private String comments;
 private long scheduleId;
 private Schedule schedule;
 private Checklist checklistForSchedule;
+private String crewName;
+private Team team;
+private List<Schedule> schedulesForTeam;
+private List<Schedule> pastSchedulesForTeam;
 
 public checklistManagedBean(){
     
@@ -60,6 +75,7 @@ allChecklistTypes.add("Cabin Crew");
 allChecklistTypes.add("Ground Staff");
 setChecklistTypes(allChecklistTypes);
 
+ 
 //setChecklistTypes(checklistSessionBean.retrieveAllChecklists());
 }
 
@@ -69,6 +85,16 @@ public void clear(){
         eachItem.setChecked(false);
     }
 }
+
+public String directToChooseChecklistToFill(String name){
+    setChecklistName(name);
+    setCrewName(loginManageBean.getEmployeeUserName());
+    setTeam(getCrewSignInSessionBean().getCCTeam(crewName));
+    setSchedulesForTeam(team.getSchedule());
+    setPastSchedulesForTeam(scheduleSessionBean.filterForPastSchedules(schedulesForTeam));
+    return "/FOS/ChooseChecklistToFill";
+}
+
 
 public String directToChooseChecklistToAddTo(){
     return"/FOS/ChooseChecklistToAddTo";
@@ -109,10 +135,10 @@ public String editParticularChecklist (String checklistCanAccess){
     return "/FOS/EditChecklist";
 }
 
-public String fillParticularChecklist (String checklistCanAccess){
-    setChecklistName(checklistCanAccess);
-    setChecklistItemsForChecklist(checklistSessionBean.retrieveChecklistItems(checklistName));
-    clear();
+public String fillParticularChecklist (Long scheduleKey ){
+    setScheduleId(scheduleKey);
+    setSchedule(scheduleSessionBean.getSchedule(scheduleId));
+    setChecklistItemsForChecklist(checklistSessionBean.retrieveChecklistItemsByScheduleAndChecklistName(schedule, checklistName));
     return "/FOS/FillChecklist";
 }
 
@@ -153,7 +179,7 @@ public String fillParticularChecklist (String checklistCanAccess){
     
     public String submitChecklist(){
         setSelectedItems(checklistSessionBean.getItemsFromNames(selectedItemNames));
-        checklistSessionBean.updateFilledChecklist(checklistName, selectedItems, comments);
+        checklistSessionBean.updateFilledChecklist(schedule, checklistName, selectedItems, comments);
         return "/CI/employeeDashBoard";
     }
     
@@ -267,12 +293,50 @@ public String fillParticularChecklist (String checklistCanAccess){
 
     public void setChecklistForSchedule(Checklist checklistForSchedule) {
         this.checklistForSchedule = checklistForSchedule;
+    }   
+
+    public String getCrewName() {
+        return crewName;
+    }
+
+    public void setCrewName(String crewName) {
+        this.crewName = crewName;
+    }
+
+    public Team getTeam() {
+        return team;
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
+    }
+
+    public CrewSignInSessionBeanLocal getCrewSignInSessionBean() {
+        return crewSignInSessionBean;
+    }
+
+    public void setCrewSignInSessionBean(CrewSignInSessionBeanLocal crewSignInSessionBean) {
+        this.crewSignInSessionBean = crewSignInSessionBean;
+    }
+
+    public List<Schedule> getSchedulesForTeam() {
+        return schedulesForTeam;
+    }
+
+    public void setSchedulesForTeam(List<Schedule> schedulesForTeam) {
+        this.schedulesForTeam = schedulesForTeam;
+    }
+
+    public List<Schedule> getPastSchedulesForTeam() {
+        return pastSchedulesForTeam;
+    }
+
+    public void setPastSchedulesForTeam(List<Schedule> pastSchedulesForTeam) {
+        this.pastSchedulesForTeam = pastSchedulesForTeam;
     }
     
     
     
-    
-   
     
             
     
