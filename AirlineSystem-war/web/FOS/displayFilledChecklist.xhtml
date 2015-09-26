@@ -24,52 +24,87 @@ and open the template in the editor.
 
 
     <body>
-        <h:form>
-            <p:dataTable id="tbl" var="item" value="#{customizedDocumentsView.items}"
-                         style="margin-bottom:20px" >                           
-
-          
-                   
-                <f:facet name="header">    
-                    <h:outputText value="#{checklistManagedBean.checklistName} checklist for Flight No: #{checklistManagedBean.schedule.flight.flightNo}, Schedule Id:#{checklistManagedBean.schedule.scheduleId}"/> 
-                    </f:facet>
-                
 
 
-                <p:column>
-                    <f:facet name="header">
-                        <h:outputText value="Item Name" />
-                    </f:facet>
-                    <h:outputText value="#{item.name}" />
-                </p:column>
 
-                <p:column>
-                    <f:facet name="header">
-                        <h:outputText value="Checked"/>
-                    </f:facet>
-                    <h:selectBooleanCheckbox value="#{item.checked}" onclick="return false;" onkeydown="return false"/>
-                </p:column>
+                <!--    To add the same header on all dashboard pages  -->
+                <!--<ui:include src="/CI/dashboardHeader.xhtml"/>-->
+                <!--    To add the same sidebar on all dashboard pages  -->
+                <ui:include src="/CI/dashboardSidebar.xhtml"/>
+
+                <div id="page-wrapper">
 
 
-            </p:dataTable>
-            
-            <h3>Comments:</h3>
-            <h:outputText value="#{customizedDocumentsView.comments}" />
-            
-            
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h2 class="page-header"> View past filled checklist  </h2>
 
-            <h3>Export Data</h3>          
+                            <h:form>
+                                <div class="pull-right">
+                                     <i class="fa fa-plus fa-save"></i>
+                            <h:commandButton value="Export check list as report" class="btn btn-outline btn-info" id="pdf">
+                                <!--<p:graphicImage name="images/pdf.png" />-->
 
-        <h:commandLink id="pdf">
-        <p:graphicImage name="images/pdf.png" />
-        <p:dataExporter type="pdf" target="tbl" fileName="Checklist" preProcessor="#{customizedDocumentsView.preProcessPDF}" />
-        </h:commandLink>
-            
-            <div class="text-center">
-                <h:commandButton class="btn btn-outline btn-success" value="Home Page"  action="#{checklistManagedBean.homePage()}"/>
-            </div>
-            
+                                <p:dataExporter type="pdf" target="tbl" fileName="Checklist" preProcessor="#{customizedDocumentsView.preProcessPDF}" />
+                            </h:commandButton>
 
-        </h:form>
-    </body>
-</html>
+
+
+
+                                </div>
+
+
+
+                                <br></br>
+                                <br></br>
+
+
+                                <p:dataTable id="tbl" var="item" value="#{checklistManagedBean.checklistItemsForChecklist}"
+                                             style="margin-bottom:20px" >                           
+
+
+
+                                    <f:facet name="header">    
+                                        <h:outputText value="#{checklistManagedBean.checklistName} checklist for Flight No: #{checklistManagedBean.schedule.flight.flightNo}, Schedule Id:#{checklistManagedBean.schedule.scheduleId}"/> 
+                                    </f:facet>
+
+
+
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Item Name" />
+                                        </f:facet>
+                                        <h:outputText value="#{item.name}" />
+                                    </p:column>
+
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Checked"/>
+                                        </f:facet>
+                                        <h:selectBooleanCheckbox value="#{item.checked}" onclick="return false;" onkeydown="return false"/>
+                                    </p:column>
+
+
+                                </p:dataTable>
+                                <div class="col-lg-12">
+                                    <h3>Comments:</h3>
+                                    <p><h:outputText value="#{checklistManagedBean.comments}"/></p>
+
+
+
+                                    <!--                    <h3>Export Data</h3>          -->
+                                    <!--                    <a class="btn btn-block btn-social btn-bitbucket">
+                                                                    <i class="fa fa-bitbucket"></i> Export checklist as report
+                                                        </a>-->
+
+
+
+                                    <br></br>
+                                    <br></br>
+                                </div>
+                            </h:form>
+                        </div>
+                    </div>
+                </div>
+                </body>
+                </html>
