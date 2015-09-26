@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import javax.ejb.Stateless;
@@ -191,8 +193,8 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
         setPolicy();
         for (Leg i : legs) {
             if ((i.getDate1().equals(date2)) && (i.getOrigin().equals(destination))
-                    && ((calcDifMin(finishHour, i.getStartHour())) > getTime_scale_min()) && (i.getStartHour() > startHour)
-                    && (numLegs < getNum_max_legs()) && (numHourFlight <= hours_max_flight)) {
+                    && ((calcDifMin(finishHour, i.getStartHour())) > time_scale_min) && (i.getStartHour() > startHour)
+                    && (numLegs < num_max_legs) && (numHourFlight <= hours_max_flight)) {
 
                 hours = calcFlightHours(i.getStartHour(), i.getFinishHour());
                 sum = sum + hours;
@@ -202,10 +204,33 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
                     found = true;
                 }
             }
+
+            if (getFormatted(i.getDate1()) > getFormatted(date2) && (i.getOrigin().equals(destination))
+                    && (i.getStartHour() + 2400 - finishHour > 600)
+                    && (numLegs < num_max_legs) && (numHourFlight <= hours_max_flight)) {
+                hours = calcFlightHours(i.getStartHour(), i.getFinishHour());
+                sum = sum + hours;
+                sum = addFlightHours(sum, numHourFlight);
+                if ((found == false) && (sum <= hours_max_flight)) {
+                    sol = i;
+                    found = true;
+
+                }
+            }
+
         }
 
         return sol;
 
+    }
+
+    public Long getFormatted(String da) {
+        String d1 = da.split("/")[0];
+        String d2 = da.split("/")[1];
+        String d3 = da.split("/")[2];
+        String format = d3 + d2 + d1;
+        Long day = Long.parseLong(format);
+        return day;
     }
 
     public void showSoln(ArrayList<Leg> leg, int numSol, int hFlight) {  //unformated
@@ -236,13 +261,16 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
                 flightCities.add(leg.get(i).getDestination());
                 startHour = String.format("%04d", leg.get(i).getStartHour());
                 finishHour = String.format("%04d", leg.get(i).getFinishHour());
-                hours = startHour + "-" + finishHour;
+
+                hours = startHour + "-" + finishHour + "(" + leg.get(0).getDate1() + ")";
+
+                System.out.println("--------%%% look: " + hours);
                 flightTimes.add(hours);
             } else {
                 flightCities.add(leg.get(i).getDestination());
                 startHour = String.format("%04d", leg.get(i).getStartHour());
                 finishHour = String.format("%04d", leg.get(i).getFinishHour());
-                hours = startHour + "-" + finishHour;
+                hours = startHour + "-" + finishHour + "(" + leg.get(i).getDate1() + ")";
                 flightTimes.add(hours);
             }
         }
@@ -309,6 +337,26 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
     public Team generateTeam(Pairing pairing) {
         String flightDate = pairing.getFDate();
 //        String flightHour = pairing.getFlightHour();
+        List<String> flightDates = new ArrayList<String>();
+        List<String> temp = pairing.getFlightTimes();
+        List<String> differentDates = new ArrayList<String>();
+
+        //to take out the duplicate dates
+        
+        for (String s : temp) {
+            differentDates.add(s.substring(10, s.length() - 1));
+        }
+
+        HashSet<String> uniqueDates = new HashSet<>(differentDates);
+
+        Iterator itr = uniqueDates.iterator();
+
+        while (itr.hasNext()) {
+            flightDates.add(itr.next().toString());
+        }
+        
+        
+        
         List<String> flightCities = pairing.getFlightCities();
         List<String> flightNumbers = pairing.getFlightNumbers();
 //        List<String> flightTimes = pairing.getFlightTimes();
@@ -403,10 +451,13 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
 
             schedules = new ArrayList<Schedule>();
             schedules = flight.getSchedule();
-
+            
+            
+           for(String ss : flightDates){ 
+               
             for (Schedule sh : schedules) {
                 String formattedDate = new SimpleDateFormat("dd/MM/yyyy").format(sh.getStartDate());
-                if (formattedDate.equals(flightDate)) {
+                if (formattedDate.equals(ss)) {
 
                     teamSchedule = team.getSchedule();
 //                    System.out.println("Team Schedule: " + teamSchedule.size());
@@ -431,6 +482,7 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
 
                 }
             }
+           }
             team.setStatus("Formed");
 
             pairing.setPaired(true);
