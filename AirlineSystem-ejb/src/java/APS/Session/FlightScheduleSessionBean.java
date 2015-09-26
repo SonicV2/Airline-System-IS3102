@@ -157,7 +157,6 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
             tmp.setTime(schedules.get(i).getStartDate());
             if (tmp.after(currTime)) {
                 curr.add(schedules.get(i));
-                System.out.println(schedules.get(i));
             }
         }
         schedules = curr;
@@ -194,14 +193,14 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
                     }
                 }
                 System.out.println("Stage 4");
-                    //Precond: There are enough aircraft to fly all the flights
+                //Precond: There are enough aircraft to fly all the flights
                 //Add all avaliable schedules to the curr List
                 for (Flight flight1 : flights) {
                     for (int k = 0; k < flight1.getSchedule().size(); k++) {
-//                            if (!flight1.getSchedule().get(k).isAssigned()) {
-                        curr.add(flight1.getSchedule().get(k));
+                        if (!flight1.getSchedule().get(k).isAssigned()) {
+                            curr.add(flight1.getSchedule().get(k));
 //                                System.out.println(flight1.getSchedule().get(k));
-//                        }
+                        }
                     }
                 }
 
@@ -211,6 +210,7 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
                     while (!curr.isEmpty()) {
                         //Find the earliest schedule that starts from the hub
                         for (int j = 0; j < curr.size(); j++) {
+                            System.out.println(curr.get(j).getStartDate());
                             if (curr.get(j).getFlight().getRoute().getOriginIATA().equals(aircraft.getHub())) {
                                 earliestSchedule = curr.get(j);
                                 break;
@@ -218,8 +218,9 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
                         }
                         //Store the status for the earliest schedule
                         result.add(earliestSchedule);
-//                            earliestSchedule.setAssigned(true);
+                        earliestSchedule.setAssigned(true);
                         curr.remove(earliestSchedule);
+                        earliestSchedule.setAircraft(aircraft);
                         em.merge(earliestSchedule);
                         currTime.setTime(earliestSchedule.getEndDate());
                         //Set the buffer time of 2 hours after the flight arrives
@@ -239,8 +240,9 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
                         }
                         //Store the status for the return schedule
                         result.add(earliestSchedule);
-//                            earliestSchedule.setAssigned(true);
+                        earliestSchedule.setAssigned(true);
                         curr.remove(earliestSchedule);
+                        earliestSchedule.setAircraft(aircraft);
                         em.merge(earliestSchedule);
                         currTime.setTime(earliestSchedule.getEndDate());
 
@@ -258,6 +260,7 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
             }
         }
 //        }
+        clearAssignment(getSchedules());
     }
 
     @Override
@@ -430,5 +433,12 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
             }
         }
         return schedules;
+    }
+    
+    private void clearAssignment(List<Schedule> sc) {
+        for (int i = 0; i < sc.size(); i++) {
+                sc.get(i).setAssigned(false);
+                em.merge(sc.get(i));
+        }
     }
 }
