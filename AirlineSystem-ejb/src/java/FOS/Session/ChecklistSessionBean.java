@@ -136,27 +136,16 @@ public class ChecklistSessionBean implements ChecklistSessionBeanLocal {
     }
 
     @Override
-    public void updateFilledChecklist(String checklistName, List<ChecklistItem> checkedItems, String comments) {
+    public void updateFilledChecklist(Schedule schedule, String checklistName, List<ChecklistItem> checkedItems, String comments) {
+        
         Checklist checklist = new Checklist();
-        try {
+        List<Checklist> checklistsForSchedule = schedule.getChecklists();
 
-            Query q = em.createQuery("SELECT a FROM Checklist a where a.name = :nameChecklist ");
-            q.setParameter("nameChecklist", checklistName);
-
-            List<Checklist> results = q.getResultList();
-            if (!results.isEmpty()) {
-                for (Checklist eachChecklist : results) {
-                    checklist = eachChecklist;
-                }
-
-            } else {
-                checklist = null;
+        for (Checklist eachChecklist : checklistsForSchedule) {
+            if (eachChecklist.getName().equals(checklistName)) {
+                checklist = eachChecklist;
             }
-
-        } catch (EntityNotFoundException enfe) {
-            System.out.println("\nEntity not found error" + enfe.getMessage());
         }
-
         checklist.checkAllItemsAsNotCompleted();
         for (ChecklistItem eachCheckedItem : checkedItems) {
             checklist.checkItemAsCompleted(eachCheckedItem);
@@ -165,22 +154,21 @@ public class ChecklistSessionBean implements ChecklistSessionBeanLocal {
     }
 
     @Override
-    public List<ChecklistItem> getItemsFromNames(List<String> selectedItemNames) {
+    public List<ChecklistItem> getItemsFromNames(Schedule schedule, String checklistName, List<String> selectedItemNames) {
+        Checklist checklist = new Checklist();
         List<ChecklistItem> list = new ArrayList();
+        List<Checklist> checklistsForSchedule = schedule.getChecklists();
 
-        for (String eachItemName : selectedItemNames) {
-            Query q = em.createQuery("SELECT a FROM ChecklistItem a where a.name = :nameItem ");
-            q.setParameter("nameItem", eachItemName);
-
-            List<ChecklistItem> results = q.getResultList();
-            if (!results.isEmpty()) {
-                for (ChecklistItem eachMatchedItem : results) {
-                    list.add(eachMatchedItem);
-                }
-
-            } else {
-                list = null;
+        for (Checklist eachChecklist : checklistsForSchedule) {
+            if (eachChecklist.getName().equals(checklistName)) {
+                checklist = eachChecklist;
             }
+        }
+        for (String eachItemName : selectedItemNames) {
+                for (ChecklistItem eachMatchedItem : checklist.getChecklistItems()) {
+                    if (eachItemName.equals(eachMatchedItem.getName()))
+                               list.add(eachMatchedItem);
+            } 
         }
         return list;
     }
