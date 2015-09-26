@@ -91,7 +91,7 @@ public class changeProfileManagedBean {
         userName = loginManageBean.getEmployee().getEmployeeUserName();
         employeeDOB = loginManageBean.getEmployee().getEmployeeDOB();
         employeeGender = loginManageBean.getEmployee().getEmployeeGender();
-        employeeHomeAddress = loginManageBean.getEmployee().getEmployeeEmailAddress();
+        employeeHomeAddress = loginManageBean.getEmployee().getEmployeeMailingAddress();
         employeeOfficeNumber = loginManageBean.getEmployee().getEmployeeOfficeNumber();
         employeeHpNumber = loginManageBean.getEmployee().getEmployeeHpNumber();
         employeeEmail = loginManageBean.getEmployee().getEmployeeEmailAddress();

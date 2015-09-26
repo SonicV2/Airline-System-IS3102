@@ -21,7 +21,7 @@
 
     <h:body>
         <!--    To add the same header on all dashboard pages  -->
-<!--        <ui:include src="dashboardHeader.xhtml"/>-->
+        <!--        <ui:include src="dashboardHeader.xhtml"/>-->
         <!--    To add the same sidebar on all dashboard pages  -->
         <ui:include src="dashboardSidebar.xhtml"/>
         <div id="page-wrapper">
@@ -67,42 +67,41 @@
                                         return true;
                                                " action="#{departmentManagedBean.deleteDepartment(depart.departmentName)}"><i class="fa fa-trash-o"></i> </h:commandLink>
                             </p:column>
-                           </p:dataTable>  
-                        </h:form>
-
-                </div>
-
-
-                <div class="col-lg-12">
-                    <h2 class="page-header"> Add A Department</h2>
-                </div>
-                <div class="col-md-6 panel-body">
-
-
-                    <h:form>
-                        <div class="form-group">
-                            <label class="control-label col-md-5">Department Name:   </label>
-                            <!--                                <label value="Department Name: " />-->
-                            <p:inputText id="deptName" required="true" requiredMessage="Please fill in Department Name!" class="form-inline" value="#{departmentManagedBean.departmentName}"  />
-                            <div class="missingfield">
-                                <h:message for="deptName"  />
-                            </div>
-                            <br></br>
-
-                            <label class="control-label col-md-5">Department Location:   </label>
-                            <p:inputText id="deptLocation" required="true" requiredMessage="Please fill in Department Location!" class="form-inline" value="#{departmentManagedBean.departmentLocation}" />
-                            <br/>
-                            <div class="missingfield">
-                                <h:message for="deptLocation"  />
-                            </div>
-                        </div>
-
-                        <div class="text-center">
-                            <br></br>
-                            <h:commandButton  class="btn btn-outline btn-success" value="Add Department" action="/CI/createDepartment" actionListener="#{departmentManagedBean.addDepartment}"/>
-                        </div>
+                        </p:dataTable>  
                     </h:form>
+
                 </div>
+
+                <ui:fragment rendered="#{loginManageBean.accessRightIDs.contains(3)}">
+                    <div class="col-lg-12">
+                        <h2 class="page-header"> Add A Department</h2>
+                    </div>
+                    <div class="col-md-6 panel-body">
+                        <h:form>
+                            <div class="form-group">
+                                <label class="control-label col-md-5">Department Name:   </label>
+                                <!--                                <label value="Department Name: " />-->
+                                <p:inputText id="deptName" required="true" requiredMessage="Please fill in Department Name!" class="form-inline" value="#{departmentManagedBean.departmentName}"  />
+                                <div class="missingfield">
+                                    <h:message for="deptName"  />
+                                </div>
+                                <br></br>
+
+                                <label class="control-label col-md-5">Department Location:   </label>
+                                <p:inputText id="deptLocation" required="true" requiredMessage="Please fill in Department Location!" class="form-inline" value="#{departmentManagedBean.departmentLocation}" />
+                                <br/>
+                                <div class="missingfield">
+                                    <h:message for="deptLocation"  />
+                                </div>
+                            </div>
+
+                            <div class="text-center">
+                                <br></br>
+                                <h:commandButton  class="btn btn-outline btn-success" value="Add Department" action="/CI/createDepartment" actionListener="#{departmentManagedBean.addDepartment}"/>
+                            </div>
+                        </h:form>
+                    </div>
+                </ui:fragment>
             </div>
         </div>
     </h:body>
