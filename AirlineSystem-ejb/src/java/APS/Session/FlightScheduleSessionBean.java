@@ -204,13 +204,12 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
                     }
                 }
 
-                //Sort the curr ArrayList according to startTime
-                Collections.sort(curr, comparator);
                 if (!curr.isEmpty()) {
+                    //Sort the curr ArrayList according to startTime
+                    Collections.sort(curr, comparator);
                     while (!curr.isEmpty()) {
                         //Find the earliest schedule that starts from the hub
                         for (int j = 0; j < curr.size(); j++) {
-                            System.out.println(curr.get(j).getStartDate());
                             if (curr.get(j).getFlight().getRoute().getOriginIATA().equals(aircraft.getHub())) {
                                 earliestSchedule = curr.get(j);
                                 break;
@@ -229,7 +228,7 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
                         System.out.println("Stage 5");
                         //Remove all the schedules before the endTime+2hrs of the earliest schedule 
                         curr = removeScheduleBefore(curr, currTime.getTime());
-
+//                        if (!curr.isEmpty()) {
                         //Find the first occurance of the return flight
                         for (int k = 0; k < curr.size(); k++) {
                             currRoute = curr.get(k).getFlight().getRoute();
@@ -253,6 +252,7 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
                         curr = removeScheduleBefore(curr, currTime.getTime());
                         System.out.println("Stage 6");
                     }
+//                    }
                     System.out.println("Aircraft set!");
                     aircraft.setSchedules(result);
                     em.merge(aircraft);
@@ -428,17 +428,17 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
     private List<Schedule> removeScheduleBefore(List<Schedule> sc, Date date) {
         schedules = new ArrayList<Schedule>();
         for (int i = 0; i < sc.size(); i++) {
-            if (sc.get(i).getStartDate().after(date)) {
+            if (sc.get(i).getStartDate().after(date) && !sc.get(i).getStartDate().equals(date)) {
                 schedules.add(sc.get(i));
             }
         }
         return schedules;
     }
-    
+
     private void clearAssignment(List<Schedule> sc) {
         for (int i = 0; i < sc.size(); i++) {
-                sc.get(i).setAssigned(false);
-                em.merge(sc.get(i));
+            sc.get(i).setAssigned(false);
+            em.merge(sc.get(i));
         }
     }
 }
