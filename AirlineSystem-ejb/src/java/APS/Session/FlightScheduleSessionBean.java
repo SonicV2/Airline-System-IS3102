@@ -211,9 +211,8 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
                     while (!curr.isEmpty()) {
                         //Find the earliest schedule that starts from the hub
                         for (int j = 0; j < curr.size(); j++) {
+                            System.out.println(curr.get(j).getStartDate());
                             if (curr.get(j).getFlight().getRoute().getOriginIATA().equals(aircraft.getHub())) {
-//                                System.out.println(curr.get(j).getFlight().getRoute().getOriginIATA());
-//                                System.out.println(aircraft.getHub());
                                 earliestSchedule = curr.get(j);
                                 break;
                             }
