@@ -77,8 +77,8 @@ public class ScheduleManageBean {
         setSchedules(scheduleSessionBean.getSchedules());
         scheduleSessionBean.changeFlightDays(flights);
         setAircraftlist(fleetSessionBean.getReserveAircrafts("Reserve"));
-        setFutureSchedules(scheduleSessionBean.filterForFutureSchedules(schedules));
-        setPastSchedules(scheduleSessionBean.filterForPastSchedules(schedules));
+//        setFutureSchedules(scheduleSessionBean.filterForFutureSchedules(schedules));
+//        setPastSchedules(scheduleSessionBean.filterForPastSchedules(schedules));
     }
     
     public void addSchedule(ActionEvent event){

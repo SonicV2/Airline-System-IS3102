@@ -4,6 +4,20 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:p="http://primefaces.org/ui"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <style>
+        .commandLink{
+            position: relative;
+            display: block;
+            padding: 10px 15px;
+
+        }
+        a:hover {
+            color: #23527c;
+            text-decoration: none;
+        }
+
+    </style>
+
 
     <div class="navbar-default sidebar" role="navigation">
         <div class="sidebar-nav navbar-collapse">
@@ -34,7 +48,7 @@
                         <a href="#{request.contextPath}/CI/updateRoles.xhtml"><i class="fa fa-plus fa-fw"></i> Role Management</a>
                     </li>
                 </ui:fragment>
-                
+
                 <!-- this is for anyone who can view, update roles-->
                 <ui:fragment rendered="#{loginManageBean.accessRightIDs.contains(6)}">
                     <li>
@@ -62,14 +76,14 @@
                         <a href="#{request.contextPath}/CI/allEmployeeInfo.xhtml" action="#{adminManagedBean.retreive()}"><i class="fa fa-plus fa-fw"></i> Employee Management</a>
                     </li>    
                 </ui:fragment>
-                
+
                 <!--                this is for viewing of all employee information, HR Exeuctive-->
                 <ui:fragment rendered="#{loginManageBean.accessRightIDs.contains(2)}">
                     <li>
                         <a href="#{request.contextPath}/CI/allEmployeeInfo.xhtml" action="#{adminManagedBean.retreive()}"><i class="fa fa-plus fa-fw"></i> Employee Management</a>
                     </li> 
                 </ui:fragment>
-                
+
                 <!--                this is for employee management, update & view-->
                 <ui:fragment rendered="#{loginManageBean.accessRightIDs.contains(19)}">
                     <li>
@@ -77,10 +91,10 @@
                     </li>
                 </ui:fragment>
 
-                
-                
 
-                
+
+
+
                 <!--                this is for Aircraft acquisition, finance manager -->
                 <ui:fragment rendered="#{loginManageBean.accessRightIDs.contains(9)}">
                     <li>
@@ -90,14 +104,14 @@
                         <a href="#{request.contextPath}/APS/RetireAircraft.xhtml"><i class="fa fa-plus fa-fw"></i>Aircrafts Management</a>
                     </li>
                 </ui:fragment>
-                
+
                 <!--                this is for Aircraft acquisition, finance executive -->
                 <ui:fragment rendered="#{loginManageBean.accessRightIDs.contains(10)}">
                     <li>
                         <a href="#{request.contextPath}/APS/RetireAircraft.xhtml"><i class="fa fa-plus fa-fw"></i>Aircrafts Management</a>
                     </li>
                 </ui:fragment>
-                
+
                 <!--                this is for flight management, operations manager -->
                 <ui:fragment rendered="#{loginManageBean.accessRightIDs.contains(11)}">
                     <li>
@@ -124,7 +138,7 @@
                         <a href="#{request.contextPath}/APS/RemoveRoute.xhtml"><i class="fa fa-plus fa-fw"></i> Route Management</a>
                     </li>
                 </ui:fragment>
-                
+
                 <!-- this is for route management, operations executive -->
                 <ui:fragment rendered="#{loginManageBean.accessRightIDs.contains(8)}">
                     <li>
@@ -141,14 +155,21 @@
                         <a href="#{request.contextPath}/APS/DeleteSchedule.xhtml"><i class="fa fa-plus fa-fw"></i> Delete Schedule</a>
                     </li>
                 </ui:fragment>
-                
-                                <!-- this is for flight scheduling, operations executive -->
+
+                <!-- this is for flight scheduling, operations executive -->
                 <ui:fragment rendered="#{loginManageBean.accessRightIDs.contains(14)}">
                     <li>
                         <a href="#{request.contextPath}/APS/UpdateSchedule.xhtml"><i class="fa fa-plus fa-fw"></i> Update Schedule</a>
                     </li>
                 </ui:fragment>
-                
+
+                <!-- this is for flight scheduling, operations executive -->
+                <ui:fragment rendered="#{loginManageBean.accessRightIDs.contains(15)}">
+                    <li>
+                        <a href="#{request.contextPath}/FOS/crewPairing.xhtml"><i class="fa fa-plus fa-fw"></i> Update Schedule</a>
+                    </li>
+                </ui:fragment>
+
                 <!-- this is for price management, finance manager -->
                 <ui:fragment rendered="#{loginManageBean.accessRightIDs.contains(16)}">
                     <li>
@@ -161,7 +182,7 @@
                         <a href="#{request.contextPath}/Inventory/viewFlights.xhtml"><i class="fa fa-plus fa-dollar"></i> Book Flight</a>
                     </li>
                 </ui:fragment>
-                
+
                 <!-- this is for price management, finance executive -->
                 <ui:fragment rendered="#{loginManageBean.accessRightIDs.contains(17)}">
                     <li>
@@ -171,8 +192,62 @@
                         <a href="#{request.contextPath}/Inventory/viewFlights.xhtml"><i class="fa fa-plus fa-dollar"></i> Book Flight</a>
                     </li>
                 </ui:fragment>
-                
 
+                <!-- this is for crew sign-in, all crews can have this access -->
+                <ui:fragment rendered="#{loginManageBean.accessRightIDs.contains(18)}">
+                    <li>
+                        <a href="#{request.contextPath}/FOS/crewSignIn.xhtml"><i class="fa fa-plus fa-eye"></i> Crew Sign-In</a>
+                    </li>
+                </ui:fragment>
+
+                <!-- this is for pilot check list, pilot can have this access -->
+                <ui:fragment rendered="#{loginManageBean.accessRightIDs.contains(21)}">
+                    <li>
+                        <a href="#{request.contextPath}/FOS/crewSignIn.xhtml"><i class="fa fa-plus fa-eye"></i> Crew Sign-In</a>
+                    </li>
+                </ui:fragment>
+
+                <!-- this is for crew check list, crew can have this access -->
+                <ui:fragment rendered="#{loginManageBean.accessRightIDs.contains(21)}">
+                    <h:form>
+                        <li>
+                            <a><h:commandLink class="commandLink" action="#{checklistManagedBean.fillParticularChecklist('Pilot')}"><i class="fa fa-plus fa-eye"></i> Crew Sign-In</h:commandLink></a>
+                        </li>
+
+                    </h:form>
+                </ui:fragment>
+
+                <!-- this is for crew check list, crew can have this access -->
+                <ui:fragment rendered="#{loginManageBean.accessRightIDs.contains(21)}">
+                    <h:form>
+                        <li>
+                            <a><h:commandLink class="commandLink" action="#{checklistManagedBean.fillParticularChecklist('Pilot')}"><i class="fa fa-plus fa-eye"></i> Crew Sign-In</h:commandLink></a>
+                        </li>
+
+                    </h:form>
+                </ui:fragment>
+
+                <!--this is for operations manager to manage crew scheduling-->
+                <ui:fragment rendered="#{loginManageBean.accessRightIDs.contains(15)}">
+                    <h:form>              
+                        <li>        
+                            <a><h:commandLink class="commandLink" action="/FOS/viewSchedule" actionListener="#{crewSignInManagedBean.viewPairing}"><i class="fa fa-plus fa-eye"></i> View All Schedule </h:commandLink></a>
+                        </li>
+                    </h:form>
+                </ui:fragment>
+
+
+                <!--this is for operations manager or executive to manage checklist-->
+                <ui:fragment rendered="#{loginManageBean.accessRightIDs.contains(20)}">   
+                    <h:form>
+                        <li>
+                            <a><h:commandLink class="commandLink" action="#{checklistManagedBean.directToCreateChecklistItem()}"><i class="fa fa-plus fa-fw"></i>Add Checklist Item</h:commandLink></a>
+                        </li>
+                        <li>
+                            <a><h:commandLink class="commandLink" action="#{checklistManagedBean.directToChooseChecklistToView()}"><i class="fa fa-plus fa-eye"></i>View filled checklists</h:commandLink></a>
+                        </li>
+                    </h:form>
+                </ui:fragment>
             </ul>
 
         </div>

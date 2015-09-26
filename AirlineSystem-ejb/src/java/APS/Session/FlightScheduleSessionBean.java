@@ -157,7 +157,6 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
             tmp.setTime(schedules.get(i).getStartDate());
             if (tmp.after(currTime)) {
                 curr.add(schedules.get(i));
-                System.out.println(schedules.get(i));
             }
         }
         schedules = curr;
