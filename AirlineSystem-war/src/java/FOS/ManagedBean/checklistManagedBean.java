@@ -91,7 +91,8 @@ public String directToChooseChecklistToFill(String name){
     setCrewName(loginManageBean.getEmployeeUserName());
     setTeam(getCrewSignInSessionBean().getCCTeam(crewName));
     setSchedulesForTeam(team.getSchedule());
-    setPastSchedulesForTeam(scheduleSessionBean.filterForPastSchedules(schedulesForTeam));
+    //setPastSchedulesForTeam(scheduleSessionBean.filterForPastSchedules(schedulesForTeam));
+    setPastSchedulesForTeam (schedulesForTeam);
     return "/FOS/ChooseChecklistToFill";
 }
 
