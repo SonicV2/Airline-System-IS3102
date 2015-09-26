@@ -131,12 +131,13 @@ public class crewScheduleManagedBean {
 
     public void getA380Slns(ActionEvent event) {
         a380PairingSessionBean.legMain(selectMonth);
-        setSlns(a380PairingSessionBean.getPairings());
+        setSlnA380(a380PairingSessionBean.getPairings());
 
         restPairingA380 = new ArrayList<Pairing>();
         FacesMessage message = null;
         if (slnA380 == null) {
             message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "No flights for this month!", "");
+             FacesContext.getCurrentInstance().addMessage(null, message);
         } else {
             for (Pairing ppp : slnA380) {
                 if (ppp.isPaired() == false) {
@@ -145,7 +146,7 @@ public class crewScheduleManagedBean {
             }
 
         }
-        FacesContext.getCurrentInstance().addMessage(null, message);
+       
     }
 
     public void getSelectPairingID(ActionEvent event) {

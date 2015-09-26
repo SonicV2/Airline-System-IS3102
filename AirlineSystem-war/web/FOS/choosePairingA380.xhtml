@@ -12,7 +12,7 @@
             <h1>Welcome to A380 Team Formation System</h1>
 
             <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
-                <p:outputLabel for="sln1" value="jjj" />
+                <p:outputLabel for="sln1" value="" />
                 <p:selectOneRadio id="sln1" value="#{crewScheduleManagedBean.sln1}"  layout="grid" columns="2">
                     <f:selectItems  value="#{crewScheduleManagedBean.restPairingA380}" var="sln" itemLabel=" #{sln.FDate} #{sln.flightHour}   #{sln.flightNumbers} #{sln.flightTimes} #{sln.flightCities} " itemValue="#{sln}"/>
                 </p:selectOneRadio>
