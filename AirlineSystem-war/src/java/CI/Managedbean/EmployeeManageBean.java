@@ -28,9 +28,9 @@ public class EmployeeManageBean {
     @EJB
     private EmployeeSessionBeanLocal employeeSessionBean;
 
-    @ManagedProperty(value="#{loginManageBean}")
+    @ManagedProperty(value = "#{loginManageBean}")
     private LoginManageBean loginManageBean;
-    
+
     public EmployeeSessionBeanLocal getEmployeeSessionBean() {
         return employeeSessionBean;
     }
@@ -41,66 +41,64 @@ public class EmployeeManageBean {
     String employeeDisplayLastName;
     String employeeRole;
     String employeeDepartment;
-    
+
     String employeeGender;
     String employeeHpNumber;
     String employeeMailingAddress;
     String employeeOfficeNumber;
     String employeeEmailAddress;
     Employee employee;
-    
+
     String employeePrivateEmail;
 
     private String employeeNewPwd;
-    private String employeeNewPwdRe; 
+    private String employeeNewPwdRe;
 
     //SimpleDateFormat format=new SimpleDateFormat("yyyy-mm-dd");
     Date employeeDOB;
-    
-   //For Cabin Crew and pilot
+
+    //For Cabin Crew and pilot
     private String experience;
     private String position;
     private List<String> languages; //cabin crew
-    
+
     private String firstLang;
     private String secondLang;
-     private List<String> skills; //pilot eg. licence to fly a380 etc
-    
-    
+    private List<String> skills; //pilot eg. licence to fly a380 etc
+
     private boolean pwdChangeStatus;
-    
+
     public EmployeeManageBean() {
     }
 
     public void addEmployee(ActionEvent event) {
-        HttpSession session = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(false);
-        
+        HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+
         String userID;
-        
-        if(session.getAttribute("isLogin")==null){
-            userID="SUPER ADMIN ";
-        }else{ userID= session.getAttribute("isLogin").toString();
-        
+
+        if (session.getAttribute("isLogin") == null) {
+            userID = "SUPER ADMIN ";
+        } else {
+            userID = session.getAttribute("isLogin").toString();
+
         }
-       
-        
-        employeeSessionBean.addEmployee(userID,employeeID, employeeDisplayFirstName, employeeDisplayLastName, employeeRole,
+
+        employeeSessionBean.addEmployee(userID, employeeID, employeeDisplayFirstName, employeeDisplayLastName, employeeRole,
                 employeeDepartment, employeeDOB, employeeGender, employeeHpNumber,
                 employeeMailingAddress, employeeOfficeNumber, employeePrivateEmail);
 
         employee = getEmployee(employeeID); //in order to get the employeeUserName and email which is generated after the creation of employee
-        
+
         employeeUserName = employee.getEmployeeUserName();
         employeeEmailAddress = employee.getEmployeeEmailAddress();
         employeeSessionBean.hashPwd(employeeID);
-        
-//        clearAll();
+
+        clearAll();
 
     }
-    
 
     //clear all input after keying in
-    public String clearAll(){
+    public String clearAll() {
         setEmployeeID("");
         setEmployeeDisplayFirstName("");
         setEmployeeDisplayLastName("");
@@ -116,68 +114,64 @@ public class EmployeeManageBean {
         setLanguages(null);
         setPosition("");
         setSkills(null);
-        
+        setFirstLang("");
+        setSecondLang("");
+
         return "employeeDashBoard";
-         
+
     }
-    
-    public void addCabinCrew(ActionEvent event){
-  
-       languages=new ArrayList<String>();
+
+    public void addCabinCrew(ActionEvent event) {
+        setEmployeeRole("Cabin Crew");
+        languages = new ArrayList<String>();
         languages.add(firstLang);
         languages.add(secondLang);
-        employeeSessionBean.addCabinCrew(employeeID,employeeDisplayFirstName, employeeDisplayLastName
-                , employeeDepartment, employeeDOB, employeeGender, employeeHpNumber,
-                employeeMailingAddress, employeeOfficeNumber, employeePrivateEmail,experience,languages, position);
-        
-        employee = getEmployee(employeeID);
-        employeeUserName = employee.getEmployeeUserName();
-        employeeEmailAddress = employee.getEmployeeEmailAddress();
-        employeeSessionBean.hashPwd(employeeID);
-    }
-    
-     public void addPilot(ActionEvent event){
-        setEmployeeRole("Pilot");
-        employeeSessionBean.addPilot(employeeID,employeeDisplayFirstName, employeeDisplayLastName
-                , employeeDepartment, employeeDOB, employeeGender, employeeHpNumber,
-                employeeMailingAddress, employeeOfficeNumber, employeePrivateEmail,experience,skills, position);
-        
-        employee = getEmployee(employeeID);
-        employeeUserName = employee.getEmployeeUserName();
-        employeeEmailAddress = employee.getEmployeeEmailAddress();
-        employeeSessionBean.hashPwd(employeeID);
-    }
-    
-     
-     
+        employeeSessionBean.addCabinCrew(employeeID, employeeDisplayFirstName, employeeDisplayLastName, employeeDepartment, employeeDOB, employeeGender, employeeHpNumber,
+                employeeMailingAddress, employeeOfficeNumber, employeePrivateEmail, experience, languages, position);
 
-    public String changePwd(){
-        HttpSession session = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+        employee = getEmployee(employeeID);
+        employeeUserName = employee.getEmployeeUserName();
+        employeeEmailAddress = employee.getEmployeeEmailAddress();
+        employeeSessionBean.hashPwd(employeeID);
+
+    }
+
+    public void addPilot(ActionEvent event) {
+        setEmployeeRole("Pilot");
+        employeeSessionBean.addPilot(employeeID, employeeDisplayFirstName, employeeDisplayLastName, employeeDepartment, employeeDOB, employeeGender, employeeHpNumber,
+                employeeMailingAddress, employeeOfficeNumber, employeePrivateEmail, experience, skills, position);
+
+        employee = getEmployee(employeeID);
+        employeeUserName = employee.getEmployeeUserName();
+        employeeEmailAddress = employee.getEmployeeEmailAddress();
+        employeeSessionBean.hashPwd(employeeID);
+    }
+
+    public String changePwd() {
+        HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
         //String userID= session.getAttribute("isLogin").toString();
-            FacesMessage message = null;
-         String employeeUserName = loginManageBean.employeeUserName;
-         if(employeeNewPwd.equals(employeeNewPwdRe)){
+        FacesMessage message = null;
+        String employeeUserName = loginManageBean.employeeUserName;
+        if (employeeNewPwd.equals(employeeNewPwdRe)) {
             employeeSessionBean.hashNewPwd(employeeUserName, employeeNewPwd);
             employeeSessionBean.employeeActivate(employeeUserName);
-            pwdChangeStatus=true;
+            pwdChangeStatus = true;
             employeeSessionBean.logPasswordChange(employeeUserName);
-            
-            
-             return "/login.xhtml" + "?faces-redirect=true";
-          
-         }else{
-             pwdChangeStatus=false;
-             
-             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Password Changed Fail", "");
-        
-             FacesContext.getCurrentInstance().addMessage(null, message);
-             
-             return "newUserChangePwd";
-             
-         }
+
+            return "/login.xhtml" + "?faces-redirect=true";
+
+        } else {
+            pwdChangeStatus = false;
+
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Password Changed Fail", "");
+
+            FacesContext.getCurrentInstance().addMessage(null, message);
+
+            return "newUserChangePwd";
+
+        }
     }
 
-    
     public Employee getEmployee(String employeeID) {
         Employee employee = employeeSessionBean.getEmployeeUseID(employeeID);
         return employee;
@@ -290,8 +284,6 @@ public class EmployeeManageBean {
     public void setEmployeePrivateEmail(String employeePrivateEmail) {
         this.employeePrivateEmail = employeePrivateEmail;
     }
-    
-    
 
     /**
      * @return the employeeNewPwd
@@ -320,7 +312,7 @@ public class EmployeeManageBean {
     public void setLoginManageBean(LoginManageBean loginManageBean) {
         this.loginManageBean = loginManageBean;
     }
-    
+
     public String getEmployeeNewPwdRe() {
         return employeeNewPwdRe;
     }
@@ -376,9 +368,5 @@ public class EmployeeManageBean {
     public void setSecondLang(String secondLang) {
         this.secondLang = secondLang;
     }
-    
-    
-    
-    
-    
+
 }
