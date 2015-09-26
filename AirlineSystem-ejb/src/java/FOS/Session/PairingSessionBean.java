@@ -139,8 +139,10 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
         Query q = em.createQuery("SELECT s FROM Schedule s");
 
         List<Schedule> scheds = q.getResultList();
-
+        
         for (Schedule s : scheds) {
+            
+          if (!s.getFlight().getAircraftType().getId().equals("Airbus A380-800")) {
             String formattedMonth = new SimpleDateFormat("MM").format(s.getStartDate());
 
             if (formattedMonth.equals(selectMonth)) {
@@ -177,6 +179,7 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
                 legss.add(l);
 
             }
+        }
         }
         System.out.println("NUM: " + legss.size());
         return legss;

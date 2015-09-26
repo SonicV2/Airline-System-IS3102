@@ -140,7 +140,7 @@ public class A380PairingSessionBean implements A380PairingSessionBeanLocal {
         List<Schedule> scheds = q.getResultList();
 
         for (Schedule s : scheds) {
-            if (s.getFlight().getAircraftType().equals("A380-800")) {
+            if (s.getFlight().getAircraftType().getId().equals("Airbus A380-800")) {
                 String formattedMonth = new SimpleDateFormat("MM").format(s.getStartDate());
 
                 if (formattedMonth.equals(selectMonth)) {
