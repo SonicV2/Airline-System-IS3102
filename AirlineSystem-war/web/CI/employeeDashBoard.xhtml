@@ -27,7 +27,7 @@
 
 
 <!--    To add the same header on all dashboard pages  -->
-        <ui:include src="dashboardHeader.xhtml"/>
+<!--        <ui:include src="dashboardHeader.xhtml"/>-->
 <!--    To add the same sidebar on all dashboard pages  -->
         <ui:include src="dashboardSidebar.xhtml"/>
         
@@ -42,10 +42,8 @@
                          <h:commandButton class="btn btn-outline btn-info" value="Fill Pilot Checklist" action="#{checklistManagedBean.fillParticularChecklist('Pilot')}"/>
                          <h:commandButton class="btn btn-outline btn-info" value="Fill Cabin Crew Checklist" action="#{checklistManagedBean.fillParticularChecklist('Cabin Crew')}"/>
                          <h:commandButton class="btn btn-outline btn-info" value="Fill Ground Staff Checklist" action="#{checklistManagedBean.fillParticularChecklist('Ground Staff')}"/>
-                         <h:commandButton class="btn btn-outline btn-info" value="Edit Pilot Checklist" action="#{checklistManagedBean.editParticularChecklist('Pilot')}"/>
-                         <h:commandButton class="btn btn-outline btn-info" value="Edit Cabin Crew Checklist" action="#{checklistManagedBean.editParticularChecklist('Cabin Crew')}"/>
-                         <h:commandButton class="btn btn-outline btn-info" value="Edit Ground Staff Checklist" action="#{checklistManagedBean.editParticularChecklist('Ground Staff')}"/>
-                         <h:commandButton class="btn btn-outline btn-info" value="Add Checklist Item" action="#{checklistManagedBean.directToCreateChecklistItem()}"/>
+                         <h:commandButton class="btn btn-outline btn-info" value="Edit Checklist" action="#{checklistManagedBean.directToChooseChecklistToEdit()}"/>
+                         <h:commandButton class="btn btn-outline btn-info" value="Add Checklist Item" action="#{checklistManagedBean.directToChooseChecklistToAddTo()}"/>
                          <h:commandButton class="btn btn-outline btn-info" value="View filled checklists" action="#{checklistManagedBean.directToChooseChecklistToView()}"/>
                     </h:form>
                 </div>

@@ -91,17 +91,16 @@ public class crewScheduleManagedBean {
         setSlns(pairingSessionBean.getPairings());
 
         restPairing = new ArrayList<Pairing>();
-      
-        
-        for (Pairing ppp : slns) {
-           
-            String formattedDate2 = new SimpleDateFormat("dd/MM/yyyy").format( date);
-            System.out.println("Schedule Date2: " + formattedDate2);
-             System.out.println("ppp.getdate: " +ppp.getFDate());
 
-            if (checkTime(ppp.getFDate(), formattedDate2) <= 0  ) {
-                if(ppp.isPaired() == false){
-                restPairing.add(ppp);
+        for (Pairing ppp : slns) {
+
+            String formattedDate2 = new SimpleDateFormat("dd/MM/yyyy").format(date);
+            System.out.println("Schedule Date2: " + formattedDate2);
+            System.out.println("ppp.getdate: " + ppp.getFDate());
+
+            if (checkTime(ppp.getFDate(), formattedDate2) <= 0) {
+                if (ppp.isPaired() == false) {
+                    restPairing.add(ppp);
                 }
             }
 
@@ -121,7 +120,7 @@ public class crewScheduleManagedBean {
             long diffHours = diff / (60 * 60 * 1000) % 24;
             long diffDays = diff / (24 * 60 * 60 * 1000);
             long result = diffDays * 24 * 60 + diffHours * 60 + diffMinutes;
-            System.out.println("REsult: "+result);
+            System.out.println("REsult: " + result);
             return result;
         } catch (Exception e) {
             e.printStackTrace();
@@ -135,11 +134,18 @@ public class crewScheduleManagedBean {
         setSlns(a380PairingSessionBean.getPairings());
 
         restPairingA380 = new ArrayList<Pairing>();
-        for (Pairing ppp : slnA380) {
-            if (ppp.isPaired() == false) {
-                restPairingA380.add(ppp);
+        FacesMessage message = null;
+        if (slnA380 == null) {
+            message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "No flights for this month!", "");
+        } else {
+            for (Pairing ppp : slnA380) {
+                if (ppp.isPaired() == false) {
+                    restPairingA380.add(ppp);
+                }
             }
+
         }
+        FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
     public void getSelectPairingID(ActionEvent event) {

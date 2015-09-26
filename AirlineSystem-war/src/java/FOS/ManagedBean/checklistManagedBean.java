@@ -94,6 +94,7 @@ public String addChecklistItem(Long scheduleKey, String checklistToAdd ){
 }
 
 public String homePage(){
+    setComments("");
     return "/CI/employeeDashBoard";
 }
 
@@ -166,6 +167,7 @@ public String fillParticularChecklist (String checklistCanAccess){
          setChecklistName (checklistToView);
          setSchedule(scheduleSessionBean.getSchedule(scheduleId));
          setChecklistItemsForChecklist(checklistSessionBean.retrieveChecklistItemsByScheduleAndChecklistName(schedule, checklistName));
+         setComments(checklistSessionBean.retrieveChecklistCommentsByScheduleAndChecklistName(schedule, checklistName));
          return "/FOS/displayFilledChecklist";
     }
 
