@@ -149,24 +149,24 @@
                 <!-- this is for flight scheduling, operations manager -->
                 <ui:fragment rendered="#{loginManageBean.accessRightIDs.contains(13)}">
                     <li>
-                        <a href="#{request.contextPath}/APS/UpdateSchedule.xhtml"><i class="fa fa-plus fa-fw"></i> Update Schedule</a>
+                        <a href="#{request.contextPath}/APS/UpdateSchedule.xhtml"><i class="fa fa-plus fa-fw"></i> Update Flight Schedule</a>
                     </li>
                     <li>
-                        <a href="#{request.contextPath}/APS/DeleteSchedule.xhtml"><i class="fa fa-plus fa-fw"></i> Delete Schedule</a>
+                        <a href="#{request.contextPath}/APS/DeleteSchedule.xhtml"><i class="fa fa-plus fa-fw"></i> Delete Flight Schedule</a>
                     </li>
                 </ui:fragment>
 
                 <!-- this is for flight scheduling, operations executive -->
                 <ui:fragment rendered="#{loginManageBean.accessRightIDs.contains(14)}">
                     <li>
-                        <a href="#{request.contextPath}/APS/UpdateSchedule.xhtml"><i class="fa fa-plus fa-fw"></i> Update Schedule</a>
+                        <a href="#{request.contextPath}/APS/UpdateSchedule.xhtml"><i class="fa fa-plus fa-fw"></i> Update Flight Schedule</a>
                     </li>
                 </ui:fragment>
 
-                <!-- this is for flight scheduling, operations executive -->
+                <!-- this is for crew scheduling, operations executive -->
                 <ui:fragment rendered="#{loginManageBean.accessRightIDs.contains(15)}">
                     <li>
-                        <a href="#{request.contextPath}/FOS/crewPairing.xhtml"><i class="fa fa-plus fa-fw"></i> Update Schedule</a>
+                        <a href="#{request.contextPath}/FOS/crewPairing.xhtml"><i class="fa fa-plus fa-fw"></i> Crew Scheduling</a>
                     </li>
                 </ui:fragment>
 
@@ -231,7 +231,7 @@
                 <ui:fragment rendered="#{loginManageBean.accessRightIDs.contains(15)}">
                     <h:form>              
                         <li>        
-                            <a><h:commandLink class="commandLink" action="/FOS/viewSchedule" actionListener="#{crewSignInManagedBean.viewPairing}"><i class="fa fa-plus fa-eye"></i> View All Schedule </h:commandLink></a>
+                            <a><h:commandLink class="commandLink" action="/FOS/viewSchedule" actionListener="#{crewSignInManagedBean.viewPairing}"><i class="fa fa-plus fa-eye"></i> View All Crew Schedules </h:commandLink></a>
                         </li>
                     </h:form>
                 </ui:fragment>
