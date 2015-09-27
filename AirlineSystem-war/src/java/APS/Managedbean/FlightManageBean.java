@@ -245,7 +245,7 @@ public class FlightManageBean {
         
         Logger logger = Logger.getLogger(FleetManageBean.class.getName());
         try {   
-        fh = new FileHandler("%h/APS/addFlight.txt",99999,1,true);  
+        fh = new FileHandler("%h/addFlight.txt",99999,1,true);  
         logger.addHandler(fh);
         SimpleFormatter formatter = new SimpleFormatter();  
         fh.setFormatter(formatter);  

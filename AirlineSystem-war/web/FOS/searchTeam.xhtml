@@ -24,7 +24,7 @@
     </style>
     <h:body>
         <!--            To add the same header on all dashboard pages  
-        <ui:include src="/CI/dashboardHeader.xhtml"/>
+-->        <ui:include src="/CI/dashboardHeader.xhtml"/><!--
             To add the same sidebar on all dashboard pages -->  
         <ui:include src="/CI/dashboardSidebar.xhtml"/>
         <div id="page-wrapper">
@@ -75,12 +75,12 @@
 
                                     <h:outputText value="Pilot" />
                                     <p:dataList value="#{searchCrewManagedBean.teamPilots}" var="p" type="ordered">
-                                        #{p.employeeDisplayFirstName} #{p.employeeDisplayLastName} ( #{p.position} )
+                                        #{p.employeeDisplayFirstName} #{p.employeeDisplayLastName} ( #{p.position} ) (#{p.status})
                                     </p:dataList>
 
                                     <h:outputText value="Cabin Crew" />
                                     <p:dataList value="#{searchCrewManagedBean.teamCC}" var="c" type="ordered">
-                                        #{c.employeeDisplayFirstName} #{c.employeeDisplayLastName} ( #{c.position} )
+                                        #{c.employeeDisplayFirstName} #{c.employeeDisplayLastName} ( #{c.position} ) (#{c.status})
                                     </p:dataList>
 
 
