@@ -82,6 +82,8 @@ public class crewScheduleManagedBean {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Change successfully!", "");
         }
         FacesContext.getCurrentInstance().addMessage(null, message);
+        
+        clear();
     }
 
 //    public void crewPairing(ActionEvent event){
@@ -232,6 +234,12 @@ public class crewScheduleManagedBean {
         }
     }
 
+    
+    public void clear(){
+        this.hours_max_flight=0;
+        this.num_max_legs=0;
+        this.time_scale_min=0;
+    }
 //    public void bigBoss() {
 //        System.out.println("HHHHHH");
 //        setLists(pairingSessionBean.addMonthlyPairing(slns));
@@ -281,7 +289,7 @@ public class crewScheduleManagedBean {
      * @param hours_max_flight the hours_max_flight to set
      */
     public void setHours_max_flight(int hours_max_flight) {
-        this.hours_max_flight = hours_max_flight;
+        this.hours_max_flight = hours_max_flight*100;
     }
 
     /**
