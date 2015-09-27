@@ -29,4 +29,5 @@ public interface ScheduleSessionBeanLocal {
     public void edit(Schedule schedule, Schedule original);
     public List<Schedule> filterForPastSchedules (List<Schedule> schedules);
     public List<Schedule> filterForFutureSchedules (List<Schedule> schedules);
+    public List<Schedule> filterForCurrentDaySchedules (List<Schedule> schedules);
 }

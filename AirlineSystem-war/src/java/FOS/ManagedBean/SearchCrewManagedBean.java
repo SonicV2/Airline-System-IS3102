@@ -77,6 +77,7 @@ public class SearchCrewManagedBean {
         languages.add("Korean");
         languages.add("French");
         languages.add("Italian");
+        languages.add("German");
 
         pilotSkillsets.add("A380");
         pilotSkillsets.add("A330");

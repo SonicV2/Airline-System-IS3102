@@ -19,7 +19,7 @@ import javax.ejb.Local;
 @Local
 public interface PairingSessionBeanLocal {
 
-    public void legMain(String selectMonth);
+    public void legMain(String selectMonth, String selectYear);
 
     public void setPolicy();
 
@@ -33,5 +33,6 @@ public interface PairingSessionBeanLocal {
 
     public Team generateTeam(Pairing pairing);
 
+//    public List<List<Pairing>> addMonthlyPairing(List<Pairing> pairing);
 
 }

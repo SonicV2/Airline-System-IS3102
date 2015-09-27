@@ -159,8 +159,8 @@ public class ScheduleManageBean {
         
         if(edited.getStartDate().equals(original.getStartDate()) && edited.getAircraft().getTailNo().equals(original.getAircraft().getTailNo())){
             
-            FacesMessage msg = new FacesMessage("Edit Cancelled");
-            FacesContext.getCurrentInstance().addMessage(null, msg);
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Edit Cancelled", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
             clear(original);
             return;
         }
@@ -171,22 +171,22 @@ public class ScheduleManageBean {
             temp.add(Calendar.HOUR, 1);
             
             if (edited.getStartDate().after(temp.getTime())) {
-                FacesMessage msg = new FacesMessage("You cannot delay flight more than one hour!");
-                FacesContext.getCurrentInstance().addMessage(null, msg);
+                message = new FacesMessage(FacesMessage.SEVERITY_INFO, "You cannot delay flight more than one hour!", "");
+                FacesContext.getCurrentInstance().addMessage(null, message);
                 clear(original);
                 return;                
             }
 
             scheduleSessionBean.edit(edited, original);
-            FacesMessage msg = new FacesMessage("Schedule Edited");
-            FacesContext.getCurrentInstance().addMessage(null, msg);
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Schedule Edited", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
 
         
     }
      
     public void onRowCancel(RowEditEvent event) {
-        FacesMessage msg = new FacesMessage("Edit Cancelled");
-        FacesContext.getCurrentInstance().addMessage(null, msg);
+        message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Edit Cancelled", "");
+        FacesContext.getCurrentInstance().addMessage(null, message);
     }
     
     public String getDateFormat(Date date){
