@@ -104,19 +104,24 @@ public class EmployeeManageBean {
         
         Logger logger = Logger.getLogger(EmployeeManageBean.class.getName());
         try {   
-        fh = new FileHandler("%h/CI/addEmployee.txt",99999,1,true);  
+        fh = new FileHandler("%h/addEmployee.txt",99999,1,true); 
+        System.out.println("Line 1 Reached");
         logger.addHandler(fh);
+        System.out.println("Line 2 Reached");
         SimpleFormatter formatter = new SimpleFormatter();  
         fh.setFormatter(formatter);  
-
+        
         } catch (SecurityException e) {  
         e.printStackTrace();  
         } catch (IOException e) {  
         e.printStackTrace();  
         } 
+        System.out.println("Line 3 Reached");
         logger.info("User: "+ userID 
                 + "has added Employee: " + employeeID);
+        System.out.println("Line 4 Reached");
         fh.close();
+        System.out.println("Line 5 Reached");
 
         clearAll();
 
@@ -161,7 +166,7 @@ public class EmployeeManageBean {
         
         Logger logger = Logger.getLogger(EmployeeManageBean.class.getName());
         try {   
-        fh = new FileHandler("%h/CI/addCabinCrew.txt",99999,1,true);  
+        fh = new FileHandler("%h/addCabinCrew.txt",99999,1,true);  
         logger.addHandler(fh);
         SimpleFormatter formatter = new SimpleFormatter();  
         fh.setFormatter(formatter);  
@@ -190,7 +195,7 @@ public class EmployeeManageBean {
          
         Logger logger = Logger.getLogger(EmployeeSessionBean.class.getName());
         try {   
-        fh = new FileHandler("%h/CI/addPilot.txt",99999,1,true);  
+        fh = new FileHandler("%h/addPilot.txt",99999,1,true);  
         logger.addHandler(fh);
         SimpleFormatter formatter = new SimpleFormatter();  
         fh.setFormatter(formatter);  
@@ -216,7 +221,7 @@ public class EmployeeManageBean {
             pwdChangeStatus = true;            
             Logger logger = Logger.getLogger(EmployeeManageBean.class.getName());
             try {   
-            fh = new FileHandler("%h/CI/changePassword.txt",99999,1,true);  
+            fh = new FileHandler("%h/changePassword.txt",99999,1,true);  
             logger.addHandler(fh);
             SimpleFormatter formatter = new SimpleFormatter();  
             fh.setFormatter(formatter);  

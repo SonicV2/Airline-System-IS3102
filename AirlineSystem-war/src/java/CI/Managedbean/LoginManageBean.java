@@ -64,7 +64,7 @@ public class LoginManageBean {
             
         Logger logger = Logger.getLogger(LoginManageBean.class.getName());
         try {   
-        fh = new FileHandler("%h/CI/LogIn.txt",99999,1,true);  
+        fh = new FileHandler("%h/LogIn.txt",99999,1,true);  
         logger.addHandler(fh);
         SimpleFormatter formatter = new SimpleFormatter();  
         fh.setFormatter(formatter);  
@@ -183,7 +183,7 @@ public class LoginManageBean {
         
         Logger logger = Logger.getLogger(LoginManageBean.class.getName());
         try {   
-        fh = new FileHandler("%h/CI/LogOut.txt",99999,1,true);  
+        fh = new FileHandler("%h/LogOut.txt",99999,1,true);  
         logger.addHandler(fh);
         SimpleFormatter formatter = new SimpleFormatter();  
         fh.setFormatter(formatter);  
