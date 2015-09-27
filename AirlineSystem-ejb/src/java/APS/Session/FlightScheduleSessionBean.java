@@ -149,7 +149,6 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
         TimeZone tz = TimeZone.getTimeZone("GMT+8:00"); //Set Timezone to Singapore
         Calendar currTime = Calendar.getInstance(tz);
         Calendar tmp = Calendar.getInstance(tz);
-        System.out.println("Start");
         //NOTE: ADD FUNCTIONALITIES
         //Take into account available aircrafts
         //Remove the schedules that are after current time Note: May be replaced by new getSchedule algo
@@ -160,7 +159,6 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
             }
         }
         schedules = curr;
-        System.out.println("Stage 1");
         //Create comparator for sorting of Schedules according to starting time
         Comparator<Schedule> comparator = new Comparator<Schedule>() {
             @Override
@@ -184,7 +182,6 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
                 curr = new ArrayList<Schedule>();
                 result = new ArrayList<Schedule>();
                 aircraftType = aircraft.getAircraftType();
-                System.out.println("Stage 3");
                 //Add flights according to hubs
                 for (int i = 0; i < aircraftType.getFlights().size(); i++) {
                     currRoute = aircraftType.getFlights().get(i).getRoute();
@@ -192,7 +189,6 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
                         flights.add(aircraftType.getFlights().get(i));
                     }
                 }
-                System.out.println("Stage 4");
                 //Precond: There are enough aircraft to fly all the flights
                 //Add all avaliable schedules to the curr List
                 for (Flight flight1 : flights) {
@@ -206,6 +202,7 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
 
                 if (!curr.isEmpty()) {
                     //Sort the curr ArrayList according to startTime
+                    System.out.println(aircraft.getTailNo());
                     Collections.sort(curr, comparator);
                     while (!curr.isEmpty()) {
                         //Find the earliest schedule that starts from the hub
@@ -225,7 +222,6 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
                         //Set the buffer time of 2 hours after the flight arrives
                         currTime.add(Calendar.HOUR, 2);
                         incoming = earliestSchedule.getFlight().getRoute();
-                        System.out.println("Stage 5");
                         //Remove all the schedules before the endTime+2hrs of the earliest schedule 
                         curr = removeScheduleBefore(curr, currTime.getTime());
 
@@ -251,7 +247,6 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
 
                         //Remove all the schedules before the endTime+2hrs of the earliest schedule 
                         curr = removeScheduleBefore(curr, currTime.getTime());
-                        System.out.println("Stage 6");
                     }
 //                    }
                     System.out.println("Aircraft set!");

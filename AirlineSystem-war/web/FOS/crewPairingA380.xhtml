@@ -30,113 +30,136 @@
 
             <div class="row">
                 <div class="col-lg-12">
-                    <h2 class="page-header">Welcome to Crew Pairing System</h2>
+                    <h2 class="page-header">Crew Scheduling for A380</h2>
                 </div>
 
                 <div class="col-md-12">
+
+
                     <h:form>
-                        <p:growl id="growl" sticky="true" showDetail="true"/>
+                        <div class="col-md-10">
+                            <p:growl id="growl" sticky="true" showDetail="true"/>
 
+                            <div class="form-group">
+                                <h:outputLabel class="col-md-3 control-label" value="Max Flight Hours: "/>
+                                <h:outputLabel value="#{crewScheduleManagedBean.pp.hours_max_flight}"/>
+                                <br/><br/>
+                            </div>
+                            <div class="form-group">
+                                <h:outputLabel class="col-md-3 control-label" value="Max number of legs: "/>
+                                <h:outputLabel value="#{crewScheduleManagedBean.pp.num_max_legs}"/>
+                                <br/><br/>
+                            </div>
 
-                        <h:outputLabel value="Max Flight Hours: "/>
-                        <h:outputLabel value="#{crewScheduleManagedBean.pp.hours_max_flight}"/>
-                        <br/><br/>
+                            <div class="form-group">
+                                <h:outputLabel class="col-md-3 control-label" value="Min stopover time: "/>
+                                <h:outputLabel value="#{crewScheduleManagedBean.pp.time_scale_min}"/>
+                                <br/><br/>
+                            </div>
 
-                        <h:outputLabel value="Max number of legs: "/>
-                        <h:outputLabel value="#{crewScheduleManagedBean.pp.num_max_legs}"/>
-                        <br/><br/>
+                            <div class="text-center">
+                                <h:commandButton class="btn btn-outline btn-success" value="Retrieve Airline Policy" actionListener="#{crewScheduleManagedBean.retrivePolicy}"/>
+                            </div>
 
+                            <br/><br/>
 
-                        <h:outputLabel value="Min stopover time: "/>
-                        <h:outputLabel value="#{crewScheduleManagedBean.pp.time_scale_min}"/>
-                        <br/><br/>
-                        <h:commandButton value="Retrieve" actionListener="#{crewScheduleManagedBean.retrivePolicy}"/>
+                            <p:outputLabel  class="col-md-3 control-label" value="Max Flight Hours: " />
+                            <p:inputText id="a" required="true" requiredMessage="Please fill in this field!" class="form-control" placeholder="Max Flight Hours" value="#{crewScheduleManagedBean.hours_max_flight}" style="width: 200px;"   />
+                            <div class="missingfield">
+                                <h:message for="a" />
+                            </div>
 
+                            <br/>
 
-                        <br/><br/>
+                            <p:outputLabel  class="col-md-3 control-label" value="Max number of legs: " />
+                            <p:inputText id="b" required="true" requiredMessage="Please fill in this field!"  class="form-control" placeholder="Max number of legs" value="#{crewScheduleManagedBean.num_max_legs}" style="width: 200px;"   />
+                            <div class="missingfield">
+                                <h:message for="b" />
+                            </div>
+                            <br/>
 
-                        <p:outputLabel value="Max Flight Hours: " />
-                        <p:inputText id="a" required="true" requiredMessage="Please fill in this field!" class="form-control input-lg" placeholder="Max Flight Hours" value="#{crewScheduleManagedBean.hours_max_flight}"  />
-                        <div class="missingfield">
-                            <h:message for="a" />
+                            <p:outputLabel class="col-md-3 control-label" value="Min stopover time: " />
+                            <p:inputText id="c" required="true" requiredMessage="Please fill in this field!" class="form-control" placeholder="Min stopover time" value="#{crewScheduleManagedBean.time_scale_min}" style="width: 200px;"   />
+                            <div class="missingfield">
+                                <h:message for="c" />
+                            </div>
+                            <br/>
+
+                            <div class="text-center">
+                            <h:commandButton class="btn btn-outline btn-success" value="Change Airline Policy" actionListener="#{crewScheduleManagedBean.changePolicy}"/>
+                            </div>
+                            <br/><br/>
+                            <div class="form-group">
+                                <p:outputLabel class="col-md-3 control-label" value="Choose Month: " />
+                                <p:inputText  required="true" requiredMessage="Please fill in this field!" class="form-control" placeholder="Choose Month" value="#{crewScheduleManagedBean.selectMonth}" style="width: 200px;"   />
+                            </div>
+                            <div class="form-group">
+                                <p:outputLabel class="col-md-3 control-label" value="Choose Year: " />
+                                <p:inputText  required="true" requiredMessage="Please fill in this field!" class="form-control" placeholder="Choose Year" value="#{crewScheduleManagedBean.selectYear}" style="width: 200px;"  />
+                                
+                            </div>
+                            <div class="text-center">
+                            <h:commandButton class="btn btn-outline btn-success" value="Display Route Pairing" actionListener="#{crewScheduleManagedBean.getA380Slns}"/>
+                            </div>
+                            
+                            <br></br>
+                            <br></br>
                         </div>
 
-                        <br/>
+                        <div class="col-lg-12">
+                            <p:dataTable id="tbl" var="sln" value="#{crewScheduleManagedBean.slnA380}"
+                                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} "
+                                         paginator="true" rows="10" style="margin-bottom:20px">
 
-                        <p:outputLabel value="Max number of legs: " />
-                        <p:inputText id="b" required="true" requiredMessage="Please fill in this field!"  class="form-control input-lg" placeholder="Max number of legs" value="#{crewScheduleManagedBean.num_max_legs}"  />
-                        <div class="missingfield">
-                            <h:message for="b" />
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Pairing ID" />
+                                    </f:facet>
+                                    <h:outputText value="#{sln.id}" />
+                                </p:column>
+
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Flight Date"/>
+                                    </f:facet>
+                                    <h:outputText value="#{sln.FDate}" />
+                                </p:column>
+
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Flight Hour" />
+                                    </f:facet>
+                                    <h:outputText value="#{sln.flightHour}" />
+                                </p:column>
+
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Flight Number" />
+                                    </f:facet>
+                                    <h:outputText value="#{sln.flightNumbers}" />
+                                </p:column>
+
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Flight Time" />
+                                    </f:facet>
+                                    <h:outputText value="#{sln.flightTimes}" />
+                                </p:column>
+
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Flight City" />
+                                    </f:facet>
+                                    <h:outputText value="#{sln.flightCities}" />
+                                </p:column>
+                            </p:dataTable>
+                            <div class="text-center">
+                            <h:commandButton class="btn btn-outline btn-success" value="Assign Teams" action="/FOS/choosePairingA380" />
+                            </div>
                         </div>
-                        <br/>
-
-                        <p:outputLabel value="Min stopover time: " />
-                        <p:inputText id="c" required="true" requiredMessage="Please fill in this field!" class="form-control input-lg" placeholder="Min stopover time" value="#{crewScheduleManagedBean.time_scale_min}"  />
-                        <div class="missingfield">
-                            <h:message for="c" />
-                        </div>
-                        <br/>
 
 
-                        <h:commandButton value="Change" actionListener="#{crewScheduleManagedBean.changePolicy}"/>
-                        <br/><br/>
-                        <h:commandButton value="Assign" action="/FOS/choosePairingA380" />
-
-
-
-                        <p:dataTable id="tbl" var="sln" value="#{crewScheduleManagedBean.slnA380}"
-                                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} "
-                                     paginator="true" rows="10" style="margin-bottom:20px">
-
-                            <p:column>
-                                <f:facet name="header">
-                                    <h:outputText value="Pairing ID" />
-                                </f:facet>
-                                <h:outputText value="#{sln.id}" />
-                            </p:column>
-
-                            <p:column>
-                                <f:facet name="header">
-                                    <h:outputText value="Flight Date"/>
-                                </f:facet>
-                                <h:outputText value="#{sln.FDate}" />
-                            </p:column>
-
-                            <p:column>
-                                <f:facet name="header">
-                                    <h:outputText value="Flight Hour" />
-                                </f:facet>
-                                <h:outputText value="#{sln.flightHour}" />
-                            </p:column>
-
-                            <p:column>
-                                <f:facet name="header">
-                                    <h:outputText value="Flight Number" />
-                                </f:facet>
-                                <h:outputText value="#{sln.flightNumbers}" />
-                            </p:column>
-
-                            <p:column>
-                                <f:facet name="header">
-                                    <h:outputText value="Flight Time" />
-                                </f:facet>
-                                <h:outputText value="#{sln.flightTimes}" />
-                            </p:column>
-
-                            <p:column>
-                                <f:facet name="header">
-                                    <h:outputText value="Flight City" />
-                                </f:facet>
-                                <h:outputText value="#{sln.flightCities}" />
-                            </p:column>
-                        </p:dataTable>
-
-                        <p:outputLabel value="Choose Month: " />
-                        <p:inputText  required="true" requiredMessage="Please fill in this field!" class="form-control input-lg" placeholder="Choose Month" value="#{crewScheduleManagedBean.selectMonth}"  />
-                        <p:inputText  required="true" requiredMessage="Please fill in this field!" class="form-control input-lg" placeholder="Choose Year" value="#{crewScheduleManagedBean.selectYear}"  />
-                        <h:commandButton value="Display" actionListener="#{crewScheduleManagedBean.getA380Slns}"/>
-
-
+                            
 
 
 

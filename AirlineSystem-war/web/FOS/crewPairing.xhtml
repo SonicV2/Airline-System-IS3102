@@ -31,28 +31,30 @@
 
             <div class="row">
                 <div class="col-lg-12">
-                    <h2 class="page-header">Welcome to Crew Pairing System</h2>
+                    <h2 class="page-header">Welcome to Crew Scheduling System</h2>
                 </div>
 
-                <div class="col-md-12">
+                <div class="col-lg-12">
+                    <div class="col-md-10">
                     <h:form>
                         <p:growl id="growl" sticky="true" showDetail="true"/>
 
 
-                        <h:outputLabel value="Max Flight Hours: "/>
+                        <h:outputLabel class="col-md-3 control-label" value="Max Flight Hours: "/>
                         <h:outputLabel value="#{crewScheduleManagedBean.pp.hours_max_flight}"/>
                         <br/><br/>
 
-                        <h:outputLabel value="Max number of legs: "/>
+                        <h:outputLabel class="col-md-3 control-label" value="Max number of legs: "/>
                         <h:outputLabel value="#{crewScheduleManagedBean.pp.num_max_legs}"/>
                         <br/><br/>
 
 
-                        <h:outputLabel value="Min stopover time: "/>
+                        <h:outputLabel class="col-md-3 control-label" value="Min stopover time: "/>
                         <h:outputLabel value="#{crewScheduleManagedBean.pp.time_scale_min}"/>
                         <br/><br/>
-                        <h:commandButton class="btn btn-outline btn-success" value="Retrieve" actionListener="#{crewScheduleManagedBean.retrivePolicy}"/>
-
+                        <div class="text-center"> 
+                            <h:commandButton class="btn btn-outline btn-success" value="Retrieve Airline Policy" actionListener="#{crewScheduleManagedBean.retrivePolicy}"/>
+                        </div>
                     </h:form>
                     <br/><br/>
                     <h:form>
@@ -64,7 +66,6 @@
                             </div>
                         </div>
 
-                        <br/>
                         <div class="form-group">
                             <h:outputLabel class="col-md-3 control-label" value="Max number of legs: " />
                             <p:inputText id="b" required="true" requiredMessage="Please fill in this field!"  class="form-control" placeholder="Max number of legs" value="#{crewScheduleManagedBean.num_max_legs}" style="width: 200px;"  />
@@ -72,7 +73,6 @@
                                 <h:message for="b" />
                             </div>
                         </div>
-                        <br/>
 
                         <div class="form-group">
                             <h:outputLabel class="col-md-3 control-label" value="Min stopover time: " />
@@ -81,74 +81,83 @@
                                 <h:message for="c" />
                             </div>
                         </div>
-                        <br/>
+                        <div class="text-center"> 
+                            <h:commandButton class="btn btn-outline btn-success" value="Change Airline Policy" actionListener="#{crewScheduleManagedBean.changePolicy}"/>
+                        </div>
+                        <br></br>
+                        <br></br>
                         <div class="form-group">
                             <h:outputLabel class="col-md-3 control-label" value="Choose Month: " />
                             <p:inputText  required="true" requiredMessage="Please fill in this field!" class="form-control" placeholder="Choose Month" value="#{crewScheduleManagedBean.selectMonth}" style="width: 200px;" />
+                        </div>
+                        <div class="form-group">
                             <h:outputLabel class="col-md-3 control-label" value="Choose Year: " />
                             <p:inputText  required="true" requiredMessage="Please fill in this field!" class="form-control" placeholder="Choose Year" value="#{crewScheduleManagedBean.selectYear}" style="width: 200px;" />
-                            <h:commandButton class="btn btn-outline btn-success" value="Display" actionListener="#{crewScheduleManagedBean.getSlns}"/>
-                        </div>
+                          </div>  
+                            <div class="text-center">   
+                                <h:commandButton class="btn btn-outline btn-success" value="Display Route Pairing" actionListener="#{crewScheduleManagedBean.getSlns}"/>
+                            </div>
+                        
+                        <br></br>
 
-                        <h:commandButton class="btn btn-outline btn-success" value="Change" actionListener="#{crewScheduleManagedBean.changePolicy}"/>
-                        <br/><br/>
                     </h:form>
+                    </div>
                     <!--                </div>-->
 
-                    <!--                <div class="col-lg-12">-->
-                    <h:form>
-                        <p:dataTable id="tbl" var="sln" value="#{crewScheduleManagedBean.slns}"
-                                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} "
-                                     paginator="true" rows="10" style="margin-bottom:20px">
+                    <div class="col-lg-12">
+                        <h:form>
+                            <p:dataTable id="tbl" var="sln" value="#{crewScheduleManagedBean.slns}"
+                                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} "
+                                         paginator="true" rows="10" style="margin-bottom:20px">
 
-                            <p:column>
-                                <f:facet name="header">
-                                    <h:outputText value="Pairing ID" />
-                                </f:facet>
-                                <h:outputText value="#{sln.id}" />
-                            </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Pairing ID" />
+                                    </f:facet>
+                                    <h:outputText value="#{sln.id}" />
+                                </p:column>
 
-                            <p:column>
-                                <f:facet name="header">
-                                    <h:outputText value="Flight Date"/>
-                                </f:facet>
-                                <h:outputText value="#{sln.FDate}" />
-                            </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Flight Date"/>
+                                    </f:facet>
+                                    <h:outputText value="#{sln.FDate}" />
+                                </p:column>
 
-                            <p:column>
-                                <f:facet name="header">
-                                    <h:outputText value="Flight Hour" />
-                                </f:facet>
-                                <h:outputText value="#{sln.flightHour}" />
-                            </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Flight Hour" />
+                                    </f:facet>
+                                    <h:outputText value="#{sln.flightHour}" />
+                                </p:column>
 
-                            <p:column>
-                                <f:facet name="header">
-                                    <h:outputText value="Flight Number" />
-                                </f:facet>
-                                <h:outputText value="#{sln.flightNumbers}" />
-                            </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Flight Number" />
+                                    </f:facet>
+                                    <h:outputText value="#{sln.flightNumbers}" />
+                                </p:column>
 
-                            <p:column>
-                                <f:facet name="header">
-                                    <h:outputText value="Flight Time" />
-                                </f:facet>
-                                <h:outputText value="#{sln.flightTimes}" />
-                            </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Flight Time" />
+                                    </f:facet>
+                                    <h:outputText value="#{sln.flightTimes}" />
+                                </p:column>
 
-                            <p:column>
-                                <f:facet name="header">
-                                    <h:outputText value="Flight City" />
-                                </f:facet>
-                                <h:outputText value="#{sln.flightCities}" />
-                            </p:column>
-                        </p:dataTable>
-                        <div class="text-center">
-                            <h:commandButton class="btn btn-outline btn-success" value="Assign Team" action="/FOS/choosePairing" />
-                        </div>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Flight City" />
+                                    </f:facet>
+                                    <h:outputText value="#{sln.flightCities}" />
+                                </p:column>
+                            </p:dataTable>
+                            <div class="text-center">
+                                <h:commandButton class="btn btn-outline btn-success" value="Assign Team" action="/FOS/choosePairing" />
+                            </div>
 
-                    </h:form>
-
+                        </h:form>
+                    </div>
                 </div>
             </div>
         </div>
