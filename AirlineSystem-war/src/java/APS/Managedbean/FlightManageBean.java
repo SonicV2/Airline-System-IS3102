@@ -12,9 +12,13 @@ import APS.Session.RouteSessionBeanLocal;
 import APS.Session.FleetSessionBeanLocal;
 import APS.Session.ScheduleSessionBeanLocal;
 import CI.Managedbean.LoginManageBean;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.FileHandler;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -26,6 +30,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -78,6 +83,9 @@ public class FlightManageBean {
     private List<Flight> flights;
     
     private Flight selectedFlight;
+    
+    private FileHandler fh;
+    private String userID;
 
     public FlightManageBean() {
     }
@@ -86,6 +94,8 @@ public class FlightManageBean {
     public void retrieve(){
         
         setFlights(flightSessionBean.retrieveFlights());
+        HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+        userID= (String)session.getAttribute("isLogin");
         
     }
 
@@ -227,10 +237,31 @@ public class FlightManageBean {
 
         flightSessionBean.addFlight(flightNo, flightDays, basicFare, startDateTime, routeId);
         flightScheduleSessionBean.scheduleFlights(flightNo);
-//        flightScheduleSessionBean.rotateFlights();
+        flightScheduleSessionBean.rotateFlights();
         flightDays = "";
+        
+        message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Flight Added Successfully!", "");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+
         FacesMessage msg = new FacesMessage("Flight Added Successfully!");
         FacesContext.getCurrentInstance().addMessage(null, msg);
+        
+        Logger logger = Logger.getLogger(FleetManageBean.class.getName());
+        try {   
+        fh = new FileHandler("%h/APS/addFlight.txt",99999,1,true);  
+        logger.addHandler(fh);
+        SimpleFormatter formatter = new SimpleFormatter();  
+        fh.setFormatter(formatter);  
+
+        } catch (SecurityException e) {  
+        e.printStackTrace();  
+        } catch (IOException e) {  
+        e.printStackTrace();  
+        } 
+        logger.info("User: "+ userID 
+                + "has added Flight: " + flightNo);
+        fh.close();
+        
         setFlights(flightSessionBean.retrieveFlights());
         setSchedule(scheduleSessionBean.getSchedules());
         clear();
@@ -267,8 +298,8 @@ public class FlightManageBean {
         flightSessionBean.deleteFlight(selectedFlight.getFlightNo());
         selectedFlight = null;
         
-        FacesMessage msg = new FacesMessage("Flight Removed");
-        FacesContext.getCurrentInstance().addMessage(null, msg);
+        message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Flight Removed", "");
+        FacesContext.getCurrentInstance().addMessage(null, message);
         
         setFlights(flightSessionBean.retrieveFlights());
         setSchedule(scheduleSessionBean.getSchedules());

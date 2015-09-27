@@ -52,6 +52,7 @@ public class AccessRightManagedBean {
 //        setAccessRights("");
         setAllAccessRights(accessRightSession.retrieveAllAccessRight());
         return "manageAccessRight";
+        
     }
 
     /**

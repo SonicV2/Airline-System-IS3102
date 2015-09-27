@@ -1,6 +1,7 @@
 package CI.Managedbean;
 
 import CI.Entity.Employee;
+import CI.Session.EmployeeSessionBean;
 import java.util.Date;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
@@ -10,10 +11,14 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import CI.Session.EmployeeSessionBeanLocal;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.logging.FileHandler;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
@@ -67,6 +72,11 @@ public class EmployeeManageBean {
     private List<String> skills; //pilot eg. licence to fly a380 etc
 
     private boolean pwdChangeStatus;
+    
+    //For Logging purposes
+    private FileHandler fh;
+    private String userID;
+   
 
     public EmployeeManageBean() {
     }
@@ -74,7 +84,6 @@ public class EmployeeManageBean {
     public void addEmployee(ActionEvent event) {
         HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
 
-        String userID;
 
         if (session.getAttribute("isLogin") == null) {
             userID = "SUPER ADMIN ";
@@ -92,6 +101,22 @@ public class EmployeeManageBean {
         employeeUserName = employee.getEmployeeUserName();
         employeeEmailAddress = employee.getEmployeeEmailAddress();
         employeeSessionBean.hashPwd(employeeID);
+        
+        Logger logger = Logger.getLogger(EmployeeManageBean.class.getName());
+        try {   
+        fh = new FileHandler("%h/CI/addEmployee.txt",99999,1,true);  
+        logger.addHandler(fh);
+        SimpleFormatter formatter = new SimpleFormatter();  
+        fh.setFormatter(formatter);  
+
+        } catch (SecurityException e) {  
+        e.printStackTrace();  
+        } catch (IOException e) {  
+        e.printStackTrace();  
+        } 
+        logger.info("User: "+ userID 
+                + "has added Employee: " + employeeID);
+        fh.close();
 
         clearAll();
 
@@ -133,6 +158,22 @@ public class EmployeeManageBean {
         employeeUserName = employee.getEmployeeUserName();
         employeeEmailAddress = employee.getEmployeeEmailAddress();
         employeeSessionBean.hashPwd(employeeID);
+        
+        Logger logger = Logger.getLogger(EmployeeManageBean.class.getName());
+        try {   
+        fh = new FileHandler("%h/CI/addCabinCrew.txt",99999,1,true);  
+        logger.addHandler(fh);
+        SimpleFormatter formatter = new SimpleFormatter();  
+        fh.setFormatter(formatter);  
+
+        } catch (SecurityException e) {  
+        e.printStackTrace();  
+        } catch (IOException e) {  
+        e.printStackTrace();  
+        } 
+        logger.info("User: "+ userID 
+                + "has added Cabin Crew: " + employeeID);
+        fh.close();
 
     }
 
@@ -145,6 +186,23 @@ public class EmployeeManageBean {
         employeeUserName = employee.getEmployeeUserName();
         employeeEmailAddress = employee.getEmployeeEmailAddress();
         employeeSessionBean.hashPwd(employeeID);
+        
+         
+        Logger logger = Logger.getLogger(EmployeeSessionBean.class.getName());
+        try {   
+        fh = new FileHandler("%h/CI/addPilot.txt",99999,1,true);  
+        logger.addHandler(fh);
+        SimpleFormatter formatter = new SimpleFormatter();  
+        fh.setFormatter(formatter);  
+
+        } catch (SecurityException e) {  
+        e.printStackTrace();  
+        } catch (IOException e) {  
+        e.printStackTrace();  
+        } 
+        logger.info("User: "+ userID 
+                + "has added Pilot: " + employeeID);
+        fh.close();
     }
 
     public String changePwd() {
@@ -155,8 +213,22 @@ public class EmployeeManageBean {
         if (employeeNewPwd.equals(employeeNewPwdRe)) {
             employeeSessionBean.hashNewPwd(employeeUserName, employeeNewPwd);
             employeeSessionBean.employeeActivate(employeeUserName);
-            pwdChangeStatus = true;
-            employeeSessionBean.logPasswordChange(employeeUserName);
+            pwdChangeStatus = true;            
+            Logger logger = Logger.getLogger(EmployeeManageBean.class.getName());
+            try {   
+            fh = new FileHandler("%h/CI/changePassword.txt",99999,1,true);  
+            logger.addHandler(fh);
+            SimpleFormatter formatter = new SimpleFormatter();  
+            fh.setFormatter(formatter);  
+
+            } catch (SecurityException e) {  
+            e.printStackTrace();  
+            } catch (IOException e) {  
+            e.printStackTrace();  
+            } 
+            logger.info("User: "+ employeeUserName
+                    + "has changed password: ");
+            fh.close();
 
             return "/login.xhtml" + "?faces-redirect=true";
 
