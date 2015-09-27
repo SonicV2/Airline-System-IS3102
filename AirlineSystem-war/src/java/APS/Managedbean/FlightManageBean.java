@@ -239,8 +239,9 @@ public class FlightManageBean {
         flightScheduleSessionBean.scheduleFlights(flightNo);
         flightScheduleSessionBean.rotateFlights();
         flightDays = "";
-        FacesMessage msg = new FacesMessage("Flight Added Successfully!");
-        FacesContext.getCurrentInstance().addMessage(null, msg);
+
+        message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Flight Added Successfully!", "");
+        FacesContext.getCurrentInstance().addMessage(null, message);
         
         Logger logger = Logger.getLogger(FleetManageBean.class.getName());
         try {   
@@ -294,8 +295,8 @@ public class FlightManageBean {
         flightSessionBean.deleteFlight(selectedFlight.getFlightNo());
         selectedFlight = null;
         
-        FacesMessage msg = new FacesMessage("Flight Removed");
-        FacesContext.getCurrentInstance().addMessage(null, msg);
+        message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Flight Removed", "");
+        FacesContext.getCurrentInstance().addMessage(null, message);
         
         setFlights(flightSessionBean.retrieveFlights());
         setSchedule(scheduleSessionBean.getSchedules());
