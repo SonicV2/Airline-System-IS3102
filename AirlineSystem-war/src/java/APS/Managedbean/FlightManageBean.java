@@ -237,7 +237,7 @@ public class FlightManageBean {
 
         flightSessionBean.addFlight(flightNo, flightDays, basicFare, startDateTime, routeId);
         flightScheduleSessionBean.scheduleFlights(flightNo);
-//        flightScheduleSessionBean.rotateFlights();
+        flightScheduleSessionBean.rotateFlights();
         flightDays = "";
         FacesMessage msg = new FacesMessage("Flight Added Successfully!");
         FacesContext.getCurrentInstance().addMessage(null, msg);
