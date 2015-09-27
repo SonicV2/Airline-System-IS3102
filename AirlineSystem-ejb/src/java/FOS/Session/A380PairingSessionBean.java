@@ -53,7 +53,7 @@ public class A380PairingSessionBean implements A380PairingSessionBeanLocal {
     private Team team;
 
     @Override
-    public void legMain(String selectMonth) {
+    public void legMain(String selectMonth,String selectYear) {
         ArrayList<Leg> legs = new ArrayList<Leg>();
         ArrayList<Leg> route = new ArrayList<Leg>();
         Leg l;
@@ -63,7 +63,7 @@ public class A380PairingSessionBean implements A380PairingSessionBeanLocal {
         int numofFlightHours = 0;
         int totalFlightHours = 0;
 
-        legs = addLeg380(selectMonth);
+        legs = addLeg380(selectMonth,selectYear);
         if(legs.size()==0){}else{
         sortList(legs);
         String destination = legs.get(0).getDestination();
@@ -131,7 +131,7 @@ public class A380PairingSessionBean implements A380PairingSessionBeanLocal {
     }
 
     //Pairing for A380
-    public ArrayList<Leg> addLeg380(String selectMonth) {
+    public ArrayList<Leg> addLeg380(String selectMonth,String selectYear) {
         
         legss = new ArrayList<Leg>();
 
@@ -142,8 +142,9 @@ public class A380PairingSessionBean implements A380PairingSessionBeanLocal {
         for (Schedule s : scheds) {
             if (s.getFlight().getAircraftType().getId().equals("Airbus A380-800")) {
                 String formattedMonth = new SimpleDateFormat("MM").format(s.getStartDate());
+                String formattedYear = new SimpleDateFormat("YYYY").format(s.getStartDate());
 
-                if (formattedMonth.equals(selectMonth)) {
+                if (formattedMonth.equals(selectMonth) && formattedYear.equals(selectYear)) {
 
                     String formattedDate = new SimpleDateFormat("dd/MM/yyyy").format(s.getStartDate());
                     // System.out.println("h------------------formate Date: " + formattedDate);
