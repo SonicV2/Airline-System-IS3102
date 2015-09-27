@@ -53,7 +53,7 @@ public class A380PairingSessionBean implements A380PairingSessionBeanLocal {
     private Team team;
 
     @Override
-    public void legMain(String selectMonth,String selectYear) {
+    public void legMain(String selectMonth, String selectYear) {
         ArrayList<Leg> legs = new ArrayList<Leg>();
         ArrayList<Leg> route = new ArrayList<Leg>();
         Leg l;
@@ -63,76 +63,78 @@ public class A380PairingSessionBean implements A380PairingSessionBeanLocal {
         int numofFlightHours = 0;
         int totalFlightHours = 0;
 
-        legs = addLeg380(selectMonth,selectYear);
-        if(legs.size()==0){}else{
-        sortList(legs);
-        String destination = legs.get(0).getDestination();
-        int startHour = legs.get(0).getStartHour();
-        int finishHour = legs.get(0).getFinishHour();
-        String date = legs.get(0).getDate1();
+        legs = addLeg380(selectMonth, selectYear);
+        if (legs.size() == 0) {
+        } else {
+            sortList(legs);
+            String destination = legs.get(0).getDestination();
+            int startHour = legs.get(0).getStartHour();
+            int finishHour = legs.get(0).getFinishHour();
+            String date = legs.get(0).getDate1();
 
-        do {// while leg.size()>0
-            route.clear();
-            numLegs = 1;
-            if (first == true) {
-                destination = legs.get(0).getDestination();
+            do {// while leg.size()>0
+                route.clear();
+                numLegs = 1;
+                if (first == true) {
+                    destination = legs.get(0).getDestination();
 
-                startHour = legs.get(0).getStartHour();
+                    startHour = legs.get(0).getStartHour();
 
-                finishHour = legs.get(0).getFinishHour();
+                    finishHour = legs.get(0).getFinishHour();
 
-                date = legs.get(0).getDate1();
+                    date = legs.get(0).getDate1();
 
-                //add the first element of the section if used
-                route.add(legs.get(0));
-
-                numofFlightHours = calcFlightHours(startHour, finishHour);
-                totalFlightHours = addFlightHours(totalFlightHours, numofFlightHours);
-                legs.remove(0);
-                first = false;
-            }
-
-            do {
-                //we seek a sln leg
-                l = searchSol(legs, destination, startHour, finishHour, date, numLegs, totalFlightHours);
-                if (l != null) {
-                    //add the leg to route
-                    route.add(l);
-                    numLegs++;
-                    destination = l.getDestination();
-
-                    startHour = l.getStartHour();
-
-                    finishHour = l.getFinishHour();
-
-                    date = l.getDate1();
+                    //add the first element of the section if used
+                    route.add(legs.get(0));
 
                     numofFlightHours = calcFlightHours(startHour, finishHour);
                     totalFlightHours = addFlightHours(totalFlightHours, numofFlightHours);
-                    //delete the leg used
-                    int indice = legs.indexOf(l);
-
-                    legs.remove(indice);
-                } else {
-                    numSols++;
-                    showSoln(route, numSols, totalFlightHours);
-
-                    first = true;
-                    totalFlightHours = 0;
+                    legs.remove(0);
+                    first = false;
                 }
-            } while (l != null);
-            System.out.println("LEG SIZE: " + legs.size());
-        } while (legs.size() > 0);
-        // }
+
+                do {
+                    //we seek a sln leg
+                    l = searchSol(legs, destination, startHour, finishHour, date, numLegs, totalFlightHours);
+                    if (l != null) {
+                        //add the leg to route
+                        route.add(l);
+                        numLegs++;
+                        destination = l.getDestination();
+
+                        startHour = l.getStartHour();
+
+                        finishHour = l.getFinishHour();
+
+                        date = l.getDate1();
+
+                        numofFlightHours = calcFlightHours(startHour, finishHour);
+                        totalFlightHours = addFlightHours(totalFlightHours, numofFlightHours);
+                        //delete the leg used
+                        int indice = legs.indexOf(l);
+
+                        legs.remove(indice);
+                    } else {
+                        numSols++;
+                        showSoln(route, numSols, totalFlightHours);
+
+                        first = true;
+                        totalFlightHours = 0;
+                    }
+                } while (l != null);
+                System.out.println("LEG SIZE: " + legs.size());
+            } while (legs.size() > 0);
+            // }
+        }
     }
-    }
+
     private void sortList(ArrayList<Leg> legs) {
         Collections.sort(legs);
     }
 
     //Pairing for A380
-    public ArrayList<Leg> addLeg380(String selectMonth,String selectYear) {
-        
+    public ArrayList<Leg> addLeg380(String selectMonth, String selectYear) {
+
         legss = new ArrayList<Leg>();
 
         Query q = em.createQuery("SELECT s FROM Schedule s");
@@ -227,6 +229,7 @@ public class A380PairingSessionBean implements A380PairingSessionBeanLocal {
         return sol;
 
     }
+
     public Long getFormatted(String da) {
         String d1 = da.split("/")[0];
         String d2 = da.split("/")[1];
@@ -235,8 +238,6 @@ public class A380PairingSessionBean implements A380PairingSessionBeanLocal {
         Long day = Long.parseLong(format);
         return day;
     }
-
-
 
     public void showSoln(ArrayList<Leg> leg, int numSol, int hFlight) {  //unformated
 
@@ -266,13 +267,13 @@ public class A380PairingSessionBean implements A380PairingSessionBeanLocal {
                 flightCities.add(leg.get(i).getDestination());
                 startHour = String.format("%04d", leg.get(i).getStartHour());
                 finishHour = String.format("%04d", leg.get(i).getFinishHour());
-                hours = startHour + "-" + finishHour+"(" + leg.get(0).getDate1() + ")";
+                hours = startHour + "-" + finishHour + "(" + leg.get(0).getDate1() + ")";
                 flightTimes.add(hours);
             } else {
                 flightCities.add(leg.get(i).getDestination());
                 startHour = String.format("%04d", leg.get(i).getStartHour());
                 finishHour = String.format("%04d", leg.get(i).getFinishHour());
-                hours = startHour + "-" + finishHour+ "(" + leg.get(i).getDate1() + ")";;
+                hours = startHour + "-" + finishHour + "(" + leg.get(i).getDate1() + ")";;
                 flightTimes.add(hours);
             }
         }
@@ -334,8 +335,8 @@ public class A380PairingSessionBean implements A380PairingSessionBeanLocal {
 
         return null;
     }
-    
-       public String validateTeam() {
+
+    public String validateTeam() {
 
         List<Pilot> pilots = new ArrayList<Pilot>();
         List<Pilot> FOs = new ArrayList<Pilot>();
@@ -346,13 +347,13 @@ public class A380PairingSessionBean implements A380PairingSessionBeanLocal {
         List<Pilot> ps = q.getResultList();
         for (Pilot pi : ps) {
             if (pi.isAssigned() == false) {
-                if (pi.getPosition().equals("Captain")) {
+                if (pi.getPosition().equals("Captain") && pi.getSkillsets().contains("A380")) {
                     pilots.add(pi);
                 }
-                if (pi.getPosition().equals("First Officer")) {
+                if (pi.getPosition().equals("First Officer")&& pi.getSkillsets().contains("A380")) {
                     FOs.add(pi);
                 }
-                if (pi.getPosition().equals("Observer")) {
+                if (pi.getPosition().equals("Observer")&& pi.getSkillsets().contains("A380")) {
                     OBs.add(pi);
                 }
             }
@@ -390,20 +391,19 @@ public class A380PairingSessionBean implements A380PairingSessionBeanLocal {
 
     @Override
     public Team generateA380Team(Pairing pairing) {
-        
+
         String result = validateTeam();
-        if(result.equals("Bad")){
+        if (result.equals("Bad")) {
             return null;
         }
-        
+
         String flightDate = pairing.getFDate();
-        
+
         List<String> flightDates = new ArrayList<String>();
         List<String> temp = pairing.getFlightTimes();
         List<String> differentDates = new ArrayList<String>();
 
         //to take out the duplicate dates
-        
         for (String s : temp) {
             differentDates.add(s.substring(10, s.length() - 1));
         }
@@ -415,9 +415,7 @@ public class A380PairingSessionBean implements A380PairingSessionBeanLocal {
         while (itr.hasNext()) {
             flightDates.add(itr.next().toString());
         }
-        
-        
-        
+
         List<String> flightCities = pairing.getFlightCities();
         List<String> flightNumbers = pairing.getFlightNumbers();
 //        List<String> flightTimes = pairing.getFlightTimes();
@@ -530,23 +528,23 @@ public class A380PairingSessionBean implements A380PairingSessionBeanLocal {
 
             schedules = new ArrayList<Schedule>();
             schedules = flight.getSchedule();
-             for(String ss : flightDates){ 
-            for (Schedule sh : schedules) {
-                String formattedDate = new SimpleDateFormat("dd/MM/yyyy").format(sh.getStartDate());
-                if (formattedDate.equals(flightDate)) {
-                    teamSchedule = team.getSchedule();
-                    teamSchedule.add(sh);
-                    sh.setAssigned(true);
-                    team.setSchedule(teamSchedule);
-                    sh.setTeam(team);
-                    em.merge(sh);
+            for (String ss : flightDates) {
+                for (Schedule sh : schedules) {
+                    String formattedDate = new SimpleDateFormat("dd/MM/yyyy").format(sh.getStartDate());
+                    if (formattedDate.equals(flightDate)) {
+                        teamSchedule = team.getSchedule();
+                        teamSchedule.add(sh);
+                        sh.setAssigned(true);
+                        team.setSchedule(teamSchedule);
+                        sh.setTeam(team);
+                        em.merge(sh);
 
-                    em.merge(team);
+                        em.merge(team);
 
-                    em.flush();
+                        em.flush();
+                    }
                 }
             }
-             }
             team.setStatus("Formed");
 
             pairing.setPaired(true);

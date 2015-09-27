@@ -67,27 +67,27 @@ public class classManageBean {
             FacesContext.getCurrentInstance().addMessage(null, msg);
         }
         if(pricePercent==0){
-            FacesMessage msg = new FacesMessage("Please fill in Percentage of Base Fare");
+            FacesMessage msg = new FacesMessage("Please fill in Percentage of Base Fare","");
             FacesContext.getCurrentInstance().addMessage(null, msg);
         }
         if(advancedSales==0){
-            FacesMessage msg = new FacesMessage("Please fill in Days of Advanced Sales");
+            FacesMessage msg = new FacesMessage("Please fill in Days of Advanced Sales","");
             FacesContext.getCurrentInstance().addMessage(null, msg);
         }
         if(percentSold==0){
-            FacesMessage msg = new FacesMessage("Please fill in Percentage of Total Tickets Sold");
+            FacesMessage msg = new FacesMessage("Please fill in Percentage of Total Tickets Sold","");
             FacesContext.getCurrentInstance().addMessage(null, msg);
         }
         if(serviceClass==null){
-            FacesMessage msg = new FacesMessage("Please Select Service Class");
+            FacesMessage msg = new FacesMessage("Please Select Service Class","");
             FacesContext.getCurrentInstance().addMessage(null, msg);
         }
         if(baggage==0){
-            FacesMessage msg = new FacesMessage("Please Select Baggage Class");
+            FacesMessage msg = new FacesMessage("Please Select Baggage Class","");
             FacesContext.getCurrentInstance().addMessage(null, msg);
         }
         if(millageAccru==0){
-            FacesMessage msg = new FacesMessage("Amount of Mileage Accruable in Percentage");
+            FacesMessage msg = new FacesMessage("Amount of Mileage Accruable in Percentage","");
             FacesContext.getCurrentInstance().addMessage(null, msg);
         }
         else{
