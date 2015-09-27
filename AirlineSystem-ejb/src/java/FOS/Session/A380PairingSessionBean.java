@@ -334,9 +334,68 @@ public class A380PairingSessionBean implements A380PairingSessionBeanLocal {
 
         return null;
     }
+    
+       public String validateTeam() {
+
+        List<Pilot> pilots = new ArrayList<Pilot>();
+        List<Pilot> FOs = new ArrayList<Pilot>();
+        List<Pilot> OBs = new ArrayList<Pilot>();
+
+        Query q = em.createQuery("SELECT p FROM Pilot p");
+
+        List<Pilot> ps = q.getResultList();
+        for (Pilot pi : ps) {
+            if (pi.isAssigned() == false) {
+                if (pi.getPosition().equals("Captain")) {
+                    pilots.add(pi);
+                }
+                if (pi.getPosition().equals("First Officer")) {
+                    FOs.add(pi);
+                }
+                if (pi.getPosition().equals("Observer")) {
+                    OBs.add(pi);
+                }
+            }
+        }
+
+        List<CabinCrew> CCs = new ArrayList<CabinCrew>();
+        List<CabinCrew> leads = new ArrayList<CabinCrew>();
+        List<CabinCrew> FS = new ArrayList<CabinCrew>();
+        List<CabinCrew> steds = new ArrayList<CabinCrew>();
+
+        Query q1 = em.createQuery("SELECT p FROM CabinCrew p");
+
+        List<CabinCrew> ps1 = q1.getResultList();
+        for (CabinCrew cc : ps1) {
+            if (cc.isAssigned() == false) {
+                if (cc.getPosition().equals("Lead Flight Stewardess")) {
+                    leads.add(cc);
+                }
+                if (cc.getPosition().equals("Flight Stewardess")) {
+                    FS.add(cc);
+                }
+                if (cc.getPosition().equals("Flight Steward")) {
+                    steds.add(cc);
+                }
+            }
+        }
+
+        if (pilots.size() < 1 || OBs.size() < 1 || FOs.size() < 1 || leads.size() < 2 || FS.size() < 12 || steds.size() < 2) {
+            return "Bad";
+        } else {
+            return "Good";
+        }
+
+    }
 
     @Override
     public Team generateA380Team(Pairing pairing) {
+        
+        String result = validateTeam();
+        if(result.equals("Bad")){
+            return null;
+        }
+        
         String flightDate = pairing.getFDate();
         
         List<String> flightDates = new ArrayList<String>();
