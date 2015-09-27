@@ -235,7 +235,7 @@
                 <ui:fragment rendered="#{loginManageBean.accessRightIDs.contains(21)}">
                     <h:form>
                         <li>
-                            <a><h:commandLink class="commandLink" action="#{checklistManagedBean.fillParticularChecklist('Pilot')}"><i class="fa fa-pencil"></i> Fill Pilot Checklist</h:commandLink></a>
+                            <a><h:commandLink class="commandLink" action="#{checklistManagedBean.directToChooseChecklistToFill('Pilot')}"><i class="fa fa-pencil"></i> Fill Pilot Checklist</h:commandLink></a>
                         </li>
 
                     </h:form>
@@ -245,7 +245,7 @@
                 <ui:fragment rendered="#{loginManageBean.accessRightIDs.contains(22)}">
                     <h:form>
                         <li>
-                            <a><h:commandLink class="commandLink" action="#{checklistManagedBean.fillParticularChecklist('Cabin Crew')}"><i class="fa fa-pencil"></i> Fill Cabin Crew Checklist</h:commandLink></a>
+                            <a><h:commandLink class="commandLink" action="#{checklistManagedBean.directToChooseChecklistToFill('Cabin Crew')}"><i class="fa fa-pencil"></i> Fill Cabin Crew Checklist</h:commandLink></a>
                         </li>
                     </h:form>
                 </ui:fragment>
@@ -254,7 +254,7 @@
                 <ui:fragment rendered="#{loginManageBean.accessRightIDs.contains(23)}">
                     <h:form>
                         <li>
-                            <a><h:commandLink class="commandLink" action="#{checklistManagedBean.fillParticularChecklist('Ground Staff')}"><i class="fa fa-pencil"></i> Fill Ground Crew Checklist</h:commandLink></a>
+                            <a><h:commandLink class="commandLink" action="#{checklistManagedBean.directToChooseChecklistToFill('Ground Staff')}"><i class="fa fa-pencil"></i> Fill Ground Crew Checklist</h:commandLink></a>
                         </li>
                     </h:form>
                 </ui:fragment>
