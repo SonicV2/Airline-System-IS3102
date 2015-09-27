@@ -63,6 +63,7 @@ private Team team;
 private List<Schedule> schedulesForTeam;
 private List<Schedule> pastSchedulesForTeam;
 private List<Schedule> currentDaySchedulesForTeam;
+ FacesMessage message = null;
 
 public checklistManagedBean(){
     
@@ -117,6 +118,7 @@ public String addChecklistItem(Long scheduleKey, String checklistToAdd ){
          setScheduleId(scheduleKey);
          setChecklistName (checklistToAdd);
          setSchedule(scheduleSessionBean.getSchedule(scheduleId));
+         setChecklistItemsForChecklist(checklistSessionBean.retrieveChecklistItemsByScheduleAndChecklistName(schedule, checklistName));
          return "/FOS/CreateChecklistItem";
 }
 
@@ -126,8 +128,24 @@ public String homePage(){
 }
 
 public String addItem(){
+    boolean itemAlreadyExists = false;
+    for (ChecklistItem itemsOfChecklist: checklistItemsForChecklist){
+        if (itemsOfChecklist.getName().equalsIgnoreCase(checklistItemName)){
+            itemAlreadyExists = true;
+        }
+    }
+    if (itemAlreadyExists == true){
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Item already exists", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            checklistItemName = "";
+            return null;
+    }
+    else{
     checklistSessionBean.addChecklistItemByScheduleAndChecklistName(schedule,checklistName, checklistItemName);
     return "/CI/employeeDashBoard";
+    }
+    
+    
 }
 
 public String editParticularChecklist (String checklistCanAccess){
@@ -370,6 +388,14 @@ public String fillParticularChecklist (Long scheduleKey ){
 
     public void setCurrentDaySchedulesForTeam(List<Schedule> currentDaySchedulesForTeam) {
         this.currentDaySchedulesForTeam = currentDaySchedulesForTeam;
+    }
+
+    public FacesMessage getMessage() {
+        return message;
+    }
+
+    public void setMessage(FacesMessage message) {
+        this.message = message;
     }
 
     
