@@ -187,18 +187,36 @@ public class crewScheduleManagedBean {
 
     public void getSelectPairingID(ActionEvent event) {
 
+        FacesMessage message = null;
+        
+        if(sln1==null){
+            message =new FacesMessage(FacesMessage.SEVERITY_ERROR,"No Pairing is selected!","");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        }else{
         String pairingID = sln1.substring(sln1.indexOf("=") + 1, sln1.indexOf("]") - 1);
-        System.out.println("--------" + sln1.substring(sln1.indexOf("=") + 1, sln1.indexOf("]")));
         sln = pairingSessionBean.getPairingByID(pairingID);
-
+        }
     }
 
     public void generateTeam(ActionEvent event) {
+        FacesMessage message = null;
+        if(sln1==null){
+            message =new FacesMessage(FacesMessage.SEVERITY_ERROR,"Cannot Generate Team!","");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        }else{
         setTeam(pairingSessionBean.generateTeam(sln));
+        }
     }
 
     public void generateA380Team(ActionEvent event) {
+        FacesMessage message = null;
+        if(sln1==null){
+            message =new FacesMessage(FacesMessage.SEVERITY_ERROR,"Cannot Generate A380 Team!","");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        }else{
+        
         setTeam(a380PairingSessionBean.generateA380Team(sln));
+        }
     }
 
 //    public void bigBoss() {
