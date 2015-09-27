@@ -44,7 +44,7 @@
                                             <label>New Password</label>
                                            
                                                 <p:password class="form-control" validatorMessage="Password required 6 to 20 characters string with at least one digit, one upper case letter, one lower case letter and one special symbol" value="#{employeeManageBean.employeeNewPwd }">
-                                                <!--<f:validateRegex pattern="((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^*()-+]).{6,20})" />-->
+                                                <f:validateRegex pattern="((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^*()-+]).{6,20})" />
                                                 </p:password>
                                             <!--<input class="form-control"/>-->
                                         </div>
