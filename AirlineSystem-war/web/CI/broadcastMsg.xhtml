@@ -33,14 +33,14 @@
                         <h2 class="page-header"> Broadcast Message System</h2>
                     </div>
                 </div>
-                <div class="col-lg-6 form-group">
-                    <p:selectManyCheckbox id="grid" value="#{broadcastMessageManagedBean.selectDepart}" layout="grid" columns="5">
+                <div class="col-md-10 form-group">
+                    <p:selectManyCheckbox id="grid" value="#{broadcastMessageManagedBean.selectDepart}" layout="grid" columns="3">
                         <f:selectItems value="#{broadcastMessageManagedBean.departments}" var="department" itemLabel="#{department}" itemValue="#{department}" />
                     </p:selectManyCheckbox>
 
 
                     <h:outputLabel value="Message" />                        
-                    <h:inputTextarea class="form-control" rows="3" value="#{broadcastMessageManagedBean.broadcastMsg}"/>
+                    <h:inputTextarea class="form-control" rows="5" value="#{broadcastMessageManagedBean.broadcastMsg}"/>
                     <br></br>
                     <h:commandButton class="btn btn-warning pull-right" value="Send" actionListener="#{broadcastMessageManagedBean.sendMsg}"/>
                 </div>

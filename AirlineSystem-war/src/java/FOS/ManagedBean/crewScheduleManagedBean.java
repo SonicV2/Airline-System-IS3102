@@ -48,10 +48,14 @@ public class crewScheduleManagedBean {
     private String sln1;
     private Team team;
     private String selectMonth; //month choosen to get pairing
-
+    private String selectYear;
+    
     private List<Pairing> restPairing;
     private List<Pairing> slnA380;
     private List<Pairing> restPairingA380;
+
+    private List<String> scheduleResult;
+//    private List<List<Pairing>> lists;
 
     /**
      * Creates a new instance of crewScheduleManagedBean
@@ -87,9 +91,9 @@ public class crewScheduleManagedBean {
 // crew pairing.html --> display all legs
     public void getSlns(ActionEvent event) {
         Date date = new Date();
-        pairingSessionBean.legMain(selectMonth);
+        pairingSessionBean.legMain(selectMonth,selectYear);
         setSlns(pairingSessionBean.getPairings());
-
+//        bigBoss();
         restPairing = new ArrayList<Pairing>();
 
         for (Pairing ppp : slns) {
@@ -106,6 +110,38 @@ public class crewScheduleManagedBean {
 
         }
 
+    }
+    
+    
+     public void scheduleNew(ActionEvent event){
+         System.out.println("$$$$$$$$$$$$$");
+         System.out.println("REST: "+restPairing.size());
+        String temp;
+        scheduleResult= new ArrayList<String>();
+        
+        for(int i=0 ; i<restPairing.size(); i++){
+//            temp +=restPairing.get(i).getFDate() + restPairing.get(i).getFlightHour();
+            for(int j=0;j<restPairing.get(i).getFlightNumbers().size();j++){
+                if(j!=0){
+                String temp1=restPairing.get(i).getFlightTimes().get(j).substring(10);
+                
+                String temp2= restPairing.get(i).getFlightTimes().get(j-1).substring(10);
+                
+                if(!temp1.equals(temp2)){
+                        scheduleResult.add("-----------------------------------------------------------"); 
+                }
+                
+                temp=restPairing.get(i).getFlightNumbers().get(j) + "----" +
+                     restPairing.get(i).getFlightCities().get(j)+" "+ "\u2708" +" "+ restPairing.get(i).getFlightCities().get(j+1)+
+                     "-----"+ restPairing.get(i).getFlightTimes().get(j);
+                    scheduleResult.add(temp);
+                
+                System.out.println("$$$$$$$$$$$$$TEMP: "+temp);
+                }
+            }
+        }
+        
+    
     }
 
     public long checkTime(String time1, String time2) {
@@ -130,7 +166,7 @@ public class crewScheduleManagedBean {
     }
 
     public void getA380Slns(ActionEvent event) {
-        a380PairingSessionBean.legMain(selectMonth);
+        a380PairingSessionBean.legMain(selectMonth,selectYear);
         setSlnA380(a380PairingSessionBean.getPairings());
 
         restPairingA380 = new ArrayList<Pairing>();
@@ -164,6 +200,16 @@ public class crewScheduleManagedBean {
     public void generateA380Team(ActionEvent event) {
         setTeam(a380PairingSessionBean.generateA380Team(sln));
     }
+
+//    public void bigBoss() {
+//        System.out.println("HHHHHH");
+//        setLists(pairingSessionBean.addMonthlyPairing(slns));
+//        for(List<Pairing> p: lists){
+//            for(Pairing p1: p){
+//                System.out.println("%%%%%%%: "+p1.getFDate() +" " +p1.getFlightCities());
+//            }
+//        }
+//    }
 
     /**
      * @return the time_scale_min
@@ -325,6 +371,48 @@ public class crewScheduleManagedBean {
      */
     public void setRestPairingA380(List<Pairing> restPairingA380) {
         this.restPairingA380 = restPairingA380;
+    }
+
+//    /**
+//     * @return the lists
+//     */
+//    public List<List<Pairing>> getLists() {
+//        return lists;
+//    }
+//
+//    /**
+//     * @param lists the lists to set
+//     */
+//    public void setLists(List<List<Pairing>> lists) {
+//        this.lists = lists;
+//    }
+
+    /**
+     * @return the selectYear
+     */
+    public String getSelectYear() {
+        return selectYear;
+    }
+
+    /**
+     * @param selectYear the selectYear to set
+     */
+    public void setSelectYear(String selectYear) {
+        this.selectYear = selectYear;
+    }
+
+    /**
+     * @return the scheduleResult
+     */
+    public List<String> getScheduleResult() {
+        return scheduleResult;
+    }
+
+    /**
+     * @param scheduleResult the scheduleResult to set
+     */
+    public void setScheduleResult(List<String> scheduleResult) {
+        this.scheduleResult = scheduleResult;
     }
 
 }
