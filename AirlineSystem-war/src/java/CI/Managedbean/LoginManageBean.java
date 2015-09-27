@@ -3,6 +3,7 @@ package CI.Managedbean;
 import CI.Entity.AccessRight;
 import CI.Entity.Employee;
 import CI.Entity.Role;
+import CI.Session.EmployeeSessionBean;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -12,8 +13,12 @@ import javax.inject.Named;
 import org.primefaces.context.RequestContext;
 import CI.Session.EmployeeSessionBeanLocal;
 import CI.Session.RoleSessionBeanLocal;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.FileHandler;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -40,6 +45,10 @@ public class LoginManageBean {
     String roles; // to get all roles in this string
     private List<Long> accessRightIDs; //get a list of access right IDs from employee
     private List<AccessRight> accessRightsForRole;
+    
+    private FileHandler fh;
+    private String userID;
+    
 
     public LoginManageBean() {
     }
@@ -50,8 +59,24 @@ public class LoginManageBean {
         doLogin(employeeUserName, employeePassword);
         HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
         if (logInCheck == true) {
-            employeeSessionBean.logLogIn(employeeUserName);
+            userID= employeeUserName;
             session.setAttribute("isLogin", employeeUserName);
+            
+        Logger logger = Logger.getLogger(LoginManageBean.class.getName());
+        try {   
+        fh = new FileHandler("%h/CI/LogIn.txt",99999,1,true);  
+        logger.addHandler(fh);
+        SimpleFormatter formatter = new SimpleFormatter();  
+        fh.setFormatter(formatter);  
+
+        } catch (SecurityException e) {  
+        e.printStackTrace();  
+        } catch (IOException e) {  
+        e.printStackTrace();  
+        } 
+        logger.info("User: "+ userID 
+                + "has logged in");
+        fh.close();
 
             if (firstTimer == true) {
 
@@ -155,6 +180,22 @@ public class LoginManageBean {
 //       }
 //    }
     public String logout() {
+        
+        Logger logger = Logger.getLogger(LoginManageBean.class.getName());
+        try {   
+        fh = new FileHandler("%h/CI/LogOut.txt",99999,1,true);  
+        logger.addHandler(fh);
+        SimpleFormatter formatter = new SimpleFormatter();  
+        fh.setFormatter(formatter);  
+
+        } catch (SecurityException e) {  
+        e.printStackTrace();  
+        } catch (IOException e) {  
+        e.printStackTrace();  
+        } 
+        logger.info("User: "+ userID 
+                + "has logged out");
+        fh.close();
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
         return "/login.xhtml?faces-redirect=true";
     }

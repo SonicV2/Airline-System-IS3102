@@ -9,11 +9,16 @@ import APS.Entity.Aircraft;
 import APS.Entity.AircraftType;
 import APS.Entity.Schedule;
 import APS.Session.FleetSessionBeanLocal;
+import CI.Session.EmployeeSessionBean;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.FileHandler;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.inject.Named;
@@ -23,6 +28,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -63,7 +69,13 @@ public class FleetManageBean {
     private List<String> aircraftTypeIds = new ArrayList<String>();
     private List<Aircraft> reserves = new ArrayList<Aircraft>();
 
+    
+    
+    private String userID;
+    private FileHandler fh;
+    
     public FleetManageBean() {
+        
     }
 
     @PostConstruct
@@ -78,7 +90,8 @@ public class FleetManageBean {
         aircraftTypeIds.add("Boeing 777-300");
         aircraftTypeIds.add("Boeing 777-300ER");
         
-        
+        HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+        userID= (String)session.getAttribute("isLogin");
     }
 
     /*This is for admin to acquire new aircraft*/
@@ -117,6 +130,22 @@ public class FleetManageBean {
         fleetSessionBean.acquireAircraft(datePurchased, lastMaintained, aircraftTypeId, hub, status);
         FacesMessage msg = new FacesMessage("Aircraft is Acquired Successfully!");
         FacesContext.getCurrentInstance().addMessage(null, msg);
+        
+        Logger logger = Logger.getLogger(FleetManageBean.class.getName());
+        try {   
+        fh = new FileHandler("%h/APS/acquireAircraft.txt",99999,1,true);  
+        logger.addHandler(fh);
+        SimpleFormatter formatter = new SimpleFormatter();  
+        fh.setFormatter(formatter);  
+
+        } catch (SecurityException e) {  
+        e.printStackTrace();  
+        } catch (IOException e) {  
+        e.printStackTrace();  
+        } 
+        logger.info("User: "+ userID 
+                + "has added Aircraft of Type: " + String.valueOf(aircraftTypeId));
+        fh.close();
 //        clear();
     }
 
@@ -158,6 +187,22 @@ public class FleetManageBean {
         
         FacesMessage msg = new FacesMessage("Aircraft Retired");
         FacesContext.getCurrentInstance().addMessage(null, msg);
+        
+        Logger logger = Logger.getLogger(FleetManageBean.class.getName());
+        try {   
+        fh = new FileHandler("%h/APS/acquireAircraft.txt",99999,1,true);  
+        logger.addHandler(fh);
+        SimpleFormatter formatter = new SimpleFormatter();  
+        fh.setFormatter(formatter);  
+
+        } catch (SecurityException e) {  
+        e.printStackTrace();  
+        } catch (IOException e) {  
+        e.printStackTrace();  
+        } 
+        logger.info("User: "+ userID 
+                + "has retired Aircraft: " + tailNo);
+        fh.close();
         
         return "RetireAircraft";
     }
