@@ -157,8 +157,8 @@
                                 <div class="form-group">
                                     <p:outputLabel value="Role: Cabin Crew" class="col-md-4 control-label" />                                  
                                 </div>
-                                
-                                                                                             
+
+
 
                                 <div class="form-group">
                                     <p:outputLabel for="department" value="Department: " class="col-md-4 control-label" />
@@ -198,7 +198,7 @@
                                         <h:message for="address"  />
                                     </div>
                                 </div>   
-                                
+
                                 <div class="form-group">
                                     <p:outputLabel for="p" value="Position: " class="col-md-4 control-label" />
                                     <h:selectOneMenu  id="p" styleClass="dropdown-menu select" value="#{employeeManageBean.position}"  >
@@ -222,45 +222,47 @@
                                     </div>
                                 </div>
 
-                                  <div class="form-group">
+                                <div class="form-group">
                                     <p:outputLabel for="firstLang" value="First Language: " class="col-md-4 control-label" />
                                     <h:selectOneMenu required="true" id="firstLang" styleClass="dropdown-menu select"  value="#{employeeManageBean.firstLang}" >
 
                                         <f:selectItem itemLabel="Select First Languages" itemValue="" noSelectionOption="true" />
-                                            <f:selectItem itemLabel="Chinese" itemValue="Chinese" />
-                                            <f:selectItem itemLabel="Japanese" itemValue="Japanese" />
-                                            <f:selectItem itemLabel="Korean" itemValue="Korean" />
-                                            <f:selectItem itemLabel="French" itemValue="French" />
-                                            <f:selectItem itemLabel="Italian" itemValue="Italian" />
-                                   
+                                        <f:selectItem itemLabel="Chinese" itemValue="Chinese" />
+                                        <f:selectItem itemLabel="Japanese" itemValue="Japanese" />
+                                        <f:selectItem itemLabel="Korean" itemValue="Korean" />
+                                        <f:selectItem itemLabel="French" itemValue="French" />
+                                        <f:selectItem itemLabel="Italian" itemValue="Italian" />
+                                        <f:selectItem itemLabel="German" itemValue="German" />
+                                        
                                     </h:selectOneMenu>
                                 </div>  
-                                
-                                
-                                 <div class="form-group">
+
+
+                                <div class="form-group">
                                     <p:outputLabel for="secondLang" value="Second Language: " class="col-md-4 control-label" />
                                     <h:selectOneMenu required="true" id="secondLang" styleClass="dropdown-menu select"  value="#{employeeManageBean.secondLang}" >
-                                  
-                                        
+
+
                                         <f:selectItem itemLabel="Select Second Languages" itemValue="" noSelectionOption="true" />
-                                            <f:selectItem itemLabel="N.A" itemValue="N.A" />
-                                            <f:selectItem itemLabel="Chinese" itemValue="Chinese" />
-                                            <f:selectItem itemLabel="Japanese" itemValue="Japanese" />
-                                            <f:selectItem itemLabel="Korean" itemValue="Korean" />
-                                            <f:selectItem itemLabel="French" itemValue="French" />
-                                            <f:selectItem itemLabel="Italian" itemValue="Italian" />
-                                   
+                                        <f:selectItem itemLabel="N.A" itemValue="N.A" />
+                                        <f:selectItem itemLabel="Chinese" itemValue="Chinese" />
+                                        <f:selectItem itemLabel="Japanese" itemValue="Japanese" />
+                                        <f:selectItem itemLabel="Korean" itemValue="Korean" />
+                                        <f:selectItem itemLabel="French" itemValue="French" />
+                                        <f:selectItem itemLabel="Italian" itemValue="Italian" />
+                                        <f:selectItem itemLabel="German" itemValue="German" />
+
                                     </h:selectOneMenu>
                                 </div>  
 
 
-                                 
+
                             </div>
                         </div>
 
                         <div class="text-center">
                             <h:commandButton class="btn btn-outline btn-success" value="Save Information" actionListener="#{employeeManageBean.addCabinCrew}"  /> 
-<!--                            comment out-->
+                            <!--                            comment out-->
                         </div>
 
                     </h:form>   

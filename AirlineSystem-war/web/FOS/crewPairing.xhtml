@@ -85,6 +85,8 @@
                         <div class="form-group">
                             <h:outputLabel class="col-md-3 control-label" value="Choose Month: " />
                             <p:inputText  required="true" requiredMessage="Please fill in this field!" class="form-control" placeholder="Choose Month" value="#{crewScheduleManagedBean.selectMonth}" style="width: 200px;" />
+                            <h:outputLabel class="col-md-3 control-label" value="Choose Year: " />
+                            <p:inputText  required="true" requiredMessage="Please fill in this field!" class="form-control" placeholder="Choose Year" value="#{crewScheduleManagedBean.selectYear}" style="width: 200px;" />
                             <h:commandButton class="btn btn-outline btn-success" value="Display" actionListener="#{crewScheduleManagedBean.getSlns}"/>
                         </div>
 
