@@ -97,11 +97,10 @@ public class EmployeeManageBean {
                 employeeMailingAddress, employeeOfficeNumber, employeePrivateEmail);
 
         employee = getEmployee(employeeID); //in order to get the employeeUserName and email which is generated after the creation of employee
-
         employeeUserName = employee.getEmployeeUserName();
         employeeEmailAddress = employee.getEmployeeEmailAddress();
         employeeSessionBean.hashPwd(employeeID);
-        
+
         Logger logger = Logger.getLogger(EmployeeManageBean.class.getName());
         try {   
         fh = new FileHandler("%h/addEmployee.txt",99999,1,true); 
@@ -118,7 +117,7 @@ public class EmployeeManageBean {
                 + " has added Employee: " + employeeID);
      
         fh.close();
-        clearAll();
+        //clearAll();
 
     }
 
