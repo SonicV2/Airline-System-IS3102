@@ -105,9 +105,7 @@ public class EmployeeManageBean {
         Logger logger = Logger.getLogger(EmployeeManageBean.class.getName());
         try {   
         fh = new FileHandler("%h/addEmployee.txt",99999,1,true); 
-        System.out.println("Line 1 Reached");
-        logger.addHandler(fh);
-        System.out.println("Line 2 Reached");
+        logger.addHandler(fh);     
         SimpleFormatter formatter = new SimpleFormatter();  
         fh.setFormatter(formatter);  
         
@@ -116,13 +114,10 @@ public class EmployeeManageBean {
         } catch (IOException e) {  
         e.printStackTrace();  
         } 
-        System.out.println("Line 3 Reached");
         logger.info("User: "+ userID 
-                + "has added Employee: " + employeeID);
-        System.out.println("Line 4 Reached");
+                + " has added Employee: " + employeeID);
+     
         fh.close();
-        System.out.println("Line 5 Reached");
-
         clearAll();
 
     }
@@ -177,7 +172,7 @@ public class EmployeeManageBean {
         e.printStackTrace();  
         } 
         logger.info("User: "+ userID 
-                + "has added Cabin Crew: " + employeeID);
+                + " has added Cabin Crew: " + employeeID);
         fh.close();
 
     }
@@ -206,7 +201,7 @@ public class EmployeeManageBean {
         e.printStackTrace();  
         } 
         logger.info("User: "+ userID 
-                + "has added Pilot: " + employeeID);
+                + " has added Pilot: " + employeeID);
         fh.close();
     }
 
@@ -232,7 +227,7 @@ public class EmployeeManageBean {
             e.printStackTrace();  
             } 
             logger.info("User: "+ employeeUserName
-                    + "has changed password: ");
+                    + " has changed password: ");
             fh.close();
 
             return "/login.xhtml" + "?faces-redirect=true";
