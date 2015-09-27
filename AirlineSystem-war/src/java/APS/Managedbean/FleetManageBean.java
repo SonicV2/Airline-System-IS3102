@@ -115,9 +115,9 @@ public class FleetManageBean {
         }
 
         fleetSessionBean.acquireAircraft(datePurchased, lastMaintained, aircraftTypeId, hub, status);
-        FacesMessage msg = new FacesMessage("Aircraft is Acquired Successfully!");
-        FacesContext.getCurrentInstance().addMessage(null, msg);
-//        clear();
+        message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Aircraft is Acquired Successfully!", "");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+        clear();
     }
 
     public String retireAircraft(Long tailNo) {
@@ -156,8 +156,8 @@ public class FleetManageBean {
         fleetSessionBean.retireAircraft(selectedAircraft.getTailNo());
         selectedAircraft = null;
         
-        FacesMessage msg = new FacesMessage("Aircraft Retired");
-        FacesContext.getCurrentInstance().addMessage(null, msg);
+        message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Aircraft Retired", "");
+        FacesContext.getCurrentInstance().addMessage(null, message);
         
         return "RetireAircraft";
     }
