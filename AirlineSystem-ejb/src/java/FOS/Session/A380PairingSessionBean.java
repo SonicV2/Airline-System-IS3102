@@ -265,13 +265,13 @@ public class A380PairingSessionBean implements A380PairingSessionBeanLocal {
                 flightCities.add(leg.get(i).getDestination());
                 startHour = String.format("%04d", leg.get(i).getStartHour());
                 finishHour = String.format("%04d", leg.get(i).getFinishHour());
-                hours = startHour + "-" + finishHour;
+                hours = startHour + "-" + finishHour+"(" + leg.get(0).getDate1() + ")";
                 flightTimes.add(hours);
             } else {
                 flightCities.add(leg.get(i).getDestination());
                 startHour = String.format("%04d", leg.get(i).getStartHour());
                 finishHour = String.format("%04d", leg.get(i).getFinishHour());
-                hours = startHour + "-" + finishHour;
+                hours = startHour + "-" + finishHour+ "(" + leg.get(i).getDate1() + ")";;
                 flightTimes.add(hours);
             }
         }
@@ -394,7 +394,7 @@ public class A380PairingSessionBean implements A380PairingSessionBeanLocal {
                     FOList.add(pi);
                 }
                 if (pi.getPosition().equals("Observer") && pi.getSkillsets().contains("A380")) {
-                    FOList.add(pi);
+                    ObserverList.add(pi);
                 }
             }
         }

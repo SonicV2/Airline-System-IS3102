@@ -317,6 +317,7 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
         Query q = em.createQuery("SELECT p FROM Pairing p");
         List<Pairing> results = new ArrayList<Pairing>();
         List<Pairing> allPairings = q.getResultList();
+
         for (Pairing p : allPairings) {
             if (p.isIsA380() == false) {
                 results.add(p);
@@ -348,6 +349,7 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
 
         //to take out the duplicate dates
         for (String s : temp) {
+            System.out.println(">>>>>>>S: "+s);
             differentDates.add(s.substring(10, s.length() - 1));
         }
 
@@ -635,28 +637,63 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
         return pp;
     }
 
-//    // Get Flight Entity use flight number
-//    public Flight getFlight(String flightNo) {
-//        //Flight flight = new Flight();
-//        Query q = em.createQuery("SELECT f FROM Flight f WHERE f.flightNo =:flightNo");
-//        q.setParameter("flightNo", flightNo);
-//        List<Flight> results = q.getResultList();
-//        if (results != null) {
-//            return results.get(0);
-//        } else {
-//            return null;
-//        }
+//    @Override
+//    public List<List<Pairing>> addMonthlyPairing(List<Pairing> pairing) {
+//        List<List<Pairing>> results = new ArrayList<List<Pairing>>();
+//        List<Pairing> lists = new ArrayList<Pairing>();
+//     
+//        Pairing p1 = pairing.get(0);
+//        Pairing pair2;
+//        boolean first = true;
+//        do {
+//            lists.clear();
+//            if (first == true) {
+//               
+//                lists.add(p1);
+//                pairing.remove(0);
+//                first = false;
+//            }
+//            do {
+//                pair2 = getMonthlyPairing(p1, pairing);
+//                if (pair2 != null) {
+//                    lists.add(pair2);
+//                    p1 = pair2;
+//                    int i = pairing.indexOf(pair2);
+//                    pairing.remove(i);
+//                } else {
+//                    results.add(lists);
+//                }
+//
+//            } while (pair2!= null);
+//        } while (pairing.size() > 0);
+//        return results;
 //    }
-//    public Schedule getSchedule(String flightNo, String date) {
-//        Flight flight = getFlight(flightNo);
-//        List<Schedule> schedules = flight.getSchedule();
-//        for (Schedule s : schedules) {
-//            if (s.getStartDate().toString().equals(date)) {
-//                return s;
+//
+//    public Pairing getMonthlyPairing(Pairing p, List<Pairing> pairings) {
+//
+//        int totalHours = 0;
+//        int flightDay = Integer.parseInt(p.getFDate().substring(0, 2));
+////        int flightHours = Integer.parseInt(p.getFlightHour());
+////        totalHours = totalHours + flightHours;
+//        String lastCity = p.getFlightCities().get(p.getFlightCities().size() - 1);
+//        String temp = p.getFlightTimes().get(p.getFlightTimes().size() - 1);
+//        int arrivalTime = Integer.parseInt(temp.split("-")[1]); //e.g 1500
+//
+//        if (arrivalTime < 1000) {
+//            arrivalTime = arrivalTime + 2400; //time starts with 0 e.g.0500
+//        }
+//
+//        for (Pairing p1 : pairings) {
+//            int flightDay1 = Integer.parseInt(p.getFDate().substring(0, 2)); // 03/09/2015 --> 3
+//            if (flightDay1 == flightDay + 1) {
+//                if (p.getFlightCities().get(0).equals(lastCity)) { // later add time constrains
+//                    return p1;
+//                }
 //            }
 //        }
 //        return null;
 //    }
+
     /**
      * @return the time_scale_min
      */
