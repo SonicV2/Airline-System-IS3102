@@ -43,6 +43,9 @@ public class crewScheduleManagedBean {
     private int num_max_legs;
     private int hours_max_flight;
     private PairingPolicy pp;
+    
+    String max_hour;
+    
     private List<Pairing> slns;
     private Pairing sln;  //selected from the webpage
     private String sln1;
@@ -86,6 +89,8 @@ public class crewScheduleManagedBean {
 //    }
     public void retrivePolicy(ActionEvent event) {
         setPp(pairingSessionBean.retrievePolicy());
+        max_hour=(pp.getHours_max_flight()/100)+"";
+        
     }
 
 // crew pairing.html --> display all legs
@@ -440,5 +445,16 @@ public class crewScheduleManagedBean {
     public void setScheduleResult(List<String> scheduleResult) {
         this.scheduleResult = scheduleResult;
     }
+
+    public String getMax_hour() {
+        return max_hour;
+    }
+
+    public void setMax_hour(String max_hour) {
+        this.max_hour = max_hour;
+    }
+
+  
+    
 
 }
