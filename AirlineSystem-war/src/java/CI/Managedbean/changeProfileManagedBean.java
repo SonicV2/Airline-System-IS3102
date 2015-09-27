@@ -106,8 +106,7 @@ public class changeProfileManagedBean {
          if(getEmployeeNewPwd().equals(getEmployeeNewPwdRe())){
             employeeSessionBean.hashNewPwd(employeeUserName, getEmployeeNewPwd());
             employeeSessionBean.employeeActivate(employeeUserName);
-           
-            employeeSessionBean.logPasswordChange(employeeUserName);
+          
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Password Change Successfully!", "");
              FacesContext.getCurrentInstance().addMessage(null, message);
          }else{

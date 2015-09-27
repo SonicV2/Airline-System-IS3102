@@ -14,7 +14,6 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
 
- 
 @ManagedBean
 public class CustomizedDocumentsView implements Serializable {
      

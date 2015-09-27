@@ -52,7 +52,7 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
     private Team team;
 
     @Override
-    public void legMain(String selectMonth) {
+    public void legMain(String selectMonth, String selectYear) {
         ArrayList<Leg> legs = new ArrayList<Leg>();
         ArrayList<Leg> route = new ArrayList<Leg>();
         Leg l;
@@ -62,7 +62,7 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
         int numofFlightHours = 0;
         int totalFlightHours = 0;
 
-        legs = addLeg(selectMonth);
+        legs = addLeg(selectMonth, selectYear);
         if (legs.size() == 0) {
         } else {
             sortList(legs);
@@ -132,54 +132,56 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
     }
 
 //    String selectMonth for non-A380
-    public ArrayList<Leg> addLeg(String selectMonth) {
+    public ArrayList<Leg> addLeg(String selectMonth, String selectYear) {
 
         legss = new ArrayList<Leg>();
 
         Query q = em.createQuery("SELECT s FROM Schedule s");
 
         List<Schedule> scheds = q.getResultList();
-        
+
         for (Schedule s : scheds) {
-            
-          if (!s.getFlight().getAircraftType().getId().equals("Airbus A380-800")) {
-            String formattedMonth = new SimpleDateFormat("MM").format(s.getStartDate());
 
-            if (formattedMonth.equals(selectMonth)) {
+            if (!s.getFlight().getAircraftType().getId().equals("Airbus A380-800")) {
+                String formattedMonth = new SimpleDateFormat("MM").format(s.getStartDate());
+                String formattedYear = new SimpleDateFormat("YYYY").format(s.getStartDate());
+                System.out.println("********YEAR: " + formattedYear);
 
-                String formattedDate = new SimpleDateFormat("dd/MM/yyyy").format(s.getStartDate());
-                // System.out.println("h------------------formate Date: " + formattedDate);
+                if (formattedMonth.equals(selectMonth) && formattedYear.equals(selectYear)) {
 
-                String formattedStartTime = new SimpleDateFormat("HHmm").format(s.getStartDate());
-                //System.out.println("h------------------formate Start Time: " + formattedStartTime);
+                    String formattedDate = new SimpleDateFormat("dd/MM/yyyy").format(s.getStartDate());
+                    // System.out.println("h------------------formate Date: " + formattedDate);
 
-                String formattedEndTime = new SimpleDateFormat("HHmm").format(s.getEndDate());
-                // System.out.println("h------------------formate Start Time: " + formattedEndTime);
+                    String formattedStartTime = new SimpleDateFormat("HHmm").format(s.getStartDate());
+                    //System.out.println("h------------------formate Start Time: " + formattedStartTime);
 
-                int formatStartTime = (int) Integer.parseInt(formattedStartTime);// use
-                //System.out.println("h*****" + formatStartTime);
+                    String formattedEndTime = new SimpleDateFormat("HHmm").format(s.getEndDate());
+                    // System.out.println("h------------------formate Start Time: " + formattedEndTime);
 
-                int formatEndTime = (int) Integer.parseInt(formattedEndTime);//use
-                //System.out.println("h******" + formatEndTime);
+                    int formatStartTime = (int) Integer.parseInt(formattedStartTime);// use
+                    //System.out.println("h*****" + formatStartTime);
 
-                Flight flight = new Flight();
+                    int formatEndTime = (int) Integer.parseInt(formattedEndTime);//use
+                    //System.out.println("h******" + formatEndTime);
 
-                flight = s.getFlight();
+                    Flight flight = new Flight();
 
-                int flightNumber = (int) Integer.parseInt(flight.getFlightNo().substring(2));
+                    flight = s.getFlight();
 
-                // System.out.println("h%%%%%%%Flight Number: " + flightNumber);
-                String deptCity = flight.getRoute().getOriginCity();
+                    int flightNumber = (int) Integer.parseInt(flight.getFlightNo().substring(2));
 
-                //System.out.println("h%%%%%%%Depart " + deptCity);
-                String destCity = flight.getRoute().getDestinationCity();
+                    // System.out.println("h%%%%%%%Flight Number: " + flightNumber);
+                    String deptCity = flight.getRoute().getOriginCity();
 
-                //System.out.println("h%%%%%%%dest: " + destCity);
-                Leg l = new Leg(flightNumber, deptCity, destCity, formatStartTime, formatEndTime, formattedDate);
-                legss.add(l);
+                    //System.out.println("h%%%%%%%Depart " + deptCity);
+                    String destCity = flight.getRoute().getDestinationCity();
 
+                    //System.out.println("h%%%%%%%dest: " + destCity);
+                    Leg l = new Leg(flightNumber, deptCity, destCity, formatStartTime, formatEndTime, formattedDate);
+                    legss.add(l);
+
+                }
             }
-        }
         }
         System.out.println("NUM: " + legss.size());
         return legss;
@@ -343,13 +345,38 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
     public Team generateTeam(Pairing pairing) {
         String flightDate = pairing.getFDate();
 //        String flightHour = pairing.getFlightHour();
+        List<String> cities = pairing.getFlightCities();
+        List<String> langs = new ArrayList<String>();
+        
+        HashMap langMap = new HashMap();
+        langMap.put("Paris", "French");
+
+        langMap.put("Frankfurt", "German");
+        langMap.put("Munich", "German");
+
+        langMap.put("Milan", "Italian");
+        langMap.put("Rome", "Italian");
+
+        langMap.put("Tokyo", "Japanese");
+        langMap.put("Sapporo", "Japanese");
+        langMap.put("Fukuoka", "Japanese");
+        langMap.put("Nagoya", "Japanese");
+        langMap.put("Okinawa", "Japanese");
+        langMap.put("Osaka", "Japanese");
+
+        langMap.put("Beijing", "Chinese");
+        langMap.put("Guangzhou", "Chinese");
+        langMap.put("Shanghai", "Chinese");
+        
+        langMap.put("Seoul", "Korean");
+        
         List<String> flightDates = new ArrayList<String>();
         List<String> temp = pairing.getFlightTimes();
         List<String> differentDates = new ArrayList<String>();
 
         //to take out the duplicate dates
         for (String s : temp) {
-            System.out.println(">>>>>>>S: "+s);
+            System.out.println(">>>>>>>S: " + s);
             differentDates.add(s.substring(10, s.length() - 1));
         }
 
@@ -427,6 +454,13 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
                 }
             }
         }
+        
+//        for(String city : cities){
+//            if(langMap.get(city)!= null){
+//                langs.add(langMap.get(city).toString());
+//                
+//            }
+//        }
 
         CCs.add(leadCCList.get(0));
         leadCCList.get(0).setAssigned(true);
@@ -693,7 +727,6 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
 //        }
 //        return null;
 //    }
-
     /**
      * @return the time_scale_min
      */
