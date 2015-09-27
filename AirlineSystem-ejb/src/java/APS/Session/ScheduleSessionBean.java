@@ -287,10 +287,19 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
     
     @Override
     public List<Schedule> filterForPastSchedules (List<Schedule> schedules){
+        long millisInDay = 60 * 60 * 24 * 1000;
+        long currentTime = new Date().getTime();
+        long dateOnly = (currentTime / millisInDay) * millisInDay;
+        Date todayDateWithoutTime = new Date(dateOnly);
+        
+        
         List<Schedule> pastSchedules = new ArrayList();
-        Date currentDate = new Date();
         for (Schedule eachSchedule : schedules){
-            if (eachSchedule.getEndDate().compareTo(currentDate)<0)
+            long scheduleDateOnly = ((eachSchedule.getEndDate().getTime())/millisInDay)*millisInDay;
+            Date eachScheduleEndDateWithoutTime = new Date(scheduleDateOnly);
+            
+            
+            if (eachScheduleEndDateWithoutTime.compareTo(todayDateWithoutTime)<=0)
                 pastSchedules.add(eachSchedule);
         }
         return pastSchedules;
@@ -298,10 +307,19 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
     
      @Override
     public List<Schedule> filterForFutureSchedules (List<Schedule> schedules){
+        long millisInDay = 60 * 60 * 24 * 1000;
+        long currentTime = new Date().getTime();
+        long dateOnly = (currentTime / millisInDay) * millisInDay;
+        Date todayDateWithoutTime = new Date(dateOnly);
+        
+        
         List<Schedule> futureSchedules = new ArrayList();
-        Date currentDate = new Date();
         for (Schedule eachSchedule : schedules){
-            if (eachSchedule.getStartDate().compareTo(currentDate)>0)
+            long scheduleDateOnly = ((eachSchedule.getEndDate().getTime())/millisInDay)*millisInDay;
+            Date eachScheduleEndDateWithoutTime = new Date(scheduleDateOnly);
+            
+            
+            if (eachScheduleEndDateWithoutTime.compareTo(todayDateWithoutTime)>=0)
                 futureSchedules.add(eachSchedule);
         }
         return futureSchedules;
@@ -321,7 +339,7 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
             Date eachScheduleEndDateWithoutTime = new Date(scheduleDateOnly);
             
             
-            if ((currentTime>eachSchedule.getEndDate().getTime()) && eachScheduleEndDateWithoutTime.compareTo(todayDateWithoutTime)==0)
+            if (eachScheduleEndDateWithoutTime.compareTo(todayDateWithoutTime)==0)
                 currentDaySchedules.add(eachSchedule);
         }
         return currentDaySchedules;

@@ -130,6 +130,7 @@ public class FleetManageBean {
         fleetSessionBean.acquireAircraft(datePurchased, lastMaintained, aircraftTypeId, hub, status);
         message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Aircraft is Acquired Successfully!", "");
         FacesContext.getCurrentInstance().addMessage(null, message);
+        setAircrafts(fleetSessionBean.retrieveAircrafts());
         clear();
         
         Logger logger = Logger.getLogger(FleetManageBean.class.getName());
@@ -187,6 +188,7 @@ public class FleetManageBean {
         
         message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Aircraft Retired", "");
         FacesContext.getCurrentInstance().addMessage(null, message);
+        setAircrafts(fleetSessionBean.retrieveAircrafts());
         
         Logger logger = Logger.getLogger(FleetManageBean.class.getName());
         try {   
