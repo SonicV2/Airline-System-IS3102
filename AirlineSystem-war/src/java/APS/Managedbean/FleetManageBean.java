@@ -131,8 +131,6 @@ public class FleetManageBean {
         message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Aircraft is Acquired Successfully!", "");
         FacesContext.getCurrentInstance().addMessage(null, message);
         clear();
-        FacesMessage msg = new FacesMessage("Aircraft is Acquired Successfully!");
-        FacesContext.getCurrentInstance().addMessage(null, msg);
         
         Logger logger = Logger.getLogger(FleetManageBean.class.getName());
         try {   
@@ -149,7 +147,6 @@ public class FleetManageBean {
         logger.info("User: "+ userID 
                 + "has added Aircraft of Type: " + String.valueOf(aircraftTypeId));
         fh.close();
-//        clear();
     }
 
     public String retireAircraft(Long tailNo) {

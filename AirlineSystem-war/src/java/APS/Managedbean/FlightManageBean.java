@@ -242,9 +242,6 @@ public class FlightManageBean {
         
         message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Flight Added Successfully!", "");
         FacesContext.getCurrentInstance().addMessage(null, message);
-
-        FacesMessage msg = new FacesMessage("Flight Added Successfully!");
-        FacesContext.getCurrentInstance().addMessage(null, msg);
         
         Logger logger = Logger.getLogger(FleetManageBean.class.getName());
         try {   
