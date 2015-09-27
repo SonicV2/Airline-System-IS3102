@@ -107,7 +107,7 @@
 
                         <h:outputLabel value="Date Purchased: " />
                         <span>
-                            <p:calendar id="button" required="true" requiredMessage="Please fill in Date of Purchase!" value="#{fleetManageBean.datePurchased}" navigator="true" pattern="yyyy-MMM-dd"/>
+                            <p:calendar id="button" value="#{fleetManageBean.datePurchased}" navigator="true" pattern="yyyy-MMM-dd"/>
                         </span>
                         <br/>
 
@@ -118,7 +118,7 @@
                     <div class="form-group">
                         <h:outputLabel value="Last Maintained: " />
                         <span>
-                            <p:calendar id="button1" required="true" requiredMessage="Please fill in Date of Maintenance!" value="#{fleetManageBean.lastMaintained}" navigator="true" pattern="yyyy-MMM-dd"/>
+                            <p:calendar id="button1" value="#{fleetManageBean.lastMaintained}" navigator="true" pattern="yyyy-MMM-dd"/>
                         </span>
                         <br/>
 

@@ -96,6 +96,7 @@ public class MessageManagedBean {
         }
         FacesContext.getCurrentInstance().addMessage(null, message);
         clear();
+        setSentMsg(messageSessionBean.sentMsg(loginManageBean.employeeUserName));
         return "message";
     }
     
