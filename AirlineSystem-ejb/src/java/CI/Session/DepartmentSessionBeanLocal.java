@@ -5,6 +5,7 @@
  */
 package CI.Session;
 
+import CI.Entity.Employee;
 import CI.Entity.OrganizationUnit;
 import java.util.List;
 import javax.ejb.Local;
@@ -25,4 +26,6 @@ public interface DepartmentSessionBeanLocal {
     public OrganizationUnit getDepartmentUseID(Long deptID);
     public String deleteOrgUnit(String OUName);
     public String updateOrgUnit(OrganizationUnit oldOUnit, OrganizationUnit newOUnit);
+    public void editGender(Employee edited);
+    public Employee searchStaff(String id);
 }
