@@ -6,7 +6,11 @@
 package CI.Managedbean;
 
 import CI.Session.EmployeeSessionBeanLocal;
+import java.io.IOException;
 import java.util.Date;
+import java.util.logging.FileHandler;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -47,6 +51,8 @@ public class changeProfileManagedBean {
     private String employeeNewPwd;
     private String employeeNewPwdRe; 
 
+    private FileHandler fh;
+   
        
     public void updateInfo(ActionEvent event){
         
@@ -106,6 +112,21 @@ public class changeProfileManagedBean {
          if(getEmployeeNewPwd().equals(getEmployeeNewPwdRe())){
             employeeSessionBean.hashNewPwd(employeeUserName, getEmployeeNewPwd());
             employeeSessionBean.employeeActivate(employeeUserName);
+            Logger logger = Logger.getLogger(LoginManageBean.class.getName());
+        try {   
+        fh = new FileHandler("%h/LogOut.txt",99999,1,true);  
+        logger.addHandler(fh);
+        SimpleFormatter formatter = new SimpleFormatter();  
+        fh.setFormatter(formatter);  
+
+        } catch (SecurityException e) {  
+        e.printStackTrace();  
+        } catch (IOException e) {  
+        e.printStackTrace();  
+        } 
+        logger.info("User: "+ employeeUserName 
+                + " has changed password");
+        fh.close();
           
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Password Change Successfully!", "");
              FacesContext.getCurrentInstance().addMessage(null, message);

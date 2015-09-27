@@ -75,7 +75,7 @@ public class LoginManageBean {
         e.printStackTrace();  
         } 
         logger.info("User: "+ userID 
-                + "has logged in");
+                + " has logged in");
         fh.close();
 
             if (firstTimer == true) {
@@ -194,7 +194,7 @@ public class LoginManageBean {
         e.printStackTrace();  
         } 
         logger.info("User: "+ userID 
-                + "has logged out");
+                + " has logged out");
         fh.close();
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
         return "/login.xhtml?faces-redirect=true";
