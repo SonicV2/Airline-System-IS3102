@@ -343,11 +343,16 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
 
     @Override
     public Team generateTeam(Pairing pairing) {
+        String result = validateTeam();
+        if(result.equals("Bad")){
+            return null;
+        }
+        
         String flightDate = pairing.getFDate();
 //        String flightHour = pairing.getFlightHour();
         List<String> cities = pairing.getFlightCities();
         List<String> langs = new ArrayList<String>();
-        
+
         HashMap langMap = new HashMap();
         langMap.put("Paris", "French");
 
@@ -367,9 +372,9 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
         langMap.put("Beijing", "Chinese");
         langMap.put("Guangzhou", "Chinese");
         langMap.put("Shanghai", "Chinese");
-        
+
         langMap.put("Seoul", "Korean");
-        
+
         List<String> flightDates = new ArrayList<String>();
         List<String> temp = pairing.getFlightTimes();
         List<String> differentDates = new ArrayList<String>();
@@ -454,14 +459,13 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
                 }
             }
         }
-        
+
 //        for(String city : cities){
 //            if(langMap.get(city)!= null){
 //                langs.add(langMap.get(city).toString());
 //                
 //            }
 //        }
-
         CCs.add(leadCCList.get(0));
         leadCCList.get(0).setAssigned(true);
         leadCCList.get(0).setTeam(team);
@@ -535,6 +539,56 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
         }
 
         return team;
+    }
+
+    
+    public String validateTeam() {
+
+        List<Pilot> pilots = new ArrayList<Pilot>();
+        List<Pilot> FOs = new ArrayList<Pilot>();
+
+        Query q = em.createQuery("SELECT p FROM Pilot p");
+
+        List<Pilot> ps = q.getResultList();
+        for (Pilot pi : ps) {
+            if (pi.isAssigned() == false) {
+                if (pi.getPosition().equals("Captain")) {
+                    pilots.add(pi);
+                }
+                if (pi.getPosition().equals("First Officer")) {
+                    FOs.add(pi);
+                }
+            }
+        }
+
+        List<CabinCrew> CCs = new ArrayList<CabinCrew>();
+        List<CabinCrew> leads = new ArrayList<CabinCrew>();
+        List<CabinCrew> FS = new ArrayList<CabinCrew>();
+        List<CabinCrew> steds = new ArrayList<CabinCrew>();
+
+        Query q1 = em.createQuery("SELECT p FROM CabinCrew p");
+
+        List<CabinCrew> ps1 = q1.getResultList();
+        for (CabinCrew cc : ps1) {
+            if (cc.isAssigned() == false) {
+                if (cc.getPosition().equals("Lead Flight Stewardess")) {
+                    leads.add(cc);
+                }
+                if (cc.getPosition().equals("Flight Stewardess")) {
+                    FS.add(cc);
+                }
+                if (cc.getPosition().equals("Flight Steward")) {
+                    steds.add(cc);
+                }
+            }
+        }
+
+        if (pilots.size() < 1 || FOs.size() < 1 || leads.size() < 1 || FS.size() < 6 || steds.size() < 1) {
+            return "Bad";
+        } else {
+            return "Good";
+        }
+
     }
 
     public Flight getFlight(String flightNumber) {
