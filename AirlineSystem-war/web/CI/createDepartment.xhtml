@@ -58,7 +58,7 @@
                             <p:column style="width:32px">
                                 <p:rowEditor />
                             </p:column>
-                            <p:column style="width:32px">
+                            <p:column style="width:32px" rendered="#{loginManageBean.accessRightIDs.contains(4)}">
 
                                 <h:commandLink onclick="if (!confirm('Do you really want to delete this department?')) {
                                             return false;

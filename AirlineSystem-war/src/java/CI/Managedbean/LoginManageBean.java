@@ -108,8 +108,11 @@ public class LoginManageBean {
         }
                 //get employee's access rights into a list of long
                 accessRightsForRole = new ArrayList<AccessRight>();
-                accessRightsForRole = getEmployee().getRoles().get(0).getAccessRights();
-
+                int size = getEmployee().getRoles().size();
+                for(int i=0; i<size; i++){
+                    accessRightsForRole.addAll(getEmployee().getRoles().get(i).getAccessRights());
+                }
+                
                 accessRightIDs = new ArrayList<Long>();
                 if (accessRightsForRole != null) {
                     for (AccessRight ar : accessRightsForRole) {
