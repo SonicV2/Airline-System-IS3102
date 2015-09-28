@@ -211,7 +211,7 @@ public class crewScheduleManagedBean {
         }else{
         setTeam(pairingSessionBean.generateTeam(sln));
         if(team==null){
-            message =new FacesMessage(FacesMessage.SEVERITY_ERROR,"Not Enought Cabin Crews or Pilots!","");
+            message =new FacesMessage(FacesMessage.SEVERITY_ERROR,"Not Enough Cabin Crews or Pilots!","");
             FacesContext.getCurrentInstance().addMessage(null, message);
         }
         }
@@ -226,7 +226,7 @@ public class crewScheduleManagedBean {
         
         setTeam(a380PairingSessionBean.generateA380Team(sln));
         if(team==null){
-            message =new FacesMessage(FacesMessage.SEVERITY_ERROR,"Not Enought Cabin Crews or Pilots!","");
+            message =new FacesMessage(FacesMessage.SEVERITY_ERROR,"Not Enough Cabin Crews or Pilots!","");
             FacesContext.getCurrentInstance().addMessage(null, message);
         }
         }
