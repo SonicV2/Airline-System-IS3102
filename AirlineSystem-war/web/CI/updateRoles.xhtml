@@ -58,6 +58,7 @@
                                 <p:rowEditor />
                             </p:column>
 
+<!--                            this is for super admin, HR manager to delete a role-->
                             <p:column headerText="Delete Role" style="width:32px" rendered="#{loginManageBean.accessRightIDs.contains(5)}">
 
                                 <h:commandLink onclick="if (!confirm('Do you really want to delete this role?')) {
