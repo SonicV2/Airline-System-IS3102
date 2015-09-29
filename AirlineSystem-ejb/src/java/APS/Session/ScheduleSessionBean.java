@@ -289,48 +289,32 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
     
     @Override
     public List<Schedule> filterForPastSchedules (List<Schedule> schedules){
-         //long millisInDay = 60 * 60 * 24 * 1000;
-        //long currentTime = new Date().getTime();
-        //long dateOnly = (currentTime / millisInDay) * millisInDay;
-        //Date todayDateWithoutTime = new Date(dateOnly);
         Date todayDate = new Date();
         String todayDateFormatted = new SimpleDateFormat("yyyyMMdd").format(todayDate);
         int todayDateInt = Integer.parseInt(todayDateFormatted);
         
-        List<Schedule> futureSchedules = new ArrayList();
+        List<Schedule> pastSchedules = new ArrayList();
         for (Schedule eachSchedule : schedules){
-            //long scheduleDateOnly = ((eachSchedule.getEndDate().getTime())/millisInDay)*millisInDay;
-            //Date eachScheduleEndDateWithoutTime = new Date(scheduleDateOnly);
             String eachScheduleDate = new SimpleDateFormat("yyyyMMdd").format(eachSchedule.getStartDate());
             int eachScheduleInt = Integer.parseInt(eachScheduleDate);
             
             if (eachScheduleInt<=todayDateInt)
-                futureSchedules.add(eachSchedule);
+                pastSchedules.add(eachSchedule);
         }
-        return futureSchedules;
+        return pastSchedules;
     }
     
      @Override
     public List<Schedule> filterForFutureSchedules (List<Schedule> schedules){
-        //long millisInDay = 60 * 60 * 24 * 1000;
-        //long currentTime = new Date().getTime();
-        //long dateOnly = (currentTime / millisInDay) * millisInDay;
-        //Date todayDateWithoutTime = new Date(dateOnly);
         Date todayDate = new Date();
         String todayDateFormatted = new SimpleDateFormat("yyyyMMdd").format(todayDate);
         int todayDateInt = Integer.parseInt(todayDateFormatted);
-        System.out.println("Today's date is:$$$$$$$$$$$$" +  todayDateInt);
         
         List<Schedule> futureSchedules = new ArrayList();
         for (Schedule eachSchedule : schedules){
-            //long scheduleDateOnly = ((eachSchedule.getEndDate().getTime())/millisInDay)*millisInDay;
-            //Date eachScheduleEndDateWithoutTime = new Date(scheduleDateOnly);
             String eachScheduleDate = new SimpleDateFormat("yyyyMMdd").format(eachSchedule.getStartDate());
             int eachScheduleInt = Integer.parseInt(eachScheduleDate);
-            System.out.println("EachScheduleDate is:$$$$$$$$$$$$" +  eachScheduleInt);
             if (eachScheduleInt>todayDateInt){
-                System.out.println("INSIDE IF: Today's date is:$$$$$$$$$$$$" +  todayDateInt);
-                System.out.println("INSIDE IF: EachScheduleDate is:$$$$$$$$$$$$" +  eachScheduleInt);
                 futureSchedules.add(eachSchedule);
             }
                 
@@ -340,21 +324,12 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
     
      @Override
     public List<Schedule> filterForCurrentDaySchedules (List<Schedule> schedules){
-        //long millisInDay = 60 * 60 * 24 * 1000;
-        //long currentTime = new Date().getTime();
-        //long dateOnly = (currentTime / millisInDay) * millisInDay;
-        //Date todayDateWithoutTime = new Date(dateOnly);
-        //System.out.println("$$$$$$$$$$$$$$$$$$$$$$$"+todayDateWithoutTime);
         Date todayDate = new Date();
         String todayDateFormatted = new SimpleDateFormat("dd/MM/yyyy").format(todayDate);
-        //Calendar calendar = new Calendar();
-        //calendar.setTime(new Date());
         
         
         List<Schedule> currentDaySchedules = new ArrayList();
         for (Schedule eachSchedule : schedules){
-            //long scheduleDateOnly = ((eachSchedule.getEndDate().getTime())/millisInDay)*millisInDay;
-            //Date eachScheduleEndDateWithoutTime = new Date(scheduleDateOnly);
             String eachScheduleDate = new SimpleDateFormat("dd/MM/yyyy").format(eachSchedule.getEndDate());
             
             if (todayDateFormatted.equals(eachScheduleDate))
