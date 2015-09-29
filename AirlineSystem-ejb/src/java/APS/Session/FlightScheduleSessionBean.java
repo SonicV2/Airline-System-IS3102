@@ -99,10 +99,6 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
         curr.set(Calendar.SECOND, 0);
         Date counter = startDateTime;
 
-//        //Prepare checklists
-//        checklists = new ArrayList<Checklist>();
-//        checklistItems = new ArrayList<ChecklistItem>();
-//        checklistItem = new ChecklistItem();
         //Create attributes for the seatAvail
         int economy = aircraftType.getEconomySeats();
         int business = aircraftType.getBusinessSeats();
@@ -149,8 +145,7 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
         TimeZone tz = TimeZone.getTimeZone("GMT+8:00"); //Set Timezone to Singapore
         Calendar currTime = Calendar.getInstance(tz);
         Calendar tmp = Calendar.getInstance(tz);
-        //NOTE: ADD FUNCTIONALITIES
-        //Take into account available aircrafts
+        
         //Remove the schedules that are after current time Note: May be replaced by new getSchedule algo
         for (int i = 0; i < schedules.size(); i++) {
             tmp.setTime(schedules.get(i).getStartDate());
@@ -202,7 +197,6 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
 
                 if (!curr.isEmpty()) {
                     //Sort the curr ArrayList according to startTime
-                    System.out.println(aircraft.getTailNo());
                     Collections.sort(curr, comparator);
                     while (!curr.isEmpty()) {
                         //Find the earliest schedule that starts from the hub
@@ -256,10 +250,11 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
             }
         }
 //        }
+        //Clear the isAssigned attribute of Aircrafts for the next assignment
         clearAssignment(getSchedules());
     }
 
-    @Override
+    @Override //Deprecated 
     public void dummyRotate() {
         aircrafts = retrieveAircrafts();
         schedules = getSchedules();
@@ -288,7 +283,8 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
             j++;
         }
     }
-
+    
+    //Retrieve flight object by searching with flight number
     private Flight getFlight(String flightNo) {
         flight = new Flight();
         try {
@@ -309,7 +305,8 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
         }
         return flight;
     }
-
+    
+    //Retireve the whole database of Aircraft Types
     private List<AircraftType> retrieveAircraftTypes() {
         List<AircraftType> allTypes = new ArrayList<AircraftType>();
 
@@ -331,7 +328,8 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
 
         return allTypes;
     }
-
+    
+    //Retrieve the whole database of Aircrafts
     private List<Aircraft> retrieveAircrafts() {
         List<Aircraft> allAircrafts = new ArrayList<Aircraft>();
 
@@ -354,6 +352,7 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
         return allAircrafts;
     }
 
+    //Retrieve the whole database of schedules
     private List<Schedule> getSchedules() {
         schedules = new ArrayList<Schedule>();
         try {
@@ -397,7 +396,8 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
         }
         return schedules;
     }
-
+    
+    //Check whether all schedules are assigned
     private boolean isAllAssigned(List<Schedule> schedules) {
         for (Schedule schedule1 : schedules) {
             if (!schedule1.isAssigned()) {
@@ -406,7 +406,8 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
         }
         return true;
     }
-
+    
+    //Given a start time of a flight, calculate the touch down time
     private Date calcEndTime(Date startTime, Flight flight) {
         //Break up the hour and minutes
         int flightHr = (int) flight.getFlightDuration();
@@ -421,6 +422,7 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
         return endTime.getTime();
     }
 
+    //Returns a list of Schedule objects with start date after the given date
     private List<Schedule> removeScheduleBefore(List<Schedule> sc, Date date) {
         schedules = new ArrayList<Schedule>();
         for (int i = 0; i < sc.size(); i++) {
@@ -430,7 +432,8 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
         }
         return schedules;
     }
-
+    
+    //Resets all the isAssigned attribute of the aircrafts
     private void clearAssignment(List<Schedule> sc) {
         for (int i = 0; i < sc.size(); i++) {
             sc.get(i).setAssigned(false);

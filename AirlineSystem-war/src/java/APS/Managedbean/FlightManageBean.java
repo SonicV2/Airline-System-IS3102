@@ -1,19 +1,14 @@
-
 package APS.Managedbean;
 
 import APS.Entity.Flight;
 import APS.Entity.Route;
 import APS.Entity.Schedule;
-import APS.Entity.AircraftType;
-import APS.Entity.Aircraft;
 import APS.Session.FlightScheduleSessionBeanLocal;
 import APS.Session.FlightSessionBeanLocal;
 import APS.Session.RouteSessionBeanLocal;
 import APS.Session.FleetSessionBeanLocal;
 import APS.Session.ScheduleSessionBeanLocal;
-import CI.Managedbean.LoginManageBean;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.FileHandler;
@@ -24,7 +19,6 @@ import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.inject.Named;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
@@ -52,13 +46,11 @@ public class FlightManageBean {
     private FleetSessionBeanLocal fleetSessionBean;
     @EJB
     private ScheduleSessionBeanLocal scheduleSessionBean;
-    
+
 //    @ManagedProperty(value="#{scheduleManageBean}")
 //    private ScheduleManageBean scheduleManageBean;
-    
     @PersistenceContext(unitName = "AirlineSystem-ejbPU")
     private EntityManager em;
-    
 
     private String flightNo;
     private String[] selectedFlightDays;
@@ -81,88 +73,90 @@ public class FlightManageBean {
     private List<Route> routes;
     private List<Schedule> schedule;
     private List<Flight> flights;
-    
+
     private Flight selectedFlight;
-    
+
     private FileHandler fh;
     private String userID;
 
     public FlightManageBean() {
     }
-    
+
     @PostConstruct
-    public void retrieve(){
-        
+    public void retrieve() {
+
         setFlights(flightSessionBean.retrieveFlights());
         HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
-        userID= (String)session.getAttribute("isLogin");
-        
+        userID = (String) session.getAttribute("isLogin");
+
     }
 
     public void createFlight(ActionEvent event) {
-        
+
+        //Front end excception handling
         if (routeId == null) {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please enter Route ID!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
             return;
         }
-        
+
         if (flightNo.isEmpty()) {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please enter Flight Number!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
             return;
         }
-        
+
         if (selectedFlightDays.length == 0) {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please select Flight Days!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
             return;
         }
-        
+
         if (startDateTime == null) {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please enter starting day and time!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
             return;
         }
-        
+
         if (basicFare == null) {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please enter Basic Fare!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
             return;
         }
-        
+
         if (flightSessionBean.getRoute(routeId) == null) {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "No such route!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
             return;
         }
-        
-        if (flights!=null) {
-        /*for (int i=0; i<flights.size(); i++) {
-            
-            Flight temp = flightSessionBean.retrieveFlights().get(i);
-   
-            if (temp.getRoute().equals(flightSessionBean.getRoute(routeId))) {
-                message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Flight already exists!", "");
-                FacesContext.getCurrentInstance().addMessage(null, message);
-                return;
-            }
-            
-        }*/
 
-        if (flightSessionBean.getFlight(flightNo) != null) {
-            if (flightSessionBean.getFlight(flightNo).getRoute() == flightSessionBean.getRoute(routeId)) {
-                message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Flight already exists!", "");
-                FacesContext.getCurrentInstance().addMessage(null, message);
-                return;
-            } else {
-                message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Flight number is already in use!", "");
-                FacesContext.getCurrentInstance().addMessage(null, message);
-                return;
+        if (flights != null) {
+            /*for (int i=0; i<flights.size(); i++) {
+            
+             Flight temp = flightSessionBean.retrieveFlights().get(i);
+   
+             if (temp.getRoute().equals(flightSessionBean.getRoute(routeId))) {
+             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Flight already exists!", "");
+             FacesContext.getCurrentInstance().addMessage(null, message);
+             return;
+             }
+            
+             }*/
+
+            if (flightSessionBean.getFlight(flightNo) != null) {
+                if (flightSessionBean.getFlight(flightNo).getRoute() == flightSessionBean.getRoute(routeId)) {
+                    message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Flight already exists!", "");
+                    FacesContext.getCurrentInstance().addMessage(null, message);
+                    return;
+                } else {
+                    message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Flight number is already in use!", "");
+                    FacesContext.getCurrentInstance().addMessage(null, message);
+                    return;
+                }
             }
         }
-        }
         
+        //Reading in the flight days
         flightDays = "";
         
         for (int i = 0; i < selectedFlightDays.length; i++) {
@@ -234,42 +228,41 @@ public class FlightManageBean {
         if (flightDays.length() == 6) {
             setString("0");
         }
-
+        
         flightSessionBean.addFlight(flightNo, flightDays, basicFare, startDateTime, routeId);
-        flightScheduleSessionBean.scheduleFlights(flightNo);
-        flightScheduleSessionBean.rotateFlights();
+        flightScheduleSessionBean.scheduleFlights(flightNo); //Create schedule and link flight to best aircraftType
+        flightScheduleSessionBean.rotateFlights(); //Rotate flights and assign aircraft to schedule
         flightDays = "";
 
         message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Flight Added Successfully!", "");
         FacesContext.getCurrentInstance().addMessage(null, message);
-        
-        Logger logger = Logger.getLogger(FleetManageBean.class.getName());
-        try {   
-        fh = new FileHandler("%h/addFlight.txt",99999,1,true);  
-        logger.addHandler(fh);
-        SimpleFormatter formatter = new SimpleFormatter();  
-        fh.setFormatter(formatter);  
 
-        } catch (SecurityException e) {  
-        e.printStackTrace();  
-        } catch (IOException e) {  
-        e.printStackTrace();  
-        } 
-        logger.info("User: "+ userID 
+        Logger logger = Logger.getLogger(FleetManageBean.class.getName());
+        try {
+            fh = new FileHandler("%h/addFlight.txt", 99999, 1, true);
+            logger.addHandler(fh);
+            SimpleFormatter formatter = new SimpleFormatter();
+            fh.setFormatter(formatter);
+
+        } catch (SecurityException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        logger.info("User: " + userID
                 + "has added Flight: " + flightNo);
         fh.close();
-        
+
         setFlights(flightSessionBean.retrieveFlights());
         setSchedule(scheduleSessionBean.getSchedules());
         clear();
-//        scheduleManageBean.updateSchedules();
     }
-    
+
     public String deleteFlight(String flightNo) {
-        
+
         selectedFlight = flightSessionBean.getFlight(flightNo);
         flights.remove(selectedFlight);
-        
+
         //search for Flight Num in Flight lists linked to the Route and remove the Flight
         List<Flight> temp = selectedFlight.getRoute().getFlights();
         temp.remove(selectedFlight);
@@ -281,38 +274,38 @@ public class FlightManageBean {
         temp1.remove(selectedFlight);
         selectedFlight.getAircraftType().setFlights(temp1);
         selectedFlight.setAircraftType(null);
-        
+
         //search for Team in Schedule lists linked to the Schedule and remove
-        for (int i=0; i<selectedFlight.getSchedule().size(); i++) {
+        for (int i = 0; i < selectedFlight.getSchedule().size(); i++) {
             selectedFlight.getSchedule().get(i).setTeam(null);
         }
-        
+
         //delete schedule
-        for (int j=0; j<selectedFlight.getSchedule().size(); j++) {
+        for (int j = 0; j < selectedFlight.getSchedule().size(); j++) {
             flightSessionBean.deleteSchedule(selectedFlight.getSchedule().get(j).getScheduleId());
         }
 
         flightSessionBean.deleteFlight(selectedFlight.getFlightNo());
         selectedFlight = null;
-        
+
         message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Flight Removed", "");
         FacesContext.getCurrentInstance().addMessage(null, message);
-        
+
         setFlights(flightSessionBean.retrieveFlights());
         setSchedule(scheduleSessionBean.getSchedules());
-        
+
         return "DeleteFlight";
-        
+
     }
-    
-     /*clear input after submit*/
+
+    /*clear input after submit*/
     public void clear() {
         setRouteId(null);
         setFlightNo("");
         setSelectedFlightDays(null);
         setStartDateTime(null);
         setBasicFare(null);
-        
+
     }
 
     public void setString(String value) {
@@ -448,7 +441,7 @@ public class FlightManageBean {
     public void setSchedule(List<Schedule> schedule) {
         this.schedule = schedule;
     }
-    
+
     public List<Flight> getFlights() {
         return flights;
     }
@@ -456,11 +449,11 @@ public class FlightManageBean {
     public void setFlights(List<Flight> flights) {
         this.flights = flights;
     }
-    
+
     public Flight getSelectedFlight() {
         return selectedFlight;
     }
- 
+
     public void setSelectedFlight(Flight selectedFlight) {
         this.selectedFlight = selectedFlight;
     }
@@ -472,5 +465,5 @@ public class FlightManageBean {
 //    public void setScheduleManageBean(ScheduleManageBean scheduleManageBean) {
 //        this.scheduleManageBean = scheduleManageBean;
 //       
-    
+
 }
