@@ -28,14 +28,14 @@
                 <!--                this is for anyone who can create department-->
                 <ui:fragment rendered="#{loginManageBean.accessRightIDs.contains(3)}">
                     <li>
-                        <a href="#{request.contextPath}/CI/createDepartment.xhtml"><i class="fa fa-plus fa-fw"></i> Department Management</a>
+                        <a href="#{request.contextPath}/CI/createDepartment.xhtml"><i class="fa fa-gear"></i> Department Management</a>
                     </li>
 
                 </ui:fragment>
                 <!--                this is for anyone who can update/view department-->
                 <ui:fragment rendered="#{loginManageBean.accessRightIDs.contains(4)}">
                     <li>
-                        <a href="#{request.contextPath}/CI/createDepartment.xhtml"><i class="fa fa-plus fa-fw"></i> Department Management</a>
+                        <a href="#{request.contextPath}/CI/createDepartment.xhtml"><i class="fa fa-gear"></i> Department Management</a>
                     </li>
 
                 </ui:fragment>
@@ -45,17 +45,20 @@
                         <a href="#{request.contextPath}/CI/createRole.xhtml"><i class="fa fa-plus fa-fw"></i> Create Role</a>
                     </li>
                     <li>
-                        <a href="#{request.contextPath}/CI/updateRoles.xhtml"><i class="fa fa-plus fa-fw"></i> Role Management</a>
+                        <a href="#{request.contextPath}/CI/updateRoles.xhtml"><i class="fa fa-gear"></i> Role Management</a>
                     </li>
                     <li>
-                        <a href="#{request.contextPath}/CI/addRole.xhtml"><i class="fa fa-plus fa-fw"></i> Add role to employee</a>
+                        <a href="#{request.contextPath}/CI/addRole.xhtml"><i class="fa fa-plus fa-fw"></i> Add Additional Role to Employee</a>
+                    </li>
+                    <li>
+                        <a href="#{request.contextPath}/CI/deleteEmployeeRole.xhtml"><i class="fa fa-trash-o"></i> Delete Role of Employee</a>
                     </li>
                 </ui:fragment>
 
                 <!-- this is for anyone who can view, update roles-->
                 <ui:fragment rendered="#{loginManageBean.accessRightIDs.contains(6)}">
                     <li>
-                        <a href="#{request.contextPath}/CI/updateRoles.xhtml"><i class="fa fa-plus fa-fw"></i> Role Management</a>
+                        <a href="#{request.contextPath}/CI/updateRoles.xhtml"><i class="fa fa-gear"></i> Role Management</a>
                     </li>
                 </ui:fragment>
 
@@ -76,7 +79,7 @@
                         </ul>
                     </li>
                     <li>
-                        <a href="#{request.contextPath}/CI/allEmployeeInfo.xhtml" action="#{adminManagedBean.retreive()}"><i class="fa fa-plus fa-fw"></i> Employee Management</a>
+                        <a href="#{request.contextPath}/CI/allEmployeeInfo.xhtml" action="#{adminManagedBean.retreive()}"><i class="fa fa-gear"></i> Employee Management</a>
                     </li>    
                 </ui:fragment>
 
@@ -107,7 +110,7 @@
                 <!--                this is for Aircraft acquisition, finance executive -->
                 <ui:fragment rendered="#{loginManageBean.accessRightIDs.contains(10)}">
                     <li>
-                        <a href="#{request.contextPath}/APS/RetireAircraft.xhtml"><i class="fa fa-plus fa-plane"></i>Aircrafts Management</a>
+                        <a href="#{request.contextPath}/APS/RetireAircraft.xhtml"><i class="fa fa-plus fa-plane"></i> Aircrafts Management</a>
                     </li>
                 </ui:fragment>
 

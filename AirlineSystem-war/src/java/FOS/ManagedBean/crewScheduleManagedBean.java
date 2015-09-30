@@ -43,6 +43,9 @@ public class crewScheduleManagedBean {
     private int num_max_legs;
     private int hours_max_flight;
     private PairingPolicy pp;
+    
+    String max_hour;
+    
     private List<Pairing> slns;
     private Pairing sln;  //selected from the webpage
     private String sln1;
@@ -79,6 +82,8 @@ public class crewScheduleManagedBean {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Change successfully!", "");
         }
         FacesContext.getCurrentInstance().addMessage(null, message);
+        
+        clear();
     }
 
 //    public void crewPairing(ActionEvent event){
@@ -86,6 +91,8 @@ public class crewScheduleManagedBean {
 //    }
     public void retrivePolicy(ActionEvent event) {
         setPp(pairingSessionBean.retrievePolicy());
+        max_hour=(pp.getHours_max_flight()/100)+"";
+        
     }
 
 // crew pairing.html --> display all legs
@@ -187,20 +194,52 @@ public class crewScheduleManagedBean {
 
     public void getSelectPairingID(ActionEvent event) {
 
+        FacesMessage message = null;
+        
+        if(sln1==null){
+            message =new FacesMessage(FacesMessage.SEVERITY_ERROR,"No Pairing is selected!","");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        }else{
         String pairingID = sln1.substring(sln1.indexOf("=") + 1, sln1.indexOf("]") - 1);
-        System.out.println("--------" + sln1.substring(sln1.indexOf("=") + 1, sln1.indexOf("]")));
         sln = pairingSessionBean.getPairingByID(pairingID);
-
+        }
     }
 
     public void generateTeam(ActionEvent event) {
+        FacesMessage message = null;
+        if(sln1==null){
+            message =new FacesMessage(FacesMessage.SEVERITY_ERROR,"Cannot Generate Team!","");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        }else{
         setTeam(pairingSessionBean.generateTeam(sln));
+        if(team==null){
+            message =new FacesMessage(FacesMessage.SEVERITY_ERROR,"Not Enough Cabin Crews or Pilots!","");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        }
+        }
     }
 
     public void generateA380Team(ActionEvent event) {
+        FacesMessage message = null;
+        if(sln1==null){
+            message =new FacesMessage(FacesMessage.SEVERITY_ERROR,"Cannot Generate A380 Team!","");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        }else{
+        
         setTeam(a380PairingSessionBean.generateA380Team(sln));
+        if(team==null){
+            message =new FacesMessage(FacesMessage.SEVERITY_ERROR,"Not Enough Cabin Crews or Pilots!","");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        }
+        }
     }
 
+    
+    public void clear(){
+        this.hours_max_flight=0;
+        this.num_max_legs=0;
+        this.time_scale_min=0;
+    }
 //    public void bigBoss() {
 //        System.out.println("HHHHHH");
 //        setLists(pairingSessionBean.addMonthlyPairing(slns));
@@ -250,7 +289,7 @@ public class crewScheduleManagedBean {
      * @param hours_max_flight the hours_max_flight to set
      */
     public void setHours_max_flight(int hours_max_flight) {
-        this.hours_max_flight = hours_max_flight;
+        this.hours_max_flight = hours_max_flight*100;
     }
 
     /**
@@ -414,5 +453,16 @@ public class crewScheduleManagedBean {
     public void setScheduleResult(List<String> scheduleResult) {
         this.scheduleResult = scheduleResult;
     }
+
+    public String getMax_hour() {
+        return max_hour;
+    }
+
+    public void setMax_hour(String max_hour) {
+        this.max_hour = max_hour;
+    }
+
+  
+    
 
 }

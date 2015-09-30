@@ -170,7 +170,7 @@ public class CrewSignInManagedBean {
     public void scheduleSignIn(ActionEvent event) { //Bug --> dont have any pairing still can sign in
         FacesMessage message;
         if (selectPairing == null) {
-            message = new FacesMessage(FacesMessage.SEVERITY_WARN, "You Cannot Sign In an Empty Pairing", "");
+            message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Please sign in 1 hour before the flight!", "");
         } else {
             setMsg(crewSignInSessionBean.crewSignIn(loginManageBean.getEmployeeUserName(), team));
             if (msg.equals("Signed")) {

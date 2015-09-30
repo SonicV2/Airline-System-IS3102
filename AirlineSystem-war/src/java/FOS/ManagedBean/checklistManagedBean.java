@@ -63,7 +63,7 @@ private Team team;
 private List<Schedule> schedulesForTeam;
 private List<Schedule> pastSchedulesForTeam;
 private List<Schedule> currentDaySchedulesForTeam;
- FacesMessage message = null;
+FacesMessage message = null;
 
 public checklistManagedBean(){
     
