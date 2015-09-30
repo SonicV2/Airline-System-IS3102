@@ -24,7 +24,7 @@ public class BookingSessionBean implements BookingSessionBeanLocal {
     private String serviceType;
     
     
-    
+    // Create a booking
     public void addBooking(double price, String serviceType, 
             SeatAvailability seatAvail){
         Booking booking = new Booking();
