@@ -156,7 +156,7 @@ public class FlightManageBean {
             }
         }
         
-        //Reading in the flight days
+        //Change the flightdays from words to a mixture of 1s and 0s for future calculation in the backend
         flightDays = "";
         
         for (int i = 0; i < selectedFlightDays.length; i++) {
@@ -298,7 +298,7 @@ public class FlightManageBean {
 
     }
 
-    /*clear input after submit*/
+    //Clear input after submit
     public void clear() {
         setRouteId(null);
         setFlightNo("");

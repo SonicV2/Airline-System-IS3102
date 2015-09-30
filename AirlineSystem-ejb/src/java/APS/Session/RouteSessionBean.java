@@ -22,6 +22,7 @@ public class RouteSessionBean implements RouteSessionBeanLocal {
     Route route; 
     Location location;
     
+    //Add new route entity
     @Override
     public void addRoute(String origin, String destination){
         route=new Route();
@@ -32,12 +33,15 @@ public class RouteSessionBean implements RouteSessionBeanLocal {
         route.create(start.getIATA(), end.getIATA(), start.getCountry(), end.getCountry(), start.getCity(), end.getCity(), distance);
         em.persist(route);
     }
+    
+    //Delete existing route entity
     @Override
     public void deleteRoute(Long routeId){
         route = getRoute(routeId);
         em.remove(route);
     }
     
+    //Get a specific route with route id
     @Override
     public Route getRoute(Long id){
         route = new Route();   
@@ -60,6 +64,7 @@ public class RouteSessionBean implements RouteSessionBeanLocal {
             return route;
     }
     
+    //Get a specific location with the country name
     @Override
     public Location getLocation(String country1){
         location = new Location();   
@@ -82,6 +87,7 @@ public class RouteSessionBean implements RouteSessionBeanLocal {
             return location;
     }
     
+    //Get a specific location with IATA
     @Override
     public Location findLocation(String location){ 
          Location locationEntity = new Location();   
@@ -104,6 +110,7 @@ public class RouteSessionBean implements RouteSessionBeanLocal {
             return locationEntity;
     }
     
+    //Get all the existing locations
     public List<Location> retrieveLocations(){
         List<Location> allLocations = new ArrayList<Location>();
         
@@ -127,6 +134,7 @@ public class RouteSessionBean implements RouteSessionBeanLocal {
         return allLocations;
     }
     
+    //Get all the existing locations from same country
     public List<Location> searchLocationsByCountry(String searchCountry){
         
         List<Location> allLocations = new ArrayList<Location>();
@@ -152,6 +160,7 @@ public class RouteSessionBean implements RouteSessionBeanLocal {
         return allLocations;
     }
     
+    //Get all the existing locations from same city
     public List<Location> searchLocationsByCity(String searchCity){
         
         List<Location> allLocations = new ArrayList<Location>();
@@ -177,6 +186,7 @@ public class RouteSessionBean implements RouteSessionBeanLocal {
         return allLocations;
     }
     
+    //Retrieve all the existing routes
     public List<Route> retrieveRoutes(){
         List<Route> allRoutes = new ArrayList<Route>();
         
@@ -200,6 +210,7 @@ public class RouteSessionBean implements RouteSessionBeanLocal {
         return allRoutes;
     }
     
+    //Calculate the distance between two airports, using latitudes and longtitudes
     public static Double haversineDist(Double lat1, Double long1, Double lat2, Double long2) {
     Double earthRadius = 6372.8; //kilometers
     Double dLat = Math.toRadians(lat2-lat1);

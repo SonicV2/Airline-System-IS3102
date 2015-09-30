@@ -75,12 +75,15 @@ public class FleetManageBean {
     public FleetManageBean() {
         
     }
-
+    
+    //Construct a table of aircraft types with their details
     @PostConstruct
     public void retrieve() {
 
         setAircraftTypes(fleetSessionBean.retrieveAircraftTypes());
         setAircrafts(fleetSessionBean.retrieveAircrafts());
+        
+        //For dropdown list of aircraft types
         aircraftTypeIds.add("Airbus A330-300");
         aircraftTypeIds.add("Airbus A380-800");
         aircraftTypeIds.add("Boeing 777-200");
@@ -92,7 +95,7 @@ public class FleetManageBean {
         userID= (String)session.getAttribute("isLogin");
     }
 
-    /*This is for admin to acquire new aircraft*/
+    //Acquire new aircraft
     public void acquireAircraft(ActionEvent event) {
 
         if (aircraftTypeId == null) {
@@ -147,7 +150,8 @@ public class FleetManageBean {
                 + "has added Aircraft of Type: " + String.valueOf(aircraftTypeId));
         fh.close();
     }
-
+    
+    //Retire existing aircraft
     public String retireAircraft(Long tailNo) {
 
 //        if (!selectedAircraft.getStatus().equals("Stand-By") || !selectedAircraft.getStatus().equals("Reserve")) {
@@ -207,6 +211,7 @@ public class FleetManageBean {
         return "RetireAircraft";
     }
     
+    //Clear the inputs
     public void clear() {
         setAircraftTypeId("");
         setHub("");
@@ -214,7 +219,8 @@ public class FleetManageBean {
         setLastMaintained(null);
         setStatus("");
     }
-
+    
+    //Change the format of displayed dates
     public String getDateFormat(Date date) {
         DateFormat df = new SimpleDateFormat("EEE, dd MMM yyyy");
         return df.format(date);

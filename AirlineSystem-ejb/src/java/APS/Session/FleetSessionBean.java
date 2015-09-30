@@ -104,6 +104,7 @@ public class FleetSessionBean implements FleetSessionBeanLocal {
         return aircraft1;
     }
     
+    //retireve all the existing aircraft types
     @Override
     public List<AircraftType> retrieveAircraftTypes() {
         List<AircraftType> allTypes = new ArrayList<AircraftType>();
@@ -127,6 +128,7 @@ public class FleetSessionBean implements FleetSessionBeanLocal {
         return allTypes;
     }
     
+    //retrieve all the aircrafts
     @Override
     public List<Aircraft> retrieveAircrafts() {
         List<Aircraft> allAircrafts = new ArrayList<Aircraft>();
@@ -150,6 +152,7 @@ public class FleetSessionBean implements FleetSessionBeanLocal {
         return allAircrafts;
     }
     
+    //get all the reserve aircrafts
     @Override
     public List<Aircraft> getReserveAircrafts(String status){
         
