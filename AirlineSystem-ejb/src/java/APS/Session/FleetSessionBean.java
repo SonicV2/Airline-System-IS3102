@@ -3,7 +3,6 @@ package APS.Session;
 import javax.ejb.Stateless;
 import APS.Entity.AircraftType;
 import APS.Entity.Aircraft;
-import APS.Entity.Flight;
 import APS.Entity.Schedule;
 import java.util.Date;
 import java.util.List;
@@ -12,7 +11,6 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.ArrayList;
-import javax.ejb.Schedules;
 
 /**
  *
@@ -106,6 +104,7 @@ public class FleetSessionBean implements FleetSessionBeanLocal {
         return aircraft1;
     }
     
+    //retireve all the existing aircraft types
     @Override
     public List<AircraftType> retrieveAircraftTypes() {
         List<AircraftType> allTypes = new ArrayList<AircraftType>();
@@ -129,6 +128,7 @@ public class FleetSessionBean implements FleetSessionBeanLocal {
         return allTypes;
     }
     
+    //retrieve all the aircrafts
     @Override
     public List<Aircraft> retrieveAircrafts() {
         List<Aircraft> allAircrafts = new ArrayList<Aircraft>();
@@ -152,6 +152,7 @@ public class FleetSessionBean implements FleetSessionBeanLocal {
         return allAircrafts;
     }
     
+    //get all the reserve aircrafts
     @Override
     public List<Aircraft> getReserveAircrafts(String status){
         

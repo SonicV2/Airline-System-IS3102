@@ -64,13 +64,19 @@ public class AdminManagedBean {
     }
     
     public void onRowEdit(RowEditEvent event) {
-        Employee employee = (Employee) event.getObject();
+        Employee edited = (Employee) event.getObject();
+        Employee original = departmentSessionBean.searchStaff(edited.getEmployeeID());
 
         //if the department is changed:
-        if (!employee.getOrganizationUnit().getDepartmentName().equals(employeeNewDeptName)){
-            departmentSessionBean.adminChangeDepartment(employee.getEmployeeID(), employeeNewDeptName, employee.getOrganizationUnit().getDepartmentName());
+        if (!edited.getOrganizationUnit().getDepartmentName().equals(employeeNewDeptName)){
+            departmentSessionBean.adminChangeDepartment(edited.getEmployeeID(), employeeNewDeptName, edited.getOrganizationUnit().getDepartmentName());
             setAllActiveEmployees(employeeSessionBean.retrieveAllActiveEmployees());
             System.out.println("changed department successful");
+        }
+        
+        if(!edited.getEmployeeGender().equals(original.getEmployeeGender())){
+            departmentSessionBean.editGender(edited);
+            setAllActiveEmployees(employeeSessionBean.retrieveAllActiveEmployees());
         }
         
         

@@ -26,6 +26,7 @@ public class ClassManagement implements ClassManagementLocal {
     @PersistenceContext(unitName = "AirlineSystem-ejbPU")
     private EntityManager em;
     
+    // Add a booking class
     public String addClassCode(String classcode, int pricePercent, int advancedSales
     , int percentSold, String serviceClass, boolean rebook, boolean cancel, 
     int baggage, int millageAccru){
@@ -43,11 +44,13 @@ public class ClassManagement implements ClassManagementLocal {
         
     }
     
+    // Find a booking class based on its classcode
     public BookingClass findClass(String classCode){
         BookingClass bc = em.find(BookingClass.class, classCode);
         return bc;
     }
     
+    // Retrieve the list of  available booking classes
     public List<BookingClass> retrieveBookingClasses(){
         List<BookingClass> allClasses = new ArrayList<BookingClass>();
         
@@ -71,6 +74,7 @@ public class ClassManagement implements ClassManagementLocal {
         return allClasses;
     }
     
+    // Delete a booking class
     public void deleteClassCode(String classcode){
         try{
             BookingClass bc = em.find(BookingClass.class, classcode);
@@ -82,6 +86,7 @@ public class ClassManagement implements ClassManagementLocal {
         }
     }
     
+    // Edit a booking class
     public void editClassCode(BookingClass bc){
         em.merge(bc);
     }

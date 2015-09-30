@@ -31,10 +31,8 @@ public class RevenueManagement implements RevenueManagementLocal{
     private EntityManager em;
     private Date rDate;
     
-    
-
-    // Add business logic below. (Right-click in editor and choose
-    // "Insert Code > Add Business Method")
+    // Generate the amount of seat available which includes overbooking based on demand forecast
+    // Currently it is dummy generating availability
     @Override
     public int[] generateAvailability(int economy, int business, int firstClass){
         int[] seats = new int[5];
@@ -46,6 +44,8 @@ public class RevenueManagement implements RevenueManagementLocal{
         return seats;
     }
     
+    
+    //Find the seat availability of a particular flight no and time
     public SeatAvailability findSA(Date fDate,String flightNo){
         System.out.println(flightNo);
         Query q = em.createQuery("SELECT o from SeatAvailability o WHERE o.schedule.flight.flightNo = :flightNo");
@@ -69,6 +69,8 @@ public class RevenueManagement implements RevenueManagementLocal{
      * @param fDate
      * @return
      */
+    
+    // Generate the amount of seat available which includes overbooking based on demand forecast
     @Override
     public int[] getAvail(String flightNo,Date fDate){
         
@@ -94,7 +96,7 @@ public class RevenueManagement implements RevenueManagementLocal{
         }
     }
     
-    
+    //Convert a string storing date and time to a date object
     public Date convertToDate(String flightDate, String flightTime){
         Date date= new Date();
         int[] seats = generateAvailability(40,20,10);
@@ -110,12 +112,14 @@ public class RevenueManagement implements RevenueManagementLocal{
         return date;
     }
     
-    
+    // Get the base price of a particular flight number
     public double getBasePrice(String flightNo){
         Flight flight = em.find(Flight.class, flightNo);
         double baseprice= flight.getBasicFare();
         return baseprice;
     }
+    
+    // Get the price of a ticket of a specific flight and service type
     public String getPrice(String flightNo,Date fDate, String serviceClass, int realSold){
         int pricePercent=100;
         Date current = new Date();

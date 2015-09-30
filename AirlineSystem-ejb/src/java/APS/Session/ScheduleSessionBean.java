@@ -39,15 +39,18 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
     private Team team;
     private Aircraft aircraft;
     private SeatAvailability seatAvail;
-
+    
+    //Update the changes made to schedules
     @Override
     public void edit(Schedule edited, Schedule original) {
         
+        //Only if there was a change in the start time of schedule, calculate the new end time and persist it
         if(!edited.getStartDate().equals(original.getStartDate())){
         edited.setEndDate(calcEndTime(edited.getStartDate(), edited.getFlight())); 
         em.merge(edited);
         }
         
+        //Only if there was a change in the aircraft tail number of schedule, assign the changed aircraft to this schedule
         if (!edited.getAircraft().getTailNo().equals(original.getAircraft().getTailNo())) {
 
             Aircraft ac= em.find(Aircraft.class, edited.getAircraft().getTailNo());
@@ -67,7 +70,8 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
             em.flush();
         }  
     }
-
+    
+    //Add new schedule entity
     @Override
     public void addSchedule(Date startDate, String flightNo) {
         schedule = new Schedule();
@@ -83,7 +87,8 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
         schedule.setSeatAvailability(seatAvail);
         em.persist(schedule);
     }
-
+    
+    //Delete existing schedule entity
     @Override
     public void deleteSchedule(Long id) {
         schedule = getSchedule(id);
@@ -93,11 +98,12 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
         
         schedule.setSeatAvailability(null);
         
-        em.remove(seatAvail); //Ask Quan Ge add in code!!!
+        em.remove(seatAvail);
         em.remove(schedule);
         em.flush();
     }
-
+    
+    //Get a specific schedule with schedule id
     @Override
     public Schedule getSchedule(Long id) {
         schedule = new Schedule();
@@ -119,7 +125,8 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
         }
         return schedule;
     }
-
+    
+    //Get a specific schedule with start date of the schedule
     @Override
     public Schedule getScheduleByDate(Date startDate) {
         schedule = new Schedule();
@@ -141,7 +148,8 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
         }
         return schedule;
     }
-
+    
+    //Get all the existing schedules
     @Override
     public List<Schedule> getSchedules() {
         schedules = new ArrayList<Schedule>();
@@ -163,7 +171,8 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
         }
         return schedules;
     }
-
+    
+    //Get a specific flight with flight number
     public Flight getFlight(String flightNo) {
         flight = new Flight();
         try {
@@ -184,7 +193,8 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
         }
         return flight;
     }
-
+    
+    //Change the display of flight days from mixture of 1s and 0s to proper days in words
     @Override
     public void changeFlightDays(List<Flight> flights) {
 
@@ -249,7 +259,8 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
             flights.get(i).setFlightDaysString(temp);
         }
     }
-
+    
+    //Get a list of schedules that use same aircraft tail number
     @Override
     public List<Schedule> getSchedules(Long tailNo) {
         aircraft = new Aircraft();
@@ -271,7 +282,8 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
 
         return aircraft.getSchedules();
     }
-
+    
+    //Calculate the new end time of edited schedule
     @Override
     public Date calcEndTime(Date startTime, Flight flight) {
         //Break up the hour and minutes
@@ -287,6 +299,7 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
         return endTime.getTime();
     }
     
+    //Change the formats of dates for past schedules
     @Override
     public List<Schedule> filterForPastSchedules (List<Schedule> schedules){
         Date todayDate = new Date();
@@ -304,6 +317,7 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
         return pastSchedules;
     }
     
+    //Change the formats of dates for future schedules
      @Override
     public List<Schedule> filterForFutureSchedules (List<Schedule> schedules){
         Date todayDate = new Date();
@@ -322,6 +336,7 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
         return futureSchedules;
     }
     
+    //Change the formats of dates for current schedules
      @Override
     public List<Schedule> filterForCurrentDaySchedules (List<Schedule> schedules){
         Date todayDate = new Date();
