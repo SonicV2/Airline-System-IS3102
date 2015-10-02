@@ -29,6 +29,8 @@ public class CrewSignInSessionBean implements CrewSignInSessionBeanLocal {
     @PersistenceContext(unitName = "AirlineSystem-ejbPU")
     private EntityManager em;
 
+    
+    // Given crewName to find the team the crew assigned
     @Override
     public Team getCCTeam(String crewName) {
         Query q = em.createQuery("SELECT t FROM Team t");
@@ -56,6 +58,7 @@ public class CrewSignInSessionBean implements CrewSignInSessionBeanLocal {
         return null;
     }
 
+    // Change the crew status to sign in 
     @Override
     public String crewSignIn(String crewName, Team team) {
 
@@ -98,6 +101,7 @@ public class CrewSignInSessionBean implements CrewSignInSessionBeanLocal {
 
     }
 
+    // If all crews sign in, then the team status will change to all sigin in
     public void changeTeamStatus(Team team) {
 
         //em.merge(team);

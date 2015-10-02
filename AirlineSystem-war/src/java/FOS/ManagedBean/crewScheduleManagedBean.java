@@ -43,16 +43,16 @@ public class crewScheduleManagedBean {
     private int num_max_legs;
     private int hours_max_flight;
     private PairingPolicy pp;
-    
+
     String max_hour;
-    
+
     private List<Pairing> slns;
     private Pairing sln;  //selected from the webpage
     private String sln1;
     private Team team;
     private String selectMonth; //month choosen to get pairing
     private String selectYear;
-    
+
     private List<Pairing> restPairing;
     private List<Pairing> slnA380;
     private List<Pairing> restPairingA380;
@@ -82,7 +82,7 @@ public class crewScheduleManagedBean {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Change successfully!", "");
         }
         FacesContext.getCurrentInstance().addMessage(null, message);
-        
+
         clear();
     }
 
@@ -91,14 +91,14 @@ public class crewScheduleManagedBean {
 //    }
     public void retrivePolicy(ActionEvent event) {
         setPp(pairingSessionBean.retrievePolicy());
-        max_hour=(pp.getHours_max_flight()/100)+"";
-        
+        max_hour = (pp.getHours_max_flight() / 100) + "";
+
     }
 
 // crew pairing.html --> display all legs
     public void getSlns(ActionEvent event) {
         Date date = new Date();
-        pairingSessionBean.legMain(selectMonth,selectYear);
+        pairingSessionBean.legMain(selectMonth, selectYear);
         setSlns(pairingSessionBean.getPairings());
 //        bigBoss();
         restPairing = new ArrayList<Pairing>();
@@ -116,39 +116,46 @@ public class crewScheduleManagedBean {
             }
 
         }
+        scheduleNew();
 
     }
-    
-    
-     public void scheduleNew(ActionEvent event){
-         System.out.println("$$$$$$$$$$$$$");
-         System.out.println("REST: "+restPairing.size());
-        String temp;
-        scheduleResult= new ArrayList<String>();
-        
-        for(int i=0 ; i<restPairing.size(); i++){
-//            temp +=restPairing.get(i).getFDate() + restPairing.get(i).getFlightHour();
-            for(int j=0;j<restPairing.get(i).getFlightNumbers().size();j++){
-                if(j!=0){
-                String temp1=restPairing.get(i).getFlightTimes().get(j).substring(10);
-                
-                String temp2= restPairing.get(i).getFlightTimes().get(j-1).substring(10);
-                
-                if(!temp1.equals(temp2)){
-                        scheduleResult.add("-----------------------------------------------------------"); 
+
+    public void scheduleNew() {
+        System.out.println("$$$$$$$$$$$$$");
+        System.out.println("REST: " + restPairing.size());
+        String temp = "";
+
+        scheduleResult = new ArrayList<String>();
+
+        for (int i = 0; i < restPairing.size(); i++) {
+            temp += "\u26F3 Pairing ID: " + restPairing.get(i).getId() + " <br /> \uD83D\uDCC6 Pairing Start Date: " + restPairing.get(i).getFDate() + "   " + "\uD83D\uDD50 Pairing Total Flight Hours: " + restPairing.get(i).getFlightHour() + "<br />";
+            System.out.println("$$$$$$$$$$$$$$$$$$$$PAIRING DATE: " + restPairing.get(i).getFDate());
+            for (int j = 0; j < restPairing.get(i).getFlightNumbers().size(); j++) {
+                if (j != 0) {
+                    String temp1 = restPairing.get(i).getFlightTimes().get(j).substring(10);
+
+                    String temp2 = restPairing.get(i).getFlightTimes().get(j - 1).substring(10);
+
+                    if (!temp1.equals(temp2)) {
+                        temp += "<br /> ----------------------------------------------------------- <br />";
+                    }
+
+                    temp += "<br />Flight Number: " + restPairing.get(i).getFlightNumbers().get(j)
+                            + "<br /> " + "Flight Route: "
+                            + restPairing.get(i).getFlightCities().get(j) + " " + "\u2708".toUpperCase() + " " + restPairing.get(i).getFlightCities().get(j + 1)
+                            + "<br />" + " Flight Schedules: " + restPairing.get(i).getFlightTimes().get(j);
+
                 }
-                
-                temp=restPairing.get(i).getFlightNumbers().get(j) + "----" +
-                     restPairing.get(i).getFlightCities().get(j)+" "+ "\u2708" +" "+ restPairing.get(i).getFlightCities().get(j+1)+
-                     "-----"+ restPairing.get(i).getFlightTimes().get(j);
-                    scheduleResult.add(temp);
-                
-                System.out.println("$$$$$$$$$$$$$TEMP: "+temp);
-                }
+
             }
+
         }
-        
-    
+        String[] sps = temp.split("\u26F3 Pairing ID: ");
+        int index = sps.length - 1;
+        for (int i = 1; i < index + 1; i++) {
+            scheduleResult.add("\u26F3 Pairing ID: " + sps[i]);
+        }
+
     }
 
     public long checkTime(String time1, String time2) {
@@ -173,14 +180,14 @@ public class crewScheduleManagedBean {
     }
 
     public void getA380Slns(ActionEvent event) {
-        a380PairingSessionBean.legMain(selectMonth,selectYear);
+        a380PairingSessionBean.legMain(selectMonth, selectYear);
         setSlnA380(a380PairingSessionBean.getPairings());
 
         restPairingA380 = new ArrayList<Pairing>();
         FacesMessage message = null;
         if (slnA380 == null) {
             message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "No flights for this month!", "");
-             FacesContext.getCurrentInstance().addMessage(null, message);
+            FacesContext.getCurrentInstance().addMessage(null, message);
         } else {
             for (Pairing ppp : slnA380) {
                 if (ppp.isPaired() == false) {
@@ -189,56 +196,59 @@ public class crewScheduleManagedBean {
             }
 
         }
-       
+
     }
 
     public void getSelectPairingID(ActionEvent event) {
 
         FacesMessage message = null;
-        
-        if(sln1==null){
-            message =new FacesMessage(FacesMessage.SEVERITY_ERROR,"No Pairing is selected!","");
+
+        if (sln1 == null) {
+            message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "No Pairing is selected!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
-        }else{
-        String pairingID = sln1.substring(sln1.indexOf("=") + 1, sln1.indexOf("]") - 1);
-        sln = pairingSessionBean.getPairingByID(pairingID);
+        } else {
+            String select = sln1.split("<br /> \uD83D\uDCC6 Pairing Start Date:")[0];
+            System.out.println("????????????? " + select);
+            
+            String pairingID = select.split("\u26F3 Pairing ID: ")[1];
+            System.out.println("?????????????ID " + pairingID);
+            sln = pairingSessionBean.getPairingByID(pairingID.trim());
         }
     }
 
     public void generateTeam(ActionEvent event) {
         FacesMessage message = null;
-        if(sln1==null){
-            message =new FacesMessage(FacesMessage.SEVERITY_ERROR,"Cannot Generate Team!","");
+        if (sln1 == null) {
+            message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Cannot Generate Team!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
-        }else{
-        setTeam(pairingSessionBean.generateTeam(sln));
-        if(team==null){
-            message =new FacesMessage(FacesMessage.SEVERITY_ERROR,"Not Enough Cabin Crews or Pilots!","");
-            FacesContext.getCurrentInstance().addMessage(null, message);
-        }
+        } else {
+            setTeam(pairingSessionBean.generateTeam(sln));
+            if (team == null) {
+                message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Not Enough Cabin Crews or Pilots!", "");
+                FacesContext.getCurrentInstance().addMessage(null, message);
+            }
         }
     }
 
     public void generateA380Team(ActionEvent event) {
         FacesMessage message = null;
-        if(sln1==null){
-            message =new FacesMessage(FacesMessage.SEVERITY_ERROR,"Cannot Generate A380 Team!","");
+        if (sln1 == null) {
+            message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Cannot Generate A380 Team!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
-        }else{
-        
-        setTeam(a380PairingSessionBean.generateA380Team(sln));
-        if(team==null){
-            message =new FacesMessage(FacesMessage.SEVERITY_ERROR,"Not Enough Cabin Crews or Pilots!","");
-            FacesContext.getCurrentInstance().addMessage(null, message);
-        }
+        } else {
+
+            setTeam(a380PairingSessionBean.generateA380Team(sln));
+            if (team == null) {
+                message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Not Enough Cabin Crews or Pilots!", "");
+                FacesContext.getCurrentInstance().addMessage(null, message);
+            }
         }
     }
 
-    
-    public void clear(){
-        this.hours_max_flight=0;
-        this.num_max_legs=0;
-        this.time_scale_min=0;
+    public void clear() {
+        this.hours_max_flight = 0;
+        this.num_max_legs = 0;
+        this.time_scale_min = 0;
     }
 //    public void bigBoss() {
 //        System.out.println("HHHHHH");
@@ -289,7 +299,7 @@ public class crewScheduleManagedBean {
      * @param hours_max_flight the hours_max_flight to set
      */
     public void setHours_max_flight(int hours_max_flight) {
-        this.hours_max_flight = hours_max_flight*100;
+        this.hours_max_flight = hours_max_flight * 100;
     }
 
     /**
@@ -425,7 +435,6 @@ public class crewScheduleManagedBean {
 //    public void setLists(List<List<Pairing>> lists) {
 //        this.lists = lists;
 //    }
-
     /**
      * @return the selectYear
      */
@@ -461,8 +470,5 @@ public class crewScheduleManagedBean {
     public void setMax_hour(String max_hour) {
         this.max_hour = max_hour;
     }
-
-  
-    
 
 }
