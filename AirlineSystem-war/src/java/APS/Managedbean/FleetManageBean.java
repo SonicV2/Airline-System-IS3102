@@ -47,6 +47,7 @@ public class FleetManageBean {
     Long tailNo;
     String status;
     String hub;
+    int amt = 0;
 
     AircraftType aircraftType = new AircraftType();
 
@@ -67,13 +68,11 @@ public class FleetManageBean {
     private List<String> aircraftTypeIds = new ArrayList<String>();
     private List<Aircraft> reserves = new ArrayList<Aircraft>();
 
-    
-    
     private String userID;
     private FileHandler fh;
-    
+
     public FleetManageBean() {
-        
+
     }
     
     //Construct a table of aircraft types with their details
@@ -90,9 +89,9 @@ public class FleetManageBean {
         aircraftTypeIds.add("Boeing 777-200ER");
         aircraftTypeIds.add("Boeing 777-300");
         aircraftTypeIds.add("Boeing 777-300ER");
-        
+
         HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
-        userID= (String)session.getAttribute("isLogin");
+        userID = (String) session.getAttribute("isLogin");
     }
 
     //Acquire new aircraft
@@ -133,21 +132,83 @@ public class FleetManageBean {
         FacesContext.getCurrentInstance().addMessage(null, message);
         setAircrafts(fleetSessionBean.retrieveAircrafts());
         clear();
-        
-        Logger logger = Logger.getLogger(FleetManageBean.class.getName());
-        try {   
-        fh = new FileHandler("%h/acquireAircraft.txt",99999,1,true);  
-        logger.addHandler(fh);
-        SimpleFormatter formatter = new SimpleFormatter();  
-        fh.setFormatter(formatter);  
 
-        } catch (SecurityException e) {  
-        e.printStackTrace();  
-        } catch (IOException e) {  
-        e.printStackTrace();  
-        } 
-        logger.info("User: "+ userID 
+        Logger logger = Logger.getLogger(FleetManageBean.class.getName());
+        try {
+            fh = new FileHandler("%h/acquireAircraft.txt", 99999, 1, true);
+            logger.addHandler(fh);
+            SimpleFormatter formatter = new SimpleFormatter();
+            fh.setFormatter(formatter);
+
+        } catch (SecurityException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        logger.info("User: " + userID
                 + "has added Aircraft of Type: " + String.valueOf(aircraftTypeId));
+        fh.close();
+    }
+
+    public void buyInBulk(ActionEvent event) {
+
+        if (aircraftTypeId == null) {
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please select aircraft type!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return;
+        }
+
+        if (hub == null) {
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please select location of the aircraft!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return;
+        }
+
+        if (datePurchased == null) {
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please enter date of purchase!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return;
+        }
+
+        if (lastMaintained == null) {
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please enter date of last maintenance!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return;
+        }
+
+        if (status == null) {
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please select status of the aircraft!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return;
+        }
+
+        if (amt == 0) {
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please enter the number of aircrafts to be purchased!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return;
+        }
+        for (int i = 0; i < amt; i++) {
+            fleetSessionBean.acquireAircraft(datePurchased, lastMaintained, aircraftTypeId, hub, status);
+            Logger logger = Logger.getLogger(FleetManageBean.class.getName());
+            try {
+                fh = new FileHandler("%h/buyAircraftsBulk.txt", 99999, 1, true);
+                logger.addHandler(fh);
+                SimpleFormatter formatter = new SimpleFormatter();
+                fh.setFormatter(formatter);
+
+            } catch (SecurityException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            logger.info("User: " + userID
+                    + "has added Aircraft of Type: " + String.valueOf(aircraftTypeId));
+        }
+        message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Aircrafts are Acquired Successfully!", "");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+        setAircrafts(fleetSessionBean.retrieveAircrafts());
+        amt = 0;
+        clear();
         fh.close();
     }
     
@@ -160,7 +221,7 @@ public class FleetManageBean {
 //            return;
 //        }
         selectedAircraft = fleetSessionBean.getAircraft(tailNo);
-        
+
         reserves = fleetSessionBean.getReserveAircrafts("Reserve");
 
         System.out.println("LOOK HERE");
@@ -187,31 +248,30 @@ public class FleetManageBean {
         aircrafts.remove(selectedAircraft);
         fleetSessionBean.retireAircraft(selectedAircraft.getTailNo());
         selectedAircraft = null;
-        
+
         message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Aircraft Retired", "");
         FacesContext.getCurrentInstance().addMessage(null, message);
         setAircrafts(fleetSessionBean.retrieveAircrafts());
-        
-        Logger logger = Logger.getLogger(FleetManageBean.class.getName());
-        try {   
-        fh = new FileHandler("%h/reitreAircraft.txt",99999,1,true);  
-        logger.addHandler(fh);
-        SimpleFormatter formatter = new SimpleFormatter();  
-        fh.setFormatter(formatter);  
 
-        } catch (SecurityException e) {  
-        e.printStackTrace();  
-        } catch (IOException e) {  
-        e.printStackTrace();  
-        } 
-        logger.info("User: "+ userID 
+        Logger logger = Logger.getLogger(FleetManageBean.class.getName());
+        try {
+            fh = new FileHandler("%h/reitreAircraft.txt", 99999, 1, true);
+            logger.addHandler(fh);
+            SimpleFormatter formatter = new SimpleFormatter();
+            fh.setFormatter(formatter);
+
+        } catch (SecurityException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        logger.info("User: " + userID
                 + "has retired Aircraft: " + tailNo);
         fh.close();
-        
+
         return "RetireAircraft";
     }
-    
-    //Clear the inputs
+
     public void clear() {
         setAircraftTypeId("");
         setHub("");
@@ -312,6 +372,14 @@ public class FleetManageBean {
 
     public void setHub(String hub) {
         this.hub = hub;
+    }
+
+    public int getAmt() {
+        return amt;
+    }
+
+    public void setAmt(int amt) {
+        this.amt = amt;
     }
 
     public List<AircraftType> getAircraftTypes() {

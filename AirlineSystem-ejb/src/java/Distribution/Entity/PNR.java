@@ -24,7 +24,7 @@ public class PNR implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     private String pnrID;
-    @OneToMany (cascade = {CascadeType.PERSIST}, mappedBy = "PNR")
+    @OneToMany (mappedBy = "pnr")
     private List<Booking> bookings = new ArrayList<Booking> ();
     private int noOfTravellers;
     private String email;
