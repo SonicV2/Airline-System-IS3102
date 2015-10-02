@@ -11,6 +11,11 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import Inventory.Entity.Booking;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import javax.persistence.Query;
+import java.util.Random;
 
 /**
  *
@@ -22,6 +27,33 @@ public class BookingSessionBean implements BookingSessionBeanLocal {
     @PersistenceContext(unitName = "AirlineSystem-ejbPU")
     private EntityManager em;
     private String serviceType;
+    
+    
+    public void bookSeats(String flightNo){
+        Query q = em.createQuery("SELECT o from SeatAvailability o WHERE o.schedule.flight.flightNo = :flightNo");
+         q.setParameter("flightNo",flightNo);
+         
+         List<SeatAvailability> saList = q.getResultList();
+         Calendar cal = Calendar.getInstance();
+         int size = saList.size();
+         for(int i=0; i<size; i++){
+             Date fTime = saList.get(i).getSchedule().getStartDate();
+             Calendar flightCal = Calendar.getInstance();
+             flightCal.setTime(fTime);
+             if(flightCal.compareTo(cal)<0)
+                 pseudoBook(saList.get(i));             
+         }
+    }
+    
+    
+    
+    public void pseudoBook(SeatAvailability sa){
+        Random random = new Random();
+        int economySaverBooked = sa.getEconomySaverTotal()/2 + random.nextInt(sa.getEconomySaverTotal()/2 );
+        sa.setEconomySaverBooked(economySaverBooked);
+        int economyBasicBooked = sa.
+        
+    }
     
     
     // Create a booking

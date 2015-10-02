@@ -18,4 +18,5 @@ public interface BookingSessionBeanLocal {
     // Create a booking
      public void addBooking(double price, String serviceType, 
             SeatAvailability seatAvail);
+     public void bookSeats(String flightNo);
 }
