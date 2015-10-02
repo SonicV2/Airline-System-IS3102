@@ -64,8 +64,7 @@ public class Booking implements Serializable {
     private int totalNumBaggeAlloewd;
     
     
-    public void createBooking(double price, String serviceType, 
-            SeatAvailability seatAvail){
+    public void createBooking(double price, String serviceType, SeatAvailability seatAvail){
         this.setPrice(price);
         this.setServiceType(serviceType);
         this.setSeatAvail(seatAvail);
