@@ -5,8 +5,8 @@
  */
 package Inventory.Entity;
 
-import APS.Entity.Flight;
 import Distribution.Entity.Baggage;
+import Distribution.Entity.PNR;
 import java.io.Serializable;
 import java.util.ArrayList;
 import javax.persistence.Entity;
@@ -17,7 +17,6 @@ import java.util.*;
 import javax.persistence.CascadeType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
