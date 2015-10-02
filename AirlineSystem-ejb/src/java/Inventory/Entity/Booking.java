@@ -57,6 +57,9 @@ public class Booking implements Serializable {
     @OneToMany(cascade = {CascadeType.PERSIST}, mappedBy = "booking")
     private List<Baggage> baggages = new ArrayList<Baggage>();
     
+    @ManyToOne(cascade = {CascadeType.PERSIST})
+    private PNR pnr = new PNR();
+    
     private double totalWeightAllowed;
     private int totalNumBaggeAlloewd;
     
