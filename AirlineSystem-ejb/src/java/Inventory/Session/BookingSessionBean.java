@@ -51,8 +51,14 @@ public class BookingSessionBean implements BookingSessionBeanLocal {
         Random random = new Random();
         int economySaverBooked = sa.getEconomySaverTotal()/2 + random.nextInt(sa.getEconomySaverTotal()/2 );
         sa.setEconomySaverBooked(economySaverBooked);
-        int economyBasicBooked = sa.
-        
+        int economyBasicBooked = sa.getEconomyBasicTotal()/2 + random.nextInt(sa.getEconomyBasicTotal()/2);
+        sa.setEconomyBasicBooked(economyBasicBooked);
+        int economyPremiumBooked = sa.getEconomyPremiumTotal()/2 + random.nextInt(sa.getEconomyPremiumTotal()/2);
+        sa.setEconomyPremiumBooked(economyPremiumBooked);
+        int businessBooked = sa.getBusinessTotal()/2 + random.nextInt(sa.getBusinessTotal()/2);
+        sa.setBusinessBooked(businessBooked);
+        int firstBooked = sa.getFirstClassTotal()/2 + random.nextInt(sa.getFirstClassTotal()/2);
+        sa.setFirstClassBooked(firstBooked);
     }
     
     
@@ -62,7 +68,7 @@ public class BookingSessionBean implements BookingSessionBeanLocal {
         Booking booking = new Booking();
         Long id = seatAvail.getId();
         seatAvail= em.find(SeatAvailability.class, id);
-        booking.createBooking(price, serviceType, seatAvail);
+        booking.YQcreateBooking(price, serviceType, seatAvail);
         em.persist(booking);
         if(serviceType.equals("Economy Saver"))
             seatAvail.setEconomySaverBooked(seatAvail.getEconomySaverBooked()+1);
