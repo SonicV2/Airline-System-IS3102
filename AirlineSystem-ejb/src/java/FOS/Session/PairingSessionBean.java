@@ -51,6 +51,7 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
 
     private Team team;
 
+    //Generate all possible pairings from specific month and year
     @Override
     public void legMain(String selectMonth, String selectYear) {
         ArrayList<Leg> legs = new ArrayList<Leg>();
@@ -240,6 +241,7 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
         return day;
     }
 
+     //Gerenate pairing and write into the database
     public void showSoln(ArrayList<Leg> leg, int numSol, int hFlight) {  //unformated
 
         Pairing pr = new Pairing();
@@ -441,6 +443,7 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
         em.persist(FOList.get(0));
 
         team.setPilots(pilots);
+        
 
         List<CabinCrew> CCs = new ArrayList<CabinCrew>();
         Query q1 = em.createQuery("SELECT p FROM CabinCrew p");

@@ -126,6 +126,15 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal{
        
         return allDepts;
     }
+    
+    public Employee searchStaff(String id){
+        Employee employee = em.find(Employee.class, id);
+        return employee;
+    }
+    
+    public void editGender(Employee edited){
+        em.merge(edited);
+    }
 
     // Return employee department name
     @Override

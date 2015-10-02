@@ -28,7 +28,8 @@ public class FlightSessionBean implements FlightSessionBeanLocal {
     private Route route;
     private AircraftType aircraftType;
     private List<Schedule> schedules;
-
+    
+    //Add new flight entity
     @Override
     public void addFlight(String flightNo, String flightDays, Double basicFare, Date startDateTime, Long routeId) {
         flight = new Flight();
@@ -42,7 +43,8 @@ public class FlightSessionBean implements FlightSessionBeanLocal {
         flight.setSchedule(schedules);
         em.persist(flight);
     }
-
+    
+    //Delete an existing flight entity
     @Override
     public void deleteFlight(String flightNo) {
         flight = getFlight(flightNo);
@@ -50,6 +52,7 @@ public class FlightSessionBean implements FlightSessionBeanLocal {
         em.flush();
     }
     
+    //Delete an existing schedule entity
     @Override
     public void deleteSchedule(Long scheduleId) {
         schedule = getSchedule(scheduleId);
@@ -57,6 +60,7 @@ public class FlightSessionBean implements FlightSessionBeanLocal {
         em.flush();
     }
     
+    //Get a specific schedule with schedule id
     @Override
     public Schedule getSchedule(Long scheduleId) {
         schedule = new Schedule();
@@ -78,7 +82,8 @@ public class FlightSessionBean implements FlightSessionBeanLocal {
         }
         return schedule;
     }
-
+    
+    //Get a specific flgith with flight number
     @Override
     public Flight getFlight(String flightNo) {
         flight = new Flight();
@@ -100,7 +105,8 @@ public class FlightSessionBean implements FlightSessionBeanLocal {
         }
         return flight;
     }
-
+    
+    //Get all the existing flights
     @Override
     public List<Flight> getFlights() {
         List<Flight> flights = new ArrayList<Flight>();
@@ -123,6 +129,7 @@ public class FlightSessionBean implements FlightSessionBeanLocal {
         return flights;
     }
     
+    //Get a specific route with route id
     @Override
     public Route getRoute(Long id) {
         route = new Route();
@@ -145,6 +152,7 @@ public class FlightSessionBean implements FlightSessionBeanLocal {
         return route;
     }
     
+    //Retrieve all the existing flights
     public List<Flight> retrieveFlights(){
         List<Flight> allFlights = new ArrayList<Flight>();
         
