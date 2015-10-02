@@ -52,6 +52,7 @@ public class A380PairingSessionBean implements A380PairingSessionBeanLocal {
 
     private Team team;
 
+    //Generate all possible pairings from specific month and year
     @Override
     public void legMain(String selectMonth, String selectYear) {
         ArrayList<Leg> legs = new ArrayList<Leg>();
@@ -230,6 +231,7 @@ public class A380PairingSessionBean implements A380PairingSessionBeanLocal {
 
     }
 
+    //Helper method: convert date string to long type
     public Long getFormatted(String da) {
         String d1 = da.split("/")[0];
         String d2 = da.split("/")[1];
@@ -239,6 +241,7 @@ public class A380PairingSessionBean implements A380PairingSessionBeanLocal {
         return day;
     }
 
+    //Gerenate pairing and write into the database
     public void showSoln(ArrayList<Leg> leg, int numSol, int hFlight) {  //unformated
 
         Pairing pr = new Pairing();
@@ -310,6 +313,7 @@ public class A380PairingSessionBean implements A380PairingSessionBeanLocal {
 
     }
 
+    //Get all pairings from pairing database
     @Override
     public List<Pairing> getPairings() {
         Query q = em.createQuery("SELECT p FROM Pairing p");
@@ -323,6 +327,7 @@ public class A380PairingSessionBean implements A380PairingSessionBeanLocal {
         return a380;
     }
 
+    //Retrieve pairings by pairing ID
     @Override
     public Pairing getPairingByID(String id) {
         Query q = em.createQuery("SELECT p FROM Pairing p");
@@ -336,6 +341,7 @@ public class A380PairingSessionBean implements A380PairingSessionBeanLocal {
         return null;
     }
 
+    //Helper Method: To see if there is enough cabin crews to form a team
     public String validateTeam() {
 
         List<Pilot> pilots = new ArrayList<Pilot>();
@@ -389,6 +395,8 @@ public class A380PairingSessionBean implements A380PairingSessionBeanLocal {
 
     }
 
+    
+    //Generate A380 Team for the specific pairing
     @Override
     public Team generateA380Team(Pairing pairing) {
 
@@ -657,6 +665,8 @@ public class A380PairingSessionBean implements A380PairingSessionBeanLocal {
         return totalTime;
     }
 
+    
+    //Set max flight hours. min stopover time between two legs and total number of legs
     @Override
     public void setPolicy() {  //retrive from data base and set the global variables
 
