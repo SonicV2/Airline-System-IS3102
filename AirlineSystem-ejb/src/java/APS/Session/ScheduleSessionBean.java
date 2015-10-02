@@ -22,7 +22,6 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-
 /**
  *
  * @author Yanlong
@@ -42,30 +41,29 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
 
     @Override
     public void edit(Schedule edited, Schedule original) {
-        
-        if(!edited.getStartDate().equals(original.getStartDate())){
-        edited.setEndDate(calcEndTime(edited.getStartDate(), edited.getFlight())); 
-        em.merge(edited);
+
+        if (!edited.getStartDate().equals(original.getStartDate())) {
+            edited.setEndDate(calcEndTime(edited.getStartDate(), edited.getFlight()));
+            em.merge(edited);
         }
-        
+
         if (!edited.getAircraft().getTailNo().equals(original.getAircraft().getTailNo())) {
 
-            Aircraft ac= em.find(Aircraft.class, edited.getAircraft().getTailNo());
+            Aircraft ac = em.find(Aircraft.class, edited.getAircraft().getTailNo());
             List<Schedule> temp1 = ac.getSchedules();
             temp1.remove(original);
             temp1.add(edited);
             ac.setSchedules(temp1);
             ac.setStatus("Stand-By");
-            
+
             Aircraft or = em.find(Aircraft.class, original.getAircraft().getTailNo());
             or.setStatus("Out-of-Order");
 
-            
             Long id = edited.getScheduleId();
-            Schedule change = em.find(Schedule.class,id);
+            Schedule change = em.find(Schedule.class, id);
             change.setAircraft(ac);
             em.flush();
-        }  
+        }
     }
 
     @Override
@@ -87,12 +85,12 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
     @Override
     public void deleteSchedule(Long id) {
         schedule = getSchedule(id);
-        
+
         seatAvail = schedule.getSeatAvailability();
         seatAvail.setSchedule(null);
-        
+
         schedule.setSeatAvailability(null);
-        
+
         em.remove(seatAvail); //Ask Quan Ge add in code!!!
         em.remove(schedule);
         em.flush();
@@ -164,7 +162,20 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
         return schedules;
     }
 
-    public Flight getFlight(String flightNo) {
+    @Override
+    public List<Schedule> getScheduleAfter(Date date) {
+        schedules = getSchedules();
+        List<Schedule> tmp = new ArrayList<Schedule>();
+        
+        for (int i = 0; i < schedules.size(); i++) {
+            if (schedules.get(i).getStartDate().after(date)) {
+                tmp.add(schedules.get(i));
+            }
+        }
+        return tmp;
+    }
+
+    private Flight getFlight(String flightNo) {
         flight = new Flight();
         try {
 
@@ -286,58 +297,57 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
 
         return endTime.getTime();
     }
-    
+
     @Override
-    public List<Schedule> filterForPastSchedules (List<Schedule> schedules){
+    public List<Schedule> filterForPastSchedules(List<Schedule> schedules) {
         Date todayDate = new Date();
         String todayDateFormatted = new SimpleDateFormat("yyyyMMdd").format(todayDate);
         int todayDateInt = Integer.parseInt(todayDateFormatted);
-        
+
         List<Schedule> pastSchedules = new ArrayList();
-        for (Schedule eachSchedule : schedules){
+        for (Schedule eachSchedule : schedules) {
             String eachScheduleDate = new SimpleDateFormat("yyyyMMdd").format(eachSchedule.getStartDate());
             int eachScheduleInt = Integer.parseInt(eachScheduleDate);
-            
-            if (eachScheduleInt<=todayDateInt)
+
+            if (eachScheduleInt <= todayDateInt) {
                 pastSchedules.add(eachSchedule);
+            }
         }
         return pastSchedules;
     }
-    
-     @Override
-    public List<Schedule> filterForFutureSchedules (List<Schedule> schedules){
+
+    @Override
+    public List<Schedule> filterForFutureSchedules(List<Schedule> schedules) {
         Date todayDate = new Date();
         String todayDateFormatted = new SimpleDateFormat("yyyyMMdd").format(todayDate);
         int todayDateInt = Integer.parseInt(todayDateFormatted);
-        
+
         List<Schedule> futureSchedules = new ArrayList();
-        for (Schedule eachSchedule : schedules){
+        for (Schedule eachSchedule : schedules) {
             String eachScheduleDate = new SimpleDateFormat("yyyyMMdd").format(eachSchedule.getStartDate());
             int eachScheduleInt = Integer.parseInt(eachScheduleDate);
-            if (eachScheduleInt>todayDateInt){
+            if (eachScheduleInt > todayDateInt) {
                 futureSchedules.add(eachSchedule);
             }
-                
+
         }
         return futureSchedules;
     }
-    
-     @Override
-    public List<Schedule> filterForCurrentDaySchedules (List<Schedule> schedules){
+
+    @Override
+    public List<Schedule> filterForCurrentDaySchedules(List<Schedule> schedules) {
         Date todayDate = new Date();
         String todayDateFormatted = new SimpleDateFormat("dd/MM/yyyy").format(todayDate);
-        
-        
+
         List<Schedule> currentDaySchedules = new ArrayList();
-        for (Schedule eachSchedule : schedules){
+        for (Schedule eachSchedule : schedules) {
             String eachScheduleDate = new SimpleDateFormat("dd/MM/yyyy").format(eachSchedule.getEndDate());
-            
-            if (todayDateFormatted.equals(eachScheduleDate))
+
+            if (todayDateFormatted.equals(eachScheduleDate)) {
                 currentDaySchedules.add(eachSchedule);
+            }
         }
         return currentDaySchedules;
     }
-    
-    
-    
+
 }

@@ -9,8 +9,10 @@ import APS.Session.RouteSessionBeanLocal;
 import APS.Session.FleetSessionBeanLocal;
 import APS.Session.ScheduleSessionBeanLocal;
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
@@ -53,6 +55,7 @@ public class FlightManageBean {
     private EntityManager em;
 
     private String flightNo;
+    private String tempNo;
     private String[] selectedFlightDays;
     private Double flightDuration;
     private Double basicFare;
@@ -92,7 +95,7 @@ public class FlightManageBean {
     }
 
     public void createFlight(ActionEvent event) {
-
+        
         //Front end excception handling
         if (routeId == null) {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please enter Route ID!", "");
@@ -100,11 +103,13 @@ public class FlightManageBean {
             return;
         }
 
-        if (flightNo.isEmpty()) {
-            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please enter Flight Number!", "");
+        if (tempNo.isEmpty()) {
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please enter valid Flight Number!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
             return;
         }
+        
+        flightNo = "MA" + String.valueOf(tempNo); //Create flightNo from the valid no. user imputs
 
         if (selectedFlightDays.length == 0) {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please select Flight Days!", "");
@@ -155,10 +160,10 @@ public class FlightManageBean {
                 }
             }
         }
-        
+
         //Reading in the flight days
         flightDays = "";
-        
+
         for (int i = 0; i < selectedFlightDays.length; i++) {
             if (selectedFlightDays[i].equals("Sunday")) {
                 setString("1");
@@ -228,10 +233,10 @@ public class FlightManageBean {
         if (flightDays.length() == 6) {
             setString("0");
         }
-        
+
         flightSessionBean.addFlight(flightNo, flightDays, basicFare, startDateTime, routeId);
         flightScheduleSessionBean.scheduleFlights(flightNo); //Create schedule and link flight to best aircraftType
-        flightScheduleSessionBean.rotateFlights(); //Rotate flights and assign aircraft to schedule
+        flightScheduleSessionBean.dummyRotate(); //Rotate flights and assign aircraft to schedule
         flightDays = "";
 
         message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Flight Added Successfully!", "");
@@ -256,6 +261,83 @@ public class FlightManageBean {
         setFlights(flightSessionBean.retrieveFlights());
         setSchedule(scheduleSessionBean.getSchedules());
         clear();
+    }
+
+    public void createTestFlight() {
+        TimeZone tz = TimeZone.getTimeZone("GMT+8:00");
+        Calendar cal = Calendar.getInstance(tz);
+
+        //Flights for hub JAPAN
+        //Round flights to Japan everyday
+        cal.set(2015, 10, 2, 7, 2, 0);
+        flightSessionBean.addFlight("MA110", "1111111", 802.80, cal.getTime(), 881L);
+        flightScheduleSessionBean.scheduleFlights("MA110");
+        cal.set(2015, 10, 2, 16, 25, 0);
+        flightSessionBean.addFlight("MA111", "1111111", 802.80, cal.getTime(), 1440L);
+        flightScheduleSessionBean.scheduleFlights("MA111");
+        cal.set(2015, 10, 2, 9, 16, 0);
+        flightSessionBean.addFlight("MA122", "1111111", 802.80, cal.getTime(), 881L);
+        flightScheduleSessionBean.scheduleFlights("MA122");
+        cal.set(2015, 10, 2, 18, 45, 0);
+        flightSessionBean.addFlight("MA128", "1111111", 802.80, cal.getTime(), 1440L);
+        flightScheduleSessionBean.scheduleFlights("MA128");
+
+        //Round flights to San Francisco from Japan 3 times a week
+        cal.set(2015, 10, 2, 17, 5, 0);
+        flightSessionBean.addFlight("MA212", "0101010", 1135.00, cal.getTime(), 1407L);
+        flightScheduleSessionBean.scheduleFlights("MA212");
+        cal.set(2015, 10, 2, 8, 11, 0);
+        flightSessionBean.addFlight("MA221", "0010101", 1024.00, cal.getTime(), 1477L);
+        flightScheduleSessionBean.scheduleFlights("MA221");
+
+        //Flights for hub FRANKFURT
+        //Round flights to Frankfurt every day of the week
+        cal.set(2015, 10, 2, 9, 22, 0);
+        flightSessionBean.addFlight("MA133", "1111111", 1253.00, cal.getTime(), 861L);
+        flightScheduleSessionBean.scheduleFlights("MA133");
+        cal.set(2015, 10, 2, 0, 55, 0);
+        flightSessionBean.addFlight("MA135", "1111111", 1352.45, cal.getTime(), 1467L);
+        flightScheduleSessionBean.scheduleFlights("MA135");
+        cal.set(2015, 10, 2, 13, 8, 0);
+        flightSessionBean.addFlight("MA146", "1111111", 1122.48, cal.getTime(), 861L);
+        flightScheduleSessionBean.scheduleFlights("MA136");
+        cal.set(2015, 10, 2, 7, 05, 0);
+        flightSessionBean.addFlight("MA149", "1111111", 1038.45, cal.getTime(), 1467L);
+        flightScheduleSessionBean.scheduleFlights("MA139");
+
+        //Round flights to New York from frankfurt 3 times every week
+        cal.set(2015, 10, 2, 7, 7, 0);
+        flightSessionBean.addFlight("MA235", "0101010", 730.00, cal.getTime(), 1406L);
+        flightScheduleSessionBean.scheduleFlights("MA235");
+        cal.set(2015, 10, 2, 17, 45, 0);
+        flightSessionBean.addFlight("MA239", "0010101", 724.00, cal.getTime(), 1476L);
+        flightScheduleSessionBean.scheduleFlights("MA239");
+
+        //Round flights to Mumbai 2 times every week
+        cal.set(2015, 10, 2, 11, 2, 0);
+        flightSessionBean.addFlight("MA155", "0010100", 403.00, cal.getTime(), 870L);
+        flightScheduleSessionBean.scheduleFlights("MA155");
+        cal.set(2015, 10, 2, 17, 9, 0);
+        flightSessionBean.addFlight("MA158", "0010100", 403.00, cal.getTime(), 1429L);
+        flightScheduleSessionBean.scheduleFlights("MA158");
+        
+        //Round flights to Shanghai 4 times every week
+        cal.set(2015, 10, 2, 10, 20, 0);
+        flightSessionBean.addFlight("MA162", "1101010", 679.00, cal.getTime(), 1449L);
+        flightScheduleSessionBean.scheduleFlights("MA162");
+        cal.set(2015, 10, 2, 19, 2, 0);
+        flightSessionBean.addFlight("MA166", "1101010", 679.00, cal.getTime(), 1450L);
+        flightScheduleSessionBean.scheduleFlights("MA166");
+        
+        //Round flights to Korea 4 times every week
+        cal.set(2015, 10, 2, 9, 33, 0);
+        flightSessionBean.addFlight("MA183", "1101010", 733.33, cal.getTime(), 882L);
+        flightScheduleSessionBean.scheduleFlights("MA183");
+        cal.set(2015, 10, 2, 20, 36, 0);
+        flightSessionBean.addFlight("MA186", "1101010", 733.33, cal.getTime(), 1441L);
+        flightScheduleSessionBean.scheduleFlights("MA186");
+
+        flightScheduleSessionBean.rotateFlights(); //Rotate flights and assign aircraft to schedule
     }
 
     public String deleteFlight(String flightNo) {
@@ -321,6 +403,15 @@ public class FlightManageBean {
     public void setFlightNo(String flightNo) {
         this.flightNo = flightNo;
     }
+
+    public String getTempNo() {
+        return tempNo;
+    }
+
+    public void setTempNo(String tempNo) {
+        this.tempNo = tempNo;
+    }
+
 
     public String getFlightDays() {
         return flightDays;
