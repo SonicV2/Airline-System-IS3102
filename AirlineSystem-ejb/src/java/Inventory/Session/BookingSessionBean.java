@@ -68,7 +68,7 @@ public class BookingSessionBean implements BookingSessionBeanLocal {
         Booking booking = new Booking();
         Long id = seatAvail.getId();
         seatAvail= em.find(SeatAvailability.class, id);
-        booking.YQcreateBooking(price, serviceType, seatAvail);
+//        booking.YQcreateBooking(price, serviceType, seatAvail);
         em.persist(booking);
         if(serviceType.equals("Economy Saver"))
             seatAvail.setEconomySaverBooked(seatAvail.getEconomySaverBooked()+1);
