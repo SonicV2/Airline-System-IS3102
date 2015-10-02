@@ -24,7 +24,7 @@ import APS.Entity.Schedule;
  * @author YiQuan
  */
 @Stateless
-public class RevenueManagement implements RevenueManagementLocal{
+public class PricingManagement implements PricingManagementLocal{
     
     
     @PersistenceContext(unitName = "AirlineSystem-ejbPU")

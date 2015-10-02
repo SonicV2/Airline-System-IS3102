@@ -5,7 +5,8 @@
  */
 package Inventory.Managedbean;
 
-import Inventory.Session.RevenueManagementLocal;
+import Inventory.Session.BookingSessionBeanLocal;
+import Inventory.Session.PricingManagementLocal;
 import java.util.ArrayList;
 import javax.ejb.EJB;
 import javax.inject.Named;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import javax.annotation.PostConstruct;
 import java.util.List;
+import Inventory.Session.RevenueManagementLocal;
 
 
 /**
@@ -29,17 +31,22 @@ import java.util.List;
 
 public class inventoryManageBean {
     @EJB
-    private RevenueManagementLocal rm; 
-    
+    private PricingManagementLocal rm; 
+    @EJB
+    private RevenueManagementLocal pm;
     private String flightNo;
     private String flightTime;
     private String flightDate;
     
     private int[] realSold;
 
-   
+   @EJB
+    private BookingSessionBeanLocal bm;
    
   
+    public void createFlightData(String Flightno){
+        bm.bookSeats(Flightno);     
+    }
 
     /**
      * @return the flightNo
@@ -82,6 +89,7 @@ public class inventoryManageBean {
     public void setFlightDate(String flightDate) {
         this.flightDate = flightDate;
     }
+    
 
     /**
      * @return the realSold
