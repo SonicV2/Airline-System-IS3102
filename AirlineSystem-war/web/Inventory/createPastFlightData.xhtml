@@ -13,12 +13,8 @@
         <h:form>
         <p:inputText placeholder="Flight No" value="#{inventoryManageBean.flightNo}"  />
         <br/>
-        <p:inputText placeholder="Flight Date DDMMYYYY" value="#{inventoryManageBean.flightDate}"  />
-        <br/>
-        <p:inputText placeholder="Flight Time HHMM" value="#{inventoryManageBean.flightTime}"  />
-        <br/>
         <h:commandButton class="btn btn-primary btn-lg btn-block" value="Submit" 
-                         actionListener="#{inventoryManageBean.createFlightSession}" />
+                         actionListener="#{inventoryManageBean.createFlightData}" />
         </h:form>
     </h:body>
 </html>

@@ -38,7 +38,7 @@ public class Booking implements Serializable {
     private String flightNo;
     @Temporal(TemporalType.TIMESTAMP)
     private Date flightDate;
-    private String bookingStatus;
+    private boolean turnUp;
 
     
     public void createBooking(double price, String serviceType, 
@@ -47,7 +47,7 @@ public class Booking implements Serializable {
         this.setServiceType(serviceType);
         this.setSeatAvail(seatAvail);
         setBookingDate(new Date());
-        setBookingStatus("normal");
+        this.turnUp= false;
         this.setFlightNo(seatAvail.getSchedule().getFlight().getFlightNo());
         this.setFlightDate(seatAvail.getSchedule().getStartDate());
     }
@@ -150,19 +150,15 @@ public class Booking implements Serializable {
         this.flightDate = flightDate;
     }
 
-    /**
-     * @return the bookingStatus
-     */
-    public String getBookingStatus() {
-        return bookingStatus;
+    public boolean isTurnUp() {
+        return turnUp;
     }
 
-    /**
-     * @param bookingStatus the bookingStatus to set
-     */
-    public void setBookingStatus(String bookingStatus) {
-        this.bookingStatus = bookingStatus;
+    public void setTurnUp(boolean turnUp) {
+        this.turnUp = turnUp;
     }
+
+   
    
     
 }
