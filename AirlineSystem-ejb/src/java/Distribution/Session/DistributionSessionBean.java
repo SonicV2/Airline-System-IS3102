@@ -9,7 +9,9 @@ import APS.Entity.Flight;
 import APS.Entity.Route;
 import APS.Entity.Schedule;
 import Inventory.Entity.SeatAvailability;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -84,8 +86,12 @@ public List<Schedule> retrieveDirectFlightsForDate (String originIata, String de
     @Override
     public Schedule getScheduleForFlightForDate (Flight flight, Date startDate){
         List<Schedule> schedulesForFlight = flight.getSchedule();
+        String startDateFormatted = new SimpleDateFormat("dd/MM/yyyy").format(startDate);
+        
         for (Schedule eachScheduleForFlight: schedulesForFlight){
-            if (eachScheduleForFlight.getStartDate().equals(startDate))
+            String eachScheduleStartDate = new SimpleDateFormat("dd/MM/yyyy").format(eachScheduleForFlight.getStartDate());
+            
+            if (eachScheduleStartDate.equals(startDateFormatted))
                 return eachScheduleForFlight;
         }
         return null;            
@@ -197,7 +203,32 @@ public List<Schedule> retrieveDirectFlightsForDate (String originIata, String de
         
         }
         return transitHubs;
-    }     
+    }
+    
+    @Override
+    public List<Schedule> retrieveOneStopFlightSchedules (List <Schedule> legOne, List<Schedule> legTwo){
+        List <Schedule> oneStopSchedules = new ArrayList<Schedule>();
+        final long MIN_TRANSIT_TIME = 3600000;
+        final long MAX_TRANSIT_TIME = 36000000;
+        for (Schedule eachLegOneSchedule: legOne){
+            for (Schedule eachLegTwoSchedule: legTwo){
+                if ((eachLegTwoSchedule.getStartDate().getTime()-eachLegOneSchedule.getEndDate().getTime()>=MIN_TRANSIT_TIME) && (eachLegTwoSchedule.getStartDate().getTime()-eachLegOneSchedule.getEndDate().getTime()<=MAX_TRANSIT_TIME)){
+                    oneStopSchedules.add(eachLegOneSchedule);
+                    oneStopSchedules.add(eachLegTwoSchedule);
+                }
+            }
+        }
+        return oneStopSchedules;
+        
+    } 
+     
+    @Override
+    public Date addOneDayToDate (Date date){
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        c.add(Calendar.DATE, 1);  
+        return c.getTime();
+}
     
     
 }

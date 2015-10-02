@@ -23,9 +23,10 @@ public interface DistributionSessionBeanLocal {
    public List<Schedule> retrieveDirectFlightsForDate (String originIata, String destinationIata, Date startDate, String serviceType, int adults, int children);
    public Schedule getScheduleForFlightForDate (Flight flight, Date startDate);
    public List<Flight> retrieveFlightsForRoute (String originIata, String destinationIata);
-   //public List<Schedule> retrieveOneStopFlightsFor 
+   public List<Schedule> retrieveOneStopFlightSchedules (List <Schedule> legOne, List<Schedule> legTwo); 
    public boolean seatsAvailableForSchedule (Schedule schedule, String serviceType, int noOfSeats);
    public List<String> getHubIatasFromOrigin (String originIATA);
    public List<String> getTransitHubs (List<String> hubsFromOrigin, String destinationIata);
    public List<Route> getAllRoutes();
+   public Date addOneDayToDate (Date date);
 }
