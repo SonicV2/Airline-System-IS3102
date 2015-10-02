@@ -34,7 +34,7 @@
                 <div class="col-md-10">
                     <div class="panel panel-green">
                         <div class="panel-heading">
-                            Please choose a schedule to assign team:
+                            Please choose a pairing to assign team:
                         </div>
 
 
@@ -42,8 +42,8 @@
                             <div class="panel-body">
                                 <h:panelGrid columns="1" style="margin-bottom:10px" cellpadding="5">
                                     <h:outputLabel for="sln1" />
-                                    <p:selectOneRadio id="sln1" value="#{crewScheduleManagedBean.sln1}"  layout="grid" columns="1">
-                                        <f:selectItems  value="#{crewScheduleManagedBean.restPairing}" var="sln" itemLabel=" #{sln.FDate} #{sln.flightHour}   #{sln.flightNumbers} #{sln.flightTimes} #{sln.flightCities} " itemValue="#{sln}"/>
+                                    <p:selectOneRadio id="sln1" value="#{crewScheduleManagedBean.sln1}"  layout="grid" columns="2">
+                                        <f:selectItems itemLabelEscaped="false" value="#{crewScheduleManagedBean.scheduleResult}" var="sln" itemLabel=" #{sln} " itemValue="#{sln}"/>
                                     </p:selectOneRadio>
                                 </h:panelGrid>
 
