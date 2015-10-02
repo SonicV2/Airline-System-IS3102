@@ -13,7 +13,7 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
-import Inventory.Session.RevenueManagementLocal;
+import Inventory.Session.PricingManagementLocal;
 import java.util.Date;
 import javax.annotation.PostConstruct;
 import java.io.Serializable;
@@ -32,7 +32,7 @@ import javax.faces.context.FacesContext;
 public class priceManageBean implements Serializable{
     
     @EJB
-    private RevenueManagementLocal rm;
+    private PricingManagementLocal rm;
     @EJB
     private BookingSessionBeanLocal bm;
     

@@ -13,7 +13,7 @@ import javax.ejb.Local;
  * @author YiQuan
  */
 @Local
-public interface RevenueManagementLocal {
+public interface PricingManagementLocal {
     
     // Generate the amount of seat available which includes overbooking based on demand forecast
     public int[] generateAvailability(int economy, int business, int firstClass);
