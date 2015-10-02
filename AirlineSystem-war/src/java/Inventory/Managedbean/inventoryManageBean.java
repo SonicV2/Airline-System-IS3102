@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import javax.annotation.PostConstruct;
 import java.util.List;
-import Inventory.Session.RevenueManagementLocal;
 
 
 /**
@@ -32,8 +31,6 @@ import Inventory.Session.RevenueManagementLocal;
 public class inventoryManageBean {
     @EJB
     private PricingManagementLocal rm; 
-    @EJB
-    private RevenueManagementLocal pm;
     private String flightNo;
     private String flightTime;
     private String flightDate;
