@@ -56,6 +56,8 @@ public class CrewSignInManagedBean {
     private String msg;
     private Schedule firstSchedule;
     private List<String> scheduleResult;
+    private List<String> scheduleResultDisabled;
+    private String selectedPairing; // select pairing from webpage
 
     /**
      * Creates a new instance of CrewSignInManagedBean
@@ -66,42 +68,117 @@ public class CrewSignInManagedBean {
 
     @PostConstruct
     public void getCCTeam() {
+        FacesMessage message = null;
         String crewName = loginManageBean.getEmployeeUserName();
-
-        System.out.println("---------------------------CrewName ManagedBean: " + crewName);
-        setTeam(getCrewSignInSessionBean().getCCTeam(crewName));
-        viewMembers();
-        getCurrentPairing();
-        scheduleNew();
-    }
-    
-    public void scheduleNew(){
-        String temp;
-        scheduleResult= new ArrayList<String>();
-        for(int i=0 ; i<pairings.size(); i++){
-            for(int j=0;j<pairings.get(i).getFlightNumbers().size();j++){
-                if(j!=0){
-                String temp1=pairings.get(i).getFlightTimes().get(j).substring(10);
-                
-                String temp2= pairings.get(i).getFlightTimes().get(j-1).substring(10);
-                
-                if(!temp1.equals(temp2)){
-                   scheduleResult.add("-----------------------------------------------------------"); 
-                }
-                
-                temp=pairings.get(i).getFlightNumbers().get(j) + "----" +
-                     pairings.get(i).getFlightCities().get(j)+ "\u2708" + pairings.get(i).getFlightCities().get(j+1)+
-                     "-----"+ pairings.get(i).getFlightTimes().get(j);
-                scheduleResult.add(temp);
-                
-                
-                }
-            }
+        if (crewSignInSessionBean.getCCTeam(crewName) == null) {
+            message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "You are not assigned to a team", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        } else {
+            setTeam(getCrewSignInSessionBean().getCCTeam(crewName));
+            viewMembers();
+            getCurrentPairing();
+            scheduleNew();
         }
-    
     }
-    
-    
+
+    public void scheduleNew() {
+        signInDate = new Date();
+        String formattedDate = new SimpleDateFormat("dd/MM/yyyy").format(signInDate);
+        String tempString = "";
+        String tempDisable = "";
+
+        scheduleResult = new ArrayList<String>();
+        scheduleResultDisabled = new ArrayList<String>();
+
+        for (int i = 0; i < pairings.size(); i++) {
+
+            if (pairings.get(i).getFDate().equals(formattedDate)) {    //Bug -->> e.g 24/9/2015 23:00  -- 25/9/2015 00;30 ForDISABLED pairings
+                getFirstPairingSchedule(pairings.get(i));
+                
+                String formattedDate1 = new SimpleDateFormat("HH:mm dd/MM/yyyy").format(firstSchedule.getStartDate());
+               
+                String formattedDate2 = new SimpleDateFormat("HH:mm dd/MM/yyyy").format(signInDate);
+                
+                
+                if (checkTime(formattedDate2, formattedDate1) > 60 || checkTime(formattedDate2, formattedDate1) < 0) {
+                    tempString += "<br /> <br /> \uD83C\uDFC1  \uD83C\uDFC1  \uD83C\uDFC1  \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 "
+                            + "\uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1\uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1\uD83C\uDFC1 \uD83C\uDFC1 "
+                            + "\uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1\uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1  <br /> <br />";
+                    tempString += "\u26F3 Pairing ID: " + pairings.get(i).getId() + " <br /> \uD83D\uDCC6 Pairing Start Date: " + pairings.get(i).getFDate() + "   " + "<br /> \uD83D\uDD50 Pairing Total Flight Hours: " + pairings.get(i).getFlightHour() + "<br />";
+              
+                    for (int j = 0; j < pairings.get(i).getFlightNumbers().size(); j++) {
+                        if (pairings.get(i).getFlightNumbers().size() == 1) {
+
+                            tempString += "<br /> Flight Number: " + pairings.get(i).getFlightNumbers().get(j)
+                                    + "<br />" + "Flight Route: "
+                                    + pairings.get(i).getFlightCities().get(j) + " " + "\u2708".toUpperCase() + " " + pairings.get(i).getFlightCities().get(j + 1)
+                                    + "<br />" + " Flight Schedules: " + pairings.get(i).getFlightTimes().get(j);
+                        }
+                        if (j != 0) {
+                            String temp1 = pairings.get(i).getFlightTimes().get(j).substring(10);
+
+                            String temp2 = pairings.get(i).getFlightTimes().get(j - 1).substring(10);
+
+                            if (!temp1.equals(temp2)) {
+                                tempString += "<br /> ----------------------------------------------------------- <br />";
+                            }
+
+                            tempString += "<br />Flight Number: " + pairings.get(i).getFlightNumbers().get(j)
+                                    + "<br /> " + "Flight Route: "
+                                    + pairings.get(i).getFlightCities().get(j) + " " + "\u2708".toUpperCase() + " " + pairings.get(i).getFlightCities().get(j + 1)
+                                    + "<br />" + " Flight Schedules: " + pairings.get(i).getFlightTimes().get(j);
+
+                        }
+
+                    }
+                    String[] sps = tempString.split("\u26F3 Pairing ID: ");
+                    for (int ii = 1; ii < sps.length; ii++) {
+                        scheduleResult.add("\u26F3 Pairing ID: " + sps[ii]);
+                    }
+                    
+                } else { // Not for disable pairing 
+                    tempDisable += "<br /> <br /> \uD83C\uDFC1  \uD83C\uDFC1  \uD83C\uDFC1  \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 "
+                            + "\uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1\uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1\uD83C\uDFC1 \uD83C\uDFC1 "
+                            + "\uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1\uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1  <br /> <br />";
+                    tempDisable += "\u26F3 Pairing ID: " + pairings.get(i).getId() + " <br /> \uD83D\uDCC6 Pairing Start Date: " + pairings.get(i).getFDate() + "   " + "<br /> \uD83D\uDD50 Pairing Total Flight Hours: " + pairings.get(i).getFlightHour() + "<br />";
+                    
+                    for (int j = 0; j < pairings.get(i).getFlightNumbers().size(); j++) {
+                        if (pairings.get(i).getFlightNumbers().size() == 1) {
+
+                            tempDisable += "<br /> Flight Number: " + pairings.get(i).getFlightNumbers().get(j)
+                                    + "<br />" + "Flight Route: "
+                                    + pairings.get(i).getFlightCities().get(j) + " " + "\u2708".toUpperCase() + " " + pairings.get(i).getFlightCities().get(j + 1)
+                                    + "<br />" + " Flight Schedules: " + pairings.get(i).getFlightTimes().get(j);
+                        }
+                        if (j != 0) {
+                            String temp1 = pairings.get(i).getFlightTimes().get(j).substring(10);
+
+                            String temp2 = pairings.get(i).getFlightTimes().get(j - 1).substring(10);
+
+                            if (!temp1.equals(temp2)) {
+                                tempDisable += "<br /> ----------------------------------------------------------- <br />";
+                            }
+
+                            tempDisable += "<br />Flight Number: " + pairings.get(i).getFlightNumbers().get(j)
+                                    + "<br /> " + "Flight Route: "
+                                    + pairings.get(i).getFlightCities().get(j) + " " + "\u2708".toUpperCase() + " " + pairings.get(i).getFlightCities().get(j + 1)
+                                    + "<br />" + " Flight Schedules: " + pairings.get(i).getFlightTimes().get(j);
+
+                        }
+
+                    }
+                    String[] sps = tempDisable.split("\u26F3 Pairing ID: ");
+                    for (int ii = 1; ii < sps.length; ii++) {
+                        scheduleResultDisabled.add("\u26F3 Pairing ID: " + sps[ii]);
+                    }
+                    
+
+                }
+
+            }
+
+        }
+    }
 
     public void viewMembers() {
         messages = new ArrayList<String>();
@@ -112,8 +189,14 @@ public class CrewSignInManagedBean {
     }
 
     public void viewPairing(ActionEvent event) {
+        FacesMessage message = null;
         pairings = new ArrayList<Pairing>();
-        setPairings(team.getPairing());
+        if (team == null) {
+            message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "No Pairing is selected!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        } else {
+            setPairings(team.getPairing());
+        }
     }
 
     public void getCurrentPairing() {
@@ -122,19 +205,14 @@ public class CrewSignInManagedBean {
         setPairings(team.getPairing());
         for (Pairing p : pairings) {
             String formattedDate = new SimpleDateFormat("dd/MM/yyyy").format(signInDate);
-            System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!Pairing date: " + p.getFDate());
-            System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!Sigin date: " + formattedDate);
 
             if (p.getFDate().equals(formattedDate)) {    //Bug -->> e.g 24/9/2015 23:00  -- 25/9/2015 00;30
                 getFirstPairingSchedule(p);
-                System.out.println(">>>>>>>>First Schedule Info: " + firstSchedule.getFlight().getFlightNo());
                 String formattedDate1 = new SimpleDateFormat("HH:mm dd/MM/yyyy").format(firstSchedule.getStartDate());
-                System.out.println("<<<<<< First Schedule: " + formattedDate1);
 
                 String formattedDate2 = new SimpleDateFormat("HH:mm dd/MM/yyyy").format(signInDate);
-                System.out.println("<<<<<< Sign: " + formattedDate2);
-                System.out.println("<<<<<<< difference: " + checkTime(formattedDate2, formattedDate1));
-                if (checkTime(formattedDate2, formattedDate1) > 60 || checkTime(formattedDate2, formattedDate1) <0 ) {
+
+                if (checkTime(formattedDate2, formattedDate1) > 60 || checkTime(formattedDate2, formattedDate1) < 0) {
                     setSelectPairing(null);
                 } else {
                     setSelectPairing(p);
@@ -179,10 +257,9 @@ public class CrewSignInManagedBean {
                 message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successfully Signed In", "");
             }
 
-         
             System.out.println("++++++UserName: " + loginManageBean.getEmployeeUserName());
         }
-           FacesContext.getCurrentInstance().addMessage(null, message);
+        FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
     public long checkTime(String time1, String time2) {
@@ -394,7 +471,33 @@ public class CrewSignInManagedBean {
     public void setScheduleResult(List<String> scheduleResult) {
         this.scheduleResult = scheduleResult;
     }
-    
-    
+
+    /**
+     * @return the scheduleResultDisabled
+     */
+    public List<String> getScheduleResultDisabled() {
+        return scheduleResultDisabled;
+    }
+
+    /**
+     * @param scheduleResultDisabled the scheduleResultDisabled to set
+     */
+    public void setScheduleResultDisabled(List<String> scheduleResultDisabled) {
+        this.scheduleResultDisabled = scheduleResultDisabled;
+    }
+
+    /**
+     * @return the selectedPairing
+     */
+    public String getSelectedPairing() {
+        return selectedPairing;
+    }
+
+    /**
+     * @param selectedPairing the selectedPairing to set
+     */
+    public void setSelectedPairing(String selectedPairing) {
+        this.selectedPairing = selectedPairing;
+    }
 
 }
