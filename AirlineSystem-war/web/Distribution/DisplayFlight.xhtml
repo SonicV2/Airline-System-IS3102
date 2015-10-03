@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <p:growl id="growl" sticky="true" showDetail="true"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <h:outputStylesheet library ="css"  name="bootstrap.css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
+        <h:outputStylesheet library="css" name="admindb.css" />
+        <h:outputStylesheet library="css" name="morrisjs/morris.css" />
+        <!--        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js" />-->
+        <title>Display Flight</title>
+    </h:head>
+    <body>
+        <h:form>
+            <p:selectOneMenu value="#{mARSManagedBean.originIATA}" editable="true" style="width:200px">
+                <f:selectItem itemLabel="Select Destination City" itemValue="" />
+                <f:selectItems value="#{mARSManagedBean.routes}" var="routes" itemLabel="#{routes.originIATA}" itemValue="#{routes.originIATA}" />
+            </p:selectOneMenu>
+
+            <p:selectOneMenu value="#{mARSManagedBean.destinationIATA}" editable="true" style="width:200px">
+                <f:selectItem itemLabel="Select Destination City" itemValue="" />
+                <f:selectItems value="#{mARSManagedBean.routes}" var="routes" itemLabel="#{routes.destinationIATA}" itemValue="#{routes.destinationIATA}" />
+            </p:selectOneMenu>
+            
+            <h:outputLabel value="Date: " />
+            <p:calendar id="button" value="#{mARSManagedBean.departureDate}" navigator="true" pattern="yyyy-MMM-dd"/>
+
+            <p:selectOneMenu value="#{mARSManagedBean.adults}" style="width:100%">
+                <f:selectItem itemLabel="0" itemValue="0" />
+                <f:selectItem itemLabel="1" itemValue="1" />
+                <f:selectItem itemLabel="2" itemValue="2" />
+                <f:selectItem itemLabel="3" itemValue="3" />
+                <f:selectItem itemLabel="4" itemValue="4" />
+                <f:selectItem itemLabel="5" itemValue="5" />
+
+            </p:selectOneMenu>
+            <p:selectOneMenu value="#{mARSManagedBean.children}" style="width:100%">
+                <f:selectItem itemLabel="0" itemValue="0" />
+                <f:selectItem itemLabel="1" itemValue="1" />
+                <f:selectItem itemLabel="2" itemValue="2" />
+                <f:selectItem itemLabel="3" itemValue="3" />
+                <f:selectItem itemLabel="4" itemValue="4" />
+                <f:selectItem itemLabel="5" itemValue="5" />
+
+            </p:selectOneMenu>
+            <p:selectOneMenu value="#{mARSManagedBean.serviceType}" style="width:100%">
+                <f:selectItem itemLabel="Economy Saver" itemValue="Economy Saver" />
+                <f:selectItem itemLabel="Economy Basic" itemValue="Economy Basic" />
+                <f:selectItem itemLabel="Economy Premium" itemValue="Economy Premium" />
+                <f:selectItem itemLabel="Business" itemValue="Business" />
+                <f:selectItem itemLabel="First Class" itemValue="First Class" />
+            </p:selectOneMenu>
+            <h:commandButton class="btn btn-outline btn-success" value="Search"  action="#{mARSManagedBean.displayFlights()}"/>
+        </h:form>
+    </body>
+</html>

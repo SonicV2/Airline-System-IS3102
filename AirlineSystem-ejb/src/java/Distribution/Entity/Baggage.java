@@ -27,6 +27,11 @@ public class Baggage implements Serializable {
     private double baggageWeight;
     @ManyToOne(cascade = {CascadeType.PERSIST})
     private Booking booking = new Booking();
+    
+    public void createBaggage(double baggageWeight, Booking booking){
+        this.setBaggageWeight(baggageWeight);
+        this.setBooking(booking);
+    }
 
     public Long getId() {
         return id;
