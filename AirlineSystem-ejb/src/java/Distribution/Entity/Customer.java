@@ -9,6 +9,7 @@ import CI.Entity.Salt;
 import FOS.Entity.Checklist;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -17,6 +18,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  *
@@ -32,25 +35,31 @@ public class Customer implements Serializable {
     private String lastName;
     private String hpNumber;
     private String homeNumber;
-    private Long mileagePoints;
+    private int mileagePoints;
      @OneToOne(cascade = {CascadeType.PERSIST})
     private Salt salt;
-    private String username;
     private String email;
     private String password;
     private String address;
+    private String gender;
+    @Temporal(TemporalType.DATE)
+    private Date customerDOB;
+
     @OneToMany(cascade = {CascadeType.PERSIST})
     private List<PNR> pnrs = new ArrayList<PNR>();
     
-    public void createCustomer (String firstName, String lastName, String hpNumber, String homeNumber, String username, String email, String password,String address){
+    public void createCustomer (String firstName, String lastName, String hpNumber, String homeNumber, String email, String password,String address, String gender, Date customerDOB){
         this.firstName = firstName;
         this.lastName = lastName;
         this.hpNumber = hpNumber;
         this.homeNumber = homeNumber;
-        this.username = username;
         this.email = email;
         this.password = password;
-        this.address = address;       
+        this.address = address;  
+        this.gender = gender;
+        this.customerDOB = customerDOB;
+        this.mileagePoints = 0; //set the mileage points to be zero at the start
+        this.pnrs = null; //does not have PNR at the start
  }
 
     public String getFirstName() {
@@ -85,11 +94,11 @@ public class Customer implements Serializable {
         this.homeNumber = homeNumber;
     }
 
-    public Long getMileagePoints() {
+    public int getMileagePoints() {
         return mileagePoints;
     }
 
-    public void setMileagePoints(Long mileagePoints) {
+    public void setMileagePoints(int mileagePoints) {
         this.mileagePoints = mileagePoints;
     }
 
@@ -99,14 +108,6 @@ public class Customer implements Serializable {
 
     public void setSalt(Salt salt) {
         this.salt = salt;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public String getEmail() {
@@ -176,6 +177,34 @@ public class Customer implements Serializable {
     @Override
     public String toString() {
         return "Distribution.Entity.Customer[ id=" + id + " ]";
+    }
+
+    /**
+     * @return the gender
+     */
+    public String getGender() {
+        return gender;
+    }
+
+    /**
+     * @param gender the gender to set
+     */
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    /**
+     * @return the customerDOB
+     */
+    public Date getCustomerDOB() {
+        return customerDOB;
+    }
+
+    /**
+     * @param customerDOB the customerDOB to set
+     */
+    public void setCustomerDOB(Date customerDOB) {
+        this.customerDOB = customerDOB;
     }
     
 }
