@@ -21,6 +21,7 @@
         
         #{schedules.flight.route.originIATA}, #{schedules.flight.route.destinationIATA}, #{mARSManagedBean.directFlightDuration}
     </p:dataList>
+    <h:commandButton class="btn btn-outline btn-success" value="Proceed to select return flight"  action="#{mARSManagedBean.displayReturnFlights()}"/>
 </h:form>
       
     </body>
