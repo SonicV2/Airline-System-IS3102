@@ -152,6 +152,10 @@ public class MARSManagedBean {
         }
     }
     
+    public String displayDepartureFlightsforReturn() {
+        return "";
+    }
+    
     public void addSchedulesToLegOne (List<Schedule> originalSchedules, List<Schedule> schedulesToAdd){
         for (Schedule eachScheduleToAdd: schedulesToAdd){
             originalSchedules.add(eachScheduleToAdd);
