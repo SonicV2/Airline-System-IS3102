@@ -30,16 +30,15 @@ public class Booking implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date bookingDate;
     private double price;
-    private String serviceType;
-    @ManyToOne(cascade = {CascadeType.PERSIST})
+    @ManyToOne
     private SeatAvailability seatAvail = new SeatAvailability();
     private String flightNo;
     @Temporal(TemporalType.TIMESTAMP)
     private Date flightDate;
     private String bookingStatus;
+    private String classCode;
+    private String serviceType;
     
     private String travellerTitle;
     private String travellerFristName;
@@ -53,24 +52,51 @@ public class Booking implements Serializable {
     private double insuranceFare;
     private String foodSelection;
     
-    @OneToMany(cascade = {CascadeType.PERSIST}, mappedBy = "booking")
+    @OneToMany(mappedBy = "booking")
     private List<Baggage> baggages = new ArrayList<Baggage>();
     
-    @ManyToOne(cascade = {CascadeType.PERSIST})
+    @ManyToOne
     private PNR pnr = new PNR();
     
     private double totalWeightAllowed;
     private int totalNumBaggeAlloewd;
     
+   
     
-    public void createBooking(double price, String serviceType, SeatAvailability seatAvail){
-        this.setPrice(price);
-        this.setServiceType(serviceType);
+    public void YQcreateBooking(String serviceType, 
+            SeatAvailability seatAvail){
+        
+        this.serviceType= serviceType;
         this.setSeatAvail(seatAvail);
-        setBookingDate(new Date());
-        this.turnUp= false;
+        this.bookingStatus= "booked";
         this.setFlightNo(seatAvail.getSchedule().getFlight().getFlightNo());
         this.setFlightDate(seatAvail.getSchedule().getStartDate());
+    }
+    
+    
+
+    public String getBookingStatus() {
+        return bookingStatus;
+    }
+
+    public void setBookingStatus(String bookingStatus) {
+        this.bookingStatus = bookingStatus;
+    }
+
+    public String getClassCode() {
+        return classCode;
+    }
+
+    public void setClassCode(String classCode) {
+        this.classCode = classCode;
+    }
+
+    public PNR getPnr() {
+        return pnr;
+    }
+
+    public void setPnr(PNR pnr) {
+        this.pnr = pnr;
     }
 
     /**
@@ -87,19 +113,7 @@ public class Booking implements Serializable {
         this.id = id;
     }
 
-    /**
-     * @return the bookingDate
-     */
-    public Date getBookingDate() {
-        return bookingDate;
-    }
-
-    /**
-     * @param bookingDate the bookingDate to set
-     */
-    public void setBookingDate(Date bookingDate) {
-        this.bookingDate = bookingDate;
-    }
+   
 
     /**
      * @return the price
@@ -171,13 +185,7 @@ public class Booking implements Serializable {
         this.flightDate = flightDate;
     }
 
-    public boolean isTurnUp() {
-        return turnUp;
-    }
-
-    public void setTurnUp(boolean turnUp) {
-        this.turnUp = turnUp;
-    }
+   
 
     public String getTravellerTitle() {
         return travellerTitle;
