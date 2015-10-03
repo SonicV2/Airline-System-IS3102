@@ -12,12 +12,12 @@ import APS.Session.FlightSessionBeanLocal;
 import APS.Session.RouteSessionBeanLocal;
 import APS.Session.ScheduleSessionBeanLocal;
 import Distribution.Session.DistributionSessionBeanLocal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.inject.Named;
-import javax.enterprise.context.Dependent;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.event.ActionEvent;
@@ -33,10 +33,13 @@ public class MARSManagedBean {
 
     @EJB
     private DistributionSessionBeanLocal distributionSessionBean;
-     @EJB
+    
+    @EJB
     private FlightSessionBeanLocal flightSessionBean;
+    
     @EJB
     private RouteSessionBeanLocal routeSessionBean;
+   
     @EJB
     private ScheduleSessionBeanLocal scheduleSessionBean;
     
@@ -69,19 +72,21 @@ public class MARSManagedBean {
     private List<Schedule> legTwoSchedules;
     private List<Schedule> directFlightSchedules;
     private List<Schedule> oneStopFlightSchedules;
-    
-    public MARSManagedBean() {
-    }
-    
+
     @PostConstruct
     public void retrieve() {
-        
+        System.out.println("In post construct!!!!!!!!!!!!!!!!!!!!!!!");
         //Retrieve all the available flights into a list of flights
         setFlights(flightSessionBean.retrieveFlights());
+        System.out.println(flights);
         //For each flight, add the available routes to the list of routes
+        List<Route> temp = new ArrayList<Route>();
         for (Flight eachFlight: flights){
-                routes.add(eachFlight.getRoute());
+                temp.add(eachFlight.getRoute());
             }
+        setRoutes(temp);
+        System.out.println(routes.get(0).getOriginCity());
+         System.out.println(routes.get(0).getDestinationCity());
     }
     
     public void displayFlights(ActionEvent event){
