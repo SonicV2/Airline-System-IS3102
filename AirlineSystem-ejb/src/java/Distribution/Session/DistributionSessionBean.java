@@ -6,6 +6,7 @@
 package Distribution.Session;
 
 import APS.Entity.Flight;
+import APS.Entity.Location;
 import APS.Entity.Route;
 import APS.Entity.Schedule;
 import Inventory.Entity.SeatAvailability;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
@@ -174,6 +176,32 @@ public List<Schedule> retrieveDirectFlightsForDate (String originIata, String de
        return routes;
     }
     
+       @Override
+    public Location getLocationFromIata (String Iata){
+       List<Location> allLocations = new ArrayList<Location>();
+       try {
+
+            Query q = em.createQuery("SELECT a FROM Location a");
+
+            List<Location> results = q.getResultList();
+            if (!results.isEmpty()) {
+                allLocations = results;
+
+            } else {
+                allLocations = null;
+                System.out.println("No locations Available!");
+            }
+
+        } catch (EntityNotFoundException enfe) {
+            System.out.println("\nEntity not found error" + "enfe.getMessage()");
+        }
+       for (Location eachLocation: allLocations){
+           if (eachLocation.getIATA().equals(Iata))
+               return eachLocation;
+       }
+         return allLocations.get(0);
+    }
+    
     
     @Override
     public List<String> getHubIatasFromOrigin (String originIATA){
@@ -212,7 +240,7 @@ public List<Schedule> retrieveDirectFlightsForDate (String originIata, String de
         final long MAX_TRANSIT_TIME = 36000000; //10 hours in milliseconds 
         for (Schedule eachLegOneSchedule: legOne){
             for (Schedule eachLegTwoSchedule: legTwo){
-                if ((eachLegTwoSchedule.getStartDate().getTime()-eachLegOneSchedule.getEndDate().getTime()>=MIN_TRANSIT_TIME) && (eachLegTwoSchedule.getStartDate().getTime()-eachLegOneSchedule.getEndDate().getTime()<=MAX_TRANSIT_TIME)){
+                if (((eachLegTwoSchedule.getStartDate().getTime()-eachLegOneSchedule.getEndDate().getTime()>=MIN_TRANSIT_TIME) && (eachLegTwoSchedule.getStartDate().getTime()-eachLegOneSchedule.getEndDate().getTime()<=MAX_TRANSIT_TIME))&& eachLegOneSchedule.getFlight().getRoute().getDestinationIATA().equals(eachLegTwoSchedule.getFlight().getRoute().getOriginIATA())){
                     oneStopSchedules.add(eachLegOneSchedule);
                     oneStopSchedules.add(eachLegTwoSchedule);
                 }
@@ -230,5 +258,75 @@ public List<Schedule> retrieveDirectFlightsForDate (String originIata, String de
         return c.getTime();
 }
     
-    
+    @Override
+    public Date convertTimeZone(Date date, TimeZone fromTZ , TimeZone toTZ)
+{
+    long fromTZDst = 0;
+    if(fromTZ.inDaylightTime(date))
+    {
+        fromTZDst = fromTZ.getDSTSavings();
+    }
+ 
+    long fromTZOffset = fromTZ.getRawOffset() + fromTZDst;
+ 
+    long toTZDst = 0;
+    if(toTZ.inDaylightTime(date))
+    {
+        toTZDst = toTZ.getDSTSavings();
+    }
+    long toTZOffset = toTZ.getRawOffset() + toTZDst;
+ 
+    return new java.util.Date(date.getTime() + (toTZOffset - fromTZOffset));
 }
+    
+    
+    @Override
+    public String getLayoverTime (Schedule legOne, Schedule legTwo){
+    int hours, mins;
+    long layoverInMilliseconds = legTwo.getStartDate().getTime()-legOne.getEndDate().getTime();
+        
+    hours = (int) (layoverInMilliseconds / (60*60*1000));
+    layoverInMilliseconds %= 60*60*1000;
+    mins = (int) (layoverInMilliseconds / (60*1000));
+    return (hours + " hours "+ mins + " mins "); 
+    }
+    
+    @Override
+    public String getTotalDurationForOneStop (Schedule legOne, Schedule legTwo){
+    int hours, mins;
+    long totalDurationInMilliseconds = legTwo.getEndDate().getTime()-legOne.getStartDate().getTime();
+        
+    hours = (int) (totalDurationInMilliseconds / (60*60*1000));
+    totalDurationInMilliseconds %= 60*60*1000;
+    mins = (int) (totalDurationInMilliseconds / (60*1000));
+    return (hours + " hours "+ mins + " mins ");
+   
+    }
+    
+    @Override
+    public String getTotalDurationForDirect (Schedule schedule){
+        int hours, mins;
+    long totalDurationInMilliseconds = schedule.getEndDate().getTime()-schedule.getStartDate().getTime();
+        
+    hours = (int) (totalDurationInMilliseconds / (60*60*1000));
+    totalDurationInMilliseconds %= 60*60*1000;
+    mins = (int) (totalDurationInMilliseconds / (60*1000));
+    return (hours + " hours "+ mins + " mins ");
+    }
+    
+    public TimeZone getTimeZoneFromIata (String iata){
+        Location location = getLocationFromIata(iata);
+        String zone = location.getTz();
+        TimeZone timeZone = TimeZone.getTimeZone(zone);
+        return timeZone;
+    }
+    
+    public TimeZone getSingaporeTimeZone (){
+        return (TimeZone.getTimeZone("Asia/Singapore"));
+    }
+    
+    }
+    
+    
+    
+
