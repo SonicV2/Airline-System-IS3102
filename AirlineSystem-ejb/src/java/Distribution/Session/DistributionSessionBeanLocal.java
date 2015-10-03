@@ -33,7 +33,8 @@ public interface DistributionSessionBeanLocal {
    public String getTotalDurationForDirect (Schedule schedule);
    public TimeZone getTimeZoneFromIata (String iata);
    public TimeZone getSingaporeTimeZone ();
-  
+   public boolean existsSchedule (String originIata, String destinationIata, Date date, String serviceType, int adults, int children);
+   
    //only for internal processing
    public boolean isIATAAHub (String iata);
    public Schedule getScheduleForFlightForDate (Flight flight, Date startDate);
