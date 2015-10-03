@@ -73,8 +73,11 @@ public class ScheduleManageBean {
     
     @PostConstruct
     public void retrieve(){
+        TimeZone tz = TimeZone.getTimeZone("GMT+8:00"); //Set Timezone to Singapore
+        Calendar currTime = Calendar.getInstance(tz);
+        
         setFlights(flightSessionBean.getFlights());
-        setSchedules(scheduleSessionBean.getSchedules());
+        setSchedules(scheduleSessionBean.getScheduleAfter(currTime.getTime()));
         scheduleSessionBean.changeFlightDays(flights);
         setAircraftlist(fleetSessionBean.getReserveAircrafts("Reserve"));
         setFutureSchedules(scheduleSessionBean.filterForFutureSchedules(schedules));

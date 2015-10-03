@@ -21,7 +21,7 @@ public class RouteSessionBean implements RouteSessionBeanLocal {
     
     Route route; 
     Location location;
-    
+        
     //Add new route entity
     @Override
     public void addRoute(String origin, String destination){
