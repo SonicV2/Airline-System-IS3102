@@ -72,42 +72,57 @@ public class MARSManagedBean {
     private List<Schedule> legTwoSchedules;
     private List<Schedule> directFlightSchedules;
     private List<Schedule> oneStopFlightSchedules;
+    
+    private String directFlightDuration;;
+    private List<String> oneStopFlightDuration;
+    private List<String> oneStopFlightLayover;
+    
+    private List<String> origins;
+    private List<String> destinations;
 
     @PostConstruct
     public void retrieve() {
-        System.out.println("In post construct!!!!!!!!!!!!!!!!!!!!!!!");
         //Retrieve all the available flights into a list of flights
         setFlights(flightSessionBean.retrieveFlights());
-        System.out.println(flights);
         //For each flight, add the available routes to the list of routes
+        
         List<Route> temp = new ArrayList<Route>();
+        List<String> temp1 = new ArrayList<String>();
+        List<String> temp2 = new ArrayList<String>();
+        
         for (Flight eachFlight: flights){
                 temp.add(eachFlight.getRoute());
             }
         setRoutes(temp);
-        System.out.println(routes.get(0).getOriginCity());
-         System.out.println(routes.get(0).getDestinationCity());
+
         legOneSchedules = new ArrayList();
         legTwoSchedules = new ArrayList();
+        oneStopFlightDuration  = new ArrayList();
+        oneStopFlightLayover   = new ArrayList();    
     }
     
-    public String displayFlights(){
+    public String displayDepartureFlights(){
         
-        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!In Function");
-        System.out.println(originIATA);
-        System.out.println(destinationIATA);
+        setDepartureDate(distributionSessionBean.convertTimeZone(departureDate, distributionSessionBean.getTimeZoneFromIata(originIATA), distributionSessionBean.getSingaporeTimeZone()));
+        
         //Check whether there is direct flight
         if (distributionSessionBean.existsDirectFlight(originIATA, destinationIATA)){
             setDirectFlightSchedules(distributionSessionBean.retrieveDirectFlightsForDate(originIATA, destinationIATA, departureDate, serviceType, adults, children));
-             System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!Before redirection");
-            System.out.println(directFlightSchedules);
-            return "DisplayDirectFlight";
+            setDirectFlightDuration(distributionSessionBean.getTotalDurationForDirect(directFlightSchedules.get(0)));
+            
+            for (Schedule eachSchedule: directFlightSchedules){
+                eachSchedule.setStartDate(distributionSessionBean.convertTimeZone(eachSchedule.getStartDate(),distributionSessionBean.getSingaporeTimeZone(), distributionSessionBean.getTimeZoneFromIata(eachSchedule.getFlight().getRoute().getOriginIATA())));
+                eachSchedule.setEndDate(distributionSessionBean.convertTimeZone(eachSchedule.getEndDate(),distributionSessionBean.getSingaporeTimeZone(), distributionSessionBean.getTimeZoneFromIata(eachSchedule.getFlight().getRoute().getDestinationIATA())));
+
+            }
+                return "DisplayDirectFlight";
         }
         else { //Retrieve one stop flights
        
                legOneSchedules.clear();
-        
                legTwoSchedules.clear();
+               oneStopFlightDuration.clear();
+               oneStopFlightLayover.clear();
             transitHubs = distributionSessionBean.getTransitHubs(distributionSessionBean.getHubIatasFromOrigin(originIATA), destinationIATA);
             for (int i=0; i<transitHubs.size(); i++) {
               addSchedulesToLegOne(legOneSchedules, distributionSessionBean.retrieveDirectFlightsForDate(originIATA, transitHubs.get(i), departureDate, serviceType, adults, children));
@@ -115,6 +130,24 @@ public class MARSManagedBean {
               addSchedulesToLegTwo(legTwoSchedules, distributionSessionBean.retrieveDirectFlightsForDate(transitHubs.get(i), destinationIATA, departureDate, serviceType, adults, children));
         }
         setOneStopFlightSchedules(distributionSessionBean.retrieveOneStopFlightSchedules(legOneSchedules, legTwoSchedules));
+        int i;
+        List<Schedule> flightOption = new ArrayList();
+        flightOption.add(new Schedule());
+        flightOption.add(new Schedule());
+        for (i=0;i<oneStopFlightSchedules.size();i++){
+                flightOption.set(i%2, oneStopFlightSchedules.get(i));
+                if (i%2==1){
+                    oneStopFlightDuration.add(distributionSessionBean.getTotalDurationForOneStop(flightOption.get(0), flightOption.get(1)));
+                    oneStopFlightLayover.add(distributionSessionBean.getLayoverTime(flightOption.get(0), flightOption.get(1)));
+                }
+        }
+        
+        for (Schedule eachSchedule: oneStopFlightSchedules){
+                eachSchedule.setStartDate(distributionSessionBean.convertTimeZone(eachSchedule.getStartDate(),distributionSessionBean.getSingaporeTimeZone(), distributionSessionBean.getTimeZoneFromIata(eachSchedule.getFlight().getRoute().getOriginIATA())));
+                eachSchedule.setEndDate(distributionSessionBean.convertTimeZone(eachSchedule.getEndDate(),distributionSessionBean.getSingaporeTimeZone(), distributionSessionBean.getTimeZoneFromIata(eachSchedule.getFlight().getRoute().getDestinationIATA())));
+
+            }
+        
         return "DisplayOneStopFlight";
         }
     }
@@ -326,6 +359,46 @@ public class MARSManagedBean {
 
     public void setOneStopFlightSchedules(List<Schedule> oneStopFlightSchedules) {
         this.oneStopFlightSchedules = oneStopFlightSchedules;
+    }
+
+    public String getDirectFlightDuration() {
+        return directFlightDuration;
+    }
+
+    public void setDirectFlightDuration(String directFlightDuration) {
+        this.directFlightDuration = directFlightDuration;
+    }
+
+    public List<String> getOneStopFlightDuration() {
+        return oneStopFlightDuration;
+    }
+
+    public void setOneStopFlightDuration(List<String> oneStopFlightDuration) {
+        this.oneStopFlightDuration = oneStopFlightDuration;
+    }
+
+    public List<String> getOneStopFlightLayover() {
+        return oneStopFlightLayover;
+    }
+
+    public void setOneStopFlightLayover(List<String> oneStopFlightLayover) {
+        this.oneStopFlightLayover = oneStopFlightLayover;
+    }
+
+    public List<String> getOrigins() {
+        return origins;
+    }
+
+    public void setOrigins(List<String> origins) {
+        this.origins = origins;
+    }
+
+    public List<String> getDestinations() {
+        return destinations;
+    }
+
+    public void setDestinations(List<String> destinations) {
+        this.destinations = destinations;
     }
     
     

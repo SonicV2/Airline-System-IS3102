@@ -88,7 +88,6 @@ public class DistributionSessionBean implements DistributionSessionBeanLocal {
                 }
             }
         }
-
         return schedulesWithSeatsAvailable;
     }
 

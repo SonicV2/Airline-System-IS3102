@@ -11,7 +11,7 @@
     <body>
 <h:form id="form">
     <p:dataList value="#{mARSManagedBean.oneStopFlightSchedules}" var="schedules" type="ordered">
-        #{schedules.startDate}, #{schedules.endDate}, #{schedules.flight.route.originIATA}, #{schedules.flight.route.destinationIATA}
+        #{schedules.startDate}, #{schedules.endDate}, #{schedules.flight.route.originIATA}, #{schedules.flight.route.destinationIATA}, #{mARSManagedBean.oneStopFlightDuration}, #{mARSManagedBean.oneStopFlightLayover}
     </p:dataList>
 </h:form>
       
