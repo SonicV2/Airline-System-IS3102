@@ -47,7 +47,7 @@ public class priceManageBean implements Serializable{
      *
      */
     
-    public String get1Flight(String flightNo, Date fDate){
+    public String get1Flight(Long scheduleID){
          this.flightNo = flightNo;
          this.fDate = fDate;
          getPriceList();

@@ -120,7 +120,7 @@ public class PricingManagement implements PricingManagementLocal{
     }
     
     // Get the price of a ticket of a specific flight and service type
-    public String getPrice(String flightNo,Date fDate, String serviceClass, int realSold){
+    public String getPrice(SeatAvailability sa, String serviceClass, int realSold){
         int pricePercent=100;
         Date current = new Date();
         System.out.println("Percent Sold: "+ realSold);
@@ -129,6 +129,7 @@ public class PricingManagement implements PricingManagementLocal{
             q.setParameter("serviceClass", serviceClass);
             List<BookingClass> classList = q.getResultList();
             int size = classList.size();
+            String flightNo= sa.getSchedule().
             long days = (fDate.getTime()-current.getTime())/ 1000 / 60 / 60 / 24;
             System.out.println("Service Type: "+ serviceClass + " " + days);
             List<BookingClass> updatedList = new ArrayList();

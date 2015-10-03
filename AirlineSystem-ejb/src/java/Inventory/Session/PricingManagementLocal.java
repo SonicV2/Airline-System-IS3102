@@ -19,7 +19,7 @@ public interface PricingManagementLocal {
     public int[] generateAvailability(int economy, int business, int firstClass);
     
     // Get the price of a ticket of a specific flight and service type
-    public String getPrice(String flightNo,Date fDate, String serviceClass, int realSold);
+    public String getPrice(SeatAvailability sa, String serviceClass, int realSold);
     
     // Get the current seat availability of a particular flight at a particlular time and date
     // Returns a int array of 10. There are 5 types of tickets service type. First 5 integers
@@ -31,6 +31,7 @@ public interface PricingManagementLocal {
     
     //Find the seat availability of a particular flight no and time
     public SeatAvailability findSA(Date fDate,String flightNo);
+    
     
     
 }
