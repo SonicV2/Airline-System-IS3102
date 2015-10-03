@@ -33,6 +33,8 @@
                 <div class="col-lg-12">
                     <h2 class="page-header">View Team Details</h2>
                 </div>
+                
+                
 
                 <div class="col-lg-12">
                     <h:form id="form">
@@ -69,23 +71,26 @@
                                     <h:outputText value="#{searchCrewManagedBean.selectTeam.id}" />
 
                                     <h:outputText value="Schedule:" />
-                                    <p:dataList value="#{searchCrewManagedBean.selectTeam.schedule}" var="ss" type="ordered">
+                                    <p:dataList value="#{searchCrewManagedBean.selectTeam.schedule}" paginator="true" rows="5" var="ss" type="ordered">
                                         Flight Number: #{ss.flight.flightNo}  Date:#{ss.startDate} 
                                     </p:dataList>
 
                                     <h:outputText value="Pilot" />
-                                    <p:dataList value="#{searchCrewManagedBean.teamPilots}" var="p" type="ordered">
+                                    <p:dataList value="#{searchCrewManagedBean.teamPilots}"  var="p" type="ordered">
                                         #{p.employeeDisplayFirstName} #{p.employeeDisplayLastName} ( #{p.position} ) (#{p.status})
                                     </p:dataList>
 
                                     <h:outputText value="Cabin Crew" />
-                                    <p:dataList value="#{searchCrewManagedBean.teamCC}" var="c" type="ordered">
+                                    <p:dataList value="#{searchCrewManagedBean.teamCC}" var="c" paginator="true" rows="8" type="ordered">
                                         #{c.employeeDisplayFirstName} #{c.employeeDisplayLastName} ( #{c.position} ) (#{c.status})
                                     </p:dataList>
 
                                 </p:panelGrid>
                             </p:outputPanel>
                         </p:dialog>
+                        
+                        <h:commandButton value="Update record" actionListener="#{searchCrewManagedBean.update}" />
+                        
                     </h:form>   
                 </div>
             </div>
