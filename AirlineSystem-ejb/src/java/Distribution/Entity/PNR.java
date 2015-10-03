@@ -14,6 +14,8 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  *
@@ -31,7 +33,10 @@ public class PNR implements Serializable {
     private String contactNo;
     private String pnrStatus;
     private double totalPrice;
+    
+    @Temporal(TemporalType.TIMESTAMP)
     private Date dateOfBooking;
+    
     private String bookingAvenue; 
 
     public void createPNR(String pnrID, int noOfTravellers, String email, String contactNo, double totalPrice, Date date, String bookingAvenue){
