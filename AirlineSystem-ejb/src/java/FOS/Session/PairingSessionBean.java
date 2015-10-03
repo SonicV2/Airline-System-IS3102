@@ -146,7 +146,6 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
             if (!s.getFlight().getAircraftType().getId().equals("Airbus A380-800")) {
                 String formattedMonth = new SimpleDateFormat("MM").format(s.getStartDate());
                 String formattedYear = new SimpleDateFormat("YYYY").format(s.getStartDate());
-                System.out.println("********YEAR: " + formattedYear);
 
                 if (formattedMonth.equals(selectMonth) && formattedYear.equals(selectYear)) {
 
@@ -184,7 +183,6 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
                 }
             }
         }
-        System.out.println("NUM: " + legss.size());
         return legss;
 
     }
@@ -192,8 +190,6 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
     //it returns a leg the fulfills the condition
     public Leg searchSol(ArrayList<Leg> legs, String destination, int startHour, int finishHour, String date2,
             int numLegs, int numHourFlight) {
-        System.out.println("STARTHOUR: " + startHour);
-        System.out.println("ENDHOUR: " + finishHour);
         Leg sol = null;
         boolean found = false;
         int hours = 0;
@@ -241,7 +237,7 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
         return day;
     }
 
-     //Gerenate pairing and write into the database
+    //Gerenate pairing and write into the database
     public void showSoln(ArrayList<Leg> leg, int numSol, int hFlight) {  //unformated
 
         Pairing pr = new Pairing();
@@ -329,6 +325,23 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
         }
         return results;
     }
+    
+    @Override
+    public List<Pairing> filterPairings(String selectYear, String selectMonth) { // filter based on year and month
+        Query q = em.createQuery("SELECT p FROM Pairing p");
+        List<Pairing> results = new ArrayList<Pairing>();
+        List<Pairing> allPairings = q.getResultList();
+
+        for (Pairing p : allPairings) {
+            String pYear = p.getFDate().split("/")[2];
+            String pMonth = p.getFDate().split("/")[1];
+            
+            if (p.isIsA380() == false && pYear.equals(selectYear) && pMonth.equals(selectMonth)) {
+                results.add(p);
+            }
+        }
+        return results;
+    }
 
     @Override
     public Pairing getPairingByID(String id) {
@@ -344,38 +357,20 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
     }
 
     @Override
+    public void clearPairing() {
+        em.createQuery("Delete  From Pairing p");
+    }
+
+    @Override
     public Team generateTeam(Pairing pairing) {
         String result = validateTeam();
-        if(result.equals("Bad")){
+        if (result.equals("Bad")) {
             return null;
         }
-        
+
         String flightDate = pairing.getFDate();
 //        String flightHour = pairing.getFlightHour();
         List<String> cities = pairing.getFlightCities();
-        List<String> langs = new ArrayList<String>();
-
-        HashMap langMap = new HashMap();
-        langMap.put("Paris", "French");
-
-        langMap.put("Frankfurt", "German");
-        langMap.put("Munich", "German");
-
-        langMap.put("Milan", "Italian");
-        langMap.put("Rome", "Italian");
-
-        langMap.put("Tokyo", "Japanese");
-        langMap.put("Sapporo", "Japanese");
-        langMap.put("Fukuoka", "Japanese");
-        langMap.put("Nagoya", "Japanese");
-        langMap.put("Okinawa", "Japanese");
-        langMap.put("Osaka", "Japanese");
-
-        langMap.put("Beijing", "Chinese");
-        langMap.put("Guangzhou", "Chinese");
-        langMap.put("Shanghai", "Chinese");
-
-        langMap.put("Seoul", "Korean");
 
         List<String> flightDates = new ArrayList<String>();
         List<String> temp = pairing.getFlightTimes();
@@ -383,7 +378,6 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
 
         //to take out the duplicate dates
         for (String s : temp) {
-            System.out.println(">>>>>>>S: " + s);
             differentDates.add(s.substring(10, s.length() - 1));
         }
 
@@ -443,7 +437,6 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
         em.persist(FOList.get(0));
 
         team.setPilots(pilots);
-        
 
         List<CabinCrew> CCs = new ArrayList<CabinCrew>();
         Query q1 = em.createQuery("SELECT p FROM CabinCrew p");
@@ -463,23 +456,52 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
             }
         }
 
-//        for(String city : cities){
-//            if(langMap.get(city)!= null){
-//                langs.add(langMap.get(city).toString());
-//                
-//            }
-//        }
-        CCs.add(leadCCList.get(0));
-        leadCCList.get(0).setAssigned(true);
-        leadCCList.get(0).setTeam(team);
+        List<CabinCrew> leadResults = langSelection(leadCCList, cities);
 
-        em.persist(leadCCList.get(0));
+        if (leadResults.isEmpty()) {
+            CCs.add(leadCCList.get(0));
+            leadCCList.get(0).setAssigned(true);
+            leadCCList.get(0).setTeam(team);
+            em.persist(leadCCList.get(0));
+        } else {
+            CCs.add(leadResults.get(0));
+            leadResults.get(0).setAssigned(true);
+            leadResults.get(0).setTeam(team);
+            em.persist(leadResults.get(0));
 
-        for (int i = 0; i < 6; i++) {
-            CCs.add(CCList.get(i));
-            CCList.get(i).setAssigned(true);
-            CCList.get(i).setTeam(team);
-            em.persist(CCList.get(i));
+        }
+
+        List<CabinCrew> ccResults = langSelection(CCList, cities);
+
+        if (ccResults.isEmpty()) {
+            for (int i = 0; i < 6; i++) {
+                CCs.add(CCList.get(i));
+                CCList.get(i).setAssigned(true);
+                CCList.get(i).setTeam(team);
+                em.persist(CCList.get(i));
+            }
+        } else if (ccResults.size() < 6) {
+            for (CabinCrew c : ccResults) {
+                CCs.add(c);
+                CCList.remove(c);
+                c.setAssigned(true);
+                c.setTeam(team);
+                em.persist(c);
+            }
+
+            for (int i = 0; i < 6 - ccResults.size(); i++) {
+                CCs.add(CCList.get(i));
+                CCList.get(i).setAssigned(true);
+                CCList.get(i).setTeam(team);
+                em.persist(CCList.get(i));
+            }
+        } else if (ccResults.size() == 6) {
+            for (CabinCrew c : ccResults) {
+                CCs.add(c);
+                c.setAssigned(true);
+                c.setTeam(team);
+                em.persist(c);
+            }
         }
 
         CCs.add(FSList.get(0));
@@ -504,19 +526,11 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
                     if (formattedDate.equals(ss)) {
 
                         teamSchedule = team.getSchedule();
-//                    System.out.println("Team Schedule: " + teamSchedule.size());
-
                         teamSchedule.add(sh);
-//                    System.out.println("Team Schedule Date: " + sh.getStartDate());
-
                         sh.setAssigned(true);
-//                    System.out.println("Team Schedule: " + sh.isAssigned());
 
                         team.setSchedule(teamSchedule);
-//                     System.out.println("Team Schedule1: " + teamSchedule.size());
-
                         sh.setTeam(team);
-//                    System.out.println("Team ID: " + team.getId());
 
                         em.merge(sh);
 
@@ -544,7 +558,58 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
         return team;
     }
 
-    
+    public List<CabinCrew> langSelection(List<CabinCrew> crews, List<String> cities) {
+        List<CabinCrew> results = new ArrayList<CabinCrew>();
+        List<String> langs = new ArrayList<String>();
+
+        HashMap langMap = new HashMap();
+        langMap.put("Paris", "French");
+
+        langMap.put("Frankfurt", "German");
+        langMap.put("Munich", "German");
+
+        langMap.put("Milan", "Italian");
+        langMap.put("Rome", "Italian");
+
+        langMap.put("Tokyo", "Japanese");
+        langMap.put("Sapporo", "Japanese");
+        langMap.put("Fukuoka", "Japanese");
+        langMap.put("Nagoya", "Japanese");
+        langMap.put("Okinawa", "Japanese");
+        langMap.put("Osaka", "Japanese");
+
+        langMap.put("Beijing", "Chinese");
+        langMap.put("Guangzhou", "Chinese");
+        langMap.put("Shanghai", "Chinese");
+
+        langMap.put("Seoul", "Korean");
+
+        for (String city : cities) {
+            if (langMap.get(city) != null) {
+                langs.add(langMap.get(city).toString());
+            }
+        }
+
+        for (String l : langs) {
+
+            for (CabinCrew cc : crews) {
+                if (langs.isEmpty()) {
+                    System.out.println("crew break");
+                    break;
+                }
+                if (cc.getLanguages().get(0).equals(l)) {
+                    results.add(cc);
+
+                } else if (cc.getLanguages().get(1).equals(l)) {
+
+                    results.add(cc);
+                }
+            }
+        }
+
+        return results;
+    }
+
     public String validateTeam() {
 
         List<Pilot> pilots = new ArrayList<Pilot>();
@@ -728,62 +793,6 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
         return pp;
     }
 
-//    @Override
-//    public List<List<Pairing>> addMonthlyPairing(List<Pairing> pairing) {
-//        List<List<Pairing>> results = new ArrayList<List<Pairing>>();
-//        List<Pairing> lists = new ArrayList<Pairing>();
-//     
-//        Pairing p1 = pairing.get(0);
-//        Pairing pair2;
-//        boolean first = true;
-//        do {
-//            lists.clear();
-//            if (first == true) {
-//               
-//                lists.add(p1);
-//                pairing.remove(0);
-//                first = false;
-//            }
-//            do {
-//                pair2 = getMonthlyPairing(p1, pairing);
-//                if (pair2 != null) {
-//                    lists.add(pair2);
-//                    p1 = pair2;
-//                    int i = pairing.indexOf(pair2);
-//                    pairing.remove(i);
-//                } else {
-//                    results.add(lists);
-//                }
-//
-//            } while (pair2!= null);
-//        } while (pairing.size() > 0);
-//        return results;
-//    }
-//
-//    public Pairing getMonthlyPairing(Pairing p, List<Pairing> pairings) {
-//
-//        int totalHours = 0;
-//        int flightDay = Integer.parseInt(p.getFDate().substring(0, 2));
-////        int flightHours = Integer.parseInt(p.getFlightHour());
-////        totalHours = totalHours + flightHours;
-//        String lastCity = p.getFlightCities().get(p.getFlightCities().size() - 1);
-//        String temp = p.getFlightTimes().get(p.getFlightTimes().size() - 1);
-//        int arrivalTime = Integer.parseInt(temp.split("-")[1]); //e.g 1500
-//
-//        if (arrivalTime < 1000) {
-//            arrivalTime = arrivalTime + 2400; //time starts with 0 e.g.0500
-//        }
-//
-//        for (Pairing p1 : pairings) {
-//            int flightDay1 = Integer.parseInt(p.getFDate().substring(0, 2)); // 03/09/2015 --> 3
-//            if (flightDay1 == flightDay + 1) {
-//                if (p.getFlightCities().get(0).equals(lastCity)) { // later add time constrains
-//                    return p1;
-//                }
-//            }
-//        }
-//        return null;
-//    }
     /**
      * @return the time_scale_min
      */

@@ -33,6 +33,9 @@ public interface PairingSessionBeanLocal {
 
     public Team generateTeam(Pairing pairing);
 
-//    public List<List<Pairing>> addMonthlyPairing(List<Pairing> pairing);
+    public void clearPairing();
 
+    public List<Pairing> filterPairings(String selectYear, String selectMonth);
+
+//    public List<List<Pairing>> addMonthlyPairing(List<Pairing> pairing);
 }
