@@ -208,8 +208,8 @@ public List<Schedule> retrieveDirectFlightsForDate (String originIata, String de
     @Override
     public List<Schedule> retrieveOneStopFlightSchedules (List <Schedule> legOne, List<Schedule> legTwo){
         List <Schedule> oneStopSchedules = new ArrayList<Schedule>();
-        final long MIN_TRANSIT_TIME = 3600000;
-        final long MAX_TRANSIT_TIME = 36000000;
+        final long MIN_TRANSIT_TIME = 3600000; //1 hour in milliseconds
+        final long MAX_TRANSIT_TIME = 36000000; //10 hours in milliseconds 
         for (Schedule eachLegOneSchedule: legOne){
             for (Schedule eachLegTwoSchedule: legTwo){
                 if ((eachLegTwoSchedule.getStartDate().getTime()-eachLegOneSchedule.getEndDate().getTime()>=MIN_TRANSIT_TIME) && (eachLegTwoSchedule.getStartDate().getTime()-eachLegOneSchedule.getEndDate().getTime()<=MAX_TRANSIT_TIME)){

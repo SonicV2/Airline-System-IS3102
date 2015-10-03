@@ -9,8 +9,8 @@ import static FOS.Entity.Team_.id;
 import Inventory.Entity.Booking;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -31,13 +31,17 @@ public class PNR implements Serializable {
     private String contactNo;
     private String pnrStatus;
     private double totalPrice;
+    private Date dateOfBooking;
+    private String bookingAvenue; 
 
-    public void createPNR(String pnrID, int noOfTravellers, String email, String contactNo, double totalPrice){
+    public void createPNR(String pnrID, int noOfTravellers, String email, String contactNo, double totalPrice, Date date, String bookingAvenue){
         this.pnrID = pnrID;
         this.noOfTravellers = noOfTravellers;
         this.email = email;
         this.contactNo = contactNo;
-        this.totalPrice = totalPrice;                      
+        this.totalPrice = totalPrice;  
+        this.dateOfBooking = date;
+        this.bookingAvenue = bookingAvenue;
     }
     
     public String getPnrID() {
@@ -95,7 +99,23 @@ public class PNR implements Serializable {
     public void setTotalPrice(double totalPrice) {
         this.totalPrice = totalPrice;
     }
-    
+
+    public Date getDateOfBooking() {
+        return dateOfBooking;
+    }
+
+    public void setDateOfBooking(Date dateOfBooking) {
+        this.dateOfBooking = dateOfBooking;
+    }
+
+    public String getBookingAvenue() {
+        return bookingAvenue;
+    }
+
+    public void setBookingAvenue(String bookingAvenue) {
+        this.bookingAvenue = bookingAvenue;
+    }
+     
     
     
 
