@@ -26,7 +26,7 @@ import javax.faces.event.ActionEvent;
  *
  * @author Yunna
  */
-@Named(value = "MARSManagedBean")
+@Named(value = "mARSManagedBean")
 @ManagedBean
 @SessionScoped
 public class MARSManagedBean {
@@ -87,17 +87,27 @@ public class MARSManagedBean {
         setRoutes(temp);
         System.out.println(routes.get(0).getOriginCity());
          System.out.println(routes.get(0).getDestinationCity());
+        legOneSchedules = new ArrayList();
+        legTwoSchedules = new ArrayList();
     }
     
-    public void displayFlights(ActionEvent event){
+    public String displayFlights(){
         
+        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!In Function");
+        System.out.println(originIATA);
+        System.out.println(destinationIATA);
         //Check whether there is direct flight
         if (distributionSessionBean.existsDirectFlight(originIATA, destinationIATA)){
             setDirectFlightSchedules(distributionSessionBean.retrieveDirectFlightsForDate(originIATA, destinationIATA, departureDate, serviceType, adults, children));
+             System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!Before redirection");
+            System.out.println(directFlightSchedules);
+            return "DisplayDirectFlight";
         }
         else { //Retrieve one stop flights
-            legOneSchedules = null;
-            legTwoSchedules = null;
+       
+               legOneSchedules.clear();
+        
+               legTwoSchedules.clear();
             transitHubs = distributionSessionBean.getTransitHubs(distributionSessionBean.getHubIatasFromOrigin(originIATA), destinationIATA);
             for (int i=0; i<transitHubs.size(); i++) {
               addSchedulesToLegOne(legOneSchedules, distributionSessionBean.retrieveDirectFlightsForDate(originIATA, transitHubs.get(i), departureDate, serviceType, adults, children));
@@ -105,6 +115,7 @@ public class MARSManagedBean {
               addSchedulesToLegTwo(legTwoSchedules, distributionSessionBean.retrieveDirectFlightsForDate(transitHubs.get(i), destinationIATA, departureDate, serviceType, adults, children));
         }
         setOneStopFlightSchedules(distributionSessionBean.retrieveOneStopFlightSchedules(legOneSchedules, legTwoSchedules));
+        return "DisplayOneStopFlight";
         }
     }
     

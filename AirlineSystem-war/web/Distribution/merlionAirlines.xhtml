@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8' ?>
 <!--
 To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
@@ -52,7 +52,7 @@ and open the template in the editor.
         <!--//pop-up-->	
     </h:head>
     <h:body>
-        <!--this is the common header of all the MARS pages-->
+        <!--this is the common header of all the mARS pages-->
         <ui:include src="merlionAirlinesHeader.xhtml"/>
         <!-- banner -->
         <div class="banner">
@@ -129,9 +129,9 @@ and open the template in the editor.
                                                                     <div class="book_date">
                                                                         <form>
                                                                             <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
-                                                                            <p:selectOneMenu id="origin" value="#{MARSManagedBean.originIATA}" effect="fold" editable="true">
-                                                                                <f:selectItem itemLabel="Select Departure City" itemValue="" />
-                                                                                <f:selectItems value="#{MARSManagedBean.routes}" var="routes" itemLabel="#{routes.originCity}" itemValue="#{routes.originIATA}" />
+                                                                            <p:selectOneMenu value="#{mARSManagedBean.originIATA}" editable="true" style="width:200px">
+                                                                                <f:selectItem itemLabel="Select Destination City" itemValue="" />
+                                                                                <f:selectItems value="#{mARSManagedBean.routes}" var="routes" itemLabel="#{routes.originCity}" itemValue="#{routes.originIATA}" />
                                                                             </p:selectOneMenu>
 <!--                                                                            <input type="text" placeholder="Type Departure City" class="typeahead1 input-md form-control tt-input" required=""/>-->
                                                                         </form>
@@ -142,9 +142,9 @@ and open the template in the editor.
                                                                     <div class="book_date">
                                                                         <form>
                                                                             <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
-                                                                            <p:selectOneMenu value="#{MARSManagedBean.destinationIATA}" editable="true">
+                                                                            <p:selectOneMenu value="#{mARSManagedBean.destinationIATA}" editable="true" style="width:200px">
                                                                                 <f:selectItem itemLabel="Select Destination City" itemValue="" />
-                                                                                <f:selectItems value="#{MARSManagedBean.routes}" var="routes" itemLabel="#{routes.destinationCity}" itemValue="#{routes.destinationIATA}" />
+                                                                                <f:selectItems value="#{mARSManagedBean.routes}" var="routes" itemLabel="#{routes.destinationCity}" itemValue="#{routes.destinationIATA}" />
                                                                             </p:selectOneMenu>
 <!--                                                                            <input type="text" placeholder="Type Destination City" class="typeahead1 input-md form-control tt-input" required=""/>-->
                                                                         </form>
@@ -160,9 +160,7 @@ and open the template in the editor.
                                                                     <div class="book_date">
                                                                         <form>
                                                                             <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
-                                                                            <input type="date" value="Select date" onfocus="this.value = '';" onblur="if (this.value == '') {
-                                                                                        this.value = 'Select date';
-                                                                                    }"/>
+                                                                            <p:calendar id="button" value="#{mARSManagedBean.departureDate}" navigator="true" pattern="yyyy-MMM-dd"/>
                                                                         </form>
                                                                     </div>		
                                                                 </li>
@@ -171,9 +169,7 @@ and open the template in the editor.
                                                                     <div class="book_date">
                                                                         <form>
                                                                             <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
-                                                                            <input type="date" value="Select date" onfocus="this.value = '';" onblur="if (this.value == '') {
-                                                                                        this.value = 'Select date';
-                                                                                    }"/>
+                                                                            <p:calendar id="button" value="#{mARSManagedBean.returnDate}" navigator="true" pattern="yyyy-MMM-dd"/>
                                                                         </form>
                                                                     </div>					
                                                                 </li>
@@ -181,13 +177,14 @@ and open the template in the editor.
                                                                     <h5>Adults (18+)</h5>
                                                                     <!-- start section_room -->
                                                                     <div class="section_room">
-                                                                        <p:selectOneMenu value="#{MARSManagedBean.adults}" style="width:100%">
+                                                                        <p:selectOneMenu value="#{mARSManagedBean.adults}" style="width:100%">
+                                                                            <f:selectItem itemLabel="0" itemValue="0" />
                                                                             <f:selectItem itemLabel="1" itemValue="1" />
                                                                             <f:selectItem itemLabel="2" itemValue="2" />
                                                                             <f:selectItem itemLabel="3" itemValue="3" />
                                                                             <f:selectItem itemLabel="4" itemValue="4" />
                                                                             <f:selectItem itemLabel="5" itemValue="5" />
-                                                                            <f:selectItem itemLabel="6" itemValue="6" />
+                                                                            
                                                                         </p:selectOneMenu>
                                                                     </div>	
                                                                 </li>
@@ -195,13 +192,14 @@ and open the template in the editor.
                                                                     <h5>Children (0-17)</h5>
                                                                     <!-- start section_room -->
                                                                     <div class="section_room">
-                                                                        <p:selectOneMenu value="#{MARSManagedBean.children}" style="width:100%">
+                                                                        <p:selectOneMenu value="#{mARSManagedBean.children}" style="width:100%">
+                                                                            <f:selectItem itemLabel="0" itemValue="0" />
                                                                             <f:selectItem itemLabel="1" itemValue="1" />
                                                                             <f:selectItem itemLabel="2" itemValue="2" />
                                                                             <f:selectItem itemLabel="3" itemValue="3" />
                                                                             <f:selectItem itemLabel="4" itemValue="4" />
                                                                             <f:selectItem itemLabel="5" itemValue="5" />
-                                                                            <f:selectItem itemLabel="6" itemValue="6" />
+
                                                                         </p:selectOneMenu>
                                                                     </div>	
                                                                 </li>
@@ -209,7 +207,7 @@ and open the template in the editor.
                                                                     <h5>Class</h5>
                                                                     <!-- start section_room -->
 <!--                                                                    <div class="section_room">-->
-                                                                        <p:selectOneMenu value="#{MARSManagedBean.serviceType}" style="width:100%">
+                                                                        <p:selectOneMenu value="#{mARSManagedBean.serviceType}" style="width:100%">
                                                                             <f:selectItem itemLabel="Economy Saver" itemValue="Economy Saver" />
                                                                             <f:selectItem itemLabel="Economy Basic" itemValue="Economy Basic" />
                                                                             <f:selectItem itemLabel="Economy Premium" itemValue="Economy Premium" />
@@ -225,9 +223,7 @@ and open the template in the editor.
                                                             <ul>	
                                                                 <li class="span1_of_3">
                                                                     <div class="date_btn">
-                                                                        <form>
-                                                                            <input type="submit" value="Search" />
-                                                                        </form>
+                                                                        <h:commandButton class="btn btn-outline btn-success" value="Search"  action="#{mARSManagedBean.displayFlights()}"/>
                                                                     </div>
                                                                 </li>
                                                                 <div class="clearfix"></div>
@@ -266,7 +262,10 @@ and open the template in the editor.
                                                                     <div class="book_date">
                                                                         <form>
                                                                             <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
-                                                                            <input type="text" placeholder="Type Departure City" class="typeahead1 input-md form-control tt-input" required=""/>
+                                                                            <p:selectOneMenu id="origin" value="#{mARSManagedBean.originIATA}" effect="fold" editable="true">
+                                                                                <f:selectItem itemLabel="Select Departure City" itemValue="" />
+                                                                                <f:selectItems value="#{mARSManagedBean.routes}" var="routes" itemLabel="#{routes.originCity}" itemValue="#{routes.originIATA}" />
+                                                                            </p:selectOneMenu>
                                                                         </form>
                                                                     </div>					
                                                                 </li>
@@ -275,7 +274,10 @@ and open the template in the editor.
                                                                     <div class="book_date">
                                                                         <form>
                                                                             <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
-                                                                            <input type="text" placeholder="Type Destination City" class="typeahead1 input-md form-control tt-input" required=""/>
+                                                                            <p:selectOneMenu value="#{mARSManagedBean.destinationIATA}" editable="true">
+                                                                                <f:selectItem itemLabel="Select Destination City" itemValue="" />
+                                                                                <f:selectItems value="#{mARSManagedBean.routes}" var="routes" itemLabel="#{routes.destinationCity}" itemValue="#{routes.destinationIATA}" />
+                                                                            </p:selectOneMenu>
                                                                         </form>
                                                                     </div>		
                                                                 </li>
@@ -289,9 +291,7 @@ and open the template in the editor.
                                                                     <div class="book_date">
                                                                         <form>
                                                                             <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
-                                                                            <input type="date" value="Select date" onfocus="this.value = '';" onblur="if (this.value == '') {
-                                                                                        this.value = 'Select date';
-                                                                                    }"/>
+                                                                            <p:calendar id="button" value="#{mARSManagedBean.departureDate}" navigator="true" pattern="yyyy-MMM-dd"/>
                                                                         </form>
                                                                     </div>		
                                                                 </li>
@@ -299,38 +299,43 @@ and open the template in the editor.
                                                                     <h5>Adults (18+)</h5>
                                                                     <!-- start section_room -->
                                                                     <div class="section_room">
-                                                                        <select id="country" onchange="change_country(this.value)" class="frm-field required">
-                                                                            <option value="null">1</option>
-                                                                            <option value="null">2</option>         
-                                                                            <option value="AX">3</option>
-                                                                            <option value="AX">4</option>
-                                                                            <option value="AX">5</option>
-                                                                            <option value="AX">6</option>
-                                                                        </select>
+                                                                        <p:selectOneMenu value="#{mARSManagedBean.adults}" style="width:100%">
+                                                                            <f:selectItem itemLabel="0" itemValue="0" />
+                                                                            <f:selectItem itemLabel="1" itemValue="1" />
+                                                                            <f:selectItem itemLabel="2" itemValue="2" />
+                                                                            <f:selectItem itemLabel="3" itemValue="3" />
+                                                                            <f:selectItem itemLabel="4" itemValue="4" />
+                                                                            <f:selectItem itemLabel="5" itemValue="5" />
+                                                                            
+                                                                        </p:selectOneMenu>
                                                                     </div>	
                                                                 </li>
                                                                 <li class="span1_of_1 left tab-children">
                                                                     <h5>Children (0-17)</h5>
                                                                     <!-- start section_room -->
                                                                     <div class="section_room">
-                                                                        <select id="country" onchange="change_country(this.value)" class="frm-field required">
-                                                                            <option value="null">1</option>
-                                                                            <option value="null">2</option>         
-                                                                            <option value="AX">3</option>
-                                                                            <option value="AX">4</option>
-                                                                            <option value="AX">5</option>
-                                                                            <option value="AX">6</option>
-                                                                        </select>
+                                                                        <p:selectOneMenu value="#{mARSManagedBean.children}" style="width:100%">
+                                                                            <f:selectItem itemLabel="0" itemValue="0" />
+                                                                            <f:selectItem itemLabel="1" itemValue="1" />
+                                                                            <f:selectItem itemLabel="2" itemValue="2" />
+                                                                            <f:selectItem itemLabel="3" itemValue="3" />
+                                                                            <f:selectItem itemLabel="4" itemValue="4" />
+                                                                            <f:selectItem itemLabel="5" itemValue="5" />
+                                                                            
+                                                                        </p:selectOneMenu>
                                                                     </div>	
                                                                 </li>
                                                                 <li class="span1_of_1 economy">
                                                                     <h5>Class</h5>
                                                                     <!-- start section_room -->
                                                                     <div class="section_room">
-                                                                        <select id="country" onchange="change_country(this.value)" class="frm-field required">
-                                                                            <option value="null">Economy</option>
-                                                                            <option value="null">Business</option>     
-                                                                        </select>
+                                                                        <p:selectOneMenu value="#{mARSManagedBean.serviceType}" style="width:100%">
+                                                                            <f:selectItem itemLabel="Economy Saver" itemValue="Economy Saver" />
+                                                                            <f:selectItem itemLabel="Economy Basic" itemValue="Economy Basic" />
+                                                                            <f:selectItem itemLabel="Economy Premium" itemValue="Economy Premium" />
+                                                                            <f:selectItem itemLabel="Business" itemValue="Business" />
+                                                                            <f:selectItem itemLabel="First Class" itemValue="First Class" />
+                                                                        </p:selectOneMenu>
                                                                     </div>	
                                                                 </li>
                                                                 <div class="clearfix"></div>
@@ -340,9 +345,7 @@ and open the template in the editor.
                                                             <ul>	
                                                                 <li class="span1_of_3">
                                                                     <div class="date_btn">
-                                                                        <form>
-                                                                            <input type="submit" value="Search" />
-                                                                        </form>
+                                                                            <h:commandButton class="btn btn-outline btn-success" value="Search" action="#{mARSManagedBean.displayFlights()}"/>
                                                                     </div>
                                                                 </li>
                                                                 <div class="clearfix"></div>
