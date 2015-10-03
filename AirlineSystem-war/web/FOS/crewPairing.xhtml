@@ -90,7 +90,11 @@
                             <br></br>
                             <div class="form-group">
                                 <h:outputLabel class="col-md-3 control-label" value="Choose Month: " />
-                                <p:inputText  required="true" requiredMessage="Please fill in this field!" class="form-control" placeholder="Choose Month" value="#{crewScheduleManagedBean.selectMonth}" style="width: 200px;" />
+                                <p:selectOneMenu  required="true" requiredMessage="Please fill in this field!" id="month" value="#{crewScheduleManagedBean.selectMonth}" style="width:150px">
+                                    <f:selectItem itemLabel="Select Month" itemValue="" noSelectionOption="true" />
+                                    <f:selectItems value="#{crewScheduleManagedBean.months}" />
+                                </p:selectOneMenu>
+                                
                             </div>
                             <div class="form-group">
                                 <h:outputLabel class="col-md-3 control-label" value="Choose Year: " />

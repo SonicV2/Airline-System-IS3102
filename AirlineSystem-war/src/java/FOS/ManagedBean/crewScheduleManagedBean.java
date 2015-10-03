@@ -58,13 +58,31 @@ public class crewScheduleManagedBean {
     private List<Pairing> restPairingA380;
 
     private List<String> scheduleResult;
-//    private List<List<Pairing>> lists;
+
+    private List<String> months;
 
     /**
      * Creates a new instance of crewScheduleManagedBean
      */
     public crewScheduleManagedBean() {
 
+    }
+
+    @PostConstruct
+    public void setMonth() {
+        months = new ArrayList<String>();
+        months.add("01");
+        months.add("02");
+        months.add("03");
+        months.add("04");
+        months.add("05");
+        months.add("06");
+        months.add("07");
+        months.add("08");
+        months.add("09");
+        months.add("10");
+        months.add("11");
+        months.add("12");
     }
 
     public void getAssignedTeam() {
@@ -86,9 +104,6 @@ public class crewScheduleManagedBean {
         clear();
     }
 
-//    public void crewPairing(ActionEvent event){
-//        pairingSessionBean.legMain(selectMonth);
-//    }
     public void retrivePolicy(ActionEvent event) {
         setPp(pairingSessionBean.retrievePolicy());
         max_hour = (pp.getHours_max_flight() / 100) + "";
@@ -97,40 +112,65 @@ public class crewScheduleManagedBean {
 
 // crew pairing.html --> display all legs
     public void getSlns(ActionEvent event) {
+        FacesMessage message = null;
         Date date = new Date();
-        pairingSessionBean.legMain(selectMonth, selectYear);
-        setSlns(pairingSessionBean.getPairings());
-//        bigBoss();
-        restPairing = new ArrayList<Pairing>();
+        int currentYear = Integer.parseInt(new SimpleDateFormat("yyyy").format(date));
+        int currentMonth = Integer.parseInt(new SimpleDateFormat("MM").format(date));
 
-        for (Pairing ppp : slns) {
+        if (Integer.parseInt(selectYear) == currentYear) {
+            if (Integer.parseInt(selectMonth) == currentMonth + 1) {
+                pairingSessionBean.legMain(selectMonth, selectYear);
+                setSlns(pairingSessionBean.filterPairings(selectYear, selectMonth));
 
-            String formattedDate2 = new SimpleDateFormat("dd/MM/yyyy").format(date);
-            System.out.println("Schedule Date2: " + formattedDate2);
-            System.out.println("ppp.getdate: " + ppp.getFDate());
+                restPairing = new ArrayList<Pairing>();
 
-            if (checkTime(ppp.getFDate(), formattedDate2) <= 0) {
-                if (ppp.isPaired() == false) {
-                    restPairing.add(ppp);
+                for (Pairing ppp : slns) {
+
+                    String formattedDate2 = new SimpleDateFormat("dd/MM/yyyy").format(date);
+
+                    if (checkTime(ppp.getFDate(), formattedDate2) <= 0) {
+                        if (ppp.isPaired() == false) {
+                            restPairing.add(ppp);
+                        }
+                    }
+
                 }
-            }
+                scheduleNew();
 
+            } else {
+                message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Cannot gerenate pairings for select month!", "");
+                FacesContext.getCurrentInstance().addMessage(null, message);
+            }
+        } else {
+            message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Cannot gerenate pairings for select year ", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
         }
-        scheduleNew();
 
     }
 
+    public void clearPairing() {
+        pairingSessionBean.clearPairing();
+    }
+
     public void scheduleNew() {
-        System.out.println("$$$$$$$$$$$$$");
-        System.out.println("REST: " + restPairing.size());
         String temp = "";
 
         scheduleResult = new ArrayList<String>();
 
         for (int i = 0; i < restPairing.size(); i++) {
-            temp += "\u26F3 Pairing ID: " + restPairing.get(i).getId() + " <br /> \uD83D\uDCC6 Pairing Start Date: " + restPairing.get(i).getFDate() + "   " + "\uD83D\uDD50 Pairing Total Flight Hours: " + restPairing.get(i).getFlightHour() + "<br />";
-            System.out.println("$$$$$$$$$$$$$$$$$$$$PAIRING DATE: " + restPairing.get(i).getFDate());
+            temp += "<br /> <br /> \uD83C\uDFC1  \uD83C\uDFC1  \uD83C\uDFC1  \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 "
+                    + "\uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1\uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1\uD83C\uDFC1 \uD83C\uDFC1 "
+                    + "\uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1\uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1  <br /> <br />";
+            temp += "\u26F3 Pairing ID: " + restPairing.get(i).getId() + " <br /> \uD83D\uDCC6 Pairing Start Date: " + restPairing.get(i).getFDate() + "   " + "<br /> \uD83D\uDD50 Pairing Total Flight Hours: " + restPairing.get(i).getFlightHour() + "<br />";
+
             for (int j = 0; j < restPairing.get(i).getFlightNumbers().size(); j++) {
+                if (restPairing.get(i).getFlightNumbers().size() == 1) {
+
+                    temp += "<br />Flight Number: " + restPairing.get(i).getFlightNumbers().get(j)
+                            + "<br /> " + "Flight Route: "
+                            + restPairing.get(i).getFlightCities().get(j) + " " + "\u2708".toUpperCase() + " " + restPairing.get(i).getFlightCities().get(j + 1)
+                            + "<br />" + " Flight Schedules: " + restPairing.get(i).getFlightTimes().get(j);
+                }
                 if (j != 0) {
                     String temp1 = restPairing.get(i).getFlightTimes().get(j).substring(10);
 
@@ -150,9 +190,11 @@ public class crewScheduleManagedBean {
             }
 
         }
+
         String[] sps = temp.split("\u26F3 Pairing ID: ");
-        int index = sps.length - 1;
-        for (int i = 1; i < index + 1; i++) {
+
+        for (int i = 1; i < sps.length; i++) {
+
             scheduleResult.add("\u26F3 Pairing ID: " + sps[i]);
         }
 
@@ -170,7 +212,6 @@ public class crewScheduleManagedBean {
             long diffHours = diff / (60 * 60 * 1000) % 24;
             long diffDays = diff / (24 * 60 * 60 * 1000);
             long result = diffDays * 24 * 60 + diffHours * 60 + diffMinutes;
-            System.out.println("REsult: " + result);
             return result;
         } catch (Exception e) {
             e.printStackTrace();
@@ -208,10 +249,9 @@ public class crewScheduleManagedBean {
             FacesContext.getCurrentInstance().addMessage(null, message);
         } else {
             String select = sln1.split("<br /> \uD83D\uDCC6 Pairing Start Date:")[0];
-            System.out.println("????????????? " + select);
-            
+
             String pairingID = select.split("\u26F3 Pairing ID: ")[1];
-            System.out.println("?????????????ID " + pairingID);
+
             sln = pairingSessionBean.getPairingByID(pairingID.trim());
         }
     }
@@ -250,15 +290,6 @@ public class crewScheduleManagedBean {
         this.num_max_legs = 0;
         this.time_scale_min = 0;
     }
-//    public void bigBoss() {
-//        System.out.println("HHHHHH");
-//        setLists(pairingSessionBean.addMonthlyPairing(slns));
-//        for(List<Pairing> p: lists){
-//            for(Pairing p1: p){
-//                System.out.println("%%%%%%%: "+p1.getFDate() +" " +p1.getFlightCities());
-//            }
-//        }
-//    }
 
     /**
      * @return the time_scale_min
@@ -469,6 +500,20 @@ public class crewScheduleManagedBean {
 
     public void setMax_hour(String max_hour) {
         this.max_hour = max_hour;
+    }
+
+    /**
+     * @return the months
+     */
+    public List<String> getMonths() {
+        return months;
+    }
+
+    /**
+     * @param months the months to set
+     */
+    public void setMonths(List<String> months) {
+        this.months = months;
     }
 
 }
