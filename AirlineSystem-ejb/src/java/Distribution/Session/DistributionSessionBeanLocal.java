@@ -42,4 +42,6 @@ public interface DistributionSessionBeanLocal {
    public boolean seatsAvailableForSchedule (Schedule schedule, String serviceType, int noOfSeats); 
    public List<Route> getAllRoutes();
    public Location getLocationFromIata (String Iata);
+   public boolean existsOneStopFlight (String originIATA, String destinationIATA, Date date, String serviceType, int adults, int children);
+   public List<Schedule> addSchedulesToList(List<Schedule> originalSchedules, List<Schedule> schedulesToAdd);
 }
