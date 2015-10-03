@@ -13,6 +13,7 @@ import CI.Session.EmployeeSessionBeanLocal;
 import FOS.Entity.Pairing;
 import FOS.Entity.Team;
 import FOS.Session.CrewSignInSessionBeanLocal;
+import FOS.Session.PairingSessionBeanLocal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -37,6 +38,9 @@ import javax.faces.event.ActionEvent;
 public class CrewSignInManagedBean {
 
     @EJB
+    private PairingSessionBeanLocal pairingSessionBean;
+
+    @EJB
     private EmployeeSessionBeanLocal employeeSessionBean;
     @EJB
     private CrewSignInSessionBeanLocal crewSignInSessionBean;
@@ -57,7 +61,9 @@ public class CrewSignInManagedBean {
     private Schedule firstSchedule;
     private List<String> scheduleResult;
     private List<String> scheduleResultDisabled;
-    private String selectedPairing; // select pairing from webpage
+    private String selectedPairing; // select pairingID from webpage
+
+    private String pairingID;
 
     /**
      * Creates a new instance of CrewSignInManagedBean
@@ -92,92 +98,96 @@ public class CrewSignInManagedBean {
 
         for (int i = 0; i < pairings.size(); i++) {
 
-            if (pairings.get(i).getFDate().equals(formattedDate)) {    //Bug -->> e.g 24/9/2015 23:00  -- 25/9/2015 00;30 ForDISABLED pairings
-                getFirstPairingSchedule(pairings.get(i));
-                
-                String formattedDate1 = new SimpleDateFormat("HH:mm dd/MM/yyyy").format(firstSchedule.getStartDate());
-               
-                String formattedDate2 = new SimpleDateFormat("HH:mm dd/MM/yyyy").format(signInDate);
-                
-                
-                if (checkTime(formattedDate2, formattedDate1) > 60 || checkTime(formattedDate2, formattedDate1) < 0) {
-                    tempString += "<br /> <br /> \uD83C\uDFC1  \uD83C\uDFC1  \uD83C\uDFC1  \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 "
-                            + "\uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1\uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1\uD83C\uDFC1 \uD83C\uDFC1 "
-                            + "\uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1\uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1  <br /> <br />";
-                    tempString += "\u26F3 Pairing ID: " + pairings.get(i).getId() + " <br /> \uD83D\uDCC6 Pairing Start Date: " + pairings.get(i).getFDate() + "   " + "<br /> \uD83D\uDD50 Pairing Total Flight Hours: " + pairings.get(i).getFlightHour() + "<br />";
-              
-                    for (int j = 0; j < pairings.get(i).getFlightNumbers().size(); j++) {
-                        if (pairings.get(i).getFlightNumbers().size() == 1) {
+            //Bug -->> e.g 24/9/2015 23:00  -- 25/9/2015 00;30 ForDISABLED pairings
+            getFirstPairingSchedule(pairings.get(i));
 
-                            tempString += "<br /> Flight Number: " + pairings.get(i).getFlightNumbers().get(j)
-                                    + "<br />" + "Flight Route: "
-                                    + pairings.get(i).getFlightCities().get(j) + " " + "\u2708".toUpperCase() + " " + pairings.get(i).getFlightCities().get(j + 1)
-                                    + "<br />" + " Flight Schedules: " + pairings.get(i).getFlightTimes().get(j);
-                        }
-                        if (j != 0) {
-                            String temp1 = pairings.get(i).getFlightTimes().get(j).substring(10);
+            String formattedDate1 = new SimpleDateFormat("HH:mm dd/MM/yyyy").format(firstSchedule.getStartDate());
 
-                            String temp2 = pairings.get(i).getFlightTimes().get(j - 1).substring(10);
+            String formattedDate2 = new SimpleDateFormat("HH:mm dd/MM/yyyy").format(signInDate);
 
-                            if (!temp1.equals(temp2)) {
-                                tempString += "<br /> ----------------------------------------------------------- <br />";
-                            }
+            if (checkTime(formattedDate2, formattedDate1) > 60 || checkTime(formattedDate2, formattedDate1) < 0) {
 
-                            tempString += "<br />Flight Number: " + pairings.get(i).getFlightNumbers().get(j)
-                                    + "<br /> " + "Flight Route: "
-                                    + pairings.get(i).getFlightCities().get(j) + " " + "\u2708".toUpperCase() + " " + pairings.get(i).getFlightCities().get(j + 1)
-                                    + "<br />" + " Flight Schedules: " + pairings.get(i).getFlightTimes().get(j);
+                tempString += "<br /> <br /> \uD83C\uDFC1  \uD83C\uDFC1  \uD83C\uDFC1  \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 "
+                        + "\uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1\uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1\uD83C\uDFC1 \uD83C\uDFC1 "
+                        + "\uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1\uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1  <br /> <br />";
+                tempString += "\u26F3 Pairing ID: [" + pairings.get(i).getId() + "] <br /> \uD83D\uDCC6 Pairing Start Date: " + pairings.get(i).getFDate() + "   " + "<br /> \uD83D\uDD50 Pairing Total Flight Hours: " + pairings.get(i).getFlightHour() + "<br />";
 
+                for (int j = 0; j < pairings.get(i).getFlightNumbers().size(); j++) {
+                    if (j == 0) {
+
+                        tempString += "<br /> Flight Number: " + pairings.get(i).getFlightNumbers().get(j)
+                                + "<br />" + "Flight Route: "
+                                + pairings.get(i).getFlightCities().get(j) + " " + "\u2708".toUpperCase() + " " + pairings.get(i).getFlightCities().get(j + 1)
+                                + "<br />" + " Flight Schedules: " + pairings.get(i).getFlightTimes().get(j);
+                        tempString += "<br /> ----------------------------------------------------------- <br />";
+                    }
+                    if (j != 0) {
+                        String temp1 = pairings.get(i).getFlightTimes().get(j).substring(10);
+
+                        String temp2 = pairings.get(i).getFlightTimes().get(j - 1).substring(10);
+
+                        if (!temp1.equals(temp2)) {
+                            tempString += "<br /> ----------------------------------------------------------- <br />";
                         }
 
+                        tempString += "<br />Flight Number: " + pairings.get(i).getFlightNumbers().get(j)
+                                + "<br /> " + "Flight Route: "
+                                + pairings.get(i).getFlightCities().get(j) + " " + "\u2708".toUpperCase() + " " + pairings.get(i).getFlightCities().get(j + 1)
+                                + "<br />" + " Flight Schedules: " + pairings.get(i).getFlightTimes().get(j);
+
                     }
-                    String[] sps = tempString.split("\u26F3 Pairing ID: ");
-                    for (int ii = 1; ii < sps.length; ii++) {
-                        scheduleResult.add("\u26F3 Pairing ID: " + sps[ii]);
+
+                }
+
+            } else { // Not for disable pairing 
+                tempDisable += "<br /> <br /> \uD83C\uDFC1  \uD83C\uDFC1  \uD83C\uDFC1  \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 "
+                        + "\uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1\uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1\uD83C\uDFC1 \uD83C\uDFC1 "
+                        + "\uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1\uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1  <br /> <br />";
+                tempDisable += "\u26F3 Pairing ID: [" + pairings.get(i).getId() + "] <br /> \uD83D\uDCC6 Pairing Start Date: " + pairings.get(i).getFDate() + "   " + "<br /> \uD83D\uDD50 Pairing Total Flight Hours: " + pairings.get(i).getFlightHour() + "<br />";
+
+                for (int j = 0; j < pairings.get(i).getFlightNumbers().size(); j++) {
+                    if (j == 0) {
+
+                        tempDisable += "<br /> Flight Number: " + pairings.get(i).getFlightNumbers().get(j)
+                                + "<br />" + "Flight Route: "
+                                + pairings.get(i).getFlightCities().get(j) + " " + "\u2708".toUpperCase() + " " + pairings.get(i).getFlightCities().get(j + 1)
+                                + "<br />" + " Flight Schedules: " + pairings.get(i).getFlightTimes().get(j);
+                        tempString += "<br /> ----------------------------------------------------------- <br />";
                     }
-                    
-                } else { // Not for disable pairing 
-                    tempDisable += "<br /> <br /> \uD83C\uDFC1  \uD83C\uDFC1  \uD83C\uDFC1  \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 "
-                            + "\uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1\uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1\uD83C\uDFC1 \uD83C\uDFC1 "
-                            + "\uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1\uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1  <br /> <br />";
-                    tempDisable += "\u26F3 Pairing ID: " + pairings.get(i).getId() + " <br /> \uD83D\uDCC6 Pairing Start Date: " + pairings.get(i).getFDate() + "   " + "<br /> \uD83D\uDD50 Pairing Total Flight Hours: " + pairings.get(i).getFlightHour() + "<br />";
-                    
-                    for (int j = 0; j < pairings.get(i).getFlightNumbers().size(); j++) {
-                        if (pairings.get(i).getFlightNumbers().size() == 1) {
+                    if (j != 0) {
+                        String temp1 = pairings.get(i).getFlightTimes().get(j).substring(10);
 
-                            tempDisable += "<br /> Flight Number: " + pairings.get(i).getFlightNumbers().get(j)
-                                    + "<br />" + "Flight Route: "
-                                    + pairings.get(i).getFlightCities().get(j) + " " + "\u2708".toUpperCase() + " " + pairings.get(i).getFlightCities().get(j + 1)
-                                    + "<br />" + " Flight Schedules: " + pairings.get(i).getFlightTimes().get(j);
-                        }
-                        if (j != 0) {
-                            String temp1 = pairings.get(i).getFlightTimes().get(j).substring(10);
+                        String temp2 = pairings.get(i).getFlightTimes().get(j - 1).substring(10);
 
-                            String temp2 = pairings.get(i).getFlightTimes().get(j - 1).substring(10);
-
-                            if (!temp1.equals(temp2)) {
-                                tempDisable += "<br /> ----------------------------------------------------------- <br />";
-                            }
-
-                            tempDisable += "<br />Flight Number: " + pairings.get(i).getFlightNumbers().get(j)
-                                    + "<br /> " + "Flight Route: "
-                                    + pairings.get(i).getFlightCities().get(j) + " " + "\u2708".toUpperCase() + " " + pairings.get(i).getFlightCities().get(j + 1)
-                                    + "<br />" + " Flight Schedules: " + pairings.get(i).getFlightTimes().get(j);
-
+                        if (!temp1.equals(temp2)) {
+                            tempDisable += "<br /> ----------------------------------------------------------- <br />";
                         }
 
+                        tempDisable += "<br />Flight Number: " + pairings.get(i).getFlightNumbers().get(j)
+                                + "<br /> " + "Flight Route: "
+                                + pairings.get(i).getFlightCities().get(j) + " " + "\u2708".toUpperCase() + " " + pairings.get(i).getFlightCities().get(j + 1)
+                                + "<br />" + " Flight Schedules: " + pairings.get(i).getFlightTimes().get(j);
+
                     }
-                    String[] sps = tempDisable.split("\u26F3 Pairing ID: ");
-                    for (int ii = 1; ii < sps.length; ii++) {
-                        scheduleResultDisabled.add("\u26F3 Pairing ID: " + sps[ii]);
-                    }
-                    
 
                 }
 
             }
 
         }
+
+        String[] sps = tempDisable.split("<br /> ----------------------------------------------------------- <br />");
+        scheduleResultDisabled.add(sps[0]);
+        for (int ii = 1; ii < sps.length; ii++) {
+            scheduleResult.add(sps[ii]);
+        }
+
+        String[] spss = tempString.split("<br /> ----------------------------------------------------------- <br />");
+
+        for (int ii = 0; ii < spss.length; ii++) {
+            scheduleResult.add(spss[ii]);
+        }
+
     }
 
     public void viewMembers() {
@@ -245,19 +255,31 @@ public class CrewSignInManagedBean {
 
     }
 
-    public void scheduleSignIn(ActionEvent event) { //Bug --> dont have any pairing still can sign in
+    public void scheduleSignIn(ActionEvent event) {
         FacesMessage message;
-        if (selectPairing == null) {
-            message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Please sign in 1 hour before the flight!", "");
-        } else {
-            setMsg(crewSignInSessionBean.crewSignIn(loginManageBean.getEmployeeUserName(), team));
-            if (msg.equals("Signed")) {
-                message = new FacesMessage(FacesMessage.SEVERITY_WARN, "You Have Signed In This Schedule", "");
-            } else {
-                message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successfully Signed In", "");
-            }
 
-            System.out.println("++++++UserName: " + loginManageBean.getEmployeeUserName());
+        
+
+        if (selectedPairing==null) {
+            message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Please select a pairing! ", "");
+        } else {
+            pairingID = selectedPairing.substring(selectedPairing.indexOf("[") + 1, selectedPairing.indexOf("]"));
+            setSelectPairing(pairingSessionBean.getPairingByID(pairingID));
+
+            String firstScheduleID = firstSchedule.getScheduleId() + "";
+
+            if (selectPairing == null) {
+                message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Please sign in 1 hour before the flight!", "");
+            } else {
+                setMsg(crewSignInSessionBean.crewSignIn(loginManageBean.getEmployeeUserName(), team, firstScheduleID));
+                if (msg.equals("Signed")) {
+                    message = new FacesMessage(FacesMessage.SEVERITY_WARN, "You Have Signed In This Schedule", "");
+                } else {
+                    message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successfully Signed In", "");
+                }
+
+                System.out.println("++++++UserName: " + loginManageBean.getEmployeeUserName());
+            }
         }
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
@@ -498,6 +520,14 @@ public class CrewSignInManagedBean {
      */
     public void setSelectedPairing(String selectedPairing) {
         this.selectedPairing = selectedPairing;
+    }
+
+    public String getPairingID() {
+        return pairingID;
+    }
+
+    public void setPairingID(String pairingID) {
+        this.pairingID = pairingID;
     }
 
 }

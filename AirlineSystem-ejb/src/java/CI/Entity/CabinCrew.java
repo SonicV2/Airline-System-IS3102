@@ -43,7 +43,7 @@ public class CabinCrew extends Employee implements Serializable{
         this.languages = languages;
         this.position=position;
         this.assigned=false;
-        this.status="0";
+        this.status="N.S";
         
     }
 

@@ -60,7 +60,7 @@ public class CrewSignInSessionBean implements CrewSignInSessionBeanLocal {
 
     // Change the crew status to sign in 
     @Override
-    public String crewSignIn(String crewName, Team team) {
+    public String crewSignIn(String crewName, Team team ,String firstScheduleID) {
 
         String msg = "";
         System.out.println("++++++UserName session bean: " + crewName);
@@ -72,10 +72,10 @@ public class CrewSignInSessionBean implements CrewSignInSessionBeanLocal {
             if (e.getEmployeeUserName().equals(crewName)) {
                 if (e.getEmployeeRole().equals("Cabin Crew")) {
                     CabinCrew c = (CabinCrew) e;
-                    if (c.getStatus().equals("SignIn")) {
+                    if (c.getStatus().contains("SignIn")) {
                         msg = "Signed";
                     } else {
-                        c.setStatus("SignIn");
+                        c.setStatus("SignIn" + firstScheduleID);
                         System.out.println("++++++UserName c: " + c.getEmployeeUserName());
                         em.persist(c);
                         em.flush();
@@ -84,10 +84,10 @@ public class CrewSignInSessionBean implements CrewSignInSessionBeanLocal {
                 }
                 if (e.getEmployeeRole().equals("Pilot")) {
                     Pilot p = (Pilot) e;
-                    if (p.getStatus().equals("SignIn")) {
+                    if (p.getStatus().contains("SignIn")) {
                         msg = "Signed";
                     } else {
-                        p.setStatus("SignIn");
+                        p.setStatus("SignIn"+ firstScheduleID);
                         em.persist(p);
                         em.flush();
                     }
