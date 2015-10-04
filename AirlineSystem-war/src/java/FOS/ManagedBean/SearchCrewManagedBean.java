@@ -84,6 +84,12 @@ public class SearchCrewManagedBean {
         pilotSkillsets.add("A330");
         pilotSkillsets.add("B777");
     }
+    
+    public void update(ActionEvent event){
+        setPilots(searchCrewSessionBean.getAllPilots());
+        setCcs(searchCrewSessionBean.getAllCCs());
+        setTeams(searchCrewSessionBean.getAllTeam());
+    }
 
   
     /**

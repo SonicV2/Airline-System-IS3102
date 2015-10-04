@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <head>
+        <title>Display Direct Flight For Outbound journey</title>
+    </head>
+    <body>
+<h:form id="form">
+    <p:dataList value="#{mARSManagedBean.directFlightSchedules}" var="schedules" type="ordered">
+        <h:outputText value="#{schedules.startDate}">
+            <f:convertDateTime pattern ="dd-mm-yyyy HH:mm:ss"/>
+        </h:outputText>
+        
+        <h:outputText value="#{schedules.endDate}">
+            <f:convertDateTime pattern ="dd-mm-yyyy HH:mm:ss"/>
+        </h:outputText>
+        
+        #{schedules.flight.route.originIATA}, #{schedules.flight.route.destinationIATA}, #{mARSManagedBean.directFlightDuration}
+    </p:dataList>
+    <h:commandButton class="btn btn-outline btn-success" value="Proceed to select return flight"  action="#{mARSManagedBean.displayReturnFlights()}"/>
+</h:form>
+      
+    </body>
+</html>

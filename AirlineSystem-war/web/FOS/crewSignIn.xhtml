@@ -27,7 +27,7 @@
 
             <div class="row">
                 <div class="col-lg-12">
-                    <h2 class="page-header">Welcome to Crew Sign In System</h2>
+                    <h2 class="page-header">Welcome to Team Information Page</h2>
                 </div>
 
         <h:form>
@@ -54,25 +54,7 @@
                 #{cs.employeeDisplayFirstName} #{cs.employeeDisplayLastName} ( #{cs.position} )
             </p:dataList>    
             <!--  view Team Members-->
-
-            <h:outputLabel value="Flight Date: "/>
-            <h:outputLabel value="#{crewSignInManagedBean.selectPairing.FDate}"/>
-            <br/>
-            <h:outputLabel value="Flight Cities: "/>
-            <h:outputLabel value="#{crewSignInManagedBean.selectPairing.flightCities}"/>
-            <br/>
-            <h:outputLabel value="Flight Hours: "/>
-            <h:outputLabel value="#{crewSignInManagedBean.selectPairing.flightHour}"/>
-            <br/>
-            <h:outputLabel value="Flight Number: "/>
-            <h:outputLabel value="#{crewSignInManagedBean.selectPairing.flightNumbers}"/>
-            <br/>
-            <h:outputLabel value="Flight Times: "/>
-            <h:outputLabel value="#{crewSignInManagedBean.selectPairing.flightTimes}"/>
-            <br/>
-            <div class="text-center">
-            <h:commandButton class="btn btn-outline btn-success" value="Sign-In" actionListener="#{crewSignInManagedBean.scheduleSignIn}"/>
-            </div>
+            
         </h:form>
             </div>
                 </div>

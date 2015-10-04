@@ -325,7 +325,7 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
         }
         return results;
     }
-    
+
     @Override
     public List<Pairing> filterPairings(String selectYear, String selectMonth) { // filter based on year and month
         Query q = em.createQuery("SELECT p FROM Pairing p");
@@ -335,7 +335,7 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
         for (Pairing p : allPairings) {
             String pYear = p.getFDate().split("/")[2];
             String pMonth = p.getFDate().split("/")[1];
-            
+
             if (p.isIsA380() == false && pYear.equals(selectYear) && pMonth.equals(selectMonth)) {
                 results.add(p);
             }
@@ -363,200 +363,293 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
 
     @Override
     public Team generateTeam(Pairing pairing) {
+        int monthP = Integer.parseInt(pairing.getFDate().split("/")[1]);
+        String yearP = pairing.getFDate().split("/")[2];
+
+        boolean check = true;
+
         String result = validateTeam();
         if (result.equals("Bad")) {
-            return null;
-        }
+            Query qq = em.createQuery("SELECT t FROM Team t");
+            List<Team> teams = qq.getResultList();
+            for (Team t : teams) {
+                List<Pairing> pairings = t.getPairing();
+                for (Pairing p : pairings) {
+                    int month = Integer.parseInt(p.getFDate().split("/")[1]);
+                    String year = p.getFDate().split("/")[2];
 
-        String flightDate = pairing.getFDate();
-//        String flightHour = pairing.getFlightHour();
-        List<String> cities = pairing.getFlightCities();
-
-        List<String> flightDates = new ArrayList<String>();
-        List<String> temp = pairing.getFlightTimes();
-        List<String> differentDates = new ArrayList<String>();
-
-        //to take out the duplicate dates
-        for (String s : temp) {
-            differentDates.add(s.substring(10, s.length() - 1));
-        }
-
-        HashSet<String> uniqueDates = new HashSet<>(differentDates);
-
-        Iterator itr = uniqueDates.iterator();
-
-        while (itr.hasNext()) {
-            flightDates.add(itr.next().toString());
-        }
-
-        List<String> flightCities = pairing.getFlightCities();
-        List<String> flightNumbers = pairing.getFlightNumbers();
-//        List<String> flightTimes = pairing.getFlightTimes();
-
-        team = new Team();
-        Flight flight;
-        List<Schedule> schedules;
-        List<Schedule> teamSchedule = new ArrayList<Schedule>();
-
-        List<Pilot> captainList = new ArrayList<Pilot>();
-        List<Pilot> FOList = new ArrayList<Pilot>();
-
-        List<CabinCrew> leadCCList = new ArrayList<CabinCrew>(); //lead female
-        List<CabinCrew> CCList = new ArrayList<CabinCrew>(); //female
-        List<CabinCrew> FSList = new ArrayList<CabinCrew>(); // male
-
-        String lastCity = flightCities.get(flightCities.size() - 1); //set all the team location attribure to lastCity
-        team.setLocation(lastCity);
-        team.setPilotNo(2);
-        team.setcCrewNo(8);
-
-        //Add crews to the team
-        List<Pilot> pilots = new ArrayList<Pilot>();
-        Query q = em.createQuery("SELECT p FROM Pilot p");
-
-        List<Pilot> ps = q.getResultList();
-        for (Pilot pi : ps) {
-            if (pi.isAssigned() == false) {
-                if (pi.getPosition().equals("Captain")) {
-                    captainList.add(pi);
+                    if (year.equals(yearP) && monthP > month) {
+                        check = true;
+                    } else {
+                        check = false;
+                    }
                 }
-                if (pi.getPosition().equals("First Officer")) {
-                    FOList.add(pi);
-                }
-            }
-        }
 
-        pilots.add(captainList.get(0)); //select 2 captains from the table
-        captainList.get(0).setAssigned(true);
-        captainList.get(0).setTeam(team);
-        em.persist(captainList.get(0));
+                if (check == true) {
+//---------------------------------------------------------------------------------------------------
 
-        pilots.add(FOList.get(0));  //select 2 first officer fromt he table
-        FOList.get(0).setAssigned(true);
-        FOList.get(0).setTeam(team);
-        em.persist(FOList.get(0));
+                    List<String> flightDates = new ArrayList<String>();
+                    List<String> temp = pairing.getFlightTimes();
+                    List<String> differentDates = new ArrayList<String>();
+                    Flight flight;
+                     List<Schedule> schedules;
+                     List<Schedule> teamSchedule = new ArrayList<Schedule>();
 
-        team.setPilots(pilots);
+                    //to take out the duplicate dates
+                    for (String s : temp) {
+                        differentDates.add(s.substring(10, s.length() - 1));
+                    }
 
-        List<CabinCrew> CCs = new ArrayList<CabinCrew>();
-        Query q1 = em.createQuery("SELECT p FROM CabinCrew p");
+                    HashSet<String> uniqueDates = new HashSet<>(differentDates);
 
-        List<CabinCrew> ps1 = q1.getResultList();
-        for (CabinCrew cc : ps1) {
-            if (cc.isAssigned() == false) {
-                if (cc.getPosition().equals("Lead Flight Stewardess")) {
-                    leadCCList.add(cc);
-                }
-                if (cc.getPosition().equals("Flight Stewardess")) {
-                    CCList.add(cc);
-                }
-                if (cc.getPosition().equals("Flight Steward")) {
-                    FSList.add(cc);
-                }
-            }
-        }
+                    Iterator itr = uniqueDates.iterator();
 
-        List<CabinCrew> leadResults = langSelection(leadCCList, cities);
+                    while (itr.hasNext()) {
+                        flightDates.add(itr.next().toString());
+                    }
 
-        if (leadResults.isEmpty()) {
-            CCs.add(leadCCList.get(0));
-            leadCCList.get(0).setAssigned(true);
-            leadCCList.get(0).setTeam(team);
-            em.persist(leadCCList.get(0));
-        } else {
-            CCs.add(leadResults.get(0));
-            leadResults.get(0).setAssigned(true);
-            leadResults.get(0).setTeam(team);
-            em.persist(leadResults.get(0));
+                    List<String> flightCities = pairing.getFlightCities();
+                    List<String> flightNumbers = pairing.getFlightNumbers();
 
-        }
+                    for (String s : flightNumbers) {
+                        flight = new Flight();
+                        flight = getFlight("MA" + s);
 
-        List<CabinCrew> ccResults = langSelection(CCList, cities);
+                        schedules = new ArrayList<Schedule>();
+                        schedules = flight.getSchedule();
 
-        if (ccResults.isEmpty()) {
-            for (int i = 0; i < 6; i++) {
-                CCs.add(CCList.get(i));
-                CCList.get(i).setAssigned(true);
-                CCList.get(i).setTeam(team);
-                em.persist(CCList.get(i));
-            }
-        } else if (ccResults.size() < 6) {
-            for (CabinCrew c : ccResults) {
-                CCs.add(c);
-                CCList.remove(c);
-                c.setAssigned(true);
-                c.setTeam(team);
-                em.persist(c);
-            }
+                        for (String ss : flightDates) {
 
-            for (int i = 0; i < 6 - ccResults.size(); i++) {
-                CCs.add(CCList.get(i));
-                CCList.get(i).setAssigned(true);
-                CCList.get(i).setTeam(team);
-                em.persist(CCList.get(i));
-            }
-        } else if (ccResults.size() == 6) {
-            for (CabinCrew c : ccResults) {
-                CCs.add(c);
-                c.setAssigned(true);
-                c.setTeam(team);
-                em.persist(c);
-            }
-        }
+                            for (Schedule sh : schedules) {
+                                String formattedDate = new SimpleDateFormat("dd/MM/yyyy").format(sh.getStartDate());
+                                if (formattedDate.equals(ss)) {
 
-        CCs.add(FSList.get(0));
-        FSList.get(0).setAssigned(true);
-        FSList.get(0).setTeam(team);
-        em.persist(FSList.get(0));
+                                    teamSchedule = t.getSchedule();
+                                    teamSchedule.add(sh);
+                                    sh.setAssigned(true);
 
-        team.setCabinCrews(CCs);
-        em.persist(team);
+                                    t.setSchedule(teamSchedule);
+                                    sh.setTeam(t);
 
-        for (String s : flightNumbers) {
-            flight = new Flight();
-            flight = getFlight("MA" + s);
+                                    em.merge(sh);
 
-            schedules = new ArrayList<Schedule>();
-            schedules = flight.getSchedule();
+                                    em.merge(t);
 
-            for (String ss : flightDates) {
+                                    em.flush();
 
-                for (Schedule sh : schedules) {
-                    String formattedDate = new SimpleDateFormat("dd/MM/yyyy").format(sh.getStartDate());
-                    if (formattedDate.equals(ss)) {
+                                }
+                            }
+                        }
+                    }
+//---------------------------------------------------------------------------------------------------                   
+                        pairing.setPaired(true);
+                        pairing.setTeam(t);
+                        List<Pairing> par = t.getPairing();
+                        par.add(pairing);
+                        t.setPairing(par);
 
-                        teamSchedule = team.getSchedule();
-                        teamSchedule.add(sh);
-                        sh.setAssigned(true);
-
-                        team.setSchedule(teamSchedule);
-                        sh.setTeam(team);
-
-                        em.merge(sh);
-
-                        em.merge(team);
-
+                        em.merge(pairing);
+                        em.merge(t);
                         em.flush();
+                        return t;
 
                     }
                 }
+
+                return null;
             }
-            team.setStatus("Formed");
 
-            pairing.setPaired(true);
-            pairing.setTeam(team);
-            List<Pairing> par = team.getPairing();
-            par.add(pairing);
-            team.setPairing(par);
+            String flightDate = pairing.getFDate();
+//        String flightHour = pairing.getFlightHour();
+            List<String> cities = pairing.getFlightCities();
 
-            em.merge(pairing);
-            em.merge(team);
-            em.flush();
+            List<String> flightDates = new ArrayList<String>();
+            List<String> temp = pairing.getFlightTimes();
+            List<String> differentDates = new ArrayList<String>();
 
+            //to take out the duplicate dates
+            for (String s : temp) {
+                differentDates.add(s.substring(10, s.length() - 1));
+            }
+
+            HashSet<String> uniqueDates = new HashSet<>(differentDates);
+
+            Iterator itr = uniqueDates.iterator();
+
+            while (itr.hasNext()) {
+                flightDates.add(itr.next().toString());
+            }
+
+            List<String> flightCities = pairing.getFlightCities();
+            List<String> flightNumbers = pairing.getFlightNumbers();
+//        List<String> flightTimes = pairing.getFlightTimes();
+
+            team = new Team();
+            Flight flight;
+            List<Schedule> schedules;
+            List<Schedule> teamSchedule = new ArrayList<Schedule>();
+
+            List<Pilot> captainList = new ArrayList<Pilot>();
+            List<Pilot> FOList = new ArrayList<Pilot>();
+
+            List<CabinCrew> leadCCList = new ArrayList<CabinCrew>(); //lead female
+            List<CabinCrew> CCList = new ArrayList<CabinCrew>(); //female
+            List<CabinCrew> FSList = new ArrayList<CabinCrew>(); // male
+
+            String lastCity = flightCities.get(flightCities.size() - 1); //set all the team location attribure to lastCity
+            team.setLocation(lastCity);
+            team.setPilotNo(2);
+            team.setcCrewNo(8);
+
+            //Add crews to the team
+            List<Pilot> pilots = new ArrayList<Pilot>();
+            Query q = em.createQuery("SELECT p FROM Pilot p");
+
+            List<Pilot> ps = q.getResultList();
+            for (Pilot pi : ps) {
+                if (pi.isAssigned() == false) {
+                    if (pi.getPosition().equals("Captain")) {
+                        captainList.add(pi);
+                    }
+                    if (pi.getPosition().equals("First Officer")) {
+                        FOList.add(pi);
+                    }
+                }
+            }
+
+            pilots.add(captainList.get(0)); //select 2 captains from the table
+            captainList.get(0).setAssigned(true);
+            captainList.get(0).setTeam(team);
+            em.persist(captainList.get(0));
+
+            pilots.add(FOList.get(0));  //select 2 first officer fromt he table
+            FOList.get(0).setAssigned(true);
+            FOList.get(0).setTeam(team);
+            em.persist(FOList.get(0));
+
+            team.setPilots(pilots);
+
+            List<CabinCrew> CCs = new ArrayList<CabinCrew>();
+            Query q1 = em.createQuery("SELECT p FROM CabinCrew p");
+
+            List<CabinCrew> ps1 = q1.getResultList();
+            for (CabinCrew cc : ps1) {
+                if (cc.isAssigned() == false) {
+                    if (cc.getPosition().equals("Lead Flight Stewardess")) {
+                        leadCCList.add(cc);
+                    }
+                    if (cc.getPosition().equals("Flight Stewardess")) {
+                        CCList.add(cc);
+                    }
+                    if (cc.getPosition().equals("Flight Steward")) {
+                        FSList.add(cc);
+                    }
+                }
+            }
+
+            List<CabinCrew> leadResults = langSelection(leadCCList, cities);
+
+            if (leadResults.isEmpty()) {
+                CCs.add(leadCCList.get(0));
+                leadCCList.get(0).setAssigned(true);
+                leadCCList.get(0).setTeam(team);
+                em.persist(leadCCList.get(0));
+            } else {
+                CCs.add(leadResults.get(0));
+                leadResults.get(0).setAssigned(true);
+                leadResults.get(0).setTeam(team);
+                em.persist(leadResults.get(0));
+
+            }
+
+            List<CabinCrew> ccResults = langSelection(CCList, cities);
+
+            if (ccResults.isEmpty()) {
+                for (int i = 0; i < 6; i++) {
+                    CCs.add(CCList.get(i));
+                    CCList.get(i).setAssigned(true);
+                    CCList.get(i).setTeam(team);
+                    em.persist(CCList.get(i));
+                }
+            } else if (ccResults.size() < 6) {
+                for (CabinCrew c : ccResults) {
+                    CCs.add(c);
+                    CCList.remove(c);
+                    c.setAssigned(true);
+                    c.setTeam(team);
+                    em.persist(c);
+                }
+
+                for (int i = 0; i < 6 - ccResults.size(); i++) {
+                    CCs.add(CCList.get(i));
+                    CCList.get(i).setAssigned(true);
+                    CCList.get(i).setTeam(team);
+                    em.persist(CCList.get(i));
+                }
+            } else if (ccResults.size() == 6) {
+                for (CabinCrew c : ccResults) {
+                    CCs.add(c);
+                    c.setAssigned(true);
+                    c.setTeam(team);
+                    em.persist(c);
+                }
+            }
+
+            CCs.add(FSList.get(0));
+            FSList.get(0).setAssigned(true);
+            FSList.get(0).setTeam(team);
+            em.persist(FSList.get(0));
+
+            team.setCabinCrews(CCs);
+            em.persist(team);
+
+            for (String s : flightNumbers) {
+                flight = new Flight();
+                flight = getFlight("MA" + s);
+
+                schedules = new ArrayList<Schedule>();
+                schedules = flight.getSchedule();
+
+                for (String ss : flightDates) {
+
+                    for (Schedule sh : schedules) {
+                        String formattedDate = new SimpleDateFormat("dd/MM/yyyy").format(sh.getStartDate());
+                        if (formattedDate.equals(ss)) {
+
+                            teamSchedule = team.getSchedule();
+                            teamSchedule.add(sh);
+                            sh.setAssigned(true);
+
+                            team.setSchedule(teamSchedule);
+                            sh.setTeam(team);
+
+                            em.merge(sh);
+
+                            em.merge(team);
+
+                            em.flush();
+
+                        }
+                    }
+                }
+                team.setStatus("Formed");
+
+                pairing.setPaired(true);
+                pairing.setTeam(team);
+                List<Pairing> par = team.getPairing();
+                par.add(pairing);
+                team.setPairing(par);
+
+                em.merge(pairing);
+                em.merge(team);
+                em.flush();
+
+            }
+
+            return team;
         }
 
-        return team;
-    }
+    
 
     public List<CabinCrew> langSelection(List<CabinCrew> crews, List<String> cities) {
         List<CabinCrew> results = new ArrayList<CabinCrew>();
