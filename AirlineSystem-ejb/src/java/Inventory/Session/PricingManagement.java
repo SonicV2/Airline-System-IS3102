@@ -120,16 +120,37 @@ public class PricingManagement implements PricingManagementLocal{
     }
     
     // Get the price of a ticket of a specific flight and service type
-    public String getPrice(SeatAvailability sa, String serviceClass, int realSold){
+    public String getClassCode(Schedule s, String serviceClass, int noPpl){
         int pricePercent=100;
+        SeatAvailability sa = s.getSeatAvailability();
         Date current = new Date();
-        System.out.println("Percent Sold: "+ realSold);
+        int realSold = noPpl;
+        if (serviceClass.equals("Economy Saver")){
+            realSold = realSold + sa.getEconomySaverBooked();
+            realSold = (realSold*100)/sa.getEconomySaverTotal();
+        }
+        if (serviceClass.equals("Economy Basic")){
+            realSold = realSold + sa.getEconomyBasicBooked();
+            realSold = (realSold*100)/sa.getEconomyBasicTotal();
+        }
+        if (serviceClass.equals("Economy Premium")){
+            realSold = realSold + sa.getEconomyPremiumBooked();
+            realSold = (realSold*100)/sa.getEconomyPremiumTotal();
+        }
+        if (serviceClass.equals("Business")){
+            realSold = realSold + sa.getBusinessBooked();
+            realSold = (realSold*100)/sa.getBusinessTotal();
+        }
+        if (serviceClass.equals("FirstClass")){
+            realSold = realSold + sa.getFirstClassBooked();
+            realSold = (realSold*100)/sa.getFirstClassTotal();
+        }
         try{
             Query q = em.createQuery("SELECT o from BookingClass o WHERE o.serviceClass = :serviceClass");
             q.setParameter("serviceClass", serviceClass);
             List<BookingClass> classList = q.getResultList();
             int size = classList.size();
-            String flightNo= sa.getSchedule().
+            Date fDate = s.getStartDate();
             long days = (fDate.getTime()-current.getTime())/ 1000 / 60 / 60 / 24;
             System.out.println("Service Type: "+ serviceClass + " " + days);
             List<BookingClass> updatedList = new ArrayList();
@@ -166,17 +187,20 @@ public class PricingManagement implements PricingManagementLocal{
                 }
             }
             
-            double doubleprice = (c.getPricePercent() * getBasePrice(flightNo))/100;
-            String price= Double.toString(doubleprice);
-            System.out.println("Price: "+ price);
             System.out.println("Final Booking Class:" + c.getClasscode());
-            return price;
+            return c.getClasscode();
         }
        catch (EntityNotFoundException enfe) {
             System.out.println("\nEntity not found error" );
-            return "100";
+            return "No ClassCode Found";
         }
         
+    }
+    
+    public double getPrice(String classCode,Schedule s){
+        BookingClass bc = em.find(BookingClass.class,classCode);
+        double price = (bc.getPricePercent() * s.getFlight().getBasicFare())/100;
+        return price;
     }
 
     
