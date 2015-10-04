@@ -88,7 +88,6 @@ public class DistributionSessionBean implements DistributionSessionBeanLocal {
                 }
             }
         }
-
         return schedulesWithSeatsAvailable;
     }
 
@@ -257,10 +256,10 @@ public class DistributionSessionBean implements DistributionSessionBeanLocal {
     }
 
     @Override
-    public Date addOneDayToDate(Date date) {
+    public Date addDaysToDate(Date date, int no) {
         Calendar c = Calendar.getInstance();
         c.setTime(date);
-        c.add(Calendar.DATE, 1);
+        c.add(Calendar.DATE, no);
         return c.getTime();
     }
 
@@ -326,5 +325,38 @@ public class DistributionSessionBean implements DistributionSessionBeanLocal {
     public TimeZone getSingaporeTimeZone() {
         return (TimeZone.getTimeZone("Asia/Singapore"));
     }
+    
+    public boolean existsSchedule (String originIata, String destinationIata, Date date, String serviceType, int adults, int children){
+        if (existsOneStopFlight(originIata,destinationIata,date,serviceType,adults,children)==false && retrieveDirectFlightsForDate(originIata,destinationIata,date,serviceType,adults,children).size()==0)
+            return false;
+        else
+            return true;
+    }
+    
+    public boolean existsOneStopFlight (String originIATA, String destinationIATA, Date date, String serviceType, int adults, int children){
+        List<String> transitHubs = getTransitHubs(getHubIatasFromOrigin(originIATA), destinationIATA);
+        List<Schedule> legOneSchedules = new ArrayList();
+        List<Schedule> legTwoSchedules = new ArrayList();
+        List<Schedule> oneStopFlightSchedules = new ArrayList();
+        
+            for (int i = 0; i < transitHubs.size(); i++) {
+                    legOneSchedules = addSchedulesToList(legOneSchedules, retrieveDirectFlightsForDate(originIATA, transitHubs.get(i), date, serviceType, adults, children));
+                    legTwoSchedules = addSchedulesToList(legTwoSchedules, retrieveDirectFlightsForDate(transitHubs.get(i), destinationIATA, addDaysToDate(date,1), serviceType, adults, children));
+                    legTwoSchedules = addSchedulesToList(legTwoSchedules, retrieveDirectFlightsForDate(transitHubs.get(i), destinationIATA, date, serviceType, adults, children));
+                }
+                oneStopFlightSchedules = retrieveOneStopFlightSchedules(legOneSchedules, legTwoSchedules);
+                if (oneStopFlightSchedules.size()>0)
+                    return true;
+                else
+                    return false;
+    }
+        
+    public List<Schedule> addSchedulesToList(List<Schedule> originalSchedules, List<Schedule> schedulesToAdd) {
+        for (Schedule eachScheduleToAdd : schedulesToAdd) {
+            originalSchedules.add(eachScheduleToAdd);
+        }
+        return originalSchedules;
+    }
+
 
 }

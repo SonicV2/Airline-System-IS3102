@@ -6,7 +6,7 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <head>
-        <title>Display Direct Flight</title>
+        <title>Display Direct Flight For Outbound journey</title>
     </head>
     <body>
 <h:form id="form">
@@ -21,6 +21,7 @@
         
         #{schedules.flight.route.originIATA}, #{schedules.flight.route.destinationIATA}, #{mARSManagedBean.directFlightDuration}
     </p:dataList>
+    <h:commandButton class="btn btn-outline btn-success" value="Proceed to select return flight"  action="#{mARSManagedBean.displayReturnFlights()}"/>
 </h:form>
       
     </body>

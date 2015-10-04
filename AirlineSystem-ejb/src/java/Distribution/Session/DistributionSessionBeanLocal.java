@@ -26,14 +26,15 @@ public interface DistributionSessionBeanLocal {
    public List<Schedule> retrieveOneStopFlightSchedules (List <Schedule> legOne, List<Schedule> legTwo); 
    public List<String> getHubIatasFromOrigin (String originIATA);
    public List<String> getTransitHubs (List<String> hubsFromOrigin, String destinationIata);
-   public Date addOneDayToDate (Date date);
+   public Date addDaysToDate (Date date, int no);
    public Date convertTimeZone(Date date, TimeZone fromTZ , TimeZone toTZ);
    public String getLayoverTime (Schedule legOne, Schedule legTwo);
    public String getTotalDurationForOneStop (Schedule legOne, Schedule legTwo);
    public String getTotalDurationForDirect (Schedule schedule);
    public TimeZone getTimeZoneFromIata (String iata);
    public TimeZone getSingaporeTimeZone ();
-  
+   public boolean existsSchedule (String originIata, String destinationIata, Date date, String serviceType, int adults, int children);
+   
    //only for internal processing
    public boolean isIATAAHub (String iata);
    public Schedule getScheduleForFlightForDate (Flight flight, Date startDate);
@@ -41,4 +42,6 @@ public interface DistributionSessionBeanLocal {
    public boolean seatsAvailableForSchedule (Schedule schedule, String serviceType, int noOfSeats); 
    public List<Route> getAllRoutes();
    public Location getLocationFromIata (String Iata);
+   public boolean existsOneStopFlight (String originIATA, String destinationIATA, Date date, String serviceType, int adults, int children);
+   public List<Schedule> addSchedulesToList(List<Schedule> originalSchedules, List<Schedule> schedulesToAdd);
 }
