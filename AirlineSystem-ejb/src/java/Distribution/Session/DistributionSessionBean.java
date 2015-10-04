@@ -256,10 +256,10 @@ public class DistributionSessionBean implements DistributionSessionBeanLocal {
     }
 
     @Override
-    public Date addOneDayToDate(Date date) {
+    public Date addDaysToDate(Date date, int no) {
         Calendar c = Calendar.getInstance();
         c.setTime(date);
-        c.add(Calendar.DATE, 1);
+        c.add(Calendar.DATE, no);
         return c.getTime();
     }
 
@@ -341,7 +341,7 @@ public class DistributionSessionBean implements DistributionSessionBeanLocal {
         
             for (int i = 0; i < transitHubs.size(); i++) {
                     legOneSchedules = addSchedulesToList(legOneSchedules, retrieveDirectFlightsForDate(originIATA, transitHubs.get(i), date, serviceType, adults, children));
-                    legTwoSchedules = addSchedulesToList(legTwoSchedules, retrieveDirectFlightsForDate(transitHubs.get(i), destinationIATA, addOneDayToDate(date), serviceType, adults, children));
+                    legTwoSchedules = addSchedulesToList(legTwoSchedules, retrieveDirectFlightsForDate(transitHubs.get(i), destinationIATA, addDaysToDate(date,1), serviceType, adults, children));
                     legTwoSchedules = addSchedulesToList(legTwoSchedules, retrieveDirectFlightsForDate(transitHubs.get(i), destinationIATA, date, serviceType, adults, children));
                 }
                 oneStopFlightSchedules = retrieveOneStopFlightSchedules(legOneSchedules, legTwoSchedules);

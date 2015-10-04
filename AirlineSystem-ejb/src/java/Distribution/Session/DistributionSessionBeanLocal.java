@@ -26,7 +26,7 @@ public interface DistributionSessionBeanLocal {
    public List<Schedule> retrieveOneStopFlightSchedules (List <Schedule> legOne, List<Schedule> legTwo); 
    public List<String> getHubIatasFromOrigin (String originIATA);
    public List<String> getTransitHubs (List<String> hubsFromOrigin, String destinationIata);
-   public Date addOneDayToDate (Date date);
+   public Date addDaysToDate (Date date, int no);
    public Date convertTimeZone(Date date, TimeZone fromTZ , TimeZone toTZ);
    public String getLayoverTime (Schedule legOne, Schedule legTwo);
    public String getTotalDurationForOneStop (Schedule legOne, Schedule legTwo);
