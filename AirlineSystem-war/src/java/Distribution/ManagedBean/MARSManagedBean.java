@@ -102,6 +102,15 @@ public class MARSManagedBean {
             temp.add(eachFlight.getRoute());
         }
         setRoutes(temp);
+        
+        for (Route eachRoute : routes) {
+            if(!temp1.contains(eachRoute.getOriginCity()))
+                temp1.add(eachRoute.getOriginCity());
+            if(!temp2.contains(eachRoute.getDestinationCity()))
+                temp2.add(eachRoute.getDestinationCity());
+        }
+        setOrigins(temp1);
+        setDestinations(temp2);
 
         legOneSchedules = new ArrayList();
         legTwoSchedules = new ArrayList();
@@ -111,7 +120,19 @@ public class MARSManagedBean {
     }
 
     public String displayDepartureFlights() {
-        boolean inputValid = true;
+        
+        List<Route> allRoutes = new ArrayList<Route>();
+        allRoutes = routeSessionBean.retrieveRoutes();
+        
+        for (Route eachRoute : allRoutes) {
+            if (eachRoute.getOriginCity().equals(originCity) && eachRoute.getDestinationCity().equals(destinationCity)) {
+                originIATA = eachRoute.getOriginIATA();
+                destinationIATA = eachRoute.getDestinationIATA();
+            }
+                
+        }
+        
+        boolean inputValid = true;  
         //One way jorney selected by user
         if (returnDate == null) {
             if (distributionSessionBean.existsSchedule(originIATA, destinationIATA, departureDate, serviceType, adults, children) == false) {

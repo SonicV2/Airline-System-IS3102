@@ -40,7 +40,7 @@ and open the template in the editor.
             <p:calendar id="button" value="#{mARSManagedBean.departureDate}" navigator="true" pattern="yyyy-MMM-dd"/>
             
             <h:outputLabel value="Return Date: " />
-            <p:calendar id="button" value="#{mARSManagedBean.returnDate}" navigator="true" pattern="yyyy-MMM-dd"/>
+            <p:calendar id="button1" value="#{mARSManagedBean.returnDate}" navigator="true" pattern="yyyy-MMM-dd"/>
             
             <h:outputLabel value="Adults: " />
             <p:selectOneMenu value="#{mARSManagedBean.adults}" style="width:100%">
@@ -70,7 +70,7 @@ and open the template in the editor.
                 <f:selectItem itemLabel="Business" itemValue="Business" />
                 <f:selectItem itemLabel="First Class" itemValue="First Class" />
             </p:selectOneMenu>
-            <h:commandButton class="btn btn-outline btn-success" value="Search"  action="#{mARSManagedBean.displayDepartureFlights()}"/>
+            <h:commandButton class="btn btn-outline btn-success" value="Search"  action="#{mARSManagedBean.displayReturnFlights()}"/>
         </h:form>
     </body>
 </html>
