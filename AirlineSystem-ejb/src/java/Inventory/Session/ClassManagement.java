@@ -29,12 +29,12 @@ public class ClassManagement implements ClassManagementLocal {
     // Add a booking class
     public String addClassCode(String classcode, int pricePercent, int advancedSales
     , int percentSold, String serviceClass, boolean rebook, boolean cancel, 
-    int baggage, int millageAccru){
+    int baggage, int millageAccru, String season){
         BookingClass bc = new BookingClass();
         BookingClass bc1 = em.find(BookingClass.class,classcode);
         if (bc1==null){
             bc.createClass(classcode, pricePercent, advancedSales, percentSold,
-                    serviceClass, rebook, cancel, baggage, millageAccru);
+                    serviceClass, rebook, cancel, baggage, millageAccru, season);
             em.persist(bc);
             return "Fare Class Added";
         }
