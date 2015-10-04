@@ -108,6 +108,7 @@ public class MARSManagedBean {
         }
         setRoutes(temp);
         
+        /*Store origin and destination cities in lists for display purpose*/
         for (Route eachRoute : routes) {
             if(!temp1.contains(eachRoute.getOriginCity()))
                 temp1.add(eachRoute.getOriginCity());
@@ -127,6 +128,7 @@ public class MARSManagedBean {
 
     public String displayDepartureFlights() {
         
+        /*Convert the chosen origin and destination cities into IATAs*/
         List<Route> allRoutes = new ArrayList<Route>();
         allRoutes = routeSessionBean.retrieveRoutes();
         
@@ -238,6 +240,19 @@ public class MARSManagedBean {
     }
 
     public String displayReturnFlights() {
+        
+        /*Convert the chosen origin and destination cities into IATAs*/
+        List<Route> allRoutes = new ArrayList<Route>();
+        allRoutes = routeSessionBean.retrieveRoutes();
+        
+        for (Route eachRoute : allRoutes) {
+            if (eachRoute.getOriginCity().equals(originCity) && eachRoute.getDestinationCity().equals(destinationCity)) {
+                originIATA = eachRoute.getOriginIATA();
+                destinationIATA = eachRoute.getDestinationIATA();
+            }
+                
+        }
+        
         //switching origin and destination
         String tempOrigin = originIATA;
         setOriginIATA(destinationIATA);
