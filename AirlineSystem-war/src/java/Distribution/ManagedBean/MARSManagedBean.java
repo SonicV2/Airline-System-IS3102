@@ -12,6 +12,7 @@ import APS.Session.FlightSessionBeanLocal;
 import APS.Session.RouteSessionBeanLocal;
 import APS.Session.ScheduleSessionBeanLocal;
 import Distribution.Session.DistributionSessionBeanLocal;
+import Inventory.Session.PricingManagementLocal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -22,7 +23,6 @@ import javax.inject.Named;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
-import javax.faces.event.ActionEvent;
 
 /**
  *
@@ -44,6 +44,9 @@ public class MARSManagedBean {
 
     @EJB
     private ScheduleSessionBeanLocal scheduleSessionBean;
+    
+    @EJB
+    private PricingManagementLocal pricingManagementBean;
 
     private String flightNo;
     private Double flightDuration;
@@ -77,7 +80,7 @@ public class MARSManagedBean {
     private List<Schedule> oneStopFlightSchedules;
 
     private String directFlightDuration;
-    ;
+    
     private List<String> oneStopFlightDuration;
     private List<String> oneStopFlightLayover;
 
@@ -85,8 +88,10 @@ public class MARSManagedBean {
     private List<String> destinations;
     FacesMessage message = null;
     
+    //Price variables
     private List<Double> minPricesForWeekDirectFlight;
     private List<Double> minPricesForWeekOneStopFlight;
+    private List<Double> selectedDatePrices;
 
     @PostConstruct
     public void retrieve() {
@@ -117,6 +122,7 @@ public class MARSManagedBean {
         oneStopFlightDuration = new ArrayList();
         oneStopFlightLayover = new ArrayList();
         returnDate = null;
+        selectedDatePrices = new ArrayList();
     }
 
     public String displayDepartureFlights() {
@@ -160,6 +166,7 @@ public class MARSManagedBean {
             if (returnDate != null) {
                 setReturnDate(distributionSessionBean.convertTimeZone(returnDate, distributionSessionBean.getTimeZoneFromIata(destinationIATA), distributionSessionBean.getSingaporeTimeZone()));
             }
+            selectedDatePrices.clear();
 
             //Check whether there is direct flight
             if (distributionSessionBean.existsDirectFlight(originIATA, destinationIATA)) {
@@ -169,7 +176,11 @@ public class MARSManagedBean {
                 for (Schedule eachSchedule : directFlightSchedules) {
                     eachSchedule.setStartDate(distributionSessionBean.convertTimeZone(eachSchedule.getStartDate(), distributionSessionBean.getSingaporeTimeZone(), distributionSessionBean.getTimeZoneFromIata(eachSchedule.getFlight().getRoute().getOriginIATA())));
                     eachSchedule.setEndDate(distributionSessionBean.convertTimeZone(eachSchedule.getEndDate(), distributionSessionBean.getSingaporeTimeZone(), distributionSessionBean.getTimeZoneFromIata(eachSchedule.getFlight().getRoute().getDestinationIATA())));
-
+                    
+                    
+                    double priceForOne = pricingManagementBean.getPrice(pricingManagementBean.getClassCode(eachSchedule, serviceType, adults+children), eachSchedule);
+                    selectedDatePrices.add((adults*priceForOne)+(0.75*priceForOne*children));
+                
                 }
                 retrieveMinWeekPricesForDirect(originIATA, destinationIATA, departureDate, serviceType, adults, children);
                 if (returnDate == null) {
@@ -195,11 +206,20 @@ public class MARSManagedBean {
                 List<Schedule> flightOption = new ArrayList();
                 flightOption.add(new Schedule());
                 flightOption.add(new Schedule());
+                
+                double flightOptionPrice=0;
+                double priceForOne = 0;
+         
+                
                 for (i = 0; i < oneStopFlightSchedules.size(); i++) {
                     flightOption.set(i % 2, oneStopFlightSchedules.get(i));
+                    priceForOne = pricingManagementBean.getPrice(pricingManagementBean.getClassCode(oneStopFlightSchedules.get(i), serviceType, adults+children), oneStopFlightSchedules.get(i));
+                    flightOptionPrice += (adults*priceForOne) + (0.75*priceForOne*children);
                     if (i % 2 == 1) {
                         oneStopFlightDuration.add(distributionSessionBean.getTotalDurationForOneStop(flightOption.get(0), flightOption.get(1)));
                         oneStopFlightLayover.add(distributionSessionBean.getLayoverTime(flightOption.get(0), flightOption.get(1)));
+                        selectedDatePrices.add(flightOptionPrice);
+                        flightOptionPrice = 0;
                     }
                 }
 
@@ -226,6 +246,7 @@ public class MARSManagedBean {
         setTempDepartureDate(departureDate);
         setTempReturnDate(returnDate);
         setDepartureDate(returnDate);
+        selectedDatePrices.clear();
 
         //Check whether there is direct flight
         if (distributionSessionBean.existsDirectFlight(originIATA, destinationIATA)) {
@@ -235,7 +256,8 @@ public class MARSManagedBean {
             for (Schedule eachSchedule : directFlightSchedules) {
                 eachSchedule.setStartDate(distributionSessionBean.convertTimeZone(eachSchedule.getStartDate(), distributionSessionBean.getSingaporeTimeZone(), distributionSessionBean.getTimeZoneFromIata(eachSchedule.getFlight().getRoute().getOriginIATA())));
                 eachSchedule.setEndDate(distributionSessionBean.convertTimeZone(eachSchedule.getEndDate(), distributionSessionBean.getSingaporeTimeZone(), distributionSessionBean.getTimeZoneFromIata(eachSchedule.getFlight().getRoute().getDestinationIATA())));
-
+                double priceForOne = pricingManagementBean.getPrice(pricingManagementBean.getClassCode(eachSchedule, serviceType, adults+children), eachSchedule);
+                selectedDatePrices.add((adults*priceForOne)+(0.75*priceForOne*children));
             }
             retrieveMinWeekPricesForDirect(originIATA, destinationIATA, departureDate, serviceType, adults, children);
 
@@ -258,11 +280,19 @@ public class MARSManagedBean {
             List<Schedule> flightOption = new ArrayList();
             flightOption.add(new Schedule());
             flightOption.add(new Schedule());
+            
+            double flightOptionPrice=0;
+            double priceForOne = 0;
+                
             for (i = 0; i < oneStopFlightSchedules.size(); i++) {
-                flightOption.set(i % 2, oneStopFlightSchedules.get(i));
+                 flightOption.set(i % 2, oneStopFlightSchedules.get(i));
+                 priceForOne = pricingManagementBean.getPrice(pricingManagementBean.getClassCode(oneStopFlightSchedules.get(i), serviceType, adults+children), oneStopFlightSchedules.get(i));
+                 flightOptionPrice += (adults*priceForOne) + (0.75*priceForOne*children);
                 if (i % 2 == 1) {
                     oneStopFlightDuration.add(distributionSessionBean.getTotalDurationForOneStop(flightOption.get(0), flightOption.get(1)));
                     oneStopFlightLayover.add(distributionSessionBean.getLayoverTime(flightOption.get(0), flightOption.get(1)));
+                    selectedDatePrices.add(flightOptionPrice);
+                    flightOptionPrice = 0;
                 }
             }
 
@@ -289,6 +319,9 @@ public class MARSManagedBean {
                 minPrice = 99999999;
                 for (Schedule eachSchedule: schedulesForEachDate){
                     //Store price for each schedule in priceForEachScheduleVariable
+                    double priceForOne = pricingManagementBean.getPrice(pricingManagementBean.getClassCode(oneStopFlightSchedules.get(i), serviceType, adults+children), oneStopFlightSchedules.get(i));
+                    priceForEachSchedule = (adults*priceForOne) + (0.75*priceForOne*children);
+     
                     if (priceForEachSchedule<minPrice){
                         minPrice = priceForEachSchedule;
                     }
@@ -330,6 +363,9 @@ public class MARSManagedBean {
                 for (i=0; i<schedulesForEachDate.size(); i++){
                    Schedule eachSchedule = schedulesForEachDate.get(i);
                    //Add price of each schdule to priceForEachFlightOption; price forEachFlightOption +=
+                    double priceForOne = pricingManagementBean.getPrice(pricingManagementBean.getClassCode(oneStopFlightSchedules.get(i), serviceType, adults+children), oneStopFlightSchedules.get(i));
+                    priceForEachFlightOption += (adults*priceForOne) + (children+0.75*priceForOne);
+                   
                    if (i%2==1){
                        if (priceForEachFlightOption<minPrice){
                             minPrice = priceForEachFlightOption;
@@ -626,6 +662,15 @@ public class MARSManagedBean {
     public void setMinPricesForWeekOneStopFlight(List<Double> minPricesForWeekOneStopFlight) {
         this.minPricesForWeekOneStopFlight = minPricesForWeekOneStopFlight;
     }
+
+    public List<Double> getSelectedDatePrices() {
+        return selectedDatePrices;
+    }
+
+    public void setSelectedDatePrices(List<Double> selectedDatePrices) {
+        this.selectedDatePrices = selectedDatePrices;
+    }
+    
     
     
 }
