@@ -5,6 +5,7 @@
  */
 package Distribution.ManagedBean;
 
+import Distribution.Entity.Customer;
 import Distribution.Session.CustomerSessionBean;
 import Distribution.Session.CustomerSessionBeanLocal;
 import java.util.Date;
@@ -14,8 +15,10 @@ import javax.enterprise.context.Dependent;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  *
@@ -25,9 +28,10 @@ import javax.faces.event.ActionEvent;
 @Named(value = "customerManagedBean")
 @SessionScoped
 public class CustomerManagedBean {
+
     @EJB
     private CustomerSessionBeanLocal customerSessionBean;
-    
+
     private Long customerID;
     private String customerFirstName;
     private String customerLastName;
@@ -37,10 +41,13 @@ public class CustomerManagedBean {
 
     private String customerEmail;
     private String customerPassword;
+    private String customerConfirmedPassword;
     private String customerAddress;
     private Date customerDOB;
     private String customerGender;
     private String feedbackMessage; //the faces message for users.
+    
+    private Customer customer;
 
     /**
      * Creates a new instance of CustomerManagedBean
@@ -48,16 +55,29 @@ public class CustomerManagedBean {
     public CustomerManagedBean() {
     }
 
-    
-    public void addCustomer (ActionEvent event){
-        setFeedbackMessage(customerSessionBean.addCustomer(customerFirstName, customerLastName, customerHpNumber, customerHpNumber, customerEmail, customerPassword, customerAddress, customerGender, customerDOB));
+    public String addCustomer() {
+        if (customerSessionBean.emailExists(customerEmail)) {
+            setFeedbackMessage("Please use a different email, this email already exists!");
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, feedbackMessage, "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return "merlionAirlinesSignUp";
         
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, feedbackMessage, "");
-        FacesContext.getCurrentInstance().addMessage(null, message);
-        clearAll();
+        } else if (!customerPassword.equals(customerConfirmedPassword)) {
+            setFeedbackMessage("The passwords you entered do not match!");
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, feedbackMessage, "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return "merlionAirlinesSignUp";  
+        }
+        else{
+            setFeedbackMessage(customerSessionBean.addCustomer(customerFirstName, customerLastName, customerHpNumber, customerHpNumber, customerEmail, customerPassword, customerAddress, customerGender, customerDOB));
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, feedbackMessage, "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            clearAll();
+            return "signUpConfirmation";
+        } 
     }
-    
-    public void clearAll(){
+
+    public void clearAll() {
         setCustomerFirstName("");
         setCustomerLastName("");
         setCustomerHpNumber("");
@@ -67,8 +87,67 @@ public class CustomerManagedBean {
         setCustomerAddress("");
         setCustomerDOB(null);
         setCustomerGender("");
+
+    }
+    
+    public String loginCheck(){
+        
+        
+        if (doLogin(customerEmail, customerPassword)){
+
+            return "customerDashboard";
+        }
+        else{
+//            ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+//
+//            return (String)ec.getRequest()).getRequestURI();
+            setFeedbackMessage("You have entered an invalid email!");
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, feedbackMessage, "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            
+            System.out.println("managed bean --- log in credentials are not right");
+            return "signUpConfirmation";
+        }
         
     }
+    
+    public Boolean doLogin(String customerEmail, String customerPassword) {
+          if (customerEmail.equals("") || customerPassword.equals("")){
+              setFeedbackMessage("Please enter your email or password!");
+              FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, feedbackMessage, "");
+              FacesContext.getCurrentInstance().addMessage(null, message);
+              return false;
+          }
+          else{
+              setCustomer(customerSessionBean.getCustomerUseEmail(customerEmail));
+              if (getCustomer() == null){
+                  setFeedbackMessage("You have entered an invalid email!");
+                  FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, feedbackMessage, "");
+                  FacesContext.getCurrentInstance().addMessage(null, message);
+                  
+                  return false;
+              }else if(customerSessionBean.isSameHash(customerEmail, customerPassword)){
+                  
+                  System.out.println("managedbean: password and email match! redirect ----");
+                  
+                  return true;
+                  //means the password and email match
+//                  redirect();
+              }
+              else{
+                  return false;
+              }
+          }   
+    }
+    
+    //redirect to customer's dashboard
+    public String redirect(){
+        
+        return "customerDashboard";
+        
+    }
+    
+
     /**
      * @return the customerSessionBean
      */
@@ -167,7 +246,6 @@ public class CustomerManagedBean {
         this.customerMileagePoints = customerMileagePoints;
     }
 
-
     /**
      * @return the customerEmail
      */
@@ -251,5 +329,33 @@ public class CustomerManagedBean {
     public void setFeedbackMessage(String feedbackMessage) {
         this.feedbackMessage = feedbackMessage;
     }
-    
+
+    /**
+     * @return the customerConfirmedPassword
+     */
+    public String getCustomerConfirmedPassword() {
+        return customerConfirmedPassword;
+    }
+
+    /**
+     * @param customerConfirmedPassword the customerConfirmedPassword to set
+     */
+    public void setCustomerConfirmedPassword(String customerConfirmedPassword) {
+        this.customerConfirmedPassword = customerConfirmedPassword;
+    }
+
+    /**
+     * @return the customer
+     */
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    /**
+     * @param customer the customer to set
+     */
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
 }

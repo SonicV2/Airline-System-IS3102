@@ -22,7 +22,7 @@ and open the template in the editor.
         <h:outputStylesheet library ="css"  name="styleMerlion.css" />
         <h:outputStylesheet library ="css"  name="JFFormStyle.css" />
         <h:outputStylesheet library ="css"  name="flexslider.css" />
-        <h:outputScript library="js" name="jQuery/jQuery-2.1.4.min.js" />
+        <!--<h:outputScript library="js" name="jQuery/jQuery-2.1.4.min.js" />-->
         <h:outputScript library="js" name="modernizr.custom.js" /> 
         <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
         <!-- //Custom Theme files -->
@@ -54,38 +54,42 @@ and open the template in the editor.
                     <div class="col-md-6 book-left">
                         <div class="book-left-info">
                             <h3>Registration Successful! </h3>
-                            
-                            
+
+
                         </div>
                         <p>Please log in with your username (your email) and password:</p>
                         <br></br>
-                        <form id="loginForm">
+                        <h:form id="loginForm">
+                            <p:growl id="growl" sticky="true" showDetail="true"/>
                             <div class="login-grid-left">
                                 <fieldset id="body">
                                     <fieldset>
-                                        <label for="email">Email Address</label>
-                                        <input type="text" name="email" id="email"/>
+                                    <label for="email">Email Address</label>
+                                    <h:inputText value="#{customerManagedBean.customerEmail}"></h:inputText>
+                                   
                                     </fieldset>
                                     <fieldset>
-                                        <label for="password">Password</label>
-                                        <input type="password" name="password" id="password"/>
+                                    <label for="password">Password</label>
+                                    <h:inputSecret value="#{customerManagedBean.customerPassword}"></h:inputSecret>
                                     </fieldset>
-                                    <input type="submit" id="login" value="Sign in"/>
+
+                                    <h:commandButton class="pull-right" value="Sign in" action="#{customerManagedBean.loginCheck()}"/>
                                     <label for="checkbox"><input type="checkbox" id="checkbox"/> <i>Remember me</i></label>
                                 </fieldset>
                                 <span><a href="#">Forgot your password?</a></span>                                
                             </div>
-                        </form>
+<!--                        </form>-->
+                        </h:form>
                     </div>
 
 
-                    
+
                     <div class="clearfix"> </div>
                 </div>
             </div>
         </div>
         <!-- //container -->
     </div>
-     <ui:include src="merlionAirlinesFooter.xhtml"/>
+    <ui:include src="merlionAirlinesFooter.xhtml"/>
     <!-- //banner-bottom -->
 </html>
