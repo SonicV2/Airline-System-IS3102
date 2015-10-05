@@ -6,22 +6,24 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <head>
-        <title>Display Direct Flight For Outbound journey</title>
+        <title>Display Direct Flight</title>
     </head>
     <body>
 <h:form id="form">
     <p:dataList value="#{mARSManagedBean.directFlightSchedules}" var="schedules" type="ordered">
         <h:outputText value="#{schedules.startDate}">
-            <f:convertDateTime pattern ="dd-mm-yyyy HH:mm:ss"/>
+<!--            <f:convertDateTime pattern ="dd-mm-yyyy HH:mm"/>-->
         </h:outputText>
         
         <h:outputText value="#{schedules.endDate}">
-            <f:convertDateTime pattern ="dd-mm-yyyy HH:mm:ss"/>
+<!--            <f:convertDateTime pattern ="dd-mm-yyyy HH:mm"/>-->
         </h:outputText>
         
-        #{schedules.flight.route.originIATA}, #{schedules.flight.route.destinationIATA}, #{mARSManagedBean.directFlightDuration}
+        #{schedules.flight.route.originIATA}, #{schedules.flight.route.destinationIATA}, #{mARSManagedBean.directFlightDuration}, #{mARSManagedBean.selectedDatePrices}, #{mARSManagedBean.minPricesForWeekDirectFlight}
     </p:dataList>
-    <h:commandButton class="btn btn-outline btn-success" value="Proceed to select return flight"  action="#{mARSManagedBean.displayReturnFlights()}"/>
+    <div class="form-group text-center">
+        <h:commandButton class="btn btn-outline btn-success" value="Select return flight"  action="#{mARSManagedBean.displayReturnFlights()}"/>
+    </div>
 </h:form>
       
     </body>

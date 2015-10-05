@@ -14,12 +14,12 @@
     <p:dataList value="#{mARSManagedBean.oneStopFlightSchedules}" var="schedules" type="ordered">
         <h:outputLabel class="col-md-4 control-label" value="Departure: "/>
         <h:outputText value="#{schedules.startDate}">
-            <f:convertDateTime pattern ="dd-mm-yyyy HH:mm:ss"/>
+<!--            <f:convertDateTime pattern ="dd-mm-yyyy HH:mm:ss"/>-->
         </h:outputText>
         
         <h:outputLabel class="col-md-4 control-label" value="Arrival: "/>
         <h:outputText value="#{schedules.endDate}">
-            <f:convertDateTime pattern ="dd-mm-yyyy HH:mm:ss"/>
+<!--            <f:convertDateTime pattern ="dd-mm-yyyy HH:mm:ss"/>-->
         </h:outputText>
         
         <h:outputLabel class="col-md-4 control-label" value="Origin: "/>

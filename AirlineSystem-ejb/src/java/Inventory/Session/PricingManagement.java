@@ -46,7 +46,7 @@ public class PricingManagement implements PricingManagementLocal {
 
     //Find the seat availability of a particular flight no and time
     public SeatAvailability findSA(Date fDate, String flightNo) {
-        System.out.println(flightNo);
+        //System.out.println(flightNo);
         Query q = em.createQuery("SELECT o from SeatAvailability o WHERE o.schedule.flight.flightNo = :flightNo");
         q.setParameter("flightNo", flightNo);
         List<SeatAvailability> saList = q.getResultList();
@@ -55,7 +55,7 @@ public class PricingManagement implements PricingManagementLocal {
         for (int i = 0; i < size; i++) {
             if (saList.get(i).getSchedule().getStartDate().equals(fDate)) {
                 sa = saList.get(i);
-                System.out.println("Date Check Successful!");
+                //System.out.println("Date Check Successful!");
             }
 
         }
@@ -150,7 +150,7 @@ public class PricingManagement implements PricingManagementLocal {
             Date currentDate = new Date();
             Date fDate = s.getStartDate();
             long days = (fDate.getTime() - current.getTime()) / 1000 / 60 / 60 / 24;
-            System.out.println("Service Type: " + serviceClass + " " + days);
+            //System.out.println("Service Type: " + serviceClass + " " + days);
             List<BookingClass> updatedList = new ArrayList();
 
 //            String currentSeason = "Neutral";
@@ -186,7 +186,7 @@ public class PricingManagement implements PricingManagementLocal {
                 int daysOut = b.getAdvancedSales();
                 if (days <= daysOut) {
                     updatedList.add(classList.get(i));
-                    System.out.println("Fare Class qualified: " + b.getClasscode());
+                    //System.out.println("Fare Class qualified: " + b.getClasscode());
                 }
             }
 
@@ -202,18 +202,18 @@ public class PricingManagement implements PricingManagementLocal {
                 }
             }
 
-            System.out.println("Lowest Fare Class: " + c.getClasscode());
+            //System.out.println("Lowest Fare Class: " + c.getClasscode());
             for (int i = 0; i < size; i++) {
                 BookingClass b = updatedList.get(i);
                 int daysOut = b.getAdvancedSales();
                 int sold = b.getPercentSold();
                 if (realSold >= sold) {
                     c = b;
-                    System.out.println("Higher Class Triggered ");
+                    //System.out.println("Higher Class Triggered ");
                 }
             }
 
-            System.out.println("Final Booking Class:" + c.getClasscode());
+            //System.out.println("Final Booking Class:" + c.getClasscode());
             return c.getClasscode();
         } catch (EntityNotFoundException enfe) {
             System.out.println("\nEntity not found error");
