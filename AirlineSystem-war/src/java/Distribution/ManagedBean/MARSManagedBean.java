@@ -12,6 +12,7 @@ import APS.Entity.Schedule;
 import APS.Session.FlightSessionBeanLocal;
 import APS.Session.RouteSessionBeanLocal;
 import APS.Session.ScheduleSessionBeanLocal;
+import Distribution.Entity.FlightOptions;
 import Distribution.Session.DistributionSessionBeanLocal;
 import Inventory.Session.PricingManagementLocal;
 import java.util.ArrayList;
@@ -24,6 +25,8 @@ import javax.inject.Named;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 /**
  *
@@ -48,6 +51,9 @@ public class MARSManagedBean {
 
     @EJB
     private PricingManagementLocal pricingManagementBean;
+    
+    @PersistenceContext(unitName = "AirlineSystem-ejbPU")
+    private EntityManager em;
 
     private String flightNo;
     private Double flightDuration;
@@ -93,6 +99,12 @@ public class MARSManagedBean {
     private List<Double> minPricesForWeekDirectFlight;
     private List<Double> minPricesForWeekOneStopFlight;
     private List<Double> selectedDatePrices;
+    
+    private List<FlightOptions> flightOptionsList;
+    private Schedule legOne;
+    private Schedule legTwo;
+    private String layover;
+    private String duration;
 
     @PostConstruct
     public void retrieve() {
@@ -134,6 +146,7 @@ public class MARSManagedBean {
         /*Convert the chosen origin and destination cities into IATAs*/
         List<Flight> allFlights = new ArrayList();
         allFlights = distributionSessionBean.getAllFlights();
+        flightOptionsList = new ArrayList();
 
         for (Flight eachFlight : allFlights) {
             if (eachFlight.getRoute().getOriginCity().equalsIgnoreCase(originCity)) {
@@ -240,8 +253,20 @@ public class MARSManagedBean {
                 for (Schedule eachSchedule : oneStopFlightSchedules) {
                     eachSchedule.setStartDate(distributionSessionBean.convertTimeZone(eachSchedule.getStartDate(), distributionSessionBean.getSingaporeTimeZone(), distributionSessionBean.getTimeZoneFromIata(eachSchedule.getFlight().getRoute().getOriginIATA())));
                     eachSchedule.setEndDate(distributionSessionBean.convertTimeZone(eachSchedule.getEndDate(), distributionSessionBean.getSingaporeTimeZone(), distributionSessionBean.getTimeZoneFromIata(eachSchedule.getFlight().getRoute().getDestinationIATA())));
-
+                   
                 }
+                
+                int c=0;
+                
+                for (int a=0; a<oneStopFlightSchedules.size(); a++) {
+                FlightOptions newFlightOptions = new FlightOptions();
+                int b = a;
+                a += 1;
+                newFlightOptions.createFlightOptions(oneStopFlightSchedules.get(b), oneStopFlightSchedules.get(a), oneStopFlightLayover.get(b-c), oneStopFlightDuration.get(b-c), selectedDatePrices.get(b-c));
+                flightOptionsList.add(newFlightOptions);
+                c++;
+                }
+             
                 if (returnDate == null) {
                     return "DisplayOneStopFlight";
                 } else {
@@ -257,6 +282,7 @@ public class MARSManagedBean {
         /*Convert the chosen origin and destination cities into IATAs*/
         List<Route> allRoutes = new ArrayList<Route>();
         allRoutes = routeSessionBean.retrieveRoutes();
+        flightOptionsList = new ArrayList();
 
         for (Route eachRoute : allRoutes) {
             if (eachRoute.getOriginCity().equals(originCity) && eachRoute.getDestinationCity().equals(destinationCity)) {
@@ -335,6 +361,20 @@ public class MARSManagedBean {
                 eachSchedule.setEndDate(distributionSessionBean.convertTimeZone(eachSchedule.getEndDate(), distributionSessionBean.getSingaporeTimeZone(), distributionSessionBean.getTimeZoneFromIata(eachSchedule.getFlight().getRoute().getDestinationIATA())));
 
             }
+            
+                            
+                int c=0;
+                
+                for (int a=0; a<oneStopFlightSchedules.size(); a++) {
+                FlightOptions newFlightOptions = new FlightOptions();
+                int b = a;
+                a += 1;
+                newFlightOptions.createFlightOptions(oneStopFlightSchedules.get(b), oneStopFlightSchedules.get(a), oneStopFlightLayover.get(b-c), oneStopFlightDuration.get(b-c), selectedDatePrices.get(b-c));
+                flightOptionsList.add(newFlightOptions);
+                c++;
+                }
+             
+                
             return "DisplayReturnOneStopFlightReturn";
         }
 
@@ -701,6 +741,46 @@ public class MARSManagedBean {
 
     public void setSelectedDatePrices(List<Double> selectedDatePrices) {
         this.selectedDatePrices = selectedDatePrices;
+    }
+
+    public List<FlightOptions> getFlightOptionsList() {
+        return flightOptionsList;
+    }
+
+    public void setFlightOptionsList(List<FlightOptions> flightOptionsList) {
+        this.flightOptionsList = flightOptionsList;
+    }
+
+    public Schedule getLegOne() {
+        return legOne;
+    }
+
+    public void setLegOne(Schedule legOne) {
+        this.legOne = legOne;
+    }
+
+    public Schedule getLegTwo() {
+        return legTwo;
+    }
+
+    public void setLegTwo(Schedule legTwo) {
+        this.legTwo = legTwo;
+    }
+
+    public String getLayover() {
+        return layover;
+    }
+
+    public void setLayover(String layover) {
+        this.layover = layover;
+    }
+
+    public String getDuration() {
+        return duration;
+    }
+
+    public void setDuration(String duration) {
+        this.duration = duration;
     }
 
 }
