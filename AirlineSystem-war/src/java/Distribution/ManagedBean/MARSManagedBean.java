@@ -359,7 +359,7 @@ public class MARSManagedBean {
   
         List<Double> pricesForWeek = new ArrayList();
         List<Schedule> schedulesForEachDate = new ArrayList();
-        double minPrice,priceForEachFlightOption=0;
+        double minPrice,priceForEachFlightOption=0.0,priceForOne;
         int i,j, k;
         List<String> transitHubs = distributionSessionBean.getTransitHubs(distributionSessionBean.getHubIatasFromOrigin(originIATA), destinationIATA);
         
@@ -382,14 +382,14 @@ public class MARSManagedBean {
                 for (k=0; k<schedulesForEachDate.size(); k++){
                    Schedule eachSchedule = schedulesForEachDate.get(k);
                    //Add price of each schdule to priceForEachFlightOption; price forEachFlightOption +=
-                    double priceForOne = pricingManagementBean.getPrice(pricingManagementBean.getClassCode(eachSchedule, serviceType, adults+children), eachSchedule);
+                    priceForOne = pricingManagementBean.getPrice(pricingManagementBean.getClassCode(eachSchedule, serviceType, adults+children), eachSchedule);
                     priceForEachFlightOption += (adults*priceForOne) + (children+0.75*priceForOne);
-                   
+                    System.out.println("EachFlightOptionPrice for schedule "+ k + " is " + priceForEachFlightOption );
                    if (k%2==1){
                        if (priceForEachFlightOption<minPrice){
                             minPrice = priceForEachFlightOption;
                         }
-                    priceForEachFlightOption = 0;   
+                    priceForEachFlightOption = 0.0;   
                    }      
                 }
                 pricesForWeek.add(minPrice);
