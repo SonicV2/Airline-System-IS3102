@@ -10,9 +10,45 @@
     </head>
     <body>
 <h:form id="form">
+    
     <p:dataList value="#{mARSManagedBean.oneStopFlightSchedules}" var="schedules" type="ordered">
-        #{schedules.startDate}, #{schedules.endDate}, #{schedules.flight.route.originIATA}, #{schedules.flight.route.destinationIATA}, #{mARSManagedBean.oneStopFlightDuration}, #{mARSManagedBean.oneStopFlightLayover}
+        <h:outputLabel class="col-md-4 control-label" value="Departure: "/>
+        <h:outputText value="#{schedules.startDate}">
+            <f:convertDateTime pattern ="dd-mm-yyyy HH:mm:ss"/>
+        </h:outputText>
+        
+        <h:outputLabel class="col-md-4 control-label" value="Arrival: "/>
+        <h:outputText value="#{schedules.endDate}">
+            <f:convertDateTime pattern ="dd-mm-yyyy HH:mm:ss"/>
+        </h:outputText>
+        
+        <h:outputLabel class="col-md-4 control-label" value="Origin: "/>
+        <h:outputText value="#{schedules.flight.route.originIATA}">
+        </h:outputText>
+        
+        <h:outputLabel class="col-md-4 control-label" value="Destination: "/>
+        <h:outputText value="#{schedules.flight.route.destinationIATA}">
+        </h:outputText>
+        
+        <h:outputLabel class="col-md-4 control-label" value="Duration: "/>
+        <h:outputText value="#{mARSManagedBean.oneStopFlightDuration}">
+        </h:outputText>
+        
+        <h:outputLabel class="col-md-4 control-label" value="Layover: "/>
+        <h:outputText value="#{mARSManagedBean.oneStopFlightLayover}">
+        </h:outputText>
+        
+        <h:outputLabel class="col-md-4 control-label" value="Price: "/>
+        <h:outputText value="#{mARSManagedBean.selectedDatePrices}">
+        </h:outputText>
+       
+
     </p:dataList>
+    
+    <h:outputLabel class="col-md-4 control-label" value="For week: "/>
+        <h:outputText value="#{mARSManagedBean.minPricesForWeekOneStopFlight}">
+        </h:outputText>
+    
 </h:form>
       
     </body>

@@ -25,10 +25,9 @@
 
     <h:body>
 
-        <!--            To add the same header on all dashboard pages  
--->       <ui:include src="/CI/dashboardHeader.xhtml"/><!--
-           To add the same sidebar on all dashboard pages -->  
+       <ui:include src="/CI/dashboardHeader.xhtml"/>      
         <ui:include src="/CI/dashboardSidebar.xhtml"/>
+        
         <div id="page-wrapper">
 
             <div class="row">
@@ -56,13 +55,26 @@
                                 <p:cellEditor>
                                     <f:facet name="output"><h:outputText value="#{bookingclass.serviceClass}" /></f:facet>
                                     <f:facet name="input">
-                                        <p:selectOneMenu id="serviceClass" value="#{bookingclass.serviceClass}" style="width:150px">
+                                        <p:selectOneMenu  value="#{bookingclass.serviceClass}" style="width:150px">
                                             <f:selectItem itemLabel="Select One" itemValue="" />
                                             <f:selectItem itemLabel="Economy Saver" itemValue="Economy Saver" />
                                             <f:selectItem itemLabel="Economy Basic" itemValue="Economy Basic" />
                                             <f:selectItem itemLabel="Economy Premium" itemValue="Economy Premium" />
                                             <f:selectItem itemLabel="Business" itemValue="Business" />
                                             <f:selectItem itemLabel="First Class" itemValue="First Class" />
+                                        </p:selectOneMenu>
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                            
+                            <p:column headerText="Season Demand">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{bookingclass.season}" /></f:facet>
+                                    <f:facet name="input">
+                                        <p:selectOneMenu  value="#{bookingclass.season}" style="width:150px">
+                                            <f:selectItem itemLabel="Neutral" itemValue="Neutral" />
+                                            <f:selectItem itemLabel="High" itemValue="High" />
+                                            <f:selectItem itemLabel="Low" itemValue="Low" />
                                         </p:selectOneMenu>
                                     </f:facet>
                                 </p:cellEditor>
@@ -93,6 +105,20 @@
                                 <p:cellEditor>
                                     <f:facet name="output"><h:outputText value="#{bookingclass.millageAccru}" /></f:facet>
                                     <f:facet name="input"><p:inputText value="#{bookingclass.millageAccru}" style="width:100%" /></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                            
+                            <p:column headerText="Season">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{bookingclass.season}" /></f:facet>
+                                    <f:facet name="input">
+                                        <p:selectOneMenu  value="#{bookingclass.season}" style="width:150px">
+                                            <f:selectItem itemLabel="Select One" itemValue="" />
+                                            <f:selectItem itemLabel="Neutral" itemValue="Neutral" />
+                                            <f:selectItem itemLabel="High" itemValue="High" />
+                                            <f:selectItem itemLabel="Low" itemValue="Low" />
+                                        </p:selectOneMenu>
+                                    </f:facet>
                                 </p:cellEditor>
                             </p:column>
 

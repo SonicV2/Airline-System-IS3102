@@ -40,6 +40,7 @@ public class classManageBean {
     private int baggage;
     private int millageAccru;
     private List<BookingClass> bookingClass;
+    private String season;
     
     
      @PostConstruct
@@ -47,6 +48,14 @@ public class classManageBean {
         clear();
         setBookingClass(cm.retrieveBookingClasses());
         
+    }
+
+    public String getSeason() {
+        return season;
+    }
+
+    public void setSeason(String season) {
+        this.season = season;
     }
     
     public void clear(){
@@ -90,10 +99,14 @@ public class classManageBean {
             FacesMessage msg = new FacesMessage("Amount of Mileage Accruable in Percentage","");
             FacesContext.getCurrentInstance().addMessage(null, msg);
         }
+        if(season.isEmpty()){
+            FacesMessage msg = new FacesMessage("Please Fill in Seasonality","");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        }
         else{
             String message = cm.addClassCode(getClasscode(), getPricePercent(), getAdvancedSales(), 
             getPercentSold(), getServiceClass(), isRebook(), isCancel(), 
-            getBaggage(), getMillageAccru());
+            getBaggage(), getMillageAccru(), getSeason());
             FacesMessage msg = new FacesMessage(message);
             FacesContext.getCurrentInstance().addMessage(null, msg);
             setBookingClass(cm.retrieveBookingClasses());
