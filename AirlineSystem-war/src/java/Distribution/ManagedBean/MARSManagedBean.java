@@ -6,7 +6,6 @@
 package Distribution.ManagedBean;
 
 import APS.Entity.Flight;
-import APS.Entity.Location;
 import APS.Entity.Route;
 import APS.Entity.Schedule;
 import APS.Session.FlightSessionBeanLocal;
@@ -163,12 +162,6 @@ public class MARSManagedBean {
         }
         if (returnDate !=null)
             isReturnDateSet = true;
-
-        
-        //setDepartureDate(distributionSessionBean.convertTimeZone(departureDate, distributionSessionBean.getTimeZoneFromIata(originIATA), distributionSessionBean.getSingaporeTimeZone()));
-        //if (isReturnDateSet) {
-            //setReturnDate(distributionSessionBean.convertTimeZone(returnDate, distributionSessionBean.getTimeZoneFromIata(destinationIATA), distributionSessionBean.getSingaporeTimeZone()));
-        //}
 
         boolean inputValid = true;
         //One way jorney selected by user
