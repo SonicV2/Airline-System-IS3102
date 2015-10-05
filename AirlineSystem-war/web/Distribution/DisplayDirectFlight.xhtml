@@ -12,14 +12,14 @@
 <h:form id="form">
     <p:dataList value="#{mARSManagedBean.directFlightSchedules}" var="schedules" type="ordered">
         <h:outputText value="#{schedules.startDate}">
-            <f:convertDateTime pattern ="dd-mm-yyyy HH:mm:ss"/>
+<!--            <f:convertDateTime pattern ="dd-mm-yyyy HH:mm"/>-->
         </h:outputText>
         
         <h:outputText value="#{schedules.endDate}">
-            <f:convertDateTime pattern ="dd-mm-yyyy HH:mm:ss"/>
+<!--            <f:convertDateTime pattern ="dd-mm-yyyy HH:mm"/>-->
         </h:outputText>
         
-        #{schedules.flight.route.originIATA}, #{schedules.flight.route.destinationIATA}, #{mARSManagedBean.directFlightDuration}
+        #{schedules.flight.route.originIATA}, #{schedules.flight.route.destinationIATA}, #{mARSManagedBean.directFlightDuration}, #{mARSManagedBean.selectedDatePrices}, #{mARSManagedBean.minPricesForWeekDirectFlight}
     </p:dataList>
 </h:form>
       

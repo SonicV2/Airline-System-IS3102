@@ -178,11 +178,12 @@ public class MARSManagedBean {
                 for (Schedule eachSchedule : directFlightSchedules) {
                     eachSchedule.setStartDate(distributionSessionBean.convertTimeZone(eachSchedule.getStartDate(), distributionSessionBean.getSingaporeTimeZone(), distributionSessionBean.getTimeZoneFromIata(eachSchedule.getFlight().getRoute().getOriginIATA())));
                     eachSchedule.setEndDate(distributionSessionBean.convertTimeZone(eachSchedule.getEndDate(), distributionSessionBean.getSingaporeTimeZone(), distributionSessionBean.getTimeZoneFromIata(eachSchedule.getFlight().getRoute().getDestinationIATA())));
-                    
+                    System.out.println("!!!!!!!!!!!!!!!Start Date:" + eachSchedule.getStartDate());
+                    System.out.println("!!!!!!!!!!!!!!!End Date:" + eachSchedule.getEndDate());
                     
                     double priceForOne = pricingManagementBean.getPrice(pricingManagementBean.getClassCode(eachSchedule, serviceType, adults+children), eachSchedule);
                     selectedDatePrices.add((adults*priceForOne)+(0.75*priceForOne*children));
-                
+                    System.out.println("!!!!!!!!!!!!!Price:" + priceForOne);
                 }
                 retrieveMinWeekPricesForDirect(originIATA, destinationIATA, departureDate, serviceType, adults, children);
                 if (returnDate == null) {
@@ -334,7 +335,7 @@ public class MARSManagedBean {
                 minPrice = 99999999;
                 for (Schedule eachSchedule: schedulesForEachDate){
                     //Store price for each schedule in priceForEachScheduleVariable
-                    double priceForOne = pricingManagementBean.getPrice(pricingManagementBean.getClassCode(oneStopFlightSchedules.get(i), serviceType, adults+children), oneStopFlightSchedules.get(i));
+                    double priceForOne = pricingManagementBean.getPrice(pricingManagementBean.getClassCode(eachSchedule, serviceType, adults+children), eachSchedule);
                     priceForEachSchedule = (adults*priceForOne) + (0.75*priceForOne*children);
      
                     if (priceForEachSchedule<minPrice){
@@ -378,7 +379,7 @@ public class MARSManagedBean {
                 for (i=0; i<schedulesForEachDate.size(); i++){
                    Schedule eachSchedule = schedulesForEachDate.get(i);
                    //Add price of each schdule to priceForEachFlightOption; price forEachFlightOption +=
-                    double priceForOne = pricingManagementBean.getPrice(pricingManagementBean.getClassCode(oneStopFlightSchedules.get(i), serviceType, adults+children), oneStopFlightSchedules.get(i));
+                    double priceForOne = pricingManagementBean.getPrice(pricingManagementBean.getClassCode(eachSchedule, serviceType, adults+children), eachSchedule);
                     priceForEachFlightOption += (adults*priceForOne) + (children+0.75*priceForOne);
                    
                    if (i%2==1){
