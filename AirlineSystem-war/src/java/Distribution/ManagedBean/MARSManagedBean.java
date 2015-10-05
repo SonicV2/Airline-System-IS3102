@@ -6,6 +6,7 @@
 package Distribution.ManagedBean;
 
 import APS.Entity.Flight;
+import APS.Entity.Location;
 import APS.Entity.Route;
 import APS.Entity.Schedule;
 import APS.Session.FlightSessionBeanLocal;
@@ -129,16 +130,18 @@ public class MARSManagedBean {
     public String displayDepartureFlights() {
         
         /*Convert the chosen origin and destination cities into IATAs*/
-        List<Route> allRoutes = new ArrayList<Route>();
-        allRoutes = routeSessionBean.retrieveRoutes();
+        List<Flight> allFlights = new ArrayList();
+        allFlights = distributionSessionBean.getAllFlights();
         
-        for (Route eachRoute : allRoutes) {
-            if (eachRoute.getOriginCity().equals(originCity) && eachRoute.getDestinationCity().equals(destinationCity)) {
-                originIATA = eachRoute.getOriginIATA();
-                destinationIATA = eachRoute.getDestinationIATA();
-            }
-                
+        for (Flight eachFlight : allFlights) {
+            if (eachFlight.getRoute().getOriginCity().equalsIgnoreCase(originCity))
+                originIATA = eachFlight.getRoute().getOriginIATA();
+            if (eachFlight.getRoute().getDestinationCity().equalsIgnoreCase(destinationCity))
+                destinationIATA = eachFlight.getRoute().getDestinationIATA();
         }
+        
+        System.out.println("MANAGE BEAN - Origin IATA:::: " + originIATA);
+        System.out.println("MANAGE BEAN - Destination IATA:::: " + destinationIATA);
         
         boolean inputValid = true;  
         //One way jorney selected by user
@@ -357,7 +360,7 @@ public class MARSManagedBean {
         List<Double> pricesForWeek = new ArrayList();
         List<Schedule> schedulesForEachDate = new ArrayList();
         double minPrice,priceForEachFlightOption=0;
-        int i,j;
+        int i,j, k;
         List<String> transitHubs = distributionSessionBean.getTransitHubs(distributionSessionBean.getHubIatasFromOrigin(originIATA), destinationIATA);
         
         for (i=-3;i<=3;i++){
@@ -376,13 +379,13 @@ public class MARSManagedBean {
                 minPrice = 99999999;
                 
                 
-                for (i=0; i<schedulesForEachDate.size(); i++){
-                   Schedule eachSchedule = schedulesForEachDate.get(i);
+                for (k=0; k<schedulesForEachDate.size(); k++){
+                   Schedule eachSchedule = schedulesForEachDate.get(k);
                    //Add price of each schdule to priceForEachFlightOption; price forEachFlightOption +=
                     double priceForOne = pricingManagementBean.getPrice(pricingManagementBean.getClassCode(eachSchedule, serviceType, adults+children), eachSchedule);
                     priceForEachFlightOption += (adults*priceForOne) + (children+0.75*priceForOne);
                    
-                   if (i%2==1){
+                   if (k%2==1){
                        if (priceForEachFlightOption<minPrice){
                             minPrice = priceForEachFlightOption;
                         }
@@ -394,6 +397,7 @@ public class MARSManagedBean {
             else
                 pricesForWeek.add(0.0);   
         }
+        System.out.println("!!!!!Length:" + pricesForWeek.size());
         setMinPricesForWeekOneStopFlight(pricesForWeek);
         
     }

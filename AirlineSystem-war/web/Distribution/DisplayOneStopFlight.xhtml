@@ -37,8 +37,17 @@
         <h:outputLabel class="col-md-4 control-label" value="Layover: "/>
         <h:outputText value="#{mARSManagedBean.oneStopFlightLayover}">
         </h:outputText>
+        
+        <h:outputLabel class="col-md-4 control-label" value="Price: "/>
+        <h:outputText value="#{mARSManagedBean.selectedDatePrices}">
+        </h:outputText>
+       
 
     </p:dataList>
+    
+    <h:outputLabel class="col-md-4 control-label" value="For week: "/>
+        <h:outputText value="#{mARSManagedBean.minPricesForWeekOneStopFlight}">
+        </h:outputText>
     
 </h:form>
       
