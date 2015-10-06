@@ -11,34 +11,75 @@
     <body>
 <h:form id="form">
     
-    <p:dataList value="#{mARSManagedBean.oneStopFlightSchedules}" var="schedules" type="ordered">
-        <h:outputLabel class="col-md-4 control-label" value="Departure: "/>
-        <h:outputText value="#{schedules.startDate}">
-            <f:convertDateTime pattern ="dd-mm-yyyy HH:mm:ss"/>
+    <p:dataList value="#{mARSManagedBean.flightOptionsList}" var="flightOptions" type="ordered">
+        <div class="col-lg-12">
+        <h:outputLabel class="col-md-4 control-label" value="Leg One departs: "/>
+        <h:outputText value="#{flightOptions.legOne.startDate}">
         </h:outputText>
+        </div>
         
-        <h:outputLabel class="col-md-4 control-label" value="Arrival: "/>
-        <h:outputText value="#{schedules.endDate}">
-            <f:convertDateTime pattern ="dd-mm-yyyy HH:mm:ss"/>
+        <div class="col-lg-12">
+        <h:outputLabel class="col-md-4 control-label" value="Leg One arrives: "/>
+        <h:outputText value="#{flightOptions.legOne.endDate}">
         </h:outputText>
+        </div>
         
-        <h:outputLabel class="col-md-4 control-label" value="Origin: "/>
-        <h:outputText value="#{schedules.flight.route.originIATA}">
+        <div class="col-lg-12">
+        <h:outputText value="#{flightOptions.legOne.flight.route.originIATA}">
         </h:outputText>
+        </div>
         
-        <h:outputLabel class="col-md-4 control-label" value="Destination: "/>
-        <h:outputText value="#{schedules.flight.route.destinationIATA}">
+        <div class="col-lg-12">
+        <h:outputText value="#{flightOptions.legOne.flight.route.destinationIATA}">
         </h:outputText>
+            </div>
         
+        <div class="col-lg-12">
+        <h:outputLabel class="col-md-4 control-label" value="Leg Two departs: "/>
+        <h:outputText value="#{flightOptions.legTwo.startDate}">
+        </h:outputText>
+        </div>
+        
+        <div class="col-lg-12">
+        <h:outputLabel class="col-md-4 control-label" value="Leg Two arrives: "/>
+        <h:outputText value="#{flightOptions.legTwo.endDate}">
+        </h:outputText>
+        </div>
+        
+        <div class="col-lg-12">
+        <h:outputText value="#{flightOptions.legTwo.flight.route.originIATA}">
+        </h:outputText>
+            </div>
+        
+        <div class="col-lg-12">
+        <h:outputText value="#{flightOptions.legTwo.flight.route.destinationIATA}">
+        </h:outputText>
+            </div>
+        
+        <div class="col-lg-12">
         <h:outputLabel class="col-md-4 control-label" value="Duration: "/>
-        <h:outputText value="#{mARSManagedBean.oneStopFlightDuration}">
+        <h:outputText value="#{flightOptions.duration}">
         </h:outputText>
+        </div>
         
+        <div class="col-lg-12">
         <h:outputLabel class="col-md-4 control-label" value="Layover: "/>
-        <h:outputText value="#{mARSManagedBean.oneStopFlightLayover}">
+        <h:outputText value="#{flightOptions.layover}">
         </h:outputText>
+        </div>
+        
+        <div class="col-lg-12">
+        <h:outputLabel class="col-md-4 control-label" value="Price: "/>
+        <h:outputText value="#{flightOptions.price}">
+        </h:outputText>
+        </div>
+       
 
     </p:dataList>
+    
+    <h:outputLabel class="col-md-4 control-label" value="For week: "/>
+        <h:outputText value="#{mARSManagedBean.minPricesForWeekOneStopFlight}">
+        </h:outputText>
     
 </h:form>
       

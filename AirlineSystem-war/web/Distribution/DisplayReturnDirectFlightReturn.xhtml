@@ -6,20 +6,20 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <head>
-        <title>Display Direct Flight For Inbound Return Journey</title>
+        <title>Display Direct Flight</title>
     </head>
     <body>
 <h:form id="form">
     <p:dataList value="#{mARSManagedBean.directFlightSchedules}" var="schedules" type="ordered">
         <h:outputText value="#{schedules.startDate}">
-            <f:convertDateTime pattern ="dd-mm-yyyy HH:mm:ss"/>
+<!--            <f:convertDateTime pattern ="dd-mm-yyyy HH:mm"/>-->
         </h:outputText>
         
         <h:outputText value="#{schedules.endDate}">
-            <f:convertDateTime pattern ="dd-mm-yyyy HH:mm:ss"/>
+<!--            <f:convertDateTime pattern ="dd-mm-yyyy HH:mm"/>-->
         </h:outputText>
         
-        #{schedules.flight.route.originIATA}, #{schedules.flight.route.destinationIATA}, #{mARSManagedBean.directFlightDuration}
+        #{schedules.flight.route.originIATA}, #{schedules.flight.route.destinationIATA}, #{mARSManagedBean.directFlightDuration}, #{mARSManagedBean.selectedDatePrices}, #{mARSManagedBean.minPricesForWeekDirectFlight}
     </p:dataList>
 </h:form>
       
