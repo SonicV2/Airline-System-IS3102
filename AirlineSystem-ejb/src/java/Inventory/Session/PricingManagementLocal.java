@@ -17,7 +17,7 @@ import javax.ejb.Local;
 public interface PricingManagementLocal {
     
     // Generate the amount of seat available which includes overbooking based on demand forecast
-    public int[] generateAvailability(int economy, int business, int firstClass);
+   public int[] generateAvailability(String flightNo, int economy, int business, int firstClass) ;
     
     // Get the price of a ticket of a specific schedule and classCode
     public double getPrice(String classCode,Schedule s);
@@ -35,6 +35,8 @@ public interface PricingManagementLocal {
     
     //Find the seat availability of a particular flight no and time
     public SeatAvailability findSA(Date fDate,String flightNo);
+    
+    public String calTurnOut(String flightNo, String serviceType);
     
     
     

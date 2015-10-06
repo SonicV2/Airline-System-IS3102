@@ -19,6 +19,7 @@ import Inventory.Entity.Booking;
 import APS.Entity.Schedule;
 import APS.Entity.Location;
 import Inventory.Entity.Season;
+import javax.persistence.TemporalType;
 
 /**
  *
@@ -33,15 +34,47 @@ public class PricingManagement implements PricingManagementLocal {
 
     // Generate the amount of seat available which includes overbooking based on demand forecast
     // Currently it is dummy generating availability
-    @Override
-    public int[] generateAvailability(int economy, int business, int firstClass) {
+  
+    public int[] generateAvailability(String flightNo, int economy, int business, int firstClass) {
+        if ( calTurnOut(flightNo,"Business").equals("Not Enough Historic Data")){
         int[] seats = new int[5];
         seats[0] = (economy / 3) + 5;
         seats[1] = (economy / 3) + 5;
         seats[2] = (economy / 3) + 5;
         seats[3] = business + 5;
-        seats[4] = business + 5;
+        seats[4] = firstClass + 5;
         return seats;
+        }
+        else{
+          int[] seats = new int[5];
+        seats[0] = (economy/3)*(100+ Integer.valueOf(calTurnOut(flightNo,"Economy Saver")))/100 ;
+        seats[1] = (economy/3)*(100+ Integer.valueOf(calTurnOut(flightNo,"Economy Basic")))/100 ;
+        seats[2] = (economy/3)*(100+ Integer.valueOf(calTurnOut(flightNo,"Economy Premium")))/100 ;
+        seats[3] = (business)*(100+ Integer.valueOf(calTurnOut(flightNo,"Business")))/100 ;
+        seats[4] = (firstClass)*(100+ Integer.valueOf(calTurnOut(flightNo,"First Class")))/100 ;
+        return seats; 
+        }
+    }
+    
+    public String calTurnOut(String flightNo, String serviceType) {
+        Query q = em.createQuery("SELECT o FROM Booking o WHERE o.flightNo=:flightNo AND o.serviceType=:serviceType AND o.flightDate <:date");
+        q.setParameter("flightNo", flightNo);
+        q.setParameter("serviceType", serviceType);
+        Date date= new Date();
+        q.setParameter("date", date,TemporalType.TIMESTAMP);
+        List<Booking> bList= q.getResultList();
+        int size = bList.size();
+        int turnOut=0;
+        if(size<200){
+            return "Not Enough Historic Data";
+        }
+        for(int i =0; i< size; i++){
+            Booking booking = bList.get(i);
+            if (booking.getBookingStatus().equals("Missed")|| booking.getBookingStatus().equals("Cancelled"))
+                turnOut++;
+        }
+        int result = turnOut*100/size;
+        return String.valueOf(result)+"%";
     }
 
     //Find the seat availability of a particular flight no and time
@@ -96,7 +129,6 @@ public class PricingManagement implements PricingManagementLocal {
     //Convert a string storing date and time to a date object
     public Date convertToDate(String flightDate, String flightTime) {
         Date date = new Date();
-        int[] seats = generateAvailability(40, 20, 10);
         int day = Integer.parseInt(flightDate.substring(0, 2));
         int month = Integer.parseInt(flightDate.substring(2, 4));
         month = month - 1;
@@ -157,7 +189,7 @@ public class PricingManagement implements PricingManagementLocal {
 
             String origin = s.getFlight().getRoute().getOriginIATA();
             Query q1 = em.createQuery("SELECT o from Season o WHERE o.location.IATA = :IATA");
-            q.setParameter("location", origin);
+            q1.setParameter("IATA", origin);
             List<Season> seasonList = q.getResultList();
             if (!seasonList.isEmpty()) {
                 for (int i = 0; i < seasonList.size(); i++) {
@@ -169,7 +201,7 @@ public class PricingManagement implements PricingManagementLocal {
             
             String destination = s.getFlight().getRoute().getDestinationIATA();
             Query q2 = em.createQuery("SELECT o from Season o WHERE o.location.IATA = :IATA");
-            q.setParameter("location", destination);
+            q.setParameter("IATA", destination);
             List<Season> seasonList2 = q.getResultList();
             if (!seasonList2.isEmpty()) {
                 for (int i = 0; i < seasonList2.size(); i++) {

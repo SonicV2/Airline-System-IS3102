@@ -7,6 +7,7 @@ package Inventory.Managedbean;
 
 import APS.Entity.Location;
 import Inventory.Session.SeasonSessionBeanLocal;
+import java.util.ArrayList;
 import java.util.Date;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -134,5 +135,7 @@ public class seasonManageBean {
     public void setRemarks(String remarks) {
         this.remarks = remarks;
     }
+    
+
 
 }
