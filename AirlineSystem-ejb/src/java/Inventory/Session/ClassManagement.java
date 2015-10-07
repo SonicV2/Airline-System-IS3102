@@ -5,15 +5,12 @@
  */
 package Inventory.Session;
 
-import APS.Entity.Location;
 import javax.ejb.Stateless;
-import javax.ejb.LocalBean;
 import Inventory.Entity.BookingClass;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
-import javax.persistence.EntityExistsException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 /**

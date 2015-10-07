@@ -5,16 +5,13 @@
  */
 package Inventory.Managedbean;
 
-import APS.Entity.Location;
 import Inventory.Session.PricingManagementLocal;
 import java.util.ArrayList;
 import java.util.Date;
 import javax.ejb.EJB;
-import javax.faces.application.FacesMessage;
 import javax.inject.Named;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.faces.context.FacesContext;
 import java.util.List;
 
 /**
