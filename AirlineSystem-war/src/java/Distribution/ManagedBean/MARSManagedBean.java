@@ -151,6 +151,7 @@ public class MARSManagedBean {
         List<Flight> allFlights = new ArrayList();
         allFlights = distributionSessionBean.getAllFlights();
         flightOptionsList = new ArrayList();
+        System.out.println("managedbean: display departure flight !!!!!!");
 
         for (Flight eachFlight : allFlights) {
             if (eachFlight.getRoute().getOriginCity().equalsIgnoreCase(originCity)) {

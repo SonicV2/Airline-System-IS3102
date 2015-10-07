@@ -15,8 +15,8 @@ and open the template in the editor.
 
     <h:head>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<!--        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />-->
+        <!--        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+                <meta name="viewport" content="width=device-width, initial-scale=1" />-->
         <title>Merlion Airlines Reservation System</title>
         <!-- Custom Theme files -->
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -111,16 +111,18 @@ and open the template in the editor.
                                     <div class="facts">
                                         <div class="booking-form">
                                             <!-- strat-date-piker -->
-                                            <script>
+<!--                                            <script>
                                                 $(function () {
                                                     $("#datepicker,#datepicker1").datepicker();
                                                 });
-                                            </script>
+                                            </script>-->
                                             <!-- /End-date-piker -->
                                             <!-- Set here the key for your domain in order to hide the watermark on the web server -->
 
                                             <div class="online_reservation">
                                                 <div class="b_room">
+                                                    
+                                                    <h:form>
                                                     <div class="booking_room">
                                                         <div class="reservation">
                                                             <ul>		
@@ -129,11 +131,11 @@ and open the template in the editor.
                                                                     <div class="book_date">
                                                                         <form id ="1">
                                                                             <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
-                                                                            <p:selectOneMenu value="#{mARSManagedBean.originIATA}" editable="true" style="width:200px">
-                                                                                <f:selectItem itemLabel="Select Destination City" itemValue="" />
-                                                                                <f:selectItems value="#{mARSManagedBean.routes}" var="routes" itemLabel="#{routes.originCity}" itemValue="#{routes.originIATA}" />
+                                                                            <p:selectOneMenu value="#{mARSManagedBean.originCity}" editable="true" style="width:200px">
+                                                                                <f:selectItem itemLabel="Select Origin City" itemValue="" />
+                                                                                <f:selectItems value="#{mARSManagedBean.origins}"/>
                                                                             </p:selectOneMenu>
-<!--                                                                            <input type="text" placeholder="Type Departure City" class="typeahead1 input-md form-control tt-input" required=""/>-->
+                                                                            <!--                                                                            <input type="text" placeholder="Type Departure City" class="typeahead1 input-md form-control tt-input" required=""/>-->
                                                                         </form>
                                                                     </div>					
                                                                 </li>
@@ -142,11 +144,11 @@ and open the template in the editor.
                                                                     <div class="book_date">
                                                                         <form id="2">
                                                                             <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
-                                                                            <p:selectOneMenu value="#{mARSManagedBean.destinationIATA}" editable="true" style="width:200px">
+                                                                            <p:selectOneMenu value="#{mARSManagedBean.destinationCity}" editable="true" style="width:200px">
                                                                                 <f:selectItem itemLabel="Select Destination City" itemValue="" />
-                                                                                <f:selectItems value="#{mARSManagedBean.routes}" var="routes" itemLabel="#{routes.destinationCity}" itemValue="#{routes.destinationIATA}" />
+                                                                                <f:selectItems value="#{mARSManagedBean.destinations}"/>
                                                                             </p:selectOneMenu>
-<!--                                                                            <input type="text" placeholder="Type Destination City" class="typeahead1 input-md form-control tt-input" required=""/>-->
+                                                                            <!--                                                                            <input type="text" placeholder="Type Destination City" class="typeahead1 input-md form-control tt-input" required=""/>-->
                                                                         </form>
                                                                     </div>		
                                                                 </li>
@@ -169,7 +171,7 @@ and open the template in the editor.
                                                                     <div class="book_date">
                                                                         <form id="4">
                                                                             <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
-                                                                            <p:calendar id="button2" value="#{mARSManagedBean.returnDate}" navigator="true" pattern="yyyy-MMM-dd"/>
+                                                                            <p:calendar id="button1" value="#{mARSManagedBean.returnDate}" navigator="true" pattern="yyyy-MMM-dd"/>
                                                                         </form>
                                                                     </div>					
                                                                 </li>
@@ -184,7 +186,7 @@ and open the template in the editor.
                                                                             <f:selectItem itemLabel="3" itemValue="3" />
                                                                             <f:selectItem itemLabel="4" itemValue="4" />
                                                                             <f:selectItem itemLabel="5" itemValue="5" />
-                                                                            
+
                                                                         </p:selectOneMenu>
                                                                     </div>	
                                                                 </li>
@@ -206,15 +208,15 @@ and open the template in the editor.
                                                                 <li class="span1_of_1 economy">
                                                                     <h5>Class</h5>
                                                                     <!-- start section_room -->
-<!--                                                                    <div class="section_room">-->
-                                                                        <p:selectOneMenu value="#{mARSManagedBean.serviceType}" style="width:100%">
-                                                                            <f:selectItem itemLabel="Economy Saver" itemValue="Economy Saver" />
-                                                                            <f:selectItem itemLabel="Economy Basic" itemValue="Economy Basic" />
-                                                                            <f:selectItem itemLabel="Economy Premium" itemValue="Economy Premium" />
-                                                                            <f:selectItem itemLabel="Business" itemValue="Business" />
-                                                                            <f:selectItem itemLabel="First Class" itemValue="First Class" />
-                                                                        </p:selectOneMenu>
-<!--                                                                    </div>	-->
+                                                                    <!--                                                                    <div class="section_room">-->
+                                                                    <p:selectOneMenu value="#{mARSManagedBean.serviceType}" style="width:100%">
+                                                                        <f:selectItem itemLabel="Economy Saver" itemValue="Economy Saver" />
+                                                                        <f:selectItem itemLabel="Economy Basic" itemValue="Economy Basic" />
+                                                                        <f:selectItem itemLabel="Economy Premium" itemValue="Economy Premium" />
+                                                                        <f:selectItem itemLabel="Business" itemValue="Business" />
+                                                                        <f:selectItem itemLabel="First Class" itemValue="First Class" />
+                                                                    </p:selectOneMenu>
+                                                                    <!--                                                                    </div>	-->
                                                                 </li>
                                                                 <div class="clearfix"></div>
                                                             </ul>
@@ -222,14 +224,15 @@ and open the template in the editor.
                                                         <div class="reservation">
                                                             <ul>	
                                                                 <li class="span1_of_3">
-                                                                    <div class="date_btn">
-                                                                        <h:commandButton class="btn btn-outline btn-success" value="Search"  action="#{mARSManagedBean.displayFlights()}"/>
-                                                                    </div>
+<!--                                                                    <div class="date_btn">-->
+<h:commandButton class="btn btn-outline btn-success" value="Search"  action="#{mARSManagedBean.displayDepartureFlights()}"/>
+<!--                                                                    </div>-->
                                                                 </li>
                                                                 <div class="clearfix"></div>
                                                             </ul>
                                                         </div>
                                                     </div>
+                                                    </h:form>
                                                     <div class="clearfix"></div>
                                                 </div>
                                             </div>
@@ -246,9 +249,9 @@ and open the template in the editor.
                                             <link rel="stylesheet" href="css/jquery-ui.css" />
                                             <script src="js/jquery-ui.js"></script>
                                             <script>
-                                                                            $(function () {
-                                                                                $("#datepicker,#datepicker1").datepicker();
-                                                                            });
+                                                $(function () {
+                                                    $("#datepicker,#datepicker1").datepicker();
+                                                });
                                             </script>
 
                                             <!-- /End-date-piker -->
@@ -306,7 +309,7 @@ and open the template in the editor.
                                                                             <f:selectItem itemLabel="3" itemValue="3" />
                                                                             <f:selectItem itemLabel="4" itemValue="4" />
                                                                             <f:selectItem itemLabel="5" itemValue="5" />
-                                                                            
+
                                                                         </p:selectOneMenu>
                                                                     </div>	
                                                                 </li>
@@ -321,7 +324,7 @@ and open the template in the editor.
                                                                             <f:selectItem itemLabel="3" itemValue="3" />
                                                                             <f:selectItem itemLabel="4" itemValue="4" />
                                                                             <f:selectItem itemLabel="5" itemValue="5" />
-                                                                            
+
                                                                         </p:selectOneMenu>
                                                                     </div>	
                                                                 </li>
@@ -345,7 +348,7 @@ and open the template in the editor.
                                                             <ul>	
                                                                 <li class="span1_of_3">
                                                                     <div class="date_btn">
-                                                                            <h:commandButton class="btn btn-outline btn-success" value="Search" action="#{mARSManagedBean.displayFlights()}"/>
+                                                                        <h:commandButton class="btn btn-outline btn-success" value="Search" action="#{mARSManagedBean.displayFlights()}"/>
                                                                     </div>
                                                                 </li>
                                                                 <div class="clearfix"></div>
