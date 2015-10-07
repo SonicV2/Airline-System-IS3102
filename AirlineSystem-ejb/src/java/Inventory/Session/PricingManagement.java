@@ -186,7 +186,7 @@ public class PricingManagement implements PricingManagementLocal {
             if (!seasonList.isEmpty()) {
                 for (int i = 0; i < seasonList.size(); i++) {
                     Season season = seasonList.get(i);
-                    if (season.isOrigin() && currentDate.after(season.getStart()) && currentDate.before(season.getEnd()) )
+                    if (season.isOrigin() && fDate.after(season.getStart()) && fDate.before(season.getEnd()) )
                         currentSeason= season.getDemand();
                 }
             }
@@ -198,10 +198,12 @@ public class PricingManagement implements PricingManagementLocal {
             if (!seasonList2.isEmpty()) {
                 for (int i = 0; i < seasonList2.size(); i++) {
                     Season season2 = seasonList2.get(i);
-                    if (season2.isDestination() && currentDate.after(season2.getStart()) && currentDate.before(season2.getEnd()) )
+                    if (season2.isDestination() && fDate.after(season2.getStart()) && fDate.before(season2.getEnd()) ){
                         currentSeason= season2.getDemand();
+                    }
                 }
             }
+            
             
             Query q = em.createQuery("SELECT o FROM BookingClass o WHERE o.serviceClass = :serviceClass AND o.season =:season");
             q.setParameter("serviceClass", serviceClass);
