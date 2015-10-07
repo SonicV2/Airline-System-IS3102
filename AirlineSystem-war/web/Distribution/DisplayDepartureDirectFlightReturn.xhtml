@@ -5,11 +5,11 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
-    <head>
+    <h:head>
         <title>Display Direct Flight</title>
-    </head>
+    </h:head>
     <body>
-<h:form id="form">
+<h:form>
     <p:dataList value="#{mARSManagedBean.directFlightSchedules}" var="schedules" type="ordered">
         <h:outputText value="#{schedules.startDate}">
 <!--            <f:convertDateTime pattern ="dd-mm-yyyy HH:mm"/>-->
