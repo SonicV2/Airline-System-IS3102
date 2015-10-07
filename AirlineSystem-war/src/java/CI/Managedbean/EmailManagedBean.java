@@ -7,6 +7,8 @@ package CI.Managedbean;
 
 import CI.Session.EmailSessionBeanLocal;
 import CI.Session.EmployeeSessionBeanLocal;
+import Distribution.Session.CustomerSessionBeanLocal;
+import java.util.Date;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -31,6 +33,9 @@ public class EmailManagedBean {
     @EJB
     private EmailSessionBeanLocal emailSessionBean;
     
+    @EJB
+    private CustomerSessionBeanLocal customerSessionBean;
+    
 
     private String receiver;
     private String subject;
@@ -41,6 +46,9 @@ public class EmailManagedBean {
     private String email;
     
     private String pass;
+    
+    private String customerEmail;
+    private Date customerDOB;
     
     public EmailManagedBean() {
     }
@@ -66,6 +74,39 @@ public class EmailManagedBean {
         
     }
     
+    public void validateCustomer(ActionEvent event){
+        setEmail(emailSessionBean.validateCustomer(customerEmail, customerDOB));
+        FacesMessage message = null;
+        if (email.equals("nomatch") || email.equals("nouser")){
+            message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Your email and birthday do not match!",""); 
+//            RequestContext.getCurrentInstance().update("growll");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+ 
+        }else
+        {
+            setPass(emailSessionBean.passGen());
+            customerSessionBean.hashNewPwd(customerEmail, pass);
+            
+//            sendEmail(customerEmail);
+            
+        }
+    }
+    
+    
+    public void sendCustomerPasswordEmail(String customerEmail){
+        
+        setSubject("*Confidential* --- Merlion Airlines Flyer Program");
+        setBody("You have recently made a request for change of password due to you forgetting your password."
+                + "Your new password is: " + pass + "Please log in to change your password again.");
+        emailSessionBean.sendEmail(customerEmail, subject, body);
+        FacesMessage message = null;
+        message = new FacesMessage(FacesMessage.SEVERITY_INFO, "An email has been sent ! Please check your personal email","");
+
+//        RequestContext.getCurrentInstance().update("growll");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+        
+        
+    }
     
     public void sendEmail(String email){
         
@@ -74,7 +115,7 @@ public class EmailManagedBean {
         System.out.println("userName "+receiver + "Subject: "+subject+"body: "+body);
         emailSessionBean.sendEmail(email, subject, body);
         FacesMessage message = null;
-        message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Email has been send ! Please check your personal email","");
+        message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Email has been sent ! Please check your personal email","");
         RequestContext.getCurrentInstance().update("growll");
         FacesContext.getCurrentInstance().addMessage(null, message);
         clear();

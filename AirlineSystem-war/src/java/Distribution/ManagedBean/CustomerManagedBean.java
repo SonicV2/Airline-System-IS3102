@@ -46,7 +46,7 @@ public class CustomerManagedBean {
     private Date customerDOB;
     private String customerGender;
     private String feedbackMessage; //the faces message for users.
-    
+
     private Customer customer;
 
     /**
@@ -61,20 +61,19 @@ public class CustomerManagedBean {
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, feedbackMessage, "");
             FacesContext.getCurrentInstance().addMessage(null, message);
             return "merlionAirlinesSignUp";
-        
+
         } else if (!customerPassword.equals(customerConfirmedPassword)) {
             setFeedbackMessage("The passwords you entered do not match!");
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, feedbackMessage, "");
             FacesContext.getCurrentInstance().addMessage(null, message);
-            return "merlionAirlinesSignUp";  
-        }
-        else{
+            return "merlionAirlinesSignUp";
+        } else {
             setFeedbackMessage(customerSessionBean.addCustomer(customerFirstName, customerLastName, customerHpNumber, customerHpNumber, customerEmail, customerPassword, customerAddress, customerGender, customerDOB));
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, feedbackMessage, "");
             FacesContext.getCurrentInstance().addMessage(null, message);
             clearAll();
             return "signUpConfirmation";
-        } 
+        }
     }
 
     public void clearAll() {
@@ -89,64 +88,54 @@ public class CustomerManagedBean {
         setCustomerGender("");
 
     }
-    
-    public String loginCheck(){
-        
-        
-        if (doLogin(customerEmail, customerPassword)){
+
+    public String loginCheck() {
+
+        if (doLogin(customerEmail, customerPassword)) {
 
             return "customerDashboard";
-        }
-        else{
-//            ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-//
-//            return (String)ec.getRequest()).getRequestURI();
-            setFeedbackMessage("You have entered an invalid email!");
-            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, feedbackMessage, "");
-            FacesContext.getCurrentInstance().addMessage(null, message);
-            
+        } else {
+
             System.out.println("managed bean --- log in credentials are not right");
             return "signUpConfirmation";
         }
-        
+
     }
-    
+
     public Boolean doLogin(String customerEmail, String customerPassword) {
-          if (customerEmail.equals("") || customerPassword.equals("")){
-              setFeedbackMessage("Please enter your email or password!");
-              FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, feedbackMessage, "");
-              FacesContext.getCurrentInstance().addMessage(null, message);
-              return false;
-          }
-          else{
-              setCustomer(customerSessionBean.getCustomerUseEmail(customerEmail));
-              if (getCustomer() == null){
-                  setFeedbackMessage("You have entered an invalid email!");
-                  FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, feedbackMessage, "");
-                  FacesContext.getCurrentInstance().addMessage(null, message);
-                  
-                  return false;
-              }else if(customerSessionBean.isSameHash(customerEmail, customerPassword)){
-                  
-                  System.out.println("managedbean: password and email match! redirect ----");
-                  
-                  return true;
-                  //means the password and email match
+        if (customerEmail.equals("") || customerPassword.equals("")) {
+            setFeedbackMessage("Please enter your email or password!");
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, feedbackMessage, "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return false;
+        } else {
+            setCustomer(customerSessionBean.getCustomerUseEmail(customerEmail));
+            if (getCustomer() == null) {
+                setFeedbackMessage("You have entered an invalid email!");
+                FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, feedbackMessage, "");
+                FacesContext.getCurrentInstance().addMessage(null, message);
+
+                return false;
+            } else if (customerSessionBean.isSameHash(customerEmail, customerPassword)) {
+                setFeedbackMessage("Your password does not match!");
+                FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, feedbackMessage, "");
+                FacesContext.getCurrentInstance().addMessage(null, message);
+
+                return true;
+                //means the password and email match
 //                  redirect();
-              }
-              else{
-                  return false;
-              }
-          }   
+            } else {
+                return false;
+            }
+        }
     }
-    
+
     //redirect to customer's dashboard
-    public String redirect(){
-        
+    public String redirect() {
+
         return "customerDashboard";
-        
+
     }
-    
 
     /**
      * @return the customerSessionBean

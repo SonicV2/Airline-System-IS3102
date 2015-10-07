@@ -15,8 +15,8 @@ and open the template in the editor.
 
     <h:head>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+<!--        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />-->
         <title>Merlion Airlines Reservation System</title>
         <!-- Custom Theme files -->
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -127,7 +127,7 @@ and open the template in the editor.
                                                                 <li  class="span1_of_1 desti">
                                                                     <h5>Flying from</h5>
                                                                     <div class="book_date">
-                                                                        <form>
+                                                                        <form id ="1">
                                                                             <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
                                                                             <p:selectOneMenu value="#{mARSManagedBean.originIATA}" editable="true" style="width:200px">
                                                                                 <f:selectItem itemLabel="Select Destination City" itemValue="" />
@@ -140,7 +140,7 @@ and open the template in the editor.
                                                                 <li  class="span1_of_1 left desti">
                                                                     <h5>Flying to</h5>
                                                                     <div class="book_date">
-                                                                        <form>
+                                                                        <form id="2">
                                                                             <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
                                                                             <p:selectOneMenu value="#{mARSManagedBean.destinationIATA}" editable="true" style="width:200px">
                                                                                 <f:selectItem itemLabel="Select Destination City" itemValue="" />
@@ -158,7 +158,7 @@ and open the template in the editor.
                                                                 <li  class="span1_of_1">
                                                                     <h5>Departure</h5>
                                                                     <div class="book_date">
-                                                                        <form>
+                                                                        <form id="3">
                                                                             <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
                                                                             <p:calendar id="button" value="#{mARSManagedBean.departureDate}" navigator="true" pattern="yyyy-MMM-dd"/>
                                                                         </form>
@@ -167,9 +167,9 @@ and open the template in the editor.
                                                                 <li  class="span1_of_1 left">
                                                                     <h5>Return</h5>
                                                                     <div class="book_date">
-                                                                        <form>
+                                                                        <form id="4">
                                                                             <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
-                                                                            <p:calendar id="button" value="#{mARSManagedBean.returnDate}" navigator="true" pattern="yyyy-MMM-dd"/>
+                                                                            <p:calendar id="button2" value="#{mARSManagedBean.returnDate}" navigator="true" pattern="yyyy-MMM-dd"/>
                                                                         </form>
                                                                     </div>					
                                                                 </li>
@@ -260,7 +260,7 @@ and open the template in the editor.
                                                                 <li  class="span1_of_1 desti">
                                                                     <h5>Flying from</h5>
                                                                     <div class="book_date">
-                                                                        <form>
+                                                                        <form id="5">
                                                                             <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
                                                                             <p:selectOneMenu id="origin" value="#{mARSManagedBean.originIATA}" effect="fold" editable="true">
                                                                                 <f:selectItem itemLabel="Select Departure City" itemValue="" />
@@ -272,7 +272,7 @@ and open the template in the editor.
                                                                 <li  class="span1_of_1 left desti">
                                                                     <h5>Flying to</h5>
                                                                     <div class="book_date">
-                                                                        <form>
+                                                                        <form id="6">
                                                                             <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
                                                                             <p:selectOneMenu value="#{mARSManagedBean.destinationIATA}" editable="true">
                                                                                 <f:selectItem itemLabel="Select Destination City" itemValue="" />
@@ -289,7 +289,7 @@ and open the template in the editor.
                                                                 <li  class="span1_of_1">
                                                                     <h5>Departure</h5>
                                                                     <div class="book_date">
-                                                                        <form>
+                                                                        <form id="7">
                                                                             <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
                                                                             <p:calendar id="button" value="#{mARSManagedBean.departureDate}" navigator="true" pattern="yyyy-MMM-dd"/>
                                                                         </form>

@@ -183,5 +183,31 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
         }
 
     }
+    
+    @Override
+    public void hashNewPwd(String customerEmail, String pwd) {
+        Customer customer = getCustomerUseEmail(customerEmail);
+        try{
+            String saltCode = generateSalt();
+            String hashedPwd = getSecurePassword(pwd, saltCode);
+            customer.setPassword(hashedPwd);
+            customer.getSalt().setSaltCode(saltCode);
+            em.persist(customer);
+        }catch(EntityNotFoundException enfe){
+            System.out.println(enfe.getMessage());
+        
+        }catch (NoSuchAlgorithmException ex) {
+        
+            System.out.println("\nNo Such Algorithm Exception"+ex.getMessage());
+            
+        } catch (NoSuchProviderException ex) {
+            System.out.println("\nNo Such Provider Exception"+ex.getMessage());
+            
+        } catch (java.security.NoSuchProviderException ex) {
+            System.out.println("\nJava security No Such Provider Exception"+ex.getMessage());  
+        
+        }
+
+    }
 
 }

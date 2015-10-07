@@ -21,4 +21,5 @@ public interface CustomerSessionBeanLocal {
     public Customer getCustomerUseEmail(String customerEmail);
     public Customer getCustomerUseID(String customerID);
     public boolean isSameHash(String userEmail, String pwd);
+    public void hashNewPwd(String customerEmail, String pwd);
 }
