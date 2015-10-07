@@ -187,30 +187,30 @@ public class PricingManagement implements PricingManagementLocal {
 
             String currentSeason = "Neutral";
 
-            String origin = s.getFlight().getRoute().getOriginIATA();
-            Query q1 = em.createQuery("SELECT o from Season o WHERE o.location.IATA = :IATA");
-            q1.setParameter("IATA", origin);
-            List<Season> seasonList = q.getResultList();
-            if (!seasonList.isEmpty()) {
-                for (int i = 0; i < seasonList.size(); i++) {
-                    Season season = seasonList.get(i);
-                    if (season.isOrigin() && currentDate.after(season.getStart()) && currentDate.before(season.getEnd()) )
-                        currentSeason= season.getDemand();
-                }
-            }
-            
-            String destination = s.getFlight().getRoute().getDestinationIATA();
-            Query q2 = em.createQuery("SELECT o from Season o WHERE o.location.IATA = :IATA");
-            q.setParameter("IATA", destination);
-            List<Season> seasonList2 = q.getResultList();
-            if (!seasonList2.isEmpty()) {
-                for (int i = 0; i < seasonList2.size(); i++) {
-                    Season season2 = seasonList2.get(i);
-                    if (season2.isDestination() && currentDate.after(season2.getStart()) && currentDate.before(season2.getEnd()) )
-                        currentSeason= season2.getDemand();
-                }
-            }
-            
+//            String origin = s.getFlight().getRoute().getOriginIATA();
+//            Query q1 = em.createQuery("SELECT o from Season o WHERE o.location.IATA = :IATA");
+//            q1.setParameter("IATA", origin);
+//            List<Season> seasonList = q.getResultList();
+//            if (!seasonList.isEmpty()) {
+//                for (int i = 0; i < seasonList.size(); i++) {
+//                    Season season = seasonList.get(i);
+//                    if (season.isOrigin() && currentDate.after(season.getStart()) && currentDate.before(season.getEnd()) )
+//                        currentSeason= season.getDemand();
+//                }
+//            }
+//            
+//            String destination = s.getFlight().getRoute().getDestinationIATA();
+//            Query q2 = em.createQuery("SELECT o from Season o WHERE o.location.IATA = :IATA");
+//            q.setParameter("IATA", destination);
+//            List<Season> seasonList2 = q.getResultList();
+//            if (!seasonList2.isEmpty()) {
+//                for (int i = 0; i < seasonList2.size(); i++) {
+//                    Season season2 = seasonList2.get(i);
+//                    if (season2.isDestination() && currentDate.after(season2.getStart()) && currentDate.before(season2.getEnd()) )
+//                        currentSeason= season2.getDemand();
+//                }
+//            }
+//            
             
 
             for (int i = 0; i < size; i++) {
