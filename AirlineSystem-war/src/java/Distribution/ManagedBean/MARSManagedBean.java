@@ -101,6 +101,7 @@ public class MARSManagedBean {
     private Schedule legTwo;
     private String layover;
     private String duration;
+    private double priceForDirect;
 
     @PostConstruct
     public void retrieve() {
@@ -230,6 +231,7 @@ public class MARSManagedBean {
                   
                 }
                 retrieveMinWeekPricesForDirect(originIATA, destinationIATA, departureDate, serviceType, adults, children);
+                setPriceForDirect(selectedDatePrices.get(0));
                 if (! isReturnDateSet) {
                     return "DisplayDirectFlight";
                 } else {
@@ -804,6 +806,14 @@ public class MARSManagedBean {
 
     public void setDuration(String duration) {
         this.duration = duration;
+    }
+
+    public double getPriceForDirect() {
+        return priceForDirect;
+    }
+
+    public void setPriceForDirect(double priceForDirect) {
+        this.priceForDirect = priceForDirect;
     }
 
 }
