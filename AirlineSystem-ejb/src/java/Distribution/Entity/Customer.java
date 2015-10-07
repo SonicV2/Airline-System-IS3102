@@ -36,7 +36,7 @@ public class Customer implements Serializable {
     private String hpNumber;
     private String homeNumber;
     private int mileagePoints;
-     @OneToOne(cascade = {CascadeType.PERSIST})
+    @OneToOne(cascade = {CascadeType.PERSIST})
     private Salt salt;
     private String email;
     private String password;
