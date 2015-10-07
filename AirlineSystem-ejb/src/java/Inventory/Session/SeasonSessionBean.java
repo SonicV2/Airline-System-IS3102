@@ -13,7 +13,6 @@ import Inventory.Entity.Season;
 import java.util.Date;
 import javax.persistence.Query;
 import java.util.List;
-import java.util.ArrayList;
 
 /**
  *

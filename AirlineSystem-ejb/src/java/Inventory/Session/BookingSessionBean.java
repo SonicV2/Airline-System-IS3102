@@ -5,19 +5,15 @@
  */
 package Inventory.Session;
 
-import Inventory.Entity.BookingClass;
 import Inventory.Entity.SeatAvailability;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import Inventory.Entity.Booking;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Query;
 import java.util.Random;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 /**
  *
