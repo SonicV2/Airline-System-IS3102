@@ -54,25 +54,31 @@ and open the template in the editor.
                             <div class="login-grid-left">
                                 <fieldset id="body2">
                                     <fieldset>
-<!--                                    <label for="email">Email Address</label>-->
-                                    <p>Email</p>
-<!--                                    <p:inputText value="#{customerManagedBean.customerEmail}" ></p:inputText>-->
-                                   <h:inputText id="PE" required="true" validatorMessage="Not a valid email addess " requiredMessage="Please fill in Personal email field!" class="form-control" value="#{customerManagedBean.customerEmail}" >
-                                        <f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
-                                    </h:inputText> 
+                                        <!--                                    <label for="email">Email Address</label>-->
+                                        <p>Email</p>
+    <!--                                    <p:inputText value="#{customerManagedBean.customerEmail}" ></p:inputText>-->
+                                        <h:inputText id="PE" required="true" validatorMessage="Not a valid email addess " requiredMessage="Please fill in Personal email field!" class="form-control" value="#{customerManagedBean.customerEmail}" >
+                                            <f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
+                                        </h:inputText> 
                                     </fieldset>
                                     <fieldset>
-<!--                                    <label for="password">Password</label>-->
-                                    <p>Password</p>
-                                    <p:password value="#{customerManagedBean.customerPassword}" />
+                                        <!--                                    <label for="password">Password</label>-->
+                                        <p>Password</p>
+                                        <p:password value="#{customerManagedBean.customerPassword}" />
                                     </fieldset>
 
                                     <h:commandButton class="pull-right" value="Sign in" action="#{customerManagedBean.loginCheck()}"/>
                                     <label for="checkbox"><input type="checkbox" id="checkbox"/> <i>Remember me</i></label>
                                 </fieldset>
                                 <span><a href="#">Forgot your password?</a></span>                                
+                            
+                            <div class="social-sits">
+                            <div class="button-bottom">
+                                <p>New account? <a href="#{request.contextPath}/Distribution/merlionAirlinesSignUp.xhtml">Signup Now!</a></p>
                             </div>
-<!--                        </form>-->
+                                </div>
+                                </div>
+                            <!--                        </form>-->
                         </h:form>
                     </div>
 
