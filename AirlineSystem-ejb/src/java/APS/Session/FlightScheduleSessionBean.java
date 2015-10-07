@@ -103,7 +103,7 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
         int economy = aircraftType.getEconomySeats();
         int business = aircraftType.getBusinessSeats();
         int firstClass = aircraftType.getFirstSeats();
-        int[] seats = rm.generateAvailability(economy, business, firstClass);
+        int[] seats = rm.generateAvailability(flightId,economy, business, firstClass);
 
         //Add a list schedule until 6 months later
         while (curr.before(endTime)) {
