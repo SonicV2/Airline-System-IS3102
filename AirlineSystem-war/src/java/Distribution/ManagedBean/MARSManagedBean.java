@@ -93,6 +93,7 @@ public class MARSManagedBean {
     private List<Double> minPricesForWeekDirectFlight;
     private List<Double> minPricesForWeekOneStopFlight;
     private List<Double> selectedDatePrices;
+    private List<Date> weekDates;    
     
     private List<Integer> adultList;
     private Integer adultTemp;
@@ -170,6 +171,8 @@ public class MARSManagedBean {
         System.out.println("service" + serviceType);
         System.out.println("origin city" + originCity);
         System.out.println("destination city" + destinationCity);
+        weekDates.clear();
+
         for (Flight eachFlight : allFlights) {
             System.out.println("managedbean: go into flight loop");
             if (eachFlight.getRoute().getOriginCity().equalsIgnoreCase(originCity)) {
@@ -347,6 +350,7 @@ public class MARSManagedBean {
         setOriginIATA(destinationIATA);
         setDestinationIATA(tempOrigin);
         flightOptionsList.clear();
+        weekDates.clear();
 
         setTempDepartureDate(departureDate);
         setTempReturnDate(returnDate);
@@ -433,6 +437,7 @@ public class MARSManagedBean {
 
         for (i = -3; i <= 3; i++) {
             Date eachDate = distributionSessionBean.addDaysToDate(date, i);
+            weekDates.add(eachDate);
             schedulesForEachDate = distributionSessionBean.retrieveDirectFlightsForDate(originIATA, destinationIATA, eachDate, serviceType, adults, children);
             if (schedulesForEachDate.size() > 0) {
                 minPrice = 99999999;
@@ -466,6 +471,7 @@ public class MARSManagedBean {
         
         for (i = -3; i <= 3; i++) {
             Date eachDate = distributionSessionBean.addDaysToDate(date, i);
+            weekDates.add(eachDate);
             legOneSchedules.clear();
             legTwoSchedules.clear();
             for (j = 0; j < transitHubs.size(); j++) {
