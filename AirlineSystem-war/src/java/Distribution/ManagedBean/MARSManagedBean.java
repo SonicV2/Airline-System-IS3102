@@ -171,6 +171,7 @@ public class MARSManagedBean {
         System.out.println("service" + serviceType);
         System.out.println("origin city" + originCity);
         System.out.println("destination city" + destinationCity);
+        weekDates = new ArrayList();
         weekDates.clear();
 
         for (Flight eachFlight : allFlights) {

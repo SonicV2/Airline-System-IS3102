@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+
+    <h:head>
+        <title>Booking</title>
+    </h:head>
+
+    <h:body>
+
+        <div class="form-group">
+            <h:outputLabel value="Traveller Title: " class="col-md-4 control-label" />
+            <div class="col-md-8">
+                <h:panelGrid>
+
+                    <h:selectOneRadio id="title" required="true" requiredMessage="Please Select Traveller Title!" value="#{bookingManagedBean.travellerTitle}">
+                        <f:selectItem itemLabel="Mr" itemValue="Mr" />
+                        <f:selectItem itemLabel="Mdm" itemValue="Mdm" />
+                        <f:selectItem itemLabel="Mrs" itemValue="Mrs" />
+                        <f:selectItem itemLabel="Miss" itemValue="Miss" />
+                    </h:selectOneRadio>
+                </h:panelGrid>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <h:outputLabel value="First Name: " class="col-md-4 control-label" />
+            <div class="col-md-8">
+                <h:inputText id="firstname" required="true" requiredMessage="Please fill in first name field!" class="form-control" value="#{bookingManagedBean.travellerFristName}" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <h:outputLabel value="Last Name: " class="col-md-4 control-label" />
+            <div class="col-md-8">
+                <h:inputText id="lastname" required="true" requiredMessage="Please fill in last name field!" class="form-control" value="#{bookingManagedBean.travellerLastName}" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <h:outputLabel value="Passport Number: " class="col-md-4 control-label" />
+            <div class="col-md-8">
+                <h:inputText id="passport" required="true" requiredMessage="Please fill in passport number field!" class="form-control" value="#{bookingManagedBean.passportNumber}" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <h:outputLabel value="Nationality: " class="col-md-4 control-label" />
+            <div class="col-md-8">
+                <h:inputText id="nationality" required="true" requiredMessage="Please fill in mailing nationality field!" class="form-control" value="#{bookingManagedBean.nationality}" />
+            </div>
+        </div>   
+
+        <div class="text-center">
+            <h:commandButton class="btn btn-outline btn-success" value="Confirm" action="#{bookingManagedBean.createBooking()}" />
+        </div>
+
+    </h:body>
+</html>

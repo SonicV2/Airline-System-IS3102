@@ -62,7 +62,7 @@
                 </div>
                 <div class="faqs-top-grids terms-grids">	
                     <h:form>
-                        <p:dataTable value="#{mARSManagedBean.directFlightSchedules}" var="schedules" rowKey="#{schedules.flight.flightNo}" >
+                        <p:dataTable value="#{mARSManagedBean.directFlightSchedules}" var="schedules" selection="#{bookingManagedBean.selectedReturnSchedule}" rowKey="#{schedules.flight.flightNo}" >
                             <p:column selectionMode="single" style="width:40px;text-align:center"/>
                             <p:column headerText="Flight Number" style="width:10%;">
                                 <h:outputText value="#{schedules.flight.flightNo}" />
