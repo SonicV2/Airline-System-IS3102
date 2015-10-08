@@ -39,7 +39,7 @@ public class PNR implements Serializable {
     
     private String bookingAvenue; 
 
-    public void createPNR(String pnrID, int noOfTravellers, String email, String contactNo, double totalPrice, Date date, String bookingAvenue){
+    public void createPNR(String pnrID, int noOfTravellers, String email, String contactNo, String pnrStatus, double totalPrice, Date date, String bookingAvenue){
         this.pnrID = pnrID;
         this.noOfTravellers = noOfTravellers;
         this.email = email;
@@ -47,6 +47,7 @@ public class PNR implements Serializable {
         this.totalPrice = totalPrice;  
         this.dateOfBooking = date;
         this.bookingAvenue = bookingAvenue;
+        this.pnrStatus = pnrStatus;
     }
     
     public String getPnrID() {

@@ -45,7 +45,7 @@ public class Booking implements Serializable {
     private String travellerLastName;
     private String passportNumber;
     private String nationality;
-    private String customerId;
+    private long customerId;
     
     private boolean isChild;
     private boolean boughtInsurance;
@@ -207,7 +207,7 @@ public class Booking implements Serializable {
         return nationality;
     }
 
-    public String getCustomerId() {
+    public long getCustomerId() {
         return customerId;
     }
 
@@ -259,7 +259,7 @@ public class Booking implements Serializable {
         this.nationality = nationality;
     }
 
-    public void setCustomerId(String customerId) {
+    public void setCustomerId(long customerId) {
         this.customerId = customerId;
     }
 
