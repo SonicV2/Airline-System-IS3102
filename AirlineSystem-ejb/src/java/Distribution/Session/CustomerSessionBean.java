@@ -5,20 +5,22 @@
  */
 package Distribution.Session;
 
-import CI.Entity.Employee;
+
 import CI.Entity.Salt;
-import CI.Session.EmployeeSessionBean;
 import Distribution.Entity.Customer;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.mail.NoSuchProviderException;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -50,11 +52,11 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
             em.persist(customer);
             
         } catch (NoSuchAlgorithmException ex) {
-            Logger.getLogger(EmployeeSessionBean.class.getName()).log(Level.SEVERE, null, ex);
+            
         } catch (NoSuchProviderException ex) {
-            Logger.getLogger(EmployeeSessionBean.class.getName()).log(Level.SEVERE, null, ex);
+           
         } catch (java.security.NoSuchProviderException ex) {
-            Logger.getLogger(EmployeeSessionBean.class.getName()).log(Level.SEVERE, null, ex);
+            
         }
 
         return "Sign up successful!";
@@ -96,5 +98,116 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
     }
 
     
+    @Override
+    public boolean isSameHash(String userEmail, String pwd) {
+        
+        Customer oneCustomer = getCustomerUseEmail(userEmail);
+        String saltCode = oneCustomer.getSalt().getSaltCode();
+        String rehash = getSecurePassword(pwd, saltCode);
+        
+        if (oneCustomer.getPassword().equals(rehash)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    // Get customer using ID
+    @Override
+    public Customer getCustomerUseID(String customerID) {
+        Customer oneCustomer = new Customer();
+        try {
+
+            Query q = em.createQuery("SELECT a FROM Customer " + "AS a WHERE a.id=:id");
+            q.setParameter("id", customerID);
+
+            List results = q.getResultList();
+            if (!results.isEmpty()) {
+                oneCustomer = (Customer) results.get(0);
+
+            } else {
+                oneCustomer = null;
+            }
+
+        } catch (EntityNotFoundException enfe) {
+            System.out.println("\nEntity not found error" + "enfe.getMessage()");
+        }
+        return oneCustomer;
+    }
+    
+    //get the customer using his email
+    @Override
+    public Customer getCustomerUseEmail(String customerEmail) {
+        Customer oneCustomer = new Customer();
+        try {
+
+            Query q = em.createQuery("SELECT a FROM Customer " + "AS a WHERE a.email=:email");
+            q.setParameter("email", customerEmail);
+
+            List results = q.getResultList();
+            if (!results.isEmpty()) {
+                oneCustomer = (Customer) results.get(0);
+
+            } else {
+                oneCustomer = null;
+            }
+
+        } catch (EntityNotFoundException enfe) {
+            System.out.println("\nEntity not found error" + "enfe.getMessage()");
+        }
+        return oneCustomer;
+    }
+    
+    //check if the email entered already exists in the database
+    @Override
+    public Boolean emailExists(String customerEmail){
+        try {
+            
+            System.out.println("session bean - customer email is:" + customerEmail);
+            Query q = em.createQuery("SELECT a FROM Customer " + "AS a WHERE a.email=:email");
+            q.setParameter("email", customerEmail);
+
+            List results = q.getResultList();
+            if (!results.isEmpty()) {
+                System.out.println("session bean - customer email already exists");
+                return true;
+ 
+            } else {
+                System.out.println("session bean - customer email does not exist");
+                return false;
+            }
+
+        } catch (EntityNotFoundException enfe) {
+            System.out.println("\nEntity not found error" + "enfe.getMessage()");
+            return false;
+        }
+
+    }
+    
+    @Override
+    public void hashNewPwd(String customerEmail, String pwd) {
+        Customer customer = getCustomerUseEmail(customerEmail);
+        try{
+            String saltCode = generateSalt();
+            String hashedPwd = getSecurePassword(pwd, saltCode);
+            customer.setPassword(hashedPwd);
+            customer.getSalt().setSaltCode(saltCode);
+            em.persist(customer);
+        }catch(EntityNotFoundException enfe){
+            System.out.println(enfe.getMessage());
+        
+        }catch (NoSuchAlgorithmException ex) {
+        
+            System.out.println("\nNo Such Algorithm Exception"+ex.getMessage());
+            
+        } catch (NoSuchProviderException ex) {
+            System.out.println("\nNo Such Provider Exception"+ex.getMessage());
+            
+        } catch (java.security.NoSuchProviderException ex) {
+            System.out.println("\nJava security No Such Provider Exception"+ex.getMessage());  
+        
+        }
+
+    }
 
 }

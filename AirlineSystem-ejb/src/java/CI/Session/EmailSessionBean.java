@@ -6,6 +6,7 @@
 package CI.Session;
 
 import CI.Entity.Employee;
+import Distribution.Entity.Customer;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
@@ -87,7 +88,8 @@ public class EmailSessionBean implements EmailSessionBeanLocal {
         }
 
     }
-
+    
+    //this is for the validation of merlion employees
     @Override
     public String validateUser(String userName, String NRIC) {
         Employee employee = getEmployee(userName);
@@ -97,12 +99,33 @@ public class EmailSessionBean implements EmailSessionBeanLocal {
                 employee.setEmployeeAccountActivate(false);
                 em.persist(employee);
                 email = employee.getEmployeePrivateEmail(); //need to change 
-                System.out.println("Email Add: "+email);
+                System.out.println("Email Add: " + email);
             } else {
                 email = "nomatch";  //NRIC and username not match
             }
         } else {
             email = "nouser"; // cannot find such user
+        }
+        return email;
+    }
+
+    
+    //this is for the validation of Merlion Customers
+    @Override
+    public String validateCustomer(String customerEmail, Date customerDOB) {
+        String email;
+        Customer customer = getCustomer(customerEmail);
+        if (customer != null) {
+            if (customer.getCustomerDOB().equals(customerDOB)) {
+
+                email = customerEmail;
+                return email;
+            } else {
+                email = "nomatch";
+
+            }
+        } else {
+            email = "nouser";
         }
         return email;
     }
@@ -137,6 +160,27 @@ public class EmailSessionBean implements EmailSessionBeanLocal {
             System.out.println("\nEntity not found error" + "enfe.getMessage()");
         }
         return employee;
+    }
+
+    //this is to get customer information based on his email
+    public Customer getCustomer(String customerEmail) {
+        Customer customer = new Customer();
+        try {
+            Query q = em.createQuery("SELECT a FROM Customer " + "AS a WHERE a.email =:customerEmail");
+            q.setParameter("customerEmail", customerEmail);
+
+            List results = q.getResultList();
+            if (!results.isEmpty()) {
+                customer = (Customer) results.get(0);
+
+            } else {
+                customer = null;
+            }
+
+        } catch (EntityNotFoundException enfe) {
+            System.out.println("\nEntity not found error" + "enfe.getMessage()");
+        }
+        return customer;
     }
 
 }

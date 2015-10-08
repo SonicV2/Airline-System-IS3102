@@ -56,7 +56,7 @@ public class Booking implements Serializable {
     private List<Baggage> baggages = new ArrayList<Baggage>();
     
     @ManyToOne
-    private PNR pnr = new PNR();
+    private PNR pnr;
     
     private double totalWeightAllowed;
     private int totalNumBaggeAlloewd;
@@ -65,7 +65,7 @@ public class Booking implements Serializable {
     
     public void YQcreateBooking(String serviceType, 
             SeatAvailability seatAvail){
-        
+        this.pnr = null;
         this.serviceType= serviceType;
         this.setSeatAvail(seatAvail);
         this.bookingStatus= "booked";

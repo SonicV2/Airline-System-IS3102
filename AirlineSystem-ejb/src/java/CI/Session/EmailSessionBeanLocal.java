@@ -5,6 +5,7 @@
  */
 package CI.Session;
 
+import java.util.Date;
 import javax.ejb.Local;
 
 /**
@@ -16,4 +17,5 @@ public interface EmailSessionBeanLocal {
     public void sendEmail(String to, String subject, String body);
     public String validateUser(String userName, String NRIC);
     public String passGen();
+    public String validateCustomer(String customerEmail, Date customerDOB);
 }
