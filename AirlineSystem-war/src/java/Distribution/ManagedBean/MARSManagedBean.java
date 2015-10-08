@@ -859,7 +859,9 @@ public class MARSManagedBean {
      */
     public void setAdultTemp(Integer adultTemp) {
         this.adultTemp = adultTemp;
-    public double getPriceForDirect() {
+    }
+    
+public double getPriceForDirect() {
         return priceForDirect;
     }
 
