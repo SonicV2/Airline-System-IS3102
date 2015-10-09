@@ -18,6 +18,7 @@ import Inventory.Entity.Booking;
 import APS.Entity.Schedule;
 import Inventory.Entity.Season;
 import javax.persistence.TemporalType;
+import APS.Entity.Route;
 
 /**
  *
@@ -45,18 +46,20 @@ public class PricingManagement implements PricingManagementLocal {
         }
         else{
           int[] seats = new int[5];
-        seats[0] = (economy/3)*(100+ Integer.valueOf(calTurnOut(flightNo,"Economy Saver")))/100 ;
-        seats[1] = (economy/3)*(100+ Integer.valueOf(calTurnOut(flightNo,"Economy Basic")))/100 ;
-        seats[2] = (economy/3)*(100+ Integer.valueOf(calTurnOut(flightNo,"Economy Premium")))/100 ;
-        seats[3] = (business)*(100+ Integer.valueOf(calTurnOut(flightNo,"Business")))/100 ;
-        seats[4] = (firstClass)*(100+ Integer.valueOf(calTurnOut(flightNo,"First Class")))/100 ;
+        seats[0] = (economy/3)*(100+ Integer.valueOf(calTurnOut(flightNo,"Economy Saver").substring(0,2)))/100 ;
+        seats[1] = (economy/3)*(100+ Integer.valueOf(calTurnOut(flightNo,"Economy Basic").substring(0,2)))/100 ;
+        seats[2] = (economy/3)*(100+ Integer.valueOf(calTurnOut(flightNo,"Economy Premium").substring(0,2)))/100 ;
+        seats[3] = (business)*(100+ Integer.valueOf(calTurnOut(flightNo,"Business").substring(0,2)))/100 ;
+        seats[4] = (firstClass)*(100+ Integer.valueOf(calTurnOut(flightNo,"First Class").substring(0,2)))/100 ;
         return seats; 
         }
     }
     
     public String calTurnOut(String flightNo, String serviceType) {
-        Query q = em.createQuery("SELECT o FROM Booking o WHERE o.flightNo=:flightNo AND o.serviceType=:serviceType AND o.flightDate <:date");
-        q.setParameter("flightNo", flightNo);
+        Flight flight= em.find(Flight.class, flightNo);
+        Long routeID = flight.getRoute().getRouteId();
+        Query q = em.createQuery("SELECT o FROM Booking o WHERE o.seatAvail.schedule.flight.route.routeId =:routeID AND o.serviceType=:serviceType AND o.flightDate <:date");
+        q.setParameter("routeID", routeID);
         q.setParameter("serviceType", serviceType);
         Date date= new Date();
         q.setParameter("date", date,TemporalType.TIMESTAMP);
@@ -71,8 +74,8 @@ public class PricingManagement implements PricingManagementLocal {
             if (booking.getBookingStatus().equals("Missed")|| booking.getBookingStatus().equals("Cancelled"))
                 turnOut++;
         }
-        int result = turnOut*100/size;
-        return String.valueOf(result)+"%";
+        Double result = turnOut*100.0/size;
+        return String.valueOf(result).substring(0, 5)+"%";
     }
 
     //Find the seat availability of a particular flight no and time
