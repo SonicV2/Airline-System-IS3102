@@ -16,7 +16,9 @@ import FOS.Session.CrewSignInSessionBeanLocal;
 import FOS.Session.PairingSessionBeanLocal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -59,11 +61,23 @@ public class CrewSignInManagedBean {
     private Pairing selectPairing;
     private String msg;
     private Schedule firstSchedule;
-    private List<String> scheduleResult;
-    private List<String> scheduleResultDisabled;
+
+    private List<String> scheduleResult;//not enabled for crew signin
+    private List<String> scheduleResultDisabled; // display for crew signin
+    private List<String> reservedCrewScheduleResult; // display for reserved crew signin
+    private List<String> reservedCrewScheduleResultDisabled; // not enabled schedule for reserved crew 
+
     private String selectedPairing; // select pairingID from webpage
 
     private String pairingID;
+
+    private List<Schedule> validSchedulesForSubmit;
+    private List<Schedule> inValidSchedulesForSubmit;
+    private String selectLeaveSchedule;
+    private List<String> leaveReasons = new ArrayList<String>();
+    private String selectLeaveReason;
+
+    private String reservedCrewSelectSignInSchedule;
 
     /**
      * Creates a new instance of CrewSignInManagedBean
@@ -80,21 +94,31 @@ public class CrewSignInManagedBean {
             message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "You are not assigned to a team", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
         } else {
+            leaveReasons.add("Medical Issue");
+            leaveReasons.add("Emergence Calls");
+            leaveReasons.add("Others");
+
             setTeam(getCrewSignInSessionBean().getCCTeam(crewName));
+
             viewMembers();
             getCurrentPairing();
             scheduleNew();
+            signInScheduleForReservedCrew();
+            viewValidSchedule();
+
         }
     }
 
     public void scheduleNew() {
         signInDate = new Date();
-        String formattedDate = new SimpleDateFormat("dd/MM/yyyy").format(signInDate);
         String tempString = "";
         String tempDisable = "";
 
         scheduleResult = new ArrayList<String>();
         scheduleResultDisabled = new ArrayList<String>();
+
+        scheduleResult.clear();
+        scheduleResultDisabled.clear();
 
         for (int i = 0; i < pairings.size(); i++) {
 
@@ -190,8 +214,108 @@ public class CrewSignInManagedBean {
 
     }
 
+    public void signInScheduleForReservedCrew() {
+        signInDate = new Date();
+        String tempString = "";
+        String tempDisable = "";
+        String crewName = loginManageBean.getEmployeeUserName();
+
+        CabinCrew crew = crewSignInSessionBean.getCabinCrew(crewName);
+
+        reservedCrewScheduleResult = new ArrayList<String>();
+        reservedCrewScheduleResultDisabled = new ArrayList<String>();
+
+        if (crew.getPosition().contains("Reserved") && !crew.getStatus().equals("N.S")) {
+            String scheduleId = crew.getStatus();
+            if (scheduleId.contains("/")) {
+                String[] schLists = scheduleId.split("/");
+                for (int i = 0; i < schLists.length; i++) {
+                    Schedule sch = crewSignInSessionBean.getScheduleByID(schLists[i]);
+                    String formattedDate1 = new SimpleDateFormat("HH:mm dd/MM/yyyy").format(sch.getStartDate());
+                    String formattedDate2 = new SimpleDateFormat("HH:mm dd/MM/yyyy").format(signInDate);
+
+                    String date1 = new SimpleDateFormat("dd/MM/yyyy").format(sch.getStartDate());
+                    String date2 = new SimpleDateFormat("dd/MM/yyyy").format(signInDate);
+
+                    if (date1.equals(date2) && checkTime(formattedDate2, formattedDate1) > 60 || checkTime(formattedDate2, formattedDate1) < 0) {
+                        tempString += "<br /> <br /> \uD83C\uDFC1  \uD83C\uDFC1  \uD83C\uDFC1  \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 "
+                                + "\uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1\uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1\uD83C\uDFC1 \uD83C\uDFC1 "
+                                + "\uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1\uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1  <br /> <br />";
+
+                        tempString += "\u26F3 Flight Number: [" + sch.getFlight().getFlightNo() + "] <br /> \uD83D\uDCC6 Schedule Start Date: " + sch.getStartDate() + "   "
+                                + "<br /> \uD83D\uDD50 Schedule End Date: " + sch.getEndDate() + "<br />"
+                                + "<br /> \uD83D\uDD50 Flight Origin City: " + sch.getFlight().getRoute().getOriginCity() + "<br />"
+                                + "<br /> \uD83D\uDD50 Flight Destination City " + sch.getFlight().getRoute().getDestinationCity() + "<br />";
+
+                    } else {
+                        tempDisable += "<br /> <br /> \uD83C\uDFC1  \uD83C\uDFC1  \uD83C\uDFC1  \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 "
+                                + "\uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1\uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1\uD83C\uDFC1 \uD83C\uDFC1 "
+                                + "\uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1\uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1  <br /> <br />";
+                        tempDisable += "\u26F3 Flight Number: [" + sch.getFlight().getFlightNo() + "] <br /> \uD83D\uDCC6 Schedule Start Date: " + sch.getStartDate() + "   "
+                                + "<br /> \uD83D\uDD50 Schedule End Date: " + sch.getEndDate() + "<br />"
+                                + "<br /> \uD83D\uDD50 Flight Origin City: " + sch.getFlight().getRoute().getOriginCity() + "<br />"
+                                + "<br /> \uD83D\uDD50 Flight Destination City " + sch.getFlight().getRoute().getDestinationCity() + "<br />";
+
+                    }
+                }
+
+                if (!tempString.equals("")) {
+                    String[] tempEnable = tempString.split("<br /> <br /> \uD83C\uDFC1  \uD83C\uDFC1  \uD83C\uDFC1  \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 "
+                            + "\uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1\uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1\uD83C\uDFC1 \uD83C\uDFC1 "
+                            + "\uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1\uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1  <br /> <br />");
+                    for (int i = 1; i < tempEnable.length; i++) {
+                        reservedCrewScheduleResult.add(tempEnable[i]);
+                    }
+                }
+                if (!tempDisable.equals("")) {
+                    String[] tDisable = tempDisable.split("<br /> <br /> \uD83C\uDFC1  \uD83C\uDFC1  \uD83C\uDFC1  \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 "
+                            + "\uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1\uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1\uD83C\uDFC1 \uD83C\uDFC1 "
+                            + "\uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1\uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1  <br /> <br />");
+                    for (int i = 1; i < tDisable.length; i++) {
+                        reservedCrewScheduleResultDisabled.add(tDisable[i]);
+                    }
+                }
+//                reservedCrewScheduleResult.add(tempString);
+//                reservedCrewScheduleResultDisabled.add(tempDisable);
+
+            } else {
+                Schedule sch = crewSignInSessionBean.getScheduleByID(scheduleId);
+
+                String formattedDate1 = new SimpleDateFormat("HH:mm dd/MM/yyyy").format(sch.getStartDate());
+                String formattedDate2 = new SimpleDateFormat("HH:mm dd/MM/yyyy").format(signInDate);
+
+                String date1 = new SimpleDateFormat("dd/MM/yyyy").format(sch.getStartDate());
+                String date2 = new SimpleDateFormat("dd/MM/yyyy").format(signInDate);
+
+                if (date1.equals(date2) && checkTime(formattedDate2, formattedDate1) > 60 || checkTime(formattedDate2, formattedDate1) < 0) {
+                    tempString += "<br /> <br /> \uD83C\uDFC1  \uD83C\uDFC1  \uD83C\uDFC1  \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 "
+                            + "\uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1\uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1\uD83C\uDFC1 \uD83C\uDFC1 "
+                            + "\uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1\uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1  <br /> <br />";
+
+                    tempString += "\u26F3 Flight Number: [" + sch.getFlight().getFlightNo() + "] <br /> \uD83D\uDCC6 Schedule Start Date: " + sch.getStartDate() + "   "
+                            + "<br /> \uD83D\uDD50 Schedule End Date: " + sch.getEndDate() + "<br />"
+                            + "<br /> \uD83D\uDD50 Flight Origin City: " + sch.getFlight().getRoute().getOriginCity() + "<br />"
+                            + "<br /> \uD83D\uDD50 Flight Destination City " + sch.getFlight().getRoute().getDestinationCity() + "<br />";
+                    reservedCrewScheduleResult.add(tempString);
+
+                } else {
+                    tempDisable += "<br /> <br /> \uD83C\uDFC1  \uD83C\uDFC1  \uD83C\uDFC1  \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 "
+                            + "\uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1\uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1\uD83C\uDFC1 \uD83C\uDFC1 "
+                            + "\uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1\uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1  <br /> <br />";
+                    tempDisable += "\u26F3 Flight Number: [" + sch.getFlight().getFlightNo() + "] <br /> \uD83D\uDCC6 Schedule Start Date: " + sch.getStartDate() + "   "
+                            + "<br /> \uD83D\uDD50 Schedule End Date: " + sch.getEndDate() + "<br />"
+                            + "<br /> \uD83D\uDD50 Flight Origin City: " + sch.getFlight().getRoute().getOriginCity() + "<br />"
+                            + "<br /> \uD83D\uDD50 Flight Destination City " + sch.getFlight().getRoute().getDestinationCity() + "<br />";
+                    reservedCrewScheduleResultDisabled.add(tempDisable);
+                }
+            }
+        }
+
+    }
+
     public void viewMembers() {
         messages = new ArrayList<String>();
+
         setCcs(team.getCabinCrews());
         setPilots(team.getPilots());
         messages.add("Pilots ");
@@ -242,25 +366,20 @@ public class CrewSignInManagedBean {
         List<Schedule> schedules = team.getSchedule();
         for (Schedule s : schedules) {
             String formattedDate1 = new SimpleDateFormat("HH:mm dd/MM/yyyy").format(s.getStartDate());
-            System.out.println("Schedule Date1: " + formattedDate1);
 
             String formattedDate2 = new SimpleDateFormat("HH:mm dd/MM/yyyy").format(signInDate);
-            System.out.println("Schedule Date2: " + formattedDate2);
 
             if (s.getStartDate().after(signInDate) && checkTime(formattedDate1, formattedDate2) > 300) {
                 schedules.add(s);
             }
         }
-        // setSchedules(team.getSchedule());
 
     }
 
     public void scheduleSignIn(ActionEvent event) {
         FacesMessage message;
 
-        
-
-        if (selectedPairing==null) {
+        if (selectedPairing == null) {
             message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Please select a pairing! ", "");
         } else {
             pairingID = selectedPairing.substring(selectedPairing.indexOf("[") + 1, selectedPairing.indexOf("]"));
@@ -277,11 +396,184 @@ public class CrewSignInManagedBean {
                 } else {
                     message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successfully Signed In", "");
                 }
-
-                System.out.println("++++++UserName: " + loginManageBean.getEmployeeUserName());
             }
         }
         FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+
+    // for crew to see which schedules could submit leave
+    public void viewValidSchedule() {
+
+        signInDate = new Date();
+
+        String formattedDate2 = new SimpleDateFormat("HH:mm dd/MM/yyyy").format(signInDate);
+
+        validSchedulesForSubmit = new ArrayList<Schedule>();
+        inValidSchedulesForSubmit = new ArrayList<Schedule>();
+
+        FacesMessage message = null;
+        String crewName = loginManageBean.getEmployeeUserName();
+        String signInScheduleId = "";
+        CabinCrew crew = crewSignInSessionBean.getCabinCrew(crewName);
+
+        if (crew.getTeam() != null && (crew.getPosition().contains("Reserved") || crew.getStatus().equals("N.S"))) {
+
+            if (crew.getStatus().contains("SignIn")) {
+
+                signInScheduleId = crew.getStatus().substring(6);
+            }
+
+            List<Schedule> schedules = team.getSchedule();
+
+            for (Schedule s : schedules) {
+                String formattedDate1 = new SimpleDateFormat("HH:mm dd/MM/yyyy").format(s.getStartDate());
+
+                if (s.getFlight().getRoute().getOriginCountry().toUpperCase().trim().equals(crew.getOrganizationUnit().getLocation().trim()) && checkTime(formattedDate2, formattedDate1) > 120
+                        && !s.getScheduleId().toString().equals(signInScheduleId)) {
+                    validSchedulesForSubmit.add(s);
+
+                }
+            }
+
+        } else {
+
+            String submitScheduleId = crew.getStatus().split("-")[0].split("Leave: ")[1];
+
+            List<Schedule> schedules = team.getSchedule();
+
+            List<Schedule> tempS = team.getSchedule();
+
+            if (submitScheduleId.contains("/")) {
+                String[] temps = submitScheduleId.split("/");
+
+                for (int i = 0; i < temps.length; i++) {
+                    Iterator<Schedule> it = tempS.iterator();
+
+                    while (it.hasNext()) {
+                        Schedule sc = it.next();
+                        if (sc.getScheduleId().toString().equals(temps[i])) {
+                            inValidSchedulesForSubmit.add(sc);
+                            //it.remove();
+                        }
+                    }
+
+                }
+
+                for (Schedule s : tempS) {
+                  
+                        String formattedDate1 = new SimpleDateFormat("HH:mm dd/MM/yyyy").format(s.getStartDate());
+                        if (s.getFlight().getRoute().getOriginCountry().toUpperCase().trim().equals(crew.getOrganizationUnit().getLocation().trim()) && checkTime(formattedDate2, formattedDate1) > 120
+                               &&!inValidSchedulesForSubmit.contains(s)  && !s.getScheduleId().toString().equals(signInScheduleId)) {
+
+                            validSchedulesForSubmit.add(s);
+
+                        }
+                    }
+                
+            } else {
+
+                for (Schedule s : schedules) {
+                    String formattedDate1 = new SimpleDateFormat("HH:mm dd/MM/yyyy").format(s.getStartDate());
+
+                    if (s.getFlight().getRoute().getOriginCountry().toUpperCase().trim().equals(crew.getOrganizationUnit().getLocation().trim()) && checkTime(formattedDate2, formattedDate1) > 120
+                            && !s.getScheduleId().toString().equals(submitScheduleId) && !s.getScheduleId().toString().equals(signInScheduleId)) {
+                        validSchedulesForSubmit.add(s);
+
+                    }
+
+                    if (s.getScheduleId().toString().equals(submitScheduleId)) {
+                        inValidSchedulesForSubmit.add(s);
+                    }
+                }
+
+            }
+        }
+
+    }
+
+    // to give if subsequent schedules will return to crew base
+    public List<Schedule> checkSchedule(String scheduleId) {
+        List<Schedule> schs = new ArrayList<Schedule>();
+        Schedule submitSchedule = crewSignInSessionBean.getScheduleByID(scheduleId);
+
+        String submitCity = submitSchedule.getFlight().getRoute().getOriginCity();
+        String submitFlightNumber = submitSchedule.getFlight().getFlightNo();
+
+        List<Pairing> teamPairings = team.getPairing();
+        String scheduleMonth = new SimpleDateFormat("MM").format(submitSchedule.getStartDate());
+        String scheduleYear = new SimpleDateFormat("yyyy").format(submitSchedule.getStartDate());
+        Pairing targetPairing = new Pairing();
+
+        //get the pairing which crew submit the leave
+        for (Pairing p : teamPairings) {
+            String pMonth = p.getFDate().split("/")[1];
+            String pYear = p.getFDate().split("/")[2];
+            if (pMonth.equals(scheduleMonth) && pYear.equals(scheduleYear)) {
+                targetPairing = p;
+            }
+        }
+
+        for (int i = 0; i < targetPairing.getFlightNumbers().size(); i++) {
+            if (targetPairing.getFlightNumbers().size() == 1) {
+                schs.add(crewSignInSessionBean.getScheduleBy(submitFlightNumber, targetPairing.getFDate()));
+            } //for case that the select schedule is the last one in the pairing --> too complicate need to consider the next month pairing
+            //           else if(targetPairing.getFlightNumbers().get(targetPairing.getFlightNumbers().size()-1).equals(submitFlightNumber)){
+            //               
+            //               schs.add(crewSignInSessionBean.getScheduleBy(submitFlightNumber, targetPairing.getFDate()));
+            //           }
+            else {
+
+                if (targetPairing.getFlightNumbers().get(i).equals(submitFlightNumber.substring(2))) {
+
+                    if (targetPairing.getFlightCities().get(i + 2).equals(submitCity)) {
+
+                        String tDate = targetPairing.getFlightTimes().get(i + 1).substring(targetPairing.getFlightTimes().get(i).indexOf("(") + 1, targetPairing.getFlightTimes().get(i).indexOf(")"));
+
+                        schs.add(crewSignInSessionBean.getScheduleBy(targetPairing.getFlightNumbers().get(i + 1), tDate));
+                        break; // once found the schedule returns to base, stop searching
+
+                    } else {
+
+                        String tDate = targetPairing.getFlightTimes().get(i).substring(targetPairing.getFlightTimes().get(i).indexOf("(") + 1, targetPairing.getFlightTimes().get(i).indexOf(")"));
+
+                        schs.add(crewSignInSessionBean.getScheduleBy(submitFlightNumber, tDate));
+                    }
+                }
+            }
+
+        }
+        return schs;
+    }
+
+    public void submitLeave(ActionEvent event) {
+
+        FacesMessage message = null;
+        String crewName = loginManageBean.getEmployeeUserName();
+        String msg = "";
+        List<Schedule> hiddenSchedules = checkSchedule(selectLeaveSchedule);
+
+        String scheduleLists = selectLeaveSchedule;
+        if (hiddenSchedules.isEmpty()) {
+            msg = crewSignInSessionBean.submitLeave(crewName, selectLeaveReason, scheduleLists);
+        } else {
+            for (Schedule s : hiddenSchedules) {
+                scheduleLists += "/" + s.getScheduleId().toString();
+            }
+            msg = crewSignInSessionBean.submitLeave(crewName, selectLeaveReason, scheduleLists);
+        }
+
+        if (msg.equals("done")) {
+            message = new FacesMessage(FacesMessage.SEVERITY_WARN, "You have submit leave for this schedule! ", "");
+        } else {
+            setSelectLeaveSchedule("");
+            setSelectLeaveReason("");
+            message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Submit Successfully ", "");
+        }
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+
+    public void refresh(ActionEvent event) {
+        viewValidSchedule();
     }
 
     public long checkTime(String time1, String time2) {
@@ -528,6 +820,120 @@ public class CrewSignInManagedBean {
 
     public void setPairingID(String pairingID) {
         this.pairingID = pairingID;
+    }
+
+    /**
+     * @return the validSchedulesForSubmit
+     */
+    public List<Schedule> getValidSchedulesForSubmit() {
+        return validSchedulesForSubmit;
+    }
+
+    /**
+     * @param validSchedulesForSubmit the validSchedulesForSubmit to set
+     */
+    public void setValidSchedulesForSubmit(List<Schedule> validSchedulesForSubmit) {
+        this.validSchedulesForSubmit = validSchedulesForSubmit;
+    }
+
+    /**
+     * @return the selectLeaveSchedule
+     */
+    public String getSelectLeaveSchedule() {
+        return selectLeaveSchedule;
+    }
+
+    /**
+     * @param selectLeaveSchedule the selectLeaveSchedule to set
+     */
+    public void setSelectLeaveSchedule(String selectLeaveSchedule) {
+        this.selectLeaveSchedule = selectLeaveSchedule;
+    }
+
+    /**
+     * @return the leaveReasons
+     */
+    public List<String> getLeaveReasons() {
+        return leaveReasons;
+    }
+
+    /**
+     * @param leaveReasons the leaveReasons to set
+     */
+    public void setLeaveReasons(List<String> leaveReasons) {
+        this.leaveReasons = leaveReasons;
+    }
+
+    /**
+     * @return the selectLeaveReason
+     */
+    public String getSelectLeaveReason() {
+        return selectLeaveReason;
+    }
+
+    /**
+     * @param selectLeaveReason the selectLeaveReason to set
+     */
+    public void setSelectLeaveReason(String selectLeaveReason) {
+        this.selectLeaveReason = selectLeaveReason;
+    }
+
+    /**
+     * @return the inValidSchedulesForSubmit
+     */
+    public List<Schedule> getInValidSchedulesForSubmit() {
+        return inValidSchedulesForSubmit;
+    }
+
+    /**
+     * @param inValidSchedulesForSubmit the inValidSchedulesForSubmit to set
+     */
+    public void setInValidSchedulesForSubmit(List<Schedule> inValidSchedulesForSubmit) {
+        this.inValidSchedulesForSubmit = inValidSchedulesForSubmit;
+    }
+
+    /**
+     * @return the reservedCrewScheduleResult
+     */
+    public List<String> getReservedCrewScheduleResult() {
+        return reservedCrewScheduleResult;
+    }
+
+    /**
+     * @param reservedCrewScheduleResult the reservedCrewScheduleResult to set
+     */
+    public void setReservedCrewScheduleResult(List<String> reservedCrewScheduleResult) {
+        this.reservedCrewScheduleResult = reservedCrewScheduleResult;
+    }
+
+    /**
+     * @return the reservedCrewScheduleResultDisabled
+     */
+    public List<String> getReservedCrewScheduleResultDisabled() {
+        return reservedCrewScheduleResultDisabled;
+    }
+
+    /**
+     * @param reservedCrewScheduleResultDisabled the
+     * reservedCrewScheduleResultDisabled to set
+     */
+    public void setReservedCrewScheduleResultDisabled(List<String> reservedCrewScheduleResultDisabled) {
+        this.reservedCrewScheduleResultDisabled = reservedCrewScheduleResultDisabled;
+    }
+
+    /**
+     * @return the reservedCrewSelectSignInSchedule
+     */
+    public String getReservedCrewSelectSignInSchedule() {
+        return reservedCrewSelectSignInSchedule;
+    }
+
+    /**
+     * @param reservedCrewSelectSignInSchedule the
+     * reservedCrewSelectSignInSchedule to set
+     */
+    public void setReservedCrewSelectSignInSchedule(String reservedCrewSelectSignInSchedule) {
+        this.reservedCrewSelectSignInSchedule = reservedCrewSelectSignInSchedule;
     }
 
 }
