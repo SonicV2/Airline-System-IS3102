@@ -6,9 +6,6 @@
 package FOS.Session;
 
 import CI.Entity.CabinCrew;
-import CI.Entity.Employee;
-import CI.Entity.Pilot;
-import FOS.Entity.Team;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -17,13 +14,13 @@ import javax.ejb.Local;
  * @author smu
  */
 @Local
-public interface SearchCrewSessionBeanLocal {
+public interface ReservedCrewScheduleSessionBeanLocal {
 
-    public List<Pilot> getAllPilots();
+    public List<CabinCrew> getAllReservedCrew(String selectYear, String selectMonth);
 
-    public List<CabinCrew> getAllCCs();
+    public void assignSchedule(String selectYear, String selectMonth, String crewName);
 
-    public List<Team> getAllTeam();
+    public String reassign(String crewName);
 
-    public List<CabinCrew> getLeaveCabinCrew();
+    public String assignBack(String crewName);
 }

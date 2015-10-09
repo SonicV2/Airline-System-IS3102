@@ -17,8 +17,21 @@ import javax.ejb.Local;
  */
 @Local
 public interface CrewSignInSessionBeanLocal {
+
     public Team getCCTeam(String crewName);
-     
-     public String crewSignIn(String crewName, Team team, String firstScheduleID);
-     public Schedule getFirstPairingSchedule(Pairing p);
+
+    public String crewSignIn(String crewName, Team team, String firstScheduleID);
+
+    public Schedule getFirstPairingSchedule(Pairing p);
+
+    public CabinCrew getCabinCrew(String crewName);
+
+    public String submitLeave(String crewName, String reason, String scheduleId);
+
+    public Schedule getScheduleByID(String scheduleId);
+
+    public Team getTeamByID(String teamId);
+
+    public Schedule getScheduleBy(String flightNumber, String flightDate);
+
 }

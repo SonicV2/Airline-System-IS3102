@@ -164,7 +164,7 @@ public class crewScheduleManagedBean {
             temp += "\u26F3 Pairing ID: " + restPairing.get(i).getId() + " <br /> \uD83D\uDCC6 Pairing Start Date: " + restPairing.get(i).getFDate() + "   " + "<br /> \uD83D\uDD50 Pairing Total Flight Hours: " + restPairing.get(i).getFlightHour() + "<br />";
 
             for (int j = 0; j < restPairing.get(i).getFlightNumbers().size(); j++) {
-                if (j== 0) {
+                if (j == 0) {
 
                     temp += "<br />Flight Number: " + restPairing.get(i).getFlightNumbers().get(j)
                             + "<br /> " + "Flight Route: "
@@ -183,19 +183,14 @@ public class crewScheduleManagedBean {
                     temp += "<br />Flight Number: " + restPairing.get(i).getFlightNumbers().get(j)
                             + "<br /> " + "Flight Route: "
                             + restPairing.get(i).getFlightCities().get(j) + " " + "\u2708".toUpperCase() + " " + restPairing.get(i).getFlightCities().get(j + 1)
-                            + "<br />" + " Flight Schedules: " + restPairing.get(i).getFlightTimes().get(j)+ "<br />";
+                            + "<br />" + " Flight Schedules: " + restPairing.get(i).getFlightTimes().get(j) + "<br />";
 
-                
-                
                 }
 
             }
 
         }
-        
-        System.out.println("###### restparing: " +restPairing.get(0).getFlightNumbers());
-        System.out.println("###### temp: " +temp);
-        
+
         String[] sps = temp.split("\u26F3 Pairing ID: ");
 
         for (int i = 1; i < sps.length; i++) {

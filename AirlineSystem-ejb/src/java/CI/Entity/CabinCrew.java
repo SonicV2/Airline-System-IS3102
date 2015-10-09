@@ -29,6 +29,7 @@ public class CabinCrew extends Employee implements Serializable{
     private String position;
    private boolean assigned;
    private String status;
+   private String schedule;
    
    @ManyToOne(cascade={CascadeType.PERSIST})
    private Team team = new Team();
@@ -44,7 +45,7 @@ public class CabinCrew extends Employee implements Serializable{
         this.position=position;
         this.assigned=false;
         this.status="N.S";
-        
+        this.schedule="N.A";
     }
 
     /**
@@ -129,6 +130,20 @@ public class CabinCrew extends Employee implements Serializable{
      */
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    /**
+     * @return the schedule
+     */
+    public String getSchedule() {
+        return schedule;
+    }
+
+    /**
+     * @param schedule the schedule to set
+     */
+    public void setSchedule(String schedule) {
+        this.schedule = schedule;
     }
 
    
