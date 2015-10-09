@@ -158,20 +158,16 @@ public class PricingManagement implements PricingManagementLocal {
         if (serviceClass.equals("Economy Saver")) {
             realSold = realSold + sa.getEconomySaverBooked();
             realSold = (realSold * 100) / sa.getEconomySaverTotal();
-        }
-        if (serviceClass.equals("Economy Basic")) {
+        }else if (serviceClass.equals("Economy Basic")) {
             realSold = realSold + sa.getEconomyBasicBooked();
             realSold = (realSold * 100) / sa.getEconomyBasicTotal();
-        }
-        if (serviceClass.equals("Economy Premium")) {
+        } else if (serviceClass.equals("Economy Premium")) {
             realSold = realSold + sa.getEconomyPremiumBooked();
             realSold = (realSold * 100) / sa.getEconomyPremiumTotal();
-        }
-        if (serviceClass.equals("Business")) {
+        }else if (serviceClass.equals("Business")) {
             realSold = realSold + sa.getBusinessBooked();
             realSold = (realSold * 100) / sa.getBusinessTotal();
-        }
-        if (serviceClass.equals("FirstClass")) {
+        }else if (serviceClass.equals("FirstClass")) {
             realSold = realSold + sa.getFirstClassBooked();
             realSold = (realSold * 100) / sa.getFirstClassTotal();
         }
@@ -183,7 +179,7 @@ public class PricingManagement implements PricingManagementLocal {
             String currentSeason = "Neutral";
 
             String origin = s.getFlight().getRoute().getOriginIATA();
-            Query q1 = em.createQuery("SELECT o FROM Season o WHERE o.location.IATA = :IATA");
+            Query q1 = em.createQuery("SELECT o FROM Season o WHERE o.locationIATA = :IATA");
             q1.setParameter("IATA", origin);
             List<Season> seasonList = q1.getResultList();
             if (!seasonList.isEmpty()) {
@@ -195,7 +191,7 @@ public class PricingManagement implements PricingManagementLocal {
             }
             
             String destination = s.getFlight().getRoute().getDestinationIATA();
-            Query q2 = em.createQuery("SELECT o FROM Season o WHERE o.location.IATA = :IATA");
+            Query q2 = em.createQuery("SELECT o FROM Season o WHERE o.locationIATA = :IATA");
             q2.setParameter("IATA", destination);
             List<Season> seasonList2 = q2.getResultList();
             if (!seasonList2.isEmpty()) {
