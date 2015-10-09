@@ -26,4 +26,6 @@ public interface SearchCrewSessionBeanLocal {
     public List<Team> getAllTeam();
 
     public List<CabinCrew> getLeaveCabinCrew();
+
+    public List<Pilot> getLeavePilot();
 }

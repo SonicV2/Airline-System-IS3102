@@ -6,6 +6,7 @@
 package FOS.Session;
 
 import CI.Entity.CabinCrew;
+import CI.Entity.Pilot;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -22,5 +23,11 @@ public interface ReservedCrewScheduleSessionBeanLocal {
 
     public String reassign(String crewName);
 
+    public String reassignPilot(String crewName);
+
     public String assignBack(String crewName);
+
+    public List<Pilot> getAllReservedPilot(String selectYear, String selectMonth);
+    
+    public void assignPilotSchedule(String selectYear, String selectMonth, String crewName);
 }
