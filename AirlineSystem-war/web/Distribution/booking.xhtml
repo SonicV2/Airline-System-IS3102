@@ -11,7 +11,8 @@
         <title>Booking</title>
     </h:head>
 
-    <h:body>
+    <body>
+        <h:form>
 
         <div class="form-group">
             <h:outputLabel value="Traveller Title: " class="col-md-4 control-label" />
@@ -55,10 +56,12 @@
                 <h:inputText id="nationality" required="true" requiredMessage="Please fill in mailing nationality field!" class="form-control" value="#{bookingManagedBean.nationality}" />
             </div>
         </div>   
-
+        
+        
         <div class="text-center">
             <h:commandButton class="btn btn-outline btn-success" value="Confirm" action="#{bookingManagedBean.createBooking()}" />
         </div>
+            </h:form>
 
-    </h:body>
+    </body>
 </html>

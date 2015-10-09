@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+
+    <h:head>
+        <title>Payment</title>
+    </h:head>
+
+    <h:body>
+
+        <div class="form-group">
+            <h:outputLabel value="Credit Card: " class="col-md-4 control-label" />
+            <div class="col-md-8">
+                <h:inputText id="credit" required="true" requiredMessage="Please fill in credit card field!" class="form-control" />
+            </div>
+        </div>
+
+        <div class="text-center">
+            <h:commandButton class="btn btn-outline btn-success" value="Confirm" action="#{bookingManagedBean.createBooking()}" />
+        </div>
+
+    </h:body>
+</html>

@@ -64,7 +64,13 @@
             
             <h:form class="form col-md-10 center-block">
                 <div class="form-group">
-                    <h:outputLabel class="col-md-4 control-label" value="Location IATA code: " />
+                    <h:outputLabel class="col-md-4 control-label" value="Country: " />
+                    <p:inputText value="#{seasonManageBean.country}"  />
+                    <br/>
+
+                </div>
+                <div class="form-group">
+                    <h:outputLabel class="col-md-4 control-label" value="Location IATA code: (Leave Blank if it applies to the whole country)" />
                     <p:inputText value="#{seasonManageBean.IATA}"  />
                     <br/>
 

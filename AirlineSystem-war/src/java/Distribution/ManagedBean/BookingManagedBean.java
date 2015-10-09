@@ -11,8 +11,10 @@ import Distribution.Entity.PNR;
 import Inventory.Entity.SeatAvailability;
 import java.util.Date;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.inject.Named;
 import javax.enterprise.context.Dependent;
+import javax.faces.bean.ManagedProperty;
 
 /**
  *
@@ -51,14 +53,36 @@ public class BookingManagedBean {
     private double totalWeightAllowed;
     private int totalNumBaggeAlloewd;
     
-    private Schedule selectedDepartureSchedule;
-    private Schedule selectedReturnSchedule;
+    private List<Schedule> schedule;
+    
+    @ManagedProperty(value = "#{mARSManagedBean}")
+    private MARSManagedBean mARSManagedBean;
     
     public BookingManagedBean() {
     }
     
+//    @PostConstruct
+//    public void retrieve() {
+//        
+//        System.out.println("selectedDepartureSchedule: " + selectedDepartureSchedule + " " + selectedDepartureSchedule.getStartDate() + "->" + selectedDepartureSchedule.getEndDate());
+//        System.out.println("selectedReturnSchedule: " + selectedReturnSchedule + " " + selectedReturnSchedule.getStartDate() + "->" + selectedReturnSchedule.getEndDate());
+//        
+//    }
+    
     public String createBooking () {
         
+        Schedule tempDeparture = mARSManagedBean.getSelectedDepartureSchedule();
+        Schedule tempReturn = mARSManagedBean.getSelectedReturnSchedule();
+        
+        schedule.add(tempDeparture);
+        schedule.add(tempReturn);
+        
+        System.out.println("!!!!!!!!!!!!!IN CREATE BOOKING");
+        System.out.println("DEPART: " + schedule.get(0));
+        System.out.println("RETURN: " + schedule.get(1));
+//        System.out.println("selectedDepartureSchedule: " + selectedDepartureSchedule + " " + selectedDepartureSchedule.getStartDate() + "->" + selectedDepartureSchedule.getEndDate());
+//        System.out.println("selectedReturnSchedule: " + selectedReturnSchedule + " " + selectedReturnSchedule.getStartDate() + "->" + selectedReturnSchedule.getEndDate());
+//        
         return "payment";
     }
 
@@ -369,33 +393,18 @@ public class BookingManagedBean {
     public void setTotalNumBaggeAlloewd(int totalNumBaggeAlloewd) {
         this.totalNumBaggeAlloewd = totalNumBaggeAlloewd;
     }
-
     /**
-     * @return the selectedDepartureSchedule
+     * @return the schedule
      */
-    public Schedule getSelectedDepartureSchedule() {
-        return selectedDepartureSchedule;
+    public List<Schedule> getSchedule() {
+        return schedule;
     }
 
     /**
-     * @param selectedDepartureSchedule the selectedDepartureSchedule to set
+     * @param schedule the schedule to set
      */
-    public void setSelectedDepartureSchedule(Schedule selectedDepartureSchedule) {
-        this.selectedDepartureSchedule = selectedDepartureSchedule;
-    }
-
-    /**
-     * @return the selectedReturnSchedule
-     */
-    public Schedule getSelectedReturnSchedule() {
-        return selectedReturnSchedule;
-    }
-
-    /**
-     * @param selectedReturnSchedule the selectedReturnSchedule to set
-     */
-    public void setSelectedReturnSchedule(Schedule selectedReturnSchedule) {
-        this.selectedReturnSchedule = selectedReturnSchedule;
+    public void setSchedule(List<Schedule> schedule) {
+        this.schedule = schedule;
     }
     
 }
