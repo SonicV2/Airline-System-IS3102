@@ -13,55 +13,103 @@
 
     <body>
         <h:form>
-
-        <div class="form-group">
-            <h:outputLabel value="Traveller Title: " class="col-md-4 control-label" />
-            <div class="col-md-8">
-                <h:panelGrid>
-
-                    <h:selectOneRadio id="title" required="true" requiredMessage="Please Select Traveller Title!" value="#{bookingManagedBean.travellerTitle}">
-                        <f:selectItem itemLabel="Mr" itemValue="Mr" />
-                        <f:selectItem itemLabel="Mdm" itemValue="Mdm" />
-                        <f:selectItem itemLabel="Mrs" itemValue="Mrs" />
-                        <f:selectItem itemLabel="Miss" itemValue="Miss" />
-                    </h:selectOneRadio>
-                </h:panelGrid>
+            <div class="form-group">
+                <h:outputLabel value="Primary Email: " class="col-md-4 control-label" />
+                <div class="col-md-8">
+                    <h:inputText id="email" required="true" requiredMessage="Please fill in email field!" class="form-control" value="#{mARSManagedBean.primaryEmail}" />
+                </div>
             </div>
-        </div>
 
-        <div class="form-group">
-            <h:outputLabel value="First Name: " class="col-md-4 control-label" />
-            <div class="col-md-8">
-                <h:inputText id="firstname" required="true" requiredMessage="Please fill in first name field!" class="form-control" value="#{bookingManagedBean.travellerFristName}" />
+            <div class="form-group">
+                <h:outputLabel value="Primary Contact Number: " class="col-md-4 control-label" />
+                <div class="col-md-8">
+                    <h:inputText id="contact" required="true" requiredMessage="Please fill in contact number field!" class="form-control" value="#{mARSManagedBean.primaryContactNo}" />
+                </div>
             </div>
-        </div>
 
-        <div class="form-group">
-            <h:outputLabel value="Last Name: " class="col-md-4 control-label" />
-            <div class="col-md-8">
-                <h:inputText id="lastname" required="true" requiredMessage="Please fill in last name field!" class="form-control" value="#{bookingManagedBean.travellerLastName}" />
-            </div>
-        </div>
+            <div class="form-group">
+                <ui:repeat value="#{mARSManagedBean.passengerList}" var="passenger">
 
-        <div class="form-group">
-            <h:outputLabel value="Passport Number: " class="col-md-4 control-label" />
-            <div class="col-md-8">
-                <h:inputText id="passport" required="true" requiredMessage="Please fill in passport number field!" class="form-control" value="#{bookingManagedBean.passportNumber}" />
-            </div>
-        </div>
 
-        <div class="form-group">
-            <h:outputLabel value="Nationality: " class="col-md-4 control-label" />
-            <div class="col-md-8">
-                <h:inputText id="nationality" required="true" requiredMessage="Please fill in mailing nationality field!" class="form-control" value="#{bookingManagedBean.nationality}" />
+                    <h:outputLabel value="Passenger #{passenger.id} " />
+                    <br></br>
+                    <h:outputLabel value="Traveller Title: " class="col-md-4 control-label" />
+                    <div class="col-md-8">
+                        <h:panelGrid>
+
+                            <h:selectOneRadio id="title" required="true" requiredMessage="Please Select Traveller Title!" value="#{passenger.title}">
+                                <f:selectItem itemLabel="Mr" itemValue="Mr" />
+                                <f:selectItem itemLabel="Mdm" itemValue="Mdm" />
+                                <f:selectItem itemLabel="Mrs" itemValue="Mrs" />
+                                <f:selectItem itemLabel="Miss" itemValue="Miss" />
+                            </h:selectOneRadio>
+                        </h:panelGrid>
+                    </div>
+
+                    <div class="form-group">
+                        <h:outputLabel value="First Name: " class="col-md-4 control-label" />
+                        <div class="col-md-8">
+                            <h:inputText id="firstname" required="true" requiredMessage="Please fill in first name field!" class="form-control" value="#{passenger.firstName}" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <h:outputLabel value="Last Name: " class="col-md-4 control-label" />
+                        <div class="col-md-8">
+                            <h:inputText id="lastname" required="true" requiredMessage="Please fill in last name field!" class="form-control" value="#{passenger.lastName}" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <h:outputLabel value="Passport Number: " class="col-md-4 control-label" />
+                        <div class="col-md-8">
+                            <h:inputText id="passport" required="true" requiredMessage="Please fill in passport number field!" class="form-control" value="#{passenger.passport}" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <h:outputLabel value="Nationality: " class="col-md-4 control-label" />
+                        <div class="col-md-8">
+                            <h:inputText id="nationality" required="true" requiredMessage="Please fill in mailing nationality field!" class="form-control" value="#{passenger.nationality}" />
+                        </div>
+                    </div>   
+
+                    <div class="form-group">
+                        <h:outputLabel value="Customer ID: " class="col-md-4 control-label" />
+                        <div class="col-md-8">
+                            <h:inputText id="customerId" class="form-control" value="#{passenger.customerId}" />
+                        </div>
+                    </div>
+
+                    <div class="col-md-8">
+                        <h:panelGrid>
+
+                            <h:selectOneRadio id="insurance" required="true" requiredMessage="Please Select insurance!" value="#{passenger.insurance}">
+                                <f:selectItem itemLabel="Yes" itemValue="true" />
+                                <f:selectItem itemLabel="No" itemValue="false" />
+                            </h:selectOneRadio>
+                        </h:panelGrid>
+                    </div>
+
+                    <div class="form-group">
+                        <h:outputLabel for="foodId" value="Food Selection:" />
+                        <span>
+                            <h:selectOneMenu class="form-control" id="foodId" value="#{passenger.foodSelection}" style="width:180px">
+                                <f:selectItem itemLabel="Select One" itemValue="" />
+                                <f:selectItems itemLabel="Western" itemValue="Western" />
+                                <f:selectItems itemLabel="Oriental" itemValue="Oriental" />
+                                <f:selectItems itemLabel="Vegetarian" itemValue="Vegetarian" />
+                            </h:selectOneMenu>
+                        </span>
+                    </div>
+
+                </ui:repeat>
             </div>
-        </div>   
-        
-        
-        <div class="text-center">
-            <h:commandButton class="btn btn-outline btn-success" value="Confirm" action="#{bookingManagedBean.createBooking()}" />
-        </div>
-            </h:form>
+
+            <div class="text-center">
+                <h:commandButton class="btn btn-outline btn-success" value="Confirm" action="#{mARSManagedBean.createBooking()}" />
+            </div>
+        </h:form>
 
     </body>
 </html>

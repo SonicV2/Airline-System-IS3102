@@ -151,10 +151,14 @@ public class PassengerBookingSessionBean implements PassengerBookingSessionBeanL
             em.persist(eachBooking);
         }
         em.persist(pnr);
-        List<PNR> existingCustomerPNRs = primaryCustomer.getPnrs();
-        existingCustomerPNRs.add(pnr);
-        primaryCustomer.setPnrs(existingCustomerPNRs);
-        em.merge(primaryCustomer);
+        
+        if (primaryCustomer!=null){
+            List<PNR> existingCustomerPNRs = primaryCustomer.getPnrs();
+            existingCustomerPNRs.add(pnr);
+            primaryCustomer.setPnrs(existingCustomerPNRs);
+            em.merge(primaryCustomer);
+        }
+     
     }
 
     //increase SeatAvailablity --merge, changeBookingStatus to Cancelled for all bookings - merge booking, remove pnr from customer, Delete PNR
