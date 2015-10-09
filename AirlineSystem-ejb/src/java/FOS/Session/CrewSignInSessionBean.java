@@ -130,6 +130,17 @@ public class CrewSignInSessionBean implements CrewSignInSessionBeanLocal {
             return "good";
         }
     }
+    
+    @Override
+    public String submitPilotLeave(String crewName, String reason, String scheduleId) {
+        Pilot crew = getPilot(crewName);
+        if (crew.getStatus().split("-")[0].equals("Leave: " + scheduleId)) {
+            return "done";
+        } else {
+            crew.setStatus("Leave: " + scheduleId+ "-"+reason);
+            return "good";
+        }
+    }
 
     @Override
     public Schedule getFirstPairingSchedule(Pairing p) {
@@ -169,6 +180,20 @@ public class CrewSignInSessionBean implements CrewSignInSessionBeanLocal {
         Query q = em.createQuery("SELECT c FROM CabinCrew c WHERE c.employeeUserName =:crewName");
         q.setParameter("crewName", crewName);
         List<CabinCrew> results = q.getResultList();
+        if(results.isEmpty()){
+            return null;
+        }
+        return results.get(0);
+    }
+    
+    @Override
+    public Pilot getPilot(String crewName) {
+        Query q = em.createQuery("SELECT p FROM Pilot p WHERE  p.employeeUserName =:crewName");
+        q.setParameter("crewName", crewName);
+        List<Pilot> results = q.getResultList();
+        if(results.isEmpty()){
+            return null;
+        }
         return results.get(0);
     }
 

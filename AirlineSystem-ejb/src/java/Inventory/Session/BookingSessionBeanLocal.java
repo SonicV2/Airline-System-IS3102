@@ -14,7 +14,7 @@ import javax.ejb.Local;
  * @author YiQuan
  */
 @Local
-public interface BookingSessionBeanLocal {
+public interface InventoryBookingSessionBeanLocal {
     // Create a booking
      public void addBooking(double price, String serviceType, 
             SeatAvailability seatAvail);

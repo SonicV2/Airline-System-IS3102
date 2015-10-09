@@ -8,7 +8,7 @@ package Inventory.Managedbean;
 import javax.inject.Named;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import Inventory.Session.BookingSessionBeanLocal;
+import Inventory.Session.InventoryBookingSessionBeanLocal;
 import javax.ejb.EJB;
 
 /**
@@ -19,6 +19,10 @@ import javax.ejb.EJB;
 @ManagedBean
 @SessionScoped
 public class flightDataManageBean {
+     @EJB
+    private InventoryBookingSessionBeanLocal bs;
+     
+     
 
     /**
      * Creates a new instance of flightDataManageBean
@@ -26,8 +30,9 @@ public class flightDataManageBean {
     public flightDataManageBean() {
     }
     
-    @EJB
-    private BookingSessionBeanLocal bs;
+   
+    
+    
     private String flightNo;
     
     public  void createData(){

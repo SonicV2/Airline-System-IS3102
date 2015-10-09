@@ -17,9 +17,18 @@
                                &lt;br/&gt; Crew Position: #{crew.position} 
                                &lt;br/&gt; Schedule ID: #{crew.status.substring(7)}" />
             </p:selectOneRadio>
-            
-            
-            <h:commandButton value="Approve" actionListener="#{reservedCrewScheduleManagedBean.reassign}"/>
+             <h:commandButton value="Approve" actionListener="#{reservedCrewScheduleManagedBean.reassign}"/>
+             <h:commandButton value="Reject"/>
+        </h:form>
+        <h:form>
+             <p:selectOneRadio id="pilot" required="true" requiredMessage="Please choose one pilot" layout="grid" columns="1" value="#{reservedCrewScheduleManagedBean.pilotUserName}">
+                 <f:selectItems itemLabelEscaped="false" value="#{reservedCrewScheduleManagedBean.leavePilotLists}" var="crew" itemValue="#{crew.employeeUserName}"
+                               itemLabel="Crew UserName: #{crew.employeeUserName} 
+                               &lt;br/&gt; Crew Dept Location: #{crew.organizationUnit.location}
+                               &lt;br/&gt; Crew Position: #{crew.position} 
+                               &lt;br/&gt; Schedule ID: #{crew.status.substring(7)}" />
+            </p:selectOneRadio>
+             <h:commandButton value="Approve" actionListener="#{reservedCrewScheduleManagedBean.reassignPilot}"/>
             <h:commandButton value="Reject"/>
         </h:form>
     </h:body>
