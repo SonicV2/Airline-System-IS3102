@@ -332,7 +332,7 @@ public class DistributionSessionBean implements DistributionSessionBeanLocal {
 
     public boolean existsSchedule(String originIata, String destinationIata, Date date, String serviceType, int adults, int children) {
 
-        if (existsOneStopFlight(originIata, destinationIata, date, serviceType, adults, children) == false && retrieveDirectFlightsForDate(originIata, destinationIata, date, serviceType, adults, children).size() == 0) {
+        if (existsOneStopFlight(originIata, destinationIata, date, serviceType, adults, children) == false && retrieveDirectFlightsForDate(originIata, destinationIata, date, serviceType, adults, children).isEmpty()) {
             return false;
         } else {
             return true;

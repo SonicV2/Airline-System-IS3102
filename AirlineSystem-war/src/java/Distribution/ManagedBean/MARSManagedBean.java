@@ -93,6 +93,10 @@ public class MARSManagedBean {
     private List<Double> minPricesForWeekDirectFlight;
     private List<Double> minPricesForWeekOneStopFlight;
     private List<Double> selectedDatePrices;
+    private List<Date> weekDates;    
+    
+    private List<Integer> adultList;
+    private Integer adultTemp;
     
     private boolean isReturnDateSet;
 
@@ -101,6 +105,7 @@ public class MARSManagedBean {
     private Schedule legTwo;
     private String layover;
     private String duration;
+    private double priceForDirect;
 
     @PostConstruct
     public void retrieve() {
@@ -142,18 +147,35 @@ public class MARSManagedBean {
         transitHubs = new ArrayList();
         directFlightSchedules = new ArrayList();
         flightOptionsList = new ArrayList();
+        
+        
+        List<Integer> adultList1 = new ArrayList();
+        for (int i = 0; i<6; i++){
+            adultList1.add(i);
+        }
+        setAdultList(adultList1);
     }
 
     public String displayDepartureFlights() {
-       
 
         /*Convert the chosen origin and destination cities into IATAs*/
         List<Flight> allFlights = new ArrayList();
         allFlights = distributionSessionBean.getAllFlights();
         flightOptionsList = new ArrayList();
+//        adults = (int) adultTemp;
         System.out.println("managedbean: display departure flight !!!!!!");
+        System.out.println("departure date" + departureDate);
+        System.out.println("reture date" + returnDate);
+        System.out.println("adults" + adults);
+        System.out.println("children" + children);
+        System.out.println("service" + serviceType);
+        System.out.println("origin city" + originCity);
+        System.out.println("destination city" + destinationCity);
+        weekDates = new ArrayList();
+        weekDates.clear();
 
         for (Flight eachFlight : allFlights) {
+            System.out.println("managedbean: go into flight loop");
             if (eachFlight.getRoute().getOriginCity().equalsIgnoreCase(originCity)) {
                 originIATA = eachFlight.getRoute().getOriginIATA();
             }
@@ -161,22 +183,27 @@ public class MARSManagedBean {
                 destinationIATA = eachFlight.getRoute().getDestinationIATA();
             }
         }
-        if (returnDate !=null)
+        if (returnDate !=null){
+            System.out.println("managedbean: return date is not null");
             isReturnDateSet = true;
+        }
 
         boolean inputValid = true;
         //One way jorney selected by user
         if (isReturnDateSet==false) {
+            System.out.println("managedbean: user did not choose return date");
             if (distributionSessionBean.existsSchedule(originIATA, destinationIATA, departureDate, serviceType, adults, children) == false) {
                 inputValid = false;
             }
         } //return journey selected by user
         else {
+            System.out.println("managedbean: user chose return date");
             if (distributionSessionBean.existsSchedule(originIATA, destinationIATA, departureDate, serviceType, adults, children) == false || distributionSessionBean.existsSchedule(destinationIATA, originIATA, returnDate, serviceType, adults, children) == false) {
                 inputValid = false;
             }
         }
         if (inputValid == false) {
+            System.out.println("managedbean: input is not valid");
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "No flights found for the selected routes or dates", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
             setDepartureDate(null);
@@ -189,6 +216,7 @@ public class MARSManagedBean {
             return null;
         } 
         else if (adults ==0 && children ==0){
+            System.out.println("managedbean: no adult or children chosen");
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please select atleast one passenger", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
             setDepartureDate(null);
@@ -230,9 +258,12 @@ public class MARSManagedBean {
                   
                 }
                 retrieveMinWeekPricesForDirect(originIATA, destinationIATA, departureDate, serviceType, adults, children);
+                setPriceForDirect(selectedDatePrices.get(0));
                 if (! isReturnDateSet) {
+                    System.out.println("managedbean: everything is right...returning direct flight page");
                     return "DisplayDirectFlight";
                 } else {
+                    System.out.println("managedbean: everything is right...returning departure direct flight page");
                     return "DisplayDepartureDirectFlightReturn";
                 }
             } else { //Retrieve one stop flights
@@ -320,6 +351,7 @@ public class MARSManagedBean {
         setOriginIATA(destinationIATA);
         setDestinationIATA(tempOrigin);
         flightOptionsList.clear();
+        weekDates.clear();
 
         setTempDepartureDate(departureDate);
         setTempReturnDate(returnDate);
@@ -406,6 +438,7 @@ public class MARSManagedBean {
 
         for (i = -3; i <= 3; i++) {
             Date eachDate = distributionSessionBean.addDaysToDate(date, i);
+            weekDates.add(eachDate);
             schedulesForEachDate = distributionSessionBean.retrieveDirectFlightsForDate(originIATA, destinationIATA, eachDate, serviceType, adults, children);
             if (schedulesForEachDate.size() > 0) {
                 minPrice = 99999999;
@@ -439,6 +472,7 @@ public class MARSManagedBean {
         
         for (i = -3; i <= 3; i++) {
             Date eachDate = distributionSessionBean.addDaysToDate(date, i);
+            weekDates.add(eachDate);
             legOneSchedules.clear();
             legTwoSchedules.clear();
             for (j = 0; j < transitHubs.size(); j++) {
@@ -804,6 +838,42 @@ public class MARSManagedBean {
 
     public void setDuration(String duration) {
         this.duration = duration;
+    }
+
+    /**
+     * @return the adultList
+     */
+    public List<Integer> getAdultList() {
+        return adultList;
+    }
+
+    /**
+     * @param adultList the adultList to set
+     */
+    public void setAdultList(List<Integer> adultList) {
+        this.adultList = adultList;
+    }
+
+    /**
+     * @return the adultTemp
+     */
+    public Integer getAdultTemp() {
+        return adultTemp;
+    }
+
+    /**
+     * @param adultTemp the adultTemp to set
+     */
+    public void setAdultTemp(Integer adultTemp) {
+        this.adultTemp = adultTemp;
+    }
+    
+public double getPriceForDirect() {
+        return priceForDirect;
+    }
+
+    public void setPriceForDirect(double priceForDirect) {
+        this.priceForDirect = priceForDirect;
     }
 
 }
