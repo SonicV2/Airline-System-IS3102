@@ -25,4 +25,7 @@ public interface SeasonSessionBeanLocal {
     public void deleteSeason(Season season);
     
     public Location findLocation(String IATA);
+    
+    public String addCountrySeason(Date start, Date end, boolean origin, boolean destination,
+    String demand, String remarks,String country);
 }

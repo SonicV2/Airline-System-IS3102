@@ -45,6 +45,21 @@ public class SeasonSessionBean implements SeasonSessionBeanLocal {
         return "Season Demand Added";
     }
     
+    public String addCountrySeason(Date start, Date end, boolean origin, boolean destination,
+    String demand, String remarks,String country){
+        Query q = em.createQuery("SELECT o FROM Location o WHERE o.country = :country");
+        q.setParameter("country", country);
+        List<Location> lList= q.getResultList();
+        int size = lList.size();
+        if(size==0)
+            return "Enter a Valid Country";
+        for(int i=0; i<size; i++){
+            Location location = lList.get(i);
+            this.addSeason(start, end, origin, destination, demand, location, remarks);
+        }
+         return "Season Demand Added";
+    }
+    
     public void editSeason(Season season){
         em.merge(season);
     }
