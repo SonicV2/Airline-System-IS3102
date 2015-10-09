@@ -31,10 +31,13 @@ public class PassengerBookingSessionBean implements PassengerBookingSessionBeanL
 
     @Override
     public boolean isPassengerAFrequentFlyer(long customerId) {
-        List<Customer> allCustomers = getAllCustomers();
-        for (Customer eachCustomer : allCustomers) {
-            if (eachCustomer.getId() == customerId) {
-                return true;
+        List<Customer> allCustomers = new ArrayList();
+        allCustomers = getAllCustomers();
+        if (allCustomers!= null) {
+            for (Customer eachCustomer : allCustomers) {
+                if (eachCustomer.getId() == customerId) {
+                    return true;
+                }
             }
         }
         return false;
@@ -129,6 +132,7 @@ public class PassengerBookingSessionBean implements PassengerBookingSessionBeanL
         PNR pnr = new PNR();
         String pnrNo = generatePNRNumber();
         pnr.createPNR(pnrNo, noOfTravellers, email, contactNo, pnrStatus, totalPrice, dateOfBooking, bookingAvenue);
+        pnr.setBookings(new ArrayList<Booking>());
         return pnr;
     }
 
@@ -145,20 +149,25 @@ public class PassengerBookingSessionBean implements PassengerBookingSessionBeanL
 
     @Override
     public void persistBookingAndPNR(PNR pnr, List<Booking> bookings, Customer primaryCustomer) {
+        if (pnr==null)
+         System.out.println("Null PNR");
+        List<Booking> allBookings = new ArrayList();        
         for (Booking eachBooking : bookings) {
             eachBooking.setPnr(pnr);
-            pnr.getBookings().add(eachBooking);
+            allBookings.add(eachBooking);
             em.persist(eachBooking);
         }
+        System.out.println("!!!!!!!!Booking List:" + allBookings);
+        pnr.setBookings(allBookings);
         em.persist(pnr);
-        
-        if (primaryCustomer!=null){
+
+        if (primaryCustomer != null) {
             List<PNR> existingCustomerPNRs = primaryCustomer.getPnrs();
             existingCustomerPNRs.add(pnr);
             primaryCustomer.setPnrs(existingCustomerPNRs);
             em.merge(primaryCustomer);
         }
-     
+
     }
 
     //increase SeatAvailablity --merge, changeBookingStatus to Cancelled for all bookings - merge booking, remove pnr from customer, Delete PNR
@@ -196,46 +205,40 @@ public class PassengerBookingSessionBean implements PassengerBookingSessionBeanL
         primaryCustomer.getPnrs().remove(pnr);
         em.merge(primaryCustomer);
     }
-    
+
     @Override
-    public List<Schedule> getDepartureSchedules (List<Schedule> selectedSchedules, boolean isReturnDateSet){
+    public List<Schedule> getDepartureSchedules(List<Schedule> selectedSchedules, boolean isReturnDateSet) {
         int noOfSelectedSchedules = selectedSchedules.size();
         List<Schedule> departureSchedules = new ArrayList();
-        
-        if (!isReturnDateSet){
-           return selectedSchedules; 
-        }    
-        //Return jouney selected
-        else
-        {
-            if (noOfSelectedSchedules == 2){
+
+        if (!isReturnDateSet) {
+            return selectedSchedules;
+        } //Return jouney selected
+        else {
+            if (noOfSelectedSchedules == 2) {
                 departureSchedules.add(selectedSchedules.get(0));
                 return departureSchedules;
-            }
-            else if (noOfSelectedSchedules ==4) {
+            } else if (noOfSelectedSchedules == 4) {
                 departureSchedules.add(selectedSchedules.get(0));
                 departureSchedules.add(selectedSchedules.get(1));
-                return departureSchedules ;
-            }        
+                return departureSchedules;
+            }
         }
         return departureSchedules;
     }
-    
-      public List<Schedule> getReturnSchedules (List<Schedule> selectedSchedules){
+
+    public List<Schedule> getReturnSchedules(List<Schedule> selectedSchedules) {
         int noOfSelectedSchedules = selectedSchedules.size();
         List<Schedule> returnSchedules = new ArrayList();
-            if (noOfSelectedSchedules == 2){
-                returnSchedules.add(selectedSchedules.get(1));
-                return returnSchedules;
-            }
-            else if (noOfSelectedSchedules ==4) {
-                returnSchedules.add(selectedSchedules.get(2));
-                returnSchedules.add(selectedSchedules.get(3));
-                return returnSchedules ;
-            }
+        if (noOfSelectedSchedules == 2) {
+            returnSchedules.add(selectedSchedules.get(1));
+            return returnSchedules;
+        } else if (noOfSelectedSchedules == 4) {
+            returnSchedules.add(selectedSchedules.get(2));
+            returnSchedules.add(selectedSchedules.get(3));
+            return returnSchedules;
+        }
         return returnSchedules;
     }
-    
-    
-    
+
 }

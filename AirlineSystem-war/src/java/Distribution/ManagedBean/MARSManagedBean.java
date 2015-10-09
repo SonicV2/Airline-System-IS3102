@@ -201,13 +201,6 @@ public class MARSManagedBean {
         selectedReturnSchedules = new ArrayList();
         totalSelectedPrice=0;
         passengerList = new ArrayList();
-        
-        
-        List<Integer> adultList1 = new ArrayList();
-        for (int i = 0; i<6; i++){
-            adultList1.add(i);
-        }
-        setAdultList(adultList1);
     }
 
     public String displayDepartureFlights() {
@@ -269,6 +262,7 @@ public class MARSManagedBean {
                     destinationIATA = eachFlight.getRoute().getDestinationIATA();
                 }
             }
+            
             boolean inputValid = true;
             //One way jorney selected by user
             if (isReturnDateSet == false) {
@@ -647,11 +641,14 @@ public class MARSManagedBean {
                     totalSelectedPrice += 15.0;
                 }
             }
-            PNR pnr = passengerBookingSessionBean.createPNR((adults+children), getPrimaryEmail(), getPrimaryContactNo(), "Booked",totalSelectedPrice, new Date(), "MerlionAirlines");
-//            if ()
-//             
+            pnr = passengerBookingSessionBean.createPNR((adults+children), getPrimaryEmail(), getPrimaryContactNo(), "Booked",totalSelectedPrice, new Date(), "MerlionAirlines");
+            if (passengerBookingSessionBean.isPassengerAFrequentFlyer(Long.parseLong(passengerList.get(0).getCustomerId())))
+              primaryCustomer = passengerBookingSessionBean.getCustomerByCustomerId(Long.parseLong(passengerList.get(0).getCustomerId()));
+            else
+              primaryCustomer = null; 
         }
-//        
+            passengerBookingSessionBean.persistBookingAndPNR(pnr, bookingList, primaryCustomer);
+        
         return "payment";
     }
 
