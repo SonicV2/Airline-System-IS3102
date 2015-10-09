@@ -327,6 +327,23 @@ public class A380PairingSessionBean implements A380PairingSessionBeanLocal {
         return a380;
     }
 
+    @Override
+    public List<Pairing> filterPairings(String selectYear, String selectMonth) { // filter based on year and month
+        Query q = em.createQuery("SELECT p FROM Pairing p");
+        List<Pairing> results = new ArrayList<Pairing>();
+        List<Pairing> allPairings = q.getResultList();
+
+        for (Pairing p : allPairings) {
+            String pYear = p.getFDate().split("/")[2];
+            String pMonth = p.getFDate().split("/")[1];
+
+            if (p.isIsA380() == false && pYear.equals(selectYear) && pMonth.equals(selectMonth)) {
+                results.add(p);
+            }
+        }
+        return results;
+    }
+
     //Retrieve pairings by pairing ID
     @Override
     public Pairing getPairingByID(String id) {
@@ -356,10 +373,10 @@ public class A380PairingSessionBean implements A380PairingSessionBeanLocal {
                 if (pi.getPosition().equals("Captain") && pi.getSkillsets().contains("A380")) {
                     pilots.add(pi);
                 }
-                if (pi.getPosition().equals("First Officer")&& pi.getSkillsets().contains("A380")) {
+                if (pi.getPosition().equals("First Officer") && pi.getSkillsets().contains("A380")) {
                     FOs.add(pi);
                 }
-                if (pi.getPosition().equals("Observer")&& pi.getSkillsets().contains("A380")) {
+                if (pi.getPosition().equals("Observer") && pi.getSkillsets().contains("A380")) {
                     OBs.add(pi);
                 }
             }
@@ -395,7 +412,6 @@ public class A380PairingSessionBean implements A380PairingSessionBeanLocal {
 
     }
 
-    
     //Generate A380 Team for the specific pairing
     @Override
     public Team generateA380Team(Pairing pairing) {
@@ -406,6 +422,7 @@ public class A380PairingSessionBean implements A380PairingSessionBeanLocal {
         }
 
         String flightDate = pairing.getFDate();
+        List<String> cities = pairing.getFlightCities();
 
         List<String> flightDates = new ArrayList<String>();
         List<String> temp = pairing.getFlightTimes();
@@ -500,6 +517,8 @@ public class A380PairingSessionBean implements A380PairingSessionBeanLocal {
             }
         }
 
+        List<CabinCrew> leadResults = langSelection(leadCCList, cities);
+
         CCs.add(leadCCList.get(0));
         CCs.add(leadCCList.get(1));
         leadCCList.get(0).setAssigned(true);
@@ -567,6 +586,58 @@ public class A380PairingSessionBean implements A380PairingSessionBeanLocal {
         }
 
         return team;
+    }
+
+    public List<CabinCrew> langSelection(List<CabinCrew> crews, List<String> cities) {
+        List<CabinCrew> results = new ArrayList<CabinCrew>();
+        List<String> langs = new ArrayList<String>();
+
+        HashMap langMap = new HashMap();
+        langMap.put("Paris", "French");
+
+        langMap.put("Frankfurt", "German");
+        langMap.put("Munich", "German");
+
+        langMap.put("Milan", "Italian");
+        langMap.put("Rome", "Italian");
+
+        langMap.put("Tokyo", "Japanese");
+        langMap.put("Sapporo", "Japanese");
+        langMap.put("Fukuoka", "Japanese");
+        langMap.put("Nagoya", "Japanese");
+        langMap.put("Okinawa", "Japanese");
+        langMap.put("Osaka", "Japanese");
+
+        langMap.put("Beijing", "Chinese");
+        langMap.put("Guangzhou", "Chinese");
+        langMap.put("Shanghai", "Chinese");
+
+        langMap.put("Seoul", "Korean");
+
+        for (String city : cities) {
+            if (langMap.get(city) != null) {
+                langs.add(langMap.get(city).toString());
+            }
+        }
+
+        for (String l : langs) {
+
+            for (CabinCrew cc : crews) {
+                if (langs.isEmpty()) {
+                    System.out.println("crew break");
+                    break;
+                }
+                if (cc.getLanguages().get(0).equals(l)) {
+                    results.add(cc);
+
+                } else if (cc.getLanguages().get(1).equals(l)) {
+
+                    results.add(cc);
+                }
+            }
+        }
+
+        return results;
     }
 
     public Flight getFlight(String flightNumber) {
@@ -665,7 +736,6 @@ public class A380PairingSessionBean implements A380PairingSessionBeanLocal {
         return totalTime;
     }
 
-    
     //Set max flight hours. min stopover time between two legs and total number of legs
     @Override
     public void setPolicy() {  //retrive from data base and set the global variables

@@ -19,7 +19,7 @@ import javax.ejb.Local;
  * @author parthasarthygupta
  */
 @Local
-public interface BookingSessionBeanLocal {
+public interface PassengerBookingSessionBeanLocal {
     
     public boolean isPassengerAFrequentFlyer(long customerId);
     public Customer getCustomerByCustomerId (long customerId);

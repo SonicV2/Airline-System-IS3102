@@ -61,4 +61,17 @@ public class SearchCrewSessionBean implements SearchCrewSessionBeanLocal {
         List<Team> teams = q.getResultList();
         return teams;
     }
+    
+    @Override
+    public List<CabinCrew> getLeaveCabinCrew(){
+        Query q = em.createQuery("SELECT c FROM CabinCrew c");
+        List<CabinCrew> results = new ArrayList<CabinCrew>();
+        List<CabinCrew> crews = q.getResultList();
+        for(CabinCrew c : crews){
+            if(c.getStatus().contains("Leave")){
+                results.add(c);
+            }
+        }
+        return results;
+    }
 }

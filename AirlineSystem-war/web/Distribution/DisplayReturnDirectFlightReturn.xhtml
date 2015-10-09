@@ -62,7 +62,7 @@
                 </div>
                 <div class="faqs-top-grids terms-grids">	
                     <h:form>
-                        <p:dataTable value="#{mARSManagedBean.directFlightSchedules}" var="schedules" selection="#{bookingManagedBean.selectedReturnSchedule}" rowKey="#{schedules.flight.flightNo}" >
+                        <p:dataTable value="#{mARSManagedBean.directFlightSchedules}" var="schedules" selection="#{mARSManagedBean.selectedReturnSchedule}" rowKey="#{schedules.flight.flightNo}" >
                             <p:column selectionMode="single" style="width:40px;text-align:center"/>
                             <p:column headerText="Flight Number" style="width:10%;">
                                 <h:outputText value="#{schedules.flight.flightNo}" />
@@ -88,6 +88,10 @@
                                 <h:outputText value="#{mARSManagedBean.minPricesForWeekDirectFlight}" />
                             </p:column>
                         </p:dataTable>
+                        
+                        <div class="form-group text-center">
+                            <h:commandButton class="btn btn-outline btn-success" value="Proceed to booking"  action="#{mARSManagedBean.summary()}"/>
+                        </div>
 
                         
                     </h:form>

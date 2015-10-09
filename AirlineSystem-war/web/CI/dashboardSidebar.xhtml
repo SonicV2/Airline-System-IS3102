@@ -173,6 +173,9 @@
                     <li>
                         <a href="#{request.contextPath}/FOS/crewPairingA380.xhtml"><i class="fa fa-clock-o"></i> Crew Scheduling For A380</a>
                     </li>
+                    <li>
+                        <a href="#{request.contextPath}/FOS/viewLeaveCrew.xhtml"><i class="fa fa-clock-o"></i> View Leave Submit Crews</a>
+                    </li>
                 </ui:fragment>
 
                 <!-- this is for price management, finance manager -->
@@ -201,12 +204,20 @@
                 <!-- this is for crew sign-in, all crews can have this access -->
                 <ui:fragment rendered="#{loginManageBean.accessRightIDs.contains(18)}">
                     <li>
-                        <a href="#{request.contextPath}/FOS/crewSignIn.xhtml"><i class="fa fa-clock-o"></i> Crew Sign-In</a>
+                        <a href="#{request.contextPath}/FOS/crewSignIn.xhtml"><i class="fa fa-clock-o"></i> View Team Member</a>
                     </li>
+                    <li>
+                        <a href="#{request.contextPath}/FOS/viewTimetable.xhtml"><i class="fa fa-plus fa-dollar"></i> View Timetable</a>
+                    </li>
+                    
+                    
                     <h:form>
-                    <li>        
-                        <a><h:commandLink class="commandLink" action="/FOS/viewSchedule" actionListener="#{crewSignInManagedBean.viewPairing}"><i class="fa fa-plus fa-eye"></i> View My Schedules </h:commandLink></a>
-                    </li>
+                        <li>        
+                            <a><h:commandLink class="commandLink" action="/FOS/viewSchedule" actionListener="#{crewSignInManagedBean.viewPairing}"><i class="fa fa-plus fa-eye"></i> Crew Sign In</h:commandLink></a>
+                        </li>
+                        <li>        
+                            <a><h:commandLink class="commandLink" action="/FOS/leaveSubmit" actionListener="#{crewSignInManagedBean.refresh}"><i class="fa fa-plus fa-eye"></i> Submit Leave</h:commandLink></a>
+                        </li>
                     </h:form>
                 </ui:fragment>
 
@@ -223,8 +234,8 @@
                         <a href="#{request.contextPath}/FOS/searchTeam.xhtml"><i class="fa fa-search"></i> Team Management</a>
                     </li>
                 </ui:fragment>
-                
-                
+
+
                 <!--this is for operations manager or executive to manage checklist-->
                 <ui:fragment rendered="#{loginManageBean.accessRightIDs.contains(20)}">   
                     <h:form>                        
@@ -240,7 +251,7 @@
                     </h:form>
                 </ui:fragment>
 
-                                <!-- this is for pilot checklist-->
+                <!-- this is for pilot checklist-->
                 <ui:fragment rendered="#{loginManageBean.accessRightIDs.contains(21)}">
                     <h:form>
                         <li>
@@ -249,8 +260,8 @@
 
                     </h:form>
                 </ui:fragment>
-                                
-                                                <!-- this is for crew checklist-->
+
+                <!-- this is for crew checklist-->
                 <ui:fragment rendered="#{loginManageBean.accessRightIDs.contains(22)}">
                     <h:form>
                         <li>
@@ -258,8 +269,8 @@
                         </li>
                     </h:form>
                 </ui:fragment>
-                                                
-                                                                                                <!-- this is for crew checklist-->
+
+                <!-- this is for crew checklist-->
                 <ui:fragment rendered="#{loginManageBean.accessRightIDs.contains(23)}">
                     <h:form>
                         <li>

@@ -24,7 +24,7 @@ import javax.persistence.Query;
  * @author parthasarthygupta
  */
 @Stateless
-public class BookingSessionBean implements BookingSessionBeanLocal {
+public class PassengerBookingSessionBean implements PassengerBookingSessionBeanLocal {
 
     @PersistenceContext(unitName = "AirlineSystem-ejbPU")
     private EntityManager em;
