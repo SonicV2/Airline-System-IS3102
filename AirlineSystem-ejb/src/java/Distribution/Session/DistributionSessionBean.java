@@ -88,7 +88,6 @@ public class DistributionSessionBean implements DistributionSessionBeanLocal {
                 }
             }
         }
-
         return schedulesWithSeatsAvailable;
     }
 
@@ -98,7 +97,8 @@ public class DistributionSessionBean implements DistributionSessionBeanLocal {
         String startDateFormatted = new SimpleDateFormat("dd/MM/yyyy").format(startDate);
 
         for (Schedule eachScheduleForFlight : schedulesForFlight) {
-            String eachScheduleStartDate = new SimpleDateFormat("dd/MM/yyyy").format(eachScheduleForFlight.getStartDate());
+            Date eachScheduleStartDateInLocalTime = convertTimeZone(eachScheduleForFlight.getStartDate(), getSingaporeTimeZone(), getTimeZoneFromIata(eachScheduleForFlight.getFlight().getRoute().getOriginIATA()));
+            String eachScheduleStartDate = new SimpleDateFormat("dd/MM/yyyy").format(eachScheduleStartDateInLocalTime);
 
             if (eachScheduleStartDate.equals(startDateFormatted)) {
                 return eachScheduleForFlight;
@@ -211,13 +211,13 @@ public class DistributionSessionBean implements DistributionSessionBeanLocal {
 
     @Override
     public List<String> getHubIatasFromOrigin(String originIATA) {
-        List<Route> routes = new ArrayList<Route>();
-        routes = getAllRoutes();
+        List<Flight> flights = new ArrayList<Flight>();
+        flights = getAllFlights();
         List<String> hubs = new ArrayList<String>();
 
-        for (Route eachRoute : routes) {
-            if (eachRoute.getOriginIATA().equals(originIATA) && isIATAAHub(eachRoute.getDestinationIATA())) {
-                hubs.add(eachRoute.getDestinationIATA());
+        for (Flight eachFlight : flights) {
+            if (eachFlight.getRoute().getOriginIATA().equals(originIATA) && isIATAAHub(eachFlight.getRoute().getDestinationIATA())) {
+                hubs.add(eachFlight.getRoute().getDestinationIATA());
             }
         }
         return hubs;
@@ -225,12 +225,15 @@ public class DistributionSessionBean implements DistributionSessionBeanLocal {
 
     @Override
     public List<String> getTransitHubs(List<String> hubsFromOrigin, String destinationIata) {
-        List<Route> routes = new ArrayList<Route>();
-        routes = getAllRoutes();
+
+        List<Flight> flights = new ArrayList<Flight>();
+        flights = getAllFlights();
+
         List<String> transitHubs = new ArrayList<String>();
+
         for (String eachHub : hubsFromOrigin) {
-            for (Route eachRoute : routes) {
-                if (eachRoute.getDestinationIATA().equals(destinationIata) && eachRoute.getOriginIATA().equals(eachHub)) {
+            for (Flight eachFlight : flights) {
+                if (!transitHubs.contains(eachHub) && eachFlight.getRoute().getDestinationIATA().equalsIgnoreCase(destinationIata) && eachFlight.getRoute().getOriginIATA().equalsIgnoreCase(eachHub)) {
                     transitHubs.add(eachHub);
                 }
             }
@@ -257,10 +260,10 @@ public class DistributionSessionBean implements DistributionSessionBeanLocal {
     }
 
     @Override
-    public Date addOneDayToDate(Date date) {
+    public Date addDaysToDate(Date date, int no) {
         Calendar c = Calendar.getInstance();
         c.setTime(date);
-        c.add(Calendar.DATE, 1);
+        c.add(Calendar.DATE, no);
         return c.getTime();
     }
 
@@ -325,6 +328,67 @@ public class DistributionSessionBean implements DistributionSessionBeanLocal {
 
     public TimeZone getSingaporeTimeZone() {
         return (TimeZone.getTimeZone("Asia/Singapore"));
+    }
+
+    public boolean existsSchedule(String originIata, String destinationIata, Date date, String serviceType, int adults, int children) {
+
+        if (existsOneStopFlight(originIata, destinationIata, date, serviceType, adults, children) == false && retrieveDirectFlightsForDate(originIata, destinationIata, date, serviceType, adults, children).isEmpty()) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public boolean existsOneStopFlight(String originIATA, String destinationIATA, Date date, String serviceType, int adults, int children) {
+
+        List<String> transitHubs = new ArrayList();
+        transitHubs = getTransitHubs(getHubIatasFromOrigin(originIATA), destinationIATA);
+
+        List<Schedule> legOneSchedules = new ArrayList();
+        List<Schedule> legTwoSchedules = new ArrayList();
+        List<Schedule> oneStopFlightSchedules = new ArrayList();
+
+        for (int i = 0; i < transitHubs.size(); i++) {
+            legOneSchedules = addSchedulesToList(legOneSchedules, retrieveDirectFlightsForDate(originIATA, transitHubs.get(i), date, serviceType, adults, children));
+            legTwoSchedules = addSchedulesToList(legTwoSchedules, retrieveDirectFlightsForDate(transitHubs.get(i), destinationIATA, addDaysToDate(date, 1), serviceType, adults, children));
+            legTwoSchedules = addSchedulesToList(legTwoSchedules, retrieveDirectFlightsForDate(transitHubs.get(i), destinationIATA, date, serviceType, adults, children));
+        }
+
+        oneStopFlightSchedules = retrieveOneStopFlightSchedules(legOneSchedules, legTwoSchedules);
+        if (oneStopFlightSchedules.size() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public List<Schedule> addSchedulesToList(List<Schedule> originalSchedules, List<Schedule> schedulesToAdd) {
+        for (Schedule eachScheduleToAdd : schedulesToAdd) {
+            originalSchedules.add(eachScheduleToAdd);
+        }
+        return originalSchedules;
+    }
+
+    public List<Flight> getAllFlights() {
+        List<Flight> allFlights = new ArrayList<Flight>();
+
+        try {
+            Query q = em.createQuery("SELECT a from Flight a");
+
+            List<Flight> results = q.getResultList();
+            if (!results.isEmpty()) {
+
+                allFlights = results;
+
+            } else {
+                allFlights = null;
+                System.out.println("no flight!");
+            }
+        } catch (EntityNotFoundException enfe) {
+            System.out.println("\nEntity not found error" + "enfe.getMessage()");
+        }
+
+        return allFlights;
     }
 
 }

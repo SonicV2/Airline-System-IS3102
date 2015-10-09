@@ -5,15 +5,12 @@
  */
 package Inventory.Session;
 
-import APS.Entity.Location;
 import javax.ejb.Stateless;
-import javax.ejb.LocalBean;
 import Inventory.Entity.BookingClass;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
-import javax.persistence.EntityExistsException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 /**
@@ -29,12 +26,12 @@ public class ClassManagement implements ClassManagementLocal {
     // Add a booking class
     public String addClassCode(String classcode, int pricePercent, int advancedSales
     , int percentSold, String serviceClass, boolean rebook, boolean cancel, 
-    int baggage, int millageAccru){
+    int baggage, int millageAccru, String season){
         BookingClass bc = new BookingClass();
         BookingClass bc1 = em.find(BookingClass.class,classcode);
         if (bc1==null){
             bc.createClass(classcode, pricePercent, advancedSales, percentSold,
-                    serviceClass, rebook, cancel, baggage, millageAccru);
+                    serviceClass, rebook, cancel, baggage, millageAccru, season);
             em.persist(bc);
             return "Fare Class Added";
         }

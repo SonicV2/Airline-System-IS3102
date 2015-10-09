@@ -58,7 +58,8 @@ and open the template in the editor.
             <div class="container">
                 <div class="faqs-top-grids">
                     <div class="book-grids">
-                        <form>
+                        <h:form id="sign-up-form">
+                            <p:growl id="growl" sticky="true" showDetail="false"/>
                             <div class="col-md-6 book-left">
 
                                 <div class="book-left-info">
@@ -67,26 +68,32 @@ and open the template in the editor.
                                 <div class="book-left-form">
 
                                     <p>First Name</p>
-                                    <input type="text" value="" onfocus="this.value = '';" onblur="if (this.value == '') {
-                                                this.value = '';
-                                            }"/>
-                                    <p>Last Name</p>
-                                    <input type="text" value="" onfocus="this.value = '';" onblur="if (this.value == '') {
-                                                this.value = '';
-                                            }"/>
 
+                                    <h:inputText id="firstname" required="true" requiredMessage="Please fill in first name field!"  value="#{customerManagedBean.customerFirstName}" />
+
+                                    <p>Last Name</p>
+
+                                    <h:inputText id="lastname" required="true" requiredMessage="Please fill in last name field!"  value="#{customerManagedBean.customerLastName}" />
+
+                                    <div style="display:inline;">
+                                        <p>Gender </p>
+                                        <h:panelGrid>
+                                            <h:selectOneRadio id="gender" required="true" requiredMessage="Please Select Gender!" value="#{customerManagedBean.customerGender}" >
+                                                <f:selectItem itemLabel="Male" itemValue="Male" />
+                                                <f:selectItem itemLabel="Female" itemValue="Female" />
+                                            </h:selectOneRadio>
+                                        </h:panelGrid>
+                                    </div>
+
+                                    <p> Date of Birth </p>
+                                    <p:calendar id="button" required="true" requiredMessage="Please fill in Date of Birth field!" value="#{customerManagedBean.customerDOB}" navigator="true" yearRange="c-100:c"/>
 
                                     <p>Handphone Number</p>
-                                    <input type="text" value="" onfocus="this.value = '';" onblur="if (this.value == '') {
-                                                this.value = '';
-                                            }"/>
-
+                                    <h:inputText id="hpnum" required="true" requiredMessage="Please fill in handphone number field!"  value="#{customerManagedBean.customerHpNumber}" />
+                                    
                                     <p>Residential Number</p>
-                                    <input type="text" value="" onfocus="this.value = '';" onblur="if (this.value == '') {
-                                                this.value = '';
-                                            }"/>
 
-
+                                    <h:inputText id="homenum" required="true" requiredMessage="Please fill in residential number field!"  value="#{customerManagedBean.customerHomeNumber}" />
 
 
                                 </div>
@@ -94,24 +101,35 @@ and open the template in the editor.
                             <div class="col-md-6 book-left book-right">
 
                                 <div class="book-left-form">
+
+                                    
+                                    
                                     <p>Email Address</p>
-                                    <input type="text" value="" onfocus="this.value = '';" onblur="if (this.value == '') {
-                                                this.value = '';
-                                            }"/>
+                                    <h:inputText id="PE" required="true" validatorMessage="Not a valid email addess " requiredMessage="Please fill in Personal email field!" class="form-control" value="#{customerManagedBean.customerEmail}" >
+                                        <f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
+                                    </h:inputText> 
+
                                     <p>Password</p>
-                                    <input type="password" name="password" id="password"/>
+
+                                    <h:inputSecret id="password" required="true" requiredMessage="Please fill in your password!"  value="#{customerManagedBean.customerPassword}" />
+                                    <!--                                    <input type="password" name="password" id="password"/>-->
                                     <p>Confirm Password</p>
-                                    <input type="password" name="password" id="password"/>
+                                    <h:inputSecret id="passwordconfirm" required="true" requiredMessage="Please confirmed password!"  value="#{customerManagedBean.customerConfirmedPassword}" />
                                     <!--                                    <label for="checkbox"><input type="checkbox" id="checkbox"/> <i>Remember me</i></label>-->
                                     <p>Home Address</p>
-                                    <input type="text" value="" onfocus="this.value = '';" onblur="if (this.value == '') {
-                                                this.value = '';
-                                            }"/>
-                                    <input class="pull-right" type="submit" id="login" value="Register"/>
+                                    <h:inputText id="homeadd" required="true" requiredMessage="Please fill in home address field!"  value="#{customerManagedBean.customerAddress}" />
+                                    <div class="form-group">
+                                    <div id="capt">
+                                    <p:captcha id="captcha" label="Captcha" secure="true" theme="clean"/>
+                                    <p:message for="captcha" />
+                                    </div>
+                                    </div>
+                                    <h:commandButton class="pull-right" value="Register" action="#{customerManagedBean.addCustomer()}"/>
+                                    <!--                                    <input class="pull-right" type="submit" id="login" value="Register"/>-->
 
                                 </div>
                             </div>
-                        </form>
+                        </h:form>
 
 
 
@@ -121,15 +139,15 @@ and open the template in the editor.
             </div>
             <!-- //container -->
         </div>
-        
+
 
 
         <ui:include src="merlionAirlinesFooter.xhtml"/>
         <h:outputScript library="js" name="jquery.flexslider.js"/> 
         <h:outputScript library="js" name="easyResponsiveTabs.js" /> 
         <h:outputScript library="js" name="jquery-ui.js" /> 
-	<h:outputScript library="js" name="scriptMerlion.js"></h:outputScript>	
+        <h:outputScript library="js" name="scriptMerlion.js"></h:outputScript>	
     </h:body>
-    
-    
+
+
 </html>

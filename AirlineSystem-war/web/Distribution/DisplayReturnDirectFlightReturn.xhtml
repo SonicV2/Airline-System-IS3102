@@ -1,0 +1,118 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <p:growl id="growl" sticky="true" showDetail="true"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <!-- Custom Theme files -->
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <h:outputStylesheet library ="css"  name="bootstrap.css" />
+        <h:outputStylesheet library ="css"  name="styleMerlion.css" />
+        <h:outputStylesheet library ="css"  name="JFFormStyle.css" />
+        <h:outputStylesheet library ="css"  name="flexslider.css" />
+        <!--<h:outputScript library="js" name="jQuery/jQuery-2.1.4.min.js" />-->
+        <h:outputScript library="js" name="modernizr.custom.js" /> 
+        <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+        <!-- //Custom Theme files -->
+
+        <!-- fonts -->
+        <link href='//fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,700,500italic,700italic,900,900italic' rel='stylesheet' type='text/css'></link>
+        <link href='//fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'></link>
+        <!-- //fonts -->	
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('#horizontalTab').easyResponsiveTabs({
+                    type: 'default', //Types: default, vertical, accordion           
+                    width: 'auto', //auto or any width like 600px
+                    fit: true   // 100% fit in a container
+                });
+            });
+        </script>
+        <!--pop-up-->
+        <h:outputScript library="js" name="menu_jquery.js" /> 
+        <!--//pop-up-->	
+        <title>Display Return Flight</title>
+    </h:head>
+        
+    <h:body>
+        <ui:include src="merlionAirlinesHeader.xhtml"/> 
+<!--<h:form id="form">
+    <p:dataList value="#{mARSManagedBean.directFlightSchedules}" var="schedules" type="ordered">
+        <h:outputText value="#{schedules.startDate}">
+            <f:convertDateTime pattern ="dd-mm-yyyy HH:mm"/>
+        </h:outputText>
+        
+        <h:outputText value="#{schedules.endDate}">
+            <f:convertDateTime pattern ="dd-mm-yyyy HH:mm"/>
+        </h:outputText>
+        
+        #{schedules.flight.route.originIATA}, #{schedules.flight.route.destinationIATA}, #{mARSManagedBean.directFlightDuration}, #{mARSManagedBean.selectedDatePrices}, #{mARSManagedBean.minPricesForWeekDirectFlight}
+    </p:dataList>
+</h:form>-->
+        
+        <div class="banner-bottom">
+            <div class="container">
+                <div class="about-info">
+                    <h2>Please choose your return flight:</h2>
+                </div>
+                <div class="faqs-top-grids terms-grids">	
+                    <h:form>
+                        <p:dataTable value="#{mARSManagedBean.directFlightSchedules}" var="schedules" selection="#{bookingManagedBean.selectedReturnSchedule}" rowKey="#{schedules.flight.flightNo}" >
+                            <p:column selectionMode="single" style="width:40px;text-align:center"/>
+                            <p:column headerText="Flight Number" style="width:10%;">
+                                <h:outputText value="#{schedules.flight.flightNo}" />
+                            </p:column>
+                            <p:column headerText="Departs" style="width:12%;">
+                                <h:outputText value="#{schedules.flight.route.originCity}, #{schedules.flight.route.originCountry} (#{schedules.flight.route.originIATA}) at " />
+                                <h:outputText value="#{schedules.startDate}">
+                                    <f:convertDateTime pattern ="hh:mm a (EEE, MMM d, yyyy)"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="Arrives" style="width:12%;">
+                                <h:outputText value="#{schedules.flight.route.destinationCity}, #{schedules.flight.route.destinationCountry} (#{schedules.flight.route.destinationIATA}) at " />
+                                
+                                <h:outputText value="#{schedules.endDate}">
+                                    <f:convertDateTime pattern ="hh:mm a (EEE, MMM d, yyyy)"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="Total Travel Time" style="width:12%;">
+                                <h:outputText value="#{mARSManagedBean.directFlightDuration}"/>
+                            </p:column>
+                            <p:column headerText="Prices">
+                                <h:outputText value="#{mARSManagedBean.selectedDatePrices}"/>
+                                <h:outputText value="#{mARSManagedBean.minPricesForWeekDirectFlight}" />
+                            </p:column>
+                        </p:dataTable>
+
+                        
+                    </h:form>
+                </div>
+            </div>
+        </div>
+
+        <ui:include src="merlionAirlinesFooter.xhtml"/>
+        <h:outputScript library="js" name="jquery.flexslider.js"/> 
+        <h:outputScript library="js" name="easyResponsiveTabs.js" /> 
+        <h:outputScript library="js" name="scriptMerlion.js"></h:outputScript>
+
+        <script type="text/javascript">
+            $(function () {
+                SyntaxHighlighter.all();
+            });
+            $(window).load(function () {
+                $('.flexslider').flexslider({
+                    animation: "slide",
+                    start: function (slider) {
+                        $('body').removeClass('loading');
+                    }
+                });
+            });
+        </script>
+      
+    </h:body>
+</html>

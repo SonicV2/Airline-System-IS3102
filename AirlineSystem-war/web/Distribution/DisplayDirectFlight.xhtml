@@ -11,7 +11,38 @@
     <body>
 <h:form id="form">
     <p:dataList value="#{mARSManagedBean.directFlightSchedules}" var="schedules" type="ordered">
-        #{schedules.startDate}, #{schedules.endDate}, #{schedules.flight.route.originIATA}, #{schedules.flight.route.destinationIATA}
+        <div class="col-lg-12">
+        <h:outputText value="#{schedules.startDate}">
+<!--            <f:convertDateTime pattern ="dd-mm-yyyy HH:mm"/>-->
+        </h:outputText>
+            </div>
+            
+            <div class="col-lg-12">
+        <h:outputText value="#{schedules.endDate}">
+<!--            <f:convertDateTime pattern ="dd-mm-yyyy HH:mm"/>-->
+        </h:outputText>
+                </div>
+        
+        <div class="col-lg-12">
+        #{schedules.flight.route.originIATA}
+</div>
+        
+        <div class="col-lg-12">
+ #{schedules.flight.route.destinationIATA}
+</div>
+        
+        <div class="col-lg-12">
+ #{mARSManagedBean.directFlightDuration}
+</div>
+
+        <div class="col-lg-12">
+ #{mARSManagedBean.priceForDirect}
+</div>
+
+        <div class="col-lg-12">
+ #{mARSManagedBean.minPricesForWeekDirectFlight}
+ </div>
+        
     </p:dataList>
 </h:form>
       

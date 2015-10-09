@@ -10,9 +10,82 @@
     </head>
     <body>
 <h:form id="form">
-    <p:dataList value="#{mARSManagedBean.oneStopFlightSchedules}" var="schedules" type="ordered">
-        #{schedules.startDate}, #{schedules.endDate}, #{schedules.flight.route.originIATA}, #{schedules.flight.route.destinationIATA}
+    
+    
+    
+    
+    
+    
+    <p:dataList value="#{mARSManagedBean.flightOptionsList}" var="flightOptions" type="ordered">
+        <div class="col-lg-12">
+        <h:outputLabel class="col-md-4 control-label" value="Leg One departs: "/>
+        <h:outputText value="#{flightOptions.legOne.startDate}">
+        </h:outputText>
+        </div>
+        
+        <div class="col-lg-12">
+        <h:outputLabel class="col-md-4 control-label" value="Leg One arrives: "/>
+        <h:outputText value="#{flightOptions.legOne.endDate}">
+        </h:outputText>
+        </div>
+        
+        <div class="col-lg-12">
+        <h:outputText value="#{flightOptions.legOne.flight.route.originIATA}">
+        </h:outputText>
+        </div>
+        
+        <div class="col-lg-12">
+        <h:outputText value="#{flightOptions.legOne.flight.route.destinationIATA}">
+        </h:outputText>
+            </div>
+        
+        <div class="col-lg-12">
+        <h:outputLabel class="col-md-4 control-label" value="Leg Two departs: "/>
+        <h:outputText value="#{flightOptions.legTwo.startDate}">
+        </h:outputText>
+        </div>
+        
+        <div class="col-lg-12">
+        <h:outputLabel class="col-md-4 control-label" value="Leg Two arrives: "/>
+        <h:outputText value="#{flightOptions.legTwo.endDate}">
+        </h:outputText>
+        </div>
+        
+        <div class="col-lg-12">
+        <h:outputText value="#{flightOptions.legTwo.flight.route.originIATA}">
+        </h:outputText>
+            </div>
+        
+        <div class="col-lg-12">
+        <h:outputText value="#{flightOptions.legTwo.flight.route.destinationIATA}">
+        </h:outputText>
+            </div>
+        
+        <div class="col-lg-12">
+        <h:outputLabel class="col-md-4 control-label" value="Duration: "/>
+        <h:outputText value="#{flightOptions.duration}">
+        </h:outputText>
+        </div>
+        
+        <div class="col-lg-12">
+        <h:outputLabel class="col-md-4 control-label" value="Layover: "/>
+        <h:outputText value="#{flightOptions.layover}">
+        </h:outputText>
+        </div>
+        
+        <div class="col-lg-12">
+        <h:outputLabel class="col-md-4 control-label" value="Price: "/>
+        <h:outputText value="#{flightOptions.price}">
+        </h:outputText>
+        </div>
+       
+
     </p:dataList>
+    
+    <h:outputLabel class="col-md-4 control-label" value="For week: "/>
+        <h:outputText value="#{mARSManagedBean.minPricesForWeekOneStopFlight}">
+        </h:outputText>
+    
 </h:form>
       
     </body>

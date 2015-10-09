@@ -32,7 +32,7 @@
 
         <!--            To add the same header on all dashboard pages  
                <ui:include src="/CI/dashboardHeader.xhtml"/>--> 
-        To add the same sidebar on all dashboard pages  
+<!--        To add the same sidebar on all dashboard pages  -->
         <ui:include src="/CI/dashboardSidebar.xhtml"/>
 
         <div id="page-wrapper">
@@ -41,13 +41,18 @@
                 <div class="col-lg-12">
                     <h2 class="page-header">Add Flight</h2>
                 </div>
-
-                <div class="text-center">
-                    <h:commandButton class="btn btn-outline btn-success" value="Generate Test Flights!!!" actionListener="#{flightManageBean.createTestFlight}"/>
-                    <br></br>
-                    <br></br>
-                </div>
-
+                <h:form>
+                    <div class="text-center">
+                        <h:commandButton class="btn btn-outline btn-success" value="Generate Test Flights!!!" actionListener="#{flightManageBean.createTestFlight}"/>
+                        <br></br>
+                        <br></br>
+                    </div>
+                    <div class="text-center">
+                        <h:commandButton class="btn btn-outline btn-success" value="Test Dem Rotate" actionListener="#{flightManageBean.testRotation}"/>
+                        <br></br>
+                        <br></br>
+                    </div>
+                </h:form>
                 <div class="col-lg-12">
                     <h:form>
                         <p:dataTable var="route" value="#{routeManageBean.routes}" widgetVar="routesTable" paginator="true" rows="10">

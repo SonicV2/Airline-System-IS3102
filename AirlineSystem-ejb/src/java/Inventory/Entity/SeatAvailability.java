@@ -43,7 +43,7 @@ public class SeatAvailability implements Serializable {
     @OneToMany
     private List<Booking> bookings = new ArrayList<Booking>();
     
-    @OneToOne
+    @OneToOne(cascade={CascadeType.ALL})
     private Schedule schedule;
 
     /**

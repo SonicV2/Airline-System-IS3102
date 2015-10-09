@@ -11,10 +11,10 @@
     </h:head>
     <h:body>
         <h:form>
-        <p:inputText placeholder="Flight No" value="#{inventoryManageBean.flightNo}"  />
+            <p:inputText placeholder="Flight No" value="#{flightDataManageBean.flightNo}"  />
         <br/>
         <h:commandButton class="btn btn-primary btn-lg btn-block" value="Submit" 
-                         actionListener="#{inventoryManageBean.createFlightData}" />
+                         actionListener="#{flightDataManageBean.createData()}" />
         </h:form>
     </h:body>
 </html>

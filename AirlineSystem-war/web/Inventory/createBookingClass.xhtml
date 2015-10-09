@@ -23,13 +23,11 @@
             display:inline;
         }
     </style>
-    
+
     <body>
 
-        <!--            To add the same header on all dashboard pages  
--->                <ui:include src="/CI/dashboardHeader.xhtml"/><!--
-                    To add the same sidebar on all dashboard pages -->  
-        <ui:include src="/CI/dashboardSidebar.xhtml"/>
+                       <ui:include src="/CI/dashboardHeader.xhtml"/>  
+                <ui:include src="/CI/dashboardSidebar.xhtml"/>
 
 
         <div id="page-wrapper">
@@ -72,6 +70,18 @@
                         <f:selectItem itemLabel="Economy Premium" itemValue="Economy Premium" />
                         <f:selectItem itemLabel="Business" itemValue="Business" />
                         <f:selectItem itemLabel="First Class" itemValue="First Class" />
+                    </h:selectOneMenu>
+                    <br/>
+
+                </div> 
+
+                <div class="form-group">
+                    <h:outputLabel class="col-md-4 control-label" value="Seasonality" />
+                    <h:selectOneMenu class="form-control" id="season" value="#{classManageBean.season}" style="width:150px">
+                        <f:selectItem itemLabel="Select One" itemValue="" />
+                        <f:selectItem itemLabel="Neutral" itemValue="Neutral" />
+                        <f:selectItem itemLabel="High" itemValue="High" />
+                        <f:selectItem itemLabel="Low" itemValue="Low" />
                     </h:selectOneMenu>
                     <br/>
 
