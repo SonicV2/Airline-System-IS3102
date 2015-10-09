@@ -38,6 +38,7 @@ public class seasonManageBean {
     private Location location;
     private String remarks;
     private String IATA;
+    private String country;
 
     public void addSeason() {
         if (start == null) {
@@ -61,17 +62,34 @@ public class seasonManageBean {
             FacesContext.getCurrentInstance().addMessage(null, msg);
         } else {
             location = sm.findLocation(IATA);
-            if (location == null) {
+            if (location == null && country == null) {
                 FacesMessage msg = new FacesMessage("Please Enter a Valid IATA code");
                 FacesContext.getCurrentInstance().addMessage(null, msg);
                 return;
             }
+            if (country == null) {
             String message = sm.addSeason(start, end, origin, destination, demand, location, remarks);
             FacesMessage msg = new FacesMessage(message);
             FacesContext.getCurrentInstance().addMessage(null, msg);
+            }
+            
+            if (location == null){
+            String message = sm.addCountrySeason(start, end, origin, destination, demand, remarks, country);
+            FacesMessage msg = new FacesMessage(message);
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+            }
+            
         }
     }
 
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+    
     public String getIATA() {
         return IATA;
     }

@@ -89,7 +89,7 @@ public class BookingSessionBean implements BookingSessionBeanLocal {
 
     public void pseuduTurnOut(Booking booking) {
         Random random = new Random();
-        int roll = random.nextInt(10) + 1;
+        int roll = random.nextInt(30) + 1;
         if (roll == 1) {
             booking.setBookingStatus("Missed");
         }
@@ -103,7 +103,7 @@ public class BookingSessionBean implements BookingSessionBeanLocal {
 
     public void pseuduTurnOut2(Booking booking) {
         Random random = new Random();
-        int roll = random.nextInt(10) + 1;
+        int roll = random.nextInt(30) + 1;
         if (roll == 1) {
             booking.setBookingStatus("Missed");
         }

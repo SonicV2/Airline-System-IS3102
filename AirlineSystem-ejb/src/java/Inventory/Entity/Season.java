@@ -36,6 +36,7 @@ public class Season implements Serializable {
     private String demand;
     @OneToOne
     private Location location;
+    private String locationIATA;
     private String remarks;
 
     public void createSeason(Date start, Date end, boolean origin, boolean destination,
@@ -47,8 +48,17 @@ public class Season implements Serializable {
         this.demand = demand;
         this.location = location;
         this.remarks = remarks;
+        this.locationIATA = location.getIATA();
     }
 
+    public String getLocationIATA() {
+        return locationIATA;
+    }
+
+    public void setLocationIATA(String locationIATA) {
+        this.locationIATA = locationIATA;
+    }
+    
     public Location getLocation() {
         return location;
     }
