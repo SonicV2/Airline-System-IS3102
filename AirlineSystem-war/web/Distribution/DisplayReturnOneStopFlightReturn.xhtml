@@ -80,6 +80,11 @@
                             <h:outputLabel class="col-md-4 control-label" value="For week: "/>
                             <h:outputText value="#{mARSManagedBean.minPricesForWeekOneStopFlight}">
                             </h:outputText>
+                            
+                            <div class="form-group text-center">
+                            <h:commandButton class="btn btn-outline btn-success" value="Proceed to booking"  action="#{mARSManagedBean.summary()}"/>
+                        </div>
+                            
                         </h:form>
                     </div>
                 </div>

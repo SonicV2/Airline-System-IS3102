@@ -12,7 +12,10 @@ import APS.Session.FlightSessionBeanLocal;
 import APS.Session.RouteSessionBeanLocal;
 import APS.Session.ScheduleSessionBeanLocal;
 import Distribution.Entity.FlightOptions;
+import Distribution.Entity.PNR;
 import Distribution.Session.DistributionSessionBeanLocal;
+import Distribution.Session.PassengerBookingSessionBeanLocal;
+import Inventory.Entity.SeatAvailability;
 import Inventory.Session.PricingManagementLocal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -48,6 +51,9 @@ public class MARSManagedBean {
 
     @EJB
     private PricingManagementLocal pricingManagementBean;
+    
+    @EJB
+    private PassengerBookingSessionBeanLocal passengerBookingSessionBean;
 
     private String flightNo;
     private Double flightDuration;
@@ -106,7 +112,40 @@ public class MARSManagedBean {
     private String layover;
     private String duration;
     private double priceForDirect;
+    
+    private Schedule selectedDepartureSchedule;
+    private Schedule selectedReturnSchedule;
+    private List<Schedule> selectedSchedules;
+    private FlightOptions selectedDepartureFlightOption;
+    private FlightOptions selectedReturnFlightOption;
+    private List<Schedule> selectedDepartureSchedules;
+    private List<Schedule> selectedReturnSchedules;
+    
+    private Date flightDate;
+    private String bookingStatus;
+    private String classCode;
+    
+    private String travellerTitle;
+    private String travellerFristName;
+    private String travellerLastName;
+    private String passportNumber;
+    private String nationality;
+    private long customerId;
+    
+    private boolean isChild;
+    private boolean boughtInsurance;
+    private double insuranceFare;
+    private String foodSelection;
+    private boolean isDirect;
+    
+    private Long id;
+    private SeatAvailability seatAvail;
 
+    private PNR pnr;
+    
+    private double totalWeightAllowed;
+    private int totalNumBaggeAlloewd;
+    
     @PostConstruct
     public void retrieve() {
         //Retrieve all the available flights into a list of flights
@@ -147,6 +186,10 @@ public class MARSManagedBean {
         transitHubs = new ArrayList();
         directFlightSchedules = new ArrayList();
         flightOptionsList = new ArrayList();
+        weekDates = new ArrayList();
+        selectedSchedules = new ArrayList();
+        selectedDepartureSchedules = new ArrayList();
+        selectedReturnSchedules = new ArrayList();
         
         
         List<Integer> adultList1 = new ArrayList();
@@ -171,8 +214,9 @@ public class MARSManagedBean {
         System.out.println("service" + serviceType);
         System.out.println("origin city" + originCity);
         System.out.println("destination city" + destinationCity);
-        weekDates = new ArrayList();
         weekDates.clear();
+        selectedDepartureSchedules.clear();
+        selectedSchedules.clear();
 
         for (Flight eachFlight : allFlights) {
             System.out.println("managedbean: go into flight loop");
@@ -257,6 +301,7 @@ public class MARSManagedBean {
                     selectedDatePrices.add((adults * priceForOne) + (0.75 * priceForOne * children));
                   
                 }
+                setIsDirect(true);
                 retrieveMinWeekPricesForDirect(originIATA, destinationIATA, departureDate, serviceType, adults, children);
                 setPriceForDirect(selectedDatePrices.get(0));
                 if (! isReturnDateSet) {
@@ -266,6 +311,7 @@ public class MARSManagedBean {
                     System.out.println("managedbean: everything is right...returning departure direct flight page");
                     return "DisplayDepartureDirectFlightReturn";
                 }
+                
             } else { //Retrieve one stop flights
                 legOneSchedules.clear();
                 legTwoSchedules.clear();
@@ -311,7 +357,7 @@ public class MARSManagedBean {
                         flightNosWithAdjustedEndDates.add(eachSchedule.getFlight().getFlightNo());
                     }
                 }
-
+                    setIsDirect(false);
                     int c = 0;
 
                     for (int a = 0; a < oneStopFlightSchedules.size(); a++) {
@@ -323,6 +369,7 @@ public class MARSManagedBean {
                     c++;
 
                 }
+                ;
                 
                 if (! isReturnDateSet) {
                     return "DisplayOneStopFlight";
@@ -334,7 +381,6 @@ public class MARSManagedBean {
     }
 
     public String displayReturnFlights() {
-
         directFlightSchedules.clear();
         selectedDatePrices.clear();
         setDirectFlightDuration("");
@@ -352,6 +398,7 @@ public class MARSManagedBean {
         setDestinationIATA(tempOrigin);
         flightOptionsList.clear();
         weekDates.clear();
+        selectedReturnSchedules.clear();
 
         setTempDepartureDate(departureDate);
         setTempReturnDate(returnDate);
@@ -518,6 +565,46 @@ public class MARSManagedBean {
             originalSchedules.add(eachScheduleToAdd);
         }
         setLegTwoSchedules(originalSchedules);
+    }
+    
+    public String summary() {
+
+        if (isDirect){
+            selectedSchedules.add(selectedDepartureSchedule);
+        }
+        else {
+            selectedSchedules.add(selectedDepartureFlightOption.getLegOne());
+            selectedSchedules.add(selectedDepartureFlightOption.getLegTwo());
+        }
+        if (isReturnDateSet){
+            if (isDirect){
+                selectedSchedules.add(selectedReturnSchedule);
+            }
+            else {
+                selectedSchedules.add(selectedReturnFlightOption.getLegOne());
+                selectedSchedules.add(selectedReturnFlightOption.getLegTwo());    
+            }
+        }
+        
+        setSelectedDepartureSchedules (passengerBookingSessionBean.getDepartureSchedules(selectedSchedules, isReturnDateSet));
+        
+        System.out.println("SELECTED DEPARTURE SCHEDULE LEG ONE: " + selectedDepartureSchedules.get(0).getFlight().getRoute());
+//        System.out.println("SELECTED DEPARTURE SCHEDULE LEG TWO: " + selectedDepartureSchedules.get(1).getFlight().getRoute());
+        
+        if (isReturnDateSet)
+        setSelectedReturnSchedules (passengerBookingSessionBean.getReturnSchedules(selectedSchedules));
+        
+        System.out.println("SELECTED RETURN SCHEDULE LEG ONE: " + selectedReturnSchedules.get(0).getFlight().getRoute());
+//        System.out.println("SELECTED RETURN SCHEDULE LEG TWO: " + selectedReturnSchedules.get(1).getFlight().getRoute());
+                
+        return "summary";
+        
+    }
+    
+    public String createBooking() {
+       
+        
+        return "payment";
     }
 
     public String getFlightNo() {
@@ -875,5 +962,343 @@ public double getPriceForDirect() {
     public void setPriceForDirect(double priceForDirect) {
         this.priceForDirect = priceForDirect;
     }
+
+    /**
+     * @return the selectedDepartureSchedule
+     */
+    public Schedule getSelectedDepartureSchedule() {
+        return selectedDepartureSchedule;
+    }
+
+    /**
+     * @param selectedDepartureSchedule the selectedDepartureSchedule to set
+     */
+    public void setSelectedDepartureSchedule(Schedule selectedDepartureSchedule) {
+        this.selectedDepartureSchedule = selectedDepartureSchedule;
+    }
+
+    /**
+     * @return the selectedReturnSchedule
+     */
+    public Schedule getSelectedReturnSchedule() {
+        return selectedReturnSchedule;
+    }
+
+    /**
+     * @param selectedReturnSchedule the selectedReturnSchedule to set
+     */
+    public void setSelectedReturnSchedule(Schedule selectedReturnSchedule) {
+        this.selectedReturnSchedule = selectedReturnSchedule;
+    }
+
+    /**
+     * @return the flightDate
+     */
+    public Date getFlightDate() {
+        return flightDate;
+    }
+
+    /**
+     * @param flightDate the flightDate to set
+     */
+    public void setFlightDate(Date flightDate) {
+        this.flightDate = flightDate;
+    }
+
+    /**
+     * @return the bookingStatus
+     */
+    public String getBookingStatus() {
+        return bookingStatus;
+    }
+
+    /**
+     * @param bookingStatus the bookingStatus to set
+     */
+    public void setBookingStatus(String bookingStatus) {
+        this.bookingStatus = bookingStatus;
+    }
+
+    /**
+     * @return the classCode
+     */
+    public String getClassCode() {
+        return classCode;
+    }
+
+    /**
+     * @param classCode the classCode to set
+     */
+    public void setClassCode(String classCode) {
+        this.classCode = classCode;
+    }
+
+    /**
+     * @return the travellerTitle
+     */
+    public String getTravellerTitle() {
+        return travellerTitle;
+    }
+
+    /**
+     * @param travellerTitle the travellerTitle to set
+     */
+    public void setTravellerTitle(String travellerTitle) {
+        this.travellerTitle = travellerTitle;
+    }
+
+    /**
+     * @return the travellerFristName
+     */
+    public String getTravellerFristName() {
+        return travellerFristName;
+    }
+
+    /**
+     * @param travellerFristName the travellerFristName to set
+     */
+    public void setTravellerFristName(String travellerFristName) {
+        this.travellerFristName = travellerFristName;
+    }
+
+    /**
+     * @return the travellerLastName
+     */
+    public String getTravellerLastName() {
+        return travellerLastName;
+    }
+
+    /**
+     * @param travellerLastName the travellerLastName to set
+     */
+    public void setTravellerLastName(String travellerLastName) {
+        this.travellerLastName = travellerLastName;
+    }
+
+    /**
+     * @return the passportNumber
+     */
+    public String getPassportNumber() {
+        return passportNumber;
+    }
+
+    /**
+     * @param passportNumber the passportNumber to set
+     */
+    public void setPassportNumber(String passportNumber) {
+        this.passportNumber = passportNumber;
+    }
+
+    /**
+     * @return the nationality
+     */
+    public String getNationality() {
+        return nationality;
+    }
+
+    /**
+     * @param nationality the nationality to set
+     */
+    public void setNationality(String nationality) {
+        this.nationality = nationality;
+    }
+
+    /**
+     * @return the customerId
+     */
+    public long getCustomerId() {
+        return customerId;
+    }
+
+    /**
+     * @param customerId the customerId to set
+     */
+    public void setCustomerId(long customerId) {
+        this.customerId = customerId;
+    }
+
+    /**
+     * @return the isChild
+     */
+    public boolean isIsChild() {
+        return isChild;
+    }
+
+    /**
+     * @param isChild the isChild to set
+     */
+    public void setIsChild(boolean isChild) {
+        this.isChild = isChild;
+    }
+
+    /**
+     * @return the boughtInsurance
+     */
+    public boolean isBoughtInsurance() {
+        return boughtInsurance;
+    }
+
+    /**
+     * @param boughtInsurance the boughtInsurance to set
+     */
+    public void setBoughtInsurance(boolean boughtInsurance) {
+        this.boughtInsurance = boughtInsurance;
+    }
+
+    /**
+     * @return the insuranceFare
+     */
+    public double getInsuranceFare() {
+        return insuranceFare;
+    }
+
+    /**
+     * @param insuranceFare the insuranceFare to set
+     */
+    public void setInsuranceFare(double insuranceFare) {
+        this.insuranceFare = insuranceFare;
+    }
+
+    /**
+     * @return the foodSelection
+     */
+    public String getFoodSelection() {
+        return foodSelection;
+    }
+
+    /**
+     * @param foodSelection the foodSelection to set
+     */
+    public void setFoodSelection(String foodSelection) {
+        this.foodSelection = foodSelection;
+    }
+
+    /**
+     * @return the id
+     */
+    public Long getId() {
+        return id;
+    }
+
+    /**
+     * @param id the id to set
+     */
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    /**
+     * @return the seatAvail
+     */
+    public SeatAvailability getSeatAvail() {
+        return seatAvail;
+    }
+
+    /**
+     * @param seatAvail the seatAvail to set
+     */
+    public void setSeatAvail(SeatAvailability seatAvail) {
+        this.seatAvail = seatAvail;
+    }
+
+    /**
+     * @return the pnr
+     */
+    public PNR getPnr() {
+        return pnr;
+    }
+
+    /**
+     * @param pnr the pnr to set
+     */
+    public void setPnr(PNR pnr) {
+        this.pnr = pnr;
+    }
+
+    /**
+     * @return the totalWeightAllowed
+     */
+    public double getTotalWeightAllowed() {
+        return totalWeightAllowed;
+    }
+
+    /**
+     * @param totalWeightAllowed the totalWeightAllowed to set
+     */
+    public void setTotalWeightAllowed(double totalWeightAllowed) {
+        this.totalWeightAllowed = totalWeightAllowed;
+    }
+
+    /**
+     * @return the totalNumBaggeAlloewd
+     */
+    public int getTotalNumBaggeAlloewd() {
+        return totalNumBaggeAlloewd;
+    }
+
+    /**
+     * @param totalNumBaggeAlloewd the totalNumBaggeAlloewd to set
+     */
+    public void setTotalNumBaggeAlloewd(int totalNumBaggeAlloewd) {
+        this.totalNumBaggeAlloewd = totalNumBaggeAlloewd;
+    }
+
+    public List<Schedule> getSelectedSchedules() {
+        return selectedSchedules;
+    }
+
+    public void setSelectedSchedules(List<Schedule> selectedSchedules) {
+        this.selectedSchedules = selectedSchedules;
+    }
+
+    public FlightOptions getSelectedDepartureFlightOption() {
+        return selectedDepartureFlightOption;
+    }
+
+    public void setSelectedDepartureFlightOption(FlightOptions selectedDepartureFlightOption) {
+        this.selectedDepartureFlightOption = selectedDepartureFlightOption;
+    }
+
+    public FlightOptions getSelectedReturnFlightOption() {
+        return selectedReturnFlightOption;
+    }
+
+    public void setSelectedReturnFlightOption(FlightOptions selectedReturnFlightOption) {
+        this.selectedReturnFlightOption = selectedReturnFlightOption;
+    }
+
+    public List<Date> getWeekDates() {
+        return weekDates;
+    }
+
+    public void setWeekDates(List<Date> weekDates) {
+        this.weekDates = weekDates;
+    }
+
+
+    public boolean isIsDirect() {
+        return isDirect;
+    }
+
+    public void setIsDirect(boolean isDirect) {
+        this.isDirect = isDirect;
+    }
+
+    public List<Schedule> getSelectedDepartureSchedules() {
+        return selectedDepartureSchedules;
+    }
+
+    public void setSelectedDepartureSchedules(List<Schedule> selectedDepartureSchedules) {
+        this.selectedDepartureSchedules = selectedDepartureSchedules;
+    }
+
+    public List<Schedule> getSelectedReturnSchedules() {
+        return selectedReturnSchedules;
+    }
+
+    public void setSelectedReturnSchedules(List<Schedule> selectedReturnSchedules) {
+        this.selectedReturnSchedules = selectedReturnSchedules;
+    }
+    
 
 }
