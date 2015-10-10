@@ -33,7 +33,7 @@ public class PassengerBookingSessionBean implements PassengerBookingSessionBeanL
     public boolean isPassengerAFrequentFlyer(long customerId) {
         List<Customer> allCustomers = new ArrayList();
         allCustomers = getAllCustomers();
-        if (allCustomers!= null) {
+        if (allCustomers != null) {
             for (Customer eachCustomer : allCustomers) {
                 if (eachCustomer.getId() == customerId) {
                     return true;
@@ -101,29 +101,6 @@ public class PassengerBookingSessionBean implements PassengerBookingSessionBeanL
         booking.setBoughtInsurance(boughtInsurance);
         booking.setInsuranceFare(insuranceFare);
         booking.setFoodSelection(foodSelection);
-
-        int noOfSeatsBooked;
-        SeatAvailability seatAvailForBooking = new SeatAvailability();
-        seatAvailForBooking = booking.getSeatAvail();
-
-        if (serviceType.equalsIgnoreCase("Economy Saver")) {
-            noOfSeatsBooked = seatAvailForBooking.getEconomySaverBooked();
-            seatAvailForBooking.setEconomySaverBooked(noOfSeatsBooked + 1);
-        } else if (serviceType.equalsIgnoreCase("Economy Basic")) {
-            noOfSeatsBooked = seatAvailForBooking.getEconomyBasicBooked();
-            seatAvailForBooking.setEconomyBasicBooked(noOfSeatsBooked + 1);
-        } else if (serviceType.equalsIgnoreCase("Economy Premium")) {
-            noOfSeatsBooked = seatAvailForBooking.getEconomyPremiumBooked();
-            seatAvailForBooking.setEconomyPremiumBooked(noOfSeatsBooked + 1);
-        } else if (serviceType.equalsIgnoreCase("Business")) {
-            noOfSeatsBooked = seatAvailForBooking.getBusinessBooked();
-            seatAvailForBooking.setBusinessBooked(noOfSeatsBooked + 1);
-        } else if (serviceType.equalsIgnoreCase("First Class")) {
-            noOfSeatsBooked = seatAvailForBooking.getFirstClassBooked();
-            seatAvailForBooking.setFirstClassBooked(noOfSeatsBooked + 1);
-        }
-        seatAvailForBooking.getBookings().add(booking);
-        em.merge(seatAvailForBooking);
         return booking;
     }
 
@@ -149,83 +126,107 @@ public class PassengerBookingSessionBean implements PassengerBookingSessionBeanL
 
     @Override
     public void persistBookingAndPNR(PNR pnr, List<Booking> bookings, Customer primaryCustomer) {
-        if (pnr==null)
-         System.out.println("Null PNR");
-        List<Booking> allBookings = new ArrayList();        
+
+        int noOfSeatsBooked;
+        String serviceType;
+        
         for (Booking eachBooking : bookings) {
             eachBooking.setPnr(pnr);
-            allBookings.add(eachBooking);
-            em.persist(eachBooking);
+            SeatAvailability seatAvailForBooking = new SeatAvailability();
+            seatAvailForBooking = eachBooking.getSeatAvail();
+            serviceType = eachBooking.getServiceType();
+            
+            if (serviceType.equalsIgnoreCase("Economy Saver")) {
+                noOfSeatsBooked = seatAvailForBooking.getEconomySaverBooked();
+                seatAvailForBooking.setEconomySaverBooked(noOfSeatsBooked + 1);
+            } else if (serviceType.equalsIgnoreCase("Economy Basic")) {
+                noOfSeatsBooked = seatAvailForBooking.getEconomyBasicBooked();
+                seatAvailForBooking.setEconomyBasicBooked(noOfSeatsBooked + 1);
+            } else if (serviceType.equalsIgnoreCase("Economy Premium")) {
+                noOfSeatsBooked = seatAvailForBooking.getEconomyPremiumBooked();
+                seatAvailForBooking.setEconomyPremiumBooked(noOfSeatsBooked + 1);
+            } else if (serviceType.equalsIgnoreCase("Business")) {
+                noOfSeatsBooked = seatAvailForBooking.getBusinessBooked();
+                seatAvailForBooking.setBusinessBooked(noOfSeatsBooked + 1);
+            } else if (serviceType.equalsIgnoreCase("First Class")) {
+                noOfSeatsBooked = seatAvailForBooking.getFirstClassBooked();
+                seatAvailForBooking.setFirstClassBooked(noOfSeatsBooked + 1);
+            }
+            em.merge(seatAvailForBooking);
         }
-        System.out.println("!!!!!!!!Booking List:" + allBookings);
-        pnr.setBookings(allBookings);
-        em.persist(pnr);
+            pnr.setBookings(bookings);
+            em.persist(pnr);
 
-        if (primaryCustomer != null) {
-            List<PNR> existingCustomerPNRs = primaryCustomer.getPnrs();
-            existingCustomerPNRs.add(pnr);
-            primaryCustomer.setPnrs(existingCustomerPNRs);
+            if (primaryCustomer != null) {
+                List<PNR> existingCustomerPNRs = primaryCustomer.getPnrs();
+                existingCustomerPNRs.add(pnr);
+                primaryCustomer.setPnrs(existingCustomerPNRs);
+                em.merge(primaryCustomer);
+            }
+
+        }
+
+        //increase SeatAvailablity --merge, changeBookingStatus to Cancelled for all bookings - merge booking, remove pnr from customer, Delete PNR
+        @Override
+        public void deletePNR(PNR pnr, Customer primaryCustomer) {
+        SeatAvailability seatAvailForBooking = new SeatAvailability();
+            String serviceType;
+            int noOfSeatsBooked;
+            for (Booking eachPnrBooking : pnr.getBookings()) {
+                seatAvailForBooking = eachPnrBooking.getSeatAvail();
+                serviceType = eachPnrBooking.getServiceType();
+                if (serviceType.equalsIgnoreCase("Economy Saver")) {
+                    noOfSeatsBooked = seatAvailForBooking.getEconomySaverBooked();
+                    seatAvailForBooking.setEconomySaverBooked(noOfSeatsBooked - 1);
+                } else if (serviceType.equalsIgnoreCase("Economy Basic")) {
+                    noOfSeatsBooked = seatAvailForBooking.getEconomyBasicBooked();
+                    seatAvailForBooking.setEconomyBasicBooked(noOfSeatsBooked - 1);
+                } else if (serviceType.equalsIgnoreCase("Economy Premium")) {
+                    noOfSeatsBooked = seatAvailForBooking.getEconomyPremiumBooked();
+                    seatAvailForBooking.setEconomyPremiumBooked(noOfSeatsBooked - 1);
+                } else if (serviceType.equalsIgnoreCase("Business")) {
+                    noOfSeatsBooked = seatAvailForBooking.getBusinessBooked();
+                    seatAvailForBooking.setBusinessBooked(noOfSeatsBooked - 1);
+                } else if (serviceType.equalsIgnoreCase("First Class")) {
+                    noOfSeatsBooked = seatAvailForBooking.getFirstClassBooked();
+                    seatAvailForBooking.setFirstClassBooked(noOfSeatsBooked - 1);
+                }
+                seatAvailForBooking.getBookings().remove(eachPnrBooking);
+                em.merge(seatAvailForBooking);
+                eachPnrBooking.setBookingStatus("Cancelled");
+                em.merge(eachPnrBooking);
+            }
+            pnr.setPnrStatus("Cancelled");
+            em.merge(pnr);
+            primaryCustomer.getPnrs().remove(pnr);
             em.merge(primaryCustomer);
         }
 
-    }
-
-    //increase SeatAvailablity --merge, changeBookingStatus to Cancelled for all bookings - merge booking, remove pnr from customer, Delete PNR
-    @Override
-    public void deletePNR(PNR pnr, Customer primaryCustomer) {
-        SeatAvailability seatAvailForBooking = new SeatAvailability();
-        String serviceType;
-        int noOfSeatsBooked;
-        for (Booking eachPnrBooking : pnr.getBookings()) {
-            seatAvailForBooking = eachPnrBooking.getSeatAvail();
-            serviceType = eachPnrBooking.getServiceType();
-            if (serviceType.equalsIgnoreCase("Economy Saver")) {
-                noOfSeatsBooked = seatAvailForBooking.getEconomySaverBooked();
-                seatAvailForBooking.setEconomySaverBooked(noOfSeatsBooked - 1);
-            } else if (serviceType.equalsIgnoreCase("Economy Basic")) {
-                noOfSeatsBooked = seatAvailForBooking.getEconomyBasicBooked();
-                seatAvailForBooking.setEconomyBasicBooked(noOfSeatsBooked - 1);
-            } else if (serviceType.equalsIgnoreCase("Economy Premium")) {
-                noOfSeatsBooked = seatAvailForBooking.getEconomyPremiumBooked();
-                seatAvailForBooking.setEconomyPremiumBooked(noOfSeatsBooked - 1);
-            } else if (serviceType.equalsIgnoreCase("Business")) {
-                noOfSeatsBooked = seatAvailForBooking.getBusinessBooked();
-                seatAvailForBooking.setBusinessBooked(noOfSeatsBooked - 1);
-            } else if (serviceType.equalsIgnoreCase("First Class")) {
-                noOfSeatsBooked = seatAvailForBooking.getFirstClassBooked();
-                seatAvailForBooking.setFirstClassBooked(noOfSeatsBooked - 1);
-            }
-            seatAvailForBooking.getBookings().remove(eachPnrBooking);
-            em.merge(seatAvailForBooking);
-            eachPnrBooking.setBookingStatus("Cancelled");
-            em.merge(eachPnrBooking);
-        }
-        pnr.setPnrStatus("Cancelled");
-        em.merge(pnr);
-        primaryCustomer.getPnrs().remove(pnr);
-        em.merge(primaryCustomer);
-    }
-
-    @Override
-    public List<Schedule> getDepartureSchedules(List<Schedule> selectedSchedules, boolean isReturnDateSet) {
+        @Override
+        public List<Schedule> getDepartureSchedules
+        (List<Schedule> selectedSchedules, boolean isReturnDateSet
+        
+            ) {
         int noOfSelectedSchedules = selectedSchedules.size();
-        List<Schedule> departureSchedules = new ArrayList();
+            List<Schedule> departureSchedules = new ArrayList();
 
-        if (!isReturnDateSet) {
-            return selectedSchedules;
-        } //Return jouney selected
-        else {
-            if (noOfSelectedSchedules == 2) {
-                departureSchedules.add(selectedSchedules.get(0));
-                return departureSchedules;
-            } else if (noOfSelectedSchedules == 4) {
-                departureSchedules.add(selectedSchedules.get(0));
-                departureSchedules.add(selectedSchedules.get(1));
-                return departureSchedules;
+            if (!isReturnDateSet) {
+                return selectedSchedules;
+            } //Return jouney selected
+            else {
+                if (noOfSelectedSchedules == 2) {
+                    departureSchedules.add(selectedSchedules.get(0));
+                    return departureSchedules;
+                } else if (noOfSelectedSchedules == 4) {
+                    departureSchedules.add(selectedSchedules.get(0));
+                    departureSchedules.add(selectedSchedules.get(1));
+                    return departureSchedules;
+                }
             }
+            return departureSchedules;
         }
-        return departureSchedules;
-    }
+
+    
 
     public List<Schedule> getReturnSchedules(List<Schedule> selectedSchedules) {
         int noOfSelectedSchedules = selectedSchedules.size();
