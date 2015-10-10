@@ -11,10 +11,12 @@ import APS.Entity.Schedule;
 import APS.Session.FlightSessionBeanLocal;
 import APS.Session.RouteSessionBeanLocal;
 import APS.Session.ScheduleSessionBeanLocal;
+import Distribution.Entity.Customer;
 import Distribution.Entity.FlightOptions;
 import Distribution.Entity.PNR;
 import Distribution.Session.DistributionSessionBeanLocal;
 import Distribution.Session.PassengerBookingSessionBeanLocal;
+import Inventory.Entity.Booking;
 import Inventory.Entity.SeatAvailability;
 import Inventory.Session.PricingManagementLocal;
 import java.util.ArrayList;
@@ -145,7 +147,14 @@ public class MARSManagedBean {
 
     private double totalWeightAllowed;
     private int totalNumBaggeAlloewd;
-
+    
+    private double totalSelectedPrice;
+    
+    private List<Passenger> passengerList;
+    
+    private String primaryEmail;
+    private String primaryContactNo;
+    
     @PostConstruct
     public void retrieve() {
         //Retrieve all the available flights into a list of flights
@@ -190,7 +199,8 @@ public class MARSManagedBean {
         selectedSchedules = new ArrayList();
         selectedDepartureSchedules = new ArrayList();
         selectedReturnSchedules = new ArrayList();
-
+        totalSelectedPrice=0;
+        passengerList = new ArrayList();
     }
 
     public String displayDepartureFlights() {
@@ -252,6 +262,7 @@ public class MARSManagedBean {
                     destinationIATA = eachFlight.getRoute().getDestinationIATA();
                 }
             }
+            
             boolean inputValid = true;
             //One way jorney selected by user
             if (isReturnDateSet == false) {
@@ -589,13 +600,55 @@ public class MARSManagedBean {
 
         System.out.println("SELECTED RETURN SCHEDULE LEG ONE: " + selectedReturnSchedules.get(0).getFlight().getRoute());
 //        System.out.println("SELECTED RETURN SCHEDULE LEG TWO: " + selectedReturnSchedules.get(1).getFlight().getRoute());
-
+        
+        double priceForEachSchedule;
+        for (Schedule eachSelectedSchedule: selectedSchedules){
+            priceForEachSchedule = pricingManagementBean.getPrice(pricingManagementBean.getClassCode(eachSelectedSchedule, serviceType, (adults+children)), eachSelectedSchedule);
+            totalSelectedPrice += (priceForEachSchedule*adults) + (priceForEachSchedule*0.75*children);
+        }
+        Passenger passenger;
+        for (int k=0; k<adults+children; k++) {
+            passenger = new Passenger();
+            passenger.setId(k+1);
+            passengerList.add(passenger);
+        }
+        
         return "summary";
 
     }
 
     public String createBooking() {
 
+//        System.out.println("INSURANCE?" + passengerList.get(0).isInsurance());
+//        System.out.println("INSURANCE?" + passengerList.get(1).isInsurance());
+        
+       double priceForEachBooking;
+       bookingStatus = "Booked";
+       List<Booking> bookingList = new ArrayList();
+       Customer primaryCustomer = new Customer ();
+       
+        
+        for (Schedule eachSelectedSchedule: selectedSchedules){
+            classCode = pricingManagementBean.getClassCode(eachSelectedSchedule, serviceType, (adults+children));
+            priceForEachBooking = pricingManagementBean.getPrice(classCode, eachSelectedSchedule);
+            setSeatAvail(eachSelectedSchedule.getSeatAvailability());
+            setFlightNo(eachSelectedSchedule.getFlight().getFlightNo());
+            setFlightDate (eachSelectedSchedule.getStartDate());
+            for (int k=0;k<passengerList.size();k++){
+                Booking eachBooking = passengerBookingSessionBean.createBooking(priceForEachBooking, seatAvail, flightNo, flightDate, bookingStatus, classCode, serviceType, passengerList.get(k).getTitle(), passengerList.get(k).getFirstName(), passengerList.get(k).getLastName(), passengerList.get(k).getPassport(), passengerList.get(k).getNationality(), Long.parseLong(passengerList.get(k).getCustomerId()), false, passengerList.get(k).isInsurance(), 15.0, passengerList.get(k).getFoodSelection());
+                bookingList.add(eachBooking);
+                if (passengerList.get(k).isInsurance()){
+                    totalSelectedPrice += 15.0;
+                }
+            }
+            pnr = passengerBookingSessionBean.createPNR((adults+children), getPrimaryEmail(), getPrimaryContactNo(), "Booked",totalSelectedPrice, new Date(), "MerlionAirlines");
+            if (passengerBookingSessionBean.isPassengerAFrequentFlyer(Long.parseLong(passengerList.get(0).getCustomerId())))
+              primaryCustomer = passengerBookingSessionBean.getCustomerByCustomerId(Long.parseLong(passengerList.get(0).getCustomerId()));
+            else
+              primaryCustomer = null; 
+        }
+            passengerBookingSessionBean.persistBookingAndPNR(pnr, bookingList, primaryCustomer);
+        
         return "payment";
     }
 
@@ -1289,6 +1342,50 @@ public class MARSManagedBean {
 
     public void setSelectedReturnSchedules(List<Schedule> selectedReturnSchedules) {
         this.selectedReturnSchedules = selectedReturnSchedules;
+    }
+
+    public double getTotalSelectedPrice() {
+        return totalSelectedPrice;
+    }
+
+    public void setTotalSelectedPrice(double totalSelectedPrice) {
+        this.totalSelectedPrice = totalSelectedPrice;
+    }
+
+    public List<Passenger> getPassengerList() {
+        return passengerList;
+    }
+
+    public void setPassengerList(List<Passenger> passengerList) {
+        this.passengerList = passengerList;
+    }
+
+    /**
+     * @return the primaryEmail
+     */
+    public String getPrimaryEmail() {
+        return primaryEmail;
+    }
+
+    /**
+     * @param primaryEmail the primaryEmail to set
+     */
+    public void setPrimaryEmail(String primaryEmail) {
+        this.primaryEmail = primaryEmail;
+    }
+
+    /**
+     * @return the primaryContactNo
+     */
+    public String getPrimaryContactNo() {
+        return primaryContactNo;
+    }
+
+    /**
+     * @param primaryContactNo the primaryContactNo to set
+     */
+    public void setPrimaryContactNo(String primaryContactNo) {
+        this.primaryContactNo = primaryContactNo;
     }
 
 }
