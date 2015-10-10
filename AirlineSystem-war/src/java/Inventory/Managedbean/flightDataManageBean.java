@@ -8,7 +8,7 @@ package Inventory.Managedbean;
 import javax.inject.Named;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import Inventory.Session.InventoryBookingSessionBeanLocal;
+import Inventory.Session.BookingSessionBeanLocal;
 import javax.ejb.EJB;
 
 /**
@@ -20,7 +20,7 @@ import javax.ejb.EJB;
 @SessionScoped
 public class flightDataManageBean {
      @EJB
-    private InventoryBookingSessionBeanLocal bs;
+    private BookingSessionBeanLocal bs;
      
      
 

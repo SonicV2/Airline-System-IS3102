@@ -20,7 +20,7 @@ import java.util.Random;
  * @author YiQuan
  */
 @Stateless
-public class InventoryBookingSessionBean implements InventoryBookingSessionBeanLocal {
+public class BookingSessionBean implements BookingSessionBeanLocal {
 
     @PersistenceContext(unitName = "AirlineSystem-ejbPU")
     private EntityManager em;
