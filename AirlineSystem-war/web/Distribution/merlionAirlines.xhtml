@@ -148,14 +148,14 @@ and open the template in the editor.
                                                                         <div class="book_date">
 
                                                                             <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
-                                                                            <p:calendar id="button" value="#{mARSManagedBean.departureDate}" navigator="true" pattern="yyyy-MMM-dd"/>
+                                                                            <p:calendar id="button" value="#{mARSManagedBean.departureDate}" navigator="true" pattern="yyyy-MMM-dd" />
                                                                         </div>		
                                                                     </li>
                                                                     <li class="span1_of_1 left">
                                                                         <h5>Return</h5>
                                                                         <div class="book_date">
                                                                             <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
-                                                                            <p:calendar id="button1" value="#{mARSManagedBean.returnDate}" navigator="true" pattern="yyyy-MMM-dd"/>
+                                                                            <p:calendar id="restricted" value="#{mARSManagedBean.returnDate}" navigator="true" pattern="yyyy-MMM-dd" mindate="#{mARSManagedBean.departureDate}"/>
                                                                         </div>					
                                                                     </li>
                                                                     <li class="span1_of_1 left adult"> 

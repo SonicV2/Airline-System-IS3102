@@ -433,9 +433,9 @@ public class CrewSignInManagedBean {
 
         if (crew.getTeam() != null && (crew.getPosition().contains("Reserved") || crew.getStatus().equals("N.S"))) {
 
-            if (crew.getStatus().contains("SignIn")) {
+            if (crew.getSignInStatus().contains("SignIn")) {
 
-                signInScheduleId = crew.getStatus().substring(6);
+                signInScheduleId = crew.getSignInStatus().substring(6);
             }
 
             List<Schedule> schedules = team.getSchedule();
@@ -527,9 +527,9 @@ public class CrewSignInManagedBean {
 
         if (crew.getTeam() != null && (crew.getPosition().contains("Reserved") || crew.getStatus().equals("N.S"))) {
 
-            if (crew.getStatus().contains("SignIn")) {
+            if (crew.getSignInStatus().contains("SignIn")) {
 
-                signInScheduleId = crew.getStatus().substring(6);
+                signInScheduleId = crew.getSignInStatus().substring(6);
             }
 
             List<Schedule> schedules = team.getSchedule();
@@ -609,8 +609,11 @@ public class CrewSignInManagedBean {
         String submitFlightNumber = submitSchedule.getFlight().getFlightNo();
 
         List<Pairing> teamPairings = team.getPairing();
+
+        String scheduleDay = new SimpleDateFormat("dd").format(submitSchedule.getStartDate());
         String scheduleMonth = new SimpleDateFormat("MM").format(submitSchedule.getStartDate());
         String scheduleYear = new SimpleDateFormat("yyyy").format(submitSchedule.getStartDate());
+
         Pairing targetPairing = new Pairing();
 
         //get the pairing which crew submit the leave
@@ -631,6 +634,7 @@ public class CrewSignInManagedBean {
             //               schs.add(crewSignInSessionBean.getScheduleBy(submitFlightNumber, targetPairing.getFDate()));
             //           }
             else {
+                //String tDate1 = targetPairing.getFlightTimes().get(i + 1).substring(targetPairing.getFlightTimes().get(i).indexOf("(") + 1, targetPairing.getFlightTimes().get(i).indexOf(")"));
 
                 if (targetPairing.getFlightNumbers().get(i).equals(submitFlightNumber.substring(2))) {
 
@@ -638,8 +642,19 @@ public class CrewSignInManagedBean {
 
                         String tDate = targetPairing.getFlightTimes().get(i + 1).substring(targetPairing.getFlightTimes().get(i).indexOf("(") + 1, targetPairing.getFlightTimes().get(i).indexOf(")"));
 
-                        schs.add(crewSignInSessionBean.getScheduleBy(targetPairing.getFlightNumbers().get(i + 1), tDate));
-                        break; // once found the schedule returns to base, stop searching
+                        int tDay = Integer.parseInt(tDate.split("/")[0]);
+                        int tMonth = Integer.parseInt(tDate.split("/")[1]);
+                        int tYear = Integer.parseInt(tDate.split("/")[2]);
+
+                        int submitDay = Integer.parseInt(scheduleDay);
+                        int submitMonth = Integer.parseInt(scheduleMonth);
+                        int submitYear = Integer.parseInt(scheduleYear);
+
+                        if (tYear == submitYear && tMonth == submitMonth && tDay >= submitDay) {
+
+                            schs.add(crewSignInSessionBean.getScheduleBy(targetPairing.getFlightNumbers().get(i + 1), tDate));
+                            break; // once found the schedule returns to base, stop searching
+                        }
 
                     } else {
 
@@ -1087,7 +1102,8 @@ public class CrewSignInManagedBean {
     }
 
     /**
-     * @param validPilotSchedulesForSubmit the validPilotSchedulesForSubmit to set
+     * @param validPilotSchedulesForSubmit the validPilotSchedulesForSubmit to
+     * set
      */
     public void setValidPilotSchedulesForSubmit(List<Schedule> validPilotSchedulesForSubmit) {
         this.validPilotSchedulesForSubmit = validPilotSchedulesForSubmit;
@@ -1101,7 +1117,8 @@ public class CrewSignInManagedBean {
     }
 
     /**
-     * @param inValidPilotSchedulesForSubmit the inValidPilotSchedulesForSubmit to set
+     * @param inValidPilotSchedulesForSubmit the inValidPilotSchedulesForSubmit
+     * to set
      */
     public void setInValidPilotSchedulesForSubmit(List<Schedule> inValidPilotSchedulesForSubmit) {
         this.inValidPilotSchedulesForSubmit = inValidPilotSchedulesForSubmit;

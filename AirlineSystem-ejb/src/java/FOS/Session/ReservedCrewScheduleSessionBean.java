@@ -1,3 +1,4 @@
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -73,8 +74,7 @@ public class ReservedCrewScheduleSessionBean implements ReservedCrewScheduleSess
         }
         return results;
     }
-    
-    
+
     @Override
     public List<Pilot> getAllReservedPilot(String selectYear, String selectMonth) {
         List<Pilot> results = new ArrayList<Pilot>();
@@ -105,7 +105,7 @@ public class ReservedCrewScheduleSessionBean implements ReservedCrewScheduleSess
                     int year = Integer.parseInt(yearMonth.substring(0, 4));
                     int month = Integer.parseInt(yearMonth.substring(4));
 
-                    if (year == Integer.parseInt(selectYear) && month  == Integer.parseInt(selectMonth)) { // change back month +1
+                    if (year == Integer.parseInt(selectYear) && month == Integer.parseInt(selectMonth)) { // change back month +1
                         results.add(cc);
                     }
                     if ((year + 1) == Integer.parseInt(selectYear) && month == 12 && Integer.parseInt(selectMonth) == 1) {
@@ -116,8 +116,6 @@ public class ReservedCrewScheduleSessionBean implements ReservedCrewScheduleSess
         }
         return results;
     }
-    
-    
 
     @Override
     public void assignSchedule(String selectYear, String selectMonth, String crewName) {
@@ -143,7 +141,7 @@ public class ReservedCrewScheduleSessionBean implements ReservedCrewScheduleSess
             }
         }
     }
-    
+
     @Override
     public void assignPilotSchedule(String selectYear, String selectMonth, String crewName) {
         Pilot crew = getPilot(crewName);
@@ -169,19 +167,27 @@ public class ReservedCrewScheduleSessionBean implements ReservedCrewScheduleSess
         }
     }
 
+    @Override
     public CabinCrew getCabinCrew(String crewName) {
 
         Query q = em.createQuery("SELECT c FROM CabinCrew c WHERE c.employeeUserName = :userName");
         q.setParameter("userName", crewName);
         List<CabinCrew> crews = q.getResultList();
+        if(crews.isEmpty()){
+            return null;
+        }
         return crews.get(0);
     }
 
+    @Override
     public Pilot getPilot(String crewName) {
 
         Query q = em.createQuery("SELECT p FROM Pilot p WHERE p.employeeUserName = :userName");
         q.setParameter("userName", crewName);
         List<Pilot> crews = q.getResultList();
+        if(crews.isEmpty()){
+            return null;
+        }
         return crews.get(0);
     }
 
@@ -198,6 +204,9 @@ public class ReservedCrewScheduleSessionBean implements ReservedCrewScheduleSess
         List<CabinCrew> teamCrews = crew.getTeam().getCabinCrews();
         Team team = crew.getTeam();
 
+        if (!crew.getStatus().contains("Leave: ")) {
+            return "unsuccessful";
+        }
         String scheduleId = crew.getStatus().split("-")[0].split("Leave: ")[1];
         int formattedDate = -1;
         String yearMonth = "";
@@ -236,7 +245,7 @@ public class ReservedCrewScheduleSessionBean implements ReservedCrewScheduleSess
                             }
                         }
                     } else {
-                        chooseSchedule = c.getSchedule();
+                        chooseSchedule = c.getSchedule().split("-")[1];
                     }
 
                     String index = chooseSchedule.substring(formattedDate - 1, formattedDate);
@@ -267,44 +276,69 @@ public class ReservedCrewScheduleSessionBean implements ReservedCrewScheduleSess
         if (reservedCrews.isEmpty()) {
             return "unsuccessful";
         } else {
+            System.out.println("<<<<<<<<<<<<<");
             List<CabinCrew> temps = new ArrayList<CabinCrew>();
             for (CabinCrew c : reservedCrews) {
                 if (c.getOrganizationUnit().getLocation().equals(crew.getOrganizationUnit().getLocation())) {
                     temps.add(c);
                 }
             }
+            System.out.println("temp: " + temps.size());
 
             if (temps.isEmpty()) {
                 return "unsuccessful";
             } else {
+
                 for (CabinCrew c : temps) {
-                    if (!c.getSchedule().equals("N.A")) { // need to modify -----------------------------------------------------!!!!!!!!!!!!!!!!!!!!!!!!
-                        String index = c.getSchedule().substring(formattedDate - 1, formattedDate);
+                    if (!c.getSchedule().equals("N.A") && c.getTeam() == null) {
+
+                        if (c.getSchedule().contains("&")) {
+                            if (c.getSchedule().contains(yearMonth)) {
+                                String[] schs = c.getSchedule().split("&");
+                                for (int i = 0; i < schs.length; i++) {
+                                    if (schs[i].contains(yearMonth)) {
+                                        chooseSchedule = schs[i].split("-")[1];
+                                    }
+                                }
+                            }
+                        } else {
+                            chooseSchedule = c.getSchedule().split("-")[1];
+                        }
+
+                        System.out.println("HHHHHHHH: " + chooseSchedule);
+
+                        String index = chooseSchedule.substring(formattedDate - 1, formattedDate);
+
+                        System.out.println("HHHHHHHH: " + index);
+
                         if (index.equals("1")) {
+
                             Long teamId = crew.getTeam().getId();
-                            crew.setSchedule("Team: " + teamId + "/" + reservedCrews.get(0).getEmployeeUserName());
+                            crew.setSchedule("Team: " + teamId + "/" + c.getEmployeeUserName());
                             em.merge(crew);
 
                             team.setcCrewNo(team.getcCrewNo() + 1);
                             teamCrews.add(c);
                             team.setCabinCrews(teamCrews);
                             em.merge(team);
-
                             c.setAssigned(true);
                             c.setStatus(scheduleId);
                             c.setTeam(team);
                             em.merge(c);
                             return "successful";
+
                         }
+
                     }
                 }
+
             }
 
         }
         return "unsuccessful";
     }
-    
-@Override
+
+    @Override
     public String reassignPilot(String crewName) {
 
         Pilot crew = getPilot(crewName);
@@ -355,7 +389,7 @@ public class ReservedCrewScheduleSessionBean implements ReservedCrewScheduleSess
                             }
                         }
                     } else {
-                        chooseSchedule = c.getSchedule();
+                        chooseSchedule = c.getSchedule().split("-")[1];
                     }
 
                     String index = chooseSchedule.substring(formattedDate - 1, formattedDate);
@@ -397,24 +431,38 @@ public class ReservedCrewScheduleSessionBean implements ReservedCrewScheduleSess
                 return "unsuccessful";
             } else {
                 for (Pilot c : temps) {
-                    if (!c.getSchedule().equals("N.A")) { // need to modify -----------------------------------------------------!!!!!!!!!!!!!!!!!!!!!!!!
-                        String index = c.getSchedule().substring(formattedDate - 1, formattedDate);
+                    if (!c.getSchedule().equals("N.A") && c.getTeam() == null) {
+                        if (c.getSchedule().contains("&")) {
+                            if (c.getSchedule().contains(yearMonth)) {
+                                String[] schs = c.getSchedule().split("&");
+                                for (int i = 0; i < schs.length; i++) {
+                                    if (schs[i].contains(yearMonth)) {
+                                        chooseSchedule = schs[i].split("-")[1];
+                                    }
+                                }
+                            }
+                        } else {
+                            chooseSchedule = c.getSchedule().split("-")[1];
+                        }
+
+                        String index = chooseSchedule.substring(formattedDate - 1, formattedDate);
                         if (index.equals("1")) {
+
                             Long teamId = crew.getTeam().getId();
-                            crew.setSchedule("Team: " + teamId + "/" + reservedCrews.get(0).getEmployeeUserName());
+                            crew.setSchedule("Team: " + teamId + "/" + c.getEmployeeUserName());
                             em.merge(crew);
 
                             team.setPilotNo(team.getPilotNo() + 1);
                             teamPilots.add(c);
                             team.setPilots(teamPilots);
                             em.merge(team);
-
                             c.setAssigned(true);
                             c.setStatus(scheduleId);
                             c.setTeam(team);
                             em.merge(c);
                             return "successful";
                         }
+
                     }
                 }
             }
@@ -458,6 +506,36 @@ public class ReservedCrewScheduleSessionBean implements ReservedCrewScheduleSess
         }
 
         return "unsuccessful";
+    }
+
+    @Override
+    public void rejectCabinCrewLeave(String crewName) {
+        CabinCrew crew = getCabinCrew(crewName);
+        String sta = crew.getStatus();
+        crew.setStatus("Reject: " + sta);
+        em.persist(crew);
+    }
+
+    @Override
+    public void changeCabinCrewStatus(String crewName) {
+        CabinCrew crew = getCabinCrew(crewName);
+        crew.setStatus("N.S");
+        em.persist(crew);
+    }
+
+    @Override
+    public void rejectPilotLeave(String crewName) {
+        Pilot crew = getPilot(crewName);
+        String sta = crew.getStatus();
+        crew.setStatus("Reject: " + sta);
+        em.persist(crew);
+    }
+
+    @Override
+    public void changePilotStatus(String crewName) {
+        Pilot crew = getPilot(crewName);
+        crew.setStatus("N.S");
+        em.persist(crew);
     }
 
     public List<CabinCrew> getReservedCrew() {

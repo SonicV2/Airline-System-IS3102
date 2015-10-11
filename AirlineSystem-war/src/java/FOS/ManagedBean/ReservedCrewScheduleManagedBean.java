@@ -8,7 +8,9 @@ package FOS.ManagedBean;
 import APS.Entity.Schedule;
 import CI.Entity.CabinCrew;
 import CI.Entity.Pilot;
+import CI.Managedbean.EmailManagedBean;
 import CI.Managedbean.LoginManageBean;
+import CI.Session.EmailSessionBeanLocal;
 import FOS.Session.CrewSignInSessionBeanLocal;
 import FOS.Session.ReservedCrewScheduleSessionBeanLocal;
 import FOS.Session.SearchCrewSessionBeanLocal;
@@ -36,6 +38,9 @@ import javax.faces.event.ActionEvent;
 @ManagedBean
 @SessionScoped
 public class ReservedCrewScheduleManagedBean {
+
+    @EJB
+    private EmailSessionBeanLocal emailSessionBean;
 
     @EJB
     private CrewSignInSessionBeanLocal crewSignInSessionBean;
@@ -73,6 +78,12 @@ public class ReservedCrewScheduleManagedBean {
 
     private List<String> reservedCrewScheduleResult;
     private List<String> reservedCrewScheduleResultDisabled;
+
+    private String subject;
+    private String body;
+
+    private String rejectReasonForCabinCrew;
+    private String rejectReasonForPilot;
 
     /**
      * Creates a new instance of ReservedCrewScheduleManagedBean
@@ -232,6 +243,50 @@ public class ReservedCrewScheduleManagedBean {
         } else {
             message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Checkout unsuccessfully!", "");
         }
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+
+    public void rejectCabinCrewLeave(ActionEvent event) {
+        reservedCrewScheduleSessionBean.rejectCabinCrewLeave(crewUserName);
+
+        sendCabinCrewEmail();
+        reservedCrewScheduleSessionBean.changeCabinCrewStatus(crewUserName);
+        setCrewUserName("");
+        setRejectReasonForCabinCrew("");
+    }
+
+    public void rejectPilotleave(ActionEvent event) {
+        reservedCrewScheduleSessionBean.rejectPilotLeave(pilotUserName);
+        sendPilotEmail();
+        reservedCrewScheduleSessionBean.changePilotStatus(pilotUserName);
+        setCrewUserName("");
+        setRejectReasonForPilot("");
+
+    }
+
+    public void sendCabinCrewEmail() {
+        CabinCrew cabin = reservedCrewScheduleSessionBean.getCabinCrew(crewUserName);
+        setSubject("Leave Application Result");
+        setBody("Dear " + cabin.getEmployeeDisplayFirstName() + cabin.getEmployeeDisplayLastName() + ": \n" + "You have submitted the following leave application: \n"
+                + cabin.getStatus() + "\n " + "Result is: \n" + cabin.getStatus() + "\n Reason: \n" + rejectReasonForCabinCrew);
+        emailSessionBean.sendEmail(cabin.getEmployeePrivateEmail(), getSubject(), getBody());
+        FacesMessage message = null;
+        message = new FacesMessage(FacesMessage.SEVERITY_INFO, "An email has been sent !", "");
+
+//        RequestContext.getCurrentInstance().update("growll");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+
+    public void sendPilotEmail() {
+        Pilot cabin = reservedCrewScheduleSessionBean.getPilot(pilotUserName);
+        setSubject("Leave Application Result");
+        setBody("Dear " + cabin.getEmployeeDisplayFirstName() + cabin.getEmployeeDisplayLastName() + ": \n" + "You have submitted the following leave application: \n"
+                + cabin.getStatus() + "\n " + "Result is: \n" + cabin.getStatus() + "\n Reason: \n" + rejectReasonForPilot);
+        emailSessionBean.sendEmail(cabin.getEmployeePrivateEmail(), getSubject(), getBody());
+        FacesMessage message = null;
+        message = new FacesMessage(FacesMessage.SEVERITY_INFO, "An email has been sent !", "");
+
+//        RequestContext.getCurrentInstance().update("growll");
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
@@ -581,6 +636,62 @@ public class ReservedCrewScheduleManagedBean {
      */
     public void setPilotLists(List<Pilot> PilotLists) {
         this.PilotLists = PilotLists;
+    }
+
+    /**
+     * @return the subject
+     */
+    public String getSubject() {
+        return subject;
+    }
+
+    /**
+     * @param subject the subject to set
+     */
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+
+    /**
+     * @return the body
+     */
+    public String getBody() {
+        return body;
+    }
+
+    /**
+     * @param body the body to set
+     */
+    public void setBody(String body) {
+        this.body = body;
+    }
+
+    /**
+     * @return the rejectReasonForCabinCrew
+     */
+    public String getRejectReasonForCabinCrew() {
+        return rejectReasonForCabinCrew;
+    }
+
+    /**
+     * @param rejectReasonForCabinCrew the rejectReasonForCabinCrew to set
+     */
+    public void setRejectReasonForCabinCrew(String rejectReasonForCabinCrew) {
+        this.rejectReasonForCabinCrew = rejectReasonForCabinCrew;
+    }
+
+    /**
+     * @return the rejectReasonForPilot
+     */
+    public String getRejectReasonForPilot() {
+        return rejectReasonForPilot;
+    }
+
+    /**
+     * @param rejectReasonForPilot the rejectReasonForPilot to set
+     */
+    public void setRejectReasonForPilot(String rejectReasonForPilot) {
+        this.rejectReasonForPilot = rejectReasonForPilot;
     }
 
 }

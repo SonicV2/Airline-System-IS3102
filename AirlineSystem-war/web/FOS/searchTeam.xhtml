@@ -77,12 +77,12 @@
 
                                     <h:outputText value="Pilot" />
                                     <p:dataList value="#{searchCrewManagedBean.teamPilots}"  var="p" type="ordered">
-                                        #{p.employeeDisplayFirstName} #{p.employeeDisplayLastName} ( #{p.position} ) (#{p.status})
+                                        #{p.employeeDisplayFirstName} #{p.employeeDisplayLastName} ( #{p.position} ) (#{p.signInStatus})
                                     </p:dataList>
 
                                     <h:outputText value="Cabin Crew" />
                                     <p:dataList value="#{searchCrewManagedBean.teamCC}" var="c" paginator="true" rows="8" type="ordered">
-                                        #{c.employeeDisplayFirstName} #{c.employeeDisplayLastName} ( #{c.position} ) (#{c.status})
+                                        #{c.employeeDisplayFirstName} #{c.employeeDisplayLastName} ( #{c.position} ) (#{c.signInStatus})
                                     </p:dataList>
 
                                 </p:panelGrid>
