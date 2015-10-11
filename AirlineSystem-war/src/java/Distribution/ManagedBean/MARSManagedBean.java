@@ -63,6 +63,14 @@ public class MARSManagedBean {
     private Date returnDate;
     private Date tempDepartureDate;
     private Date tempReturnDate;
+    
+    //the variables for one way flights
+    private Date oneWayDepartureDate;
+    private int oneWayAdult;
+    private int oneWayChildren;
+    private String oneWayServiceType;
+    private String oneWayOriginCity;
+    private String oneWayDestinationCity;
 
     private Long routeId;
     private String originCountry;
@@ -192,59 +200,58 @@ public class MARSManagedBean {
         selectedReturnSchedules = new ArrayList();
 
     }
+    
+    public void setOneWayVariables(){
+        setAdults(oneWayAdult);
+        setChildren(oneWayChildren);
+        setOriginCity(oneWayOriginCity);
+        setDestinationCity(oneWayDestinationCity);
+        setServiceType(oneWayServiceType);
+        setDepartureDate(oneWayDepartureDate);
+    }
+    
 
-    public String displayDepartureFlights() {
+    public String displayDepartureFlights(Boolean oneWay) {
 
         /*Convert the chosen origin and destination cities into IATAs*/
         List<Flight> allFlights = new ArrayList();
         allFlights = distributionSessionBean.getAllFlights();
         flightOptionsList = new ArrayList();
-        System.out.println("managedbean: display departure flight !!!!!!");
-        System.out.println("departure date" + departureDate);
-        System.out.println("reture date" + returnDate);
-        System.out.println("adults" + adults);
-        System.out.println("children" + children);
-        System.out.println("service" + serviceType);
-        System.out.println("origin city" + originCity);
-        System.out.println("destination city" + destinationCity);
         weekDates.clear();
         selectedDepartureSchedules.clear();
         selectedSchedules.clear();
-
-        //verify whether inputs are right
-        if (originCity.equals(destinationCity)) {
+        
+        //basic input check
+        if (oneWay){
+            setOneWayVariables();
+            if ((oneWayAdult == 0 && oneWayChildren == 0 )|| oneWayServiceType == null || oneWayOriginCity == null
+                    || oneWayDestinationCity == null){
+                
+                message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please fill in all required fields!", "");
+                FacesContext.getCurrentInstance().addMessage(null, message);
+                return null;
+            }
+            else if (oneWayOriginCity.equals(oneWayDestinationCity)) {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Origin and destination cannot be the same!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
-//            setDepartureDate(null);
-//            setReturnDate(null);
-//            setOriginCity("");
-//            setDestinationCity("");
-//            setAdults(0);
-//            setChildren(0);
-//            setServiceType("");
             return null;
-        } else if (adults == 0 && children == 0) {
-            System.out.println("managedbean: no adult or children chosen");
-            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please select at least one passenger!", "");
+        }
+        } else if (!oneWay){
+            if (departureDate == null || returnDate == null || (adults == 0 && children == 0 )||
+                serviceType == null || originCity == null || destinationCity == null){
+                
+                message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please fill in all required fields!", "");
+                FacesContext.getCurrentInstance().addMessage(null, message);
+                return null;
+            }
+            else if (originCity.equals(destinationCity)) {
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Origin and destination cannot be the same!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
-//            setDepartureDate(null);
-//            setReturnDate(null);
-//            setOriginIATA("");
-//            setDestinationIATA("");
-//            setAdults(0);
-//            setChildren(0);
-//            setServiceType("");
             return null;
-        } 
-        
-        else if (returnDate != null) {
-            System.out.println("managedbean: return date is not null");
-            isReturnDateSet = true;
-        } 
-        
-        {
+            }
+        }
+            //go into database to get IATA of origin and destinations
             for (Flight eachFlight : allFlights) {
-                System.out.println("managedbean: go into flight loop");
                 if (eachFlight.getRoute().getOriginCity().equalsIgnoreCase(originCity)) {
                     originIATA = eachFlight.getRoute().getOriginIATA();
                 }
@@ -254,7 +261,7 @@ public class MARSManagedBean {
             }
             boolean inputValid = true;
             //One way jorney selected by user
-            if (isReturnDateSet == false) {
+            if (oneWay) {
                 System.out.println("managedbean: user did not choose return date");
                 if (distributionSessionBean.existsSchedule(originIATA, destinationIATA, departureDate, serviceType, adults, children) == false) {
                     inputValid = false;
@@ -297,7 +304,7 @@ public class MARSManagedBean {
                     setIsDirect(true);
                     retrieveMinWeekPricesForDirect(originIATA, destinationIATA, departureDate, serviceType, adults, children);
                     setPriceForDirect(selectedDatePrices.get(0));
-                    if (!isReturnDateSet) {
+                    if (oneWay) {
                         System.out.println("managedbean: everything is right...returning direct flight page");
                         return "DisplayDirectFlight";
                     } else {
@@ -361,9 +368,8 @@ public class MARSManagedBean {
                         c++;
 
                     }
-                    ;
 
-                    if (!isReturnDateSet) {
+                    if (oneWay) {
                         return "DisplayOneStopFlight";
                     } else {
                         return "DisplayDepartureOneStopFlightReturn";
@@ -371,7 +377,7 @@ public class MARSManagedBean {
                 }
             }
 
-        }
+        
     }
 
     public String displayReturnFlights() {
@@ -1289,6 +1295,91 @@ public class MARSManagedBean {
 
     public void setSelectedReturnSchedules(List<Schedule> selectedReturnSchedules) {
         this.selectedReturnSchedules = selectedReturnSchedules;
+    }
+
+    /**
+     * @return the oneWayDepartureDate
+     */
+    public Date getOneWayDepartureDate() {
+        return oneWayDepartureDate;
+    }
+
+    /**
+     * @param oneWayDepartureDate the oneWayDepartureDate to set
+     */
+    public void setOneWayDepartureDate(Date oneWayDepartureDate) {
+        this.oneWayDepartureDate = oneWayDepartureDate;
+    }
+
+    /**
+     * @return the oneWayAdult
+     */
+    public int getOneWayAdult() {
+        return oneWayAdult;
+    }
+
+    /**
+     * @param oneWayAdult the oneWayAdult to set
+     */
+    public void setOneWayAdult(int oneWayAdult) {
+        this.oneWayAdult = oneWayAdult;
+    }
+
+    /**
+     * @return the oneWayChildren
+     */
+    public int getOneWayChildren() {
+        return oneWayChildren;
+    }
+
+    /**
+     * @param oneWayChildren the oneWayChildren to set
+     */
+    public void setOneWayChildren(int oneWayChildren) {
+        this.oneWayChildren = oneWayChildren;
+    }
+
+    /**
+     * @return the oneWayServiceType
+     */
+    public String getOneWayServiceType() {
+        return oneWayServiceType;
+    }
+
+    /**
+     * @param oneWayServiceType the oneWayServiceType to set
+     */
+    public void setOneWayServiceType(String oneWayServiceType) {
+        this.oneWayServiceType = oneWayServiceType;
+    }
+
+    /**
+     * @return the oneWayOriginCity
+     */
+    public String getOneWayOriginCity() {
+        return oneWayOriginCity;
+    }
+
+    /**
+     * @param oneWayOriginCity the oneWayOriginCity to set
+     */
+    public void setOneWayOriginCity(String oneWayOriginCity) {
+        this.oneWayOriginCity = oneWayOriginCity;
+    }
+
+
+    /**
+     * @return the oneWayDestinationCity
+     */
+    public String getOneWayDestinationCity() {
+        return oneWayDestinationCity;
+    }
+
+    /**
+     * @param oneWayDestinationCity the oneWayDestinationCity to set
+     */
+    public void setOneWayDestinationCity(String oneWayDestinationCity) {
+        this.oneWayDestinationCity = oneWayDestinationCity;
     }
 
 }
