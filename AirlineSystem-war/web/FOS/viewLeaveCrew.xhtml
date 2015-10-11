@@ -10,6 +10,7 @@
     </h:head>
     <h:body>
         <h:form>
+            <h:outputText value="Cabin Crew"/>
             <p:selectOneRadio id="cc" required="true" requiredMessage="Please choose one crew" layout="grid" columns="1" value="#{reservedCrewScheduleManagedBean.crewUserName}">
                 <f:selectItems itemLabelEscaped="false" value="#{reservedCrewScheduleManagedBean.leaveCCLists}" var="crew" itemValue="#{crew.employeeUserName}"
                                itemLabel="Crew UserName: #{crew.employeeUserName} 
@@ -17,19 +18,33 @@
                                &lt;br/&gt; Crew Position: #{crew.position} 
                                &lt;br/&gt; Schedule ID: #{crew.status.substring(7)}" />
             </p:selectOneRadio>
-             <h:commandButton value="Approve" actionListener="#{reservedCrewScheduleManagedBean.reassign}"/>
-             <h:commandButton value="Reject"/>
+            <br /><br />
+            <h:commandButton value="Approve" actionListener="#{reservedCrewScheduleManagedBean.reassign}"/>
+            <br />
+            <p:inputTextarea rows="5" cols="30" counter="display" maxlength="1000" counterTemplate="{0} characters remaining." value="#{reservedCrewScheduleManagedBean.rejectReasonForCabinCrew}" autoResize="false" />
+            <h:outputText id="display" />
+            <br />
+            <h:commandButton value="Reject" actionListener="#{reservedCrewScheduleManagedBean.rejectCabinCrewLeave}"/>
         </h:form>
+        <br /> <br />
+
+
         <h:form>
-             <p:selectOneRadio id="pilot" required="true" requiredMessage="Please choose one pilot" layout="grid" columns="1" value="#{reservedCrewScheduleManagedBean.pilotUserName}">
-                 <f:selectItems itemLabelEscaped="false" value="#{reservedCrewScheduleManagedBean.leavePilotLists}" var="crew" itemValue="#{crew.employeeUserName}"
+            <h:outputText value="Pilot"/>
+            <p:selectOneRadio id="pilot" required="true" requiredMessage="Please choose one pilot" layout="grid" columns="1" value="#{reservedCrewScheduleManagedBean.pilotUserName}">
+                <f:selectItems itemLabelEscaped="false" value="#{reservedCrewScheduleManagedBean.leavePilotLists}" var="crew" itemValue="#{crew.employeeUserName}"
                                itemLabel="Crew UserName: #{crew.employeeUserName} 
                                &lt;br/&gt; Crew Dept Location: #{crew.organizationUnit.location}
                                &lt;br/&gt; Crew Position: #{crew.position} 
                                &lt;br/&gt; Schedule ID: #{crew.status.substring(7)}" />
             </p:selectOneRadio>
-             <h:commandButton value="Approve" actionListener="#{reservedCrewScheduleManagedBean.reassignPilot}"/>
-            <h:commandButton value="Reject"/>
+            <br /><br />
+            <h:commandButton value="Approve" actionListener="#{reservedCrewScheduleManagedBean.reassignPilot}"/>
+            <br />
+            <p:inputTextarea rows="5" cols="30" counter="display1" maxlength="1000" counterTemplate="{0} characters remaining."  autoResize="false" value="#{reservedCrewScheduleManagedBean.rejectReasonForPilot}" />
+            <h:outputText id="display1" />
+            <br />
+            <h:commandButton value="Reject" actionListener="#{reservedCrewScheduleManagedBean.rejectPilotleave}"/>
         </h:form>
     </h:body>
 </html>

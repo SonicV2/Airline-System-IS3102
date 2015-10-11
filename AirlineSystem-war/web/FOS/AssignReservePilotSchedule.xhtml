@@ -23,9 +23,8 @@
             </p:selectOneMenu>
             
            
-            
-       
-            <p:dataTable var="rc" value="#{reservedCrewScheduleManagedBean.CCLists}">
+         
+            <p:dataTable var="rc" value="#{reservedCrewScheduleManagedBean.pilotLists}">
                 <p:column headerText="Name">
                     <h:outputText value="#{rc.employeeDisplayFirstName}  #{rc.employeeDisplayLastName}" />
                 </p:column>
@@ -35,9 +34,8 @@
                 </p:column>
 
             </p:dataTable>
-                 <h:commandButton value="Search Cabin Crew" actionListener="#{reservedCrewScheduleManagedBean.getReservedCrew}"/>
-            <h:commandButton value="Assign Cabin Crew Schedule" actionListener="#{reservedCrewScheduleManagedBean.assignSchedule}"/>
-        
+            <h:commandButton value="Search Pilot" actionListener="#{reservedCrewScheduleManagedBean.getReservedPilot}"/>
+            <h:commandButton value="Assign Pilot Schedule" actionListener="#{reservedCrewScheduleManagedBean.assignPilotSchedule}"/>
         </h:form>
 
 

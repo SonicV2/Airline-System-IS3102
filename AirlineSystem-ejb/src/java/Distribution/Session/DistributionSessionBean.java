@@ -71,7 +71,6 @@ public class DistributionSessionBean implements DistributionSessionBeanLocal {
     }
 
     public List<Schedule> retrieveDirectFlightsForDate(String originIata, String destinationIata, Date startDate, String serviceType, int adults, int children) {
-        
         List<Flight> flightsForRoute = new ArrayList();
         flightsForRoute = retrieveFlightsForRoute(originIata, destinationIata);
         List<Schedule> schedulesForFlights = new ArrayList<Schedule>();
