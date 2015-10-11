@@ -75,6 +75,11 @@ public class CustomerManagedBean {
             return "signUpConfirmation";
         }
     }
+    
+    public String logOut(){
+        FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+        return "/Distribution/merlionAirlines.xhtml?faces-redirect=true";
+    }
 
     public void clearAll() {
         setCustomerFirstName("");

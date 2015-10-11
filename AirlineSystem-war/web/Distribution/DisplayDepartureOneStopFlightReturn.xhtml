@@ -116,7 +116,14 @@
                         </h:outputText>
 
                         <div class="form-group text-center">
-                            <h:commandButton class="btn btn-outline btn-success" value="Select return flight"  action="#{mARSManagedBean.displayReturnFlights()}"/>
+<!--                            if this is not a one way flight, proceed to return flights-->
+                            <ui:fragment rendered="#{!mARSManagedBean.oneWayFlight}">
+                                <h:commandButton class="btn btn-outline btn-success" value="Select return flight"  action="#{mARSManagedBean.displayReturnFlights()}"/>
+                            </ui:fragment>
+<!--                            if this is a one way flight, proceed to booking-->
+                             <ui:fragment rendered="#{mARSManagedBean.oneWayFlight}">
+                             <h:commandButton class="btn btn-outline btn-success" value="Proceed to booking"  action="#{mARSManagedBean.summary()}"/>
+                             </ui:fragment>
                         </div>
                         </h:form>
                 </div>
