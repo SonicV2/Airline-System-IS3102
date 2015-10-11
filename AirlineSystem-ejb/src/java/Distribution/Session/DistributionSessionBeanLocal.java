@@ -9,6 +9,7 @@ import APS.Entity.Flight;
 import APS.Entity.Location;
 import APS.Entity.Route;
 import APS.Entity.Schedule;
+import Distribution.Entity.FlightOptions;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
@@ -45,4 +46,5 @@ public interface DistributionSessionBeanLocal {
    public Location getLocationFromIata (String Iata);
    public boolean existsOneStopFlight (String originIATA, String destinationIATA, Date date, String serviceType, int adults, int children);
    public List<Schedule> addSchedulesToList(List<Schedule> originalSchedules, List<Schedule> schedulesToAdd);
+   public void persistFlightOptions (FlightOptions flightOptions);
 }
