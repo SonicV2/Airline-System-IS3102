@@ -199,8 +199,11 @@ public class PassengerBookingSessionBean implements PassengerBookingSessionBeanL
             }
             pnr.setPnrStatus("Cancelled");
             em.merge(pnr);
+            if (primaryCustomer!=null){
             primaryCustomer.getPnrs().remove(pnr);
             em.merge(primaryCustomer);
+            }
+            
         }
 
         @Override
@@ -229,6 +232,7 @@ public class PassengerBookingSessionBean implements PassengerBookingSessionBeanL
 
     
 
+    @Override
     public List<Schedule> getReturnSchedules(List<Schedule> selectedSchedules) {
         int noOfSelectedSchedules = selectedSchedules.size();
         List<Schedule> returnSchedules = new ArrayList();
@@ -241,6 +245,31 @@ public class PassengerBookingSessionBean implements PassengerBookingSessionBeanL
             return returnSchedules;
         }
         return returnSchedules;
+    }
+    
+    @Override
+    public PNR getPNR(String pnrID) {
+        PNR pnr = new PNR();   
+            try {
+
+            Query q = em.createQuery("SELECT a FROM PNR " + "AS a WHERE a.pnrID=:pnrID");
+            q.setParameter("pnrID", pnrID);
+
+            List results = q.getResultList();
+            if (!results.isEmpty()) {
+                pnr = (PNR) results.get(0);
+
+            } else {
+                pnr = null;
+            }
+
+        } catch (EntityNotFoundException enfe) {
+            System.out.println("\nEntity not found error" + "enfe.getMessage()");
+        }
+            if (pnr!=null && pnr.getPnrStatus().equals("Cancelled"))
+                pnr = null;
+            
+            return pnr;
     }
 
 }

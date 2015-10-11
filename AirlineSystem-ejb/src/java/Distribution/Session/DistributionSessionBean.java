@@ -9,6 +9,7 @@ import APS.Entity.Flight;
 import APS.Entity.Location;
 import APS.Entity.Route;
 import APS.Entity.Schedule;
+import Distribution.Entity.FlightOptions;
 import Inventory.Entity.SeatAvailability;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -390,6 +391,10 @@ public class DistributionSessionBean implements DistributionSessionBeanLocal {
         }
 
         return allFlights;
+    }
+    
+    public void persistFlightOptions (FlightOptions flightOptions) {
+        em.persist(flightOptions);
     }
 
 }

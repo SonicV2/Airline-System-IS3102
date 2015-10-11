@@ -4,6 +4,7 @@ import APS.Entity.AircraftType;
 import APS.Entity.Flight;
 import APS.Entity.Route;
 import APS.Entity.Schedule;
+import Inventory.Entity.SeatAvailability;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -28,7 +29,7 @@ public class FlightSessionBean implements FlightSessionBeanLocal {
     private Route route;
     private AircraftType aircraftType;
     private List<Schedule> schedules;
-    
+    private SeatAvailability seatAvail;
     //Add new flight entity
     @Override
     public void addFlight(String flightNo, String flightDays, Double basicFare, Date startDateTime, Long routeId) {
@@ -56,6 +57,13 @@ public class FlightSessionBean implements FlightSessionBeanLocal {
     @Override
     public void deleteSchedule(Long scheduleId) {
         schedule = getSchedule(scheduleId);
+
+        seatAvail = schedule.getSeatAvailability();
+        seatAvail.setSchedule(null);
+
+        schedule.setSeatAvailability(null);
+        
+        em.remove(seatAvail);
         em.remove(schedule);
         em.flush();
     }

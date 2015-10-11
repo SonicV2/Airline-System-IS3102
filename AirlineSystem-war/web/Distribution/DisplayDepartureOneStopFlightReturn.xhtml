@@ -38,7 +38,7 @@
         <!--//pop-up-->	
         <title>Display One Stop Flight for Outbound Departure Journey</title>
     </h:head>
-    <body>
+    <h:body>
         <ui:include src="merlionAirlinesHeader.xhtml"/> 
         <div class="banner-bottom">
             <div class="container">
@@ -47,88 +47,97 @@
                 </div>
                 <div class="faqs-top-grids terms-grids">
                     <h:form>
-
-                        <p:dataTable value="#{mARSManagedBean.oneStopFlightSchedules}" var="schedules" rowKey="#{schedules.flight.flightNo}" >
+                        <p:dataTable value="#{mARSManagedBean.flightOptionsList}" var="flightOptions" selection="#{mARSManagedBean.selectedDepartureFlightOption}" rowKey="#{flightOptions.flightOptionsId}" >
                             <p:column selectionMode="single" style="width:40px;text-align:center"/>
+                            
                             <p:column headerText="Flight Number" style="width:10%;">
-                                <h:outputText value="#{schedules.flight.flightNo}" />
+                                <h:outputText value="#{flightOptions.legOne.flight.flightNo}, #{flightOptions.legTwo.flight.flightNo}" />
                             </p:column>
-                            <p:column headerText="Departs" style="width:12%;">
-                                <h:outputText value="#{schedules.flight.route.originCity}, #{schedules.flight.route.originCountry} (#{schedules.flight.route.originIATA}) at " />
-                                <h:outputText value="#{schedules.startDate}">
+                            
+                            <p:column headerText="Leg One Departs" style="width:12%;">
+                                <h:outputText value="#{flightOptions.legOne.flight.route.originCity}, #{flightOptions.legOne.flight.route.originCountry} (#{flightOptions.legOne.flight.route.originIATA}) at " />
+                                <h:outputText value="#{flightOptions.legOne.startDate}">
                                     <f:convertDateTime pattern ="hh:mm a (EEE, MMM d, yyyy)"/>
                                 </h:outputText>
                             </p:column>
 
-                            <p:column headerText="Arrives" style="width:12%;">
-                                <h:outputText value="#{schedules.flight.route.destinationCity}, #{schedules.flight.route.destinationCountry} (#{schedules.flight.route.destinationIATA}) at " />
+                            <p:column headerText="Leg One Arrives" style="width:12%;">
+                                <h:outputText value="#{flightOptions.legOne.flight.route.destinationCity}, #{flightOptions.legOne.flight.route.destinationCountry} (#{flightOptions.legOne.flight.route.destinationIATA}) at " />
 
-                                <h:outputText value="#{schedules.endDate}">
+                                <h:outputText value="#{flightOptions.legOne.endDate}">
                                     <f:convertDateTime pattern ="hh:mm a (EEE, MMM d, yyyy)"/>
                                 </h:outputText>
                             </p:column>
-                            <p:column headerText="Travel Time" style="width:12%;">
-                                <h:outputText value="Layover Time: #{mARSManagedBean.oneStopFlightLayover}" rendered="#{mARSManagedBean.oneStopFlightSchedules.indexOf(schedules)==0}"/>
-                                <h:outputText value="Total Travel Time: #{mARSManagedBean.oneStopFlightDuration}" rendered="#{mARSManagedBean.oneStopFlightSchedules.indexOf(schedules)==1}"/>
+                            
+                            <p:column headerText="Layover Time" style="width:12%;">
+                                <h:outputText value="#{flightOptions.layover}"/>
                             </p:column>
+                            
+                            <p:column headerText="Leg Two Departs" style="width:12%;">
+                                <h:outputText value="#{flightOptions.legTwo.flight.route.originCity}, #{flightOptions.legTwo.flight.route.originCountry} (#{flightOptions.legTwo.flight.route.originIATA}) at " />
+                                <h:outputText value="#{flightOptions.legTwo.startDate}">
+                                    <f:convertDateTime pattern ="hh:mm a (EEE, MMM d, yyyy)"/>
+                                </h:outputText>
+                            </p:column>
+
+                            <p:column headerText="Leg Two Arrives" style="width:12%;">
+                                <h:outputText value="#{flightOptions.legTwo.flight.route.destinationCity}, #{flightOptions.legTwo.flight.route.destinationCountry} (#{flightOptions.legTwo.flight.route.destinationIATA}) at " />
+
+                                <h:outputText value="#{flightOptions.legTwo.endDate}">
+                                    <f:convertDateTime pattern ="hh:mm a (EEE, MMM d, yyyy)"/>
+                                </h:outputText>
+                            </p:column>
+
+                            <p:column headerText="Total Travel Time" style="width:12%;">
+                                <h:outputText value="#{flightOptions.duration}"/>
+                            </p:column>
+
+                            <!--                            <p:column headerText="Travel Time" style="width:12%;">
+                                                            <h:outputText value="Layover Time: #{mARSManagedBean.oneStopFlightLayover}" rendered="#{mARSManagedBean.oneStopFlightSchedules.indexOf(schedules)==0}"/>
+                                                            <h:outputText value="Total Travel Time: #{mARSManagedBean.oneStopFlightDuration}" rendered="#{mARSManagedBean.oneStopFlightSchedules.indexOf(schedules)==1}"/>
+                                                        </p:column>-->
 
                             <p:column headerText="Prices">
                                 <h:outputText value="#{mARSManagedBean.selectedDatePrices}"/>
                             </p:column>
                         </p:dataTable>
 
-<!--                        <p:dataList value="#{mARSManagedBean.oneStopFlightSchedules}" var="schedules" type="ordered">
-                            <h:outputLabel class="col-md-4 control-label" value="Departure: "/>
-                            <h:outputText value="#{schedules.startDate}">
-                                            <f:convertDateTime pattern ="dd-mm-yyyy HH:mm:ss"/>
-                            </h:outputText>
-
-                            <h:outputLabel class="col-md-4 control-label" value="Arrival: "/>
-                            <h:outputText value="#{schedules.endDate}">
-                                            <f:convertDateTime pattern ="dd-mm-yyyy HH:mm:ss"/>
-                            </h:outputText>
-
-                            <h:outputLabel class="col-md-4 control-label" value="Origin: "/>
-                            <h:outputText value="#{schedules.flight.route.originIATA}">
-                            </h:outputText>
-
-                            <h:outputLabel class="col-md-4 control-label" value="Destination: "/>
-                            <h:outputText value="#{schedules.flight.route.destinationIATA}">
-                            </h:outputText>
-
-                            <h:outputLabel class="col-md-4 control-label" value="Duration: "/>
-                            <h:outputText value="#{mARSManagedBean.oneStopFlightDuration}">
-                            </h:outputText>
-
-                            <h:outputLabel class="col-md-4 control-label" value="Layover: "/>
-                            <h:outputText value="#{mARSManagedBean.oneStopFlightLayover}">
-                            </h:outputText>
-
-                            <h:outputLabel class="col-md-4 control-label" value="Price: "/>
-                            <h:outputText value="#{mARSManagedBean.selectedDatePrices}">
-                            </h:outputText>
-
-
-                        </p:dataList>-->
-
                         <h:outputLabel class="col-md-4 control-label" value="For week: "/>
                         <h:outputText value="#{mARSManagedBean.minPricesForWeekOneStopFlight}">
                         </h:outputText>
 
                         <div class="form-group text-center">
-<!--                            if this is not a one way flight, proceed to return flights-->
+                            <!--                            if this is not a one way flight, proceed to return flights-->
                             <ui:fragment rendered="#{!mARSManagedBean.oneWayFlight}">
                                 <h:commandButton class="btn btn-outline btn-success" value="Select return flight"  action="#{mARSManagedBean.displayReturnFlights()}"/>
                             </ui:fragment>
-<!--                            if this is a one way flight, proceed to booking-->
-                             <ui:fragment rendered="#{mARSManagedBean.oneWayFlight}">
-                             <h:commandButton class="btn btn-outline btn-success" value="Proceed to booking"  action="#{mARSManagedBean.summary()}"/>
-                             </ui:fragment>
+                            <!--                            if this is a one way flight, proceed to booking-->
+                            <ui:fragment rendered="#{mARSManagedBean.oneWayFlight}">
+                                <h:commandButton class="btn btn-outline btn-success" value="Proceed to booking"  action="#{mARSManagedBean.summary()}"/>
+                            </ui:fragment>
                         </div>
-                        </h:form>
+                    </h:form>
                 </div>
             </div>
         </div>
-   
-    </body>
+        <ui:include src="merlionAirlinesFooter.xhtml"/>
+        <h:outputScript library="js" name="jquery.flexslider.js"/> 
+        <h:outputScript library="js" name="easyResponsiveTabs.js" /> 
+        <h:outputScript library="js" name="scriptMerlion.js"></h:outputScript>
+
+        <script type="text/javascript">
+            $(function () {
+                SyntaxHighlighter.all();
+            });
+            $(window).load(function () {
+                $('.flexslider').flexslider({
+                    animation: "slide",
+                    start: function (slider) {
+                        $('body').removeClass('loading');
+                    }
+                });
+            });
+        </script>
+
+    </h:body>
 </html>
