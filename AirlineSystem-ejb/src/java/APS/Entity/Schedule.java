@@ -49,7 +49,7 @@ public class Schedule implements Serializable {
     @ManyToOne(cascade = {CascadeType.PERSIST})
     private Team team = new Team();
 
-    @OneToOne(mappedBy="schedule", cascade = {CascadeType.PERSIST})
+    @OneToOne(mappedBy="schedule",cascade = {CascadeType.PERSIST})
     private SeatAvailability seatAvail;
 
     @ManyToOne
