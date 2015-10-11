@@ -21,8 +21,9 @@ import javax.persistence.ManyToOne;
  */
 @Entity
 public class Pilot extends Employee implements Serializable {
+
     private static final long serialVersionUID = 1L;
-    
+
     private String experience;
     private String position;
     private List<String> skillsets;
@@ -37,44 +38,39 @@ public class Pilot extends Employee implements Serializable {
     public Pilot() {
         super();
     }
-    
-    public void create(String experience ,List<String> skillsets, String position){
-        this.experience=experience;
-        this.position=position;
-        this.skillsets=skillsets;
-        this.assigned=false;
 
-         this.status="N.S";
-   
+    public void create(String experience, List<String> skillsets, String position) {
+        this.experience = experience;
+        this.position = position;
+        this.skillsets = skillsets;
+        this.assigned = false;
+
+        this.status = "N.S";
+        this.schedule = "N.A";
+        this.signInStatus="N.S";
 
     }
 
-   
     public String getExperience() {
         return experience;
     }
 
-   
     public void setExperience(String experience) {
         this.experience = experience;
     }
 
-   
     public String getPosition() {
         return position;
     }
 
-    
     public void setPosition(String position) {
         this.position = position;
     }
 
-    
     public List<String> getSkillsets() {
         return skillsets;
     }
 
-    
     public void setSkillsets(List<String> skillsets) {
         this.skillsets = skillsets;
     }
@@ -120,7 +116,6 @@ public class Pilot extends Employee implements Serializable {
     public void setStatus(String status) {
         this.status = status;
     }
-}
 
     /**
      * @return the schedule
@@ -150,3 +145,4 @@ public class Pilot extends Employee implements Serializable {
         this.signInStatus = signInStatus;
     }
 
+}
