@@ -32,7 +32,7 @@ public interface PassengerBookingSessionBeanLocal {
     //associate customer with PNR; pnr with bookings; booking with PNR; persist all
     public void persistBookingAndPNR (PNR pnr, List<Booking> bookings, Customer primaryCustomer);
     //increase SeatAvailablity --merge, changeBookingStatus to Cancelled for all bookings - merge booking, remove pnr from customer, Delete PNR, (Check deleteChecklistItem
-    public void deletePNR (PNR pnr, Customer primaryCustomer);
+    public void deletePNR (PNR pnr);
     public List<Schedule> getDepartureSchedules (List<Schedule> selectedSchedules, boolean isReturnDateSet);
     //call only when return schedules is set
     public List<Schedule> getReturnSchedules (List<Schedule> selectedSchedules);
