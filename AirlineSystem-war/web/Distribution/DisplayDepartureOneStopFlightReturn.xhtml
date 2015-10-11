@@ -50,10 +50,6 @@
                         <p:dataTable value="#{mARSManagedBean.flightOptionsList}" var="flightOptions" selection="#{mARSManagedBean.selectedDepartureFlightOption}" rowKey="#{flightOptions.flightOptionsId}" >
                             <p:column selectionMode="single" style="width:40px;text-align:center"/>
                             
-                            <p:column headerText="Flight Option Id" style="width:10%;">
-                                <h:outputText value="#{flightOptions.flightOptionsId}" />
-                            </p:column>
-                            
                             <p:column headerText="Flight Number" style="width:10%;">
                                 <h:outputText value="#{flightOptions.legOne.flight.flightNo}, #{flightOptions.legTwo.flight.flightNo}" />
                             </p:column>
@@ -124,6 +120,24 @@
                 </div>
             </div>
         </div>
+        <ui:include src="merlionAirlinesFooter.xhtml"/>
+        <h:outputScript library="js" name="jquery.flexslider.js"/> 
+        <h:outputScript library="js" name="easyResponsiveTabs.js" /> 
+        <h:outputScript library="js" name="scriptMerlion.js"></h:outputScript>
+
+        <script type="text/javascript">
+            $(function () {
+                SyntaxHighlighter.all();
+            });
+            $(window).load(function () {
+                $('.flexslider').flexslider({
+                    animation: "slide",
+                    start: function (slider) {
+                        $('body').removeClass('loading');
+                    }
+                });
+            });
+        </script>
 
     </h:body>
 </html>

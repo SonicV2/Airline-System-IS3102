@@ -35,10 +35,10 @@
         </script>
         <!--pop-up-->
         <h:outputScript library="js" name="menu_jquery.js" /> 
-        <!--//pop-up-->
+        <!--//pop-up-->	
         <title>Display One Stop Flight For Inbound Return Journey</title>
     </h:head>
-    <body>
+    <h:body>
         <ui:include src="merlionAirlinesHeader.xhtml"/> 
         <div class="banner-bottom">
             <div class="container">
@@ -110,7 +110,27 @@
                 </div>
             </div>
         </div>
-    </body>
+        
+        <ui:include src="merlionAirlinesFooter.xhtml"/>
+        <h:outputScript library="js" name="jquery.flexslider.js"/> 
+        <h:outputScript library="js" name="easyResponsiveTabs.js" /> 
+        <h:outputScript library="js" name="scriptMerlion.js"></h:outputScript>
+
+        <script type="text/javascript">
+            $(function () {
+                SyntaxHighlighter.all();
+            });
+            $(window).load(function () {
+                $('.flexslider').flexslider({
+                    animation: "slide",
+                    start: function (slider) {
+                        $('body').removeClass('loading');
+                    }
+                });
+            });
+        </script>
+
+    </h:body>
 </html>
 
 <!--    <p:dataList value="#{mARSManagedBean.oneStopFlightSchedules}" var="schedules" type="ordered">
