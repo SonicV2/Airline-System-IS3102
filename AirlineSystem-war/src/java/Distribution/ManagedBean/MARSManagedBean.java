@@ -147,14 +147,18 @@ public class MARSManagedBean {
 
     private double totalWeightAllowed;
     private int totalNumBaggeAlloewd;
-    
+
     private double totalSelectedPrice;
-    
+    private double totalPriceWinsurance;
+
     private List<Passenger> passengerList;
-    
+
     private String primaryEmail;
     private String primaryContactNo;
-    
+
+    private String creditCard;
+    private String csv;
+
     @PostConstruct
     public void retrieve() {
         //Retrieve all the available flights into a list of flights
@@ -199,8 +203,11 @@ public class MARSManagedBean {
         selectedSchedules = new ArrayList();
         selectedDepartureSchedules = new ArrayList();
         selectedReturnSchedules = new ArrayList();
-        totalSelectedPrice=0;
+        totalSelectedPrice = 0;
         passengerList = new ArrayList();
+        totalPriceWinsurance = 0;
+        creditCard = null;
+        csv = null;
     }
 
     public String displayDepartureFlights() {
@@ -240,8 +247,8 @@ public class MARSManagedBean {
         
         else if (returnDate != null) {
             isReturnDateSet = true;
-        } 
-        
+        }
+
         {
             for (Flight eachFlight : allFlights) {
                 if (eachFlight.getRoute().getOriginCity().equalsIgnoreCase(originCity)) {
@@ -251,7 +258,7 @@ public class MARSManagedBean {
                     destinationIATA = eachFlight.getRoute().getDestinationIATA();
                 }
             }
-            
+
             boolean inputValid = true;
             //One way jorney selected by user
             if (isReturnDateSet == false) {
@@ -561,6 +568,8 @@ public class MARSManagedBean {
 
     public String summary() {
 
+        passengerList.clear();
+
         if (isDirect) {
             selectedSchedules.add(selectedDepartureSchedule);
         } else {
@@ -584,66 +593,123 @@ public class MARSManagedBean {
         if (isReturnDateSet) {
             setSelectedReturnSchedules(passengerBookingSessionBean.getReturnSchedules(selectedSchedules));
         }
+
         
         totalSelectedPrice=0;
+
         double priceForEachSchedule;
-        for (Schedule eachSelectedSchedule: selectedSchedules){
-            priceForEachSchedule = pricingManagementBean.getPrice(pricingManagementBean.getClassCode(eachSelectedSchedule, serviceType, (adults+children)), eachSelectedSchedule);
-            totalSelectedPrice += (priceForEachSchedule*adults) + (priceForEachSchedule*0.75*children);
+        for (Schedule eachSelectedSchedule : selectedSchedules) {
+            priceForEachSchedule = pricingManagementBean.getPrice(pricingManagementBean.getClassCode(eachSelectedSchedule, serviceType, (adults + children)), eachSelectedSchedule);
+            totalSelectedPrice += (priceForEachSchedule * adults) + (priceForEachSchedule * 0.75 * children);
         }
         Passenger passenger;
+
         passengerList.clear();
         for (int k=0; k<adults+children; k++) {
             passenger = new Passenger();
-            passenger.setId(k+1);
+            passenger.setId(k + 1);
             passengerList.add(passenger);
         }
           for (Schedule eachSelectedSchedule: selectedSchedules){
             eachSelectedSchedule.setStartDate(distributionSessionBean.convertTimeZone(eachSelectedSchedule.getStartDate(),distributionSessionBean.getSingaporeTimeZone(), distributionSessionBean.getTimeZoneFromIata(eachSelectedSchedule.getFlight().getRoute().getOriginIATA())));
             eachSelectedSchedule.setEndDate(distributionSessionBean.convertTimeZone(eachSelectedSchedule.getEndDate(), distributionSessionBean.getSingaporeTimeZone(), distributionSessionBean.getTimeZoneFromIata(eachSelectedSchedule.getFlight().getRoute().getDestinationIATA())));
         }
-        
+
         return "summary";
 
     }
 
+    public String payment() {
+
+        for (int i = 0; i < passengerList.size(); i++) {
+            if (passengerList.get(i).getCustomerId().isEmpty())
+                continue;
+            if (!isInteger(passengerList.get(i).getCustomerId())) {
+                message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Invalid Customer Id!", "");
+                FacesContext.getCurrentInstance().addMessage(null, message);
+                return null;
+            }
+        }
+
+        return "payment";
+    }
+
     public String createBooking() {
+        
+        
+//        if (!isInteger(creditCard)) {
+//            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Invalid credit card number!", "");
+//            FacesContext.getCurrentInstance().addMessage(null, message);
+//            return null;
+//        }
+
+      
+        if (creditCard.length() != 16) {
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Credit card number should be 16 digits!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return null;
+
+        }
+        
+        if (csv.length() != 3) {
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Invalid csv!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return null;
+        }
+        
+        if (!isInteger(csv)) {
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Invalid csv!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return null;
+        }
 
         for (Schedule eachSelectedSchedule: selectedSchedules){
             eachSelectedSchedule.setStartDate(distributionSessionBean.convertTimeZone(eachSelectedSchedule.getStartDate(),  distributionSessionBean.getTimeZoneFromIata(eachSelectedSchedule.getFlight().getRoute().getOriginIATA()), distributionSessionBean.getSingaporeTimeZone()));
             eachSelectedSchedule.setEndDate(distributionSessionBean.convertTimeZone(eachSelectedSchedule.getEndDate(),  distributionSessionBean.getTimeZoneFromIata(eachSelectedSchedule.getFlight().getRoute().getDestinationIATA()), distributionSessionBean.getSingaporeTimeZone()));
         }
-        
+
        double priceForEachBooking;
        bookingStatus = "Booked";
        List<Booking> bookingList = new ArrayList();
        Customer primaryCustomer = new Customer ();
-        
-        for (Schedule eachSelectedSchedule: selectedSchedules){
-            classCode = pricingManagementBean.getClassCode(eachSelectedSchedule, serviceType, (adults+children));
+
+        totalPriceWinsurance = totalSelectedPrice;
+
+        for (Schedule eachSelectedSchedule : selectedSchedules) {
+            classCode = pricingManagementBean.getClassCode(eachSelectedSchedule, serviceType, (adults + children));
             priceForEachBooking = pricingManagementBean.getPrice(classCode, eachSelectedSchedule);
             setSeatAvail(eachSelectedSchedule.getSeatAvailability());
             setFlightNo(eachSelectedSchedule.getFlight().getFlightNo());
+            setFlightDate (eachSelectedSchedule.getStartDate());
+            for (int k=0;k<(adults+children);k++){
             setFlightDate(eachSelectedSchedule.getStartDate());
-            for (int k = 0; k < passengerList.size(); k++) {
-                if (passengerList.get(k).getCustomerId() == null)
-                    passengerList.get(k).setCustomerId("0");
                 Booking eachBooking = passengerBookingSessionBean.createBooking(priceForEachBooking, seatAvail, flightNo, flightDate, bookingStatus, classCode, serviceType, passengerList.get(k).getTitle(), passengerList.get(k).getFirstName(), passengerList.get(k).getLastName(), passengerList.get(k).getPassport(), passengerList.get(k).getNationality(), Long.parseLong(passengerList.get(k).getCustomerId()), false, passengerList.get(k).isInsurance(), 15.0, passengerList.get(k).getFoodSelection());
                 bookingList.add(eachBooking);
-                if (passengerList.get(k).isInsurance()){
-                    totalSelectedPrice += 15.0;
+                if (passengerList.get(k).isInsurance()) {
+                    totalPriceWinsurance += 15.0;
                 }
             }
-            
-            pnr = passengerBookingSessionBean.createPNR((adults+children), getPrimaryEmail(), getPrimaryContactNo(), "Booked",totalSelectedPrice, new Date(), "MerlionAirlines");
+        }
+            pnr = passengerBookingSessionBean.createPNR((adults+children), getPrimaryEmail(), getPrimaryContactNo(), "Booked",totalPriceWinsurance, new Date(), "MerlionAirlines");
             if (passengerBookingSessionBean.isPassengerAFrequentFlyer(Long.parseLong(passengerList.get(0).getCustomerId())))
               primaryCustomer = passengerBookingSessionBean.getCustomerByCustomerId(Long.parseLong(passengerList.get(0).getCustomerId()));
             else
               primaryCustomer = null; 
-        }
-            passengerBookingSessionBean.persistBookingAndPNR(pnr, bookingList, primaryCustomer);
         
-        return "payment";
+        passengerBookingSessionBean.persistBookingAndPNR(pnr, bookingList, primaryCustomer);
+
+        return "confirmation";
+    }
+
+    public static boolean isInteger(String s) {
+        try {
+            Integer.parseInt(s);
+        } catch (NumberFormatException e) {
+            return false;
+        } catch (NullPointerException e) {
+            return false;
+        }
+        return true;
     }
 
     public String getFlightNo() {
@@ -1380,6 +1446,48 @@ public class MARSManagedBean {
      */
     public void setPrimaryContactNo(String primaryContactNo) {
         this.primaryContactNo = primaryContactNo;
+    }
+
+    /**
+     * @return the creditCard
+     */
+    public String getCreditCard() {
+        return creditCard;
+    }
+
+    /**
+     * @param creditCard the creditCard to set
+     */
+    public void setCreditCard(String creditCard) {
+        this.creditCard = creditCard;
+    }
+
+    /**
+     * @return the totalPriceWinsurance
+     */
+    public double getTotalPriceWinsurance() {
+        return totalPriceWinsurance;
+    }
+
+    /**
+     * @param totalPriceWinsurance the totalPriceWinsurance to set
+     */
+    public void setTotalPriceWinsurance(double totalPriceWinsurance) {
+        this.totalPriceWinsurance = totalPriceWinsurance;
+    }
+
+    /**
+     * @return the csv
+     */
+    public String getCsv() {
+        return csv;
+    }
+
+    /**
+     * @param csv the csv to set
+     */
+    public void setCsv(String csv) {
+        this.csv = csv;
     }
 
 }
