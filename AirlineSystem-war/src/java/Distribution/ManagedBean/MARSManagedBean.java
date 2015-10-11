@@ -164,6 +164,8 @@ public class MARSManagedBean {
 
     private double totalSelectedPrice;
     private double totalPriceWinsurance;
+    private double adultPrice;
+    private double childPrice;
 
     private List<Passenger> passengerList;
 
@@ -221,6 +223,8 @@ public class MARSManagedBean {
         selectedDepartureSchedules = new ArrayList();
         selectedReturnSchedules = new ArrayList();
         totalSelectedPrice = 0;
+        adultPrice = 0;
+        childPrice = 0;
         passengerList = new ArrayList();
         totalPriceWinsurance = 0;
         creditCard = null;
@@ -339,6 +343,7 @@ public class MARSManagedBean {
 //                    }
 
             } else { //Retrieve one stop flights
+                System.out.println("managedbean::::one stop flights...");
                 legOneSchedules.clear();
                 legTwoSchedules.clear();
                 oneStopFlightDuration = new ArrayList();
@@ -457,7 +462,7 @@ public class MARSManagedBean {
             for (int i = 0; i < transitHubs.size(); i++) {
                 addSchedulesToLegOne(legOneSchedules, distributionSessionBean.retrieveDirectFlightsForDate(originIATA, transitHubs.get(i), departureDate, serviceType, adults, children));
                 addSchedulesToLegTwo(legTwoSchedules, distributionSessionBean.retrieveDirectFlightsForDate(transitHubs.get(i), destinationIATA, distributionSessionBean.addDaysToDate(departureDate, 1), serviceType, adults, children));
-                addSchedulesToLegTwo(legTwoSchedules, distributionSessionBean.retrieveDirectFlightsForDate(transitHubs.get(i), destinationIATA, distributionSessionBean.addDaysToDate(departureDate, 2), serviceType, adults, children));
+//                addSchedulesToLegTwo(legTwoSchedules, distributionSessionBean.retrieveDirectFlightsForDate(transitHubs.get(i), destinationIATA, distributionSessionBean.addDaysToDate(departureDate, 2), serviceType, adults, children));
                 addSchedulesToLegTwo(legTwoSchedules, distributionSessionBean.retrieveDirectFlightsForDate(transitHubs.get(i), destinationIATA, departureDate, serviceType, adults, children));
             }
             setOneStopFlightSchedules(distributionSessionBean.retrieveOneStopFlightSchedules(legOneSchedules, legTwoSchedules));
@@ -628,11 +633,13 @@ public class MARSManagedBean {
 
         totalSelectedPrice = 0;
 
-        double priceForEachSchedule;
+        double priceForEachSchedule = 0;
         for (Schedule eachSelectedSchedule : selectedSchedules) {
             priceForEachSchedule = pricingManagementBean.getPrice(pricingManagementBean.getClassCode(eachSelectedSchedule, serviceType, (adults + children)), eachSelectedSchedule);
             totalSelectedPrice += (priceForEachSchedule * adults) + (priceForEachSchedule * 0.75 * children);
         }
+        adultPrice = priceForEachSchedule;
+        childPrice = priceForEachSchedule;
         Passenger passenger;
 
         passengerList.clear();
@@ -1704,6 +1711,34 @@ public class MARSManagedBean {
      */
     public void setOneWayFlight(Boolean oneWayFlight) {
         this.oneWayFlight = oneWayFlight;
+    }
+
+    /**
+     * @return the adultPrice
+     */
+    public double getAdultPrice() {
+        return adultPrice;
+    }
+
+    /**
+     * @param adultPrice the adultPrice to set
+     */
+    public void setAdultPrice(double adultPrice) {
+        this.adultPrice = adultPrice;
+    }
+
+    /**
+     * @return the childPrice
+     */
+    public double getChildPrice() {
+        return childPrice;
+    }
+
+    /**
+     * @param childPrice the childPrice to set
+     */
+    public void setChildPrice(double childPrice) {
+        this.childPrice = childPrice;
     }
 
 }
