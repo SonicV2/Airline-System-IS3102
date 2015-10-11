@@ -158,6 +158,9 @@ public class MARSManagedBean {
 
     private String creditCard;
     private String csv;
+    private String pnrId;
+    
+    private PNR searchedPNR;
 
     @PostConstruct
     public void retrieve() {
@@ -208,6 +211,7 @@ public class MARSManagedBean {
         totalPriceWinsurance = 0;
         creditCard = null;
         csv = null;
+        setPnrId(null);
     }
 
     public String displayDepartureFlights() {
@@ -711,6 +715,44 @@ public class MARSManagedBean {
         }
 
         return "confirmation";
+    }
+    
+    public String searchPNR() {
+        
+        searchedPNR = passengerBookingSessionBean.getPNR(pnrId);
+        if ( searchedPNR ==null || !primaryEmail.equals(searchedPNR.getEmail())){
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Booking record is not found!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return null;
+        }
+        
+        selectedSchedules.clear();
+        
+       List<Long> addedSchedules = new ArrayList();
+        for (Booking eachBooking : searchedPNR.getBookings()){
+            if (!addedSchedules.contains(eachBooking.getSeatAvail().getSchedule().getScheduleId())){
+                addedSchedules.add(eachBooking.getSeatAvail().getSchedule().getScheduleId());
+                selectedSchedules.add(eachBooking.getSeatAvail().getSchedule());
+            }    
+       }
+        
+        for (Schedule eachSelectedSchedule : selectedSchedules) {
+            eachSelectedSchedule.setStartDate(distributionSessionBean.convertTimeZone(eachSelectedSchedule.getStartDate(), distributionSessionBean.getSingaporeTimeZone(), distributionSessionBean.getTimeZoneFromIata(eachSelectedSchedule.getFlight().getRoute().getOriginIATA())));
+            eachSelectedSchedule.setEndDate(distributionSessionBean.convertTimeZone(eachSelectedSchedule.getEndDate(), distributionSessionBean.getSingaporeTimeZone(), distributionSessionBean.getTimeZoneFromIata(eachSelectedSchedule.getFlight().getRoute().getDestinationIATA())));
+        }
+       
+        
+        return "displayPNR";  
+    }
+    
+    public String deletePNR() {
+        
+        passengerBookingSessionBean.deletePNR(searchedPNR, null);
+        
+        message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Booking has been successfully cancelled!", "");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+        
+        return "merlionAirlines";
     }
 
     public static boolean isInteger(String s) {
@@ -1509,6 +1551,34 @@ public class MARSManagedBean {
      */
     public void setCsv(String csv) {
         this.csv = csv;
+    }
+
+    /**
+     * @return the pnrId
+     */
+    public String getPnrId() {
+        return pnrId;
+    }
+
+    /**
+     * @param pnrId the pnrId to set
+     */
+    public void setPnrId(String pnrId) {
+        this.pnrId = pnrId;
+    }
+
+    /**
+     * @return the searchedPNR
+     */
+    public PNR getSearchedPNR() {
+        return searchedPNR;
+    }
+
+    /**
+     * @param searchedPNR the searchedPNR to set
+     */
+    public void setSearchedPNR(PNR searchedPNR) {
+        this.searchedPNR = searchedPNR;
     }
 
 }

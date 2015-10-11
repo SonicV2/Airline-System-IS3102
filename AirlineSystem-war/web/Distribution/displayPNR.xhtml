@@ -1,0 +1,95 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <head>
+        <title>Display PNR</title>
+    </head>
+    <body>
+        <h:form id="form">
+            
+                        <div class="col-lg-12">
+                <h:outputLabel value="PNR ID: " />
+                <h:outputText value="#{mARSManagedBean.searchedPNR.pnrID}">
+                </h:outputText>
+            </div>
+            
+            <div class="col-lg-12">
+                <h:outputLabel value="Date of Booking: " />
+                <h:outputText value="#{mARSManagedBean.searchedPNR.dateOfBooking}">
+                </h:outputText>
+            </div>
+            
+            <div class="col-lg-12">
+                <h:outputLabel value="Email: " />
+                <h:outputText value="#{mARSManagedBean.searchedPNR.email}">
+                </h:outputText>
+            </div>
+            
+            <div class="col-lg-12">
+                <h:outputLabel value="Contact Number: " />
+                <h:outputText value="#{mARSManagedBean.searchedPNR.contactNo}">
+                </h:outputText>
+            </div>
+            
+            <div class="col-lg-12">
+                <h:outputLabel value="Number of Travellers: " />
+                <h:outputText value="#{mARSManagedBean.searchedPNR.noOfTravellers}">
+                </h:outputText>
+            </div>
+            
+            <div class="col-lg-12">
+                <h:outputLabel value="Total Price: " />
+                <h:outputText value="#{mARSManagedBean.searchedPNR.totalPrice}">
+                </h:outputText>
+            </div>
+            
+            <p:dataList value="#{mARSManagedBean.selectedSchedules}" var="schedules" type="ordered">
+
+                <div class="col-lg-12">
+                    <h:outputLabel value="Flight Number: " />
+                    <h:outputText value="#{schedules.flight.flightNo}">
+                    </h:outputText>
+                </div>
+
+                <div class="col-lg-12">
+                    <h:outputLabel value="Origin: " />
+                    <h:outputText value="#{schedules.flight.route.originIATA}">
+                    </h:outputText>
+                </div>
+
+                <div class="col-lg-12">
+                    <h:outputLabel value="Destination: " />
+                    <h:outputText value="#{schedules.flight.route.destinationIATA}">
+                    </h:outputText>
+                </div>
+
+                <div class="col-lg-12">
+                    <h:outputLabel value="Departure Time: " />
+                    <h:outputText value="#{schedules.startDate}">
+                        <f:convertDateTime pattern ="hh:mm a (EEE, MMM d, yyyy)"/>
+                        <!--            <f:convertDateTime pattern ="dd-mm-yyyy HH:mm"/>-->
+                    </h:outputText>
+                </div>
+
+                <div class="col-lg-12">
+                    <h:outputLabel value="Arrival Time: " />
+                    <h:outputText value="#{schedules.endDate}">
+                        <f:convertDateTime pattern ="hh:mm a (EEE, MMM d, yyyy)"/>
+                        <!--            <f:convertDateTime pattern ="dd-mm-yyyy HH:mm"/>-->
+                    </h:outputText>
+                </div>
+
+            </p:dataList>
+            
+            <div class="text-center">
+                <h:commandButton class="btn btn-outline btn-success" value="Cancel Booking" action="#{mARSManagedBean.deletePNR()}" />
+            </div>
+
+        </h:form>
+
+    </body>
+</html>

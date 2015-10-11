@@ -40,5 +40,6 @@ public interface PassengerBookingSessionBeanLocal {
     
     
     public List<Customer> getAllCustomers();
+    public PNR getPNR(String pnrID);
     
 }
