@@ -40,7 +40,7 @@ public class SeatAvailability implements Serializable {
     private int economyPremiumBooked;
     private int businessBooked;
     private int firstClassBooked;
-    @OneToMany
+    @OneToMany(mappedBy="seatAvail")
     private List<Booking> bookings = new ArrayList<Booking>();
     
     @OneToOne(cascade={CascadeType.ALL})

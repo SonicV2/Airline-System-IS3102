@@ -9,6 +9,7 @@ import APS.Entity.Flight;
 import APS.Entity.Location;
 import APS.Entity.Route;
 import APS.Entity.Schedule;
+import Distribution.Entity.FlightOptions;
 import Inventory.Entity.SeatAvailability;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -70,13 +71,6 @@ public class DistributionSessionBean implements DistributionSessionBeanLocal {
     }
 
     public List<Schedule> retrieveDirectFlightsForDate(String originIata, String destinationIata, Date startDate, String serviceType, int adults, int children) {
-        System.out.println("StartDate " + startDate);
-        System.out.println("ORIGIN: " + originIata);
-        System.out.println("DESTINATION: " + destinationIata);
-        System.out.println("service type: " + serviceType);
-        System.out.println("adults: " + adults);
-        System.out.println("dhildren: " + children);
-        
         
         List<Flight> flightsForRoute = new ArrayList();
         flightsForRoute = retrieveFlightsForRoute(originIata, destinationIata);
@@ -84,13 +78,10 @@ public class DistributionSessionBean implements DistributionSessionBeanLocal {
         List<Schedule> schedulesWithSeatsAvailable = new ArrayList<Schedule>();
 
         for (Flight eachFlight : flightsForRoute) {
-            System.out.println("Flight for route: " + eachFlight.getFlightNo());
             if (getScheduleForFlightForDate(eachFlight, startDate) != null) {
-                System.out.println("Get schedule for flight for date " + getScheduleForFlightForDate(eachFlight, startDate));
                 schedulesForFlights.add(getScheduleForFlightForDate(eachFlight, startDate));
             }
         }
-        System.out.println("SchedulesForFlight " + schedulesForFlights.size());
         if (schedulesForFlights.size() > 0) {
             for (Schedule eachScheduleForFlight : schedulesForFlights) {
 
@@ -99,7 +90,6 @@ public class DistributionSessionBean implements DistributionSessionBeanLocal {
                 }
             }
         }
-        System.out.println("#### Schedules with seatsAvailable size" + schedulesWithSeatsAvailable.size());
         return schedulesWithSeatsAvailable;
     }
 
@@ -165,8 +155,6 @@ public class DistributionSessionBean implements DistributionSessionBeanLocal {
         } else if (serviceType.equalsIgnoreCase("First Class")) {
             seatsAvailable = seatAvailability.getFirstClassTotal() - seatAvailability.getFirstClassBooked();
         }
-        System.out.println("Distribution session bean: Seats available: " + seatsAvailable);
-        System.out.println("Distribution session bean: noOfSeats: " + noOfSeats);
         if (seatsAvailable >= noOfSeats) {
             return true;
         }
@@ -403,6 +391,10 @@ public class DistributionSessionBean implements DistributionSessionBeanLocal {
         }
 
         return allFlights;
+    }
+    
+    public void persistFlightOptions (FlightOptions flightOptions) {
+        em.persist(flightOptions);
     }
 
 }

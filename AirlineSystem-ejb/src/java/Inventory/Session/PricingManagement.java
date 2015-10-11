@@ -221,7 +221,7 @@ public class PricingManagement implements PricingManagementLocal {
             }
             
             size = updatedList.size();
-
+            
             BookingClass c = updatedList.get(0);
             for (int i = 0; i < size; i++) {
                 BookingClass b = updatedList.get(i);

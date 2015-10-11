@@ -9,20 +9,36 @@
 
     <h:head>
         <title>Payment</title>
+        <p:growl id="growl" sticky="true" showDetail="true"/>
     </h:head>
 
     <h:body>
+        <h:form>
 
-        <div class="form-group">
             <h:outputLabel value="Credit Card: " class="col-md-4 control-label" />
             <div class="col-md-8">
-                <h:inputText id="credit" required="true" requiredMessage="Please fill in credit card field!" class="form-control" />
+                <h:panelGrid>
+                    <h:selectOneRadio id="type" required="true" requiredMessage="Please Select Credit Card Type!">
+                        <f:selectItem itemLabel="Visa" itemValue="Visa" />
+                        <f:selectItem itemLabel="Master Card" itemValue="Master Card" />
+                    </h:selectOneRadio>
+                </h:panelGrid>
             </div>
-        </div>
+            <div class="col-md-8">
+                <h:inputText id="credit" required="true" requiredMessage="Please fill in credit card field!" class="form-control"  value="#{mARSManagedBean.creditCard}" />
+            </div>
 
-        <div class="text-center">
-            <h:commandButton class="btn btn-outline btn-success" value="Confirm" action="#{bookingManagedBean.createBooking()}" />
-        </div>
+            <div class="form-group">
+                <h:outputLabel value="CSV: " class="col-md-4 control-label" />
+                <div class="col-md-8">
+                    <p:password required="true" requiredMessage="Please fill in csv field!" class="form-control" value="#{mARSManagedBean.csv}"/>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <h:commandButton class="btn btn-outline btn-success" value="Confirm" action="#{mARSManagedBean.createBooking()}" />
+            </div>
+        </h:form>
 
     </h:body>
 </html>

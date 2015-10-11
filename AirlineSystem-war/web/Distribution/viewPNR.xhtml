@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+
+    <h:head>
+        <title>View PNR</title>
+        <p:growl id="growl" sticky="true" showDetail="true"/>
+    </h:head>
+
+    <h:body>
+        <h:form>
+            
+            
+            <div class="form-group">
+                <h:outputLabel value="PNR ID: " class="col-md-4 control-label" />
+                <div class="col-md-8">
+                    <h:inputText id="contact" required="true" requiredMessage="Please fill in pnr field!" class="form-control" value="#{mARSManagedBean.pnrId}" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <h:outputLabel value="Primary Email: " class="col-md-4 control-label" />
+                <div class="col-md-8">
+                    <h:inputText id="PE" required="true" validatorMessage="Not a valid email addess!!" requiredMessage="Please fill in Primary Email field!" class="form-control" value="#{mARSManagedBean.primaryEmail}" >
+                        <f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
+                    </h:inputText> 
+                </div>
+                <div class="missingfield"> 
+                    <h:message errorStyle="color:red; display:block" for="PE" />
+                </div>
+            </div>
+
+            <div class="text-center">
+                <h:commandButton class="btn btn-outline btn-success" value="Search" action="#{mARSManagedBean.searchPNR()}" />
+            </div>
+        </h:form>
+
+    </h:body>
+</html>

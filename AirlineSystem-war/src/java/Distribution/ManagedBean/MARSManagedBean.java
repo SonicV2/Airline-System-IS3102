@@ -29,6 +29,8 @@ import javax.inject.Named;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 /**
  *
@@ -57,6 +59,9 @@ public class MARSManagedBean {
     @EJB
     private PassengerBookingSessionBeanLocal passengerBookingSessionBean;
 
+    @PersistenceContext(unitName = "AirlineSystem-ejbPU")
+    private EntityManager em;
+
     private String flightNo;
     private Double flightDuration;
     private Double price;
@@ -65,6 +70,15 @@ public class MARSManagedBean {
     private Date returnDate;
     private Date tempDepartureDate;
     private Date tempReturnDate;
+
+    //the variables for one way flights
+    private Date oneWayDepartureDate;
+    private int oneWayAdult;
+    private int oneWayChildren;
+    private String oneWayServiceType;
+    private String oneWayOriginCity;
+    private String oneWayDestinationCity;
+    private Boolean oneWayFlight;
 
     private Long routeId;
     private String originCountry;
@@ -147,14 +161,21 @@ public class MARSManagedBean {
 
     private double totalWeightAllowed;
     private int totalNumBaggeAlloewd;
-    
+
     private double totalSelectedPrice;
-    
+    private double totalPriceWinsurance;
+
     private List<Passenger> passengerList;
-    
+
     private String primaryEmail;
     private String primaryContactNo;
-    
+
+    private String creditCard;
+    private String csv;
+    private String pnrId;
+
+    private PNR searchedPNR;
+
     @PostConstruct
     public void retrieve() {
         //Retrieve all the available flights into a list of flights
@@ -199,190 +220,193 @@ public class MARSManagedBean {
         selectedSchedules = new ArrayList();
         selectedDepartureSchedules = new ArrayList();
         selectedReturnSchedules = new ArrayList();
-        totalSelectedPrice=0;
+        totalSelectedPrice = 0;
         passengerList = new ArrayList();
+        totalPriceWinsurance = 0;
+        creditCard = null;
+        csv = null;
+        setPnrId(null);
     }
 
-    public String displayDepartureFlights() {
+    public void setOneWayVariables() {
+        setAdults(oneWayAdult);
+        setChildren(oneWayChildren);
+        setOriginCity(oneWayOriginCity);
+        setDestinationCity(oneWayDestinationCity);
+        setServiceType(oneWayServiceType);
+        setDepartureDate(oneWayDepartureDate);
+    }
 
+    public String displayDepartureFlights(Boolean oneWay) {
+  
+        
+        oneWayFlight = oneWay;
         /*Convert the chosen origin and destination cities into IATAs*/
         List<Flight> allFlights = new ArrayList();
         allFlights = distributionSessionBean.getAllFlights();
         flightOptionsList = new ArrayList();
-        System.out.println("managedbean: display departure flight !!!!!!");
-        System.out.println("departure date" + departureDate);
-        System.out.println("reture date" + returnDate);
-        System.out.println("adults" + adults);
-        System.out.println("children" + children);
-        System.out.println("service" + serviceType);
-        System.out.println("origin city" + originCity);
-        System.out.println("destination city" + destinationCity);
         weekDates.clear();
         selectedDepartureSchedules.clear();
         selectedSchedules.clear();
 
-        //verify whether inputs are right
-        if (originCity.equals(destinationCity)) {
-            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Origin and destination cannot be the same!", "");
-            FacesContext.getCurrentInstance().addMessage(null, message);
-//            setDepartureDate(null);
-//            setReturnDate(null);
-//            setOriginCity("");
-//            setDestinationCity("");
-//            setAdults(0);
-//            setChildren(0);
-//            setServiceType("");
-            return null;
-        } else if (adults == 0 && children == 0) {
-            System.out.println("managedbean: no adult or children chosen");
-            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please select at least one passenger!", "");
-            FacesContext.getCurrentInstance().addMessage(null, message);
-//            setDepartureDate(null);
-//            setReturnDate(null);
-//            setOriginIATA("");
-//            setDestinationIATA("");
-//            setAdults(0);
-//            setChildren(0);
-//            setServiceType("");
-            return null;
-        } 
-        
-        else if (returnDate != null) {
-            System.out.println("managedbean: return date is not null");
-            isReturnDateSet = true;
-        } 
-        
-        {
-            for (Flight eachFlight : allFlights) {
-                System.out.println("managedbean: go into flight loop");
-                if (eachFlight.getRoute().getOriginCity().equalsIgnoreCase(originCity)) {
-                    originIATA = eachFlight.getRoute().getOriginIATA();
-                }
-                if (eachFlight.getRoute().getDestinationCity().equalsIgnoreCase(destinationCity)) {
-                    destinationIATA = eachFlight.getRoute().getDestinationIATA();
-                }
-            }
-            
-            boolean inputValid = true;
-            //One way jorney selected by user
-            if (isReturnDateSet == false) {
-                System.out.println("managedbean: user did not choose return date");
-                if (distributionSessionBean.existsSchedule(originIATA, destinationIATA, departureDate, serviceType, adults, children) == false) {
-                    inputValid = false;
-                }
-            } //return journey selected by user
-            else {
-                System.out.println("managedbean: user chose return date");
-                if (distributionSessionBean.existsSchedule(originIATA, destinationIATA, departureDate, serviceType, adults, children) == false || distributionSessionBean.existsSchedule(destinationIATA, originIATA, returnDate, serviceType, adults, children) == false) {
-                    inputValid = false;
-                }
-            }
-            if (inputValid == false) {
-                System.out.println("managedbean: input is not valid");
-                message = new FacesMessage(FacesMessage.SEVERITY_INFO, "No flights found for the selected routes or dates", "");
+        //basic input check
+        if (oneWay) {
+            setOneWayVariables();
+            if ((oneWayAdult == 0 && oneWayChildren == 0) || oneWayServiceType == null || oneWayOriginCity == null
+                    || oneWayDestinationCity == null) {
+
+                message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please fill in all required fields!", "");
                 FacesContext.getCurrentInstance().addMessage(null, message);
-                setDepartureDate(null);
-                setReturnDate(null);
-                setOriginIATA("");
-                setDestinationIATA("");
-                setAdults(0);
-                setChildren(0);
-                setServiceType("");
                 return null;
-            } else {
-                selectedDatePrices.clear();
+            } else if (oneWayOriginCity.equals(oneWayDestinationCity)) {
+                message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Origin and destination cannot be the same!", "");
+                FacesContext.getCurrentInstance().addMessage(null, message);
+                return null;
+            }
+        } else if (!oneWay) {
+            if (departureDate == null || returnDate == null || (adults == 0 && children == 0)
+                    || serviceType == null || originCity == null || destinationCity == null) {
 
-                //Check whether there is direct flight
-                if (distributionSessionBean.existsDirectFlight(originIATA, destinationIATA)) {
-                    setDirectFlightSchedules(distributionSessionBean.retrieveDirectFlightsForDate(originIATA, destinationIATA, departureDate, serviceType, adults, children));
-                    setDirectFlightDuration(distributionSessionBean.getTotalDurationForDirect(directFlightSchedules.get(0)));
+                message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please fill in all required fields!", "");
+                FacesContext.getCurrentInstance().addMessage(null, message);
+                return null;
+            } else if (originCity.equals(destinationCity)) {
+                message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Origin and destination cannot be the same!", "");
+                FacesContext.getCurrentInstance().addMessage(null, message);
+                return null;
+            }
+        }
+        //go into database to get IATA of origin and destinations
+        for (Flight eachFlight : allFlights) {
+            if (eachFlight.getRoute().getOriginCity().equalsIgnoreCase(originCity)) {
+                originIATA = eachFlight.getRoute().getOriginIATA();
+            }
+            if (eachFlight.getRoute().getDestinationCity().equalsIgnoreCase(destinationCity)) {
+                destinationIATA = eachFlight.getRoute().getDestinationIATA();
+            }
+        }
 
-                    for (Schedule eachSchedule : directFlightSchedules) {
+        boolean inputValid = true;
+        //One way jorney selected by user
+        if (oneWay) {
+            if (distributionSessionBean.existsSchedule(originIATA, destinationIATA, departureDate, serviceType, adults, children) == false) {
+                inputValid = false;
+            }
+        } //return journey selected by user
+        else {
+            if (distributionSessionBean.existsSchedule(originIATA, destinationIATA, departureDate, serviceType, adults, children) == false || distributionSessionBean.existsSchedule(destinationIATA, originIATA, returnDate, serviceType, adults, children) == false) {
+                inputValid = false;
+            }
+        }
+        if (inputValid == false) {
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "No flights found for the selected routes or dates", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            setDepartureDate(null);
+            setReturnDate(null);
+            setOriginIATA("");
+            setDestinationIATA("");
+            setAdults(0);
+            setChildren(0);
+            setServiceType("");
+            return null;
+        } else {
+            selectedDatePrices.clear();
+            directFlightSchedules = new ArrayList();
+            setDirectFlightDuration("");
+
+            //Check whether there is direct flight
+            if (distributionSessionBean.existsDirectFlight(originIATA, destinationIATA)) {
+                setDirectFlightSchedules(distributionSessionBean.retrieveDirectFlightsForDate(originIATA, destinationIATA, departureDate, serviceType, adults, children));
+                setDirectFlightDuration(distributionSessionBean.getTotalDurationForDirect(directFlightSchedules.get(0)));
+
+                for (Schedule eachSchedule : directFlightSchedules) {
+                    eachSchedule.setStartDate(distributionSessionBean.convertTimeZone(eachSchedule.getStartDate(), distributionSessionBean.getSingaporeTimeZone(), distributionSessionBean.getTimeZoneFromIata(eachSchedule.getFlight().getRoute().getOriginIATA())));
+                    eachSchedule.setEndDate(distributionSessionBean.convertTimeZone(eachSchedule.getEndDate(), distributionSessionBean.getSingaporeTimeZone(), distributionSessionBean.getTimeZoneFromIata(eachSchedule.getFlight().getRoute().getDestinationIATA())));
+
+                    double priceForOne = pricingManagementBean.getPrice(pricingManagementBean.getClassCode(eachSchedule, serviceType, adults + children), eachSchedule);
+                    selectedDatePrices.add((adults * priceForOne) + (0.75 * priceForOne * children));
+
+                }
+                setIsDirect(true);
+                retrieveMinWeekPricesForDirect(originIATA, destinationIATA, departureDate, serviceType, adults, children);
+                setPriceForDirect(selectedDatePrices.get(0));
+
+                return "DisplayDepartureDirectFlightReturn";
+//                    if (oneWay) {
+//                        return "DisplayDirectFlight";
+//                    } else {
+//                        return "DisplayDepartureDirectFlightReturn";
+//                    }
+
+            } else { //Retrieve one stop flights
+                legOneSchedules.clear();
+                legTwoSchedules.clear();
+                oneStopFlightDuration = new ArrayList();
+                oneStopFlightLayover = new ArrayList();
+                oneStopFlightSchedules = new ArrayList();
+
+                retrieveMinWeekPricesForOneStop(originIATA, destinationIATA, departureDate, serviceType, adults, children);
+                transitHubs = distributionSessionBean.getTransitHubs(distributionSessionBean.getHubIatasFromOrigin(originIATA), destinationIATA);
+                for (int i = 0; i < transitHubs.size(); i++) {
+                    addSchedulesToLegOne(legOneSchedules, distributionSessionBean.retrieveDirectFlightsForDate(originIATA, transitHubs.get(i), departureDate, serviceType, adults, children));
+                    addSchedulesToLegTwo(legTwoSchedules, distributionSessionBean.retrieveDirectFlightsForDate(transitHubs.get(i), destinationIATA, distributionSessionBean.addDaysToDate(departureDate, 1), serviceType, adults, children));
+                    addSchedulesToLegTwo(legTwoSchedules, distributionSessionBean.retrieveDirectFlightsForDate(transitHubs.get(i), destinationIATA, departureDate, serviceType, adults, children));
+                }
+
+                setOneStopFlightSchedules(distributionSessionBean.retrieveOneStopFlightSchedules(legOneSchedules, legTwoSchedules));
+                int i;
+                List<Schedule> flightOption = new ArrayList();
+                flightOption.add(new Schedule());
+                flightOption.add(new Schedule());
+
+                double flightOptionPrice = 0;
+                double priceForOne = 0;
+
+                for (i = 0; i < oneStopFlightSchedules.size(); i++) {
+                    flightOption.set(i % 2, oneStopFlightSchedules.get(i));
+                    priceForOne = pricingManagementBean.getPrice(pricingManagementBean.getClassCode(oneStopFlightSchedules.get(i), serviceType, adults + children), oneStopFlightSchedules.get(i));
+                    flightOptionPrice += (adults * priceForOne) + (0.75 * priceForOne * children);
+                    if (i % 2 == 1) {
+                        oneStopFlightDuration.add(distributionSessionBean.getTotalDurationForOneStop(flightOption.get(0), flightOption.get(1)));
+                        oneStopFlightLayover.add(distributionSessionBean.getLayoverTime(flightOption.get(0), flightOption.get(1)));
+                        selectedDatePrices.add(flightOptionPrice);
+                        flightOptionPrice = 0;
+                    }
+                }
+
+                List<String> flightNosWithAdjustedEndDates = new ArrayList();
+
+                for (Schedule eachSchedule : oneStopFlightSchedules) {
+                    if (!flightNosWithAdjustedEndDates.contains(eachSchedule.getFlight().getFlightNo())) {
                         eachSchedule.setStartDate(distributionSessionBean.convertTimeZone(eachSchedule.getStartDate(), distributionSessionBean.getSingaporeTimeZone(), distributionSessionBean.getTimeZoneFromIata(eachSchedule.getFlight().getRoute().getOriginIATA())));
                         eachSchedule.setEndDate(distributionSessionBean.convertTimeZone(eachSchedule.getEndDate(), distributionSessionBean.getSingaporeTimeZone(), distributionSessionBean.getTimeZoneFromIata(eachSchedule.getFlight().getRoute().getDestinationIATA())));
-
-                        double priceForOne = pricingManagementBean.getPrice(pricingManagementBean.getClassCode(eachSchedule, serviceType, adults + children), eachSchedule);
-                        selectedDatePrices.add((adults * priceForOne) + (0.75 * priceForOne * children));
-
-                    }
-                    setIsDirect(true);
-                    retrieveMinWeekPricesForDirect(originIATA, destinationIATA, departureDate, serviceType, adults, children);
-                    setPriceForDirect(selectedDatePrices.get(0));
-                    if (!isReturnDateSet) {
-                        System.out.println("managedbean: everything is right...returning direct flight page");
-                        return "DisplayDirectFlight";
-                    } else {
-                        System.out.println("managedbean: everything is right...returning departure direct flight page");
-                        return "DisplayDepartureDirectFlightReturn";
-                    }
-
-                } else { //Retrieve one stop flights
-                    legOneSchedules.clear();
-                    legTwoSchedules.clear();
-                    oneStopFlightDuration.clear();
-                    oneStopFlightLayover.clear();
-
-                    retrieveMinWeekPricesForOneStop(originIATA, destinationIATA, departureDate, serviceType, adults, children);
-                    transitHubs = distributionSessionBean.getTransitHubs(distributionSessionBean.getHubIatasFromOrigin(originIATA), destinationIATA);
-                    for (int i = 0; i < transitHubs.size(); i++) {
-                        addSchedulesToLegOne(legOneSchedules, distributionSessionBean.retrieveDirectFlightsForDate(originIATA, transitHubs.get(i), departureDate, serviceType, adults, children));
-                        addSchedulesToLegTwo(legTwoSchedules, distributionSessionBean.retrieveDirectFlightsForDate(transitHubs.get(i), destinationIATA, distributionSessionBean.addDaysToDate(departureDate, 1), serviceType, adults, children));
-                        addSchedulesToLegTwo(legTwoSchedules, distributionSessionBean.retrieveDirectFlightsForDate(transitHubs.get(i), destinationIATA, departureDate, serviceType, adults, children));
-                    }
-
-                    setOneStopFlightSchedules(distributionSessionBean.retrieveOneStopFlightSchedules(legOneSchedules, legTwoSchedules));
-                    int i;
-                    List<Schedule> flightOption = new ArrayList();
-                    flightOption.add(new Schedule());
-                    flightOption.add(new Schedule());
-
-                    double flightOptionPrice = 0;
-                    double priceForOne = 0;
-
-                    for (i = 0; i < oneStopFlightSchedules.size(); i++) {
-                        flightOption.set(i % 2, oneStopFlightSchedules.get(i));
-                        priceForOne = pricingManagementBean.getPrice(pricingManagementBean.getClassCode(oneStopFlightSchedules.get(i), serviceType, adults + children), oneStopFlightSchedules.get(i));
-                        flightOptionPrice += (adults * priceForOne) + (0.75 * priceForOne * children);
-                        if (i % 2 == 1) {
-                            oneStopFlightDuration.add(distributionSessionBean.getTotalDurationForOneStop(flightOption.get(0), flightOption.get(1)));
-                            oneStopFlightLayover.add(distributionSessionBean.getLayoverTime(flightOption.get(0), flightOption.get(1)));
-                            selectedDatePrices.add(flightOptionPrice);
-                            flightOptionPrice = 0;
-                        }
-                    }
-
-                    List<String> flightNosWithAdjustedEndDates = new ArrayList();
-
-                    for (Schedule eachSchedule : oneStopFlightSchedules) {
-                        if (!flightNosWithAdjustedEndDates.contains(eachSchedule.getFlight().getFlightNo())) {
-                            eachSchedule.setStartDate(distributionSessionBean.convertTimeZone(eachSchedule.getStartDate(), distributionSessionBean.getSingaporeTimeZone(), distributionSessionBean.getTimeZoneFromIata(eachSchedule.getFlight().getRoute().getOriginIATA())));
-                            eachSchedule.setEndDate(distributionSessionBean.convertTimeZone(eachSchedule.getEndDate(), distributionSessionBean.getSingaporeTimeZone(), distributionSessionBean.getTimeZoneFromIata(eachSchedule.getFlight().getRoute().getDestinationIATA())));
-                            flightNosWithAdjustedEndDates.add(eachSchedule.getFlight().getFlightNo());
-                        }
-                    }
-                    setIsDirect(false);
-                    int c = 0;
-
-                    for (int a = 0; a < oneStopFlightSchedules.size(); a++) {
-                        FlightOptions newFlightOptions = new FlightOptions();
-                        int b = a;
-                        a += 1;
-                        newFlightOptions.createFlightOptions(oneStopFlightSchedules.get(b), oneStopFlightSchedules.get(a), oneStopFlightLayover.get(b - c), oneStopFlightDuration.get(b - c), selectedDatePrices.get(b - c));
-                        flightOptionsList.add(newFlightOptions);
-                        c++;
-
-                    }
-                    ;
-
-                    if (!isReturnDateSet) {
-                        return "DisplayOneStopFlight";
-                    } else {
-                        return "DisplayDepartureOneStopFlightReturn";
+                        flightNosWithAdjustedEndDates.add(eachSchedule.getFlight().getFlightNo());
                     }
                 }
-            }
+                setIsDirect(false);
+                int c = 0;
 
+                for (int a = 0; a < oneStopFlightSchedules.size(); a++) {
+                    FlightOptions newFlightOptions = new FlightOptions();
+                    int b = a;
+                    a += 1;
+                    newFlightOptions.createFlightOptions(oneStopFlightSchedules.get(b), oneStopFlightSchedules.get(a), oneStopFlightLayover.get(b - c), oneStopFlightDuration.get(b - c), selectedDatePrices.get(b - c));
+                    distributionSessionBean.persistFlightOptions(newFlightOptions);
+                    System.out.println("!!!!!!!!!!!!flight option id:" + newFlightOptions.getFlightOptionsId());
+                    flightOptionsList.add(newFlightOptions);
+                    c++;
+
+                }
+
+                return "DisplayDepartureOneStopFlightReturn";
+//                    if (oneWay) {
+//                        return "DisplayOneStopFlight";
+//                    } else {
+//                        return "DisplayDepartureOneStopFlightReturn";
+//                    }
+            }
         }
+
     }
 
     public String displayReturnFlights() {
@@ -433,6 +457,7 @@ public class MARSManagedBean {
             for (int i = 0; i < transitHubs.size(); i++) {
                 addSchedulesToLegOne(legOneSchedules, distributionSessionBean.retrieveDirectFlightsForDate(originIATA, transitHubs.get(i), departureDate, serviceType, adults, children));
                 addSchedulesToLegTwo(legTwoSchedules, distributionSessionBean.retrieveDirectFlightsForDate(transitHubs.get(i), destinationIATA, distributionSessionBean.addDaysToDate(departureDate, 1), serviceType, adults, children));
+                addSchedulesToLegTwo(legTwoSchedules, distributionSessionBean.retrieveDirectFlightsForDate(transitHubs.get(i), destinationIATA, distributionSessionBean.addDaysToDate(departureDate, 2), serviceType, adults, children));
                 addSchedulesToLegTwo(legTwoSchedules, distributionSessionBean.retrieveDirectFlightsForDate(transitHubs.get(i), destinationIATA, departureDate, serviceType, adults, children));
             }
             setOneStopFlightSchedules(distributionSessionBean.retrieveOneStopFlightSchedules(legOneSchedules, legTwoSchedules));
@@ -473,6 +498,7 @@ public class MARSManagedBean {
                 int b = a;
                 a += 1;
                 newFlightOptions.createFlightOptions(oneStopFlightSchedules.get(b), oneStopFlightSchedules.get(a), oneStopFlightLayover.get(b - c), oneStopFlightDuration.get(b - c), selectedDatePrices.get(b - c));
+                distributionSessionBean.persistFlightOptions(newFlightOptions);
                 flightOptionsList.add(newFlightOptions);
                 c++;
             }
@@ -574,6 +600,8 @@ public class MARSManagedBean {
 
     public String summary() {
 
+        passengerList.clear();
+
         if (isDirect) {
             selectedSchedules.add(selectedDepartureSchedule);
         } else {
@@ -589,67 +617,192 @@ public class MARSManagedBean {
             }
         }
 
+        for (Schedule eachSelectedSchedule : selectedSchedules) {
+            eachSelectedSchedule.setStartDate(distributionSessionBean.convertTimeZone(eachSelectedSchedule.getStartDate(), distributionSessionBean.getTimeZoneFromIata(eachSelectedSchedule.getFlight().getRoute().getOriginIATA()), distributionSessionBean.getSingaporeTimeZone()));
+            eachSelectedSchedule.setEndDate(distributionSessionBean.convertTimeZone(eachSelectedSchedule.getEndDate(), distributionSessionBean.getTimeZoneFromIata(eachSelectedSchedule.getFlight().getRoute().getDestinationIATA()), distributionSessionBean.getSingaporeTimeZone()));
+        }
         setSelectedDepartureSchedules(passengerBookingSessionBean.getDepartureSchedules(selectedSchedules, isReturnDateSet));
-
-        System.out.println("SELECTED DEPARTURE SCHEDULE LEG ONE: " + selectedDepartureSchedules.get(0).getFlight().getRoute());
-//        System.out.println("SELECTED DEPARTURE SCHEDULE LEG TWO: " + selectedDepartureSchedules.get(1).getFlight().getRoute());
-
         if (isReturnDateSet) {
             setSelectedReturnSchedules(passengerBookingSessionBean.getReturnSchedules(selectedSchedules));
         }
 
-        System.out.println("SELECTED RETURN SCHEDULE LEG ONE: " + selectedReturnSchedules.get(0).getFlight().getRoute());
-//        System.out.println("SELECTED RETURN SCHEDULE LEG TWO: " + selectedReturnSchedules.get(1).getFlight().getRoute());
-        
+        totalSelectedPrice = 0;
+
         double priceForEachSchedule;
-        for (Schedule eachSelectedSchedule: selectedSchedules){
-            priceForEachSchedule = pricingManagementBean.getPrice(pricingManagementBean.getClassCode(eachSelectedSchedule, serviceType, (adults+children)), eachSelectedSchedule);
-            totalSelectedPrice += (priceForEachSchedule*adults) + (priceForEachSchedule*0.75*children);
+        for (Schedule eachSelectedSchedule : selectedSchedules) {
+            priceForEachSchedule = pricingManagementBean.getPrice(pricingManagementBean.getClassCode(eachSelectedSchedule, serviceType, (adults + children)), eachSelectedSchedule);
+            totalSelectedPrice += (priceForEachSchedule * adults) + (priceForEachSchedule * 0.75 * children);
         }
         Passenger passenger;
-        for (int k=0; k<adults+children; k++) {
+
+        passengerList.clear();
+        for (int k = 0; k < adults + children; k++) {
             passenger = new Passenger();
-            passenger.setId(k+1);
+            passenger.setId(k + 1);
             passengerList.add(passenger);
         }
-        
+        for (Schedule eachSelectedSchedule : selectedSchedules) {
+            eachSelectedSchedule.setStartDate(distributionSessionBean.convertTimeZone(eachSelectedSchedule.getStartDate(), distributionSessionBean.getSingaporeTimeZone(), distributionSessionBean.getTimeZoneFromIata(eachSelectedSchedule.getFlight().getRoute().getOriginIATA())));
+            eachSelectedSchedule.setEndDate(distributionSessionBean.convertTimeZone(eachSelectedSchedule.getEndDate(), distributionSessionBean.getSingaporeTimeZone(), distributionSessionBean.getTimeZoneFromIata(eachSelectedSchedule.getFlight().getRoute().getDestinationIATA())));
+        }
+
         return "summary";
 
     }
 
+    public String payment() {
+
+        for (int i = 0; i < passengerList.size(); i++) {
+            if (passengerList.get(i).getCustomerId().isEmpty()) {
+                continue;
+            }
+            if (!isInteger(passengerList.get(i).getCustomerId())) {
+                message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Invalid Customer Id!", "");
+                FacesContext.getCurrentInstance().addMessage(null, message);
+                return null;
+            }
+            if (!passengerList.get(i).getCustomerId().equals("")) {
+                if (!passengerBookingSessionBean.isPassengerAFrequentFlyer(Long.parseLong(passengerList.get(i).getCustomerId()))) {
+                    message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Customer Id does not exist!", "");
+                    FacesContext.getCurrentInstance().addMessage(null, message);
+                    return null;
+                }
+            }
+        }
+
+        return "payment";
+    }
+
     public String createBooking() {
 
-//        System.out.println("INSURANCE?" + passengerList.get(0).isInsurance());
-//        System.out.println("INSURANCE?" + passengerList.get(1).isInsurance());
-        
-       double priceForEachBooking;
-       bookingStatus = "Booked";
-       List<Booking> bookingList = new ArrayList();
-       Customer primaryCustomer = new Customer ();
-       
-        
-        for (Schedule eachSelectedSchedule: selectedSchedules){
-            classCode = pricingManagementBean.getClassCode(eachSelectedSchedule, serviceType, (adults+children));
+        if (!checkCreditCard(creditCard)) {
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Invalid credit card number!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return null;
+        }
+
+        if (creditCard.length() != 16) {
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Credit card number should be 16 digits!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return null;
+
+        }
+
+        if (csv.length() != 3) {
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Invalid csv!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return null;
+        }
+
+        if (!isInteger(csv)) {
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Invalid csv!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return null;
+        }
+
+        for (Schedule eachSelectedSchedule : selectedSchedules) {
+            eachSelectedSchedule.setStartDate(distributionSessionBean.convertTimeZone(eachSelectedSchedule.getStartDate(), distributionSessionBean.getTimeZoneFromIata(eachSelectedSchedule.getFlight().getRoute().getOriginIATA()), distributionSessionBean.getSingaporeTimeZone()));
+            eachSelectedSchedule.setEndDate(distributionSessionBean.convertTimeZone(eachSelectedSchedule.getEndDate(), distributionSessionBean.getTimeZoneFromIata(eachSelectedSchedule.getFlight().getRoute().getDestinationIATA()), distributionSessionBean.getSingaporeTimeZone()));
+        }
+
+        double priceForEachBooking;
+        bookingStatus = "Booked";
+        List<Booking> bookingList = new ArrayList();
+        Customer primaryCustomer = new Customer();
+
+        totalPriceWinsurance = totalSelectedPrice;
+
+        for (Schedule eachSelectedSchedule : selectedSchedules) {
+            classCode = pricingManagementBean.getClassCode(eachSelectedSchedule, serviceType, (adults + children));
             priceForEachBooking = pricingManagementBean.getPrice(classCode, eachSelectedSchedule);
             setSeatAvail(eachSelectedSchedule.getSeatAvailability());
             setFlightNo(eachSelectedSchedule.getFlight().getFlightNo());
-            setFlightDate (eachSelectedSchedule.getStartDate());
-            for (int k=0;k<passengerList.size();k++){
+            setFlightDate(eachSelectedSchedule.getStartDate());
+            for (int k = 0; k < (adults + children); k++) {
+                setFlightDate(eachSelectedSchedule.getStartDate());
+                if (passengerList.get(k).getCustomerId().equals("")) {
+                    passengerList.get(k).setCustomerId("0");
+                }
                 Booking eachBooking = passengerBookingSessionBean.createBooking(priceForEachBooking, seatAvail, flightNo, flightDate, bookingStatus, classCode, serviceType, passengerList.get(k).getTitle(), passengerList.get(k).getFirstName(), passengerList.get(k).getLastName(), passengerList.get(k).getPassport(), passengerList.get(k).getNationality(), Long.parseLong(passengerList.get(k).getCustomerId()), false, passengerList.get(k).isInsurance(), 15.0, passengerList.get(k).getFoodSelection());
                 bookingList.add(eachBooking);
-                if (passengerList.get(k).isInsurance()){
-                    totalSelectedPrice += 15.0;
+                if (passengerList.get(k).isInsurance()) {
+                    totalPriceWinsurance += 15.0;
                 }
             }
-            pnr = passengerBookingSessionBean.createPNR((adults+children), getPrimaryEmail(), getPrimaryContactNo(), "Booked",totalSelectedPrice, new Date(), "MerlionAirlines");
-            if (passengerBookingSessionBean.isPassengerAFrequentFlyer(Long.parseLong(passengerList.get(0).getCustomerId())))
-              primaryCustomer = passengerBookingSessionBean.getCustomerByCustomerId(Long.parseLong(passengerList.get(0).getCustomerId()));
-            else
-              primaryCustomer = null; 
         }
-            passengerBookingSessionBean.persistBookingAndPNR(pnr, bookingList, primaryCustomer);
-        
-        return "payment";
+        pnr = passengerBookingSessionBean.createPNR((adults + children), getPrimaryEmail(), getPrimaryContactNo(), "Booked", totalPriceWinsurance, new Date(), "MerlionAirlines");
+        if (passengerBookingSessionBean.isPassengerAFrequentFlyer(Long.parseLong(passengerList.get(0).getCustomerId()))) {
+            primaryCustomer = passengerBookingSessionBean.getCustomerByCustomerId(Long.parseLong(passengerList.get(0).getCustomerId()));
+        } else {
+            primaryCustomer = null;
+        }
+
+        passengerBookingSessionBean.persistBookingAndPNR(pnr, bookingList, primaryCustomer);
+
+        for (Schedule eachSelectedSchedule : selectedSchedules) {
+            eachSelectedSchedule.setStartDate(distributionSessionBean.convertTimeZone(eachSelectedSchedule.getStartDate(), distributionSessionBean.getSingaporeTimeZone(), distributionSessionBean.getTimeZoneFromIata(eachSelectedSchedule.getFlight().getRoute().getOriginIATA())));
+            eachSelectedSchedule.setEndDate(distributionSessionBean.convertTimeZone(eachSelectedSchedule.getEndDate(), distributionSessionBean.getSingaporeTimeZone(), distributionSessionBean.getTimeZoneFromIata(eachSelectedSchedule.getFlight().getRoute().getDestinationIATA())));
+        }
+
+        return "confirmation";
+    }
+
+    public String searchPNR() {
+
+        searchedPNR = passengerBookingSessionBean.getPNR(pnrId);
+        if (searchedPNR == null || !primaryEmail.equals(searchedPNR.getEmail())) {
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Booking record is not found!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return null;
+        }
+
+        selectedSchedules.clear();
+
+        List<Long> addedSchedules = new ArrayList();
+        for (Booking eachBooking : searchedPNR.getBookings()) {
+            if (!addedSchedules.contains(eachBooking.getSeatAvail().getSchedule().getScheduleId())) {
+                addedSchedules.add(eachBooking.getSeatAvail().getSchedule().getScheduleId());
+                selectedSchedules.add(eachBooking.getSeatAvail().getSchedule());
+            }
+        }
+
+        for (Schedule eachSelectedSchedule : selectedSchedules) {
+            eachSelectedSchedule.setStartDate(distributionSessionBean.convertTimeZone(eachSelectedSchedule.getStartDate(), distributionSessionBean.getSingaporeTimeZone(), distributionSessionBean.getTimeZoneFromIata(eachSelectedSchedule.getFlight().getRoute().getOriginIATA())));
+            eachSelectedSchedule.setEndDate(distributionSessionBean.convertTimeZone(eachSelectedSchedule.getEndDate(), distributionSessionBean.getSingaporeTimeZone(), distributionSessionBean.getTimeZoneFromIata(eachSelectedSchedule.getFlight().getRoute().getDestinationIATA())));
+        }
+
+        return "displayPNR";
+    }
+
+    public String deletePNR() {
+
+        passengerBookingSessionBean.deletePNR(searchedPNR, null);
+
+        message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Booking has been successfully cancelled!", "");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+
+        return "merlionAirlines";
+    }
+
+    public static boolean isInteger(String s) {
+        try {
+            Integer.parseInt(s);
+        } catch (NumberFormatException e) {
+            return false;
+        } catch (NullPointerException e) {
+            return false;
+        }
+        return true;
+    }
+
+    public boolean checkCreditCard(String s) {
+        int i;
+        for (i = 0; i < s.length(); i++) {
+            if (!Character.isDigit(s.charAt(i))) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public String getFlightNo() {
@@ -1344,6 +1497,90 @@ public class MARSManagedBean {
         this.selectedReturnSchedules = selectedReturnSchedules;
     }
 
+    /**
+     * @return the oneWayDepartureDate
+     */
+    public Date getOneWayDepartureDate() {
+        return oneWayDepartureDate;
+    }
+
+    /**
+     * @param oneWayDepartureDate the oneWayDepartureDate to set
+     */
+    public void setOneWayDepartureDate(Date oneWayDepartureDate) {
+        this.oneWayDepartureDate = oneWayDepartureDate;
+    }
+
+    /**
+     * @return the oneWayAdult
+     */
+    public int getOneWayAdult() {
+        return oneWayAdult;
+    }
+
+    /**
+     * @param oneWayAdult the oneWayAdult to set
+     */
+    public void setOneWayAdult(int oneWayAdult) {
+        this.oneWayAdult = oneWayAdult;
+    }
+
+    /**
+     * @return the oneWayChildren
+     */
+    public int getOneWayChildren() {
+        return oneWayChildren;
+    }
+
+    /**
+     * @param oneWayChildren the oneWayChildren to set
+     */
+    public void setOneWayChildren(int oneWayChildren) {
+        this.oneWayChildren = oneWayChildren;
+    }
+
+    /**
+     * @return the oneWayServiceType
+     */
+    public String getOneWayServiceType() {
+        return oneWayServiceType;
+    }
+
+    /**
+     * @param oneWayServiceType the oneWayServiceType to set
+     */
+    public void setOneWayServiceType(String oneWayServiceType) {
+        this.oneWayServiceType = oneWayServiceType;
+    }
+
+    /**
+     * @return the oneWayOriginCity
+     */
+    public String getOneWayOriginCity() {
+        return oneWayOriginCity;
+    }
+
+    /**
+     * @param oneWayOriginCity the oneWayOriginCity to set
+     */
+    public void setOneWayOriginCity(String oneWayOriginCity) {
+        this.oneWayOriginCity = oneWayOriginCity;
+    }
+
+    /**
+     * @return the oneWayDestinationCity
+     */
+    public String getOneWayDestinationCity() {
+        return oneWayDestinationCity;
+    }
+
+    /**
+     * @param oneWayDestinationCity the oneWayDestinationCity to set
+     */
+    public void setOneWayDestinationCity(String oneWayDestinationCity) {
+        this.oneWayDestinationCity = oneWayDestinationCity;
+    }
+
     public double getTotalSelectedPrice() {
         return totalSelectedPrice;
     }
@@ -1386,6 +1623,87 @@ public class MARSManagedBean {
      */
     public void setPrimaryContactNo(String primaryContactNo) {
         this.primaryContactNo = primaryContactNo;
+    }
+
+    /**
+     * @return the creditCard
+     */
+    public String getCreditCard() {
+        return creditCard;
+    }
+
+    /**
+     * @param creditCard the creditCard to set
+     */
+    public void setCreditCard(String creditCard) {
+        this.creditCard = creditCard;
+    }
+
+    /**
+     * @return the totalPriceWinsurance
+     */
+    public double getTotalPriceWinsurance() {
+        return totalPriceWinsurance;
+    }
+
+    /**
+     * @param totalPriceWinsurance the totalPriceWinsurance to set
+     */
+    public void setTotalPriceWinsurance(double totalPriceWinsurance) {
+        this.totalPriceWinsurance = totalPriceWinsurance;
+    }
+
+    /**
+     * @return the csv
+     */
+    public String getCsv() {
+        return csv;
+    }
+
+    /**
+     * @param csv the csv to set
+     */
+    public void setCsv(String csv) {
+        this.csv = csv;
+    }
+
+    /**
+     * @return the pnrId
+     */
+    public String getPnrId() {
+        return pnrId;
+    }
+
+    /**
+     * @param pnrId the pnrId to set
+     */
+    public void setPnrId(String pnrId) {
+        this.pnrId = pnrId;
+    }
+
+    /**
+     * @return the searchedPNR
+     */
+    public PNR getSearchedPNR() {
+        return searchedPNR;
+    }
+
+    /**
+     * @param searchedPNR the searchedPNR to set
+     */
+    public void setSearchedPNR(PNR searchedPNR) {
+        this.searchedPNR = searchedPNR;
+    }
+
+    public Boolean getOneWayFlight() {
+        return oneWayFlight;
+    }
+
+    /**
+     * @param oneWayFlight the oneWayFlight to set
+     */
+    public void setOneWayFlight(Boolean oneWayFlight) {
+        this.oneWayFlight = oneWayFlight;
     }
 
 }
