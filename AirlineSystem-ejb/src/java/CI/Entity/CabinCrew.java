@@ -10,9 +10,6 @@ import java.io.Serializable;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 /**
@@ -30,6 +27,7 @@ public class CabinCrew extends Employee implements Serializable{
    private boolean assigned;
    private String status;
    private String schedule;
+   private String signInStatus;
    
    @ManyToOne(cascade={CascadeType.PERSIST})
    private Team team = new Team();
@@ -46,6 +44,7 @@ public class CabinCrew extends Employee implements Serializable{
         this.assigned=false;
         this.status="N.S";
         this.schedule="N.A";
+        this.signInStatus="N.S";
     }
 
     /**
@@ -144,6 +143,20 @@ public class CabinCrew extends Employee implements Serializable{
      */
     public void setSchedule(String schedule) {
         this.schedule = schedule;
+    }
+
+    /**
+     * @return the signInStatus
+     */
+    public String getSignInStatus() {
+        return signInStatus;
+    }
+
+    /**
+     * @param signInStatus the signInStatus to set
+     */
+    public void setSignInStatus(String signInStatus) {
+        this.signInStatus = signInStatus;
     }
 
    

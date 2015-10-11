@@ -30,6 +30,7 @@ public class Pilot extends Employee implements Serializable {
     private boolean assigned;
     private String status;
     private String schedule;
+    private String signInStatus;
 
     @ManyToOne(cascade = {CascadeType.ALL})
     private Team team = new Team();
@@ -46,6 +47,7 @@ public class Pilot extends Employee implements Serializable {
 
         this.status = "N.S";
         this.schedule = "N.A";
+        this.signInStatus="N.S";
 
     }
 
@@ -127,6 +129,20 @@ public class Pilot extends Employee implements Serializable {
      */
     public void setSchedule(String schedule) {
         this.schedule = schedule;
+    }
+
+    /**
+     * @return the signInStatus
+     */
+    public String getSignInStatus() {
+        return signInStatus;
+    }
+
+    /**
+     * @param signInStatus the signInStatus to set
+     */
+    public void setSignInStatus(String signInStatus) {
+        this.signInStatus = signInStatus;
     }
 
 }

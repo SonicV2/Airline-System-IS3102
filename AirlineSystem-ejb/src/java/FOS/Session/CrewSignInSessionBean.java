@@ -66,10 +66,10 @@ public class CrewSignInSessionBean implements CrewSignInSessionBeanLocal {
             if (e.getEmployeeUserName().equals(crewName)) {
                 if (e.getEmployeeRole().equals("Cabin Crew")) {
                     CabinCrew c = (CabinCrew) e;
-                    if (c.getStatus().contains("SignIn")) {
+                    if (c.getSignInStatus().contains("SignIn")) {
                         msg = "Signed";
                     } else {
-                        c.setStatus("SignIn" + firstScheduleID);
+                        c.setSignInStatus("SignIn" + firstScheduleID);
                         em.persist(c);
                         em.flush();
                     }
@@ -77,10 +77,10 @@ public class CrewSignInSessionBean implements CrewSignInSessionBeanLocal {
                 }
                 if (e.getEmployeeRole().equals("Pilot")) {
                     Pilot p = (Pilot) e;
-                    if (p.getStatus().contains("SignIn")) {
+                    if (p.getSignInStatus().contains("SignIn")) {
                         msg = "Signed";
                     } else {
-                        p.setStatus("SignIn" + firstScheduleID);
+                        p.setSignInStatus("SignIn" + firstScheduleID);
                         em.persist(p);
                         em.flush();
                     }
@@ -103,13 +103,13 @@ public class CrewSignInSessionBean implements CrewSignInSessionBeanLocal {
         List<Pilot> pilots = team.getPilots();
 
         for (CabinCrew c : ccs) {
-            if (c.getStatus().equals("SignIn" + firstScheduleID)) {
+            if (c.getSignInStatus().equals("SignIn" + firstScheduleID)) {
                 cCount++;
             }
         }
 
         for (Pilot p : pilots) {
-            if (p.getStatus().equals("SignIn" + firstScheduleID)) {
+            if (p.getSignInStatus().equals("SignIn" + firstScheduleID)) {
                 pCount++;
             }
         }

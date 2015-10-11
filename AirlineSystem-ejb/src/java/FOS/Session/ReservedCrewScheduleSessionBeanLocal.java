@@ -28,6 +28,18 @@ public interface ReservedCrewScheduleSessionBeanLocal {
     public String assignBack(String crewName);
 
     public List<Pilot> getAllReservedPilot(String selectYear, String selectMonth);
-    
+
     public void assignPilotSchedule(String selectYear, String selectMonth, String crewName);
+
+    public void rejectCabinCrewLeave(String crewName);
+
+    public void rejectPilotLeave(String crewName);
+
+    public CabinCrew getCabinCrew(String crewName);
+
+    public Pilot getPilot(String crewName);
+
+    public void changeCabinCrewStatus(String crewName);
+
+    public void changePilotStatus(String crewName);
 }
