@@ -29,6 +29,7 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import static java.util.Comparator.comparing;
 
 /**
  *
@@ -73,6 +74,10 @@ public class CrewSignInManagedBean {
 
     private List<Schedule> validSchedulesForSubmit;
     private List<Schedule> inValidSchedulesForSubmit;
+
+    private List<Schedule> validPilotSchedulesForSubmit;
+    private List<Schedule> inValidPilotSchedulesForSubmit;
+
     private String selectLeaveSchedule;
     private List<String> leaveReasons = new ArrayList<String>();
     private String selectLeaveReason;
@@ -105,6 +110,7 @@ public class CrewSignInManagedBean {
             scheduleNew();
             signInScheduleForReservedCrew();
             viewValidSchedule();
+            viewPilotValidSchedule();
 
         }
     }
@@ -222,6 +228,10 @@ public class CrewSignInManagedBean {
 
         CabinCrew crew = crewSignInSessionBean.getCabinCrew(crewName);
 
+        if (crew == null) {// for reason if the crew is pilot
+            return;
+        }
+
         reservedCrewScheduleResult = new ArrayList<String>();
         reservedCrewScheduleResultDisabled = new ArrayList<String>();
 
@@ -266,6 +276,7 @@ public class CrewSignInManagedBean {
                     for (int i = 1; i < tempEnable.length; i++) {
                         reservedCrewScheduleResult.add(tempEnable[i]);
                     }
+
                 }
                 if (!tempDisable.equals("")) {
                     String[] tDisable = tempDisable.split("<br /> <br /> \uD83C\uDFC1  \uD83C\uDFC1  \uD83C\uDFC1  \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 "
@@ -416,6 +427,10 @@ public class CrewSignInManagedBean {
         String signInScheduleId = "";
         CabinCrew crew = crewSignInSessionBean.getCabinCrew(crewName);
 
+        if (crew == null) { // for reason if the crew is pilot
+            return;
+        }
+
         if (crew.getTeam() != null && (crew.getPosition().contains("Reserved") || crew.getStatus().equals("N.S"))) {
 
             if (crew.getStatus().contains("SignIn")) {
@@ -460,16 +475,16 @@ public class CrewSignInManagedBean {
                 }
 
                 for (Schedule s : tempS) {
-                  
-                        String formattedDate1 = new SimpleDateFormat("HH:mm dd/MM/yyyy").format(s.getStartDate());
-                        if (s.getFlight().getRoute().getOriginCountry().toUpperCase().trim().equals(crew.getOrganizationUnit().getLocation().trim()) && checkTime(formattedDate2, formattedDate1) > 120
-                               &&!inValidSchedulesForSubmit.contains(s)  && !s.getScheduleId().toString().equals(signInScheduleId)) {
 
-                            validSchedulesForSubmit.add(s);
+                    String formattedDate1 = new SimpleDateFormat("HH:mm dd/MM/yyyy").format(s.getStartDate());
+                    if (s.getFlight().getRoute().getOriginCountry().toUpperCase().trim().equals(crew.getOrganizationUnit().getLocation().trim()) && checkTime(formattedDate2, formattedDate1) > 120
+                            && !inValidSchedulesForSubmit.contains(s) && !s.getScheduleId().toString().equals(signInScheduleId)) {
 
-                        }
+                        validSchedulesForSubmit.add(s);
+
                     }
-                
+                }
+
             } else {
 
                 for (Schedule s : schedules) {
@@ -483,6 +498,100 @@ public class CrewSignInManagedBean {
 
                     if (s.getScheduleId().toString().equals(submitScheduleId)) {
                         inValidSchedulesForSubmit.add(s);
+                    }
+                }
+
+            }
+        }
+
+    }
+
+    // for pilot to see which schedules could submit leave
+    public void viewPilotValidSchedule() {
+
+        signInDate = new Date();
+
+        String formattedDate2 = new SimpleDateFormat("HH:mm dd/MM/yyyy").format(signInDate);
+
+        validPilotSchedulesForSubmit = new ArrayList<Schedule>();
+        inValidPilotSchedulesForSubmit = new ArrayList<Schedule>();
+
+        FacesMessage message = null;
+        String crewName = loginManageBean.getEmployeeUserName();
+        String signInScheduleId = "";
+        Pilot crew = crewSignInSessionBean.getPilot(crewName);
+
+        if (crew == null) { // for crew is cabin crew
+            return;
+        }
+
+        if (crew.getTeam() != null && (crew.getPosition().contains("Reserved") || crew.getStatus().equals("N.S"))) {
+
+            if (crew.getStatus().contains("SignIn")) {
+
+                signInScheduleId = crew.getStatus().substring(6);
+            }
+
+            List<Schedule> schedules = team.getSchedule();
+
+            for (Schedule s : schedules) {
+                String formattedDate1 = new SimpleDateFormat("HH:mm dd/MM/yyyy").format(s.getStartDate());
+
+                if (s.getFlight().getRoute().getOriginCountry().toUpperCase().trim().equals(crew.getOrganizationUnit().getLocation().trim()) && checkTime(formattedDate2, formattedDate1) > 120
+                        && !s.getScheduleId().toString().equals(signInScheduleId)) {
+                    validPilotSchedulesForSubmit.add(s);
+
+                }
+            }
+
+        } else {
+
+            String submitScheduleId = crew.getStatus().split("-")[0].split("Leave: ")[1];
+
+            List<Schedule> schedules = team.getSchedule();
+
+            List<Schedule> tempS = team.getSchedule();
+
+            if (submitScheduleId.contains("/")) {
+                String[] temps = submitScheduleId.split("/");
+
+                for (int i = 0; i < temps.length; i++) {
+                    Iterator<Schedule> it = tempS.iterator();
+
+                    while (it.hasNext()) {
+                        Schedule sc = it.next();
+                        if (sc.getScheduleId().toString().equals(temps[i])) {
+                            inValidPilotSchedulesForSubmit.add(sc);
+                            //it.remove();
+                        }
+                    }
+
+                }
+
+                for (Schedule s : tempS) {
+
+                    String formattedDate1 = new SimpleDateFormat("HH:mm dd/MM/yyyy").format(s.getStartDate());
+                    if (s.getFlight().getRoute().getOriginCountry().toUpperCase().trim().equals(crew.getOrganizationUnit().getLocation().trim()) && checkTime(formattedDate2, formattedDate1) > 120
+                            && !inValidPilotSchedulesForSubmit.contains(s) && !s.getScheduleId().toString().equals(signInScheduleId)) {
+
+                        validPilotSchedulesForSubmit.add(s);
+
+                    }
+                }
+
+            } else {
+
+                for (Schedule s : schedules) {
+                    String formattedDate1 = new SimpleDateFormat("HH:mm dd/MM/yyyy").format(s.getStartDate());
+
+                    if (s.getFlight().getRoute().getOriginCountry().toUpperCase().trim().equals(crew.getOrganizationUnit().getLocation().trim()) && checkTime(formattedDate2, formattedDate1) > 120
+                            && !s.getScheduleId().toString().equals(submitScheduleId) && !s.getScheduleId().toString().equals(signInScheduleId)) {
+                        validPilotSchedulesForSubmit.add(s);
+
+                    }
+
+                    if (s.getScheduleId().toString().equals(submitScheduleId)) {
+                        inValidPilotSchedulesForSubmit.add(s);
                     }
                 }
 
@@ -549,31 +658,65 @@ public class CrewSignInManagedBean {
 
         FacesMessage message = null;
         String crewName = loginManageBean.getEmployeeUserName();
-        String msg = "";
-        List<Schedule> hiddenSchedules = checkSchedule(selectLeaveSchedule);
+        CabinCrew cc = crewSignInSessionBean.getCabinCrew(crewName);
+        if (cc != null) {
+            String msg = "";
+            List<Schedule> hiddenSchedules = checkSchedule(selectLeaveSchedule);
 
-        String scheduleLists = selectLeaveSchedule;
-        if (hiddenSchedules.isEmpty()) {
-            msg = crewSignInSessionBean.submitLeave(crewName, selectLeaveReason, scheduleLists);
-        } else {
-            for (Schedule s : hiddenSchedules) {
-                scheduleLists += "/" + s.getScheduleId().toString();
+            String scheduleLists = selectLeaveSchedule;
+            if (hiddenSchedules.isEmpty()) {
+                msg = crewSignInSessionBean.submitLeave(crewName, selectLeaveReason, scheduleLists);
+            } else {
+                for (Schedule s : hiddenSchedules) {
+                    scheduleLists += "/" + s.getScheduleId().toString();
+                }
+                msg = crewSignInSessionBean.submitLeave(crewName, selectLeaveReason, scheduleLists);
             }
-            msg = crewSignInSessionBean.submitLeave(crewName, selectLeaveReason, scheduleLists);
-        }
 
-        if (msg.equals("done")) {
-            message = new FacesMessage(FacesMessage.SEVERITY_WARN, "You have submit leave for this schedule! ", "");
-        } else {
-            setSelectLeaveSchedule("");
-            setSelectLeaveReason("");
-            message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Submit Successfully ", "");
+            if (msg.equals("done")) {
+                message = new FacesMessage(FacesMessage.SEVERITY_WARN, "You have submit leave for this schedule! ", "");
+            } else {
+                setSelectLeaveSchedule("");
+                setSelectLeaveReason("");
+                message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Submit Successfully ", "");
+            }
+            FacesContext.getCurrentInstance().addMessage(null, message);
         }
-        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+
+    public void submitPilotLeave(ActionEvent event) {
+
+        FacesMessage message = null;
+        String crewName = loginManageBean.getEmployeeUserName();
+        Pilot pilot = crewSignInSessionBean.getPilot(crewName);
+        if (pilot != null) {
+            String msg = "";
+            List<Schedule> hiddenSchedules = checkSchedule(selectLeaveSchedule);
+
+            String scheduleLists = selectLeaveSchedule;
+            if (hiddenSchedules.isEmpty()) {
+                msg = crewSignInSessionBean.submitPilotLeave(crewName, selectLeaveReason, scheduleLists);
+            } else {
+                for (Schedule s : hiddenSchedules) {
+                    scheduleLists += "/" + s.getScheduleId().toString();
+                }
+                msg = crewSignInSessionBean.submitPilotLeave(crewName, selectLeaveReason, scheduleLists);
+            }
+
+            if (msg.equals("done")) {
+                message = new FacesMessage(FacesMessage.SEVERITY_WARN, "You have submit leave for this schedule! ", "");
+            } else {
+                setSelectLeaveSchedule("");
+                setSelectLeaveReason("");
+                message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Submit Successfully ", "");
+            }
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        }
     }
 
     public void refresh(ActionEvent event) {
         viewValidSchedule();
+        viewPilotValidSchedule();
     }
 
     public long checkTime(String time1, String time2) {
@@ -934,6 +1077,34 @@ public class CrewSignInManagedBean {
      */
     public void setReservedCrewSelectSignInSchedule(String reservedCrewSelectSignInSchedule) {
         this.reservedCrewSelectSignInSchedule = reservedCrewSelectSignInSchedule;
+    }
+
+    /**
+     * @return the validPilotSchedulesForSubmit
+     */
+    public List<Schedule> getValidPilotSchedulesForSubmit() {
+        return validPilotSchedulesForSubmit;
+    }
+
+    /**
+     * @param validPilotSchedulesForSubmit the validPilotSchedulesForSubmit to set
+     */
+    public void setValidPilotSchedulesForSubmit(List<Schedule> validPilotSchedulesForSubmit) {
+        this.validPilotSchedulesForSubmit = validPilotSchedulesForSubmit;
+    }
+
+    /**
+     * @return the inValidPilotSchedulesForSubmit
+     */
+    public List<Schedule> getInValidPilotSchedulesForSubmit() {
+        return inValidPilotSchedulesForSubmit;
+    }
+
+    /**
+     * @param inValidPilotSchedulesForSubmit the inValidPilotSchedulesForSubmit to set
+     */
+    public void setInValidPilotSchedulesForSubmit(List<Schedule> inValidPilotSchedulesForSubmit) {
+        this.inValidPilotSchedulesForSubmit = inValidPilotSchedulesForSubmit;
     }
 
 }

@@ -19,6 +19,10 @@ import javax.ejb.EJB;
 @ManagedBean
 @SessionScoped
 public class flightDataManageBean {
+     @EJB
+    private BookingSessionBeanLocal bs;
+     
+     
 
     /**
      * Creates a new instance of flightDataManageBean
@@ -26,8 +30,9 @@ public class flightDataManageBean {
     public flightDataManageBean() {
     }
     
-    @EJB
-    private BookingSessionBeanLocal bs;
+   
+    
+    
     private String flightNo;
     
     public  void createData(){

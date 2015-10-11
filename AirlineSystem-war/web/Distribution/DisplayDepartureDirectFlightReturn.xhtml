@@ -38,27 +38,9 @@
         <!--//pop-up-->	
         <title>Display Direct Flight</title>
     </h:head>
-   
+
     <h:body>
         <ui:include src="merlionAirlinesHeader.xhtml"/>    
-
-
-
-<!--    <p:dataList value="#{mARSManagedBean.directFlightSchedules}" var="schedules" type="ordered">
-    
-   Flight Number: #{schedules.flight.flightNo}
-   Departs From: #{schedules.flight.route.originCity}, #{schedules.flight.route.originCountry} (#{schedules.flight.route.originIATA})
-   Arrives At: #{schedules.flight.route.destinationCity}, #{schedules.flight.route.destinationCountry} (#{schedules.flight.route.destinationIATA})
-   <h:outputText value="#{schedules.startDate}">
-        <f:convertDateTime pattern ="dd-mm-yyyy HH:mm"/>
-    </h:outputText>
-    
-    <h:outputText value="#{schedules.endDate}">
-        <f:convertDateTime pattern ="dd-mm-yyyy HH:mm"/>
-    </h:outputText>
-    
-        #{schedules.flight.route.originIATA}, #{schedules.flight.route.destinationIATA}, #{mARSManagedBean.directFlightDuration}, #{mARSManagedBean.selectedDatePrices}, #{mARSManagedBean.minPricesForWeekDirectFlight}
-    </p:dataList>-->
         <div class="banner-bottom">
             <div class="container">
                 <div class="about-info">
@@ -79,7 +61,7 @@
                             </p:column>
                             <p:column headerText="Arrives" style="width:12%;">
                                 <h:outputText value="#{schedules.flight.route.destinationCity}, #{schedules.flight.route.destinationCountry} (#{schedules.flight.route.destinationIATA}) at " />
-                                
+
                                 <h:outputText value="#{schedules.endDate}">
                                     <f:convertDateTime pattern ="hh:mm a (EEE, MMM d, yyyy)"/>
                                 </h:outputText>
@@ -88,13 +70,19 @@
                                 <h:outputText value="#{mARSManagedBean.directFlightDuration}"/>
                             </p:column>
                             <p:column headerText="Prices">
-                                <h:outputText value="#{mARSManagedBean.selectedDatePrices}"/>
+                                <h:outputText value="#{mARSManagedBean.selectedDatePrices.get(mARSManagedBean.directFlightSchedules.indexOf(schedules))}"/>
                                 <h:outputText value="#{mARSManagedBean.minPricesForWeekDirectFlight}" />
                             </p:column>
                         </p:dataTable>
-
                         <div class="form-group text-center">
-                            <h:commandButton class="btn btn-outline btn-success" value="Select return flight"  action="#{mARSManagedBean.displayReturnFlights()}"/>
+                            <!--                        if this is not a one way flight-->
+                            <ui:fragment rendered="#{!mARSManagedBean.oneWayFlight}">
+                                <h:commandButton class="btn btn-outline btn-success" value="Select return flight"  action="#{mARSManagedBean.displayReturnFlights()}"/>
+                            </ui:fragment>
+                            <!-- if this is a one way flight -->
+                            <ui:fragment rendered="#{mARSManagedBean.oneWayFlight}">
+                                <h:commandButton class="btn btn-outline btn-success" value="Proceed to booking"  action="#{mARSManagedBean.summary()}"/>
+                            </ui:fragment>
                         </div>
                     </h:form>
                 </div>

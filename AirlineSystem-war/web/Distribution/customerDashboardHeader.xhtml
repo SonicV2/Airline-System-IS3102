@@ -52,7 +52,9 @@ and open the template in the editor.
                 </div>
                 <div class="dropdown-grids">
                 <div id="loginContainer">
-                    <a href="#" id="loginButton"><span>Log Out</span></a>
+                    <h:form>
+                    <a jsf:action="#{customerManagedBean.logOut()}" id="loginButton"><span>Log Out</span></a>
+                    </h:form>
                 </div>
                
                 </div>

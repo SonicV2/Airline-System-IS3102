@@ -7,6 +7,7 @@ package FOS.ManagedBean;
 
 import APS.Entity.Schedule;
 import CI.Entity.CabinCrew;
+import CI.Entity.Pilot;
 import CI.Managedbean.LoginManageBean;
 import FOS.Session.CrewSignInSessionBeanLocal;
 import FOS.Session.ReservedCrewScheduleSessionBeanLocal;
@@ -49,11 +50,21 @@ public class ReservedCrewScheduleManagedBean {
     private LoginManageBean loginManageBean;
 
     private List<CabinCrew> CCLists;
+    private List<Pilot> PilotLists;
+
     private List<CabinCrew> leaveCCLists;
+    private List<Pilot> leavePilotLists;
+
     private String crewUserName;
+    private String pilotUserName;
+
     private String msgAssign;
     private List<CabinCrew> approvedLists;
+    private List<Pilot> approvedPilotLists;
+
     private List<CabinCrew> rejectLists;
+    private List<Pilot> rejectPilotLists;
+
     private List<String> months;
 
     private String selectYear;
@@ -74,6 +85,7 @@ public class ReservedCrewScheduleManagedBean {
         //getReservedCrew();
         months = new ArrayList<String>();
         getAllLeaveCrew();
+        getAllLeavePilot();
         months.add("01");
         months.add("02");
         months.add("03");
@@ -86,7 +98,7 @@ public class ReservedCrewScheduleManagedBean {
         months.add("10");
         months.add("11");
         months.add("12");
-        signInScheduleForReservedCrew();
+        reservedCrewSignOut();
     }
 
     public void getReservedCrew(ActionEvent event) {
@@ -105,14 +117,46 @@ public class ReservedCrewScheduleManagedBean {
         }
     }
 
+    public void getReservedPilot(ActionEvent event) {
+        FacesMessage message = null;
+        date = new Date();
+        String month = new SimpleDateFormat("MM").format(date);
+        String year = new SimpleDateFormat("yyyy").format(date);
+        if (Integer.parseInt(selectMonth) < Integer.parseInt(month) || Integer.parseInt(selectYear) < Integer.parseInt(year)) {
+            message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "You cannot select previous month/year!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        } else if (reservedCrewScheduleSessionBean.getAllReservedPilot(selectYear, selectMonth) == null) {
+            message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "No Reserved Pilots!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        } else {
+            setPilotLists(reservedCrewScheduleSessionBean.getAllReservedPilot(selectYear, selectMonth));
+        }
+    }
+
 //Assign reserved crews schedules    
     public void assignSchedule(ActionEvent event) {
+        FacesMessage message = null;
         for (CabinCrew c : CCLists) {
             reservedCrewScheduleSessionBean.assignSchedule(selectYear, selectMonth, c.getEmployeeUserName());
+        }
+
+        getReservedCrew(event);
+        setSelectYear("");
+        setSelectMonth("");
+        message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Assign Successfully!", "");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+
+    public void assignPilotSchedule(ActionEvent event) {
+        FacesMessage message = null;
+        for (Pilot p : PilotLists) {
+            reservedCrewScheduleSessionBean.assignPilotSchedule(selectYear, selectMonth, p.getEmployeeUserName());
         }
         getReservedCrew(event);
         setSelectYear("");
         setSelectMonth("");
+        message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Assign Successfully!", "");
+        FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
     public void getAllLeaveCrew() {
@@ -127,6 +171,23 @@ public class ReservedCrewScheduleManagedBean {
             }
             if (c.getSchedule().contains("Team")) {
                 approvedLists.add(c);
+            }
+        }
+
+    }
+
+    public void getAllLeavePilot() {
+        FacesMessage message = null;
+        leavePilotLists = new ArrayList<Pilot>();
+        approvedPilotLists = new ArrayList<Pilot>();
+
+        List<Pilot> tempLists = searchCrewSessionBean.getLeavePilot();
+        for (Pilot c : tempLists) {
+            if (c.getSchedule().equals("N.A")) {
+                leavePilotLists.add(c);
+            }
+            if (c.getSchedule().contains("Team")) {
+                approvedPilotLists.add(c);
             }
         }
 
@@ -147,6 +208,21 @@ public class ReservedCrewScheduleManagedBean {
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
+    // Find reserve Pilot
+    public void reassignPilot(ActionEvent event) {
+
+        setMsgAssign(reservedCrewScheduleSessionBean.reassignPilot(pilotUserName));
+        FacesMessage message = null;
+        if (msgAssign.equals("unsuccessful")) {
+            message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "No reserve Pilot available!", "");
+
+        } else {
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "A reserved Pilot has been assigned!", "");
+        }
+        setPilotUserName("");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+
     // Reassign back (Crew finishes leave)
     public void assignBack(ActionEvent event) {
         FacesMessage message = null;
@@ -159,13 +235,17 @@ public class ReservedCrewScheduleManagedBean {
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
-    public void signInScheduleForReservedCrew() {
+    public void reservedCrewSignOut() {
         Date signInDate = new Date();
         String tempString = "";
         String tempDisable = "";
         String crewName = loginManageBean.getEmployeeUserName();
 
         CabinCrew crew = crewSignInSessionBean.getCabinCrew(crewName);
+
+        if (crew == null) {
+            return;
+        }
 
         setReservedCrewScheduleResult(new ArrayList<String>());
         setReservedCrewScheduleResultDisabled(new ArrayList<String>());
@@ -431,6 +511,76 @@ public class ReservedCrewScheduleManagedBean {
      */
     public void setReservedCrewScheduleResultDisabled(List<String> reservedCrewScheduleResultDisabled) {
         this.reservedCrewScheduleResultDisabled = reservedCrewScheduleResultDisabled;
+    }
+
+    /**
+     * @return the leavePilotLists
+     */
+    public List<Pilot> getLeavePilotLists() {
+        return leavePilotLists;
+    }
+
+    /**
+     * @param leavePilotLists the leavePilotLists to set
+     */
+    public void setLeavePilotLists(List<Pilot> leavePilotLists) {
+        this.leavePilotLists = leavePilotLists;
+    }
+
+    /**
+     * @return the approvedPilotLists
+     */
+    public List<Pilot> getApprovedPilotLists() {
+        return approvedPilotLists;
+    }
+
+    /**
+     * @param approvedPilotLists the approvedPilotLists to set
+     */
+    public void setApprovedPilotLists(List<Pilot> approvedPilotLists) {
+        this.approvedPilotLists = approvedPilotLists;
+    }
+
+    /**
+     * @return the rejectPilotLists
+     */
+    public List<Pilot> getRejectPilotLists() {
+        return rejectPilotLists;
+    }
+
+    /**
+     * @param rejectPilotLists the rejectPilotLists to set
+     */
+    public void setRejectPilotLists(List<Pilot> rejectPilotLists) {
+        this.rejectPilotLists = rejectPilotLists;
+    }
+
+    /**
+     * @return the pilotUserName
+     */
+    public String getPilotUserName() {
+        return pilotUserName;
+    }
+
+    /**
+     * @param pilotUserName the pilotUserName to set
+     */
+    public void setPilotUserName(String pilotUserName) {
+        this.pilotUserName = pilotUserName;
+    }
+
+    /**
+     * @return the PilotLists
+     */
+    public List<Pilot> getPilotLists() {
+        return PilotLists;
+    }
+
+    /**
+     * @param PilotLists the PilotLists to set
+     */
+    public void setPilotLists(List<Pilot> PilotLists) {
+        this.PilotLists = PilotLists;
     }
 
 }
