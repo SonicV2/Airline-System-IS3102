@@ -243,9 +243,7 @@ public class MARSManagedBean {
 //            setChildren(0);
 //            setServiceType("");
             return null;
-        } 
-        
-        else if (returnDate != null) {
+        } else if (returnDate != null) {
             isReturnDateSet = true;
         }
 
@@ -584,18 +582,17 @@ public class MARSManagedBean {
                 selectedSchedules.add(selectedReturnFlightOption.getLegTwo());
             }
         }
-       
-          for (Schedule eachSelectedSchedule: selectedSchedules){
-            eachSelectedSchedule.setStartDate(distributionSessionBean.convertTimeZone(eachSelectedSchedule.getStartDate(),  distributionSessionBean.getTimeZoneFromIata(eachSelectedSchedule.getFlight().getRoute().getOriginIATA()), distributionSessionBean.getSingaporeTimeZone()));
-            eachSelectedSchedule.setEndDate(distributionSessionBean.convertTimeZone(eachSelectedSchedule.getEndDate(),  distributionSessionBean.getTimeZoneFromIata(eachSelectedSchedule.getFlight().getRoute().getDestinationIATA()), distributionSessionBean.getSingaporeTimeZone()));
+
+        for (Schedule eachSelectedSchedule : selectedSchedules) {
+            eachSelectedSchedule.setStartDate(distributionSessionBean.convertTimeZone(eachSelectedSchedule.getStartDate(), distributionSessionBean.getTimeZoneFromIata(eachSelectedSchedule.getFlight().getRoute().getOriginIATA()), distributionSessionBean.getSingaporeTimeZone()));
+            eachSelectedSchedule.setEndDate(distributionSessionBean.convertTimeZone(eachSelectedSchedule.getEndDate(), distributionSessionBean.getTimeZoneFromIata(eachSelectedSchedule.getFlight().getRoute().getDestinationIATA()), distributionSessionBean.getSingaporeTimeZone()));
         }
         setSelectedDepartureSchedules(passengerBookingSessionBean.getDepartureSchedules(selectedSchedules, isReturnDateSet));
         if (isReturnDateSet) {
             setSelectedReturnSchedules(passengerBookingSessionBean.getReturnSchedules(selectedSchedules));
         }
 
-        
-        totalSelectedPrice=0;
+        totalSelectedPrice = 0;
 
         double priceForEachSchedule;
         for (Schedule eachSelectedSchedule : selectedSchedules) {
@@ -605,13 +602,13 @@ public class MARSManagedBean {
         Passenger passenger;
 
         passengerList.clear();
-        for (int k=0; k<adults+children; k++) {
+        for (int k = 0; k < adults + children; k++) {
             passenger = new Passenger();
             passenger.setId(k + 1);
             passengerList.add(passenger);
         }
-          for (Schedule eachSelectedSchedule: selectedSchedules){
-            eachSelectedSchedule.setStartDate(distributionSessionBean.convertTimeZone(eachSelectedSchedule.getStartDate(),distributionSessionBean.getSingaporeTimeZone(), distributionSessionBean.getTimeZoneFromIata(eachSelectedSchedule.getFlight().getRoute().getOriginIATA())));
+        for (Schedule eachSelectedSchedule : selectedSchedules) {
+            eachSelectedSchedule.setStartDate(distributionSessionBean.convertTimeZone(eachSelectedSchedule.getStartDate(), distributionSessionBean.getSingaporeTimeZone(), distributionSessionBean.getTimeZoneFromIata(eachSelectedSchedule.getFlight().getRoute().getOriginIATA())));
             eachSelectedSchedule.setEndDate(distributionSessionBean.convertTimeZone(eachSelectedSchedule.getEndDate(), distributionSessionBean.getSingaporeTimeZone(), distributionSessionBean.getTimeZoneFromIata(eachSelectedSchedule.getFlight().getRoute().getDestinationIATA())));
         }
 
@@ -622,12 +619,20 @@ public class MARSManagedBean {
     public String payment() {
 
         for (int i = 0; i < passengerList.size(); i++) {
-            if (passengerList.get(i).getCustomerId().isEmpty())
+            if (passengerList.get(i).getCustomerId().isEmpty()) {
                 continue;
+            }
             if (!isInteger(passengerList.get(i).getCustomerId())) {
                 message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Invalid Customer Id!", "");
                 FacesContext.getCurrentInstance().addMessage(null, message);
                 return null;
+            }
+            if (!passengerList.get(i).getCustomerId().equals("")) {
+                if (!passengerBookingSessionBean.isPassengerAFrequentFlyer(Long.parseLong(passengerList.get(i).getCustomerId()))) {
+                    message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Customer Id does not exist!", "");
+                    FacesContext.getCurrentInstance().addMessage(null, message);
+                    return null;
+                }
             }
         }
 
@@ -635,43 +640,41 @@ public class MARSManagedBean {
     }
 
     public String createBooking() {
-        
-        
-//        if (!isInteger(creditCard)) {
-//            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Invalid credit card number!", "");
-//            FacesContext.getCurrentInstance().addMessage(null, message);
-//            return null;
-//        }
 
-      
+        if (!checkCreditCard(creditCard)) {
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Invalid credit card number!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return null;
+        }
+        
         if (creditCard.length() != 16) {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Credit card number should be 16 digits!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
             return null;
 
         }
-        
+
         if (csv.length() != 3) {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Invalid csv!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
             return null;
         }
-        
+
         if (!isInteger(csv)) {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Invalid csv!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
             return null;
         }
 
-        for (Schedule eachSelectedSchedule: selectedSchedules){
-            eachSelectedSchedule.setStartDate(distributionSessionBean.convertTimeZone(eachSelectedSchedule.getStartDate(),  distributionSessionBean.getTimeZoneFromIata(eachSelectedSchedule.getFlight().getRoute().getOriginIATA()), distributionSessionBean.getSingaporeTimeZone()));
-            eachSelectedSchedule.setEndDate(distributionSessionBean.convertTimeZone(eachSelectedSchedule.getEndDate(),  distributionSessionBean.getTimeZoneFromIata(eachSelectedSchedule.getFlight().getRoute().getDestinationIATA()), distributionSessionBean.getSingaporeTimeZone()));
+        for (Schedule eachSelectedSchedule : selectedSchedules) {
+            eachSelectedSchedule.setStartDate(distributionSessionBean.convertTimeZone(eachSelectedSchedule.getStartDate(), distributionSessionBean.getTimeZoneFromIata(eachSelectedSchedule.getFlight().getRoute().getOriginIATA()), distributionSessionBean.getSingaporeTimeZone()));
+            eachSelectedSchedule.setEndDate(distributionSessionBean.convertTimeZone(eachSelectedSchedule.getEndDate(), distributionSessionBean.getTimeZoneFromIata(eachSelectedSchedule.getFlight().getRoute().getDestinationIATA()), distributionSessionBean.getSingaporeTimeZone()));
         }
 
-       double priceForEachBooking;
-       bookingStatus = "Booked";
-       List<Booking> bookingList = new ArrayList();
-       Customer primaryCustomer = new Customer ();
+        double priceForEachBooking;
+        bookingStatus = "Booked";
+        List<Booking> bookingList = new ArrayList();
+        Customer primaryCustomer = new Customer();
 
         totalPriceWinsurance = totalSelectedPrice;
 
@@ -680,9 +683,12 @@ public class MARSManagedBean {
             priceForEachBooking = pricingManagementBean.getPrice(classCode, eachSelectedSchedule);
             setSeatAvail(eachSelectedSchedule.getSeatAvailability());
             setFlightNo(eachSelectedSchedule.getFlight().getFlightNo());
-            setFlightDate (eachSelectedSchedule.getStartDate());
-            for (int k=0;k<(adults+children);k++){
             setFlightDate(eachSelectedSchedule.getStartDate());
+            for (int k = 0; k < (adults + children); k++) {
+                setFlightDate(eachSelectedSchedule.getStartDate());
+                if (passengerList.get(k).getCustomerId().equals("")) {
+                    passengerList.get(k).setCustomerId("0");
+                }
                 Booking eachBooking = passengerBookingSessionBean.createBooking(priceForEachBooking, seatAvail, flightNo, flightDate, bookingStatus, classCode, serviceType, passengerList.get(k).getTitle(), passengerList.get(k).getFirstName(), passengerList.get(k).getLastName(), passengerList.get(k).getPassport(), passengerList.get(k).getNationality(), Long.parseLong(passengerList.get(k).getCustomerId()), false, passengerList.get(k).isInsurance(), 15.0, passengerList.get(k).getFoodSelection());
                 bookingList.add(eachBooking);
                 if (passengerList.get(k).isInsurance()) {
@@ -690,13 +696,19 @@ public class MARSManagedBean {
                 }
             }
         }
-            pnr = passengerBookingSessionBean.createPNR((adults+children), getPrimaryEmail(), getPrimaryContactNo(), "Booked",totalPriceWinsurance, new Date(), "MerlionAirlines");
-            if (passengerBookingSessionBean.isPassengerAFrequentFlyer(Long.parseLong(passengerList.get(0).getCustomerId())))
-              primaryCustomer = passengerBookingSessionBean.getCustomerByCustomerId(Long.parseLong(passengerList.get(0).getCustomerId()));
-            else
-              primaryCustomer = null; 
-        
+        pnr = passengerBookingSessionBean.createPNR((adults + children), getPrimaryEmail(), getPrimaryContactNo(), "Booked", totalPriceWinsurance, new Date(), "MerlionAirlines");
+        if (passengerBookingSessionBean.isPassengerAFrequentFlyer(Long.parseLong(passengerList.get(0).getCustomerId()))) {
+            primaryCustomer = passengerBookingSessionBean.getCustomerByCustomerId(Long.parseLong(passengerList.get(0).getCustomerId()));
+        } else {
+            primaryCustomer = null;
+        }
+
         passengerBookingSessionBean.persistBookingAndPNR(pnr, bookingList, primaryCustomer);
+        
+        for (Schedule eachSelectedSchedule : selectedSchedules) {
+            eachSelectedSchedule.setStartDate(distributionSessionBean.convertTimeZone(eachSelectedSchedule.getStartDate(), distributionSessionBean.getSingaporeTimeZone(), distributionSessionBean.getTimeZoneFromIata(eachSelectedSchedule.getFlight().getRoute().getOriginIATA())));
+            eachSelectedSchedule.setEndDate(distributionSessionBean.convertTimeZone(eachSelectedSchedule.getEndDate(), distributionSessionBean.getSingaporeTimeZone(), distributionSessionBean.getTimeZoneFromIata(eachSelectedSchedule.getFlight().getRoute().getDestinationIATA())));
+        }
 
         return "confirmation";
     }
@@ -708,6 +720,15 @@ public class MARSManagedBean {
             return false;
         } catch (NullPointerException e) {
             return false;
+        }
+        return true;
+    }
+    
+    public boolean checkCreditCard (String s){
+        int i;
+        for (i=0;i<s.length();i++){
+            if (!Character.isDigit(s.charAt(i)))
+                return false;
         }
         return true;
     }

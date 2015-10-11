@@ -96,7 +96,8 @@ public class PassengerBookingSessionBean implements PassengerBookingSessionBeanL
         booking.setTravellerLastName(travellerLastName);
         booking.setPassportNumber(passportNumber);
         booking.setNationality(nationality);
-        booking.setCustomerId(customerId);
+        if (customerId != 0)
+            booking.setCustomerId(customerId);
         booking.setIsChild(isChild);
         booking.setBoughtInsurance(boughtInsurance);
         booking.setInsuranceFare(insuranceFare);
