@@ -73,6 +73,7 @@ public class MARSManagedBean {
     private String oneWayServiceType;
     private String oneWayOriginCity;
     private String oneWayDestinationCity;
+    private Boolean oneWayFlight;
 
     private Long routeId;
     private String originCountry;
@@ -229,7 +230,7 @@ public class MARSManagedBean {
     
 
     public String displayDepartureFlights(Boolean oneWay) {
-
+        oneWayFlight = oneWay;
         /*Convert the chosen origin and destination cities into IATAs*/
         List<Flight> allFlights = new ArrayList();
         allFlights = distributionSessionBean.getAllFlights();
@@ -280,7 +281,6 @@ public class MARSManagedBean {
             boolean inputValid = true;
             //One way jorney selected by user
             if (oneWay) {
-                System.out.println("managedbean: user did not choose return date");
                 if (distributionSessionBean.existsSchedule(originIATA, destinationIATA, departureDate, serviceType, adults, children) == false) {
                     inputValid = false;
                 }
@@ -322,12 +322,13 @@ public class MARSManagedBean {
                     setIsDirect(true);
                     retrieveMinWeekPricesForDirect(originIATA, destinationIATA, departureDate, serviceType, adults, children);
                     setPriceForDirect(selectedDatePrices.get(0));
-                    if (oneWay) {
-                        System.out.println("managedbean: everything is right...returning direct flight page");
-                        return "DisplayDirectFlight";
-                    } else {
-                        return "DisplayDepartureDirectFlightReturn";
-                    }
+
+                    return "DisplayDepartureDirectFlightReturn";
+//                    if (oneWay) {
+//                        return "DisplayDirectFlight";
+//                    } else {
+//                        return "DisplayDepartureDirectFlightReturn";
+//                    }
 
                 } else { //Retrieve one stop flights
                     legOneSchedules.clear();
@@ -386,12 +387,14 @@ public class MARSManagedBean {
                         c++;
 
                     }
-
-                    if (oneWay) {
-                        return "DisplayOneStopFlight";
-                    } else {
-                        return "DisplayDepartureOneStopFlightReturn";
-                    }
+                        
+                    
+                    return "DisplayDepartureOneStopFlightReturn";
+//                    if (oneWay) {
+//                        return "DisplayOneStopFlight";
+//                    } else {
+//                        return "DisplayDepartureOneStopFlightReturn";
+//                    }
                 }
             }
 
@@ -1529,6 +1532,8 @@ public class MARSManagedBean {
      */
     public void setOneWayDestinationCity(String oneWayDestinationCity) {
         this.oneWayDestinationCity = oneWayDestinationCity;
+    }
+    
     public double getTotalSelectedPrice() {
         return totalSelectedPrice;
     }
@@ -1613,6 +1618,20 @@ public class MARSManagedBean {
      */
     public void setCsv(String csv) {
         this.csv = csv;
+    }
+
+    /**
+     * @return the oneWayFlight
+     */
+    public Boolean getOneWayFlight() {
+        return oneWayFlight;
+    }
+
+    /**
+     * @param oneWayFlight the oneWayFlight to set
+     */
+    public void setOneWayFlight(Boolean oneWayFlight) {
+        this.oneWayFlight = oneWayFlight;
     }
 
 }
