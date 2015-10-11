@@ -230,6 +230,8 @@ public class MARSManagedBean {
     
 
     public String displayDepartureFlights(Boolean oneWay) {
+  
+        
         oneWayFlight = oneWay;
         /*Convert the chosen origin and destination cities into IATAs*/
         List<Flight> allFlights = new ArrayList();
@@ -277,10 +279,16 @@ public class MARSManagedBean {
                     destinationIATA = eachFlight.getRoute().getDestinationIATA();
                 }
             }
+            System.out.println("Origin IATA: " + originIATA);
+            System.out.println("Destination IATA: " + destinationIATA);
+            System.out.println("Return date: " + returnDate);
+            System.out.println("Departure date: " + departureDate);
 
             boolean inputValid = true;
             //One way jorney selected by user
             if (oneWay) {
+                
+                System.out.println("one way selected");
                 if (distributionSessionBean.existsSchedule(originIATA, destinationIATA, departureDate, serviceType, adults, children) == false) {
                     inputValid = false;
                 }
@@ -342,9 +350,13 @@ public class MARSManagedBean {
                     for (int i = 0; i < transitHubs.size(); i++) {
                         addSchedulesToLegOne(legOneSchedules, distributionSessionBean.retrieveDirectFlightsForDate(originIATA, transitHubs.get(i), departureDate, serviceType, adults, children));
                         addSchedulesToLegTwo(legTwoSchedules, distributionSessionBean.retrieveDirectFlightsForDate(transitHubs.get(i), destinationIATA, distributionSessionBean.addDaysToDate(departureDate, 1), serviceType, adults, children));
+                        //addSchedulesToLegTwo(legTwoSchedules, distributionSessionBean.retrieveDirectFlightsForDate(transitHubs.get(i), destinationIATA, distributionSessionBean.addDaysToDate(departureDate, 2), serviceType, adults, children));
                         addSchedulesToLegTwo(legTwoSchedules, distributionSessionBean.retrieveDirectFlightsForDate(transitHubs.get(i), destinationIATA, departureDate, serviceType, adults, children));
                     }
-
+                    System.out.println("Departure date now: " + departureDate);
+                    System.out.println("In managed bean...Leg One Schedules length: " +legOneSchedules.size());
+                    System.out.println("In managed bean...Leg Two Schedules length: " +legTwoSchedules.size());
+                    
                     setOneStopFlightSchedules(distributionSessionBean.retrieveOneStopFlightSchedules(legOneSchedules, legTwoSchedules));
                     int i;
                     List<Schedule> flightOption = new ArrayList();
@@ -449,6 +461,7 @@ public class MARSManagedBean {
             for (int i = 0; i < transitHubs.size(); i++) {
                 addSchedulesToLegOne(legOneSchedules, distributionSessionBean.retrieveDirectFlightsForDate(originIATA, transitHubs.get(i), departureDate, serviceType, adults, children));
                 addSchedulesToLegTwo(legTwoSchedules, distributionSessionBean.retrieveDirectFlightsForDate(transitHubs.get(i), destinationIATA, distributionSessionBean.addDaysToDate(departureDate, 1), serviceType, adults, children));
+                addSchedulesToLegTwo(legTwoSchedules, distributionSessionBean.retrieveDirectFlightsForDate(transitHubs.get(i), destinationIATA, distributionSessionBean.addDaysToDate(departureDate, 2), serviceType, adults, children));
                 addSchedulesToLegTwo(legTwoSchedules, distributionSessionBean.retrieveDirectFlightsForDate(transitHubs.get(i), destinationIATA, departureDate, serviceType, adults, children));
             }
             setOneStopFlightSchedules(distributionSessionBean.retrieveOneStopFlightSchedules(legOneSchedules, legTwoSchedules));
