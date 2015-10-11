@@ -624,8 +624,10 @@ public class MARSManagedBean {
             priceForEachBooking = pricingManagementBean.getPrice(classCode, eachSelectedSchedule);
             setSeatAvail(eachSelectedSchedule.getSeatAvailability());
             setFlightNo(eachSelectedSchedule.getFlight().getFlightNo());
-            setFlightDate (eachSelectedSchedule.getStartDate());
-            for (int k=0;k<(adults+children);k++){
+            setFlightDate(eachSelectedSchedule.getStartDate());
+            for (int k = 0; k < passengerList.size(); k++) {
+                if (passengerList.get(k).getCustomerId() == null)
+                    passengerList.get(k).setCustomerId("0");
                 Booking eachBooking = passengerBookingSessionBean.createBooking(priceForEachBooking, seatAvail, flightNo, flightDate, bookingStatus, classCode, serviceType, passengerList.get(k).getTitle(), passengerList.get(k).getFirstName(), passengerList.get(k).getLastName(), passengerList.get(k).getPassport(), passengerList.get(k).getNationality(), Long.parseLong(passengerList.get(k).getCustomerId()), false, passengerList.get(k).isInsurance(), 15.0, passengerList.get(k).getFoodSelection());
                 bookingList.add(eachBooking);
                 if (passengerList.get(k).isInsurance()){
