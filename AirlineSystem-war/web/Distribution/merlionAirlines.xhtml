@@ -48,6 +48,11 @@ and open the template in the editor.
         <h:outputScript library="js" name="menu_jquery.js" /> 
         <!--//pop-up-->	
     </h:head>
+    <style>
+        .ui-selectonemenu .ui-selectonemenu-trigger {
+            width: 23px;
+        }
+    </style>
     <h:body>
         <!--this is the common header of all the mARS pages-->
         <ui:include src="merlionAirlinesHeader.xhtml"/>
@@ -92,7 +97,7 @@ and open the template in the editor.
                 <div class="col-md-8 banner-right">
                     <div class="sap_tabs">	
                         <div class="booking-info">
-                            <h2>Book Domestic and International Flight Tickets</h2>
+                            <h2>Book International Flight Tickets</h2>
                         </div>
                         <div id="horizontalTab" style="display: block; width: 100%; margin: 0px;">
                             <ul class="resp-tabs-list">
@@ -232,7 +237,7 @@ and open the template in the editor.
                                                                     <div class="book_date">
                                                                             
                                                                         <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
-                                                                        <p:selectOneMenu value="#{mARSManagedBean.oneWayOriginCity}" editable="true" style="width:200px">
+                                                                        <p:selectOneMenu value="#{mARSManagedBean.oneWayOriginCity}" editable="true" style="width:100%">
                                                                                 <f:selectItem itemLabel="Select Origin City" itemValue="" />
                                                                                 <f:selectItems value="#{mARSManagedBean.origins}"/>
                                                                         </p:selectOneMenu>
@@ -296,7 +301,7 @@ and open the template in the editor.
                                                                     <h5>Class</h5>
                                                                     <!-- start section_room -->
                                                                     <div class="section_room">
-                                                                        <p:selectOneMenu value="#{mARSManagedBean.oneWayServiceType}">
+                                                                        <p:selectOneMenu value="#{mARSManagedBean.oneWayServiceType}" style="width: 150px">
                                                                                 <f:selectItem itemLabel="Economy Saver" itemValue="Economy Saver" />
                                                                                 <f:selectItem itemLabel="Economy Basic" itemValue="Economy Basic" />
                                                                                 <f:selectItem itemLabel="Economy Premium" itemValue="Economy Premium" />
