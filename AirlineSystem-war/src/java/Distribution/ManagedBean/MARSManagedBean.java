@@ -238,6 +238,8 @@ public class MARSManagedBean {
     }
 
     public String displayDepartureFlights(Boolean oneWay) {
+  
+        
         oneWayFlight = oneWay;
         /*Convert the chosen origin and destination cities into IATAs*/
         List<Flight> allFlights = new ArrayList();
@@ -455,6 +457,7 @@ public class MARSManagedBean {
             for (int i = 0; i < transitHubs.size(); i++) {
                 addSchedulesToLegOne(legOneSchedules, distributionSessionBean.retrieveDirectFlightsForDate(originIATA, transitHubs.get(i), departureDate, serviceType, adults, children));
                 addSchedulesToLegTwo(legTwoSchedules, distributionSessionBean.retrieveDirectFlightsForDate(transitHubs.get(i), destinationIATA, distributionSessionBean.addDaysToDate(departureDate, 1), serviceType, adults, children));
+                addSchedulesToLegTwo(legTwoSchedules, distributionSessionBean.retrieveDirectFlightsForDate(transitHubs.get(i), destinationIATA, distributionSessionBean.addDaysToDate(departureDate, 2), serviceType, adults, children));
                 addSchedulesToLegTwo(legTwoSchedules, distributionSessionBean.retrieveDirectFlightsForDate(transitHubs.get(i), destinationIATA, departureDate, serviceType, adults, children));
             }
             setOneStopFlightSchedules(distributionSessionBean.retrieveOneStopFlightSchedules(legOneSchedules, legTwoSchedules));
