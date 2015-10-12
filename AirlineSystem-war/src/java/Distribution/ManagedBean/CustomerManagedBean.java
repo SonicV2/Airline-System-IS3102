@@ -48,6 +48,9 @@ public class CustomerManagedBean {
     private String feedbackMessage; //the faces message for users.
 
     private Customer customer;
+    private String passportNumber;
+    private String nationality;
+    private String title;
 
     /**
      * Creates a new instance of CustomerManagedBean
@@ -68,7 +71,7 @@ public class CustomerManagedBean {
             FacesContext.getCurrentInstance().addMessage(null, message);
             return "merlionAirlinesSignUp";
         } else {
-            setFeedbackMessage(customerSessionBean.addCustomer(customerFirstName, customerLastName, customerHpNumber, customerHpNumber, customerEmail, customerPassword, customerAddress, customerGender, customerDOB));
+            setFeedbackMessage(customerSessionBean.addCustomer(customerFirstName, customerLastName, customerHpNumber, customerHpNumber, customerEmail, customerPassword, customerAddress, customerGender, customerDOB, title, nationality, passportNumber));
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, feedbackMessage, "");
             FacesContext.getCurrentInstance().addMessage(null, message);
             clearAll();
@@ -97,11 +100,10 @@ public class CustomerManagedBean {
     public String loginCheck() {
 
         if (doLogin(customerEmail, customerPassword)) {
-
-            return "customerDashboard";
+            return "merlionAirlines";
+                   
+            //return "customerDashboard";
         } else {
-
-            System.out.println("managed bean --- log in credentials are not right");
             return "signUpConfirmation";
         }
 
@@ -352,4 +354,29 @@ public class CustomerManagedBean {
         this.customer = customer;
     }
 
+    public String getPassportNumber() {
+        return passportNumber;
+    }
+
+    public void setPassportNumber(String passportNumber) {
+        this.passportNumber = passportNumber;
+    }
+
+    public String getNationality() {
+        return nationality;
+    }
+
+    public void setNationality(String nationality) {
+        this.nationality = nationality;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    
 }
