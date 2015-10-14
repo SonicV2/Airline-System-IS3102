@@ -35,7 +35,12 @@ and open the template in the editor.
 
     </h:head>
     <!--this is the common header of all the MARS pages-->
-    <ui:include src="merlionAirlinesHeader.xhtml"/>
+    <ui:fragment rendered ="#{customerManagedBean.isCustomerLoggedOn}">
+        <ui:include src="customerDashboardHeader.xhtml"/>
+        </ui:fragment>
+        <ui:fragment rendered ="#{!customerManagedBean.isCustomerLoggedOn}">
+        <ui:include src="merlionAirlinesHeader.xhtml"/>
+        </ui:fragment>
     <div class="banner-bottom">
         <!-- container -->
         <div class="container">

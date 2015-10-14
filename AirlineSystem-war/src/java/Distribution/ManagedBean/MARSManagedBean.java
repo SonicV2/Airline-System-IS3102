@@ -182,6 +182,7 @@ public class MARSManagedBean {
     private String pnrId;
 
     private PNR searchedPNR;
+    private Date systemDate;
 
     @PostConstruct
     public void retrieve() {
@@ -235,6 +236,7 @@ public class MARSManagedBean {
         creditCard = null;
         csv = null;
         setPnrId(null);
+        systemDate = new Date();
     }
 
     public void setOneWayVariables() {
@@ -1764,5 +1766,14 @@ public class MARSManagedBean {
     public void setCustomerManagedBean(CustomerManagedBean customerManagedBean) {
         this.customerManagedBean = customerManagedBean;
     }
+
+    public Date getSystemDate() {
+        return systemDate;
+    }
+
+    public void setSystemDate(Date systemDate) {
+        this.systemDate = systemDate;
+    }
+    
 
 }
