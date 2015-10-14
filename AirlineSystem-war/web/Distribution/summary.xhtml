@@ -5,71 +5,415 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
-    <head>
+    <h:head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <!-- Custom Theme files -->
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <h:outputStylesheet library ="css"  name="bootstrap.css" />
+        <h:outputStylesheet library ="css"  name="styleMerlion.css" />
+        <h:outputStylesheet library ="css"  name="JFFormStyle.css" />
+        <h:outputStylesheet library ="css"  name="flexslider.css" />
+        <h:outputScript library="js" name="jQuery/jQuery-2.1.4.min.js" />
+        <h:outputScript library="js" name="modernizr.custom.js" /> 
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
+
+
+        <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+        <!-- //Custom Theme files -->
+
+        <!-- fonts -->
+        <link href='//fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,700,500italic,700italic,900,900italic' rel='stylesheet' type='text/css'></link>
+        <link href='//fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'></link>
+        <!-- //fonts -->	
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('#horizontalTab').easyResponsiveTabs({
+                    type: 'default', //Types: default, vertical, accordion           
+                    width: 'auto', //auto or any width like 600px
+                    fit: true   // 100% fit in a container
+                });
+            });
+        </script>
+        <!--pop-up-->
+        <h:outputScript library="js" name="menu_jquery.js" /> 
+        <!--//pop-up-->	
         <title>Summary</title>
-    </head>
-    <body>
-        <h:form id="form">
-            <p:dataList value="#{mARSManagedBean.selectedSchedules}" var="schedules" type="ordered">
+    </h:head>
+    <style>
+        .flight-list-v2 {
+            margin: 40px 15px 0px 15px;
+            overflow: hidden;
+            border: 1px solid #e6e6e6;
+            box-shadow: 0px 0px 5px #e6e6e6;	
+        }
+        .flight-list-v2:hover {
+            border: 1px solid #F19C4F;
+            box-shadow: 0px 0px 5px #F19C4F;
+        }
+        .flight-list-v2 .airline {
+            padding: 20px 0px;
+        }
+        .flight-list-v2 .airline h6 {
+            margin-top: 5px;
+        }
+        .flight-list-v2 img {
+            max-width: 100%;
+        }
+        .flight-list-v2 .bold {
+            font-weight: normal;
+        }
+        .flight-list-v2  h3{
+            font-weight: bold;
+            margin: 20px 0px 0px;
+        }
+        .stop-duration {
+            padding: 15px;
+        }
+        .flight-list-v2 .stop {
+            height: 15px;
+            width: 15px;
+            border-radius: 50%;
+            background: #e6e6e6;
+            margin-top: -8px;
+            margin-left: 47%;
+        }
+        .flight-list-v2 .stop-box {
+            padding: 8px 10px;
+            margin-left: 36%;
+            width: 70px;
+            position: relative;
+            border: 1px solid #e6e6e6;
+            z-index: -1;
+            margin-top: 6px;
+            text-align: center;
+        }
+        .flight-list-v2 .stop-box:before {
+            border-left: 1px solid #e6e6e6;
+            border-top: 1px solid #e6e6e6;
+            content: "";
+            background: #ffffff;
+            height: 10px;
+            left: 42%;
+            position: absolute;
+            top: -6px;
+            -webkit-transform: rotate(45deg);
+            -ms-transform: rotate(45deg);
+            -o-transform: rotate(45deg);
+            -moz-transform: rotate(45deg);
+            transform: rotate(45deg);
+            width: 10px;
+        }
+        .flight-list-v2 .departure {
+            text-align: right;
+        }
+        .flight-list-v2 .destination {
+            text-align: left;
+        }
+        .flight-list-v2 .duration {
+            margin-top: 5px;
+        }
+        .flight-direction {
+            border: 1px solid #e6e6e6;
+            position: relative;
+            margin-top: 15px;
+            z-index: -1;
+        }
+        .flight-direction:after {
+            background: #e6e6e6 none repeat scroll 0 0;
+            border-radius: 50%;
+            color: #0A3152;
+            content: "";
+            height: 15px;
+            position: absolute;
+            right: -2px;
+            top: -7px;
+            width: 15px;
+        }
+        .flight-direction:before {
+            background: #e6e6e6 none repeat scroll 0 0;
+            border-radius: 50%;
+            color: #0A3152;
+            content: "";
+            height: 15px;
+            position: absolute;
+            left: -2px;
+            top: -7px;
+            width: 15px;
+        }
+        .flight-list-footer {
+            overflow: hidden;
+            background: #f7f7f7;
+            padding: 10px 0px;
+            color: #0A3152;
+        }
+        .flight-list-footer span{
+            padding: 0px 10px;
+            font-size: 13px;
+        }
+        .flight-list-footer .pull-right span{
+            font-weight: bold;
+            font-size: 18px;
+            padding: 0;
+        }
+        .flight-list-footer .pull-right a {
+            color: #ffffff;
+            background: #F2676B;
+            padding: 15px;
+            margin-left: 20px;
+            font-weight: bold;
+        }
+        .flight-list-v2:hover .flight-list-footer .pull-right a {
+            background: #00ADEF;
+        }
+        .flight-list-footer .refund {
+            color: #F2676B;
+            border-left: 1px solid #0A3152;
+            border-right: 1px solid #0A3152;
+        }
+        .flight-list-footer .fa-info-circle {
+            cursor: pointer;
+        }
+        .flight-list-v2 h5 {
+            color: #0A3152;
+            font-size: 13px;
+            margin: 5px 0px;
+        }
+        .booking-sidebar .sidebar-item {
+            border: 1px solid #e6e6e6;
+            box-shadow: 0px 0px 5px #e6e6e6;
+        }
+        .booking-sidebar .sidebar-item h4 {
+            background: #e6e6e6 none repeat scroll 0 0;
+            padding: 20px 15px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin: 0px;
+        }
+        .booking-sidebar .sidebar-item h4 i {
+            color: #F2676B;
+            margin-right: 10px;
+        }
+        .booking-sidebar .sidebar-body {
+            padding: 20px;
+        }
+        .booking-sidebar .sidebar-body .table {
+            margin-bottom: 0px;
+        }
+        .booking-sidebar .sidebar-body table tr {
+            border-bottom: 1px solid #e6e6e6;
+        }
+        .booking-sidebar .sidebar-body table tr:last-child {
+            border-bottom: none;
+        }
+        .booking-sidebar .sidebar-body table td {
+            border-top: none;
+        }
+        .booking-sidebar .sidebar-body .total {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        /*        for responsive implementation*/
+        @media (max-width: 767px) {
+            .flight-list-v2 .departure ,
+            .flight-list-v2 .destination {
+                text-align: center;
+            }
+            .flight-list-v2 .stop-box {
+                margin-left: 38%;
+            }
+            .flight-list-v2 h3 {
+                margin: 0px;
+            }
+            .sm-invisible {
+                display: none;
+            }
+            .flight-list-main {
+                padding-bottom: 20px;
+            }
+            .flight-list-v2 .airline {
+                padding: 20px 0px 10px 0px;
+            }
+        }
 
-                <div class="col-lg-12">
-                    <h:outputLabel value="Flight Number: " />
-                    <h:outputText value="#{schedules.flight.flightNo}">
-                    </h:outputText>
+    </style>
+    <h:body>
+        <ui:fragment rendered ="#{customerManagedBean.isCustomerLoggedOn}">
+        <ui:include src="customerDashboardHeader.xhtml"/>
+        </ui:fragment>
+        <ui:fragment rendered ="#{!customerManagedBean.isCustomerLoggedOn}">
+        <ui:include src="merlionAirlinesHeader.xhtml"/>
+        </ui:fragment>
+        <div class="banner-bottom">
+            <!-- container -->
+            <div class="container">
+                <div class="about-info">
+                    <h2>Here's your itinerary for the trip:</h2>
+                </div>
+                <div class="faqs-top-grids terms-grids">
+
+                    <ui:repeat value='#{mARSManagedBean.selectedSchedules}' var='schedules'>
+                        <div class="col-md-8 col-sm-8">
+                            <div class="flight-list-v2">
+                                <div class="flight-list-main">	
+                                    <div class="col-md-2 col-sm-2 text-center airline">
+                                        <br></br>
+                                        <h4 style='color:#26c6da;'>Merlion Airlines</h4>
+
+                                        <h5>#{schedules.flight.flightNo}</h5>
+                                    </div>
+                                    <div class="col-md-3 col-sm-3 departure">
+
+                                        <h3><i class="fa fa-plane"></i> #{schedules.flight.route.originIATA} </h3>
+                                        <h4><h:outputText value="#{schedules.startDate}">
+                                                <f:convertDateTime pattern ="hh:mm a"/>
+                                            </h:outputText></h4>
+
+                                        <h5 class="bold"><h:outputText value="#{schedules.startDate}">
+
+                                                <f:convertDateTime pattern ="EEE, MMM d, yyyy"/>
+                                            </h:outputText></h5>
+
+                                        <h5>#{schedules.flight.route.originCity}, #{schedules.flight.route.originCountry}</h5>
+                                    </div>
+
+
+                                    <div class="col-md-4 col-sm-4 stop-duration">
+                                        <div class="duration text-center">
+                                            <h1><i class="fa fa-long-arrow-right"></i></h1>
+                                            <span><i class="fa fa-clock-o"></i> 
+                                                    #{mARSManagedBean.convertToHours(schedules.flight.flightDuration)} Hours                                            
+                                                    #{mARSManagedBean.convertToMins(schedules.flight.flightDuration)} Mins 
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 col-sm-3 destination">
+                                        <h3><i class="fa fa-plane fa-rotate-90"></i> #{schedules.flight.route.destinationIATA} </h3>
+                                        <h4><h:outputText value="#{schedules.endDate}">
+                                                <f:convertDateTime pattern ="hh:mm a"/>
+                                            </h:outputText></h4>
+                                        <h5 class="bold"><h:outputText value="#{schedules.endDate}">
+                                                <f:convertDateTime pattern ="EEE, MMM d, yyyy"/>
+                                            </h:outputText></h5>
+                                        <h5>#{schedules.flight.route.destinationCity}, #{schedules.flight.route.destinationCountry}</h5>
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                                <div class="flight-list-footer">
+                                    <div class="col-md-6 col-sm-6 col-xs-6 sm-invisible">
+                                        <span><i class="fa fa-plane"></i>#{mARSManagedBean.serviceType}</span>
+                                        <!--                                        <span class="refund"><i class="fa fa-undo"></i> Refundable</span>-->
+
+                                    </div>
+                                    <!--                                    <div class="col-md-6 col-sm-6 col-xs-12 clear-padding">
+                                                                            <div class="pull-right">
+                                                                                <a href="#">Edit Flight</a>
+                                                                            </div>
+                                                                        </div>-->
+                                </div>
+                            </div>
+                        </div>
+                    </ui:repeat>
+
+                    <div class="col-md-4 col-sm-4 booking-sidebar">
+                        <div class="sidebar-item">
+                            <h4><i class="fa fa-bookmark"></i>Fare Details</h4>
+                            <div class="sidebar-body">
+                                <table class="table">
+                                    <tbody><tr>
+                                            <td>Adult </td>
+                                            <td>#{mARSManagedBean.adults}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Children </td>
+                                            <td>#{mARSManagedBean.children}</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>You Pay</td>
+                                            <td class="total">#{mARSManagedBean.totalSelectedPrice}</td>
+                                        </tr>
+                                    </tbody></table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class='col-md-10'>
+                        <h:form id="form">
+
+                            <div class="form-group text-center">
+                                <h:commandButton class="btn btn-outline btn-success" value="Confirm Booking"  action="booking"/>
+                            </div>
+                        </h:form>
+                    </div>
+
+
+
+                    <div class="clearfix"> </div>
                 </div>
 
-                <div class="col-lg-12">
-                    <h:outputLabel value="Origin: " />
-                    <h:outputText value="#{schedules.flight.route.originIATA}">
-                    </h:outputText>
-                </div>
-
-                <div class="col-lg-12">
-                    <h:outputLabel value="Destination: " />
-                    <h:outputText value="#{schedules.flight.route.destinationIATA}">
-                    </h:outputText>
-                </div>
-
-                <div class="col-lg-12">
-                    <h:outputLabel value="Departure Time: " />
-                    <h:outputText value="#{schedules.startDate}">
-                        <f:convertDateTime pattern ="hh:mm a (EEE, MMM d, yyyy)"/>
-                        <!--            <f:convertDateTime pattern ="dd-mm-yyyy HH:mm"/>-->
-                    </h:outputText>
-                </div>
-
-                <div class="col-lg-12">
-                    <h:outputLabel value="Arrival Time: " />
-                    <h:outputText value="#{schedules.endDate}">
-                        <f:convertDateTime pattern ="hh:mm a (EEE, MMM d, yyyy)"/>
-                        <!--            <f:convertDateTime pattern ="dd-mm-yyyy HH:mm"/>-->
-                    </h:outputText>
-                </div>
-
-            </p:dataList>
-
-            <div class="col-lg-12">
-                <h:outputLabel value="Number of Adults: " />
-                <h:outputText value="#{mARSManagedBean.adults}">
-                </h:outputText>
             </div>
+        </div>
 
-            <div class="col-lg-12">
-                <h:outputLabel value="Number of Children: " />
-                <h:outputText value="#{mARSManagedBean.children}">
-                </h:outputText>
-            </div>
 
-            <div class="col-lg-12">
-                <h:outputLabel value="Total Price: " />
-                <h:outputText value="#{mARSManagedBean.totalSelectedPrice}">
-                </h:outputText>
-            </div>
 
-            <div class="form-group text-center">
-                <h:commandButton class="btn btn-outline btn-success" value="Proceed to booking"  action="booking"/>
-            </div>
-        </h:form>
+        <ui:include src="merlionAirlinesFooter.xhtml"/>
+        <h:outputScript library="js" name="jquery.flexslider.js"/> 
+        <h:outputScript library="js" name="easyResponsiveTabs.js" /> 
+        <h:outputScript library="js" name="scriptMerlion.js"></h:outputScript>
 
-    </body>
+        <script type="text/javascript">
+            $(function () {
+                SyntaxHighlighter.all();
+            });
+            $(window).load(function () {
+                $('.flexslider').flexslider({
+                    animation: "slide",
+                    start: function (slider) {
+                        $('body').removeClass('loading');
+                    }
+                });
+            });
+        </script>
+
+    </h:body>
+
+<!--                                      <p:dataList value="#{mARSManagedBean.selectedSchedules}" var="schedules" type="definition">
+
+                            <div class="col-lg-12">
+                                <h:outputLabel value="Flight Number: " />
+                                <h:outputText value="#{schedules.flight.flightNo}">
+                                </h:outputText>
+                            </div>
+
+                            <div class="col-lg-12">
+                                <h:outputLabel value="Origin: " />
+                                <h:outputText value="#{schedules.flight.route.originIATA}">
+                                </h:outputText>
+                            </div>
+
+                            <div class="col-lg-12">
+                                <h:outputLabel value="Destination: " />
+                                <h:outputText value="#{schedules.flight.route.destinationIATA}">
+                                </h:outputText>
+                            </div>
+
+                            <div class="col-lg-12">
+                                <h:outputLabel value="Departure Time: " />
+                                <h:outputText value="#{schedules.startDate}">
+                                    <f:convertDateTime pattern ="hh:mm a (EEE, MMM d, yyyy)"/>
+                                                <f:convertDateTime pattern ="dd-mm-yyyy HH:mm"/>
+                                </h:outputText>
+                            </div>
+
+                            <div class="col-lg-12">
+                                <h:outputLabel value="Arrival Time: " />
+                                <h:outputText value="#{schedules.endDate}">
+                                    <f:convertDateTime pattern ="hh:mm a (EEE, MMM d, yyyy)"/>
+                                                <f:convertDateTime pattern ="dd-mm-yyyy HH:mm"/>
+                                </h:outputText>
+                            </div>
+
+                        </p:dataList>-->
 </html>

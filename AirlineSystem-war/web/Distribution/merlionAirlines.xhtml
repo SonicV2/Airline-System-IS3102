@@ -55,7 +55,12 @@ and open the template in the editor.
     </style>
     <h:body>
         <!--this is the common header of all the mARS pages-->
+        <ui:fragment rendered ="#{customerManagedBean.isCustomerLoggedOn}">
+        <ui:include src="customerDashboardHeader.xhtml"/>
+        </ui:fragment>
+        <ui:fragment rendered ="#{!customerManagedBean.isCustomerLoggedOn}">
         <ui:include src="merlionAirlinesHeader.xhtml"/>
+        </ui:fragment>
         <!-- banner -->
         <div class="banner">
             <!-- container -->
@@ -148,7 +153,7 @@ and open the template in the editor.
                                                                         <div class="book_date">
 
                                                                             <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
-                                                                            <p:calendar id="button" value="#{mARSManagedBean.departureDate}" navigator="true" pattern="yyyy-MMM-dd" />
+                                                                            <p:calendar id="button" value="#{mARSManagedBean.departureDate}" navigator="true" pattern="yyyy-MMM-dd" mindate="#{mARSManagedBean.systemDate}" onchange="#{mARSManagedBean.setDepartureDate(departureDate)}"/>
                                                                         </div>		
                                                                     </li>
                                                                     <li class="span1_of_1 left">
@@ -265,7 +270,7 @@ and open the template in the editor.
                                                                     <h5>Departure</h5>
                                                                     <div class="book_date">
                                                                         <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
-                                                                        <p:calendar id="button" value="#{mARSManagedBean.oneWayDepartureDate}" navigator="true" pattern="yyyy-MMM-dd"/>
+                                                                        <p:calendar id="button" value="#{mARSManagedBean.oneWayDepartureDate}" navigator="true" pattern="yyyy-MMM-dd" mindate="#{mARSManagedBean.systemDate}"/>
 
                                                                     </div>		
                                                                 </li>
