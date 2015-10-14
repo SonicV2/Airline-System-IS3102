@@ -40,7 +40,12 @@
     </h:head>
 
     <h:body>
-        <ui:include src="merlionAirlinesHeader.xhtml"/>    
+        <ui:fragment rendered ="#{customerManagedBean.isCustomerLoggedOn}">
+        <ui:include src="customerDashboardHeader.xhtml"/>
+        </ui:fragment>
+        <ui:fragment rendered ="#{!customerManagedBean.isCustomerLoggedOn}">
+        <ui:include src="merlionAirlinesHeader.xhtml"/>
+        </ui:fragment>   
         <div class="banner-bottom">
             <div class="container">
                 <div class="about-info">
