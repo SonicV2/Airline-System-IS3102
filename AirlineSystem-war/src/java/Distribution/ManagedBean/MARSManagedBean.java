@@ -11,6 +11,7 @@ import APS.Entity.Schedule;
 import APS.Session.FlightSessionBeanLocal;
 import APS.Session.RouteSessionBeanLocal;
 import APS.Session.ScheduleSessionBeanLocal;
+import CI.Managedbean.LoginManageBean;
 import Distribution.Entity.Customer;
 import Distribution.Entity.FlightOptions;
 import Distribution.Entity.PNR;
@@ -27,6 +28,7 @@ import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.inject.Named;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
@@ -58,6 +60,9 @@ public class MARSManagedBean {
 
     @EJB
     private PassengerBookingSessionBeanLocal passengerBookingSessionBean;
+
+    @ManagedProperty(value = "#{customerManagedBean}")
+    private CustomerManagedBean customerManagedBean;
 
     @PersistenceContext(unitName = "AirlineSystem-ejbPU")
     private EntityManager em;
@@ -253,8 +258,7 @@ public class MARSManagedBean {
     }
 
     public String displayDepartureFlights(Boolean oneWay) {
-  
-        
+
         oneWayFlight = oneWay;
         /*Convert the chosen origin and destination cities into IATAs*/
         List<Flight> allFlights = new ArrayList();
@@ -596,7 +600,7 @@ public class MARSManagedBean {
     }
 
     public void addSchedulesToLegOne(List<Schedule> originalSchedules, List<Schedule> schedulesToAdd) {
-        
+
         for (Schedule eachScheduleToAdd : schedulesToAdd) {
             originalSchedules.add(eachScheduleToAdd);
         }
@@ -610,8 +614,8 @@ public class MARSManagedBean {
         setLegTwoSchedules(originalSchedules);
     }
 
-    public String summary() {   
-        
+    public String summary() {
+
         passengerList.clear();
 
         if (isDirect) {
@@ -628,7 +632,7 @@ public class MARSManagedBean {
                 selectedSchedules.add(selectedReturnFlightOption.getLegTwo());
             }
         }
-  
+
         for (Schedule eachSelectedSchedule : selectedSchedules) {
             eachSelectedSchedule.setStartDate(distributionSessionBean.convertTimeZone(eachSelectedSchedule.getStartDate(), distributionSessionBean.getTimeZoneFromIata(eachSelectedSchedule.getFlight().getRoute().getOriginIATA()), distributionSessionBean.getSingaporeTimeZone()));
             eachSelectedSchedule.setEndDate(distributionSessionBean.convertTimeZone(eachSelectedSchedule.getEndDate(), distributionSessionBean.getTimeZoneFromIata(eachSelectedSchedule.getFlight().getRoute().getDestinationIATA()), distributionSessionBean.getSingaporeTimeZone()));
@@ -658,6 +662,18 @@ public class MARSManagedBean {
         for (Schedule eachSelectedSchedule : selectedSchedules) {
             eachSelectedSchedule.setStartDate(distributionSessionBean.convertTimeZone(eachSelectedSchedule.getStartDate(), distributionSessionBean.getSingaporeTimeZone(), distributionSessionBean.getTimeZoneFromIata(eachSelectedSchedule.getFlight().getRoute().getOriginIATA())));
             eachSelectedSchedule.setEndDate(distributionSessionBean.convertTimeZone(eachSelectedSchedule.getEndDate(), distributionSessionBean.getSingaporeTimeZone(), distributionSessionBean.getTimeZoneFromIata(eachSelectedSchedule.getFlight().getRoute().getDestinationIATA())));
+        }
+
+        Customer loggedInCustomer = customerManagedBean.getCustomer();
+        if (loggedInCustomer != null) {
+            passengerList.get(0).setTitle(loggedInCustomer.getTitle());
+            passengerList.get(0).setFirstName(loggedInCustomer.getFirstName());
+            passengerList.get(0).setLastName(loggedInCustomer.getLastName());
+            passengerList.get(0).setPassport(loggedInCustomer.getPassportNumber());
+            passengerList.get(0).setNationality(loggedInCustomer.getNationality());
+            passengerList.get(0).setCustomerId(loggedInCustomer.getId().toString());
+            primaryContactNo = loggedInCustomer.getHpNumber();
+            primaryEmail = loggedInCustomer.getEmail();
         }
 
         return "summary";
@@ -789,7 +805,7 @@ public class MARSManagedBean {
     }
 
     public String deletePNR() {
-        
+
         for (Schedule eachSelectedSchedule : selectedSchedules) {
             eachSelectedSchedule.setStartDate(distributionSessionBean.convertTimeZone(eachSelectedSchedule.getStartDate(), distributionSessionBean.getTimeZoneFromIata(eachSelectedSchedule.getFlight().getRoute().getOriginIATA()), distributionSessionBean.getSingaporeTimeZone()));
             eachSelectedSchedule.setEndDate(distributionSessionBean.convertTimeZone(eachSelectedSchedule.getEndDate(), distributionSessionBean.getTimeZoneFromIata(eachSelectedSchedule.getFlight().getRoute().getDestinationIATA()), distributionSessionBean.getSingaporeTimeZone()));
@@ -1750,6 +1766,14 @@ public class MARSManagedBean {
      */
     public void setChildPrice(double childPrice) {
         this.childPrice = childPrice;
+    }
+
+    public CustomerManagedBean getCustomerManagedBean() {
+        return customerManagedBean;
+    }
+
+    public void setCustomerManagedBean(CustomerManagedBean customerManagedBean) {
+        this.customerManagedBean = customerManagedBean;
     }
 
 }

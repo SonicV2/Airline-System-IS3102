@@ -67,6 +67,18 @@ and open the template in the editor.
                                 </div>
                                 <div class="book-left-form">
 
+                                     <div style="display:inline;">
+                                        <p>Title </p>
+                                        <h:panelGrid>
+                                            <h:selectOneRadio id="title" required="true" requiredMessage="Please Select Title!" value="#{customerManagedBean.title}" >
+                                                <f:selectItem itemLabel="Mr" itemValue="Mr" />
+                                                <f:selectItem itemLabel="Mdm" itemValue="Mdm" />
+                                                <f:selectItem itemLabel="Mrs" itemValue="Mrs" />
+                                                <f:selectItem itemLabel="Miss" itemValue="Miss" />
+                                            </h:selectOneRadio>
+                                        </h:panelGrid>
+                                    </div>
+                                    
                                     <p>First Name</p>
 
                                     <h:inputText id="firstname" required="true" requiredMessage="Please fill in first name field!"  value="#{customerManagedBean.customerFirstName}" />
@@ -75,6 +87,13 @@ and open the template in the editor.
 
                                     <h:inputText id="lastname" required="true" requiredMessage="Please fill in last name field!"  value="#{customerManagedBean.customerLastName}" />
 
+                                    <p> Passport Number </p>
+                                    <h:inputText id="passport" required="true" requiredMessage="Please fill in passport number field!" value="#{customerManagedBean.passportNumber}" />
+
+                                    <p>Nationality</p>
+
+                                    <h:inputText id="nationality" required="true" requiredMessage="Please fill in nationality field!" value="#{customerManagedBean.nationality}" />
+                                    
                                     <div style="display:inline;">
                                         <p>Gender </p>
                                         <h:panelGrid>

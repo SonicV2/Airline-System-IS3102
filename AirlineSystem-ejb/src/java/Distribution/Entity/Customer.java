@@ -44,11 +44,15 @@ public class Customer implements Serializable {
     private String gender;
     @Temporal(TemporalType.DATE)
     private Date customerDOB;
-
+    
+    private String title;
+    private String passportNumber;
+    private String nationality;
+    
     @OneToMany(cascade = {CascadeType.PERSIST})
     private List<PNR> pnrs = new ArrayList<PNR>();
     
-    public void createCustomer (String firstName, String lastName, String hpNumber, String homeNumber, String email, String password,String address, String gender, Date customerDOB){
+    public void createCustomer (String firstName, String lastName, String hpNumber, String homeNumber, String email, String password,String address, String gender, Date customerDOB, String title, String nationality, String passportNumber){
         this.firstName = firstName;
         this.lastName = lastName;
         this.hpNumber = hpNumber;
@@ -60,6 +64,9 @@ public class Customer implements Serializable {
         this.customerDOB = customerDOB;
         this.mileagePoints = 0; //set the mileage points to be zero at the start
         this.pnrs = null; //does not have PNR at the start
+        this.title = title;
+        this.passportNumber = passportNumber;
+        this.nationality = nationality;
  }
 
     public String getFirstName() {
@@ -206,5 +213,30 @@ public class Customer implements Serializable {
     public void setCustomerDOB(Date customerDOB) {
         this.customerDOB = customerDOB;
     }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getPassportNumber() {
+        return passportNumber;
+    }
+
+    public void setPassportNumber(String passportNumber) {
+        this.passportNumber = passportNumber;
+    }
+
+    public String getNationality() {
+        return nationality;
+    }
+
+    public void setNationality(String nationality) {
+        this.nationality = nationality;
+    }
+    
     
 }
