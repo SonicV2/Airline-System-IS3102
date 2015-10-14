@@ -231,6 +231,17 @@ public class MARSManagedBean {
         csv = null;
         setPnrId(null);
     }
+    
+    public int convertToHours(double duration){
+        int hr =(int)duration;
+        return hr;
+    }
+    
+    public int convertToMins(double duration){
+        double d = duration - Math.floor(duration);
+        int min =(int) (d * 60);
+        return min;
+    }
 
     public void setOneWayVariables() {
         setAdults(oneWayAdult);
