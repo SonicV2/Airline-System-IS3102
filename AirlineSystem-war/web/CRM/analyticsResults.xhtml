@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>Analytics Results</title>
+        <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+        <script type="text/javascript">
+            google.load("visualization", "1", {packages: ["corechart"]});
+            google.setOnLoadCallback(drawChart);
+            function drawChart() {
+                var size =#{cRMAnalyticsManagedBean.csList.size()};
+                
+                var data = google.visualization.arrayToDataTable([
+                    ['Customer', 'Score'], 
+                    ['#{cRMAnalyticsManagedBean.getName(0)}', #{cRMAnalyticsManagedBean.getScore(0)}],
+                    ['#{cRMAnalyticsManagedBean.getName(1)}', #{cRMAnalyticsManagedBean.getScore(1)}],
+                    ['#{cRMAnalyticsManagedBean.getName(2)}', #{cRMAnalyticsManagedBean.getScore(2)}],
+                    ['#{cRMAnalyticsManagedBean.getName(3)}', #{cRMAnalyticsManagedBean.getScore(3)}],
+                    ['#{cRMAnalyticsManagedBean.getName(4)}', #{cRMAnalyticsManagedBean.getScore(4)}]
+                    ]);
+
+              var data2 = [['Customer', 'Score']];
+             for (  i = 0; i &lt;5; i++) {
+                    data2[i + 1] = ['#{cRMAnalyticsManagedBean.getName(i)}', #{cRMAnalyticsManagedBean.getScore(i)}];
+             }
+                
+
+            var dataDraw = google.visualization.arrayToDataTable(data2);
+
+                var options = {
+                    title: 'Customer Scores',
+                    legend: {position: 'none'},
+                    histogram: { lastBucketPercentile: 5 }
+                };
+
+                var chart = new google.visualization.Histogram(document.getElementById('chart_div'));
+                chart.draw(dataDraw, options);
+            }
+        </script>
+    </h:head>
+    <h:body>
+        <div id="chart_div" style="width: 900px; height: 500px;"></div>
+
+        <br/>
+        <br/>
+        Mean
+        <h:outputLabel class="col-md-4 control-label" value="#{cRMAnalyticsManagedBean.mean}" />
+        <br/>
+        <br/>
+        Median
+        <h:outputLabel class="col-md-4 control-label" value="#{cRMAnalyticsManagedBean.median}" />
+        <br/>
+        <br/>
+        Mode
+        <h:outputLabel class="col-md-4 control-label" value="#{cRMAnalyticsManagedBean.mode}" />
+    </h:body>
+</html>
+

@@ -18,9 +18,11 @@ public class CustomerScore implements Serializable {
     private String email;
     
     
-    public CustomerScore(Long id, double score){
+    public CustomerScore(Long id, double score, String name, String email){
         this.id = id;
         this.score=score;
+        this.name=name;
+        this.email=email;
     }
     public Long getId() {
         return id;

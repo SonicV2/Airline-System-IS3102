@@ -9,11 +9,14 @@ import CRM.Session.AnalyticsSessionBeanLocal;
 import java.io.Serializable;
 import javax.ejb.EJB;
 import javax.inject.Named;
-import javax.enterprise.context.Dependent;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.bean.ManagedBean;
 import CRM.Session.CustomerScore;
 import java.util.List;
+import java.util.HashMap;
+
+
+
 
 /**
  *
@@ -30,44 +33,116 @@ public class CRMAnalyticsManagedBean implements Serializable {
     private String type;
     private int from;
     private int to;
-    private double result;
+    private double mean;
+    private int median;
+    private int mode;
     private List<CustomerScore> csList;
+    private int hmSize;
+    private HashMap<Integer, Integer> hm;
+    private String test;
+    private List<Double> doubleList;
+
 
     /**
      * Creates a new instance of CRMAnalyticsManagedBean
      */
     public CRMAnalyticsManagedBean() {
+        test= "haha";
     }
 
     public String retrieveCustomerList() {
         if (type.equals("Recency")) {
             csList = am.getRecency(from, to);
-            System.out.println("Look Here !!!!");
-            System.out.println(csList.get(0).getScore());
-        }
-        if (type.equals("Frequency")) {
+        } else if (type.equals("Frequency")) {
             csList = am.getFrequency(from, to);
-        }
-        if (type.equals("Monetary")) {
+        } else if (type.equals("Monetary")) {
             csList = am.getMonetary(from, to);
         }
-        
+
         return "viewListResults";
+    }
+
+    public String getTest() {
+        return test;
+    }
+
+    public void setTest(String test) {
+        this.test = test;
     }
     
 
-    public String calculateAvg() {
-        if (type.equals("Recency")) {
-            result = am.calAvgRecencyScore();
-        }
-        if (type.equals("Frequency")) {
-            result = am.calAvgFrequencyScore();
-        }
-        if (type.equals("Monetary")) {
-            result = am.calAvgMonetaryScore();
+    
+    public void calculateAvg() {
+        int size = csList.size();
+        double totalScore = 0.0;
+        for (int i = 0; i < size; i++) {
+            CustomerScore cs = csList.get(i);
+            totalScore += cs.getScore();
         }
 
-        return "avgResults";
+        mean = totalScore / size;
+
+    }
+
+    public void calculateMedian() {
+        int index = csList.size() / 2;
+        Double score = csList.get(index).getScore();
+        median = score.intValue();
+    }
+
+    public void calculateMode() {
+
+        int size = csList.size();
+        int[] array = new int[size];
+        for (int i = 0; i < size; i++) {
+            Double score = csList.get(i).getScore();
+            array[i] = score.intValue();
+        }
+        hm = new HashMap<Integer, Integer>();
+        int max = 1, temp =0;
+        for (int i = 0; i < array.length; i++) {
+            if (hm.get(array[i]) != null) {
+                int count = hm.get(array[i]);
+                count = count + 1;
+                hm.put(array[i], count);
+                if (count > max) {
+                    max = count;
+                    temp = array[i];
+                }
+            } else {
+                hm.put(array[i], 1);
+            }
+        }
+        mode= temp;
+
+    }
+
+    public String calMMM() {
+        if (type.equals("Recency")) {
+            csList = am.getRecency(0, 100);
+        } else if (type.equals("Frequency")) {
+            csList = am.getFrequency(0, 100);
+        } else if (type.equals("Monetary")) {
+            csList = am.getMonetary(0, 100);
+        }
+        calculateAvg();
+        calculateMedian();
+        calculateMode();
+        
+   
+        
+        return "analyticsResults";
+    }
+    
+    public String getName(int index){
+        
+        return csList.get(index).getName();
+    }
+    public double getScore(int index){
+        System.out.println("Get Score!!!");
+        System.out.println(index);
+        System.out.println(csList.get(index).getScore());
+        return csList.get(index).getScore();
     }
 
     public List<CustomerScore> getCsList() {
@@ -77,8 +152,6 @@ public class CRMAnalyticsManagedBean implements Serializable {
     public void setCsList(List<CustomerScore> csList) {
         this.csList = csList;
     }
-    
-    
 
     public String getType() {
         return type;
@@ -104,12 +177,48 @@ public class CRMAnalyticsManagedBean implements Serializable {
         this.to = to;
     }
 
-    public double getResult() {
-        return result;
+    public double getMean() {
+        return mean;
     }
 
-    public void setResult(double result) {
-        this.result = result;
+    public void setMean(double mean) {
+        this.mean = mean;
     }
+
+    public int getMedian() {
+        return median;
+    }
+
+    public void setMedian(int median) {
+        this.median = median;
+    }
+
+    public int getMode() {
+        return mode;
+    }
+
+    public void setMode(int mode) {
+        this.mode = mode;
+    }
+
+    public int getHmSize() {
+        return hmSize;
+    }
+
+    public void setHmSize(int hmSize) {
+        this.hmSize = hmSize;
+    }
+
+    public HashMap<Integer, Integer> getHm() {
+        return hm;
+    }
+
+    public void setHm(HashMap<Integer, Integer> hm) {
+        this.hm = hm;
+    }
+    
+    
+
+    
 
 }

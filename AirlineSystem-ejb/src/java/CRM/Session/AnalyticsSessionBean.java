@@ -41,9 +41,9 @@ public class AnalyticsSessionBean implements AnalyticsSessionBeanLocal {
         String address = "Com 1 NUS SOC";
         String gender = "male";
         Date date = new Date();
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 1000; i++) {
             Customer c = new Customer();
-            c.createCustomer(firstName, Integer.toString(i), hpNumber, homenumber, email, password, address, gender, date);
+            c.createCustomer(firstName, Integer.toString(i), hpNumber, homenumber, email, password, address, gender, date, "MR", "Singaporean", "ABC123");
             em.persist(c);
         }
     }
@@ -55,25 +55,29 @@ public class AnalyticsSessionBean implements AnalyticsSessionBeanLocal {
         for (int i = 0; i < bSize; i++) {
             Booking b = bList.get(i);
             Random random = new Random();
-            int roll = random.nextInt(100);
-            int roll2 = random.nextInt(36);
+            int roll = random.nextInt(1000);
+            int roll2 = random.nextInt(24);
             String lastName = Integer.toString(roll);
             Query q1 = em.createQuery("SELECT o FROM Customer o WHERE o.lastName =:lastName");
             q1.setParameter("lastName", lastName);
             List<Customer> cList = q1.getResultList();
             Customer c = cList.get(0);
             b.setCustomerId(c.getId());
-            b.setPrice(random.nextInt(500)+100.0);           
+            b.setPrice(random.nextInt(500) + 100.0);
+            Date flightDate= b.getFlightDate();
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(flightDate);
+            cal.setTimeInMillis(cal.getTimeInMillis()-(roll2*1000*60*60*24*30));
+            b.setFlightDate(flightDate);
         }
 
     }
 
     public List<CustomerScore> getRecency(int from, int to) {
-        System.out.println("Session Bean Reached!!!");
         List<CustomerScore> scoreList = new ArrayList();
         Query q = em.createQuery("SELECT o FROM Customer o");
         List<Customer> cList = q.getResultList();
-        int size = cList.size();  
+        int size = cList.size();
         for (int i = 0; i < size; i++) {
             Long score = Long.valueOf("99999");
             Customer customer = cList.get(i);
@@ -92,15 +96,35 @@ public class AnalyticsSessionBean implements AnalyticsSessionBeanLocal {
 
                 Long time1 = c1.getTimeInMillis();
                 Long time2 = c2.getTimeInMillis();
-                Long score2 = Math.abs((time1-time2) / 1000 / 60 / 60 / 24);
+                Long score2 = Math.abs((time1 - time2) / 1000 / 60 / 60 / 24);
                 if (score2 < score) {
                     score = score2;
                 }
             }
-            
-            CustomerScore cs = new CustomerScore(customerId, score * 1.0);
-            System.out.println(cs.getScore());
+            Customer c = em.find(Customer.class, customerId);
+            CustomerScore cs = new CustomerScore(customerId, score * 1.0, c.getFirstName() + " " + c.getLastName(), c.getEmail());
             scoreList.add(cs);
+        }
+        int size2= scoreList.size();   
+        for (int i=0; i<size2; i++){
+            boolean change = false;
+            CustomerScore cs = scoreList.get(i);
+            double minScore =cs.getScore();
+            int minIndex = i;
+            for (int j=i+1; j<size2; j++){
+                CustomerScore cs2 = scoreList.get(j);
+                if(cs2.getScore()< minScore){
+                    minScore = cs2.getScore();
+                    minIndex=j;
+                    change= true;
+                }
+            }
+            if(change){
+                CustomerScore temp= scoreList.get(minIndex);
+                scoreList.remove(minIndex);
+                scoreList.add(i, temp);                
+                change=false;
+            }
         }
         int scoreSize = scoreList.size();
         from = from * scoreSize / 100;
@@ -109,43 +133,7 @@ public class AnalyticsSessionBean implements AnalyticsSessionBeanLocal {
         return scoreList;
     }
 
-    public double calAvgRecencyScore() {
-        Query q = em.createQuery("SELECT o FROM Customer o");
-        List<Customer> cList = q.getResultList();
-        int size = cList.size();
-        Long totalScore = Long.valueOf("0");     
-        for (int i = 0; i < size; i++) {
-            Long score = Long.valueOf("99999");
-            Customer customer = cList.get(i);
-            Long customerId = customer.getId();
-            Query q1 = em.createQuery("SELECT o FROM Booking o WHERE o.customerId =:customerId");
-            q1.setParameter("customerId", customerId);
-            List<Booking> bList = q1.getResultList();
-            int bSize = bList.size();
-            Date today = new Date();
-            Calendar c1 = Calendar.getInstance();
-            c1.setTime(today);
-            for (int j = 0; j < bSize; j++) {
-                Booking booking = bList.get(j);
-                Calendar c2 = Calendar.getInstance();
-                c2.setTime(booking.getFlightDate());
-                System.out.println(c1.getTime());
-                System.out.println(c2.getTime());
-                Long time1 = c1.getTimeInMillis();
-                Long time2 = c2.getTimeInMillis();
-                Long score2 = Math.abs((time1-time2) / 1000 / 60 / 60 / 24);
-                System.out.println(score2);
-                if (score2 < score) {
-                    score = score2;
-                }
-            }
-
-            totalScore = totalScore + score;
-
-        }
-        double result = totalScore /(size*1.0);
-        return result;
-    }
+ 
 
     public List<CustomerScore> getFrequency(int from, int to) {
         List<CustomerScore> scoreList = new ArrayList();
@@ -160,14 +148,36 @@ public class AnalyticsSessionBean implements AnalyticsSessionBeanLocal {
             Calendar lastYear = Calendar.getInstance();
             lastYear.set(-2, Calendar.MONTH, Calendar.DATE);
             Date lastYearDate = lastYear.getTime();
-            Query q1 = em.createQuery("SELECT o FROM Booking o WHERE o.customerId =:customerID AND o.flightDate >:date");
+            Query q1 = em.createQuery("SELECT o FROM Booking o WHERE o.customerId =:customerId AND o.flightDate >:date");
             q1.setParameter("customerId", customerId);
             q1.setParameter("date", lastYearDate);
             List<Booking> bList = q1.getResultList();
             score = bList.size();
-            CustomerScore cs = new CustomerScore(customerId, score * 1.0);
+            Customer c = em.find(Customer.class, customerId);
+            CustomerScore cs = new CustomerScore(customerId, score * 1.0, c.getFirstName() + " " + c.getLastName(), c.getEmail());
             scoreList.add(cs);
 
+        }
+        int size2= scoreList.size();   
+        for (int i=0; i<size2; i++){
+            boolean change = false;
+            CustomerScore cs = scoreList.get(i);
+            double minScore =cs.getScore();
+            int minIndex = i;
+            for (int j=i+1; j<size2; j++){
+                CustomerScore cs2 = scoreList.get(j);
+                if(cs2.getScore()< minScore){
+                    minScore = cs2.getScore();
+                    minIndex=j;
+                    change= true;
+                }
+            }
+            if(change){
+                CustomerScore temp= scoreList.get(minIndex);
+                scoreList.remove(minIndex);
+                scoreList.add(i, temp);                
+                change=false;
+            }
         }
         int scoreSize = scoreList.size();
         from = from * scoreSize / 100;
@@ -176,30 +186,6 @@ public class AnalyticsSessionBean implements AnalyticsSessionBeanLocal {
         return scoreList;
     }
 
-    public double calAvgFrequencyScore() {
-        Query q = em.createQuery("SELECT o FROM Customer o");
-        List<Customer> cList = q.getResultList();
-        int size = cList.size();
-        int totalScore = 0;
-        int score = 0;
-        System.out.println(size);
-        for (int i = 0; i < size; i++) {
-            Customer customer = cList.get(i);
-            Long customerId = customer.getId();
-            Calendar lastYear = Calendar.getInstance();
-            lastYear.set(-2, Calendar.MONTH, Calendar.DATE);
-            Date lastYearDate = lastYear.getTime();
-            Query q1 = em.createQuery("SELECT o FROM Booking o WHERE o.customerId =:customerId AND o.flightDate >:date");
-            q1.setParameter("customerId", customerId);
-            q1.setParameter("date", lastYearDate);
-            List<Booking> bList = q1.getResultList();
-            score = bList.size();
-            totalScore = totalScore + score;
-
-        }
-        double result = totalScore * 1.0 / size;
-        return result;
-    }
 
     public List<CustomerScore> getMonetary(int from, int to) {
         List<CustomerScore> scoreList = new ArrayList();
@@ -219,10 +205,30 @@ public class AnalyticsSessionBean implements AnalyticsSessionBeanLocal {
                 Booking b = bList.get(j);
                 score = score + b.getPrice();
             }
-
-            CustomerScore cs = new CustomerScore(customerId, score * 1.0);
+            Customer c = em.find(Customer.class, customerId);
+            CustomerScore cs = new CustomerScore(customerId, score * 1.0, c.getFirstName() + " " + c.getLastName(), c.getEmail());
             scoreList.add(cs);
 
+        }
+        int size2= scoreList.size();   
+        for (int i=0; i<size2; i++){
+            boolean change = false;
+            CustomerScore cs = scoreList.get(i);
+            double minScore =cs.getScore();
+            int minIndex = i;
+            for (int j=i+1; j<size2; j++){
+                CustomerScore cs2 = scoreList.get(j);
+                if(cs2.getScore()< minScore){
+                    minScore = cs2.getScore();
+                    minIndex=j;
+                    change= true;
+                }
+            }
+            if(change){
+                CustomerScore temp= scoreList.get(minIndex);
+                scoreList.remove(minIndex);
+                scoreList.add(i, temp);                
+            }
         }
         int scoreSize = scoreList.size();
         from = from * scoreSize / 100;

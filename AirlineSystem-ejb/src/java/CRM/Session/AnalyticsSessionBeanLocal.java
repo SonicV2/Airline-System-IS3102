@@ -21,14 +21,10 @@ public interface AnalyticsSessionBeanLocal {
 
     public List<CustomerScore> getRecency(int from, int to);
 
-    public double calAvgRecencyScore();
 
     public List<CustomerScore> getFrequency(int from, int to);
 
-    public double calAvgFrequencyScore();
-
     public List<CustomerScore> getMonetary(int from, int to);
 
-    public double calAvgMonetaryScore();
 
 }
