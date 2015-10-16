@@ -25,9 +25,9 @@
     <h:body>
 
         <!--    To add the same header on all dashboard pages  -->
-        <ui:include src="dashboardHeader.xhtml"/>
+        <ui:include src="DashboardHeader.xhtml"/>
         <!--    To add the same sidebar on all dashboard pages  -->
-        <ui:include src="dashboardSidebar.xhtml"/>
+        <ui:include src="DashboardSidebar.xhtml"/>
 
         <div id="page-wrapper">
 
@@ -50,64 +50,64 @@
                             <td style="width: 30%;">NRIC Number: </td>
 
 
-                            <td><h:outputText value="#{employeeManageBean.employeeID}" /></td>
+                            <td><h:outputText value="#{employeeManagedBean.employeeID}" /></td>
                             <td></td>
 
                             <tr>
                                 <td><h:outputText value="User Name" /></td>
-                                <td><h:outputText value="#{employeeManageBean.employeeUserName}" /></td>
+                                <td><h:outputText value="#{employeeManagedBean.employeeUserName}" /></td>
                             </tr>
                             <tr>
                                 <td><h:outputText value="First Name" /></td>
-                                <td><h:outputText value="#{employeeManageBean.employeeDisplayFirstName}" /></td>
+                                <td><h:outputText value="#{employeeManagedBean.employeeDisplayFirstName}" /></td>
                             </tr>
                             <tr>
                                 <td> <h:outputText value="Last Name" /></td>
-                                <td><h:outputText value="#{employeeManageBean.employeeDisplayLastName}" /></td>
+                                <td><h:outputText value="#{employeeManagedBean.employeeDisplayLastName}" /></td>
                             </tr>
                             <tr>
                                 <td> <h:outputText value="Date of Birth" /></td>
-                                <td>#{loginManageBean.employee.employeeDOB.date}/#{loginManageBean.employee.employeeDOB.month+1}/#{loginManageBean.employee.employeeDOB.year+1900}</td>
+                                <td>#{loginManagedBean.employee.employeeDOB.date}/#{loginManagedBean.employee.employeeDOB.month+1}/#{loginManagedBean.employee.employeeDOB.year+1880}</td>
                             </tr>
                             <tr>
                                 <td> <h:outputText value="Gender" /></td>
-                                <td><h:outputText value="#{employeeManageBean.employeeGender}" /></td>
+                                <td><h:outputText value="#{employeeManagedBean.employeeGender}" /></td>
                             </tr>
                             <tr>
                                 <td><h:outputText value="Company Email Address" /></td>
-                                <td><h:outputText value="#{employeeManageBean.employeeEmailAddress}" /></td>
+                                <td><h:outputText value="#{employeeManagedBean.employeeEmailAddress}" /></td>
                             </tr>
                             <tr>
                                 <td><h:outputText value="Private Email Address" /></td>
-                                <td><h:outputText value="#{employeeManageBean.employeePrivateEmail}" /></td>
+                                <td><h:outputText value="#{employeeManagedBean.employeePrivateEmail}" /></td>
                             </tr>
                             <tr>
                                 <td><h:outputText value="Mobile Number" /></td>
-                                <td><h:outputText value="#{employeeManageBean.employeeHpNumber}" /></td>
+                                <td><h:outputText value="#{employeeManagedBean.employeeHpNumber}" /></td>
                             </tr>
                             <tr>
                                 <td><h:outputText value="Role" /></td>
-                                <td><h:outputText value="#{employeeManageBean.employeeRole}" /></td>
+                                <td><h:outputText value="#{employeeManagedBean.employeeRole}" /></td>
                             </tr>
                             <tr>
                                 <td><h:outputText value="Department" /></td>
-                                <td><h:outputText value="#{employeeManageBean.employeeDepartment}" /></td>
+                                <td><h:outputText value="#{employeeManagedBean.employeeDepartment}" /></td>
                             </tr>
                             
                             
-                            <ui:fragment rendered ="#{employeeManageBean.employeeRole eq 'Cabin Crew'}">
+                            <ui:fragment rendered ="#{employeeManagedBean.employeeRole eq 'Cabin Crew'}">
                             <tr>
                                 <td><h:outputText value="Position" /></td>
-                                <td><h:outputText value="#{employeeManageBean.position}" /></td>
+                                <td><h:outputText value="#{employeeManagedBean.position}" /></td>
                             </tr>
                             <tr>
                                 <td><h:outputText value="Years of Experience" /></td>
-                                <td><h:outputText value="#{employeeManageBean.experience}" /></td>
+                                <td><h:outputText value="#{employeeManagedBean.experience}" /></td>
                             </tr>
                                 <tr>
                                 <td><h:outputText value="Languages" /></td>
                                 <td>
-                                    <ui:repeat value="#{employeeManageBean.languages}" var="language">
+                                    <ui:repeat value="#{employeeManagedBean.languages}" var="language">
                                     <i class="fa fa-volume-up"></i><h:outputText value="#{language}" />
                                     </ui:repeat>
                                 </td>
@@ -115,19 +115,19 @@
                                 </tr>
                             </ui:fragment>
                             
-                            <ui:fragment rendered ="#{employeeManageBean.employeeRole eq 'Pilot'}">
+                            <ui:fragment rendered ="#{employeeManagedBean.employeeRole eq 'Pilot'}">
                             <tr>
                                 <td><h:outputText value="Position" /></td>
-                                <td><h:outputText value="#{employeeManageBean.position}" /></td>
+                                <td><h:outputText value="#{employeeManagedBean.position}" /></td>
                             </tr>
                             <tr>
                                 <td><h:outputText value="Years of Experience" /></td>
-                                <td><h:outputText value="#{employeeManageBean.experience}" /></td>
+                                <td><h:outputText value="#{employeeManagedBean.experience}" /></td>
                             </tr>
                                 <tr>
                                 <td><h:outputText value="Specilizes in" /></td>
                                 <td>
-                                <ui:repeat value="#{employeeManageBean.skills}" var="skill">
+                                <ui:repeat value="#{employeeManagedBean.skills}" var="skill">
                                     <i class="fa fa-plane"></i> <h:outputText value="#{skill}" />
                                 </ui:repeat>
                                 </td>
@@ -143,7 +143,7 @@
 
             <div class="text-center">
                 <h:form>
-                    <h:commandButton class="btn btn-warning" value="Return to dashboard" action="#{employeeManageBean.clearAll()}" />
+                    <h:commandButton class="btn btn-warning" value="Return to dashboard" action="#{employeeManagedBean.clearAll()}" />
                 </h:form>  
             </div>
 

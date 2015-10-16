@@ -27,9 +27,9 @@
     </h:head>
     <h:body>  
         <!--    To add the same header on all dashboard pages  -->
-        <ui:include src="dashboardHeader.xhtml"/>
+        <ui:include src="DashboardHeader.xhtml"/>
         <!--    To add the same sidebar on all dashboard pages  -->
-        <ui:include src="dashboardSidebar.xhtml"/>
+        <ui:include src="DashboardSidebar.xhtml"/>
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
@@ -41,7 +41,7 @@
 
             <div class="panel panel-yellow">
                 <div class="panel-heading">
-                    #{loginManageBean.employee.employeeDisplayFirstName} #{loginManageBean.employee.employeeDisplayLastName}
+                    #{loginManagedBean.employee.employeeDisplayFirstName} #{loginManagedBean.employee.employeeDisplayLastName}
                 </div>
                 <div class="panel-body">
 
@@ -49,46 +49,51 @@
                     <table class="table">
                         <tbody>
                             <td style="width: 30%;">Full Name: </td>
-                            <td>#{loginManageBean.employee.employeeDisplayFirstName} #{loginManageBean.employee.employeeDisplayLastName}</td>
+                            <td>#{loginManagedBean.employee.employeeDisplayFirstName} #{loginManagedBean.employee.employeeDisplayLastName}</td>
                             <td></td>
                             <tr>
+                            <td style="width: 30%;">Username: </td>
+                            <td>#{loginManagedBean.employee.employeeUserName}</td>
+                            <td></td>
+                            </tr>
+                            <tr>
                                 <td>Role/Department</td>
-                                <td>#{loginManageBean.roles} / #{loginManageBean.employee.organizationUnit.getDepartmentName()}</td>
+                                <td>#{loginManagedBean.roles} / #{loginManagedBean.employee.organizationUnit.getDepartmentName()}</td>
                                 <td></td>
                             </tr>
                             <tr>
                                 <td>Birthday</td>
-                                <td>#{loginManageBean.employee.employeeDOB.date}/#{loginManageBean.employee.employeeDOB.month+1}/#{loginManageBean.employee.employeeDOB.year+1900}</td>
+                                <td>#{loginManagedBean.employee.employeeDOB.date}/#{loginManagedBean.employee.employeeDOB.month+1}/#{loginManagedBean.employee.employeeDOB.year+1900}</td>
                                 <td></td>
                             </tr>
                             <tr>
                                 <td>Gender</td>
-                                <td>#{loginManageBean.employee.employeeGender}</td>
+                                <td>#{loginManagedBean.employee.employeeGender}</td>
                                 <td></td>
                             </tr>
                             <tr>
                                 <td>Home Address</td>
-                                <td>#{loginManageBean.employee.employeeMailingAddress}</td>
+                                <td>#{loginManagedBean.employee.employeeMailingAddress}</td>
                                 <td></td>
                             </tr>
                             <tr>
                                 <td>Office Number</td>
-                                <td>#{loginManageBean.employee.employeeOfficeNumber}</td>
+                                <td>#{loginManagedBean.employee.employeeOfficeNumber}</td>
                                 <td></td>
                             </tr>
                             <tr>
                                 <td>Handphone Number</td>
-                                <td>#{loginManageBean.employee.employeeHpNumber}</td>
+                                <td>#{loginManagedBean.employee.employeeHpNumber}</td>
                                 <td></td>
                             </tr>
                             <tr>
                                 <td>Company Email</td>
-                                <td>#{loginManageBean.employee.employeeEmailAddress}</td>
+                                <td>#{loginManagedBean.employee.employeeEmailAddress}</td>
                                 <td></td>
                             </tr>
                             <tr>
                                 <td>Personal Email</td>
-                                <td>#{loginManageBean.employee.employeePrivateEmail}</td>
+                                <td>#{loginManagedBean.employee.employeePrivateEmail}</td>
                                 <td></td>
                             </tr>                          
 
@@ -102,11 +107,11 @@
             </div>
                
             <h:form>
-                <h:commandButton class="btn btn-warning pull-left" value="Change Information" action="changeProfile?faces-redirect=true" />
+                <h:commandButton class="btn btn-warning pull-left" value="Change Information" action="ChangeProfile?faces-redirect=true" />
             </h:form>  
 
             <h:form>
-                <h:commandButton class="btn btn-warning pull-right" value="Change Password" action="employeeChangePwd"/>
+                <h:commandButton class="btn btn-warning pull-right" value="Change Password" action="EmployeeChangePwd"/>
             </h:form>  
 
 

@@ -26,8 +26,8 @@ import javax.servlet.http.HttpSession;
 //@ViewScoped
 //@RequestScoped
 @SessionScoped
-@Named(value = "loginManageBean")
-public class LoginManageBean {
+@Named(value = "loginManagedBean")
+public class LoginManagedBean {
 
     @EJB
     private EmployeeSessionBeanLocal employeeSessionBean;
@@ -50,7 +50,7 @@ public class LoginManageBean {
     private String userID;
     
 
-    public LoginManageBean() {
+    public LoginManagedBean() {
     }
 
 
@@ -62,7 +62,7 @@ public class LoginManageBean {
             userID= employeeUserName;
             session.setAttribute("isLogin", employeeUserName);
             
-        Logger logger = Logger.getLogger(LoginManageBean.class.getName());
+        Logger logger = Logger.getLogger(LoginManagedBean.class.getName());
         try {   
         fh = new FileHandler("%h/LogIn.txt",99999,1,true);  
         logger.addHandler(fh);
@@ -80,7 +80,7 @@ public class LoginManageBean {
 
             if (firstTimer == true) {
 
-                return "CI/newUserChangePwd" + "?faces-redirect=true";
+                return "CI/NewUserChangePwd" + "?faces-redirect=true";
             } else {
                 
                 return direct();
@@ -119,7 +119,7 @@ public class LoginManageBean {
                         accessRightIDs.add(ar.getId());
                     }
                 }
-        return "CI/employeeDashBoard" + "?faces-redirect=true";
+        return "CI/EmployeeDashBoard" + "?faces-redirect=true";
     }
 
     public void refresh() {
@@ -184,7 +184,7 @@ public class LoginManageBean {
 //    }
     public String logout() {
         
-        Logger logger = Logger.getLogger(LoginManageBean.class.getName());
+        Logger logger = Logger.getLogger(LoginManagedBean.class.getName());
         try {   
         fh = new FileHandler("%h/LogOut.txt",99999,1,true);  
         logger.addHandler(fh);
@@ -200,7 +200,7 @@ public class LoginManageBean {
                 + " has logged out");
         fh.close();
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
-        return "/login.xhtml?faces-redirect=true";
+        return "/Login.xhtml?faces-redirect=true";
     }
 
     public String getEmployeeUserName() {

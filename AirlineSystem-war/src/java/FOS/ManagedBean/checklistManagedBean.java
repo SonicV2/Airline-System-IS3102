@@ -7,7 +7,7 @@ package FOS.ManagedBean;
 
 import APS.Entity.Schedule;
 import APS.Session.ScheduleSessionBeanLocal;
-import CI.Managedbean.LoginManageBean;
+import CI.Managedbean.LoginManagedBean;
 import FOS.Entity.Checklist;
 import FOS.Entity.ChecklistItem;
 import FOS.Entity.Team;
@@ -41,7 +41,7 @@ public class checklistManagedBean {
     private ScheduleSessionBeanLocal scheduleSessionBean;
      
      @ManagedProperty(value = "#{loginManageBean}")
-    private LoginManageBean loginManageBean;
+    private LoginManagedBean loginManageBean;
      
      @EJB
     private CrewSignInSessionBeanLocal crewSignInSessionBean;
@@ -374,11 +374,11 @@ public String fillParticularChecklist (Long scheduleKey ){
         this.scheduleSessionBean = scheduleSessionBean;
     }
 
-    public LoginManageBean getLoginManageBean() {
+    public LoginManagedBean getLoginManageBean() {
         return loginManageBean;
     }
 
-    public void setLoginManageBean(LoginManageBean loginManageBean) {
+    public void setLoginManageBean(LoginManagedBean loginManageBean) {
         this.loginManageBean = loginManageBean;
     }
 

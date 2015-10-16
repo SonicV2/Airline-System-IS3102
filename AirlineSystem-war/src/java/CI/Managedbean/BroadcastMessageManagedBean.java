@@ -35,8 +35,8 @@ public class BroadcastMessageManagedBean {
     @EJB
     private DepartmentSessionBeanLocal departmentSessionBean;
 
-    @ManagedProperty(value = "#{loginManageBean}")
-    private LoginManageBean loginManageBean;
+    @ManagedProperty(value = "#{loginManagedBean}")
+    private LoginManagedBean loginManageBean;
     FacesMessage message = null;
     private String sender;
     private List<String> departments; //departments from database
@@ -157,14 +157,14 @@ public class BroadcastMessageManagedBean {
     /**
      * @return the loginManageBean
      */
-    public LoginManageBean getLoginManageBean() {
+    public LoginManagedBean getLoginManageBean() {
         return loginManageBean;
     }
 
     /**
      * @param loginManageBean the loginManageBean to set
      */
-    public void setLoginManageBean(LoginManageBean loginManageBean) {
+    public void setLoginManageBean(LoginManagedBean loginManageBean) {
         this.loginManageBean = loginManageBean;
     }
 

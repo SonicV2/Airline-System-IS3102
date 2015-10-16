@@ -109,7 +109,7 @@ public class RoleManagedBean {
         newAccessRights.removeAll(roleSessionBean.getAccessRights(getRoleIDforAccessRight()));
         
         
-        return "addNewAccessRight";
+        return "AddNewAccessRight";
     }
 
     public void deleteEmployeeRole(ActionEvent event) {
@@ -133,7 +133,7 @@ public class RoleManagedBean {
         FacesContext.getCurrentInstance().addMessage(null, message);
         setAllRoles(roleSessionBean.retrieveAllRoles());
 
-        return "updateRoles";
+        return "UpdateRoles";
     }
     
     public String deleteAccessRight(Long arID, Long roleID){
@@ -142,7 +142,7 @@ public class RoleManagedBean {
         FacesContext.getCurrentInstance().addMessage(null, message);
         accessRightsForRole = roleSessionBean.getAccessRights(roleIDforAccessRight);
         
-        return "viewAccessRight";
+        return "ViewAccessRight";
     }
    
     public String addRole() {
@@ -153,7 +153,7 @@ public class RoleManagedBean {
                     FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Role Exists", "");
                     FacesContext.getCurrentInstance().addMessage(null, message);
                     clear();
-                    return "createRole";
+                    return "CreateRole";
                 }
             }
         }
@@ -166,13 +166,13 @@ public class RoleManagedBean {
         FacesContext.getCurrentInstance().addMessage(null, message);
         clear();
 
-        return "createRole";
+        return "CreateRole";
     }
     
     public String addAdditionalAccessRights(){
             roleSessionBean.addNewAccessRight(roleIDforAccessRight, selectedNewAccessRights);
             accessRightsForRole = roleSessionBean.getAccessRights(roleIDforAccessRight);
-            return "viewAccessRight";
+            return "ViewAccessRight";
     }
     
     public String getAccessRightsPerRole(Long roleID, String roleName) {
@@ -180,7 +180,7 @@ public class RoleManagedBean {
         accessRightsForRole = roleSessionBean.getAccessRights(roleID);
         roleNameForAccessRight = roleName;
         setRoleIDforAccessRight(roleID);
-        return "viewAccessRight";
+        return "ViewAccessRight";
 
     }
     

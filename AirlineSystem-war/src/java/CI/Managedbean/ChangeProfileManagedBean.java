@@ -29,14 +29,14 @@ import javax.servlet.http.HttpSession;
 @Named(value = "changeProfileManagedBean")
 @ManagedBean
 @RequestScoped
-public class changeProfileManagedBean {
+public class ChangeProfileManagedBean {
 
     @EJB
     private EmployeeSessionBeanLocal employeeSessionBean;
     
 
      @ManagedProperty(value = "#{loginManageBean}")
-    private LoginManageBean loginManageBean;
+    private LoginManagedBean loginManageBean;
      
     private String userName;
     private Date employeeDOB;
@@ -112,7 +112,7 @@ public class changeProfileManagedBean {
          if(getEmployeeNewPwd().equals(getEmployeeNewPwdRe())){
             employeeSessionBean.hashNewPwd(employeeUserName, getEmployeeNewPwd());
             employeeSessionBean.employeeActivate(employeeUserName);
-            Logger logger = Logger.getLogger(LoginManageBean.class.getName());
+            Logger logger = Logger.getLogger(LoginManagedBean.class.getName());
         try {   
         fh = new FileHandler("%h/LogOut.txt",99999,1,true);  
         logger.addHandler(fh);
@@ -131,7 +131,7 @@ public class changeProfileManagedBean {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Password Change Successfully!", "");
              FacesContext.getCurrentInstance().addMessage(null, message);
          }else{
-           message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Password Changed Fail", "");
+           message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Password Change Failed", "");
              FacesContext.getCurrentInstance().addMessage(null, message);
          }
     }
@@ -141,7 +141,7 @@ public class changeProfileManagedBean {
     /**
      * Creates a new instance of changeProfileManagedBean
      */
-    public changeProfileManagedBean() {
+    public ChangeProfileManagedBean() {
     
     }
 
@@ -264,14 +264,14 @@ public class changeProfileManagedBean {
     /**
      * @return the loginManageBean
      */
-    public LoginManageBean getLoginManageBean() {
+    public LoginManagedBean getLoginManageBean() {
         return loginManageBean;
     }
 
     /**
      * @param loginManageBean the loginManageBean to set
      */
-    public void setLoginManageBean(LoginManageBean loginManageBean) {
+    public void setLoginManageBean(LoginManagedBean loginManageBean) {
         this.loginManageBean = loginManageBean;
     }
 

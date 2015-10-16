@@ -25,13 +25,13 @@ import org.primefaces.event.RowEditEvent;
  */
 @ManagedBean
 @ViewScoped
-@Named(value = "departmentManageBean")
-public class departmentManagedBean {
+@Named(value = "departmentManagedBean")
+public class DepartmentManagedBean {
 
     @EJB
     private DepartmentSessionBeanLocal departmentSessionBean;
 
-    public departmentManagedBean(DepartmentSessionBeanLocal departmentSessionBean) {
+    public DepartmentManagedBean(DepartmentSessionBeanLocal departmentSessionBean) {
         this.departmentSessionBean = departmentSessionBean;
     }
 
@@ -57,7 +57,7 @@ public class departmentManagedBean {
     private OrganizationUnit newOrgUnit;
     
 
-    public departmentManagedBean() {
+    public DepartmentManagedBean() {
 
     }
     
@@ -98,7 +98,7 @@ public class departmentManagedBean {
             for (OrganizationUnit ou : depts) {
                 if (ou.getDepartmentName().equals(departmentName.toUpperCase()) && ou.getLocation().equals(departmentLocation.toUpperCase())) {
 
-                    message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Department Exists", "");
+                    message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Department already exists!", "");
                     FacesContext.getCurrentInstance().addMessage(null, message);
                     return;
                 }
@@ -136,7 +136,7 @@ public class departmentManagedBean {
 
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, errorMsg, "");
         FacesContext.getCurrentInstance().addMessage(null, message);
-        return "createDepartment";
+        return "CreateDepartment";
 
     }
 
