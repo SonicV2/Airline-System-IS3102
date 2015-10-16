@@ -34,8 +34,8 @@
             <h:form id="form">
 
 
-                <p:dataTable id="schedules" var="schedule" value="#{scheduleManageBean.futureSchedules}" rowKey="#{schedule.scheduleId}"
-                             selection="#{scheduleManageBean.selectedSchedule}" selectionMode="single" paginator="true" rows="10" widgetVar="schedulesTable">
+                <p:dataTable id="schedules" var="schedule" value="#{ScheduleManageBean.futureSchedules}" rowKey="#{schedule.scheduleId}"
+                             selection="#{ScheduleManageBean.selectedSchedule}" selectionMode="single" paginator="true" rows="10" widgetVar="schedulesTable">
 
                     <f:facet name="header">
 
@@ -69,17 +69,17 @@
 
                     <p:column headerText="Pilot list" style="width:60px;">
                         <h:commandLink
-                            action="#{checklistManagedBean.editChecklist(schedule.scheduleId, 'Pilot')}"><i class="fa fa-plane"></i></h:commandLink>
+                            action="#{ChecklistManagedBean.editChecklist(schedule.scheduleId, 'Pilot')}"><i class="fa fa-plane"></i></h:commandLink>
                     </p:column>
                     
                     <p:column headerText="Cabin Crew list" style="width:60px;">
                         <h:commandLink
-                            action="#{checklistManagedBean.editChecklist(schedule.scheduleId, 'Cabin Crew')}"><i class="fa fa-compass"></i></h:commandLink>
+                            action="#{ChecklistManagedBean.editChecklist(schedule.scheduleId, 'Cabin Crew')}"><i class="fa fa-compass"></i></h:commandLink>
                     </p:column>
                     
                     <p:column headerText="Ground Staff list" style="width:60px;">
                         <h:commandLink
-                            action="#{checklistManagedBean.editChecklist(schedule.scheduleId, 'Ground Staff')}"><i class="fa fa-street-view"></i></h:commandLink>
+                            action="#{ChecklistManagedBean.editChecklist(schedule.scheduleId, 'Ground Staff')}"><i class="fa fa-street-view"></i></h:commandLink>
                     </p:column>
 
                 </p:dataTable>

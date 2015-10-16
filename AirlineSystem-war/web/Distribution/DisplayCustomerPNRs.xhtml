@@ -4,84 +4,87 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
         <title>Display Customer PNR</title>
     </h:head>
     <h:body>
         <h:form> 
-            <p:dataScroller value="#{customerManagedBean.pnrDisplayList}" var="pnr" chunkSize="10">
-        <f:facet name="header">
-            Scroll Down to Load More Cars
-        </f:facet>
- 
-        <f:facet name="loader">
-            <p:commandButton type="button" value="More" icon="ui-icon-circle-triangle-s"/>
-        </f:facet>
- 
-            <p:outputPanel>
+
+            <c:forEach var="pnr" items="#{customerManagedBean.pnrDisplayList}" >
+
+                <div class ="col-lg-12">
                     <h:outputText value="PNR:" />
                     <h:outputText value="#{pnr.id}" style="font-weight: bold"/>
- 
+                </div>
+
+                <div class ="col-lg-12">
                     <h:outputText value="No of travellers:" />
                     <h:outputText value="#{pnr.noOfTravellers}" style="font-weight: bold"/>
+                </div>
+
+                <div class ="col-lg-12">
+                    <h:outputText value="Flights booked: #{pnr.uniqueSchedules}" />
+
+                    <c:forEach items="#{pnr.uniqueSchedules}" var="schedules">
+
+                        <div class ="col-lg-12">
+                            <h:outputText value="Flight Number:" />
+                            <h:outputText value="#{schedules.flight.flightNo}" style="font-weight: bold"/>
+                        </div>
+
+                        <div class ="col-lg-12">
+                            <h:outputText value="Origin:" />
+                            <h:outputText value="#{schedules.flight.route.originIATA}" style="font-weight: bold"/>
+                        </div>
+
+                        <div class ="col-lg-12">
+                            <h:outputText value="Destination:" />
+                            <h:outputText value="#{schedules.flight.route.destinationIATA}" style="font-weight: bold"/>
+                        </div>
+
+                        <div class ="col-lg-12">
+                            <h:outputText value="Departure:" />
+                            <h:outputText value="#{schedules.startDate}" style="font-weight: bold">
+                                <f:convertDateTime pattern ="hh:mm a (EEE, MMM d, yyyy)" />
+                            </h:outputText>
+                        </div>
+
+                        <div class ="col-lg-12">
+                            <h:outputText value="Arrival:" />
+                            <h:outputText value="#{schedules.endDate}" style="font-weight: bold">
+                                <f:convertDateTime pattern ="hh:mm a (EEE, MMM d, yyyy)" />
+                            </h:outputText>
+                        </div>
+
+                    </c:forEach>
                     
-                    
-                    <h:outputText value="Flights booked:" />
-                    
-                    
-                    <p:dataList value="#{pnr.uniqueSchedules}" var="schedules">
-                    
-                    <div class ="col-lg-12">
-                    <h:outputText value="Flight Number:" />
-                    <h:outputText value="#{schedules.flight.flightNo}" style="font-weight: bold"/>
-                    </div>
-                    
-                   <div class ="col-lg-12">
-                    <h:outputText value="Origin:" />
-                    <h:outputText value="#{schedules.flight.route.originIATA}" style="font-weight: bold"/>
-                    </div>
-                    
-                    <div class ="col-lg-12">
-                    <h:outputText value="Destination:" />
-                    <h:outputText value="#{schedules.flight.route.destinationIATA}" style="font-weight: bold"/>
-                    </div>
-                    
-                    <div class ="col-lg-12">
-                    <h:outputText value="Departure:" />
-                    <h:outputText value="#{schedules.startDate}" style="font-weight: bold">
-                        <f:convertDateTime pattern ="hh:mm a (EEE, MMM d, yyyy)" />
-                    </h:outputText>
-                    </div>
-                    
-                    <div class ="col-lg-12">
-                    <h:outputText value="Arrival:" />
-                    <h:outputText value="#{schedules.endDate}" style="font-weight: bold">
-                        <f:convertDateTime pattern ="hh:mm a (EEE, MMM d, yyyy)" />
-                    </h:outputText>
-                    </div>
-                    
-                    </p:dataList>
-                    
+                </div>
+
+                <div class ="col-lg-12">
                     <h:outputText value="Service Type:" />
                     <h:outputText value="#{pnr.serviceType}" style="font-weight: bold"/>
-                    
-                    <h:outputText value="Traveller details:" />
-                    
-                    <p:dataList value="#{pnr.travellerNames}" var="travellers">
-                    
-                    <div class ="col-lg-12">
-                    <h:outputText value="#{travellers}" style="font-weight: bold"/>
-                    </div>
-                        
-                    </p:dataList>
-                    
-                    <h:outputText value="Number of bags allowed:" />
-                    <h:outputText value="#{pnr.noOfBags}" style="font-weight: bold"/>
-               
-            </p:outputPanel>
+                </div>
 
-    </p:dataScroller>
-</h:form>
+                <div class ="col-lg-12">
+                    <h:outputText value="Traveller details: #{pnr.travellerNames}" />
+
+                    <c:forEach items="#{pnr.travellerNames}" var="travellers">
+
+                        <div class ="col-lg-12">
+                            <h:outputText value="#{travellers}" style="font-weight: bold"/>
+                        </div>
+
+                    </c:forEach>
+                    </div>
+
+                    <div class ="col-lg-12">
+                        <h:outputText value="Number of bags allowed:" />
+                        <h:outputText value="#{pnr.noOfBags}" style="font-weight: bold"/>
+                    </div>
+
+            </c:forEach>
+        </h:form>
     </h:body>
 </html>

@@ -240,10 +240,10 @@
     </style>
     <h:body>
         <ui:fragment rendered ="#{customerManagedBean.isCustomerLoggedOn}">
-        <ui:include src="customerDashboardHeader.xhtml"/>
+        <ui:include src="CustomerDashboardHeader.xhtml"/>
         </ui:fragment>
         <ui:fragment rendered ="#{!customerManagedBean.isCustomerLoggedOn}">
-        <ui:include src="merlionAirlinesHeader.xhtml"/>
+        <ui:include src="MerlionAirlinesHeader.xhtml"/>
         </ui:fragment>
         <div class="banner-bottom">
             <!-- container -->
@@ -338,12 +338,49 @@
                             </div>
                         </div>
                     </div>
+                    
+                    <div class='col-md-10'>
+                        <p>Log in with your username (email) and password:</p>
+                        <br></br>
+                        <h:form id="loginForm">
+                            <p:growl id="growl" sticky="true" showDetail="true"/>
+                            <div class="login-grid-left">
+                                <fieldset id="body2">
+                                    <fieldset>
+                                        <!--                                    <label for="email">Email Address</label>-->
+                                        <p>Email</p>
+    <!--                                    <p:inputText value="#{customerManagedBean.customerEmail}" ></p:inputText>-->
+                                        <h:inputText id="PE" required="true" validatorMessage="Not a valid email addess " requiredMessage="Please fill in Personal email field!" class="form-control" value="#{customerManagedBean.customerEmail}" >
+                                            <f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
+                                        </h:inputText> 
+                                    </fieldset>
+                                    <fieldset>
+                                        <!--                                    <label for="password">Password</label>-->
+                                        <p>Password</p>
+                                        <p:password value="#{customerManagedBean.customerPassword}" />
+                                    </fieldset>
+
+                                    <h:commandButton class="pull-right" value="Sign in" action="#{customerManagedBean.loginCheckAtSummary()}"/>
+                                    <label for="checkbox"><input type="checkbox" id="checkbox"/> <i>Remember me</i></label>
+                                </fieldset>
+                                <span><a href="#">Forgot your password?</a></span>                                
+                            
+                            <div class="social-sits">
+                            <div class="button-bottom">
+                                <p>New account? <a href="#{request.contextPath}/Distribution/MerlionAirlinesSignUp.xhtml">Signup Now!</a></p>
+                            </div>
+                                </div>
+                                </div>
+                            <!--                        </form>-->
+                        </h:form>
+                    </div>
+                    </div>
 
                     <div class='col-md-10'>
                         <h:form id="form">
 
                             <div class="form-group text-center">
-                                <h:commandButton class="btn btn-outline btn-success" value="Confirm Booking"  action="booking"/>
+                                <h:commandButton class="btn btn-outline btn-success" value="Continue as a Guest"  action="Booking"/>
                             </div>
                         </h:form>
                     </div>
@@ -354,11 +391,10 @@
                 </div>
 
             </div>
-        </div>
 
 
 
-        <ui:include src="merlionAirlinesFooter.xhtml"/>
+        <ui:include src="MerlionAirlinesFooter.xhtml"/>
         <h:outputScript library="js" name="jquery.flexslider.js"/> 
         <h:outputScript library="js" name="easyResponsiveTabs.js" /> 
         <h:outputScript library="js" name="scriptMerlion.js"></h:outputScript>
