@@ -21,8 +21,8 @@ and open the template in the editor.
                 <div class="header-dropdown">
                     <div class="emergency-grid">
                         <ul>
-                            <li>Toll Free : </li>
-                            <li class="call">+1 234 567 8901</li>
+                            <li>Call Us: </li>
+                            <li class="call">+65 65413748</li>
                         </ul>
                     </div>
                     <div class="clearfix"> </div>
@@ -54,10 +54,27 @@ and open the template in the editor.
                 </div>
 
                 <div class="dropdown-grids">
-                    <div id="loginContainer"><a href="#{request.contextPath}/Distribution/merlionAirlinesLogin.xhtml" id="loginButton"><span>Login</span></a>
+<!--                <ui:fragment rendered="#{!customerManagedBean.isCustomerLoggedOn}"
+                             <h:commandButton class ="dropdown-grids" value="Login" action ="merlionAirlinesLogin" </h:commandButton>-->
+                             
+<!--                    
+-->                   <div id="loginContainer"><a href="#{request.contextPath}/Distribution/merlionAirlinesLogin.xhtml" id="loginButton"><span>Login</span></a><!--
                         
-                    </div>
-                </div>
+                    </div>-->
+                
+                <!--</ui:fragment>-->
+                
+<!--                <ui:fragment rendered="#{customerManagedBean.isCustomerLoggedOn}"
+                
+                             <p>Welcome #{customerManagedBean.customer.firstName} </p>
+                 
+                    <div id="loginContainer"><a href="#{request.contextPath}/Distribution/customerDashboard.xhtml" id="loginButton"><span>Dashboard</span></a>
+                        
+-->                    </div><!--
+                </ui:fragment> 
+-->                </div><!--
+                -->
+                
                 
                 <div class="clearfix"> </div>
 

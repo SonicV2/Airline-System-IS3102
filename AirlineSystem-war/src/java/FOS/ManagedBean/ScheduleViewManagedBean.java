@@ -8,7 +8,7 @@ package FOS.ManagedBean;
 import APS.Entity.Schedule;
 import CI.Entity.CabinCrew;
 import CI.Entity.Pilot;
-import CI.Managedbean.LoginManageBean;
+import CI.Managedbean.LoginManagedBean;
 import FOS.Entity.Pairing;
 import FOS.Entity.Team;
 import FOS.Session.CrewSignInSessionBeanLocal;
@@ -40,7 +40,7 @@ public class ScheduleViewManagedBean {
     private CrewSignInSessionBeanLocal crewSignInSessionBean;
 
     @ManagedProperty(value = "#{loginManageBean}")
-    private LoginManageBean loginManageBean;
+    private LoginManagedBean loginManageBean;
 
     private ScheduleModel eventModel;
     private ScheduleModel pilotEventModel;
@@ -416,14 +416,14 @@ public class ScheduleViewManagedBean {
     /**
      * @return the loginManageBean
      */
-    public LoginManageBean getLoginManageBean() {
+    public LoginManagedBean getLoginManageBean() {
         return loginManageBean;
     }
 
     /**
      * @param loginManageBean the loginManageBean to set
      */
-    public void setLoginManageBean(LoginManageBean loginManageBean) {
+    public void setLoginManageBean(LoginManagedBean loginManageBean) {
         this.loginManageBean = loginManageBean;
     }
 

@@ -9,7 +9,7 @@ import APS.Entity.Schedule;
 import CI.Entity.CabinCrew;
 import CI.Entity.Pilot;
 import CI.Managedbean.EmailManagedBean;
-import CI.Managedbean.LoginManageBean;
+import CI.Managedbean.LoginManagedBean;
 import CI.Session.EmailSessionBeanLocal;
 import FOS.Session.CrewSignInSessionBeanLocal;
 import FOS.Session.ReservedCrewScheduleSessionBeanLocal;
@@ -52,7 +52,7 @@ public class ReservedCrewScheduleManagedBean {
     private ReservedCrewScheduleSessionBeanLocal reservedCrewScheduleSessionBean;
 
     @ManagedProperty(value = "#{loginManageBean}")
-    private LoginManageBean loginManageBean;
+    private LoginManagedBean loginManageBean;
 
     private List<CabinCrew> CCLists;
     private List<Pilot> PilotLists;
@@ -528,14 +528,14 @@ public class ReservedCrewScheduleManagedBean {
     /**
      * @return the loginManageBean
      */
-    public LoginManageBean getLoginManageBean() {
+    public LoginManagedBean getLoginManageBean() {
         return loginManageBean;
     }
 
     /**
      * @param loginManageBean the loginManageBean to set
      */
-    public void setLoginManageBean(LoginManageBean loginManageBean) {
+    public void setLoginManageBean(LoginManagedBean loginManageBean) {
         this.loginManageBean = loginManageBean;
     }
 
