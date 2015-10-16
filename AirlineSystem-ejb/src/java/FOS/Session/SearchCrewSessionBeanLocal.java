@@ -18,7 +18,14 @@ import javax.ejb.Local;
  */
 @Local
 public interface SearchCrewSessionBeanLocal {
-     public List<Pilot> getAllPilots();
-      public List<CabinCrew> getAllCCs ();
-      public List<Team> getAllTeam();
+
+    public List<Pilot> getAllPilots();
+
+    public List<CabinCrew> getAllCCs();
+
+    public List<Team> getAllTeam();
+
+    public List<CabinCrew> getLeaveCabinCrew();
+
+    public List<Pilot> getLeavePilot();
 }

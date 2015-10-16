@@ -18,7 +18,7 @@ import javax.ejb.Local;
 @Local
 public interface A380PairingSessionBeanLocal {
 
-    public void legMain(String selectMonth,String selectYear);
+    public void legMain(String selectMonth, String selectYear);
 
     public List<Pairing> getPairings();
 
@@ -31,4 +31,6 @@ public interface A380PairingSessionBeanLocal {
     public void changePolicy(int maxLeg, int maxFlight, int minStopTime);
 
     public PairingPolicy retrievePolicy();
+
+    public List<Pairing> filterPairings(String selectYear, String selectMonth);
 }

@@ -9,42 +9,46 @@
         <title>Display Direct Flight</title>
     </head>
     <body>
-<h:form id="form">
-    <p:dataList value="#{mARSManagedBean.directFlightSchedules}" var="schedules" type="ordered">
-        <div class="col-lg-12">
-        <h:outputText value="#{schedules.startDate}">
-<!--            <f:convertDateTime pattern ="dd-mm-yyyy HH:mm"/>-->
-        </h:outputText>
-            </div>
-            
-            <div class="col-lg-12">
-        <h:outputText value="#{schedules.endDate}">
-<!--            <f:convertDateTime pattern ="dd-mm-yyyy HH:mm"/>-->
-        </h:outputText>
+        <h:form id="form">   
+            <p:dataList value="#{mARSManagedBean.directFlightSchedules}" var="schedules" type="ordered">
+                <div class="col-lg-12">
+                    <h:outputText value="#{schedules.startDate}">
+                        <!--            <f:convertDateTime pattern ="dd-mm-yyyy HH:mm"/>-->
+                    </h:outputText>
                 </div>
-        
-        <div class="col-lg-12">
-        #{schedules.flight.route.originIATA}
-</div>
-        
-        <div class="col-lg-12">
- #{schedules.flight.route.destinationIATA}
-</div>
-        
-        <div class="col-lg-12">
- #{mARSManagedBean.directFlightDuration}
-</div>
 
-        <div class="col-lg-12">
- #{mARSManagedBean.selectedDatePrices}
-</div>
+                <div class="col-lg-12">
+                    <h:outputText value="#{schedules.endDate}">
+                        <!--            <f:convertDateTime pattern ="dd-mm-yyyy HH:mm"/>-->
+                    </h:outputText>
+                </div>
 
-        <div class="col-lg-12">
- #{mARSManagedBean.minPricesForWeekDirectFlight}
- </div>
-        
-    </p:dataList>
-</h:form>
-      
+                <div class="col-lg-12">
+                    #{schedules.flight.route.originIATA}
+                </div>
+
+                <div class="col-lg-12">
+                    #{schedules.flight.route.destinationIATA}
+                </div>
+
+                <div class="col-lg-12">
+                    #{mARSManagedBean.directFlightDuration}
+                </div>
+
+                <div class="col-lg-12">
+                    #{mARSManagedBean.priceForDirect}
+                </div>
+
+                <div class="col-lg-12">
+                    #{mARSManagedBean.minPricesForWeekDirectFlight}
+                </div>
+
+            </p:dataList>
+
+            <div class="form-group text-center">
+                <h:commandButton class="btn btn-outline btn-success" value="Proceed to booking"  action="#{mARSManagedBean.summary()}"/>
+            </div>
+        </h:form>
+
     </body>
 </html>

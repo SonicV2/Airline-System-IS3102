@@ -5,16 +5,15 @@
  */
 package Distribution.Session;
 
-
 import CI.Entity.Salt;
 import Distribution.Entity.Customer;
+import Distribution.Entity.PNR;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.mail.NoSuchProviderException;
 import javax.persistence.EntityManager;
@@ -35,7 +34,7 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
     Customer customer;
 
     @Override
-    public String addCustomer(String firstName, String lastName, String hpNumber, String homeNumber, String email, String password, String address, String gender, Date DOB) {
+    public String addCustomer(String firstName, String lastName, String hpNumber, String homeNumber, String email, String password, String address, String gender, Date DOB, String title, String nationality, String passportNumber) {
 
         try {
 
@@ -47,16 +46,16 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
             salt.create(saltCode);
             customer.setSalt(salt);
             em.persist(salt);
-            
-            customer.createCustomer(firstName, lastName, hpNumber, homeNumber, email, hashedPwd, address, gender, DOB);
+
+            customer.createCustomer(firstName, lastName, hpNumber, homeNumber, email, hashedPwd, address, gender, DOB, title, nationality, passportNumber);
             em.persist(customer);
-            
+
         } catch (NoSuchAlgorithmException ex) {
-            
+
         } catch (NoSuchProviderException ex) {
-           
+
         } catch (java.security.NoSuchProviderException ex) {
-            
+
         }
 
         return "Sign up successful!";
@@ -97,21 +96,20 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
         return generatedPassword;
     }
 
-    
     @Override
     public boolean isSameHash(String userEmail, String pwd) {
-        
+
         Customer oneCustomer = getCustomerUseEmail(userEmail);
         String saltCode = oneCustomer.getSalt().getSaltCode();
         String rehash = getSecurePassword(pwd, saltCode);
-        
+
         if (oneCustomer.getPassword().equals(rehash)) {
             return true;
         } else {
             return false;
         }
     }
-    
+
     // Get customer using ID
     @Override
     public Customer getCustomerUseID(String customerID) {
@@ -134,7 +132,7 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
         }
         return oneCustomer;
     }
-    
+
     //get the customer using his email
     @Override
     public Customer getCustomerUseEmail(String customerEmail) {
@@ -157,12 +155,12 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
         }
         return oneCustomer;
     }
-    
+
     //check if the email entered already exists in the database
     @Override
-    public Boolean emailExists(String customerEmail){
+    public Boolean emailExists(String customerEmail) {
         try {
-            
+
             System.out.println("session bean - customer email is:" + customerEmail);
             Query q = em.createQuery("SELECT a FROM Customer " + "AS a WHERE a.email=:email");
             q.setParameter("email", customerEmail);
@@ -171,7 +169,7 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
             if (!results.isEmpty()) {
                 System.out.println("session bean - customer email already exists");
                 return true;
- 
+
             } else {
                 System.out.println("session bean - customer email does not exist");
                 return false;
@@ -183,31 +181,46 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
         }
 
     }
-    
+
     @Override
     public void hashNewPwd(String customerEmail, String pwd) {
         Customer customer = getCustomerUseEmail(customerEmail);
-        try{
+        try {
             String saltCode = generateSalt();
             String hashedPwd = getSecurePassword(pwd, saltCode);
             customer.setPassword(hashedPwd);
             customer.getSalt().setSaltCode(saltCode);
             em.persist(customer);
-        }catch(EntityNotFoundException enfe){
+        } catch (EntityNotFoundException enfe) {
             System.out.println(enfe.getMessage());
-        
-        }catch (NoSuchAlgorithmException ex) {
-        
-            System.out.println("\nNo Such Algorithm Exception"+ex.getMessage());
-            
+
+        } catch (NoSuchAlgorithmException ex) {
+
+            System.out.println("\nNo Such Algorithm Exception" + ex.getMessage());
+
         } catch (NoSuchProviderException ex) {
-            System.out.println("\nNo Such Provider Exception"+ex.getMessage());
-            
+            System.out.println("\nNo Such Provider Exception" + ex.getMessage());
+
         } catch (java.security.NoSuchProviderException ex) {
-            System.out.println("\nJava security No Such Provider Exception"+ex.getMessage());  
-        
+            System.out.println("\nJava security No Such Provider Exception" + ex.getMessage());
+
         }
 
+    }
+
+    @Override
+    public List<PNR> retrieveCustomerPNRs(Customer customer) {
+        if (customer != null) {
+            List<PNR> customerBookedPNRs = new ArrayList();
+            for (PNR eachCustomerPNR : customer.getPnrs()) {
+                if (eachCustomerPNR.getPnrStatus().equals("Booked")) {
+                    customerBookedPNRs.add(eachCustomerPNR);
+                }
+            }
+            return customerBookedPNRs;
+        } else {
+            return null;
+        }
     }
 
 }

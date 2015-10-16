@@ -57,7 +57,7 @@ public class AdminManagedBean {
     }
     
     @PostConstruct
-    public void retreive(){
+    public void retrieve(){
 //        setAllEmployees(employeeSessionBean.retrieveAllEmployees());
         setAllActiveEmployees(employeeSessionBean.retrieveAllActiveEmployees());
         setAllOUs(departmentSessionBean.retrieveAllDepts());
@@ -71,7 +71,6 @@ public class AdminManagedBean {
         if (!edited.getOrganizationUnit().getDepartmentName().equals(employeeNewDeptName)){
             departmentSessionBean.adminChangeDepartment(edited.getEmployeeID(), employeeNewDeptName, edited.getOrganizationUnit().getDepartmentName());
             setAllActiveEmployees(employeeSessionBean.retrieveAllActiveEmployees());
-            System.out.println("changed department successful");
         }
         
         if(!edited.getEmployeeGender().equals(original.getEmployeeGender())){
@@ -91,24 +90,23 @@ public class AdminManagedBean {
     }
     
     public String lockoutEmployee(String employeeID){
-        System.out.println("managed bean - lock out employee name:" + employeeID);
         Boolean lockSuccess = employeeSessionBean.lockoutEmployee(employeeID);
         
         System.out.println("lockout success:" + lockSuccess);
         if (lockSuccess){
             setAllActiveEmployees(employeeSessionBean.retrieveAllActiveEmployees());
-            return "allEmployeeInfo";
+            return "AllEmployeeInfo";
         }
         
         else{
-            return "singleEmployeeInfo";
+            return "SingleEmployeeInfo";
         }
     }
      
     public String getEmployeeInfo(String employeeID){
         anEmployee = employeeSessionBean.getEmployeeUseID(employeeID);
         
-        return "singleEmployeeInfo";
+        return "SingleEmployeeInfo";
     }
     
     /**

@@ -21,7 +21,7 @@ public class FlightOptions implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private Long flightOptionsId;
     private Schedule legOne;
     private Schedule legTwo;
     private String layover;
@@ -36,13 +36,6 @@ public class FlightOptions implements Serializable {
         this.price = price;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public Schedule getLegOne() {
         return legOne;
@@ -84,10 +77,24 @@ public class FlightOptions implements Serializable {
         this.price = price;
     }
 
-    @Override
+    /**
+     * @return the flightOptionsId
+     */
+    public Long getFlightOptionsId() {
+        return flightOptionsId;
+    }
+
+    /**
+     * @param flightOptionsId the flightOptionsId to set
+     */
+    public void setFlightOptionsId(Long flightOptionsId) {
+        this.flightOptionsId = flightOptionsId;
+    }
+    
+        @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += (flightOptionsId != null ? flightOptionsId.hashCode() : 0);
         return hash;
     }
 
@@ -98,15 +105,10 @@ public class FlightOptions implements Serializable {
             return false;
         }
         FlightOptions other = (FlightOptions) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((this.flightOptionsId == null && other.flightOptionsId != null) || (this.flightOptionsId != null && !this.flightOptionsId.equals(other.flightOptionsId))) {
             return false;
         }
         return true;
-    }
-
-    @Override
-    public String toString() {
-        return "Distribution.Entity.FlightOptions[ id=" + id + " ]";
     }
     
 }

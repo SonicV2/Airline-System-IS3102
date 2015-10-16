@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <p:growl id="growl" sticky="true" showDetail="true"/>
+        <title>Reserved Crew</title>
+    </h:head>
+    <h:body>
+        Welcome to reserved crew schedule system
+        <h:form>
+            <h:outputText value="Choose Year"/>
+            <h:inputText validatorMessage="Not a valid year format e.g 2015" required="true" requiredMessage="Please enter year!" value="#{ReservedCrewScheduleManagedBean.selectYear}">
+                <f:validateLength minimum="4" maximum="4" />
+            </h:inputText>
+
+            <p:outputLabel for="month" value="Month: " />
+            <p:selectOneMenu id="month" required="true" requiredMessage="Please choose one month!" value="#{ReservedCrewScheduleManagedBean.selectMonth}" style="width:150px">
+                <f:selectItem itemLabel="Select Month" itemValue="" noSelectionOption="true" />
+                <f:selectItems value="#{ReservedCrewScheduleManagedBean.months}" />
+            </p:selectOneMenu>
+            
+           
+            
+       
+            <p:dataTable var="rc" value="#{ReservedCrewScheduleManagedBean.CCLists}">
+                <p:column headerText="Name">
+                    <h:outputText value="#{rc.employeeDisplayFirstName}  #{rc.employeeDisplayLastName}" />
+                </p:column>
+
+                <p:column headerText="Location">
+                    <h:outputText value="#{rc.organizationUnit.departmentName} #{rc.organizationUnit.location}" />
+                </p:column>
+
+            </p:dataTable>
+                 <h:commandButton value="Search Cabin Crew" actionListener="#{ReservedCrewScheduleManagedBean.getReservedCrew}"/>
+            <h:commandButton value="Assign Cabin Crew Schedule" actionListener="#{ReservedCrewScheduleManagedBean.assignSchedule}"/>
+        
+        </h:form>
+
+
+
+    </h:body>
+</html>
+

@@ -9,6 +9,7 @@ import APS.Entity.Flight;
 import APS.Entity.Location;
 import APS.Entity.Route;
 import APS.Entity.Schedule;
+import Distribution.Entity.FlightOptions;
 import Inventory.Entity.SeatAvailability;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -332,7 +333,7 @@ public class DistributionSessionBean implements DistributionSessionBeanLocal {
 
     public boolean existsSchedule(String originIata, String destinationIata, Date date, String serviceType, int adults, int children) {
 
-        if (existsOneStopFlight(originIata, destinationIata, date, serviceType, adults, children) == false && retrieveDirectFlightsForDate(originIata, destinationIata, date, serviceType, adults, children).size() == 0) {
+        if (existsOneStopFlight(originIata, destinationIata, date, serviceType, adults, children) == false && retrieveDirectFlightsForDate(originIata, destinationIata, date, serviceType, adults, children).isEmpty()) {
             return false;
         } else {
             return true;
@@ -389,6 +390,10 @@ public class DistributionSessionBean implements DistributionSessionBeanLocal {
         }
 
         return allFlights;
+    }
+    
+    public void persistFlightOptions (FlightOptions flightOptions) {
+        em.persist(flightOptions);
     }
 
 }

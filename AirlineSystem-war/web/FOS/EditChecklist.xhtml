@@ -39,13 +39,13 @@ and open the template in the editor.
         <h:form id="iform">
         <p:growl id="msgs" showDetail="true"/>
 
-        <p:dataTable id="editChecklist" var="item" value="#{checklistManagedBean.checklistItemsForChecklist}" editable="true" style="margin-bottom:20px">
+        <p:dataTable id="editChecklist" var="item" value="#{ChecklistManagedBean.checklistItemsForChecklist}" editable="true" style="margin-bottom:20px">
             <f:facet name="header">
-                Edit #{checklistManagedBean.checklistName} Checklist
+                Edit #{ChecklistManagedBean.checklistName} Checklist
             </f:facet>
 
-            <p:ajax event="rowEdit" listener="#{checklistManagedBean.onRowEdit}" update=":iform:msgs" />
-            <p:ajax event="rowEditCancel" listener="#{checklistManagedBean.onRowCancel}" update=":iform:msgs" />
+            <p:ajax event="rowEdit" listener="#{ChecklistManagedBean.onRowEdit}" update=":iform:msgs" />
+            <p:ajax event="rowEditCancel" listener="#{ChecklistManagedBean.onRowCancel}" update=":iform:msgs" />
             
             <p:column headerText="Items">
                 <p:cellEditor>
@@ -63,13 +63,13 @@ and open the template in the editor.
                             return false;
                         }
                         ;
-                        return true;" action="#{checklistManagedBean.deleteItem(item.id)}"><i class="fa fa-trash-o"></i> </h:commandLink>
+                        return true;" action="#{ChecklistManagedBean.deleteItem(item.id)}"><i class="fa fa-trash-o"></i> </h:commandLink>
             </p:column>
             
         </p:dataTable>
         
          <div class="text-center">
-             <h:commandButton class="btn btn-outline btn-success" value="Edit complete"  action="#{checklistManagedBean.editChecklistDone()}"/>
+             <h:commandButton class="btn btn-outline btn-success" value="Edit complete"  action="#{ChecklistManagedBean.editChecklistDone()}"/>
         </div>
         
         </h:form>

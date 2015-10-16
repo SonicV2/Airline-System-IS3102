@@ -29,7 +29,6 @@ public class CrewSignInSessionBean implements CrewSignInSessionBeanLocal {
     @PersistenceContext(unitName = "AirlineSystem-ejbPU")
     private EntityManager em;
 
-    
     // Given crewName to find the team the crew assigned
     @Override
     public Team getCCTeam(String crewName) {
@@ -40,17 +39,13 @@ public class CrewSignInSessionBean implements CrewSignInSessionBeanLocal {
             List<CabinCrew> ccList = t.getCabinCrews();
             List<Pilot> pilotList = t.getPilots();
             for (CabinCrew c : ccList) {
-
                 if (c.getEmployeeUserName().equals(crewName)) {
-
                     return t;
                 }
             }
 
             for (Pilot p : pilotList) {
-
                 if (p.getEmployeeUserName().equals(crewName)) {
-
                     return t;
                 }
             }
@@ -60,10 +55,9 @@ public class CrewSignInSessionBean implements CrewSignInSessionBeanLocal {
 
     // Change the crew status to sign in 
     @Override
-    public String crewSignIn(String crewName, Team team ,String firstScheduleID) {
+    public String crewSignIn(String crewName, Team team, String firstScheduleID) {
 
         String msg = "";
-        System.out.println("++++++UserName session bean: " + crewName);
 
         Query q = em.createQuery("SELECT e FROM Employee e");
         List<Employee> employees = q.getResultList();
@@ -72,11 +66,10 @@ public class CrewSignInSessionBean implements CrewSignInSessionBeanLocal {
             if (e.getEmployeeUserName().equals(crewName)) {
                 if (e.getEmployeeRole().equals("Cabin Crew")) {
                     CabinCrew c = (CabinCrew) e;
-                    if (c.getStatus().contains("SignIn")) {
+                    if (c.getSignInStatus().contains("SignIn")) {
                         msg = "Signed";
                     } else {
-                        c.setStatus("SignIn" + firstScheduleID);
-                        System.out.println("++++++UserName c: " + c.getEmployeeUserName());
+                        c.setSignInStatus("SignIn" + firstScheduleID);
                         em.persist(c);
                         em.flush();
                     }
@@ -84,10 +77,10 @@ public class CrewSignInSessionBean implements CrewSignInSessionBeanLocal {
                 }
                 if (e.getEmployeeRole().equals("Pilot")) {
                     Pilot p = (Pilot) e;
-                    if (p.getStatus().contains("SignIn")) {
+                    if (p.getSignInStatus().contains("SignIn")) {
                         msg = "Signed";
                     } else {
-                        p.setStatus("SignIn"+ firstScheduleID);
+                        p.setSignInStatus("SignIn" + firstScheduleID);
                         em.persist(p);
                         em.flush();
                     }
@@ -95,14 +88,13 @@ public class CrewSignInSessionBean implements CrewSignInSessionBeanLocal {
                 }
             }
         }
-        System.out.println("Team ID: " + team.getId());
-        changeTeamStatus(team);
+        changeTeamStatus(team, firstScheduleID);
         return msg;
 
     }
 
     // If all crews sign in, then the team status will change to all sigin in
-    public void changeTeamStatus(Team team) {
+    public void changeTeamStatus(Team team, String firstScheduleID) {
 
         //em.merge(team);
         int cCount = 1;
@@ -111,62 +103,141 @@ public class CrewSignInSessionBean implements CrewSignInSessionBeanLocal {
         List<Pilot> pilots = team.getPilots();
 
         for (CabinCrew c : ccs) {
-            if (c.getStatus().equals("SignIn")) {
+            if (c.getSignInStatus().equals("SignIn" + firstScheduleID)) {
                 cCount++;
-
             }
         }
 
         for (Pilot p : pilots) {
-
-            if (p.getStatus().equals("SignIn")) {
+            if (p.getSignInStatus().equals("SignIn" + firstScheduleID)) {
                 pCount++;
-
             }
         }
         if (cCount >= team.getcCrewNo() && pCount >= team.getPilotNo()) {  //not very logical but for the system's sake 
-            System.out.println("TEAM ID: " + team.getId());
-            team.setStatus("AllSignIn");
+            team.setStatus("AllSignIn" + firstScheduleID);
             em.merge(team);
         }
         em.flush();
     }
-    
+
+    @Override
+    public String submitLeave(String crewName, String reason, String scheduleId) {
+        CabinCrew crew = getCabinCrew(crewName);
+        if (crew.getStatus().split("-")[0].equals("Leave: " + scheduleId)) {
+            return "done";
+        } else {
+            crew.setStatus("Leave: " + scheduleId+ "-"+reason);
+            return "good";
+        }
+    }
     
     @Override
-    public Schedule getFirstPairingSchedule(Pairing p){
-         System.out.println(">>>>>>>>>" + p.getId());
+    public String submitPilotLeave(String crewName, String reason, String scheduleId) {
+        Pilot crew = getPilot(crewName);
+        if (crew.getStatus().split("-")[0].equals("Leave: " + scheduleId)) {
+            return "done";
+        } else {
+            crew.setStatus("Leave: " + scheduleId+ "-"+reason);
+            return "good";
+        }
+    }
+
+    @Override
+    public Schedule getFirstPairingSchedule(Pairing p) {
+
         String flightDate = p.getFDate();
-         System.out.println(">>>>>>>>>" + p.getFDate());
-         
+
         List<String> flightNumbers = p.getFlightNumbers();
         String firstFlightNo = flightNumbers.get(0);
         Flight f = getFlight(firstFlightNo);
-        System.out.println(">>>>>>>>>" + firstFlightNo);
-       
-        List<Schedule> schedules =f.getSchedule();
-        
-        for(Schedule s : schedules){
-             String formattedDate = new SimpleDateFormat("dd/MM/yyyy").format(s.getStartDate());
-             System.out.println(">>>>>>>>>date" + formattedDate);
-             if(formattedDate.equals(flightDate)){
-                 return s;
-             }
+
+        List<Schedule> schedules = f.getSchedule();
+
+        for (Schedule s : schedules) {
+            String formattedDate = new SimpleDateFormat("dd/MM/yyyy").format(s.getStartDate());
+            if (formattedDate.equals(flightDate)) {
+                return s;
+            }
         }
         return null;
     }
-    
-    public Flight getFlight(String flightNumber){
+
+    public Flight getFlight(String flightNumber) {
         Query q = em.createQuery("SELECT f FROM Flight f");
         List<Flight> flights = q.getResultList();
-        System.out.println("GetFlight: "+ flightNumber);
-        for(Flight f: flights){
-            System.out.println("FLIGHT: "+ f.getFlightNo());
-            if(f.getFlightNo().equals("MA"+flightNumber)){
+
+        for (Flight f : flights) {
+
+            if (f.getFlightNo().equals("MA" + flightNumber)) {
                 return f;
             }
         }
         return null;
     }
 
+    @Override
+    public CabinCrew getCabinCrew(String crewName) {
+        Query q = em.createQuery("SELECT c FROM CabinCrew c WHERE c.employeeUserName =:crewName");
+        q.setParameter("crewName", crewName);
+        List<CabinCrew> results = q.getResultList();
+        if(results.isEmpty()){
+            return null;
+        }
+        return results.get(0);
+    }
+    
+    @Override
+    public Pilot getPilot(String crewName) {
+        Query q = em.createQuery("SELECT p FROM Pilot p WHERE  p.employeeUserName =:crewName");
+        q.setParameter("crewName", crewName);
+        List<Pilot> results = q.getResultList();
+        if(results.isEmpty()){
+            return null;
+        }
+        return results.get(0);
+    }
+
+    @Override
+    public Schedule getScheduleByID(String scheduleId){
+        Query q = em.createQuery("SELECT s FROM Schedule s");
+        List<Schedule> schedules = q.getResultList();
+        for(Schedule s:schedules){
+            if(s.getScheduleId().toString().equals(scheduleId)){
+                return s;
+            }
+        }
+        return null;
+    }
+    
+    @Override
+    public Schedule getScheduleBy(String flightNumber, String flightDate){
+        String fNumber="";
+        if(flightNumber.contains("MA")){
+            fNumber=flightNumber.substring(2);
+        }else{
+            fNumber =flightNumber;
+        }
+        Flight flight = getFlight(fNumber);
+
+        List<Schedule> schedules = flight.getSchedule();
+        for(Schedule s : schedules){
+            String sDate = new SimpleDateFormat("dd/MM/yyyy").format(s.getStartDate());
+            if(sDate.equals(flightDate)){
+                return s;
+            }
+        }
+        return null;
+    }
+    
+    @Override
+    public Team getTeamByID(String teamId){
+        Query q = em.createQuery("SELECT t FROM Team t");
+        List<Team> teams = q.getResultList();
+        for(Team t : teams){
+            if(t.getId().equals(teamId)){
+                return t;
+            }
+        }
+        return null;
+    }
 }

@@ -224,14 +224,9 @@ public class FleetManagedBean {
 
         reserves = fleetSessionBean.getReserveAircrafts("Reserve");
 
-        System.out.println("LOOK HERE");
-        System.out.println(reserves.get(1));
-
         for (int i = 0; i < selectedAircraft.getSchedules().size(); i++) {
             selectedAircraft.getSchedules().get(i).setAircraft(reserves.get(1));
             fleetSessionBean.persistSchedule(selectedAircraft.getSchedules().get(i));
-            System.out.println("LOOK HERE");
-            System.out.println(selectedAircraft.getSchedules().get(i).getAircraft());
         }
         reserves.get(1).setStatus("Stand-By");
         List<Schedule> temp = selectedAircraft.getSchedules();
@@ -242,8 +237,6 @@ public class FleetManagedBean {
         temp1.remove(selectedAircraft);
         selectedAircraft.getAircraftType().setAircrafts(temp1);
         selectedAircraft.setAircraftType(null);
-
-        System.out.println("Hurray");
 
         aircrafts.remove(selectedAircraft);
         fleetSessionBean.retireAircraft(selectedAircraft.getTailNo());
