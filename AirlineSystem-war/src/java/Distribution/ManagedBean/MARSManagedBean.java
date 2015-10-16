@@ -238,15 +238,15 @@ public class MARSManagedBean {
         setPnrId(null);
         systemDate = new Date();
     }
-    
-    public int convertToHours(double duration){
-        int hr =(int)duration;
+
+    public int convertToHours(double duration) {
+        int hr = (int) duration;
         return hr;
     }
-    
-    public int convertToMins(double duration){
+
+    public int convertToMins(double duration) {
         double d = duration - Math.floor(duration);
-        int min =(int) (d * 60);
+        int min = (int) (d * 60);
         return min;
     }
 
@@ -618,6 +618,39 @@ public class MARSManagedBean {
 
     public String summary() {
 
+//        if (isDirect && oneWayFlight) {
+//            if (selectedDepartureSchedule == null) {
+//                message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please select a flight!", "");
+//                FacesContext.getCurrentInstance().addMessage(null, message);
+//                return null;
+//            }
+//        } else if (isDirect && !oneWayFlight) {
+//  
+//            if (selectedReturnSchedule == null) {
+//                message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please select a flight!", "");
+//                FacesContext.getCurrentInstance().addMessage(null, message);
+//                return null;
+//            }
+//
+//        }
+//
+//        if (!isDirect && oneWayFlight) {
+//            if (selectedDepartureFlightOption == null) {
+//                message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please select a flight!", "");
+//                FacesContext.getCurrentInstance().addMessage(null, message);
+//                return null;
+//            }
+//
+//        } else if (!isDirect && !oneWayFlight) {
+//            
+//            if (selectedReturnFlightOption == null) {
+//                message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please select a flight!", "");
+//                FacesContext.getCurrentInstance().addMessage(null, message);
+//                return null;
+//            }
+//
+//        }
+
         passengerList.clear();
 
         if (isDirect) {
@@ -678,7 +711,7 @@ public class MARSManagedBean {
             primaryEmail = loggedInCustomer.getEmail();
         }
 
-        return "summary";
+        return "Summary";
 
     }
 
@@ -702,7 +735,7 @@ public class MARSManagedBean {
             }
         }
 
-        return "payment";
+        return "Payment";
     }
 
     public String createBooking() {
@@ -776,7 +809,7 @@ public class MARSManagedBean {
             eachSelectedSchedule.setEndDate(distributionSessionBean.convertTimeZone(eachSelectedSchedule.getEndDate(), distributionSessionBean.getSingaporeTimeZone(), distributionSessionBean.getTimeZoneFromIata(eachSelectedSchedule.getFlight().getRoute().getDestinationIATA())));
         }
 
-        return "confirmation";
+        return "Confirmation";
     }
 
     public String searchPNR() {
@@ -803,7 +836,7 @@ public class MARSManagedBean {
             eachSelectedSchedule.setEndDate(distributionSessionBean.convertTimeZone(eachSelectedSchedule.getEndDate(), distributionSessionBean.getSingaporeTimeZone(), distributionSessionBean.getTimeZoneFromIata(eachSelectedSchedule.getFlight().getRoute().getDestinationIATA())));
         }
 
-        return "displayPNR";
+        return "DisplayPNR";
     }
 
     public String deletePNR() {
@@ -817,7 +850,7 @@ public class MARSManagedBean {
         message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Booking has been successfully cancelled!", "");
         FacesContext.getCurrentInstance().addMessage(null, message);
 
-        return "merlionAirlines";
+        return "MerlionAirlines";
     }
 
     public static boolean isInteger(String s) {
@@ -1785,6 +1818,5 @@ public class MARSManagedBean {
     public void setSystemDate(Date systemDate) {
         this.systemDate = systemDate;
     }
-    
 
 }

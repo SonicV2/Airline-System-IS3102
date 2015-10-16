@@ -40,10 +40,10 @@
     </h:head>
     <h:body>
         <ui:fragment rendered ="#{customerManagedBean.isCustomerLoggedOn}">
-        <ui:include src="customerDashboardHeader.xhtml"/>
+        <ui:include src="CustomerDashboardHeader.xhtml"/>
         </ui:fragment>
         <ui:fragment rendered ="#{!customerManagedBean.isCustomerLoggedOn}">
-        <ui:include src="merlionAirlinesHeader.xhtml"/>
+        <ui:include src="MerlionAirlinesHeader.xhtml"/>
         </ui:fragment> 
         <div class="banner-bottom">
             <div class="container">
@@ -116,7 +116,7 @@
             </div>
         </div>
         
-        <ui:include src="merlionAirlinesFooter.xhtml"/>
+        <ui:include src="MerlionAirlinesFooter.xhtml"/>
         <h:outputScript library="js" name="jquery.flexslider.js"/> 
         <h:outputScript library="js" name="easyResponsiveTabs.js" /> 
         <h:outputScript library="js" name="scriptMerlion.js"></h:outputScript>

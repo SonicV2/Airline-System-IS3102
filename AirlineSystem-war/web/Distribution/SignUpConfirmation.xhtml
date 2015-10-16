@@ -35,7 +35,12 @@ and open the template in the editor.
 
     </h:head>
     <!--this is the common header of all the MARS pages-->
-    <ui:include src="merlionAirlinesHeader.xhtml"/>
+    <ui:fragment rendered ="#{customerManagedBean.isCustomerLoggedOn}">
+        <ui:include src="CustomerDashboardHeader.xhtml"/>
+        </ui:fragment>
+        <ui:fragment rendered ="#{!customerManagedBean.isCustomerLoggedOn}">
+        <ui:include src="MerlionAirlinesHeader.xhtml"/>
+        </ui:fragment>
     <div class="banner-bottom">
         <!-- container -->
         <div class="container">
@@ -43,42 +48,36 @@ and open the template in the editor.
                 <div class="book-grids">
                     <div class="col-md-6 book-left">
                         <div class="book-left-info">
-                            <h3>Welcome To Merlion Flyer Programme! </h3>
+                            <h3>Registration Successful! </h3>
 
 
                         </div>
-                        <p>Please log in with your username (email) and password:</p>
+                        <p>Please log in with your username (your email) and password:</p>
                         <br></br>
                         <h:form id="loginForm">
                             <p:growl id="growl" sticky="true" showDetail="true"/>
                             <div class="login-grid-left">
                                 <fieldset id="body2">
                                     <fieldset>
-                                        <!--                                    <label for="email">Email Address</label>-->
-                                        <p>Email</p>
-    <!--                                    <p:inputText value="#{customerManagedBean.customerEmail}" ></p:inputText>-->
-                                        <h:inputText id="PE" required="true" validatorMessage="Not a valid email addess " requiredMessage="Please fill in Personal email field!" class="form-control" value="#{customerManagedBean.customerEmail}" >
-                                            <f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
-                                        </h:inputText> 
+<!--                                    <label for="email">Email Address</label>-->
+                                    <p>Email</p>
+<!--                                    <p:inputText value="#{customerManagedBean.customerEmail}" ></p:inputText>-->
+                                   <h:inputText id="PE" required="true" validatorMessage="Not a valid email addess " requiredMessage="Please fill in Personal email field!" class="form-control" value="#{customerManagedBean.customerEmail}" >
+                                        <f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
+                                    </h:inputText> 
                                     </fieldset>
                                     <fieldset>
-                                        <!--                                    <label for="password">Password</label>-->
-                                        <p>Password</p>
-                                        <p:password value="#{customerManagedBean.customerPassword}" />
+<!--                                    <label for="password">Password</label>-->
+                                    <p>Password</p>
+                                    <p:password value="#{customerManagedBean.customerPassword}" />
                                     </fieldset>
 
                                     <h:commandButton class="pull-right" value="Sign in" action="#{customerManagedBean.loginCheck()}"/>
                                     <label for="checkbox"><input type="checkbox" id="checkbox"/> <i>Remember me</i></label>
                                 </fieldset>
                                 <span><a href="#">Forgot your password?</a></span>                                
-                            
-                            <div class="social-sits">
-                            <div class="button-bottom">
-                                <p>New account? <a href="#{request.contextPath}/Distribution/merlionAirlinesSignUp.xhtml">Signup Now!</a></p>
                             </div>
-                                </div>
-                                </div>
-                            <!--                        </form>-->
+<!--                        </form>-->
                         </h:form>
                     </div>
 
@@ -90,6 +89,6 @@ and open the template in the editor.
         </div>
         <!-- //container -->
     </div>
-    <ui:include src="merlionAirlinesFooter.xhtml"/>
+    <ui:include src="MerlionAirlinesFooter.xhtml"/>
     <!-- //banner-bottom -->
 </html>

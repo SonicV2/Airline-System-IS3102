@@ -47,10 +47,10 @@
 
         <!--this is the common header of all the MARS pages-->
         <ui:fragment rendered ="#{customerManagedBean.isCustomerLoggedOn}">
-        <ui:include src="customerDashboardHeader.xhtml"/>
+        <ui:include src="CustomerDashboardHeader.xhtml"/>
         </ui:fragment>
         <ui:fragment rendered ="#{!customerManagedBean.isCustomerLoggedOn}">
-        <ui:include src="merlionAirlinesHeader.xhtml"/>
+        <ui:include src="MerlionAirlinesHeader.xhtml"/>
         </ui:fragment>
         <div class="banner-bottom">
             <div class="container">

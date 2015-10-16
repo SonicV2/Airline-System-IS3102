@@ -77,19 +77,19 @@ public class CustomerManagedBean {
             setFeedbackMessage("Please use a different email, this email already exists!");
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, feedbackMessage, "");
             FacesContext.getCurrentInstance().addMessage(null, message);
-            return "merlionAirlinesSignUp";
+            return "MerlionAirlinesSignUp";
 
         } else if (!customerPassword.equals(customerConfirmedPassword)) {
             setFeedbackMessage("The passwords you entered do not match!");
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, feedbackMessage, "");
             FacesContext.getCurrentInstance().addMessage(null, message);
-            return "merlionAirlinesSignUp";
+            return "MerlionAirlinesSignUp";
         } else {
             setFeedbackMessage(customerSessionBean.addCustomer(customerFirstName, customerLastName, customerHpNumber, customerHpNumber, customerEmail, customerPassword, customerAddress, customerGender, customerDOB, title, nationality, passportNumber));
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, feedbackMessage, "");
             FacesContext.getCurrentInstance().addMessage(null, message);
             clearAll();
-            return "signUpConfirmation";
+            return "SignUpConfirmation";
         }
     }
 
@@ -97,7 +97,7 @@ public class CustomerManagedBean {
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
         customer = null;
         isCustomerLoggedOn = false;
-        return "/Distribution/merlionAirlines.xhtml?faces-redirect=true";
+        return "/Distribution/MerlionAirlines.xhtml?faces-redirect=true";
     }
 
     public void clearAll() {
@@ -117,11 +117,24 @@ public class CustomerManagedBean {
 
         if (doLogin(customerEmail, customerPassword)) {
             isCustomerLoggedOn = true;
-            return "merlionAirlines";
+            return "MerlionAirlines";
 
-            //return "customerDashboard";
+            //return "CustomerDashboard";
         } else {
-            return "signUpConfirmation";
+            return "SignUpConfirmation";
+        }
+
+    }
+    
+    public String loginCheckAtSummary() {
+
+        if (doLogin(customerEmail, customerPassword)) {
+            isCustomerLoggedOn = true;
+            return "Booking";
+
+            //return "CustomerDashboard";
+        } else {
+            return "SignUpConfirmation";
         }
 
     }
@@ -161,7 +174,7 @@ public class CustomerManagedBean {
     //redirect to customer's dashboard
     public String redirect() {
 
-        return "customerDashboard";
+        return "CustomerDashboard";
 
     }
 
