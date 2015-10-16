@@ -32,7 +32,7 @@ import javax.faces.event.ActionEvent;
 @Named(value = "crewScheduleManagedBean")
 @ManagedBean
 @SessionScoped
-public class crewScheduleManagedBean {
+public class CrewScheduleManagedBean {
 
     @EJB
     private A380PairingSessionBeanLocal a380PairingSessionBean;
@@ -64,7 +64,7 @@ public class crewScheduleManagedBean {
     /**
      * Creates a new instance of crewScheduleManagedBean
      */
-    public crewScheduleManagedBean() {
+    public CrewScheduleManagedBean() {
 
     }
 

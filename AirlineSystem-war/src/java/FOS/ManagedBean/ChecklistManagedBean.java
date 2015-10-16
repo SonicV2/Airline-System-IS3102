@@ -33,7 +33,7 @@ import org.primefaces.event.RowEditEvent;
 @Named(value = "checklistManagedBean")
 @ManagedBean
 @SessionScoped
-public class checklistManagedBean {
+public class ChecklistManagedBean {
      @EJB
     private ChecklistSessionBeanLocal checklistSessionBean;
      
@@ -65,7 +65,7 @@ private List<Schedule> pastSchedulesForTeam;
 private List<Schedule> currentDaySchedulesForTeam;
 FacesMessage message = null;
 
-public checklistManagedBean(){
+public ChecklistManagedBean(){
     
 }
 
