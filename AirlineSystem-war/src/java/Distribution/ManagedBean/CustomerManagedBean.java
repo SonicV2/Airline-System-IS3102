@@ -213,7 +213,10 @@ public class CustomerManagedBean {
                     }
 
                     eachPNRDisplay.setTravellerNames(addedNames);
+                    System.out.println("traveller names size:" + eachPNRDisplay.getTravellerNames().size());
+                    
                     eachPNRDisplay.setUniqueSchedules(selectedSchedules);
+                    System.out.println("unique schedules size:" + eachPNRDisplay.getUniqueSchedules().size());
                     
                     String serviceType = eachCustomerPNR.getBookings().get(0).getServiceType();
                     eachPNRDisplay.setServiceType(serviceType);
@@ -225,12 +228,19 @@ public class CustomerManagedBean {
                         eachPNRDisplay.setNoOfBags(noOfTravellers * 3);
                     }
                     pnrDisplayList.add(eachPNRDisplay);
+                    
                 }
             } else { //no PNRS for customer
                 setFeedbackMessage("No bookings associated with your account");
                 FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, feedbackMessage, "");
                 FacesContext.getCurrentInstance().addMessage(null, message);
                 return null;
+            }
+            System.out.println("PNR DISPLAY LIST SIZE: " + pnrDisplayList.size());
+            for (int i=0; i<pnrDisplayList.size(); i++) {
+                System.out.println("PNR DISPLAY LIST schedule: " + pnrDisplayList.get(i).getUniqueSchedules());
+                System.out.println("PNR DISPLAY LIST traveller: " + pnrDisplayList.get(i).getTravellerNames());
+                
             }
             return "DisplayCustomerPNRs";
         }
