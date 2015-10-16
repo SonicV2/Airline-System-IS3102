@@ -23,7 +23,7 @@ import javax.faces.event.ActionEvent;
  */
 @Named(value = "assignTeamManagedBean")
 @SessionScoped
-public class assignTeamManagedBean {
+public class AssignTeamManagedBean {
     @EJB
     private CrewAssignSessionBeanLocal crewAssignSessionBean;
     
@@ -35,7 +35,7 @@ public class assignTeamManagedBean {
     
     private List<Employee> selectedCC;
     
-    public assignTeamManagedBean() {
+    public AssignTeamManagedBean() {
     }
 
     @PostConstruct

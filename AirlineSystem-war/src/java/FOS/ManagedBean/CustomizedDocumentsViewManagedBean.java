@@ -15,7 +15,7 @@ import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
 
 @ManagedBean
-public class CustomizedDocumentsView implements Serializable {
+public class CustomizedDocumentsViewManagedBean implements Serializable {
      
     private List<ChecklistItem> items;
     String checklistName;
@@ -23,7 +23,7 @@ public class CustomizedDocumentsView implements Serializable {
     String comments;
          
     @ManagedProperty("#{checklistManagedBean}")
-    private checklistManagedBean checkBean;
+    private ChecklistManagedBean checkBean;
      
     @PostConstruct
     public void init() {
@@ -61,11 +61,11 @@ public class CustomizedDocumentsView implements Serializable {
          
     }
 
-    public checklistManagedBean getCheckBean() {
+    public ChecklistManagedBean getCheckBean() {
         return checkBean;
     }
 
-    public void setCheckBean(checklistManagedBean checkBean) {
+    public void setCheckBean(ChecklistManagedBean checkBean) {
         this.checkBean = checkBean;
     }
 
