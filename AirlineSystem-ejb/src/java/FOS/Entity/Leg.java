@@ -7,7 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class Leg implements Comparable,Serializable {
+public class Leg implements Comparable, Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -20,8 +20,10 @@ public class Leg implements Comparable,Serializable {
     private int startHour;
     private int finishHour;
     private String date1;
-    
-    public Leg(){super();}
+
+    public Leg() {
+        super();
+    }
 
     public Leg(int line, String origin, String destination, int startHour, int finishHour, String date1) {
         super();
@@ -41,7 +43,6 @@ public class Leg implements Comparable,Serializable {
         this.id = id;
     }
 
- 
     /**
      * @return the line
      */
@@ -49,7 +50,6 @@ public class Leg implements Comparable,Serializable {
         return line;
     }
 
- 
     public void setLine(int line) {
         this.line = line;
     }
@@ -61,7 +61,6 @@ public class Leg implements Comparable,Serializable {
         return origin;
     }
 
-  
     public void setOrigin(String origin) {
         this.origin = origin;
     }
@@ -73,7 +72,6 @@ public class Leg implements Comparable,Serializable {
         return destination;
     }
 
- 
     public void setDestination(String destination) {
         this.destination = destination;
     }
@@ -85,7 +83,6 @@ public class Leg implements Comparable,Serializable {
         return startHour;
     }
 
-   
     public void setStartHour(int startHour) {
         this.startHour = startHour;
     }
@@ -111,41 +108,43 @@ public class Leg implements Comparable,Serializable {
         return date1;
     }
 
-    
     public void setDate1(String date1) {
         this.date1 = date1;
     }
-    
-    public Long getFormatted(String da){
-		String d1 = da.split("/")[0];
-		String d2 = da.split("/")[1];
-		String d3 = da.split("/")[2];
-		String format = d3+d2+d1;
-		Long day = Long.parseLong(format);
-		return day;
-	}
 
+    public Long getFormatted(String da) {
+        String d1 = da.split("/")[0];
+        String d2 = da.split("/")[1];
+        String d3 = da.split("/")[2];
+        String format = d3 + d2 + d1;
+        Long day = Long.parseLong(format);
+        return day;
+    }
 
     @Override
     public int compareTo(Object o) {
         Leg leg = (Leg) o;
-		if(this.startHour == leg.getStartHour()){
-			
-			return 0;
-		}
-		else if(getFormatted(this.date1) > getFormatted(leg.getDate1())){
-			System.out.println("this Date: " + getFormatted(this.date1) );
-			System.out.println("leg date: "+ getFormatted(leg.getDate1()));
-			return 2;
-		}
-		else if(this.startHour <leg.getStartHour()){
-			System.out.println("this Hour: " + this.startHour);
-			System.out.println("leg Hour: "+ leg.getStartHour());
-			return -1;
-		}
-		else
-			return 1;
-		
-	}
-   
+
+        if (getFormatted(this.date1) > getFormatted(leg.getDate1())) {
+
+            return 2;
+
+        } else if (this.date1.equals(leg.getDate1())){
+
+            if (this.startHour == leg.getStartHour()) {
+
+                return 0;
+            } else if (this.startHour < leg.getStartHour()) {
+
+                return -1;
+            } else {
+                return 1;
+
+            }
+      
+
+        }else return -2;
+        
+    }
+
 }
