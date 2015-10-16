@@ -8,6 +8,7 @@ and open the template in the editor.
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
+      xmlns:jsf="http://xmlns.jcp.org/jsf"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
@@ -77,12 +78,23 @@ and open the template in the editor.
                                     </div>
                                     <div class="clearfix"> </div>
                                 </div>
+                                <h:form>
                                 <div class="c-left-grids">
                                     <div class="c-left">
                                         <span class="glyphicon glyphicon-lock" aria-hidden="true"></span>
                                     </div>
                                     <div class="c-right">
-                                        <a href="#">Manage Bookings</a>
+                                        <a jsf:action="#{customerManagedBean.displayCustomerPNRs()}">Manage Bookings</a>
+                                    </div>
+                                    <div class="clearfix"> </div>
+                                </div>
+                                </h:form>
+                                <div class="c-left-grids">
+                                    <div class="c-left">
+                                        <span class="glyphicon glyphicon-lock" aria-hidden="true"></span>
+                                    </div>
+                                    <div class="c-right">
+                                        <a href="#">Update Profile</a>
                                     </div>
                                     <div class="clearfix"> </div>
                                 </div>

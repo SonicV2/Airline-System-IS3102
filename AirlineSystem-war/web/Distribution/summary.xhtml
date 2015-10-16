@@ -239,7 +239,12 @@
 
     </style>
     <h:body>
+        <ui:fragment rendered ="#{customerManagedBean.isCustomerLoggedOn}">
+        <ui:include src="customerDashboardHeader.xhtml"/>
+        </ui:fragment>
+        <ui:fragment rendered ="#{!customerManagedBean.isCustomerLoggedOn}">
         <ui:include src="merlionAirlinesHeader.xhtml"/>
+        </ui:fragment>
         <div class="banner-bottom">
             <!-- container -->
             <div class="container">
