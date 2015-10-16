@@ -75,7 +75,7 @@
                             </p:column>
                                             
                             <!-- this is for route management, operations manager -->
-                            <p:column headerText="Delete Route" style="width:60px" rendered="#{loginManageBean.accessRightIDs.contains(7)}">
+                            <p:column headerText="Delete Route" style="width:60px" rendered="#{loginManagedBean.accessRightIDs.contains(7)}">
 
                                 <h:commandLink onclick="if (!confirm('Do you really want to delete this route?')) {
                                             return false;

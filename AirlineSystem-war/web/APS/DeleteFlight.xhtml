@@ -77,7 +77,7 @@
                             </p:column>
                             
 <!--                            only operations manager can delete flight-->
-                            <p:column headerText="Delete Flight" style="width:60px" rendered="#{loginManageBean.accessRightIDs.contains(11)}" >
+                            <p:column headerText="Delete Flight" style="width:60px" rendered="#{loginManagedBean.accessRightIDs.contains(11)}" >
 
                                 <h:commandLink onclick="if (!confirm('Do you really want to delete this flight? It will delete all the related schedules!')) {
                                             return false;

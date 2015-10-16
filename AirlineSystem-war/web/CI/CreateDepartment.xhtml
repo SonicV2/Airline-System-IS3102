@@ -21,9 +21,9 @@
 
     <h:body>
         <!--    To add the same header on all dashboard pages  -->
-                <ui:include src="dashboardHeader.xhtml"/>
+                <ui:include src="DashboardHeader.xhtml"/>
         <!--    To add the same sidebar on all dashboard pages  -->
-        <ui:include src="dashboardSidebar.xhtml"/>
+        <ui:include src="DashboardSidebar.xhtml"/>
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
@@ -58,7 +58,7 @@
                             <p:column style="width:32px">
                                 <p:rowEditor />
                             </p:column>
-                            <p:column style="width:32px" rendered="#{loginManageBean.accessRightIDs.contains(3)}">
+                            <p:column style="width:32px" rendered="#{loginManagedBean.accessRightIDs.contains(3)}">
 
                                 <h:commandLink onclick="if (!confirm('Do you really want to delete this department?')) {
                                             return false;
@@ -72,7 +72,7 @@
 
                 </div>
 
-                <ui:fragment rendered="#{loginManageBean.accessRightIDs.contains(3)}">
+                <ui:fragment rendered="#{loginManagedBean.accessRightIDs.contains(3)}">
                     <div class="col-lg-12">
                         <h2 class="page-header"> Add A Department</h2>
                     </div>
@@ -97,7 +97,7 @@
 
                             <div class="text-center">
                                 <br></br>
-                                <h:commandButton  class="btn btn-outline btn-success" value="Add Department" action="/CI/createDepartment" actionListener="#{departmentManagedBean.addDepartment}"/>
+                                <h:commandButton  class="btn btn-outline btn-success" value="Add Department" action="/CI/CreateDepartment" actionListener="#{departmentManagedBean.addDepartment}"/>
                             </div>
                         </h:form>
                     </div>

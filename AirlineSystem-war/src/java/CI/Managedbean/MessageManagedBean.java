@@ -52,8 +52,8 @@ public class MessageManagedBean {
     private String senderDepartment;
     
    
-    @ManagedProperty(value = "#{loginManageBean}")
-    private LoginManageBean loginManageBean;
+    @ManagedProperty(value = "#{loginManagedBean}")
+    private LoginManagedBean loginManageBean;
 
     public MessageManagedBean() {
         lastRead = new Date();
@@ -97,7 +97,7 @@ public class MessageManagedBean {
         FacesContext.getCurrentInstance().addMessage(null, message);
         clear();
         setSentMsg(messageSessionBean.sentMsg(loginManageBean.employeeUserName));
-        return "message";
+        return "Message";
     }
     
 //    public void checkReceiver() {
@@ -142,14 +142,14 @@ public class MessageManagedBean {
     /**
      * @return the loginManageBean
      */
-    public LoginManageBean getLoginManageBean() {
+    public LoginManagedBean getLoginManageBean() {
         return loginManageBean;
     }
 
     /**
      * @param loginManageBean the loginManageBean to set
      */
-    public void setLoginManageBean(LoginManageBean loginManageBean) {
+    public void setLoginManageBean(LoginManagedBean loginManageBean) {
         this.loginManageBean = loginManageBean;
     }
 

@@ -27,14 +27,14 @@ import org.primefaces.context.RequestContext;
 @ManagedBean
 @SessionScoped
 //@RequestScoped
-@Named(value = "employeeManageBean")
-public class EmployeeManageBean {
+@Named(value = "employeeManagedBean")
+public class EmployeeManagedBean {
 
     @EJB
     private EmployeeSessionBeanLocal employeeSessionBean;
 
     @ManagedProperty(value = "#{loginManageBean}")
-    private LoginManageBean loginManageBean;
+    private LoginManagedBean loginManageBean;
 
     public EmployeeSessionBeanLocal getEmployeeSessionBean() {
         return employeeSessionBean;
@@ -78,7 +78,7 @@ public class EmployeeManageBean {
     private String userID;
    
 
-    public EmployeeManageBean() {
+    public EmployeeManagedBean() {
     }
 
     public void addEmployee(ActionEvent event) {
@@ -101,7 +101,7 @@ public class EmployeeManageBean {
         employeeEmailAddress = employee.getEmployeeEmailAddress();
         employeeSessionBean.hashPwd(employeeID);
 
-        Logger logger = Logger.getLogger(EmployeeManageBean.class.getName());
+        Logger logger = Logger.getLogger(EmployeeManagedBean.class.getName());
         try {   
         fh = new FileHandler("%h/addEmployee.txt",99999,1,true); 
         logger.addHandler(fh);     
@@ -141,7 +141,7 @@ public class EmployeeManageBean {
         setFirstLang("");
         setSecondLang("");
 
-        return "employeeDashBoard";
+        return "EmployeeDashBoard";
 
     }
 
@@ -158,7 +158,7 @@ public class EmployeeManageBean {
         employeeEmailAddress = employee.getEmployeeEmailAddress();
         employeeSessionBean.hashPwd(employeeID);
         
-        Logger logger = Logger.getLogger(EmployeeManageBean.class.getName());
+        Logger logger = Logger.getLogger(EmployeeManagedBean.class.getName());
         try {   
         fh = new FileHandler("%h/addCabinCrew.txt",99999,1,true);  
         logger.addHandler(fh);
@@ -213,7 +213,7 @@ public class EmployeeManageBean {
             employeeSessionBean.hashNewPwd(employeeUserName, employeeNewPwd);
             employeeSessionBean.employeeActivate(employeeUserName);
             pwdChangeStatus = true;            
-            Logger logger = Logger.getLogger(EmployeeManageBean.class.getName());
+            Logger logger = Logger.getLogger(EmployeeManagedBean.class.getName());
             try {   
             fh = new FileHandler("%h/changePassword.txt",99999,1,true);  
             logger.addHandler(fh);
@@ -229,16 +229,16 @@ public class EmployeeManageBean {
                     + " has changed password: ");
             fh.close();
 
-            return "/login.xhtml" + "?faces-redirect=true";
+            return "/Login.xhtml" + "?faces-redirect=true";
 
         } else {
             pwdChangeStatus = false;
 
-            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Password Changed Fail", "");
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Password Change Failed", "");
 
             FacesContext.getCurrentInstance().addMessage(null, message);
 
-            return "newUserChangePwd";
+            return "NewUserChangePwd";
 
         }
     }
@@ -373,14 +373,14 @@ public class EmployeeManageBean {
     /**
      * @return the loginManageBean
      */
-    public LoginManageBean getLoginManageBean() {
+    public LoginManagedBean getLoginManageBean() {
         return loginManageBean;
     }
 
     /**
      * @param loginManageBean the loginManageBean to set
      */
-    public void setLoginManageBean(LoginManageBean loginManageBean) {
+    public void setLoginManageBean(LoginManagedBean loginManageBean) {
         this.loginManageBean = loginManageBean;
     }
 

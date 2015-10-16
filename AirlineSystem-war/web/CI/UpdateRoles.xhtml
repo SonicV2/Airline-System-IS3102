@@ -24,9 +24,9 @@
 
     <h:body>
         <!--    To add the same header on all dashboard pages  -->
-                        <ui:include src="dashboardHeader.xhtml"/>
+        <ui:include src="DashboardHeader.xhtml"/>
         <!--    To add the same sidebar on all dashboard pages  -->
-        <ui:include src="dashboardSidebar.xhtml"/>
+        <ui:include src="DashboardSidebar.xhtml"/>
         <div id="page-wrapper">
 
 
@@ -59,7 +59,7 @@
                             </p:column>
 
 <!--                            this is for super admin, HR manager to delete a role-->
-                            <p:column headerText="Delete Role" style="width:32px" rendered="#{loginManageBean.accessRightIDs.contains(5)}">
+                            <p:column headerText="Delete Role" style="width:32px" rendered="#{loginManagedBean.accessRightIDs.contains(5)}">
 
                                 <h:commandLink onclick="if (!confirm('Do you really want to delete this role?')) {
                                             return false;
