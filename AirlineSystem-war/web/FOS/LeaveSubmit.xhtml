@@ -13,14 +13,14 @@
             <h1> Welcome to Leave Submit System </h1>
             
             <p:outputLabel for="reason" value="Leave Reason: " />
-            <p:selectOneMenu id="reason" required="true" requiredMessage="Please choose one reason" value="#{crewSignInManagedBean.selectLeaveReason}" style="width:150px">
+            <p:selectOneMenu id="reason" required="true" requiredMessage="Please choose one reason" value="#{CrewSignInManagedBean.selectLeaveReason}" style="width:150px">
                 <f:selectItem itemLabel="Select Reason" itemValue="" noSelectionOption="true" />
-                <f:selectItems value="#{crewSignInManagedBean.leaveReasons}" />
+                <f:selectItems value="#{CrewSignInManagedBean.leaveReasons}" />
             </p:selectOneMenu>
 
 
-            <p:selectOneRadio id="sch1" required="true" requiredMessage="Please choose one schedule" layout="grid" columns="1" value="#{crewSignInManagedBean.selectLeaveSchedule}">
-                <f:selectItems itemLabelEscaped="false" value="#{crewSignInManagedBean.validSchedulesForSubmit}" var="sch" itemValue="#{sch.scheduleId}"
+            <p:selectOneRadio id="sch1" required="true" requiredMessage="Please choose one schedule" layout="grid" columns="1" value="#{CrewSignInManagedBean.selectLeaveSchedule}">
+                <f:selectItems itemLabelEscaped="false" value="#{CrewSignInManagedBean.validSchedulesForSubmit}" var="sch" itemValue="#{sch.scheduleId}"
                                itemLabel="Schedule ID: #{sch.scheduleId} 
                                &lt;br/&gt; Flight Number: #{sch.flight.flightNo}  ( #{sch.flight.route.originCity} -> #{sch.flight.route.destinationCity})
                                 
@@ -30,11 +30,11 @@
          
             
            <br /> <br />
-            <p:outputLabel for="sch2" value="You have submitted leave for #{crewSignInManagedBean.inValidSchedulesForSubmit.size()} following Schedule(s):  " />
+            <p:outputLabel for="sch2" value="You have submitted leave for #{CrewSignInManagedBean.inValidSchedulesForSubmit.size()} following Schedule(s):  " />
             
             <p:selectOneRadio id="sch2"  layout="grid" columns="1" disabled="true" >
                 
-                <f:selectItems itemLabelEscaped="false" value="#{crewSignInManagedBean.inValidSchedulesForSubmit}" var="sch"
+                <f:selectItems itemLabelEscaped="false" value="#{CrewSignInManagedBean.inValidSchedulesForSubmit}" var="sch"
                                itemLabel="Schedule ID: #{sch.scheduleId} 
                                &lt;br/&gt; Flight Number: #{sch.flight.flightNo}   ( #{sch.flight.route.originCity} -> #{sch.flight.route.destinationCity})
                                &lt;br/&gt; Schedule Start Date: #{sch.startDate} 
@@ -42,7 +42,7 @@
             </p:selectOneRadio>
 
            <br /> <br />
-            <h:commandButton value="Submit" actionListener="#{crewSignInManagedBean.submitLeave}"/>
+            <h:commandButton value="Submit" actionListener="#{CrewSignInManagedBean.submitLeave}"/>
         </h:form>
     </h:body>
 </html>

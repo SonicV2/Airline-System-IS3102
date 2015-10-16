@@ -45,7 +45,7 @@ and open the template in the editor.
                             <h:commandButton value="Export check list as report" class="btn btn-outline btn-info" id="pdf">
                                 <!--<p:graphicImage name="images/pdf.png" />-->
 
-                                <p:dataExporter type="pdf" target="tbl" fileName="Checklist" preProcessor="#{customizedDocumentsView.preProcessPDF}" />
+                                <p:dataExporter type="pdf" target="tbl" fileName="Checklist" preProcessor="#{CustomizedDocumentsViewManagedBean.preProcessPDF}" />
                             </h:commandButton>
 
 
@@ -59,13 +59,13 @@ and open the template in the editor.
                                 <br></br>
 
 
-                                <p:dataTable id="tbl" var="item" value="#{checklistManagedBean.checklistItemsForChecklist}"
+                                <p:dataTable id="tbl" var="item" value="#{ChecklistManagedBean.checklistItemsForChecklist}"
                                              style="margin-bottom:20px" >                           
 
 
 
                                     <f:facet name="header">    
-                                        <h:outputText value="#{checklistManagedBean.checklistName} checklist for Flight No: #{checklistManagedBean.schedule.flight.flightNo}, Schedule Id:#{checklistManagedBean.schedule.scheduleId}"/> 
+                                        <h:outputText value="#{ChecklistManagedBean.checklistName} checklist for Flight No: #{ChecklistManagedBean.schedule.flight.flightNo}, Schedule Id:#{ChecklistManagedBean.schedule.scheduleId}"/> 
                                     </f:facet>
 
 
@@ -88,7 +88,7 @@ and open the template in the editor.
                                 </p:dataTable>
                                 <div class="col-lg-12">
                                     <h3>Comments:</h3>
-                                    <p><h:outputText value="#{checklistManagedBean.comments}"/></p>
+                                    <p><h:outputText value="#{ChecklistManagedBean.comments}"/></p>
 
 
 

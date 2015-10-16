@@ -30,7 +30,7 @@
                 </div>
                 <h1>Search Cabin Crew</h1>
                 <h:form>
-                    <p:dataTable var="crew" value="#{searchCrewManagedBean.ccs}" widgetVar="crewsTable" paginator="true" rows="10">
+                    <p:dataTable var="crew" value="#{SearchCrewManagedBean.ccs}" widgetVar="crewsTable" paginator="true" rows="10">
 
                         <f:facet name="header">
                             <p:outputPanel>
@@ -50,7 +50,7 @@
                             <f:facet name="filter">
                                 <p:selectOneMenu onchange="PF('crewsTable').filter()" >
                                     <f:selectItem itemLabel="Select One" itemValue="#{null}" noSelectionOption="true" />
-                                    <f:selectItems value="#{searchCrewManagedBean.ccPosition}" />
+                                    <f:selectItems value="#{SearchCrewManagedBean.ccPosition}" />
                                 </p:selectOneMenu>
                             </f:facet>
                             <h:outputText value="#{crew.position}" />
@@ -67,7 +67,7 @@
                         <p:column filterBy="#{crew.languages.get(0)}" headerText="Main Language" filterMatchMode="in">
                             <f:facet name="filter">
                                 <p:selectCheckboxMenu label="Language" onchange="PF('crewsTable').filter()" panelStyle="width:125px" scrollHeight="150">
-                                    <f:selectItems value="#{searchCrewManagedBean.languages}" />
+                                    <f:selectItems value="#{SearchCrewManagedBean.languages}" />
                                 </p:selectCheckboxMenu>
                             </f:facet>
 
