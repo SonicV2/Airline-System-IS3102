@@ -696,14 +696,9 @@ public class MARSManagedBean {
 
         double priceForEachSchedule = 0;
         for (Schedule eachSelectedSchedule : selectedSchedules) {
-            System.out.println("No. of Adults: " + adults);
-            System.out.println("********Loop starts, total selected price = " + totalSelectedPrice);
             priceForEachSchedule = pm.getPrice(pm.getClassCode(eachSelectedSchedule, serviceType, (adults + children)), eachSelectedSchedule);
-            System.out.println("Price for each schedule: " + priceForEachSchedule);
             totalSelectedPrice += (priceForEachSchedule * adults) + (priceForEachSchedule * 0.75 * children);
-            System.out.println("********Loop endss, total selected price = " + totalSelectedPrice);
         }
-        System.out.println("OUTSIDE LOOP, total selected price = " + totalSelectedPrice);
         adultPrice = priceForEachSchedule;
         childPrice = priceForEachSchedule;
         Passenger passenger;

@@ -37,7 +37,7 @@
         <!--pop-up-->
         <h:outputScript library="js" name="menu_jquery.js" /> 
         <!--//pop-up-->	
-        
+
         <h:outputStylesheet library ="css"  name="flightdisplay.css" />
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
         <title>Display Direct Flight</title>
@@ -62,11 +62,11 @@
                             <div class="flight-list-view">
                                 <div class="airline-logo col-md-2 text-center clear-padding">
                                     <br></br>
-                                    
+
                                     <h4>Merlion Airlines</h4>
                                     <h5> #{schedules.flight.flightNo}</h5>
                                     <br></br>
-                                      
+
                                 </div>
                                 <div class="col-md-6 col-sm-6 col-xs-8 text-center clear-padding flight-desc">
                                     <div class="take-off">
@@ -97,10 +97,14 @@
                                     <div class="price">
                                         <br></br><br></br>
                                         <h4>$ #{mARSManagedBean.selectedDatePrices.get(mARSManagedBean.directFlightSchedules.indexOf(schedules))}</h4>
-                                        <h5>Per Person</h5>
+                                        <h5>Per Adult</h5>
+                                        <ui:fragment rendered="#{mARSManagedBean.children > 0}">
+                                            <h4>$ #{mARSManagedBean.selectedDatePrices.get(mARSManagedBean.directFlightSchedules.indexOf(schedules))*0.75}</h4>
+                                            <h5>Per Child</h5>
+                                        </ui:fragment>
                                     </div>
                                     <div class="book">
-                                            <a jsf:action="#{mARSManagedBean.bookDirectDepartureSchedule(schedules)}">BOOK</a>
+                                        <a jsf:action="#{mARSManagedBean.bookDirectDepartureSchedule(schedules)}">BOOK</a>
                                     </div>
                                 </div>
                             </div>
