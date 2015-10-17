@@ -225,8 +225,8 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
                 
             }else
             {
-                allCustomers = null;
                 System.out.println("no reserve aircraft!");
+                return null;
             }
         }catch (EntityNotFoundException enfe) {
             System.out.println("\nEntity not found error" + "enfe.getMessage()");

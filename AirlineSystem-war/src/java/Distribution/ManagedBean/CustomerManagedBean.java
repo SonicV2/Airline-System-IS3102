@@ -196,9 +196,11 @@ public class CustomerManagedBean {
         
         pnrDisplayList = new ArrayList();
         if (customer != null) {
+           
             List<PNR> customerPNRs = customerSessionBean.retrieveCustomerPNRs(customer);
-            System.out.println("No of pnrs retrieved for customer " + customerPNRs.size());
-            if (customerPNRs != null) {//PNRs found for customer
+            System.out.println("Checked no. of pnr");
+            System.out.println("No of pnrs retrieved for customer: " + customerPNRs.size());
+            if (!customerPNRs.isEmpty()) {//PNRs found for customer
                 for (PNR eachCustomerPNR : customerPNRs) {
 //                    selectedSchedules.clear();
 //                    addedSchedules.clear();
@@ -249,10 +251,11 @@ public class CustomerManagedBean {
 
                 }
             } else { //no PNRS for customer
-                setFeedbackMessage("No bookings associated with your account");
-                FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, feedbackMessage, "");
+                System.out.println("no PNR for customer");
+                FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "No bookings associated with your account!", "");
                 FacesContext.getCurrentInstance().addMessage(null, message);
                 return null;
+              
             }
 
             return "DisplayCustomerPNRs";
