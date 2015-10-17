@@ -100,14 +100,7 @@
                                         <h5>Per Person</h5>
                                     </div>
                                     <div class="book">
-<!--                                        if this is not one way flight-->
-                                        <ui:fragment rendered="#{!mARSManagedBean.oneWayFlight}">
                                             <a jsf:action="#{mARSManagedBean.bookDirectDepartureSchedule(schedules)}">BOOK</a>
-                                        </ui:fragment>
-<!--                                        if this is one way flight-->
-                                        <ui:fragment rendered="#{mARSManagedBean.oneWayFlight}">
-                                            <a jsf:action="#{mARSManagedBean.summary()}">BOOK</a>
-                                        </ui:fragment>
                                     </div>
                                 </div>
                             </div>
