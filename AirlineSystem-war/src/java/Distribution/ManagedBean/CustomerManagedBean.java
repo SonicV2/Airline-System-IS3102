@@ -251,7 +251,6 @@ public class CustomerManagedBean {
 
                 }
             } else { //no PNRS for customer
-                System.out.println("no PNR for customer");
                 FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "No bookings associated with your account!", "");
                 FacesContext.getCurrentInstance().addMessage(null, message);
                 return null;
