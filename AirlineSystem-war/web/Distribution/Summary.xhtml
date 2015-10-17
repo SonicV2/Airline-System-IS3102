@@ -351,18 +351,17 @@
                                         <fieldset>
                                             <!--                                    <label for="email">Email Address</label>-->
                                             <p>Email</p>
-        <!--                                    <p:inputText value="#{customerManagedBean.customerEmail}" ></p:inputText>-->
-                                            <h:inputText id="PE" required="true" validatorMessage="Not a valid email addess " requiredMessage="Please fill in Personal email field!" class="form-control" value="#{customerManagedBean.customerEmail}" >
+                                            <h:inputText id="PE" required="true" validatorMessage="Not a valid email addess " requiredMessage="Please fill in Personal email field!" class="form-control" value="#{mARSManagedBean.customerEmail}" >
                                                 <f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
                                             </h:inputText> 
                                         </fieldset>
                                         <fieldset>
                                             <!--                                    <label for="password">Password</label>-->
                                             <p>Password</p>
-                                            <p:password value="#{customerManagedBean.customerPassword}" />
+                                            <p:password value="#{mARSManagedBean.customerPassword}" />
                                         </fieldset>
 
-                                        <h:commandButton class="pull-right" value="Sign in" action="#{customerManagedBean.loginCheckAtSummary()}"/>
+                                        <h:commandButton class="pull-right" value="Sign in" action="#{mARSManagedBean.loginCheckAtSummary()}"/>
                                         <label for="checkbox"><input type="checkbox" id="checkbox"/> <i>Remember me</i></label>
                                     </fieldset>
                                     <span><a href="#">Forgot your password?</a></span>                                
