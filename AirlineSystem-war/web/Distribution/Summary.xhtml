@@ -128,19 +128,19 @@
                                         <h:form>
                                             <p:growl id="growl" sticky="true" showDetail="true"/>
                                             <label>Email</label>
-                                            <h:inputText id="PE" required="true" validatorMessage="Not a valid email addess " requiredMessage="Please fill in Personal email field!" class="form-control" value="#{customerManagedBean.customerEmail}" >
+                                            <h:inputText id="PE" required="true" validatorMessage="Not a valid email addess " requiredMessage="Please fill in Personal email field!" class="form-control" value="#{mARSManagedBean.customerEmail}" >
                                                 <f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
                                             </h:inputText> 
 
                                             <label>Password</label>
 
-                                            <h:inputSecret class="form-control" value="#{customerManagedBean.customerPassword}" />
+                                            <h:inputSecret class="form-control" value="#{mARSManagedBean.customerPassword}" />
 
                                             <div class="social-sits">
                                                 <div class="button-bottom">
                                                     <p>New account? <a href="#{request.contextPath}/Distribution/MerlionAirlinesSignUp.xhtml">Signup Now!</a></p>
 
-                                                    <h:commandButton class="btn btn-outline btn-success pull-right" value="Sign in" action="#{customerManagedBean.loginCheckAtSummary()}"/>
+                                                    <h:commandButton class="btn btn-outline btn-success pull-right" value="Sign in" action="#{mARSManagedBean.loginCheckAtSummary()}"/>
                                                     <br></br>
                                                 </div>
                                             </div>
