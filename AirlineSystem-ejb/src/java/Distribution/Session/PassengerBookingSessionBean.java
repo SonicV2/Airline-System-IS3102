@@ -204,6 +204,7 @@ public class PassengerBookingSessionBean implements PassengerBookingSessionBeanL
         }
         pnr.setPnrStatus("Cancelled");
          em.merge(pnr);
+         em.flush();
     }
 
     @Override
