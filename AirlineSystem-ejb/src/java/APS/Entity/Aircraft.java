@@ -3,6 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
+//Author
 package APS.Entity;
 
 import java.io.Serializable;
