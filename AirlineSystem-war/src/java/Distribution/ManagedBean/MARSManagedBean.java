@@ -12,6 +12,7 @@ import APS.Session.FlightSessionBeanLocal;
 import APS.Session.RouteSessionBeanLocal;
 import APS.Session.ScheduleSessionBeanLocal;
 import CI.Managedbean.LoginManagedBean;
+import CI.Session.EmailSessionBeanLocal;
 import Distribution.Entity.Customer;
 import Distribution.Entity.FlightOptions;
 import Distribution.Entity.PNR;
@@ -34,6 +35,7 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import org.primefaces.context.RequestContext;
 
 /**
  *
@@ -58,6 +60,9 @@ public class MARSManagedBean {
 
     @EJB
     private PassengerBookingSessionBeanLocal passengerBookingSessionBean;
+    
+    @EJB
+    private EmailSessionBeanLocal emailSessionBean;
 
     @ManagedProperty(value = "#{customerManagedBean}")
     private CustomerManagedBean customerManagedBean;
@@ -185,6 +190,9 @@ public class MARSManagedBean {
      private String customerEmail;
     private String customerPassword;
     private boolean isCustomerLoggedOn;
+    
+    private String subject;
+    private String body;
     
     @PostConstruct
     public void retrieve() {
@@ -869,8 +877,38 @@ public class MARSManagedBean {
         
         setCsv(null);
         setCreditCard(null);
+        
+        sendEmail(primaryEmail);
+        
+        message = new FacesMessage(FacesMessage.SEVERITY_INFO, "A cofirmation email has been sent to the primary email. Please check.", "");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+        
 
         return "Confirmation";
+    }
+    
+    public void sendEmail(String email){
+        
+        setSubject("Merlion Airlines Booking Confirmation");
+        
+        String flight = "";
+        String tempBody= "";
+        
+        for (int i=0; i<selectedSchedules.size(); i++) {
+            flight = "Flight Number: " + selectedSchedules.get(i).getFlight().getFlightNo()
+                    + "\nOrigin Country: " + selectedSchedules.get(i).getFlight().getRoute().getOriginCity() + ", " + selectedSchedules.get(i).getFlight().getRoute().getOriginCountry()
+                    + "\nDestination Country: " + selectedSchedules.get(i).getFlight().getRoute().getDestinationCity() + ", " + selectedSchedules.get(i).getFlight().getRoute().getDestinationCountry()
+                    + "\nDeparture Date: " + selectedSchedules.get(i).getStartDate() + "," +
+                    "\nArrival Date: " + selectedSchedules.get(i).getEndDate() + "\n\n";
+            tempBody += flight;
+        }
+                
+        setBody("Thank you for using Merlion Airlines. \n\nYour PNR Id: " + pnr.getPnrID() + "\nDate of Booking: " + pnr.getDateOfBooking() +
+                "\nNumber of Travellers: " + pnr.getNoOfTravellers() + "\nTotal Price Paid: " + pnr.getTotalPrice() +
+                "\n\n" + tempBody + "\n\nYou can always view the details of your booking at our website.");
+        
+        emailSessionBean.sendEmail(email, getSubject(), getBody());
+        
     }
 
     public String searchPNR() {
@@ -1921,6 +1959,34 @@ public class MARSManagedBean {
      */
     public void setIsCustomerLoggedOn(boolean isCustomerLoggedOn) {
         this.isCustomerLoggedOn = isCustomerLoggedOn;
+    }
+
+    /**
+     * @return the subject
+     */
+    public String getSubject() {
+        return subject;
+    }
+
+    /**
+     * @param subject the subject to set
+     */
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+
+    /**
+     * @return the body
+     */
+    public String getBody() {
+        return body;
+    }
+
+    /**
+     * @param body the body to set
+     */
+    public void setBody(String body) {
+        this.body = body;
     }
 
 }
