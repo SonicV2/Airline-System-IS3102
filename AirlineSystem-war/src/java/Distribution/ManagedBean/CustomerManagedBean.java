@@ -20,6 +20,7 @@ import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
@@ -65,6 +66,8 @@ public class CustomerManagedBean {
     
     private String selectedPNRId;
     private PNR selectedPNR;
+    
+    private Boolean loggedIn;
 
     @PostConstruct
     public void init() {
@@ -164,7 +167,8 @@ public class CustomerManagedBean {
                 setFeedbackMessage("Login Successful!");
                 FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, feedbackMessage, "");
                 FacesContext.getCurrentInstance().addMessage(null, message);
-
+                
+                loggedIn = true;
                 return true;
                 //means the password and email match
 //                  redirect();
@@ -546,6 +550,20 @@ public class CustomerManagedBean {
      */
     public void setSelectedPNR(PNR selectedPNR) {
         this.selectedPNR = selectedPNR;
+    }
+
+    /**
+     * @return the loggedIn
+     */
+    public Boolean getLoggedIn() {
+        return loggedIn;
+    }
+
+    /**
+     * @param loggedIn the loggedIn to set
+     */
+    public void setLoggedIn(Boolean loggedIn) {
+        this.loggedIn = loggedIn;
     }
 
 }
