@@ -431,7 +431,13 @@ public class MARSManagedBean {
     public String bookDirectDepartureSchedule(Schedule directSchedule){
         setSelectedDepartureSchedule(directSchedule);
         System.out.println(selectedDepartureSchedule.getScheduleId());
+        if (oneWayFlight){
+            return summary();
+        }
+        if (!oneWayFlight){
         return displayReturnFlights();
+        }
+        return null;
     }
     
     public String bookDirectReturnSchedule(Schedule directSchedule){
