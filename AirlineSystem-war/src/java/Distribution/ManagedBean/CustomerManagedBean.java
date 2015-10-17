@@ -191,6 +191,9 @@ public class CustomerManagedBean {
 
     public String displayCustomerPNRs() {
         
+        System.out.println("IN displayCustomerPNRs");
+        System.out.println("Customer logged in? " + isCustomerLoggedOn);
+        
         pnrDisplayList = new ArrayList();
         if (customer != null) {
             List<PNR> customerPNRs = customerSessionBean.retrieveCustomerPNRs(customer);
@@ -254,8 +257,9 @@ public class CustomerManagedBean {
 
             return "DisplayCustomerPNRs";
         } else {//customer is null
+            
             System.out.println("Customer is null");
-            return null;
+            return "ViewPNR";
         }
     }
 
