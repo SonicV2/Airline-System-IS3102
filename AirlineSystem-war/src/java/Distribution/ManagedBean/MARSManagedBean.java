@@ -440,8 +440,24 @@ public class MARSManagedBean {
         return null;
     }
     
+    public String bookOneStopDeparture(FlightOptions flightOption){
+        setSelectedDepartureFlightOption(flightOption);
+
+        if (oneWayFlight){
+            return summary();
+        }
+        if (!oneWayFlight){
+        return displayReturnFlights();
+        }
+        return null;
+    }
     public String bookDirectReturnSchedule(Schedule directSchedule){
         setSelectedReturnSchedule(directSchedule);
+        return summary();
+    }
+    
+    public String bookOneStopReturn(FlightOptions flightOption){
+        setSelectedReturnFlightOption(flightOption);
         return summary();
     }
 
