@@ -25,8 +25,10 @@ public class FlightSessionBean implements FlightSessionBeanLocal {
     private EntityManager em;
 
     private Flight flight;
+    private List<Flight> flights;
     private Schedule schedule;
     private Route route;
+    private List<Route> routes;
     private AircraftType aircraftType;
     private List<Schedule> schedules;
     private SeatAvailability seatAvail;
@@ -44,7 +46,7 @@ public class FlightSessionBean implements FlightSessionBeanLocal {
         flight.setSchedule(schedules);
         em.persist(flight);
     }
-    
+
     //Delete an existing flight entity
     @Override
     public void deleteFlight(String flightNo) {
@@ -52,7 +54,7 @@ public class FlightSessionBean implements FlightSessionBeanLocal {
         em.remove(flight);
         em.flush();
     }
-    
+
     //Delete an existing schedule entity
     @Override
     public void deleteSchedule(Long scheduleId) {
@@ -67,7 +69,7 @@ public class FlightSessionBean implements FlightSessionBeanLocal {
         em.remove(schedule);
         em.flush();
     }
-    
+
     //Get a specific schedule with schedule id
     @Override
     public Schedule getSchedule(Long scheduleId) {
@@ -90,7 +92,7 @@ public class FlightSessionBean implements FlightSessionBeanLocal {
         }
         return schedule;
     }
-    
+
     //Get a specific flgith with flight number
     @Override
     public Flight getFlight(String flightNo) {
@@ -113,30 +115,7 @@ public class FlightSessionBean implements FlightSessionBeanLocal {
         }
         return flight;
     }
-    
-    //Get all the existing flights
-    @Override
-    public List<Flight> getFlights() {
-        List<Flight> flights = new ArrayList<Flight>();
-        try {
 
-            Query q = em.createQuery("SELECT a FROM Flight a");
-
-            List<Flight> results = q.getResultList();
-            if (!results.isEmpty()) {
-                flights = results;
-
-            } else {
-                flights = null;
-                System.out.println("No Flights Added!");
-            }
-
-        } catch (EntityNotFoundException enfe) {
-            System.out.println("\nEntity not found error" + "enfe.getMessage()");
-        }
-        return flights;
-    }
-    
     //Get a specific route with route id
     @Override
     public Route getRoute(Long id) {
@@ -159,29 +138,90 @@ public class FlightSessionBean implements FlightSessionBeanLocal {
         }
         return route;
     }
-    
+
     //Retrieve all the existing flights
-    public List<Flight> retrieveFlights(){
-        List<Flight> allFlights = new ArrayList<Flight>();
-        
-        try{
+    @Override
+    public List<Flight> retrieveFlights() {
+        flights = new ArrayList<Flight>();
+
+        try {
             Query q = em.createQuery("SELECT a from Flight a");
-            
+
             List<Flight> results = q.getResultList();
-            if (!results.isEmpty()){
-                
-                allFlights = results;
-                
-            }else
-            {
-                allFlights = null;
+            if (!results.isEmpty()) {
+
+                flights = results;
+
+            } else {
+                flights = null;
                 System.out.println("no flight!");
             }
-        }catch (EntityNotFoundException enfe) {
+        } catch (EntityNotFoundException enfe) {
             System.out.println("\nEntity not found error" + "enfe.getMessage()");
         }
-       
-        return allFlights;
+
+        return flights;
     }
 
+    //Retrieve all the existing routes that the flights fly
+    @Override
+    public List<Route> retrieveFlightRoutes() {
+        routes = new ArrayList<Route>();
+        List<Route> routesWithFlights = new ArrayList<Route>();
+
+        try {
+            Query q = em.createQuery("SELECT a from Route a");
+
+            List<Route> results = q.getResultList();
+            if (!results.isEmpty()) {
+
+                routes = results;
+
+            } else {
+                routes = null;
+                System.out.println("no Route!");
+            }
+        } catch (EntityNotFoundException enfe) {
+            System.out.println("\nEntity not found error" + "enfe.getMessage()");
+        }
+
+        for (int i = 0; i < routes.size(); i++) {
+            if (!routes.get(i).getFlights().isEmpty()) {
+                routesWithFlights.add(routes.get(i));
+            }
+        }
+
+        return routesWithFlights;
+    }
+    
+    //Retrieve all the existing routes that the flights fly
+    @Override
+    public List<Long> retrieveFlightRouteIds() {
+        routes = new ArrayList<Route>();
+        List<Long> routeIds = new ArrayList<Long>();
+
+        try {
+            Query q = em.createQuery("SELECT a from Route a");
+
+            List<Route> results = q.getResultList();
+            if (!results.isEmpty()) {
+
+                routes = results;
+
+            } else {
+                routes = null;
+                System.out.println("no Route!");
+            }
+        } catch (EntityNotFoundException enfe) {
+            System.out.println("\nEntity not found error" + "enfe.getMessage()");
+        }
+
+        for (int i = 0; i < routes.size(); i++) {
+            if (!routes.get(i).getFlights().isEmpty()) {
+                routeIds.add(routes.get(i).getRouteId());
+            }
+        }
+
+        return routeIds;
+    }
 }
