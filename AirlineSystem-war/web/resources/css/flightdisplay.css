@@ -1,0 +1,116 @@
+        body, html {
+	font-family: 'Open Sans', sans-serif;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	color: #07253F;
+	font-size: 15px;
+}
+a {
+	text-decoration: none;
+}
+a:hover {
+	text-decoration: none;
+}
+a:focus {
+	outline: none;
+}
+a:active {
+	text-decoration: none;
+}
+h5 {
+	font-size: 15px;
+}
+.transition-effect {
+	transition: all 0.5s ease;
+	-ms-transition: all 0.5s ease;
+	-moz-transition: all 0.5s ease;
+	-o-transition: all 0.5s ease;
+	-webkit-transition: all 0.5s ease;
+}
+.row {
+	margin: 0;
+}
+.clear-padding {
+	padding: 0;
+}
+
+        @media (max-width: 991px) {
+            .flight-list-view .flight-desc {
+                border-top: 1px solid #e6e6e6; 
+            }
+            .flight-list-view .flight-book {
+                border-top: 1px solid #e6e6e6; 
+            }
+            .flight-list-view .price {
+                float: left;
+                border-right: 1px solid #e6e6e6;
+                width: 50%;
+                border-bottom: none;
+            }
+            .flight-list-view .book{
+                float: right;
+                width: 50%;
+                padding: 10px 0px;
+            }
+        }
+
+        .flight-list-view {
+            margin: 40px 15px 0px;
+            border: 1px solid #e6e6e6;
+            box-shadow: 0px 0px 5px #e6e6e6;
+            overflow: hidden;
+        }
+        .flight-list-view:hover {
+            border: 1px solid #F19C4F;
+            box-shadow: 0px 0px 5px #F19C4F;
+        }
+        .flight-list-view .airline-logo {
+            padding: 33px 0px;
+            border-right: 1px solid #e6e6e6;
+        }
+        .flight-list-view h6 {
+            margin-bottom: 0px;
+        }
+        .flight-list-view .take-off {
+            border-bottom: 1px solid #e6e6e6;
+            padding: 5px 0px;
+        }
+        .flight-list-view .landing {
+            padding: 5px 0px;
+        }
+        .flight-list-view .flight-desc h5 {
+            font-size: 13px;
+        }
+        .flight-list-view .flight-desc h4 i {
+            margin-right: 5px;
+            color: #F2676B;
+        }
+        .flight-list-view .flight-desc {
+            border-right: 1px solid #e6e6e6;
+            min-height: 123px;
+        }
+        .flight-list-view .flight-desc .duration {
+            padding: 40px 0px;
+        }
+        .flight-list-view .price {
+            padding: 10px 0px 0px 0px;
+        }
+        .flight-list-view .price h4 {
+            font-weight: bold;
+        }
+        .flight-list-view .book a {
+            font-weight: bold;
+            color: #ffffff;
+            background: #F2676B;
+            padding: 8px 20px;
+            display: inline-block;
+        }
+        .flight-list-view .book {
+            padding: 5px 0 10px;
+        }
+        .flight-list-view .book  h6 {
+            margin-top: 10px;
+        }
+        .flight-list-view:hover .book a{
+            background: #00ADEF;
+        }

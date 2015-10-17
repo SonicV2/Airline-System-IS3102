@@ -425,8 +425,20 @@ public class MARSManagedBean {
         }
 
     }
+    
+    public String bookDirectDepartureSchedule(Schedule directSchedule){
+        setSelectedDepartureSchedule(directSchedule);
+        System.out.println(selectedDepartureSchedule.getScheduleId());
+        return displayReturnFlights();
+    }
+    
+    public String bookDirectReturnSchedule(Schedule directSchedule){
+        setSelectedReturnSchedule(directSchedule);
+        return summary();
+    }
 
     public String displayReturnFlights() {
+
         directFlightSchedules.clear();
         selectedDatePrices.clear();
         setDirectFlightDuration("");
