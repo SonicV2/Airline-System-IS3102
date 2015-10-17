@@ -247,5 +247,11 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
             return null;
         }
     }
+    
+    @Override
+    public void updateCustomerProfile (Customer customer){
+        em.merge(customer);
+        em.flush();
+    }
 
 }

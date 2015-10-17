@@ -190,16 +190,12 @@ public class CustomerManagedBean {
     }
 
     public String displayCustomerPNRs() {
-        
-        System.out.println("IN displayCustomerPNRs");
-        System.out.println("Customer logged in? " + isCustomerLoggedOn);
+ 
         
         pnrDisplayList = new ArrayList();
         if (customer != null) {
            
             List<PNR> customerPNRs = customerSessionBean.retrieveCustomerPNRs(customer);
-            System.out.println("Checked no. of pnr");
-            System.out.println("No of pnrs retrieved for customer: " + customerPNRs.size());
             if (!customerPNRs.isEmpty()) {//PNRs found for customer
                 for (PNR eachCustomerPNR : customerPNRs) {
 //                    selectedSchedules.clear();
@@ -280,6 +276,47 @@ public class CustomerManagedBean {
         return "CustomerDashboard";
     }
 
+    public String updateProfile(){
+      title = customer.getTitle();
+      customerFirstName = customer.getFirstName();
+      customerLastName = customer.getLastName();
+      passportNumber = customer.getPassportNumber();
+      customerGender = customer.getGender();
+      nationality = customer.getNationality();
+      customerDOB = customer.getCustomerDOB();
+      customerHpNumber = customer.getHpNumber();
+      customerHomeNumber = customer.getHomeNumber();
+      customerEmail = customer.getEmail();
+      customerAddress = customer.getAddress();
+      
+       
+      
+      return "UpdateProfile";  
+    }
+    
+    public String persistUpdatedProfile(){
+      customer.setTitle(title);
+      customer.setFirstName(customerFirstName);
+      customer.setLastName(customerLastName);
+      customer.setPassportNumber(passportNumber);
+      customer.setGender(customerGender);
+      customer.setNationality(nationality);
+      customer.setCustomerDOB(customerDOB);
+      customer.setHpNumber(customerHpNumber);
+      customer.setHomeNumber(customerHomeNumber);
+      customer.setEmail(customerEmail);
+      customer.setAddress(customerAddress);
+     
+      customerSessionBean.updateCustomerProfile(customer);
+      
+      FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Your profile has been updated!", "");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+      
+        
+      return "CustomerDashboard";  
+    }
+    
+    
     /**
      * @return the customerSessionBean
      */

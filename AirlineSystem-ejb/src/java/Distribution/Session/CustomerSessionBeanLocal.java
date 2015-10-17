@@ -25,4 +25,5 @@ public interface CustomerSessionBeanLocal {
     public boolean isSameHash(String userEmail, String pwd);
     public void hashNewPwd(String customerEmail, String pwd);
     public List<PNR> retrieveCustomerPNRs (Customer customer);
+    public void updateCustomerProfile (Customer customer);
 }
