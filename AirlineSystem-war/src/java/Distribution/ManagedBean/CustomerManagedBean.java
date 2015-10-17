@@ -10,6 +10,7 @@ import Distribution.Entity.Customer;
 import Distribution.Entity.PNR;
 import Distribution.Session.CustomerSessionBeanLocal;
 import Distribution.Session.DistributionSessionBeanLocal;
+import Distribution.Session.PassengerBookingSessionBeanLocal;
 import Inventory.Entity.Booking;
 import java.util.ArrayList;
 import java.util.Date;
@@ -19,6 +20,7 @@ import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
@@ -36,6 +38,9 @@ public class CustomerManagedBean {
 
     @EJB
     private DistributionSessionBeanLocal distributionSessionBean;
+    
+    @EJB
+    private PassengerBookingSessionBeanLocal passengerBookingSessionBean;
 
     private Long customerID;
     private String customerFirstName;
@@ -58,12 +63,17 @@ public class CustomerManagedBean {
     private String title;
     private boolean isCustomerLoggedOn;
     private List<PNRDisplay> pnrDisplayList;
+    
+    private String selectedPNRId;
+    private PNR selectedPNR;
+    
+    private Boolean loggedIn;
 
     @PostConstruct
     public void init() {
         customer = null;
         isCustomerLoggedOn = false;
-        pnrDisplayList = new ArrayList();
+        //pnrDisplayList = new ArrayList();
     }
 
     /**
@@ -125,7 +135,7 @@ public class CustomerManagedBean {
         }
 
     }
-    
+
     public String loginCheckAtSummary() {
 
         if (doLogin(customerEmail, customerPassword)) {
@@ -157,7 +167,8 @@ public class CustomerManagedBean {
                 setFeedbackMessage("Login Successful!");
                 FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, feedbackMessage, "");
                 FacesContext.getCurrentInstance().addMessage(null, message);
-
+                
+                loggedIn = true;
                 return true;
                 //means the password and email match
 //                  redirect();
@@ -179,27 +190,26 @@ public class CustomerManagedBean {
     }
 
     public String displayCustomerPNRs() {
-        pnrDisplayList.clear();
-        List<Schedule> selectedSchedules = new ArrayList();
-
-        List<Long> addedSchedules = new ArrayList();
-        List<String> addedNames = new ArrayList();
         
-        
+        pnrDisplayList = new ArrayList();
         if (customer != null) {
             List<PNR> customerPNRs = customerSessionBean.retrieveCustomerPNRs(customer);
+            System.out.println("No of pnrs retrieved for customer " + customerPNRs.size());
             if (customerPNRs != null) {//PNRs found for customer
-                System.out.println("Number of pnrs retrieved : " +customerPNRs.size());
                 for (PNR eachCustomerPNR : customerPNRs) {
-                    System.out.println("FOR EACH PNR");
-                    selectedSchedules.clear();
-                    addedSchedules.clear();
-                    addedNames.clear();
+//                    selectedSchedules.clear();
+//                    addedSchedules.clear();
+//                    addedNames.clear();
+                    List<Schedule> selectedSchedules = new ArrayList();
+
+                    List<Long> addedSchedules = new ArrayList();
+                    List<String> addedNames = new ArrayList();
+
                     PNRDisplay eachPNRDisplay = new PNRDisplay();
 
                     eachPNRDisplay.setId(eachCustomerPNR.getPnrID());
                     int noOfTravellers = eachCustomerPNR.getNoOfTravellers();
-                    System.out.println("No of travellers: " + noOfTravellers);
+
                     eachPNRDisplay.setNoOfTravellers(noOfTravellers);
 
                     for (Booking eachBooking : eachCustomerPNR.getBookings()) {
@@ -213,24 +223,16 @@ public class CustomerManagedBean {
 
                         }
                     }
-                    System.out.println ("Added names size : " + addedNames.size());
-                    for (String eachName : addedNames ){
-                        System.out.println ("NAME : " + eachName);
-                    }
-                    
+
                     for (Schedule eachSelectedSchedule : selectedSchedules) {
-                        System.out.println ("Start date of schedule is: " + eachSelectedSchedule.getStartDate());
-                        System.out.println ("End date of schedule is: " + eachSelectedSchedule.getEndDate());
                         eachSelectedSchedule.setStartDate(distributionSessionBean.convertTimeZone(eachSelectedSchedule.getStartDate(), distributionSessionBean.getSingaporeTimeZone(), distributionSessionBean.getTimeZoneFromIata(eachSelectedSchedule.getFlight().getRoute().getOriginIATA())));
                         eachSelectedSchedule.setEndDate(distributionSessionBean.convertTimeZone(eachSelectedSchedule.getEndDate(), distributionSessionBean.getSingaporeTimeZone(), distributionSessionBean.getTimeZoneFromIata(eachSelectedSchedule.getFlight().getRoute().getDestinationIATA())));
                     }
 
                     eachPNRDisplay.setTravellerNames(addedNames);
-                    System.out.println("traveller names size:" + eachPNRDisplay.getTravellerNames().size());
-                    
+
                     eachPNRDisplay.setUniqueSchedules(selectedSchedules);
-                    System.out.println("unique schedules size:" + eachPNRDisplay.getUniqueSchedules().size());
-                    
+
                     String serviceType = eachCustomerPNR.getBookings().get(0).getServiceType();
                     eachPNRDisplay.setServiceType(serviceType);
                     if (serviceType.charAt(0) == 'E') {
@@ -241,7 +243,7 @@ public class CustomerManagedBean {
                         eachPNRDisplay.setNoOfBags(noOfTravellers * 3);
                     }
                     pnrDisplayList.add(eachPNRDisplay);
-                    
+
                 }
             } else { //no PNRS for customer
                 setFeedbackMessage("No bookings associated with your account");
@@ -249,19 +251,27 @@ public class CustomerManagedBean {
                 FacesContext.getCurrentInstance().addMessage(null, message);
                 return null;
             }
-            System.out.println("PNR DISPLAY LIST SIZE: " + pnrDisplayList.size());
-            for (int i=0; i<pnrDisplayList.size(); i++) {
-                System.out.println("PNR DISPLAY LIST schedule: " + pnrDisplayList.get(i).getUniqueSchedules());
-                System.out.println("PNR DISPLAY LIST traveller: " + pnrDisplayList.get(i).getTravellerNames());
-                
-            }
+
             return "DisplayCustomerPNRs";
-        }
-        
-        else {//customer is null
+        } else {//customer is null
             System.out.println("Customer is null");
             return null;
         }
+    }
+
+    public String deleteCustomerPNR(String pnrId) {
+        
+        System.out.println("PNR ID: " + pnrId);
+        selectedPNR = passengerBookingSessionBean.getPNR(pnrId);
+
+        passengerBookingSessionBean.deletePNR(selectedPNR);
+
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Booking has been successfully cancelled!", "");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+        
+        
+
+        return "CustomerDashboard";
     }
 
     /**
@@ -512,6 +522,48 @@ public class CustomerManagedBean {
 
     public void setPnrDisplayList(List<PNRDisplay> pnrDisplayList) {
         this.pnrDisplayList = pnrDisplayList;
+    }
+
+    /**
+     * @return the selectedPNRId
+     */
+    public String getSelectedPNRId() {
+        return selectedPNRId;
+    }
+
+    /**
+     * @param selectedPNRId the selectedPNRId to set
+     */
+    public void setSelectedPNRId(String selectedPNRId) {
+        this.selectedPNRId = selectedPNRId;
+    }
+
+    /**
+     * @return the selectedPNR
+     */
+    public PNR getSelectedPNR() {
+        return selectedPNR;
+    }
+
+    /**
+     * @param selectedPNR the selectedPNR to set
+     */
+    public void setSelectedPNR(PNR selectedPNR) {
+        this.selectedPNR = selectedPNR;
+    }
+
+    /**
+     * @return the loggedIn
+     */
+    public Boolean getLoggedIn() {
+        return loggedIn;
+    }
+
+    /**
+     * @param loggedIn the loggedIn to set
+     */
+    public void setLoggedIn(Boolean loggedIn) {
+        this.loggedIn = loggedIn;
     }
 
 }

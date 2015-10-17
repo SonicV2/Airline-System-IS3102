@@ -7,16 +7,26 @@
       xmlns:c="http://java.sun.com/jsp/jstl/core"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
+                <p:growl id="growl" sticky="true" showDetail="true"/>
         <title>Display Customer PNR</title>
     </h:head>
     <h:body>
+
         <h:form> 
 
-            <c:forEach var="pnr" items="#{customerManagedBean.pnrDisplayList}" >
+            <ui:repeat var="pnr" value="#{customerManagedBean.pnrDisplayList}" >
 
                 <div class ="col-lg-12">
                     <h:outputText value="PNR:" />
                     <h:outputText value="#{pnr.id}" style="font-weight: bold"/>
+
+                    <h:commandButton onclick="if (!confirm('Do you really want to cancel this booking?')) {
+                                            return false;
+                                        }
+                                        ;
+                                        return true;
+                                        " class="btn btn-outline btn-success" value="Cancel " action="#{customerManagedBean.deleteCustomerPNR(pnr.id)}" />
+           
                 </div>
 
                 <div class ="col-lg-12">
@@ -25,9 +35,9 @@
                 </div>
 
                 <div class ="col-lg-12">
-                    <h:outputText value="Flights booked: #{pnr.uniqueSchedules}" />
+                    <h:outputText value="Flights booked:" />
 
-                    <c:forEach items="#{pnr.uniqueSchedules}" var="schedules">
+                    <ui:repeat value="#{pnr.uniqueSchedules}" var="schedules">
 
                         <div class ="col-lg-12">
                             <h:outputText value="Flight Number:" />
@@ -58,8 +68,8 @@
                             </h:outputText>
                         </div>
 
-                    </c:forEach>
-                    
+                    </ui:repeat>
+
                 </div>
 
                 <div class ="col-lg-12">
@@ -68,23 +78,28 @@
                 </div>
 
                 <div class ="col-lg-12">
-                    <h:outputText value="Traveller details: #{pnr.travellerNames}" />
+                    <h:outputText value="Traveller details:" />
 
-                    <c:forEach items="#{pnr.travellerNames}" var="travellers">
+                    <ui:repeat value="#{pnr.travellerNames}" var="travellers">
 
                         <div class ="col-lg-12">
                             <h:outputText value="#{travellers}" style="font-weight: bold"/>
                         </div>
 
-                    </c:forEach>
-                    </div>
+                    </ui:repeat>
+                </div>
 
-                    <div class ="col-lg-12">
-                        <h:outputText value="Number of bags allowed:" />
-                        <h:outputText value="#{pnr.noOfBags}" style="font-weight: bold"/>
-                    </div>
+                <div class ="col-lg-12">
+                    <h:outputText value="Number of bags allowed:" />
+                    <h:outputText value="#{pnr.noOfBags}" style="font-weight: bold"/>
+                </div>
 
-            </c:forEach>
+            </ui:repeat>
+
+            <!--            <div class="text-center">
+            
+                        </div>-->
+
         </h:form>
     </h:body>
 </html>

@@ -332,46 +332,66 @@
                             </div>
 
                         </ui:repeat>
-                        <div class="login-box">
-                            <h3>Book Flight</h3>
-                            <div class="booking-form">
-                                <div class="col-md-6 col-sm-6">
-                                    <h:form>
-                                        <p:growl id="growl" sticky="true" showDetail="true"/>
-                                        <label>Email</label>
-                                        <h:inputText id="PE" required="true" validatorMessage="Not a valid email addess " requiredMessage="Please fill in Personal email field!" class="form-control" value="#{customerManagedBean.customerEmail}" >
-                                            <f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
-                                        </h:inputText> 
-                                        
-                                        <label>Password</label>
-                                        
-                                        <h:inputSecret class="form-control" value="#{customerManagedBean.customerPassword}" />
-                                        
-                                        <div class="social-sits">
+
+
+                        <ui:fragment rendered="#{!customerManagedBean.loggedIn}">
+                            <div class="login-box">
+                                <h3>Book Flight</h3>
+                                <div class="booking-form">
+                                    <div class="col-md-6 col-sm-6">
+                                        <h:form>
+                                            <p:growl id="growl" sticky="true" showDetail="true"/>
+                                            <label>Email</label>
+                                            <h:inputText id="PE" required="true" validatorMessage="Not a valid email addess " requiredMessage="Please fill in Personal email field!" class="form-control" value="#{customerManagedBean.customerEmail}" >
+                                                <f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
+                                            </h:inputText> 
+
+                                            <label>Password</label>
+
+                                            <h:inputSecret class="form-control" value="#{customerManagedBean.customerPassword}" />
+
+                                            <div class="social-sits">
                                                 <div class="button-bottom">
                                                     <p>New account? <a href="#{request.contextPath}/Distribution/MerlionAirlinesSignUp.xhtml">Signup Now!</a></p>
-                                                
-                                            <h:commandButton class="btn btn-outline btn-success pull-right" value="Sign in" action="#{customerManagedBean.loginCheckAtSummary()}"/>
-                                            <br></br>
-                                            </div>
-                                        </div>
-                                        
-                                        
-                                        
-                                    </h:form>
-                                </div>
-                                <div class="col-md-6 col-sm-6 text-center">
-                                    <div class="social-media-login">
-                                        <h:form id="form">
 
-                                            <div class="form-group text-center">
-                                                <h:commandButton class="btn btn-outline btn-success" value="Continue as a Guest"  action="Booking"/>
+                                                    <h:commandButton class="btn btn-outline btn-success pull-right" value="Sign in" action="#{customerManagedBean.loginCheckAtSummary()}"/>
+                                                    <br></br>
+                                                </div>
                                             </div>
+
+
+
                                         </h:form>
+                                    </div>
+                                    <div class="col-md-6 col-sm-6 text-center">
+                                        <div class="social-media-login">
+                                            <h:form id="form">
+
+                                                <div class="form-group text-center">
+                                                    <h:commandButton class="btn btn-outline btn-success" value="Continue as a Guest"  action="Booking"/>
+                                                </div>
+                                            </h:form>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </ui:fragment>
+
+
+                        <ui:fragment rendered="#{customerManagedBean.loggedIn}">
+                            <div class='col-md-10'>
+                                <h:form id="customer">
+
+                                    <div class="form-group text-center">
+                                        <br></br>
+                                        <h:commandButton class="btn btn-outline btn-success" value="Proceed to Booking"  action="Booking"/>
+                                    </div>
+                                </h:form>
+                            </div>
+                        </ui:fragment>
+
+
+
                     </div>
 
                     <div class="col-md-4 col-sm-4 booking-sidebar">
@@ -398,13 +418,8 @@
                     </div>
 
 
-
-
-
-
-
-
                     <div class="clearfix"> </div>
+
                 </div>
             </div>
 
@@ -433,41 +448,11 @@
 
     </h:body>
 
-<!--                                      <p:dataList value="#{mARSManagedBean.selectedSchedules}" var="schedules" type="definition">
-
-                            <div class="col-lg-12">
-                                <h:outputLabel value="Flight Number: " />
-                                <h:outputText value="#{schedules.flight.flightNo}">
-                                </h:outputText>
-                            </div>
-
-                            <div class="col-lg-12">
-                                <h:outputLabel value="Origin: " />
-                                <h:outputText value="#{schedules.flight.route.originIATA}">
-                                </h:outputText>
-                            </div>
-
-                            <div class="col-lg-12">
-                                <h:outputLabel value="Destination: " />
-                                <h:outputText value="#{schedules.flight.route.destinationIATA}">
-                                </h:outputText>
-                            </div>
-
-                            <div class="col-lg-12">
-                                <h:outputLabel value="Departure Time: " />
-                                <h:outputText value="#{schedules.startDate}">
-                                    <f:convertDateTime pattern ="hh:mm a (EEE, MMM d, yyyy)"/>
-                                                <f:convertDateTime pattern ="dd-mm-yyyy HH:mm"/>
-                                </h:outputText>
-                            </div>
-
-                            <div class="col-lg-12">
-                                <h:outputLabel value="Arrival Time: " />
-                                <h:outputText value="#{schedules.endDate}">
-                                    <f:convertDateTime pattern ="hh:mm a (EEE, MMM d, yyyy)"/>
-                                                <f:convertDateTime pattern ="dd-mm-yyyy HH:mm"/>
-                                </h:outputText>
-                            </div>
-
-                        </p:dataList>-->
 </html>
+
+
+
+
+
+
+

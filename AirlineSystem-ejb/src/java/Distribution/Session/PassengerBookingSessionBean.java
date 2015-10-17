@@ -173,9 +173,7 @@ public class PassengerBookingSessionBean implements PassengerBookingSessionBeanL
     public void deletePNR(PNR pnr) {
         SeatAvailability seatAvailForBooking = new SeatAvailability();
         String serviceType;
-        int noOfSeatsBooked;
-        
-         
+        int noOfSeatsBooked;      
           
         for (Booking eachPnrBooking : pnr.getBookings()) {
             seatAvailForBooking = eachPnrBooking.getSeatAvail();
@@ -204,6 +202,7 @@ public class PassengerBookingSessionBean implements PassengerBookingSessionBeanL
         }
         pnr.setPnrStatus("Cancelled");
          em.merge(pnr);
+         em.flush();
     }
 
     @Override

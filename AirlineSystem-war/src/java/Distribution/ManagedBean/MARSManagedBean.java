@@ -15,6 +15,7 @@ import CI.Managedbean.LoginManagedBean;
 import Distribution.Entity.Customer;
 import Distribution.Entity.FlightOptions;
 import Distribution.Entity.PNR;
+import Distribution.Session.CustomerSessionBeanLocal;
 import Distribution.Session.DistributionSessionBeanLocal;
 import Distribution.Session.PassengerBookingSessionBeanLocal;
 import Inventory.Entity.Booking;
@@ -50,10 +51,7 @@ public class MARSManagedBean {
     private FlightSessionBeanLocal flightSessionBean;
 
     @EJB
-    private RouteSessionBeanLocal routeSessionBean;
-
-    @EJB
-    private ScheduleSessionBeanLocal scheduleSessionBean;
+    private CustomerSessionBeanLocal customerSessionBean;
 
     @EJB
     private PricingManagementLocal pm;
@@ -184,6 +182,10 @@ public class MARSManagedBean {
     private PNR searchedPNR;
     private Date systemDate;
 
+     private String customerEmail;
+    private String customerPassword;
+    private boolean isCustomerLoggedOn;
+    
     @PostConstruct
     public void retrieve() {
         //Retrieve all the available flights into a list of flights
@@ -726,6 +728,33 @@ public class MARSManagedBean {
         return "Summary";
 
     }
+    
+    public String loginCheckAtSummary() {
+
+        if (customerManagedBean.doLogin(customerEmail, customerPassword)) {
+            customerManagedBean.setCustomerPassword(customerPassword);
+            customerManagedBean.setCustomerEmail(customerEmail);
+            customerManagedBean.setIsCustomerLoggedOn(true);
+            
+            Customer loggedInCustomer = customerSessionBean.getCustomerUseEmail(customerEmail);
+            
+            passengerList.get(0).setTitle(loggedInCustomer.getTitle());
+            passengerList.get(0).setFirstName(loggedInCustomer.getFirstName());
+            passengerList.get(0).setLastName(loggedInCustomer.getLastName());
+            passengerList.get(0).setPassport(loggedInCustomer.getPassportNumber());
+            passengerList.get(0).setNationality(loggedInCustomer.getNationality());
+            passengerList.get(0).setCustomerId(loggedInCustomer.getId().toString());
+            primaryContactNo = loggedInCustomer.getHpNumber();
+            primaryEmail = loggedInCustomer.getEmail();
+            
+            return "Booking";
+
+            //return "CustomerDashboard";
+        } else {
+            return "";
+        }
+
+    }
 
     public String payment() {
 
@@ -820,6 +849,9 @@ public class MARSManagedBean {
             eachSelectedSchedule.setStartDate(distributionSessionBean.convertTimeZone(eachSelectedSchedule.getStartDate(), distributionSessionBean.getSingaporeTimeZone(), distributionSessionBean.getTimeZoneFromIata(eachSelectedSchedule.getFlight().getRoute().getOriginIATA())));
             eachSelectedSchedule.setEndDate(distributionSessionBean.convertTimeZone(eachSelectedSchedule.getEndDate(), distributionSessionBean.getSingaporeTimeZone(), distributionSessionBean.getTimeZoneFromIata(eachSelectedSchedule.getFlight().getRoute().getDestinationIATA())));
         }
+        
+        setCsv(null);
+        setCreditCard(null);
 
         return "Confirmation";
     }
@@ -864,6 +896,7 @@ public class MARSManagedBean {
 
         return "MerlionAirlines";
     }
+    
 
     public static boolean isInteger(String s) {
         try {
@@ -1829,6 +1862,48 @@ public class MARSManagedBean {
 
     public void setSystemDate(Date systemDate) {
         this.systemDate = systemDate;
+    }
+
+    /**
+     * @return the customerEmail
+     */
+    public String getCustomerEmail() {
+        return customerEmail;
+    }
+
+    /**
+     * @param customerEmail the customerEmail to set
+     */
+    public void setCustomerEmail(String customerEmail) {
+        this.customerEmail = customerEmail;
+    }
+
+    /**
+     * @return the customerPassword
+     */
+    public String getCustomerPassword() {
+        return customerPassword;
+    }
+
+    /**
+     * @param customerPassword the customerPassword to set
+     */
+    public void setCustomerPassword(String customerPassword) {
+        this.customerPassword = customerPassword;
+    }
+
+    /**
+     * @return the isCustomerLoggedOn
+     */
+    public boolean isIsCustomerLoggedOn() {
+        return isCustomerLoggedOn;
+    }
+
+    /**
+     * @param isCustomerLoggedOn the isCustomerLoggedOn to set
+     */
+    public void setIsCustomerLoggedOn(boolean isCustomerLoggedOn) {
+        this.isCustomerLoggedOn = isCustomerLoggedOn;
     }
 
 }

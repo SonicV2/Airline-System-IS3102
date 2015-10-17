@@ -210,6 +210,31 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
 
     @Override
     public List<PNR> retrieveCustomerPNRs(Customer customer) {
+        Long customerId = customer.getId();
+        
+        List<Customer> allCustomers = new ArrayList<>();
+        
+        try{
+            Query q = em.createQuery("SELECT a FROM Customer " + "AS a WHERE a.id=:id");
+            q.setParameter("id", customerId);
+            
+            List<Customer> results = q.getResultList();
+            if (!results.isEmpty()){
+                
+                allCustomers = results;
+                
+            }else
+            {
+                allCustomers = null;
+                System.out.println("no reserve aircraft!");
+            }
+        }catch (EntityNotFoundException enfe) {
+            System.out.println("\nEntity not found error" + "enfe.getMessage()");
+        }
+        customer = allCustomers.get(0);
+        
+        
+        
         if (customer != null) {
             List<PNR> customerBookedPNRs = new ArrayList();
             for (PNR eachCustomerPNR : customer.getPnrs()) {
