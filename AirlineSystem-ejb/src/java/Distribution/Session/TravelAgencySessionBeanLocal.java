@@ -6,8 +6,10 @@
 package Distribution.Session;
 
 import Distribution.Entity.TravelAgency;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import javax.ejb.Local;
+import javax.mail.NoSuchProviderException;
 
 /**
  *
@@ -17,5 +19,15 @@ import javax.ejb.Local;
 public interface TravelAgencySessionBeanLocal {
 
     public List<TravelAgency> retrieveTravelAgencies();
+
+    public String generateSalt() throws NoSuchAlgorithmException, NoSuchProviderException, java.security.NoSuchProviderException;
+
+    public String getSecurePassword(String passwordToHash, String salt);
+
+    public String addTravelAgency(String name, double maxCredit, double currentCredit, double commission, String email, String address, String contactNo, String password, String primaryContact);
+
+    public boolean isSameHash(String email, String pwd);
+
+    public TravelAgency getAgencyUseEmail(String agencyEmail);
     
 }

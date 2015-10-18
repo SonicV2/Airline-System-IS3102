@@ -167,6 +167,14 @@ public class TravelAgency implements Serializable {
     public void setPrimaryContact(String primaryContact) {
         this.primaryContact = primaryContact;
     }
+
+    public Salt getSalt() {
+        return salt;
+    }
+
+    public void setSalt(Salt salt) {
+        this.salt = salt;
+    }
     
     
     
