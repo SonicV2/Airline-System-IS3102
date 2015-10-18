@@ -5,6 +5,7 @@
  */
 package Distribution.Entity;
 
+import CI.Entity.Salt;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +15,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 /**
  *
@@ -32,11 +34,26 @@ public class TravelAgency implements Serializable {
     private String email;
     private String address;
     private String contactNo;
+    @OneToOne(cascade = {CascadeType.PERSIST})
+    private Salt salt;
     private String password;
+    private String  primaryContact;
     
             
     @OneToMany(cascade = {CascadeType.PERSIST})
     private List<PNR> pnrs = new ArrayList<PNR>();
+    
+    public void createTravelAgent (String name, double maxCredit, double currentCredit, double commission, String email, String address, String contactNo, String password, String primaryContact){
+        this.name = name;
+        this.maxCredit = maxCredit;
+        this.currentCredit = currentCredit;
+        this.commission = commission;
+        this.email = email;
+        this.address = address;
+        this.contactNo = contactNo;
+        this.password = password; 
+        this.primaryContact = primaryContact;
+    }
     
     public Long getId() {
         return id;
@@ -142,6 +159,15 @@ public class TravelAgency implements Serializable {
     public void setPnrs(List<PNR> pnrs) {
         this.pnrs = pnrs;
     }
+
+    public String getPrimaryContact() {
+        return primaryContact;
+    }
+
+    public void setPrimaryContact(String primaryContact) {
+        this.primaryContact = primaryContact;
+    }
+    
     
     
 }
