@@ -62,6 +62,8 @@ public class TravelAgencyManagedBean {
 
     @PostConstruct
     public void retrieve() {
+        
+        setTravelAgencies(travelAgencySessionBean.getAllTravelAgencies());
 
     }
 
