@@ -398,4 +398,27 @@ public class TravelAgencySessionBean implements TravelAgencySessionBeanLocal {
             return noOfBookings;
         }        
     }
+    
+    @Override
+    public TravelAgency getTravelAgencyById(Long id){
+        TravelAgency agency = new TravelAgency();
+        try {
+            
+            Query q = em.createQuery("SELECT a FROM TravelAgency " + "AS a WHERE a.id=:id");
+            q.setParameter("id", id);
+            
+            List results = q.getResultList();
+            if (!results.isEmpty()) {
+                agency = (TravelAgency) results.get(0);
+                
+            } else {
+                agency = null;
+            }
+            
+        } catch (EntityNotFoundException enfe) {
+            System.out.println("\nEntity not found error" + "enfe.getMessage()");
+        }
+        return agency;
+        
+    }
 }
