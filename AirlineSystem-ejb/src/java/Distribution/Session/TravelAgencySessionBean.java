@@ -5,6 +5,7 @@
  */
 package Distribution.Session;
 
+import Distribution.Entity.TravelAgency;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -18,6 +19,9 @@ public class TravelAgencySessionBean implements TravelAgencySessionBeanLocal {
     @PersistenceContext(unitName = "AirlineSystem-ejbPU")
     private EntityManager em;
     
-    
+    @Override
+    public void persistTravelAgency (TravelAgency travelAgency){
+        em.persist(travelAgency);
+    }
     
 }

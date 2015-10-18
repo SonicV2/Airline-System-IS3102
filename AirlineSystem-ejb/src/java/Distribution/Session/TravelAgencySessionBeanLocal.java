@@ -5,6 +5,7 @@
  */
 package Distribution.Session;
 
+import Distribution.Entity.TravelAgency;
 import javax.ejb.Local;
 
 /**
@@ -13,5 +14,6 @@ import javax.ejb.Local;
  */
 @Local
 public interface TravelAgencySessionBeanLocal {
+    public void persistTravelAgency (TravelAgency travelAgency);
     
 }

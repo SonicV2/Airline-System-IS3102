@@ -23,7 +23,7 @@ import javax.inject.Named;
 public class TravelAgencyManagedBean {
     
      @EJB
-    private TravelAgencySessionBeanLocal travelAgencySessionBeanLocal;
+    private TravelAgencySessionBeanLocal travelAgencySessionBean;
      
      private String name;
      private String address;
@@ -42,9 +42,12 @@ public class TravelAgencyManagedBean {
      
      public String addTravelAgency(){
          travelAgency = new TravelAgency();
+         
+         //salt is already persisted, salt associated with customer
          travelAgency.createTravelAgent(name, maxCredit, maxCredit, 0.0, email, address, contactNo, password, primaryContact);
          
          
+         travelAgencySessionBean.persistTravelAgency(travelAgency);
          return null;
      }
 
