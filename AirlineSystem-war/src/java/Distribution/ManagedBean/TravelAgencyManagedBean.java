@@ -37,6 +37,7 @@ public class TravelAgencyManagedBean {
 
     private List<TravelAgency> travelAgencies;
     private TravelAgency selectedAgency;
+    private TravelAgencyDisplay travelAgencyDisplay;
      
      private String name;
      private String address;
@@ -250,6 +251,22 @@ public class TravelAgencyManagedBean {
             return "TravelAgencyDashboard";
     }
 
+    public String viewTravelAgencies(){
+        if (travelAgencies==null || travelAgencies.isEmpty()){
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Your password has been updated!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        }
+        return "ViewAllTravelAgencies";
+    }
+    
+    public String viewTravelAgencyProfile(){
+        int noOfBookings = travelAgencySessionBean.noOfConfirmedBookings(travelAgency);
+        travelAgencyDisplay.setTravelAgency(travelAgency);
+        travelAgencyDisplay.setNoOfConfirmedBookings(noOfBookings);
+   
+        return "ViewTravelAgencyProfile";
+    }
+    
     /**
      * @return the travelAgencies
      */
@@ -482,4 +499,13 @@ public class TravelAgencyManagedBean {
         this.confirmedPassword = confirmedPassword;
     }
 
+    public TravelAgencyDisplay getTravelAgencyDisplay() {
+        return travelAgencyDisplay;
+    }
+
+    public void setTravelAgencyDisplay(TravelAgencyDisplay travelAgencyDisplay) {
+        this.travelAgencyDisplay = travelAgencyDisplay;
+    }
+
+    
 }
