@@ -6,6 +6,7 @@
 package Distribution.ManagedBean;
 
 import APS.Entity.Schedule;
+import CI.Session.EmailSessionBeanLocal;
 import Distribution.Entity.Customer;
 import Distribution.Entity.PNR;
 import Distribution.Session.CustomerSessionBeanLocal;
@@ -23,6 +24,8 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
+import org.primefaces.context.RequestContext;
 
 /**
  *
@@ -38,9 +41,12 @@ public class CustomerManagedBean {
 
     @EJB
     private DistributionSessionBeanLocal distributionSessionBean;
-    
+
     @EJB
     private PassengerBookingSessionBeanLocal passengerBookingSessionBean;
+
+    @EJB
+    private EmailSessionBeanLocal emailSessionBean;
 
     private Long customerID;
     private String customerFirstName;
@@ -51,6 +57,7 @@ public class CustomerManagedBean {
 
     private String customerEmail;
     private String customerPassword;
+    private String customerNewPassword;
     private String customerConfirmedPassword;
     private String customerAddress;
     private Date customerDOB;
@@ -63,11 +70,16 @@ public class CustomerManagedBean {
     private String title;
     private boolean isCustomerLoggedOn;
     private List<PNRDisplay> pnrDisplayList;
-    
+
     private String selectedPNRId;
     private PNR selectedPNR;
-    
+
     private Boolean loggedIn;
+
+    private String email;
+    private String pass;
+    private String body;
+    private String subject;
 
     @PostConstruct
     public void init() {
@@ -167,7 +179,7 @@ public class CustomerManagedBean {
                 setFeedbackMessage("Login Successful!");
                 FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, feedbackMessage, "");
                 FacesContext.getCurrentInstance().addMessage(null, message);
-                
+
                 loggedIn = true;
                 return true;
                 //means the password and email match
@@ -190,16 +202,11 @@ public class CustomerManagedBean {
     }
 
     public String displayCustomerPNRs() {
-        
-        System.out.println("IN displayCustomerPNRs");
-        System.out.println("Customer logged in? " + isCustomerLoggedOn);
-        
+
         pnrDisplayList = new ArrayList();
         if (customer != null) {
-           
+
             List<PNR> customerPNRs = customerSessionBean.retrieveCustomerPNRs(customer);
-            System.out.println("Checked no. of pnr");
-            System.out.println("No of pnrs retrieved for customer: " + customerPNRs.size());
             if (!customerPNRs.isEmpty()) {//PNRs found for customer
                 for (PNR eachCustomerPNR : customerPNRs) {
 //                    selectedSchedules.clear();
@@ -251,23 +258,22 @@ public class CustomerManagedBean {
 
                 }
             } else { //no PNRS for customer
-                System.out.println("no PNR for customer");
                 FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "No bookings associated with your account!", "");
                 FacesContext.getCurrentInstance().addMessage(null, message);
                 return null;
-              
+
             }
 
             return "DisplayCustomerPNRs";
         } else {//customer is null
-            
+
             System.out.println("Customer is null");
             return "ViewPNR";
         }
     }
 
     public String deleteCustomerPNR(String pnrId) {
-        
+
         System.out.println("PNR ID: " + pnrId);
         selectedPNR = passengerBookingSessionBean.getPNR(pnrId);
 
@@ -275,10 +281,104 @@ public class CustomerManagedBean {
 
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Booking has been successfully cancelled!", "");
         FacesContext.getCurrentInstance().addMessage(null, message);
-        
-        
 
         return "CustomerDashboard";
+    }
+
+    public String updateProfile() {
+        title = customer.getTitle();
+        customerFirstName = customer.getFirstName();
+        customerLastName = customer.getLastName();
+        passportNumber = customer.getPassportNumber();
+        customerGender = customer.getGender();
+        nationality = customer.getNationality();
+        customerDOB = customer.getCustomerDOB();
+        customerHpNumber = customer.getHpNumber();
+        customerHomeNumber = customer.getHomeNumber();
+        customerEmail = customer.getEmail();
+        customerAddress = customer.getAddress();
+
+        return "UpdateProfile";
+    }
+    
+    public String changePassword() {
+        if (!customerSessionBean.isSameHash(customerEmail, customerPassword)) {
+            setFeedbackMessage("Incorrect old password!");
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, feedbackMessage, "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return "ChangePassword";
+
+        } else if (!customerNewPassword.equals(customerConfirmedPassword)) {
+            setFeedbackMessage("The passwords you entered do not match!");
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, feedbackMessage, "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return "ChangePassword";
+        } else {
+            
+            customer.setPassword(customerSessionBean.newPassword(customerEmail, customerNewPassword));
+            customerSessionBean.updateCustomerProfile(customer);
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Your password has been updated!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            
+        }
+        
+        return "CustomerDashboard";
+        
+    }
+
+    public String persistUpdatedProfile() {
+
+            customer.setTitle(title);
+            customer.setFirstName(customerFirstName);
+            customer.setLastName(customerLastName);
+            customer.setPassportNumber(passportNumber);
+            customer.setGender(customerGender);
+            customer.setNationality(nationality);
+            customer.setCustomerDOB(customerDOB);
+            customer.setHpNumber(customerHpNumber);
+            customer.setHomeNumber(customerHomeNumber);
+            customer.setEmail(customerEmail);
+            customer.setAddress(customerAddress);
+
+            customerSessionBean.updateCustomerProfile(customer);
+
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Your profile has been updated!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+
+            return "CustomerDashboard";
+    }
+
+    public void validateUser(ActionEvent event) {
+        setEmail(customerSessionBean.validateUser(customerEmail, passportNumber)); //get employee's email address 
+        FacesMessage message = null;
+        if (getEmail().equals("nomatch")) {
+
+            message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "User Name and Passport Number Does Not Match!", "");
+            RequestContext.getCurrentInstance().update("growll");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+
+        } else if (getEmail().equals("nouser")) {
+            message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "No Such User Name!", "");
+            RequestContext.getCurrentInstance().update("growll");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        } else {
+            setPass(emailSessionBean.passGen());
+            customerSessionBean.hashNewPwd(customerEmail, getPass());
+
+            sendEmail(getEmail());
+        }
+
+    }
+
+    public void sendEmail(String email) {
+
+        setSubject("*Confidential*--- Password Reset ");
+        setBody("Your New Password: " + pass);
+        emailSessionBean.sendEmail(email, getSubject(), getBody());
+        FacesMessage message = null;
+        message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Email has been sent ! Please check your personal email", "");
+        RequestContext.getCurrentInstance().update("growll");
+        FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
     /**
@@ -571,6 +671,76 @@ public class CustomerManagedBean {
      */
     public void setLoggedIn(Boolean loggedIn) {
         this.loggedIn = loggedIn;
+    }
+
+    /**
+     * @return the email
+     */
+    public String getEmail() {
+        return email;
+    }
+
+    /**
+     * @param email the email to set
+     */
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    /**
+     * @return the pass
+     */
+    public String getPass() {
+        return pass;
+    }
+
+    /**
+     * @param pass the pass to set
+     */
+    public void setPass(String pass) {
+        this.pass = pass;
+    }
+
+    /**
+     * @return the body
+     */
+    public String getBody() {
+        return body;
+    }
+
+    /**
+     * @param body the body to set
+     */
+    public void setBody(String body) {
+        this.body = body;
+    }
+
+    /**
+     * @return the subject
+     */
+    public String getSubject() {
+        return subject;
+    }
+
+    /**
+     * @param subject the subject to set
+     */
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+
+    /**
+     * @return the customerNewPassword
+     */
+    public String getCustomerNewPassword() {
+        return customerNewPassword;
+    }
+
+    /**
+     * @param customerNewPassword the customerNewPassword to set
+     */
+    public void setCustomerNewPassword(String customerNewPassword) {
+        this.customerNewPassword = customerNewPassword;
     }
 
 }

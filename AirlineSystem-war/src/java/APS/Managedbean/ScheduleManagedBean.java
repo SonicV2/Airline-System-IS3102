@@ -78,43 +78,43 @@ public class ScheduleManagedBean {
         
         setFlights(flightSessionBean.retrieveFlights());
         setSchedules(scheduleSessionBean.getScheduleAfter(currTime.getTime()));
-        scheduleSessionBean.changeFlightDays(flights);
+        scheduleSessionBean.displayFlightDays(flights);
         setAircraftlist(fleetSessionBean.getReserveAircrafts("Reserve"));
         setFutureSchedules(scheduleSessionBean.filterForFutureSchedules(schedules));
         setPastSchedules(scheduleSessionBean.filterForPastSchedules(schedules));
     }
     
-    public void addSchedule(ActionEvent event){
-        
-        if (flightNo.isEmpty()) {
-            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please enter Flight Number!", "");
-            FacesContext.getCurrentInstance().addMessage(null, message);
-            return;
-        }
-        
-        if (startDate == null) {
-            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please enter new date and time of flight!", "");
-            FacesContext.getCurrentInstance().addMessage(null, message);
-            return;
-        }
-        
-        if (flightSessionBean.getFlight(flightNo) == null) {
-            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "No such flight number!", "");
-            FacesContext.getCurrentInstance().addMessage(null, message);
-            return;
-        }
-        
-        for (int i=0; i<flightSessionBean.getFlight(flightNo).getSchedule().size(); i++) {
-        if (flightSessionBean.getFlight(flightNo).getSchedule().get(i).getStartDate().equals(startDate)) {
-            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Schedule already exists!", "");
-            FacesContext.getCurrentInstance().addMessage(null, message);
-            return;
-        }
-            }
-        
-        scheduleSessionBean.addSchedule(startDate, flightNo);
-        
-    }
+//    public void addSchedule(ActionEvent event){
+//        
+//        if (flightNo.isEmpty()) {
+//            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please enter Flight Number!", "");
+//            FacesContext.getCurrentInstance().addMessage(null, message);
+//            return;
+//        }
+//        
+//        if (startDate == null) {
+//            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please enter new date and time of flight!", "");
+//            FacesContext.getCurrentInstance().addMessage(null, message);
+//            return;
+//        }
+//        
+//        if (flightSessionBean.getFlight(flightNo) == null) {
+//            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "No such flight number!", "");
+//            FacesContext.getCurrentInstance().addMessage(null, message);
+//            return;
+//        }
+//        
+//        for (int i=0; i<flightSessionBean.getFlight(flightNo).getSchedule().size(); i++) {
+//        if (flightSessionBean.getFlight(flightNo).getSchedule().get(i).getStartDate().equals(startDate)) {
+//            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Schedule already exists!", "");
+//            FacesContext.getCurrentInstance().addMessage(null, message);
+//            return;
+//        }
+//            }
+//        
+//        scheduleSessionBean.addSchedule(startDate, flightNo);
+//        
+//    }
     public void updateSchedules(){
         setSchedules(scheduleSessionBean.getSchedules());
         setFutureSchedules(scheduleSessionBean.filterForFutureSchedules(schedules));

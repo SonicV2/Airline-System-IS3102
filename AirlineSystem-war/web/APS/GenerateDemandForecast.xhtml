@@ -41,6 +41,15 @@
                 <div class="col-lg-12">
                     <h2 class="page-header">Generate Demand Forecast</h2>
                 </div>
+                
+                <h:form>
+                    <div class="text-center">
+                        <h:commandButton class="btn btn-outline btn-success" value="Test Forecast!!!" actionListener="#{flightManageBean.testForecast}"/>
+                        <br></br>
+                        <br></br>
+                    </div>
+                </h:form>
+                
                 <div class="col-lg-12">
                     <h:form>
                         <p:dataTable var="route" value="#{flightManageBean.routes}" widgetVar="routesTable" paginator="true" rows="10">
