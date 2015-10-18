@@ -7,13 +7,9 @@ package Distribution.Session;
 
 
 import CI.Entity.Salt;
-import Distribution.Entity.TravelAgency;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.util.ArrayList;
-import java.util.List;
-import APS.Entity.Flight;
 import Distribution.Entity.PNR;
 import Distribution.Entity.TravelAgency;
 import Inventory.Entity.Booking;
