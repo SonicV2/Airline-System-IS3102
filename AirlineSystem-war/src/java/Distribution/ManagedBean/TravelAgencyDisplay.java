@@ -13,6 +13,7 @@ import Distribution.Entity.TravelAgency;
  */
 public class TravelAgencyDisplay {
     
+    
     private TravelAgency travelAgency;
     private int noOfConfirmedBookings;
 
