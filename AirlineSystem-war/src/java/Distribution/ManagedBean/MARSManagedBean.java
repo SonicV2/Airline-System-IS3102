@@ -12,9 +12,11 @@ import APS.Session.FlightSessionBeanLocal;
 import APS.Session.RouteSessionBeanLocal;
 import APS.Session.ScheduleSessionBeanLocal;
 import CI.Managedbean.LoginManagedBean;
+import CI.Session.EmailSessionBeanLocal;
 import Distribution.Entity.Customer;
 import Distribution.Entity.FlightOptions;
 import Distribution.Entity.PNR;
+import Distribution.Session.CustomerSessionBeanLocal;
 import Distribution.Session.DistributionSessionBeanLocal;
 import Distribution.Session.PassengerBookingSessionBeanLocal;
 import Inventory.Entity.Booking;
@@ -33,6 +35,7 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import org.primefaces.context.RequestContext;
 
 /**
  *
@@ -50,16 +53,16 @@ public class MARSManagedBean {
     private FlightSessionBeanLocal flightSessionBean;
 
     @EJB
-    private RouteSessionBeanLocal routeSessionBean;
-
-    @EJB
-    private ScheduleSessionBeanLocal scheduleSessionBean;
+    private CustomerSessionBeanLocal customerSessionBean;
 
     @EJB
     private PricingManagementLocal pm;
 
     @EJB
     private PassengerBookingSessionBeanLocal passengerBookingSessionBean;
+    
+    @EJB
+    private EmailSessionBeanLocal emailSessionBean;
 
     @ManagedProperty(value = "#{customerManagedBean}")
     private CustomerManagedBean customerManagedBean;
@@ -184,6 +187,13 @@ public class MARSManagedBean {
     private PNR searchedPNR;
     private Date systemDate;
 
+     private String customerEmail;
+    private String customerPassword;
+    private boolean isCustomerLoggedOn;
+    
+    private String subject;
+    private String body;
+    
     @PostConstruct
     public void retrieve() {
         //Retrieve all the available flights into a list of flights
@@ -345,7 +355,7 @@ public class MARSManagedBean {
                     eachSchedule.setEndDate(distributionSessionBean.convertTimeZone(eachSchedule.getEndDate(), distributionSessionBean.getSingaporeTimeZone(), distributionSessionBean.getTimeZoneFromIata(eachSchedule.getFlight().getRoute().getDestinationIATA())));
 
                     double priceForOne = pm.getPrice(pm.getClassCode(eachSchedule, serviceType, adults + children), eachSchedule);
-                    selectedDatePrices.add((adults * priceForOne) + (0.75 * priceForOne * children));
+                    selectedDatePrices.add(priceForOne);
 
                 }
                 setIsDirect(true);
@@ -376,21 +386,19 @@ public class MARSManagedBean {
                 List<Schedule> flightOption = new ArrayList();
                 flightOption.add(new Schedule());
                 flightOption.add(new Schedule());
-
-                double flightOptionPrice = 0;
+                
                 double priceForOne = 0;
 
                 for (i = 0; i < oneStopFlightSchedules.size(); i++) {
                     flightOption.set(i % 2, oneStopFlightSchedules.get(i));
-                    priceForOne = pm.getPrice(pm.getClassCode(oneStopFlightSchedules.get(i), serviceType, adults + children), oneStopFlightSchedules.get(i));
-                    flightOptionPrice += (adults * priceForOne) + (0.75 * priceForOne * children);
+                    priceForOne += pm.getPrice(pm.getClassCode(oneStopFlightSchedules.get(i), serviceType, adults + children), oneStopFlightSchedules.get(i));
                     if (i % 2 == 1) {
                         oneStopFlightDuration.add(distributionSessionBean.getTotalDurationForOneStop(flightOption.get(0), flightOption.get(1)));
                         oneStopFlightLayover.add(distributionSessionBean.getLayoverTime(flightOption.get(0), flightOption.get(1)));
-                        selectedDatePrices.add(flightOptionPrice);
-                        flightOptionPrice = 0;
                     }
                 }
+                
+                selectedDatePrices.add(priceForOne);
 
                 List<String> flightNosWithAdjustedEndDates = new ArrayList();
 
@@ -425,8 +433,42 @@ public class MARSManagedBean {
         }
 
     }
+    
+    public String bookDirectDepartureSchedule(Schedule directSchedule){
+        setSelectedDepartureSchedule(directSchedule);
+        System.out.println(selectedDepartureSchedule.getScheduleId());
+        if (oneWayFlight){
+            return summary();
+        }
+        if (!oneWayFlight){
+        return displayReturnFlights();
+        }
+        return null;
+    }
+    
+    public String bookOneStopDeparture(FlightOptions flightOption){
+        setSelectedDepartureFlightOption(flightOption);
+
+        if (oneWayFlight){
+            return summary();
+        }
+        if (!oneWayFlight){
+        return displayReturnFlights();
+        }
+        return null;
+    }
+    public String bookDirectReturnSchedule(Schedule directSchedule){
+        setSelectedReturnSchedule(directSchedule);
+        return summary();
+    }
+    
+    public String bookOneStopReturn(FlightOptions flightOption){
+        setSelectedReturnFlightOption(flightOption);
+        return summary();
+    }
 
     public String displayReturnFlights() {
+
         directFlightSchedules.clear();
         selectedDatePrices.clear();
         setDirectFlightDuration("");
@@ -458,7 +500,7 @@ public class MARSManagedBean {
                 eachSchedule.setStartDate(distributionSessionBean.convertTimeZone(eachSchedule.getStartDate(), distributionSessionBean.getSingaporeTimeZone(), distributionSessionBean.getTimeZoneFromIata(eachSchedule.getFlight().getRoute().getOriginIATA())));
                 eachSchedule.setEndDate(distributionSessionBean.convertTimeZone(eachSchedule.getEndDate(), distributionSessionBean.getSingaporeTimeZone(), distributionSessionBean.getTimeZoneFromIata(eachSchedule.getFlight().getRoute().getDestinationIATA())));
                 double priceForOne = pm.getPrice(pm.getClassCode(eachSchedule, serviceType, adults + children), eachSchedule);
-                selectedDatePrices.add((adults * priceForOne) + (0.75 * priceForOne * children));
+                selectedDatePrices.add(priceForOne);
             }
             retrieveMinWeekPricesForDirect(originIATA, destinationIATA, departureDate, serviceType, adults, children);
 
@@ -483,20 +525,17 @@ public class MARSManagedBean {
             flightOption.add(new Schedule());
             flightOption.add(new Schedule());
 
-            double flightOptionPrice = 0;
             double priceForOne = 0;
 
             for (i = 0; i < oneStopFlightSchedules.size(); i++) {
                 flightOption.set(i % 2, oneStopFlightSchedules.get(i));
-                priceForOne = pm.getPrice(pm.getClassCode(oneStopFlightSchedules.get(i), serviceType, adults + children), oneStopFlightSchedules.get(i));
-                flightOptionPrice += (adults * priceForOne) + (0.75 * priceForOne * children);
+                priceForOne += pm.getPrice(pm.getClassCode(oneStopFlightSchedules.get(i), serviceType, adults + children), oneStopFlightSchedules.get(i));
                 if (i % 2 == 1) {
                     oneStopFlightDuration.add(distributionSessionBean.getTotalDurationForOneStop(flightOption.get(0), flightOption.get(1)));
                     oneStopFlightLayover.add(distributionSessionBean.getLayoverTime(flightOption.get(0), flightOption.get(1)));
-                    selectedDatePrices.add(flightOptionPrice);
-                    flightOptionPrice = 0;
                 }
             }
+            selectedDatePrices.add(priceForOne);
 
             List<String> flightNosWithAdjustedEndDates = new ArrayList();
 
@@ -714,6 +753,33 @@ public class MARSManagedBean {
         return "Summary";
 
     }
+    
+    public String loginCheckAtSummary() {
+
+        if (customerManagedBean.doLogin(customerEmail, customerPassword)) {
+            customerManagedBean.setCustomerPassword(customerPassword);
+            customerManagedBean.setCustomerEmail(customerEmail);
+            customerManagedBean.setIsCustomerLoggedOn(true);
+            
+            Customer loggedInCustomer = customerSessionBean.getCustomerUseEmail(customerEmail);
+            
+            passengerList.get(0).setTitle(loggedInCustomer.getTitle());
+            passengerList.get(0).setFirstName(loggedInCustomer.getFirstName());
+            passengerList.get(0).setLastName(loggedInCustomer.getLastName());
+            passengerList.get(0).setPassport(loggedInCustomer.getPassportNumber());
+            passengerList.get(0).setNationality(loggedInCustomer.getNationality());
+            passengerList.get(0).setCustomerId(loggedInCustomer.getId().toString());
+            primaryContactNo = loggedInCustomer.getHpNumber();
+            primaryEmail = loggedInCustomer.getEmail();
+            
+            return "Booking";
+
+            //return "CustomerDashboard";
+        } else {
+            return "";
+        }
+
+    }
 
     public String payment() {
 
@@ -808,8 +874,41 @@ public class MARSManagedBean {
             eachSelectedSchedule.setStartDate(distributionSessionBean.convertTimeZone(eachSelectedSchedule.getStartDate(), distributionSessionBean.getSingaporeTimeZone(), distributionSessionBean.getTimeZoneFromIata(eachSelectedSchedule.getFlight().getRoute().getOriginIATA())));
             eachSelectedSchedule.setEndDate(distributionSessionBean.convertTimeZone(eachSelectedSchedule.getEndDate(), distributionSessionBean.getSingaporeTimeZone(), distributionSessionBean.getTimeZoneFromIata(eachSelectedSchedule.getFlight().getRoute().getDestinationIATA())));
         }
+        
+        setCsv(null);
+        setCreditCard(null);
+        
+        sendEmail(primaryEmail);
+        
+        message = new FacesMessage(FacesMessage.SEVERITY_INFO, "A cofirmation email has been sent to the primary email. Please check.", "");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+        
 
         return "Confirmation";
+    }
+    
+    public void sendEmail(String email){
+        
+        setSubject("Merlion Airlines Booking Confirmation");
+        
+        String flight = "";
+        String tempBody= "";
+        
+        for (int i=0; i<selectedSchedules.size(); i++) {
+            flight = "Flight Number: " + selectedSchedules.get(i).getFlight().getFlightNo()
+                    + "\nOrigin Country: " + selectedSchedules.get(i).getFlight().getRoute().getOriginCity() + ", " + selectedSchedules.get(i).getFlight().getRoute().getOriginCountry()
+                    + "\nDestination Country: " + selectedSchedules.get(i).getFlight().getRoute().getDestinationCity() + ", " + selectedSchedules.get(i).getFlight().getRoute().getDestinationCountry()
+                    + "\nDeparture Date: " + selectedSchedules.get(i).getStartDate() + "," +
+                    "\nArrival Date: " + selectedSchedules.get(i).getEndDate() + "\n\n";
+            tempBody += flight;
+        }
+                
+        setBody("Thank you for using Merlion Airlines. \n\nYour PNR Id: " + pnr.getPnrID() + "\nDate of Booking: " + pnr.getDateOfBooking() +
+                "\nNumber of Travellers: " + pnr.getNoOfTravellers() + "\nTotal Price Paid: " + pnr.getTotalPrice() +
+                "\n\n" + tempBody + "\n\nYou can always view the details of your booking at our website.");
+        
+        emailSessionBean.sendEmail(email, getSubject(), getBody());
+        
     }
 
     public String searchPNR() {
@@ -852,6 +951,7 @@ public class MARSManagedBean {
 
         return "MerlionAirlines";
     }
+    
 
     public static boolean isInteger(String s) {
         try {
@@ -1817,6 +1917,76 @@ public class MARSManagedBean {
 
     public void setSystemDate(Date systemDate) {
         this.systemDate = systemDate;
+    }
+
+    /**
+     * @return the customerEmail
+     */
+    public String getCustomerEmail() {
+        return customerEmail;
+    }
+
+    /**
+     * @param customerEmail the customerEmail to set
+     */
+    public void setCustomerEmail(String customerEmail) {
+        this.customerEmail = customerEmail;
+    }
+
+    /**
+     * @return the customerPassword
+     */
+    public String getCustomerPassword() {
+        return customerPassword;
+    }
+
+    /**
+     * @param customerPassword the customerPassword to set
+     */
+    public void setCustomerPassword(String customerPassword) {
+        this.customerPassword = customerPassword;
+    }
+
+    /**
+     * @return the isCustomerLoggedOn
+     */
+    public boolean isIsCustomerLoggedOn() {
+        return isCustomerLoggedOn;
+    }
+
+    /**
+     * @param isCustomerLoggedOn the isCustomerLoggedOn to set
+     */
+    public void setIsCustomerLoggedOn(boolean isCustomerLoggedOn) {
+        this.isCustomerLoggedOn = isCustomerLoggedOn;
+    }
+
+    /**
+     * @return the subject
+     */
+    public String getSubject() {
+        return subject;
+    }
+
+    /**
+     * @param subject the subject to set
+     */
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+
+    /**
+     * @return the body
+     */
+    public String getBody() {
+        return body;
+    }
+
+    /**
+     * @param body the body to set
+     */
+    public void setBody(String body) {
+        this.body = body;
     }
 
 }
