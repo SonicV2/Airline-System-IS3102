@@ -93,7 +93,7 @@ and open the template in the editor.
                                 
                                 <div class="c-left-grids">
                                     <div class="c-left">
-                                        <span class="glyphicon glyphicon-lock" aria-hidden="true"></span>
+                                        <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
                                     </div>
                                     <div class="c-right">
                                         <a jsf:action="#{customerManagedBean.updateProfile()}">Update Profile</a>
@@ -101,16 +101,19 @@ and open the template in the editor.
                                     <div class="clearfix"> </div>
                                 </div>
                                     </h:form>
+                               
                                 <div class="c-left-grids">
                                     <div class="c-left">
-                                        <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
+                                        <span class="glyphicon glyphicon-lock" aria-hidden="true"></span>
+                                      
                                     </div>
                                     <div class="c-right">
-                                        <a href="#">Refund Status</a>
+                                        <a href="#{request.contextPath}/Distribution/ChangePassword.xhtml">Change Password</a>
                                     </div>
                                     <div class="clearfix"> </div>
                                 </div>
                             </div>
+                            
                             <div class="customer-left-grid">
                                 <div class="c-left-grids">
                                     <div class="c-left">

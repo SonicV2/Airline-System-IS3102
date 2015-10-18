@@ -131,13 +131,16 @@
                                 <div class="clearfix"></div>
                                 <div class="flight-list-footer">
                                     <div class="col-md-6 col-sm-6 col-xs-6 sm-invisible">
-                                        <span><i class="fa fa-plane"></i> Economy</span>
+                                        <span><i class="fa fa-plane"></i> #{mARSManagedBean.serviceType}</span>
                                         <span class="refund"><i class="fa fa-clock-o"></i> Total Travel Time: #{flightOptions.duration}</span>
 
                                     </div>
                                     <div class="col-md-6 col-sm-6 col-xs-12 clear-padding">
                                         <div class="pull-right">
                                             <span>$#{flightOptions.price}/Person</span>
+                                            <ui:fragment rendered="#{mARSManagedBean.children > 0}">
+                                                <span>, $#{flightOptions.price * 0.75}/Child</span>
+                                            </ui:fragment>
 
                                             <a jsf:action="#{mARSManagedBean.bookOneStopReturn(flightOptions)}">BOOK</a>
                                         </div>

@@ -60,6 +60,36 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
 
         return "Sign up successful!";
     }
+    
+    @Override
+    public String newPassword (String email, String password) {
+        try {
+
+            customer = getCustomerUseEmail(email);
+            System.out.println("************IN SESSION BEAN, customer id: " + customer.getId());
+
+            String saltCode = generateSalt();
+            String hashedPwd = getSecurePassword(password, saltCode);
+
+            customer.getSalt().setSaltCode(saltCode);
+            customer.setPassword(hashedPwd);
+            em.persist(customer);
+
+            System.out.println("************IN SESSION BEAN, customer salt: " + customer.getSalt());
+            System.out.println("************IN SESSION BEAN, customer password: " + customer.getPassword());
+            
+            return hashedPwd;
+
+        } catch (NoSuchAlgorithmException ex) {
+
+        } catch (NoSuchProviderException ex) {
+
+        } catch (java.security.NoSuchProviderException ex) {
+
+        }
+        
+        return null;
+    }
 
     // Password encryption use MD 5 hashing
     public String generateSalt() throws NoSuchAlgorithmException, NoSuchProviderException, java.security.NoSuchProviderException {
@@ -191,6 +221,8 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
             customer.setPassword(hashedPwd);
             customer.getSalt().setSaltCode(saltCode);
             em.persist(customer);
+            
+            
         } catch (EntityNotFoundException enfe) {
             System.out.println(enfe.getMessage());
 
@@ -252,6 +284,24 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
     public void updateCustomerProfile (Customer customer){
         em.merge(customer);
         em.flush();
+    }
+    
+    @Override
+    public String validateUser(String customerEmail, String passportNum) {
+        Customer customer = getCustomerUseEmail(customerEmail);
+        String email;
+        if (customer != null) {
+            if (customer.getPassportNumber().equals(passportNum)) {
+               
+                email = customer.getEmail(); //need to change 
+                System.out.println("Email Add: " + email);
+            } else {
+                email = "nomatch";  //NRIC and username not match
+            }
+        } else {
+            email = "nouser"; // cannot find such user
+        }
+        return email;
     }
 
 }

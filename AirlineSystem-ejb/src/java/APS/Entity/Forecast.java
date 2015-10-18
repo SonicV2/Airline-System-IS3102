@@ -24,31 +24,31 @@ public class Forecast implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private int year;
-    private double originalMth1;
-    private double originalMth2;
-    private double originalMth3;
-    private double originalMth4;
-    private double originalMth5;
-    private double originalMth6;
-    private double originalMth7;
-    private double originalMth8;
-    private double originalMth9;
-    private double originalMth10;
-    private double originalMth11;
-    private double originalMth12;
-    private double originalMth13;
-    private double originalMth14;
-    private double originalMth15;
-    private double originalMth16;
-    private double originalMth17;
-    private double originalMth18;
-    private double originalMth19;
-    private double originalMth20;
-    private double originalMth21;
-    private double originalMth22;
-    private double originalMth23;
-    private double originalMth24;
+    private int yearOfForecast;
+//    private double originalMth1;
+//    private double originalMth2;
+//    private double originalMth3;
+//    private double originalMth4;
+//    private double originalMth5;
+//    private double originalMth6;
+//    private double originalMth7;
+//    private double originalMth8;
+//    private double originalMth9;
+//    private double originalMth10;
+//    private double originalMth11;
+//    private double originalMth12;
+//    private double originalMth13;
+//    private double originalMth14;
+//    private double originalMth15;
+//    private double originalMth16;
+//    private double originalMth17;
+//    private double originalMth18;
+//    private double originalMth19;
+//    private double originalMth20;
+//    private double originalMth21;
+//    private double originalMth22;
+//    private double originalMth23;
+//    private double originalMth24;
     private double mth1Forecast;
     private double mth2Forecast;
     private double mth3Forecast;
@@ -65,32 +65,32 @@ public class Forecast implements Serializable {
     @ManyToOne
     private Route route = new Route();
 
-    public void createForecastReport(int year, double[] dForecast) {
-        this.year = year;
-        this.setOriginalMth1(dForecast[0]);
-        this.setOriginalMth2(dForecast[1]);
-        this.setOriginalMth3(dForecast[2]);
-        this.setOriginalMth4(dForecast[3]);
-        this.setOriginalMth5(dForecast[4]);
-        this.setOriginalMth6(dForecast[5]);
-        this.setOriginalMth7(dForecast[6]);
-        this.setOriginalMth8(dForecast[7]);
-        this.setOriginalMth9(dForecast[8]);
-        this.setOriginalMth10(dForecast[9]);
-        this.setOriginalMth11(dForecast[10]);
-        this.setOriginalMth12(dForecast[11]);
-        this.setOriginalMth13(dForecast[12]);
-        this.setOriginalMth14(dForecast[13]);
-        this.setOriginalMth15(dForecast[14]);
-        this.setOriginalMth16(dForecast[15]);
-        this.setOriginalMth17(dForecast[16]);
-        this.setOriginalMth18(dForecast[17]);
-        this.setOriginalMth19(dForecast[18]);
-        this.setOriginalMth20(dForecast[19]);
-        this.setOriginalMth21(dForecast[20]);
-        this.setOriginalMth22(dForecast[21]);
-        this.setOriginalMth23(dForecast[22]);
-        this.setOriginalMth24(dForecast[23]);
+    public void createForecastReport(int yearOfForecast, double[] dForecast) {
+        this.yearOfForecast = yearOfForecast;
+//        this.setOriginalMth1(dForecast[0]);
+//        this.setOriginalMth2(dForecast[1]);
+//        this.setOriginalMth3(dForecast[2]);
+//        this.setOriginalMth4(dForecast[3]);
+//        this.setOriginalMth5(dForecast[4]);
+//        this.setOriginalMth6(dForecast[5]);
+//        this.setOriginalMth7(dForecast[6]);
+//        this.setOriginalMth8(dForecast[7]);
+//        this.setOriginalMth9(dForecast[8]);
+//        this.setOriginalMth10(dForecast[9]);
+//        this.setOriginalMth11(dForecast[10]);
+//        this.setOriginalMth12(dForecast[11]);
+//        this.setOriginalMth13(dForecast[12]);
+//        this.setOriginalMth14(dForecast[13]);
+//        this.setOriginalMth15(dForecast[14]);
+//        this.setOriginalMth16(dForecast[15]);
+//        this.setOriginalMth17(dForecast[16]);
+//        this.setOriginalMth18(dForecast[17]);
+//        this.setOriginalMth19(dForecast[18]);
+//        this.setOriginalMth20(dForecast[19]);
+//        this.setOriginalMth21(dForecast[20]);
+//        this.setOriginalMth22(dForecast[21]);
+//        this.setOriginalMth23(dForecast[22]);
+//        this.setOriginalMth24(dForecast[23]);
         this.setMth1Forecast(dForecast[24]);
         this.setMth2Forecast(dForecast[25]);
         this.setMth3Forecast(dForecast[26]);
@@ -114,204 +114,204 @@ public class Forecast implements Serializable {
     }
 
     public int getYear() {
-        return year;
+        return yearOfForecast;
     }
 
     public void setYear(int year) {
-        this.year = year;
+        this.yearOfForecast = year;
     }
 
-    public double getOriginalMth1() {
-        return originalMth1;
-    }
-
-    public void setOriginalMth1(double originalMth1) {
-        this.originalMth1 = originalMth1;
-    }
-
-    public double getOriginalMth2() {
-        return originalMth2;
-    }
-
-    public void setOriginalMth2(double originalMth2) {
-        this.originalMth2 = originalMth2;
-    }
-
-    public double getOriginalMth3() {
-        return originalMth3;
-    }
-
-    public void setOriginalMth3(double originalMth3) {
-        this.originalMth3 = originalMth3;
-    }
-
-    public double getOriginalMth4() {
-        return originalMth4;
-    }
-
-    public void setOriginalMth4(double originalMth4) {
-        this.originalMth4 = originalMth4;
-    }
-
-    public double getOriginalMth5() {
-        return originalMth5;
-    }
-
-    public void setOriginalMth5(double originalMth5) {
-        this.originalMth5 = originalMth5;
-    }
-
-    public double getOriginalMth6() {
-        return originalMth6;
-    }
-
-    public void setOriginalMth6(double originalMth6) {
-        this.originalMth6 = originalMth6;
-    }
-
-    public double getOriginalMth7() {
-        return originalMth7;
-    }
-
-    public void setOriginalMth7(double originalMth7) {
-        this.originalMth7 = originalMth7;
-    }
-
-    public double getOriginalMth8() {
-        return originalMth8;
-    }
-
-    public void setOriginalMth8(double originalMth8) {
-        this.originalMth8 = originalMth8;
-    }
-
-    public double getOriginalMth9() {
-        return originalMth9;
-    }
-
-    public void setOriginalMth9(double originalMth9) {
-        this.originalMth9 = originalMth9;
-    }
-
-    public double getOriginalMth10() {
-        return originalMth10;
-    }
-
-    public void setOriginalMth10(double originalMth10) {
-        this.originalMth10 = originalMth10;
-    }
-
-    public double getOriginalMth11() {
-        return originalMth11;
-    }
-
-    public void setOriginalMth11(double originalMth11) {
-        this.originalMth11 = originalMth11;
-    }
-
-    public double getOriginalMth12() {
-        return originalMth12;
-    }
-
-    public void setOriginalMth12(double originalMth12) {
-        this.originalMth12 = originalMth12;
-    }
-
-    public double getOriginalMth13() {
-        return originalMth13;
-    }
-
-    public void setOriginalMth13(double originalMth13) {
-        this.originalMth13 = originalMth13;
-    }
-
-    public double getOriginalMth14() {
-        return originalMth14;
-    }
-
-    public void setOriginalMth14(double originalMth14) {
-        this.originalMth14 = originalMth14;
-    }
-
-    public double getOriginalMth15() {
-        return originalMth15;
-    }
-
-    public void setOriginalMth15(double originalMth15) {
-        this.originalMth15 = originalMth15;
-    }
-
-    public double getOriginalMth16() {
-        return originalMth16;
-    }
-
-    public void setOriginalMth16(double originalMth16) {
-        this.originalMth16 = originalMth16;
-    }
-
-    public double getOriginalMth17() {
-        return originalMth17;
-    }
-
-    public void setOriginalMth17(double originalMth17) {
-        this.originalMth17 = originalMth17;
-    }
-
-    public double getOriginalMth18() {
-        return originalMth18;
-    }
-
-    public void setOriginalMth18(double originalMth18) {
-        this.originalMth18 = originalMth18;
-    }
-
-    public double getOriginalMth19() {
-        return originalMth19;
-    }
-
-    public void setOriginalMth19(double originalMth19) {
-        this.originalMth19 = originalMth19;
-    }
-
-    public double getOriginalMth20() {
-        return originalMth20;
-    }
-
-    public void setOriginalMth20(double originalMth20) {
-        this.originalMth20 = originalMth20;
-    }
-
-    public double getOriginalMth21() {
-        return originalMth21;
-    }
-
-    public void setOriginalMth21(double originalMth21) {
-        this.originalMth21 = originalMth21;
-    }
-
-    public double getOriginalMth22() {
-        return originalMth22;
-    }
-
-    public void setOriginalMth22(double originalMth22) {
-        this.originalMth22 = originalMth22;
-    }
-
-    public double getOriginalMth23() {
-        return originalMth23;
-    }
-
-    public void setOriginalMth23(double originalMth23) {
-        this.originalMth23 = originalMth23;
-    }
-
-    public double getOriginalMth24() {
-        return originalMth24;
-    }
-
-    public void setOriginalMth24(double originalMth24) {
-        this.originalMth24 = originalMth24;
-    }
+//    public double getOriginalMth1() {
+//        return originalMth1;
+//    }
+//
+//    public void setOriginalMth1(double originalMth1) {
+//        this.originalMth1 = originalMth1;
+//    }
+//
+//    public double getOriginalMth2() {
+//        return originalMth2;
+//    }
+//
+//    public void setOriginalMth2(double originalMth2) {
+//        this.originalMth2 = originalMth2;
+//    }
+//
+//    public double getOriginalMth3() {
+//        return originalMth3;
+//    }
+//
+//    public void setOriginalMth3(double originalMth3) {
+//        this.originalMth3 = originalMth3;
+//    }
+//
+//    public double getOriginalMth4() {
+//        return originalMth4;
+//    }
+//
+//    public void setOriginalMth4(double originalMth4) {
+//        this.originalMth4 = originalMth4;
+//    }
+//
+//    public double getOriginalMth5() {
+//        return originalMth5;
+//    }
+//
+//    public void setOriginalMth5(double originalMth5) {
+//        this.originalMth5 = originalMth5;
+//    }
+//
+//    public double getOriginalMth6() {
+//        return originalMth6;
+//    }
+//
+//    public void setOriginalMth6(double originalMth6) {
+//        this.originalMth6 = originalMth6;
+//    }
+//
+//    public double getOriginalMth7() {
+//        return originalMth7;
+//    }
+//
+//    public void setOriginalMth7(double originalMth7) {
+//        this.originalMth7 = originalMth7;
+//    }
+//
+//    public double getOriginalMth8() {
+//        return originalMth8;
+//    }
+//
+//    public void setOriginalMth8(double originalMth8) {
+//        this.originalMth8 = originalMth8;
+//    }
+//
+//    public double getOriginalMth9() {
+//        return originalMth9;
+//    }
+//
+//    public void setOriginalMth9(double originalMth9) {
+//        this.originalMth9 = originalMth9;
+//    }
+//
+//    public double getOriginalMth10() {
+//        return originalMth10;
+//    }
+//
+//    public void setOriginalMth10(double originalMth10) {
+//        this.originalMth10 = originalMth10;
+//    }
+//
+//    public double getOriginalMth11() {
+//        return originalMth11;
+//    }
+//
+//    public void setOriginalMth11(double originalMth11) {
+//        this.originalMth11 = originalMth11;
+//    }
+//
+//    public double getOriginalMth12() {
+//        return originalMth12;
+//    }
+//
+//    public void setOriginalMth12(double originalMth12) {
+//        this.originalMth12 = originalMth12;
+//    }
+//
+//    public double getOriginalMth13() {
+//        return originalMth13;
+//    }
+//
+//    public void setOriginalMth13(double originalMth13) {
+//        this.originalMth13 = originalMth13;
+//    }
+//
+//    public double getOriginalMth14() {
+//        return originalMth14;
+//    }
+//
+//    public void setOriginalMth14(double originalMth14) {
+//        this.originalMth14 = originalMth14;
+//    }
+//
+//    public double getOriginalMth15() {
+//        return originalMth15;
+//    }
+//
+//    public void setOriginalMth15(double originalMth15) {
+//        this.originalMth15 = originalMth15;
+//    }
+//
+//    public double getOriginalMth16() {
+//        return originalMth16;
+//    }
+//
+//    public void setOriginalMth16(double originalMth16) {
+//        this.originalMth16 = originalMth16;
+//    }
+//
+//    public double getOriginalMth17() {
+//        return originalMth17;
+//    }
+//
+//    public void setOriginalMth17(double originalMth17) {
+//        this.originalMth17 = originalMth17;
+//    }
+//
+//    public double getOriginalMth18() {
+//        return originalMth18;
+//    }
+//
+//    public void setOriginalMth18(double originalMth18) {
+//        this.originalMth18 = originalMth18;
+//    }
+//
+//    public double getOriginalMth19() {
+//        return originalMth19;
+//    }
+//
+//    public void setOriginalMth19(double originalMth19) {
+//        this.originalMth19 = originalMth19;
+//    }
+//
+//    public double getOriginalMth20() {
+//        return originalMth20;
+//    }
+//
+//    public void setOriginalMth20(double originalMth20) {
+//        this.originalMth20 = originalMth20;
+//    }
+//
+//    public double getOriginalMth21() {
+//        return originalMth21;
+//    }
+//
+//    public void setOriginalMth21(double originalMth21) {
+//        this.originalMth21 = originalMth21;
+//    }
+//
+//    public double getOriginalMth22() {
+//        return originalMth22;
+//    }
+//
+//    public void setOriginalMth22(double originalMth22) {
+//        this.originalMth22 = originalMth22;
+//    }
+//
+//    public double getOriginalMth23() {
+//        return originalMth23;
+//    }
+//
+//    public void setOriginalMth23(double originalMth23) {
+//        this.originalMth23 = originalMth23;
+//    }
+//
+//    public double getOriginalMth24() {
+//        return originalMth24;
+//    }
+//
+//    public void setOriginalMth24(double originalMth24) {
+//        this.originalMth24 = originalMth24;
+//    }
 
     public double getMth1Forecast() {
         return mth1Forecast;
@@ -420,7 +420,7 @@ public class Forecast implements Serializable {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 97 * hash + this.year;
+        hash = 97 * hash + this.yearOfForecast;
         return hash;
     }
 
@@ -433,7 +433,7 @@ public class Forecast implements Serializable {
             return false;
         }
         final Forecast other = (Forecast) obj;
-        if (this.year != other.year) {
+        if (this.yearOfForecast != other.yearOfForecast) {
             return false;
         }
         return true;
@@ -441,6 +441,6 @@ public class Forecast implements Serializable {
 
     @Override
     public String toString() {
-        return "Forecast{" + "id=" + year + '}';
+        return "Forecast{" + "id=" + yearOfForecast + '}';
     }
 }

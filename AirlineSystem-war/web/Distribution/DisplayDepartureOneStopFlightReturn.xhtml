@@ -55,12 +55,12 @@
                 </div>
                 <div class="faqs-top-grids terms-grids">
                     <h:form>
-                                <ui:repeat value="#{mARSManagedBean.flightOptionsList}" var="flightOptions" >
-                                    <div class="flight-list-v2">
-                                        <div class="flight-list-main">	
-                                            <div class="col-md-2 col-sm-2 text-center airline">
-                                                <br></br>
-                                                <h4 style='color:#26c6da;'>Merlion Airlines</h4>
+                        <ui:repeat value="#{mARSManagedBean.flightOptionsList}" var="flightOptions" >
+                            <div class="flight-list-v2">
+                                <div class="flight-list-main">	
+                                    <div class="col-md-2 col-sm-2 text-center airline">
+                                        <br></br>
+                                        <h4 style='color:#26c6da;'>Merlion Airlines</h4>
 
                                                 <h5>#{flightOptions.legOne.flight.flightNo}</h5>
                                             </div>
@@ -131,7 +131,7 @@
                                         <div class="clearfix"></div>
                                         <div class="flight-list-footer">
                                             <div class="col-md-6 col-sm-6 col-xs-6 sm-invisible">
-                                                <span><i class="fa fa-plane"></i> Economy</span>
+                                                <span><i class="fa fa-plane"></i> #{mARSManagedBean.serviceType}</span>
                                                 <span class="refund"><i class="fa fa-clock-o"></i> Total Travel Time: #{flightOptions.duration}</span>
                                                 
                                             </div>
@@ -144,11 +144,74 @@
                                             </div>
                                         </div>
                                     </div>
-                                </ui:repeat>
-                        </h:form>
+                                    <div class="col-md-3 col-sm-3 destination">
+                                        <h3><i class="fa fa-plane fa-rotate-90"></i><h:outputText value="#{flightOptions.legOne.endDate}">
+                                                <f:convertDateTime pattern ="hh:mm a"/>
+                                            </h:outputText></h3>
+                                        <h5 class="bold"><h:outputText value="#{flightOptions.legOne.endDate}">
+                                                <f:convertDateTime pattern ="EEE, MMM d, yyyy"/>
+                                            </h:outputText></h5>
+                                        <h5>#{flightOptions.legOne.flight.route.destinationCity}, #{flightOptions.legOne.flight.route.destinationCountry} (#{flightOptions.legOne.flight.route.destinationIATA})</h5>
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                                <div class="flight-list-main">	
+                                    <div class="col-md-2 col-sm-2 text-center airline">
+                                        <h4 style='color:#26c6da;'>Merlion Airlines</h4>
+                                        <h5>#{flightOptions.legTwo.flight.flightNo}</h5>
+                                    </div>
+                                    <div class="col-md-3 col-sm-3 departure">
+                                        <h3><i class="fa fa-plane"></i><h:outputText value="#{flightOptions.legTwo.startDate}">
+                                                <f:convertDateTime pattern ="hh:mm a"/>
+                                            </h:outputText></h3>
+                                        <h5 class="bold"><h:outputText value="#{flightOptions.legTwo.startDate}">
+                                                <f:convertDateTime pattern ="EEE, MMM d, yyyy"/>
+                                            </h:outputText></h5>
+                                        <h5>#{flightOptions.legTwo.flight.route.originCity}, #{flightOptions.legTwo.flight.route.originCountry} (#{flightOptions.legTwo.flight.route.originIATA})</h5>
+                                    </div>
+                                    <div class="col-md-4 col-sm-4 stop-duration">
+                                        <div class="duration text-center">
+                                            <h1><i class="fa fa-long-arrow-right"></i></h1>
+                                            <span><i class="fa fa-clock-o"></i> 
+                                                #{mARSManagedBean.convertToHours(flightOptions.legTwo.flight.flightDuration)} Hours                                            
+                                                #{mARSManagedBean.convertToMins(flightOptions.legTwo.flight.flightDuration)} Mins 
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 col-sm-3 destination">
+                                        <h3><i class="fa fa-plane fa-rotate-90"></i><h:outputText value="#{flightOptions.legTwo.endDate}">
+                                                <f:convertDateTime pattern ="hh:mm a"/>
+                                            </h:outputText></h3>
+                                        <h5 class="bold"><h:outputText value="#{flightOptions.legTwo.endDate}">
+                                                <f:convertDateTime pattern ="EEE, MMM d, yyyy"/>
+                                            </h:outputText></h5>
+                                        <h5>#{flightOptions.legTwo.flight.route.destinationCity}, #{flightOptions.legTwo.flight.route.destinationCountry} (#{flightOptions.legTwo.flight.route.destinationIATA}) </h5>
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                                <div class="flight-list-footer">
+                                    <div class="col-md-6 col-sm-6 col-xs-6 sm-invisible">
+                                        <span><i class="fa fa-plane"></i> Economy</span>
+                                        <span class="refund"><i class="fa fa-clock-o"></i> Total Travel Time: #{flightOptions.duration}</span>
+
+                                    </div>
+                                    <div class="col-md-6 col-sm-6 col-xs-12 clear-padding">
+                                        <div class="pull-right">
+                                            <span>$#{flightOptions.price}/Person</span>
+                                            <ui:fragment rendered="#{mARSManagedBean.children > 0}">
+                                                <span>, $#{flightOptions.price * 0.75}/Child</span>
+                                            </ui:fragment>
+
+                                            <a jsf:action="#{mARSManagedBean.bookOneStopDeparture(flightOptions)}">BOOK</a>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
+                        </ui:repeat>
+                    </h:form>
+                </div>
+            </div>
+        </div>
 
 
 

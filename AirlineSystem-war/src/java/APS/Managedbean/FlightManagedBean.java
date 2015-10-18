@@ -432,7 +432,11 @@ public class FlightManagedBean {
         demandForecastSessionBean.generateDemandForecast(routeId, year, period, isUpdate);
         clear();
     }
-
+    
+    public void testForecast(ActionEvent event) {
+        demandForecastSessionBean.generateDemandForecast(881L, 2016, 4, false);
+    }
+    
     /*clear input after submit*/
     public void clear() {
         setRouteId(null);

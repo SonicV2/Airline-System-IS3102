@@ -69,22 +69,22 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
         }
     }
     
-    //Add new schedule entity
-    @Override
-    public void addSchedule(Date startDate, String flightNo) {
-        schedule = new Schedule();
-        flight = getFlight(flightNo);
-        TimeZone tz = TimeZone.getTimeZone("GMT+8:00"); //Set Timezone to Singapore
-        Calendar endDate = Calendar.getInstance(tz);
-        endDate.set(Calendar.SECOND, 0);
-        endDate.setTime(calcEndTime(startDate, flight));
-        schedule.createSchedule(startDate, endDate.getTime());
-        flight.getSchedule().add(schedule);
-        schedule.setFlight(flight);
-        schedule.setTeam(team);
-        schedule.setSeatAvailability(seatAvail);
-        em.persist(schedule);
-    }
+//    //Add new schedule entity
+//    @Override
+//    public void addSchedule(Date startDate, String flightNo) {
+//        schedule = new Schedule();
+//        flight = getFlight(flightNo);
+//        TimeZone tz = TimeZone.getTimeZone("GMT+8:00"); //Set Timezone to Singapore
+//        Calendar endDate = Calendar.getInstance(tz);
+//        endDate.set(Calendar.SECOND, 0);
+//        endDate.setTime(calcEndTime(startDate, flight));
+//        schedule.createSchedule(startDate, endDate.getTime());
+//        flight.getSchedule().add(schedule);
+//        schedule.setFlight(flight);
+//        schedule.setTeam(team);
+//        schedule.setSeatAvailability(seatAvail);
+//        em.persist(schedule);
+//    }
     
     //Delete existing schedule entity
     @Override
@@ -206,7 +206,7 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
     
     //Change the display of flight days from mixture of 1s and 0s to proper days in words
     @Override
-    public void changeFlightDays(List<Flight> flights) {
+    public void displayFlightDays(List<Flight> flights) {
 
         for (int i = 0; i < flights.size(); i++) {
             String temp = "";

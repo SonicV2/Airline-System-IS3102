@@ -21,8 +21,8 @@ and open the template in the editor.
                 <div class="header-dropdown">
                     <div class="emergency-grid">
                         <ul>
-                            <li>Toll Free : </li>
-                            <li class="call">+1 234 567 8901</li>
+                            <li>Call Us : </li>
+                            <li class="call">+65 65413748</li>
                         </ul>
                     </div>
                     <div class="clearfix"> </div>
@@ -35,11 +35,26 @@ and open the template in the editor.
                     <h:form>
                     <span class="menu"><img src="images/menu.png" alt="" /></span>
                     <ul class="nav1">
+                        <ui:fragment  rendered="#{request.requestURI eq '/AirlineSystem-war/Distribution/MerlionAirlines.xhtml'}">
+                        <li class="active"><a href="#{request.contextPath}/Distribution/MerlionAirlines.xhtml">Book a flight</a></li>
+                        </ui:fragment>
+                        <ui:fragment  rendered="#{request.requestURI ne '/AirlineSystem-war/Distribution/MerlionAirlines.xhtml'}">
                         <li><a href="#{request.contextPath}/Distribution/MerlionAirlines.xhtml">Book a flight</a></li>
+                        </ui:fragment>
+                        <ui:fragment  rendered="#{request.requestURI eq '/AirlineSystem-war/Distribution/DisplayCustomerPNRs.xhtml'}">
                         <li class="active"><a jsf:action="#{customerManagedBean.displayCustomerPNRs()}">Manage My Flights</a></li>
+                        </ui:fragment>
+                        <ui:fragment  rendered="#{request.requestURI ne '/AirlineSystem-war/Distribution/DisplayCustomerPNRs.xhtml'}">
+                        <li><a jsf:action="#{customerManagedBean.displayCustomerPNRs()}">Manage My Flights</a></li>
+                        </ui:fragment>
                         <li><a href="holidays.html">Check-in Flight</a></li>
-                        <li><a href="#{request.contextPath}/Distribution/CustomerDashboard.xhtml">View My Dashboard</a></li>
                         
+                        <ui:fragment  rendered="#{request.requestURI eq '/AirlineSystem-war/Distribution/CustomerDashboard.xhtml'}">
+                        <li class="active"><a href="#{request.contextPath}/Distribution/CustomerDashboard.xhtml">View My Dashboard</a></li>
+                        </ui:fragment>
+                        <ui:fragment  rendered="#{request.requestURI ne '/AirlineSystem-war/Distribution/CustomerDashboard.xhtml'}">
+                        <li><a href="#{request.contextPath}/Distribution/CustomerDashboard.xhtml">View My Dashboard</a></li>
+                        </ui:fragment>
                     </ul>
                     </h:form>
                     <div class="clearfix"> </div>
