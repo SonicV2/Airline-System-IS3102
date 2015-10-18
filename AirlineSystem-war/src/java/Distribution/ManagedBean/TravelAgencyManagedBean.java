@@ -5,6 +5,7 @@
  */
 package Distribution.ManagedBean;
 
+import Distribution.Entity.TravelAgency;
 import Distribution.Session.TravelAgencySessionBeanLocal;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -32,12 +33,19 @@ public class TravelAgencyManagedBean {
      private double currentCredit;
      private double commission;
      private String email;
+     private TravelAgency travelAgency;
      
      
      @PostConstruct
      public void retrieve(){
-        
+     }
      
+     public String addTravelAgency(){
+         travelAgency = new TravelAgency();
+         travelAgency.createTravelAgent(name, maxCredit, maxCredit, 0.0, email, address, contactNo, password, primaryContact);
+         
+         
+         return null;
      }
 
     public String getName() {
