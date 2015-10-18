@@ -5,7 +5,9 @@
  */
 package Distribution.ManagedBean;
 
+import Distribution.Entity.TravelAgency;
 import Distribution.Session.TravelAgencySessionBeanLocal;
+import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
@@ -23,10 +25,41 @@ public class TravelAgencyManagedBean {
     
      @EJB
     private TravelAgencySessionBeanLocal travelAgencySessionBeanLocal;
+    
+    private List<TravelAgency> travelAgencies;
+    private TravelAgency selectedAgency;
      
      @PostConstruct
      public void retrieve(){
          
      }
+
+    /**
+     * @return the travelAgencies
+     */
+    public List<TravelAgency> getTravelAgencies() {
+        return travelAgencies;
+    }
+
+    /**
+     * @param travelAgencies the travelAgencies to set
+     */
+    public void setTravelAgencies(List<TravelAgency> travelAgencies) {
+        this.travelAgencies = travelAgencies;
+    }
+
+    /**
+     * @return the selectedAgency
+     */
+    public TravelAgency getSelectedAgency() {
+        return selectedAgency;
+    }
+
+    /**
+     * @param selectedAgency the selectedAgency to set
+     */
+    public void setSelectedAgency(TravelAgency selectedAgency) {
+        this.selectedAgency = selectedAgency;
+    }
     
 }
