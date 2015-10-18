@@ -8,6 +8,7 @@ package Distribution.ManagedBean;
 import CI.Session.EmailSessionBeanLocal;
 import Distribution.Entity.TravelAgency;
 import Distribution.Session.TravelAgencySessionBeanLocal;
+import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -17,7 +18,6 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.inject.Named;
-import org.primefaces.context.RequestContext;
 
 /**
  *
@@ -36,6 +36,46 @@ public class TravelAgencyManagedBean {
 
     private List<TravelAgency> travelAgencies;
     private TravelAgency selectedAgency;
+     
+     private String name;
+     private String address;
+     private String primaryContact;
+     private String contactNo;
+     private double maxCredit;
+     private double currentCredit;
+     private double commission;
+     private String email;
+     private TravelAgency travelAgency;
+     
+     private String subject;
+     private String body;
+     private String hashedPassword;
+     private String password;
+     
+     private String feedbackMessage;
+     
+     private boolean isAgencyLoggedOn;
+     
+     
+     @PostConstruct
+     public void retrieve(){
+        travelAgencies = new ArrayList();
+         
+     }
+     
+     public void addTravelAgency(){
+         
+         setEmail(email);
+         
+         setPassword(emailSessionBean.passGen());
+         
+         travelAgencySessionBean.addTravelAgency(name, maxCredit, maxCredit, 0.0, email, address, contactNo, password, primaryContact);
+         
+         sendEmail(getEmail());
+         
+         setFeedbackMessage("Travel Agency is registered successfully!");
+         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, feedbackMessage, "");
+         FacesContext.getCurrentInstance().addMessage(null, message);
 
     private String name;
     private String address;
@@ -155,6 +195,7 @@ public class TravelAgencyManagedBean {
             }
         }
     }
+    
 
     public void validateUser(ActionEvent event) {
         setEmail(travelAgencySessionBean.validateUser(email, getId())); //get employee's email address 

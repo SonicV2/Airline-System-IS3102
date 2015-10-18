@@ -38,6 +38,8 @@ public interface TravelAgencySessionBeanLocal {
     public int noOfDaysSinceDate (Date date);
     public void deletePendingPNRs ();
     public void deletePNR(PNR pnr);
+    public void deleteTravelAgency (TravelAgency travelAgency);
+    public int noOfConfirmedBookings (TravelAgency travelAgency);
     
     public List<TravelAgency> getAllTravelAgencies();
 

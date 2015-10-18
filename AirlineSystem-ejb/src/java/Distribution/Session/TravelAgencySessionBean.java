@@ -5,15 +5,10 @@
  */
 package Distribution.Session;
 
-
 import CI.Entity.Salt;
-import Distribution.Entity.TravelAgency;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.util.ArrayList;
-import java.util.List;
-import APS.Entity.Flight;
 import Distribution.Entity.PNR;
 import Distribution.Entity.TravelAgency;
 import Inventory.Entity.Booking;
@@ -35,18 +30,17 @@ import javax.persistence.Query;
  */
 @Stateless
 public class TravelAgencySessionBean implements TravelAgencySessionBeanLocal {
-
+    
     @PersistenceContext(unitName = "AirlineSystem-ejbPU")
     private EntityManager em;
-
     
     private TravelAgency travelAgency;
     
     @Override
     public String addTravelAgency(String name, double maxCredit, double currentCredit, double commission, String email, String address, String contactNo, String password, String primaryContact) {
-
+        
         try {
-
+            
             travelAgency = new TravelAgency();
             String saltCode = generateSalt();
             String hashedPwd = getSecurePassword(password, saltCode);
@@ -54,23 +48,23 @@ public class TravelAgencySessionBean implements TravelAgencySessionBeanLocal {
             salt.create(saltCode);
             travelAgency.setSalt(salt);
             em.persist(salt);
-
+            
             travelAgency.createTravelAgent(name, maxCredit, maxCredit, 0.0, email, address, contactNo, hashedPwd, primaryContact);
             
             em.persist(travelAgency);
-
+            
         } catch (NoSuchAlgorithmException ex) {
-
+            
         } catch (NoSuchProviderException ex) {
-
+            
         } catch (java.security.NoSuchProviderException ex) {
-
+            
         }
-
+        
         return "Sign up successful!";
     }
-    
-        // Password encryption use MD 5 hashing
+
+    // Password encryption use MD 5 hashing
     @Override
     public String generateSalt() throws NoSuchAlgorithmException, NoSuchProviderException, java.security.NoSuchProviderException {
         //Always use a SecureRandom generator
@@ -82,7 +76,7 @@ public class TravelAgencySessionBean implements TravelAgencySessionBeanLocal {
         //return salt
         return salt.toString();
     }
-
+    
     @Override
     public String getSecurePassword(String passwordToHash, String salt) {
         String generatedPassword = null;
@@ -109,11 +103,11 @@ public class TravelAgencySessionBean implements TravelAgencySessionBeanLocal {
     
     @Override
     public boolean isSameHash(String email, String pwd) {
-
+        
         TravelAgency agency = getAgencyUseEmail(email);
         String saltCode = agency.getSalt().getSaltCode();
         String rehash = getSecurePassword(pwd, saltCode);
-
+        
         if (agency.getPassword().equals(rehash)) {
             return true;
         } else {
@@ -125,18 +119,18 @@ public class TravelAgencySessionBean implements TravelAgencySessionBeanLocal {
     public TravelAgency getAgencyUseEmail(String agencyEmail) {
         TravelAgency agency = new TravelAgency();
         try {
-
+            
             Query q = em.createQuery("SELECT a FROM TravelAgency " + "AS a WHERE a.email=:email");
             q.setParameter("email", agencyEmail);
-
+            
             List results = q.getResultList();
             if (!results.isEmpty()) {
                 agency = (TravelAgency) results.get(0);
-
+                
             } else {
                 agency = null;
             }
-
+            
         } catch (EntityNotFoundException enfe) {
             System.out.println("\nEntity not found error" + "enfe.getMessage()");
         }
@@ -249,7 +243,7 @@ public class TravelAgencySessionBean implements TravelAgencySessionBeanLocal {
     public void persistTravelAgency(TravelAgency travelAgency) {
         em.persist(travelAgency);
     }
-
+    
     @Override
     public void resetCreditsAndCommission(TravelAgency travelAgency) {
         travelAgency.setCommission(0.0);
@@ -257,14 +251,14 @@ public class TravelAgencySessionBean implements TravelAgencySessionBeanLocal {
         em.merge(travelAgency);
         em.flush();
     }
-
+    
     @Override
     public void changeCreditLimit(TravelAgency travelAgency, double newLimit) {
         travelAgency.setMaxCredit(newLimit);
         em.merge(travelAgency);
         em.flush();
     }
-
+    
     @Override
     public List<PNR> retrievePendingPNRs(TravelAgency travelAgency) {
         if (travelAgency.getPnrs() == null || travelAgency.getPnrs().isEmpty()) {
@@ -279,20 +273,20 @@ public class TravelAgencySessionBean implements TravelAgencySessionBeanLocal {
             return pendingPNRs;
         }
     }
-
+    
     @Override
     public int noOfDaysSinceDate(Date date) {
         Date currentDate = new Date();
         long diff = currentDate.getTime() - date.getTime();
         return (int) TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
     }
-
+    
     @Override
     public void deletePNR(PNR pnr) {
         SeatAvailability seatAvailForBooking = new SeatAvailability();
         String serviceType;
         int noOfSeatsBooked;
-
+        
         for (Booking eachPnrBooking : pnr.getBookings()) {
             seatAvailForBooking = eachPnrBooking.getSeatAvail();
             serviceType = eachPnrBooking.getServiceType();
@@ -322,39 +316,46 @@ public class TravelAgencySessionBean implements TravelAgencySessionBeanLocal {
         em.merge(pnr);
         em.flush();
     }
-
+    
     @Override
     public void deletePendingPNRs() {
         List<PNR> pnrsForEachTravelAgency = new ArrayList();
         List<TravelAgency> allTravelAgencies = getAllTravelAgencies();
+        double currentCreditForAgency;
+        
         if (allTravelAgencies != null) {
             for (TravelAgency eachTravelAgency : allTravelAgencies) {
+                currentCreditForAgency = eachTravelAgency.getCurrentCredit();
                 pnrsForEachTravelAgency = eachTravelAgency.getPnrs();
                 if (pnrsForEachTravelAgency != null && !pnrsForEachTravelAgency.isEmpty()) {
                     for (PNR eachPNR : pnrsForEachTravelAgency) {
                         if (eachPNR.getPnrStatus().equalsIgnoreCase("Pending") && noOfDaysSinceDate(eachPNR.getDateOfBooking()) > 14) {
+                            currentCreditForAgency += eachPNR.getTotalPrice();
                             deletePNR(eachPNR);
                         }
                     }
-
+                    
                 }
+                eachTravelAgency.setCurrentCredit(currentCreditForAgency);
+                em.merge(eachTravelAgency);
+                em.flush();
             }
         }
-
+        
     }
-
+    
     @Override
     public List<TravelAgency> getAllTravelAgencies() {
         List<TravelAgency> allTravelAgencies = new ArrayList();
-
+        
         try {
             Query q = em.createQuery("SELECT a from TravelAgency a");
-
+            
             List<TravelAgency> results = q.getResultList();
             if (!results.isEmpty()) {
-
+                
                 allTravelAgencies = results;
-
+                
             } else {
                 allTravelAgencies = null;
                 System.out.println("no travel agencies!");
@@ -362,8 +363,39 @@ public class TravelAgencySessionBean implements TravelAgencySessionBeanLocal {
         } catch (EntityNotFoundException enfe) {
             System.out.println("\nEntity not found error" + "enfe.getMessage()");
         }
-
+        
         return allTravelAgencies;
     }
-
+    
+    @Override
+    public void deleteTravelAgency(TravelAgency travelAgency) {
+        List<PNR> pnrsForTravelAgency = travelAgency.getPnrs();
+        if (pnrsForTravelAgency != null && !pnrsForTravelAgency.isEmpty()) {
+            for (PNR eachPNR : pnrsForTravelAgency) {
+                if (eachPNR.getPnrStatus().equalsIgnoreCase("Pending")) {
+                    deletePNR(eachPNR);
+                }
+            }
+            
+        }        
+        em.remove(travelAgency);
+        em.merge(travelAgency);
+        em.flush();        
+    }
+    
+    @Override
+    public int noOfConfirmedBookings(TravelAgency travelAgency) {
+        int noOfBookings = 0;
+        List<PNR> travelAgencyPNRs = travelAgency.getPnrs();
+        if (travelAgencyPNRs == null || travelAgencyPNRs.isEmpty()) {
+            return 0;
+        } else {
+            for (PNR eachPNR : travelAgencyPNRs) {
+                if (eachPNR.getPnrStatus().equalsIgnoreCase("Booked")) {
+                    noOfBookings += eachPNR.getBookings().size();
+                }
+            }
+            return noOfBookings;
+        }        
+    }
 }
