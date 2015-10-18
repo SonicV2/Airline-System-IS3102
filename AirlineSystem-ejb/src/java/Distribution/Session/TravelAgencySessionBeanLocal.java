@@ -41,5 +41,15 @@ public interface TravelAgencySessionBeanLocal {
     
     public List<TravelAgency> getAllTravelAgencies();
 
+    public String validateUser(String agencyEmail, Long id);
+
+    public void hashNewPwd(String agencyEmail, String pwd);
+
+    public String newPassword(String email, String password);
+
+    public void updateAgencyProfile(TravelAgency travelAgency);
+
+    public Boolean emailExists(String agencyEmail);
+
     
 }

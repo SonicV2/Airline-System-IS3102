@@ -143,6 +143,107 @@ public class TravelAgencySessionBean implements TravelAgencySessionBeanLocal {
         return agency;
     }
     
+    @Override
+    public String validateUser(String agencyEmail, Long id) {
+        TravelAgency agency = getAgencyUseEmail(agencyEmail);
+        String email;
+        if (agency != null) {
+            if (agency.getId().equals(id)) {
+               
+                email = agency.getEmail();
+            } else {
+                email = "nomatch";  //NRIC and username not match
+            }
+        } else {
+            email = "nouser"; // cannot find such user
+        }
+        return email;
+    }
+    
+    @Override
+    public void hashNewPwd(String agencyEmail, String pwd) {
+        TravelAgency agency = getAgencyUseEmail(agencyEmail);
+        try {
+            String saltCode = generateSalt();
+            String hashedPwd = getSecurePassword(pwd, saltCode);
+            agency.setPassword(hashedPwd);
+            agency.getSalt().setSaltCode(saltCode);
+            em.persist(agency);
+            
+            
+        } catch (EntityNotFoundException enfe) {
+            System.out.println(enfe.getMessage());
+
+        } catch (NoSuchAlgorithmException ex) {
+
+            System.out.println("\nNo Such Algorithm Exception" + ex.getMessage());
+
+        } catch (NoSuchProviderException ex) {
+            System.out.println("\nNo Such Provider Exception" + ex.getMessage());
+
+        } catch (java.security.NoSuchProviderException ex) {
+            System.out.println("\nJava security No Such Provider Exception" + ex.getMessage());
+
+        }
+
+    }
+    
+    @Override
+    public String newPassword (String email, String password) {
+        try {
+
+            travelAgency = getAgencyUseEmail(email);
+            
+            String saltCode = generateSalt();
+            String hashedPwd = getSecurePassword(password, saltCode);
+
+            travelAgency.getSalt().setSaltCode(saltCode);
+            travelAgency.setPassword(hashedPwd);
+            em.persist(travelAgency);
+
+            return hashedPwd;
+
+        } catch (NoSuchAlgorithmException ex) {
+
+        } catch (NoSuchProviderException ex) {
+
+        } catch (java.security.NoSuchProviderException ex) {
+
+        }
+        
+        return null;
+    }
+    
+    @Override
+    public Boolean emailExists(String agencyEmail) {
+        try {
+
+            Query q = em.createQuery("SELECT a FROM TravelAgency " + "AS a WHERE a.email=:email");
+            q.setParameter("email", agencyEmail);
+
+            List results = q.getResultList();
+            if (!results.isEmpty()) {
+                System.out.println("session bean - email already exists");
+                return true;
+
+            } else {
+                System.out.println("session bean - email does not exist");
+                return false;
+            }
+
+        } catch (EntityNotFoundException enfe) {
+            System.out.println("\nEntity not found error" + "enfe.getMessage()");
+            return false;
+        }
+
+    }
+    
+    @Override
+    public void updateAgencyProfile (TravelAgency travelAgency){
+        em.merge(travelAgency);
+        em.flush();
+    }
+    
 
     @Override
     public void persistTravelAgency(TravelAgency travelAgency) {
