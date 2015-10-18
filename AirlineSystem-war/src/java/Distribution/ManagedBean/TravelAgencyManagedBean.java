@@ -42,7 +42,7 @@ public class TravelAgencyManagedBean {
      @PostConstruct
      public void retrieve(){
         
-         trav
+         
      
      }
 
