@@ -226,17 +226,24 @@ public class TravelAgencySessionBean implements TravelAgencySessionBeanLocal {
     public void deletePendingPNRs() {
         List<PNR> pnrsForEachTravelAgency = new ArrayList();
         List<TravelAgency> allTravelAgencies = getAllTravelAgencies();
+        double currentCreditForAgency;
+        
         if (allTravelAgencies != null) {
             for (TravelAgency eachTravelAgency : allTravelAgencies) {
+                currentCreditForAgency = eachTravelAgency.getCurrentCredit();
                 pnrsForEachTravelAgency = eachTravelAgency.getPnrs();
                 if (pnrsForEachTravelAgency != null && !pnrsForEachTravelAgency.isEmpty()) {
                     for (PNR eachPNR : pnrsForEachTravelAgency) {
                         if (eachPNR.getPnrStatus().equalsIgnoreCase("Pending") && noOfDaysSinceDate(eachPNR.getDateOfBooking()) > 14) {
+                            currentCreditForAgency += eachPNR.getTotalPrice();
                             deletePNR(eachPNR);
                         }
                     }
 
                 }
+                eachTravelAgency.setCurrentCredit(currentCreditForAgency);
+                em.merge(eachTravelAgency);
+                em.flush();
             }
         }
 
@@ -263,6 +270,22 @@ public class TravelAgencySessionBean implements TravelAgencySessionBeanLocal {
         }
 
         return allTravelAgencies;
+    }
+    
+    @Override
+    public void deleteTravelAgency (TravelAgency travelAgency){
+        List<PNR> pnrsForTravelAgency = travelAgency.getPnrs();
+        if (pnrsForTravelAgency!=null && !pnrsForTravelAgency.isEmpty()){
+            for (PNR eachPNR : pnrsForTravelAgency){
+                if (eachPNR.getPnrStatus().equalsIgnoreCase("Pending"))
+                    deletePNR(eachPNR);
+            }
+            
+        }       
+            em.remove(travelAgency);
+            em.merge(travelAgency);
+            em.flush();
+                 
     }
 
 }

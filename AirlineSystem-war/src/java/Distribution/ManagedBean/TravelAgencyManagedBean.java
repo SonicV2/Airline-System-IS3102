@@ -8,6 +8,7 @@ package Distribution.ManagedBean;
 import CI.Session.EmailSessionBeanLocal;
 import Distribution.Entity.TravelAgency;
 import Distribution.Session.TravelAgencySessionBeanLocal;
+import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -16,7 +17,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
-import org.primefaces.context.RequestContext;
 
 /**
  *
@@ -58,7 +58,7 @@ public class TravelAgencyManagedBean {
      
      @PostConstruct
      public void retrieve(){
-        
+        travelAgencies = new ArrayList();
          
      }
      
@@ -142,6 +142,7 @@ public class TravelAgencyManagedBean {
             }
         }
     }
+    
 
     /**
      * @return the travelAgencies
