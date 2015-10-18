@@ -15,7 +15,7 @@
         <h:outputStylesheet library ="css"  name="styleMerlion.css" />
         <h:outputStylesheet library ="css"  name="JFFormStyle.css" />
         <h:outputStylesheet library ="css"  name="flexslider.css" />
-        <h:outputScript library="js" name="jQuery/jQuery-2.1.4.min.js" />
+
         <h:outputScript library="js" name="modernizr.custom.js" /> 
 
 
@@ -51,126 +51,138 @@
                 <div class="about-info">
                     <h3>Here are your existing bookings: </h3>
                 </div>
+                <h:form>
+                    <p:growl id="growl" sticky="true" showDetail="false"/> 
+                    <div class="faqs-top-grids terms-grids">
+                        <ui:repeat var="pnr" value="#{customerManagedBean.pnrDisplayList}" >
+                            <div class="blog-grids">
 
-                <div class="faqs-top-grids terms-grids">
-                    <ui:repeat var="pnr" value="#{customerManagedBean.pnrDisplayList}" >
-                        <div class="blog-grids">
-
-                            <div class="col-md-8 col-sm-8 booking-sidebar">
-                                <div class="flight-list-v2">
-                                    <div class="sidebar-item">
-                                        <h4><i class="fa fa-bookmark"></i>Booking Details</h4>
+                                <div class="col-md-8 col-sm-8 booking-sidebar">
+                                    <div class="flight-list-v2">
+                                        <div class="sidebar-item">
+                                            <h4><i class="fa fa-bookmark"></i>Booking Details</h4>
 
 
-                                        <div class="sidebar-body">
-                                            <table class="table">
-                                                <tbody>
-                                                    <tr>
-                                                        <td>PNR ID</td>
-                                                        <td>#{pnr.id}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>No of travellers</td>
-                                                        <td>#{pnr.noOfTravellers}</td>
-                                                    </tr>
-                                                    <tr>
+                                            <div class="sidebar-body">
+                                                <table class="table">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>PNR ID</td>
+                                                            <td>#{pnr.id}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>No of travellers</td>
+                                                            <td>#{pnr.noOfTravellers}</td>
+                                                        </tr>
+                                                        <tr>
 
-                                                        <td>Number of bags allowed</td>
-                                                        <td>#{pnr.noOfBags}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Service Type</td>
-                                                        <td>#{pnr.serviceType}</td>
-                                                    </tr>
+                                                            <td>Number of bags allowed</td>
+                                                            <td>#{pnr.noOfBags}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Service Type</td>
+                                                            <td>#{pnr.serviceType}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <div class='pull-right'>
+                                                                <h:commandButton onclick="if (!confirm('Do you really want to cancel this booking?')) {
+                                    return false;
+                                }
+                                ;
+                                return true;
+                                                                                 " class="btn btn-outline btn-success" value="Cancel Booking" action="#{customerManagedBean.deleteCustomerPNR(pnr.id)}" />
+                                                            </div>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
 
-                                                </tbody>
-                                            </table>
+
+
                                         </div>
 
-                                        
-
                                     </div>
-
                                 </div>
-                            </div>
-                            <ui:repeat value="#{pnr.travellerNames}" var="travellers">
-                                            <div class="col-md-4 col-sm-4 booking-sidebar">
-                                                <div class="flight-list-v2">
-                                                <div class="sidebar-item">
-                                                    <h4><i class="fa fa-bookmark"></i>Traveler Details</h4>
-                                                    <div class="sidebar-body">
-                                                        <table class="table">
-                                                            <tbody><tr>
-                                                                    <td>Traveler #{pnr.travellerNames.indexOf(travellers) + 1} </td>
-                                                                    <td>#{travellers}</td>
-                                                                </tr>
-                                                            </tbody></table>
+                                <ui:repeat value="#{pnr.travellerNames}" var="travellers">
+                                    <div class="col-md-4 col-sm-4 booking-sidebar">
+                                        <div class="flight-list-v2">
+                                            <div class="sidebar-item">
+                                                <h4><i class="fa fa-bookmark"></i>Traveler Details</h4>
+                                                <div class="sidebar-body">
+                                                    <table class="table">
+                                                        <tbody><tr>
+                                                                <td>Traveler #{pnr.travellerNames.indexOf(travellers) + 1} </td>
+                                                                <td>#{travellers}</td>
+                                                            </tr>
+                                                        </tbody></table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ui:repeat>
+
+                                <div class="col-md-8 col-sm-8">
+                                    <ui:repeat value="#{pnr.uniqueSchedules}" var="schedules">
+                                        <div class="flight-list-v2">
+                                            <div class="flight-list-main">	
+                                                <div class="col-md-2 col-sm-2 text-center airline">
+                                                    <br></br>
+                                                    <h4 style='color:#26c6da;'>Merlion Airlines</h4>
+
+                                                    <h5>#{schedules.flight.flightNo}</h5>
+                                                </div>
+                                                <div class="col-md-3 col-sm-3 departure">
+
+                                                    <h3><i class="fa fa-plane"></i> #{schedules.flight.route.originIATA} </h3>
+                                                    <h4><h:outputText value="#{schedules.startDate}">
+                                                            <f:convertDateTime pattern ="hh:mm a"/>
+                                                        </h:outputText></h4>
+
+                                                    <h5 class="bold"><h:outputText value="#{schedules.startDate}">
+
+                                                            <f:convertDateTime pattern ="EEE, MMM d, yyyy"/>
+                                                        </h:outputText></h5>
+
+                                                    <h5>#{schedules.flight.route.originCity}, #{schedules.flight.route.originCountry}</h5>
+                                                </div>
+
+
+                                                <div class="col-md-4 col-sm-4 stop-duration">
+                                                    <div class="duration text-center">
+                                                        <h1><i class="fa fa-long-arrow-right"></i></h1>
+                                                        <span><i class="fa fa-clock-o"></i> 
+                                                            #{mARSManagedBean.convertToHours(schedules.flight.flightDuration)} Hours                                            
+                                                            #{mARSManagedBean.convertToMins(schedules.flight.flightDuration)} Mins 
+                                                        </span>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            </div>
-                                        </ui:repeat>
-
-                            <div class="col-md-8 col-sm-8">
-                                <ui:repeat value="#{pnr.uniqueSchedules}" var="schedules">
-                                    <div class="flight-list-v2">
-                                        <div class="flight-list-main">	
-                                            <div class="col-md-2 col-sm-2 text-center airline">
-                                                <br></br>
-                                                <h4 style='color:#26c6da;'>Merlion Airlines</h4>
-
-                                                <h5>#{schedules.flight.flightNo}</h5>
-                                            </div>
-                                            <div class="col-md-3 col-sm-3 departure">
-
-                                                <h3><i class="fa fa-plane"></i> #{schedules.flight.route.originIATA} </h3>
-                                                <h4><h:outputText value="#{schedules.startDate}">
-                                                        <f:convertDateTime pattern ="hh:mm a"/>
-                                                    </h:outputText></h4>
-
-                                                <h5 class="bold"><h:outputText value="#{schedules.startDate}">
-
-                                                        <f:convertDateTime pattern ="EEE, MMM d, yyyy"/>
-                                                    </h:outputText></h5>
-
-                                                <h5>#{schedules.flight.route.originCity}, #{schedules.flight.route.originCountry}</h5>
-                                            </div>
-
-
-                                            <div class="col-md-4 col-sm-4 stop-duration">
-                                                <div class="duration text-center">
-                                                    <h1><i class="fa fa-long-arrow-right"></i></h1>
-                                                    <span><i class="fa fa-clock-o"></i> 
-                                                        #{mARSManagedBean.convertToHours(schedules.flight.flightDuration)} Hours                                            
-                                                        #{mARSManagedBean.convertToMins(schedules.flight.flightDuration)} Mins 
-                                                    </span>
+                                                <div class="col-md-3 col-sm-3 destination">
+                                                    <h3><i class="fa fa-plane fa-rotate-90"></i> #{schedules.flight.route.destinationIATA} </h3>
+                                                    <h4><h:outputText value="#{schedules.endDate}">
+                                                            <f:convertDateTime pattern ="hh:mm a"/>
+                                                        </h:outputText></h4>
+                                                    <h5 class="bold"><h:outputText value="#{schedules.endDate}">
+                                                            <f:convertDateTime pattern ="EEE, MMM d, yyyy"/>
+                                                        </h:outputText></h5>
+                                                    <h5>#{schedules.flight.route.destinationCity}, #{schedules.flight.route.destinationCountry}</h5>
                                                 </div>
                                             </div>
-                                            <div class="col-md-3 col-sm-3 destination">
-                                                <h3><i class="fa fa-plane fa-rotate-90"></i> #{schedules.flight.route.destinationIATA} </h3>
-                                                <h4><h:outputText value="#{schedules.endDate}">
-                                                        <f:convertDateTime pattern ="hh:mm a"/>
-                                                    </h:outputText></h4>
-                                                <h5 class="bold"><h:outputText value="#{schedules.endDate}">
-                                                        <f:convertDateTime pattern ="EEE, MMM d, yyyy"/>
-                                                    </h:outputText></h5>
-                                                <h5>#{schedules.flight.route.destinationCity}, #{schedules.flight.route.destinationCountry}</h5>
+                                            <div class="clearfix"></div>
+                                            <div class="flight-list-footer">
+                                                <div class="col-md-6 col-sm-6 col-xs-6 sm-invisible">
+                                                    <span><i class="fa fa-plane"></i>#{pnr.serviceType}</span>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="clearfix"></div>
-                                        <div class="flight-list-footer">
-                                            <div class="col-md-6 col-sm-6 col-xs-6 sm-invisible">
-                                                <span><i class="fa fa-plane"></i>#{pnr.serviceType}</span>
-                                            </div>
-                                        </div>
-                                    </div>
 
-                                </ui:repeat>
+                                    </ui:repeat>
+                                </div>
                             </div>
-                        </div>
-                    </ui:repeat>
-                    <div class="clearfix"> </div>
-                </div>
+
+                        </ui:repeat>
+                        <div class="clearfix"> </div>
+                    </div>
+                </h:form>
             </div>
         </div>
     </h:body>

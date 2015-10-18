@@ -282,7 +282,7 @@ public class CustomerManagedBean {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Booking has been successfully cancelled!", "");
         FacesContext.getCurrentInstance().addMessage(null, message);
 
-        return "DisplayCustomerPNRs?faces-redirect=true";
+        return "CustomerDashboard?faces-redirect=true";
     }
 
     public String updateProfile() {

@@ -55,11 +55,7 @@ and open the template in the editor.
         <div class="banner-bottom">
             <!-- container -->
             <div class="container">
-                <div class="banner-bottom-grids">
-                    <div class="col-md-8 banner-bottom-grid">
-                        <div class="top-destinations-info">
-                            <h4>Hello #{customerManagedBean.customer.firstName} #{customerManagedBean.customer.lastName}! Welcome to Merlion Airlines!</h4>
-                        </div>
+<!--                <div class="banner-bottom-grids">-->
                         <div class="customer-grid">
                             <div class="customer-left-grid">
                                 <div class="c-left-grids">
@@ -71,15 +67,7 @@ and open the template in the editor.
                                     </div>
                                     <div class="clearfix"> </div>
                                 </div>
-                                <div class="c-left-grids">
-                                    <div class="c-left">
-                                        <span class="glyphicon glyphicon-road" aria-hidden="true"></span>
-                                    </div>
-                                    <div class="c-right">
-                                        <a href="#">Road Status</a>
-                                    </div>
-                                    <div class="clearfix"> </div>
-                                </div>
+                                
                                 <h:form>
                                     <div class="c-left-grids">
                                         <div class="c-left">
@@ -114,49 +102,36 @@ and open the template in the editor.
                                 </div>
                             </div>
                             
-                            <div class="customer-left-grid">
-                                <div class="c-left-grids">
-                                    <div class="c-left">
-                                        <span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span>
-                                    </div>
-                                    <div class="c-right">
-                                        <a href="#">Cancellation</a>
-                                    </div>
-                                    <div class="clearfix"> </div>
-                                </div>
-                                <div class="c-left-grids">
-                                    <div class="c-left">
-                                        <span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span>
-                                    </div>
-                                    <div class="c-right">
-                                        <a href="faqs.html">FAQs</a>
-                                    </div>
-                                    <div class="clearfix"> </div>
-                                </div>
-                                <div class="c-left-grids">
-                                    <div class="c-left">
-                                        <span class="glyphicon glyphicon-phone-alt" aria-hidden="true"></span>
-                                    </div>
-                                    <div class="c-right">
-                                        <a href="#">Complaints</a>
-                                    </div>
-                                    <div class="clearfix"> </div>
-                                </div>
-                                <div class="c-left-grids">
-                                    <div class="c-left">
-                                        <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
-                                    </div>
-                                    <div class="c-right">
-                                        <a href="contact.html">Contact</a>
-                                    </div>
-                                    <div class="clearfix"> </div>
-                                </div>
-                            </div>
+<!--                            <div class="customer-left-grid">-->
+                                
+                                
+                               
+                                
+<!--                            </div>-->
                             <div class="clearfix"> </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
+<!--            </div>-->
+
+        
+         <ui:include src="MerlionAirlinesFooter.xhtml"/>
+        <h:outputScript library="js" name="jquery.flexslider.js"/> 
+        <h:outputScript library="js" name="easyResponsiveTabs.js" /> 
+        <h:outputScript library="js" name="scriptMerlion.js"></h:outputScript>
+
+        <script type="text/javascript">
+            $(function () {
+                SyntaxHighlighter.all();
+            });
+            $(window).load(function () {
+                $('.flexslider').flexslider({
+                    animation: "slide",
+                    start: function (slider) {
+                        $('body').removeClass('loading');
+                    }
+                });
+            });
+        </script>
     </h:body>
 </html>
