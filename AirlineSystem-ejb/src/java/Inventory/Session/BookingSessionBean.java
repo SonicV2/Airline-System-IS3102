@@ -39,6 +39,8 @@ public class BookingSessionBean implements BookingSessionBeanLocal {
                 pseudoBook(saList.get(i));
             }
         }
+        System.out.println("booked!!!");
+        
     }
 
     public void pseudoBook(SeatAvailability sa) {

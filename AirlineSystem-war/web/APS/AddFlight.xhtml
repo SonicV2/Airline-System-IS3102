@@ -32,8 +32,8 @@
 
         <!--            To add the same header on all dashboard pages  
                <ui:include src="/CI/dashboardHeader.xhtml"/>--> 
-<!--        To add the same sidebar on all dashboard pages  -->
-        <ui:include src="/CI/dashboardSidebar.xhtml"/>
+<!--        To add the same sidebar on all dashboard pages -->
+        <ui:include src="/CI/DashboardSidebar.xhtml"/> 
 
         <div id="page-wrapper">
 
@@ -43,19 +43,19 @@
                 </div>
                 <h:form>
                     <div class="text-center">
-                        <h:commandButton class="btn btn-outline btn-success" value="Generate Test Flights!!!" actionListener="#{flightManageBean.createTestFlight}"/>
+                        <h:commandButton class="btn btn-outline btn-success" value="Generate Test Flights!!!" actionListener="#{flightManagedBean.createTestFlight}"/>
                         <br></br>
                         <br></br>
                     </div>
                     <div class="text-center">
-                        <h:commandButton class="btn btn-outline btn-success" value="Test Dem Rotate" actionListener="#{flightManageBean.testRotation}"/>
+                        <h:commandButton class="btn btn-outline btn-success" value="Test Dem Rotate" actionListener="#{flightManagedBean.testRotation}"/>
                         <br></br>
                         <br></br>
                     </div>
                 </h:form>
                 <div class="col-lg-12">
                     <h:form>
-                        <p:dataTable var="route" value="#{routeManageBean.routes}" widgetVar="routesTable" paginator="true" rows="10">
+                        <p:dataTable var="route" value="#{routeManagedBean.routes}" widgetVar="routesTable" paginator="true" rows="10">
 
                             <f:facet name="header">
                                 <p:outputPanel>
@@ -100,20 +100,20 @@
                         <br></br>
                         <div class="form-group">                          
                             <h:outputLabel class="col-md-4 control-label" value="Route ID: "/>
-                            <p:inputText value="#{flightManageBean.routeId}"  />
+                            <p:inputText value="#{flightManagedBean.routeId}"  />
                             <br/>
                         </div>
                         <div class="form-group">                          
                             <h:outputLabel class="col-md-4 control-label" value="Flight Number: " />
                             <span>
-                                <h:outputText value="MA"/><p:inputMask id ="tempNo" mask ="99?999999" style="width:180px" value="#{flightManageBean.tempNo}"/>
+                                <h:outputText value="MA"/><p:inputMask id ="tempNo" mask ="99?999999" style="width:180px" value="#{flightManagedBean.tempNo}"/>
                             </span>
                             <br/>
                         </div>
 
                         <div class="form-group col-lg-12">
                             <h:outputLabel class="control-label" value="Flight Days (Days of the week):" />
-                            <p:selectManyCheckbox id="basic" value="#{flightManageBean.selectedFlightDays}" layout="grid" columns="7">
+                            <p:selectManyCheckbox id="basic" value="#{flightManagedBean.selectedFlightDays}" layout="grid" columns="7">
                                 <f:selectItem itemLabel="Monday" itemValue="Monday" />
                                 <f:selectItem itemLabel="Tuesday" itemValue="Tuesday" />
                                 <f:selectItem itemLabel="Wednesday" itemValue="Wednesday" />
@@ -128,17 +128,17 @@
 
                         <div class="form-group">
                             <h:outputLabel class="col-md-4 control-label" for="datetime" value="Flight start day and time:" />
-                            <p:calendar id="datetime" value="#{flightManageBean.startDateTime}" pattern="MM/dd/yyyy HH:mm"/>
+                            <p:calendar id="datetime" value="#{flightManagedBean.startDateTime}" pattern="MM/dd/yyyy HH:mm"/>
                         </div>
 
                         <div class="form-group">
                             <h:outputLabel class="col-md-4 control-label" value="Set basic fare for flight:" />
-                            <p:inputText value="#{flightManageBean.basicFare}" />
+                            <p:inputText value="#{flightManagedBean.basicFare}" />
                             <br/>
                         </div>           
 
                         <div class="text-center">
-                            <h:commandButton class="btn btn-outline btn-success" value="Add Flight" actionListener="#{flightManageBean.createFlight}"/>
+                            <h:commandButton class="btn btn-outline btn-success" value="Add Flight" actionListener="#{flightManagedBean.createFlight}"/>
                             <br></br>
                             <br></br>
                         </div>
