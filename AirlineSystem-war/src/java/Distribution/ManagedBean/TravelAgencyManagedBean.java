@@ -5,8 +5,12 @@
  */
 package Distribution.ManagedBean;
 
+import Distribution.Entity.PNR;
 import Distribution.Entity.TravelAgency;
+import static Distribution.Entity.TravelAgency_.password;
 import Distribution.Session.TravelAgencySessionBeanLocal;
+import java.util.ArrayList;
+import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
@@ -34,10 +38,12 @@ public class TravelAgencyManagedBean {
      private double commission;
      private String email;
      private TravelAgency travelAgency;
+     private List<PNR> pendingPNRs;
      
      
      @PostConstruct
      public void retrieve(){
+         pendingPNRs = new ArrayList();
      }
      
      public String addTravelAgency(){
@@ -50,6 +56,7 @@ public class TravelAgencyManagedBean {
          travelAgencySessionBean.persistTravelAgency(travelAgency);
          return null;
      }
+     
 
     public String getName() {
         return name;
@@ -114,6 +121,23 @@ public class TravelAgencyManagedBean {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public TravelAgency getTravelAgency() {
+        return travelAgency;
+    }
+
+    public void setTravelAgency(TravelAgency travelAgency) {
+        this.travelAgency = travelAgency;
+    }
+
+    public List<PNR> getPendingPNRs() {
+        return pendingPNRs;
+    }
+
+    public void setPendingPNRs(List<PNR> pendingPNRs) {
+        this.pendingPNRs = pendingPNRs;
+    }
+    
      
      
     
