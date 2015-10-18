@@ -40,6 +40,7 @@ public interface TravelAgencySessionBeanLocal {
     public void deletePNR(PNR pnr);
     public void deleteTravelAgency (TravelAgency travelAgency);
     public int noOfConfirmedBookings (TravelAgency travelAgency);
+    public TravelAgency getTravelAgencyById(Long id);
     
     public List<TravelAgency> getAllTravelAgencies();
 
