@@ -37,13 +37,21 @@ public class TravelAgencyManagedBean {
      private double currentCredit;
      private double commission;
      private String email;
+     private TravelAgency travelAgency;
      
      
      @PostConstruct
      public void retrieve(){
         
          
+     }
      
+     public String addTravelAgency(){
+         travelAgency = new TravelAgency();
+         travelAgency.createTravelAgent(name, maxCredit, maxCredit, 0.0, email, address, contactNo, password, primaryContact);
+         
+         
+         return null;
      }
 
     /**
