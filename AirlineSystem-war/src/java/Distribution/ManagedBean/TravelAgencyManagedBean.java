@@ -253,13 +253,14 @@ public class TravelAgencyManagedBean {
 
     public String viewTravelAgencies(){
         if (travelAgencies==null || travelAgencies.isEmpty()){
-            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Your password has been updated!", "");
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "No record found!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
         }
         return "ViewAllTravelAgencies";
     }
     
-    public String viewTravelAgencyProfile(){
+    public String viewTravelAgencyProfile(Long id){
+        
         int noOfBookings = travelAgencySessionBean.noOfConfirmedBookings(travelAgency);
         travelAgencyDisplay.setTravelAgency(travelAgency);
         travelAgencyDisplay.setNoOfConfirmedBookings(noOfBookings);
