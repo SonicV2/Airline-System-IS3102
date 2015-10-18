@@ -7,7 +7,6 @@ package Distribution.ManagedBean;
 
 import CI.Session.EmailSessionBeanLocal;
 import Distribution.Entity.TravelAgency;
-import static Distribution.Entity.TravelAgency_.password;
 import Distribution.Session.TravelAgencySessionBeanLocal;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -31,6 +30,12 @@ public class TravelAgencyManagedBean {
      @EJB
     private TravelAgencySessionBeanLocal travelAgencySessionBean;
      
+     @EJB
+    private EmailSessionBeanLocal emailSessionBean;
+    
+    private List<TravelAgency> travelAgencies;
+    private TravelAgency selectedAgency;
+     
      private String name;
      private String address;
      private String primaryContact;
@@ -40,7 +45,6 @@ public class TravelAgencyManagedBean {
      private double commission;
      private String email;
      private TravelAgency travelAgency;
-     private List<PNR> pendingPNRs;
      
      private String subject;
      private String body;
@@ -58,18 +62,19 @@ public class TravelAgencyManagedBean {
          
      }
      
-     public String addTravelAgency(){
-         travelAgency = new TravelAgency();
-         
-         //salt is already persisted, salt associated with customer
-         travelAgency.createTravelAgent(name, maxCredit, maxCredit, 0.0, email, address, contactNo, password, primaryContact);
+     public void addTravelAgency(){
          
          setEmail(email);
          
-         travelAgencySessionBean.persistTravelAgency(travelAgency);
-         return null;
-     }
-     
+         setPassword(emailSessionBean.passGen());
+         
+         travelAgencySessionBean.addTravelAgency(name, maxCredit, maxCredit, 0.0, email, address, contactNo, password, primaryContact);
+         
+         sendEmail(getEmail());
+         
+         setFeedbackMessage("Travel Agency is registered successfully!");
+         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, feedbackMessage, "");
+         FacesContext.getCurrentInstance().addMessage(null, message);
 
          clear();
      }
@@ -229,22 +234,75 @@ public class TravelAgencyManagedBean {
         this.email = email;
     }
 
+    /**
+     * @return the travelAgency
+     */
     public TravelAgency getTravelAgency() {
         return travelAgency;
     }
 
+    /**
+     * @param travelAgency the travelAgency to set
+     */
     public void setTravelAgency(TravelAgency travelAgency) {
         this.travelAgency = travelAgency;
     }
 
-    public List<PNR> getPendingPNRs() {
-        return pendingPNRs;
+    /**
+     * @return the subject
+     */
+    public String getSubject() {
+        return subject;
     }
 
-    public void setPendingPNRs(List<PNR> pendingPNRs) {
-        this.pendingPNRs = pendingPNRs;
+    /**
+     * @param subject the subject to set
+     */
+    public void setSubject(String subject) {
+        this.subject = subject;
     }
-    
+
+    /**
+     * @return the body
+     */
+    public String getBody() {
+        return body;
+    }
+
+    /**
+     * @param body the body to set
+     */
+    public void setBody(String body) {
+        this.body = body;
+    }
+
+    /**
+     * @return the hashedPassword
+     */
+    public String getHashedPassword() {
+        return hashedPassword;
+    }
+
+    /**
+     * @param hashedPassword the hashedPassword to set
+     */
+    public void setHashedPassword(String hashedPassword) {
+        this.hashedPassword = hashedPassword;
+    }
+
+    /**
+     * @return the password
+     */
+    public String getPassword() {
+        return password;
+    }
+
+    /**
+     * @param password the password to set
+     */
+    public void setPassword(String password) {
+        this.password = password;
+    }
      
       /**
      * @return the feedbackMessage
