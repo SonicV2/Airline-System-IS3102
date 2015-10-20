@@ -137,7 +137,7 @@
                                             </div>
                                             <div class="col-md-6 col-sm-6 col-xs-12 clear-padding">
                                                 <div class="pull-right">
-                                                    <span>$#{flightOptions.price}/Person</span>
+                                                    <span>$#{flightOptions.price}/Adult</span>
                                                     <ui:fragment rendered="#{mARSManagedBean.children > 0}">
                                                 <span>, $#{flightOptions.price * 0.75}/Child</span>
                                             </ui:fragment>
@@ -148,6 +148,28 @@
                                     </div>
                         </ui:repeat>
                     </h:form>
+                    
+                    <h:form>
+                        <br></br><br></br>
+                        <h3>Prices on other days:</h3>
+                        <ui:repeat value="#{mARSManagedBean.minPricesForWeekDirectFlight}" var="price">
+                        <div class="col-md-2 flight-list-view">
+                        <div class="clearfix visible-sm-block visible-xs-block"></div>
+                        <div class="col-md-2 flight-book text-center clear-padding">
+                                    <div class="price">
+                                        <h6> date </h6>
+                                        <h4>#{price}/Adult</h4>
+                                        <h5>#{price *0.75}/Child</h5>
+                                        
+                                    </div>
+                                    <div class="book">
+                                        <a jsf:action="#">BOOK</a>
+                                    </div>
+                                </div>
+                        </div>
+                        </ui:repeat>
+                    </h:form>
+                    <div class="clearfix"></div>
                 </div>
             </div>
         </div>
