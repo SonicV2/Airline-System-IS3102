@@ -43,7 +43,13 @@
         <title>Display PNR</title>
     </h:head>
     <h:body>
+        <!--this is the common header of all the mARS pages-->
+        <ui:fragment rendered ="#{customerManagedBean.isCustomerLoggedOn}">
         <ui:include src="CustomerDashboardHeader.xhtml"/>
+        </ui:fragment>
+        <ui:fragment rendered ="#{!customerManagedBean.isCustomerLoggedOn}">
+        <ui:include src="MerlionAirlinesHeader.xhtml"/>
+        </ui:fragment>
         <div class="banner-bottom">
             <!-- container -->
             <div class="container">
@@ -143,7 +149,7 @@
                                         <div class="clearfix"></div>
                                         <div class="flight-list-footer">
                                             <div class="col-md-6 col-sm-6 col-xs-6 sm-invisible">
-                                                <span><i class="fa fa-plane"></i>#{mARSManagedBean.serviceType}</span>
+                                                <span><i class="fa fa-plane"></i>#{mARSManagedBean.searchedPNR.bookings.get(0).serviceType}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -185,46 +191,3 @@
     </h:body>
 </html>
 
-<!--            <p:dataList value="#{mARSManagedBean.selectedSchedules}" var="schedules" type="ordered">
-
-                <div class="col-lg-12">
-                    <h:outputLabel value="Flight Number: " />
-                    <h:outputText value="#{schedules.flight.flightNo}">
-                    </h:outputText>
-                </div>
-
-                <div class="col-lg-12">
-                    <h:outputLabel value="Origin: " />
-                    <h:outputText value="#{schedules.flight.route.originIATA}">
-                    </h:outputText>
-                </div>
-
-                <div class="col-lg-12">
-                    <h:outputLabel value="Destination: " />
-                    <h:outputText value="#{schedules.flight.route.destinationIATA}">
-                    </h:outputText>
-                </div>
-
-                <div class="col-lg-12">
-                    <h:outputLabel value="Departure Time: " />
-                    <h:outputText value="#{schedules.startDate}">
-                        <f:convertDateTime pattern ="hh:mm a (EEE, MMM d, yyyy)"/>
-                                    <f:convertDateTime pattern ="dd-mm-yyyy HH:mm"/>
-                    </h:outputText>
-                </div>
-
-                <div class="col-lg-12">
-                    <h:outputLabel value="Arrival Time: " />
-                    <h:outputText value="#{schedules.endDate}">
-                        <f:convertDateTime pattern ="hh:mm a (EEE, MMM d, yyyy)"/>
-                                    <f:convertDateTime pattern ="dd-mm-yyyy HH:mm"/>
-                    </h:outputText>
-                </div>
-
-            </p:dataList>
-            
-            <div class="text-center">
-                <h:commandButton class="btn btn-outline btn-success" value="Cancel Booking" action="#{mARSManagedBean.deletePNR()}" />
-            </div>
-
-        </h:form>-->

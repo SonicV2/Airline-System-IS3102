@@ -223,6 +223,7 @@ public class CustomerManagedBean {
                     int noOfTravellers = eachCustomerPNR.getNoOfTravellers();
 
                     eachPNRDisplay.setNoOfTravellers(noOfTravellers);
+                    eachPNRDisplay.setBookingDate(eachCustomerPNR.getDateOfBooking());
 
                     for (Booking eachBooking : eachCustomerPNR.getBookings()) {
                         if (!addedNames.contains(eachBooking.getTravellerFristName() + " " + eachBooking.getTravellerLastName())) {
@@ -282,7 +283,7 @@ public class CustomerManagedBean {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Booking has been successfully cancelled!", "");
         FacesContext.getCurrentInstance().addMessage(null, message);
 
-        return "CustomerDashboard?faces-redirect=true";
+        return displayCustomerPNRs();
     }
 
     public String updateProfile() {
