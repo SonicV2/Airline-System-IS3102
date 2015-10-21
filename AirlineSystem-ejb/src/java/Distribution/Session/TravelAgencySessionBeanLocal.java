@@ -57,6 +57,10 @@ public interface TravelAgencySessionBeanLocal {
     public void deductCredit(TravelAgency travelAgency, double price);
 
     public void linkPNR(TravelAgency travelAgency, PNR pnr);
+    
+    public void cancelPNR(TravelAgency travelAgency, PNR pnr, double price);
+
+    public void confirmPNR(TravelAgency travelAgency, PNR pnr, double price);
 
     
 }

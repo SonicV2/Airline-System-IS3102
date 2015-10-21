@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+
+
+    <h:head>
+        <p:growl id="growl" sticky="true" showDetail="true"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <h:outputStylesheet library ="css"  name="bootstrap.css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
+        <h:outputStylesheet library="css" name="admindb.css" />
+        <h:outputStylesheet library="css" name="morrisjs/morris.css" />
+        <title>View All Pending PNRs</title>
+    </h:head>
+
+    <h:body>
+
+        <div id="page-wrapper">
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2 class="page-header">View All Pending PNRs</h2>
+                </div>
+
+                <div class="col-lg-12">
+
+                    <h:form id="form">
+                        <p:dataTable var="pnr" value="#{travelAgencyManagedBean.pendingPNRs}" widgetVar="pnrTable" paginator="true" rows="10">
+
+                            <f:facet name="header">
+                                <p:outputPanel>
+                                    <h:outputText value="Search all fields:" />
+                                    <p:inputText id="globalFilter" onkeyup="PF('pnrTable').filter()" style="width:150px" placeholder="Enter keyword"/>
+                                </p:outputPanel>
+                            </f:facet>
+
+                            <p:column filterBy="#{pnr.pnrID}" headerText="PNR ID" filterMatchMode="contains">
+                                <h:outputText value="#{pnr.pnrID}" />
+                            </p:column>
+
+                            <p:column filterBy="#{pnr.dateOfBooking}" headerText="Date of Booking" filterMatchMode="contains">
+                                <h:outputText value="#{pnr.dateOfBooking}" />
+                            </p:column>
+
+                            <p:column headerText="View Details">
+                                <p:commandLink update=":form:pnrDetail" oncomplete="PF('pnrDialog').show()" title="View Detail">
+                                    <h:outputText styleClass="ui-icon ui-icon-search" style="margin:0 auto;" />
+                                    <f:setPropertyActionListener value="#{pnr}" target="#{travelAgencyManagedBean.selectedPNR}" />
+                                </p:commandLink>
+                            </p:column>
+                            </p:dataTable>
+
+                            <p:dialog header="PNR Info #{travelAgencyManagedBean.selectedPNR}" widgetVar="pnrDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                                <p:outputPanel id="pnrDetail" style="text-align:center;">
+                                    <p:panelGrid  columns="2" rendered="#{not empty travelAgencyManagedBean.selectedPNR}" columnClasses="label,value">
+
+                                        <ui:repeat var="booking" value="#{travelAgencyManagedBean.selectedPNR.bookings}" >
+                                            <h:outputText value="Flight Number:" />
+                                            <h:outputText value="#{booking.seatAvail.schedule.flight.flightNo}" />
+
+                                            <h:outputText value="Origin IATA: " />
+                                            <h:outputText value="#{booking.seatAvail.schedule.flight.route.originIATA}" />
+
+                                            <h:outputText value="Destination IATA: " />
+                                            <h:outputText value="#{booking.seatAvail.schedule.flight.route.destinationIATA}" />
+                                        </ui:repeat>
+                                    </p:panelGrid>
+                                </p:outputPanel>
+                            </p:dialog>
+
+                    </h:form>
+                </div>
+            </div>
+        </div>
+    </h:body>
+</html>

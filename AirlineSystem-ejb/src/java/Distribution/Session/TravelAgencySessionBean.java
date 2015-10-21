@@ -276,6 +276,76 @@ public class TravelAgencySessionBean implements TravelAgencySessionBeanLocal {
             em.merge(travelAgency);
     }
     
+    /**
+     *
+     * @param travelAgency
+     * @param pnr
+     */
+    @Override
+    public void confirmPNR(TravelAgency travelAgency, PNR pnr, double price){
+        
+        List<PNR> existingCustomerPNRs = travelAgency.getPnrs();
+        
+        int i =0;
+        
+        for (i=0; i<existingCustomerPNRs.size(); i++) {
+            if (existingCustomerPNRs.get(i).equals(pnr))
+                break;
+        }
+        
+        for (Booking eachPnrBooking : pnr.getBookings()) {
+            eachPnrBooking.setBookingStatus("Booked");
+            em.merge(eachPnrBooking);
+        }
+        
+        pnr.setPnrStatus("Confirmed");
+        em.merge(pnr);
+        
+        
+        existingCustomerPNRs.set(i, pnr);
+        
+        travelAgency.setPnrs(existingCustomerPNRs);
+        travelAgency.setCommission(price*0.30);
+        em.merge(travelAgency);
+        
+        em.flush();
+    }
+    
+        @Override
+    public void cancelPNR(TravelAgency travelAgency, PNR pnr, double price){
+        
+        List<PNR> existingCustomerPNRs = travelAgency.getPnrs();
+        
+        int i =0;
+        
+        for (i=0; i<existingCustomerPNRs.size(); i++) {
+            if (existingCustomerPNRs.get(i).equals(pnr))
+                break;
+        }
+        
+        for (Booking eachPnrBooking : pnr.getBookings()) {
+            eachPnrBooking.setBookingStatus("Cancelled");
+            eachPnrBooking.setPnr(null);
+            em.merge(eachPnrBooking);
+        }
+        
+        //Return Commission only for confirmed pnrs, not for pending pnrs
+        if (pnr.getPnrStatus().equals("Confirmed"))
+            travelAgency.setCommission(travelAgency.getCommission()-price*0.30);
+ 
+        pnr.setPnrStatus("Cancelled");
+        em.merge(pnr);
+        
+        
+        existingCustomerPNRs.set(i, pnr);
+        
+        travelAgency.setPnrs(existingCustomerPNRs);
+        travelAgency.setCurrentCredit(travelAgency.getCurrentCredit()+price);
+        em.merge(travelAgency);
+        
+        em.flush();
+    }
+    
     @Override
     public List<PNR> retrievePendingPNRs(TravelAgency travelAgency) {
         if (travelAgency.getPnrs() == null || travelAgency.getPnrs().isEmpty()) {

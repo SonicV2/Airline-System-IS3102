@@ -84,6 +84,9 @@ public class TravelAgencyManagedBean {
     private Long id;
     private String newPassword;
     private String confirmedPassword;
+    
+    private List<PNR> pendingPNRs;
+    private List<PNR> allPNRs;
 
     private String flightNo;
     private Double flightDuration;
@@ -191,6 +194,8 @@ public class TravelAgencyManagedBean {
 
     private PNR searchedPNR;
     private Date systemDate;
+    private PNR selectedPNR;
+    private String selectedPNRId = "";
 
     @PostConstruct
     public void retrieve() {
@@ -242,7 +247,6 @@ public class TravelAgencyManagedBean {
         passengerList = new ArrayList();
         totalPriceWinsurance = 0;
         systemDate = new Date();
-
     }
 
     public int convertToHours(double duration) {
@@ -947,7 +951,7 @@ public class TravelAgencyManagedBean {
     public String deleteTravelAgency(Long id) {
 
         setTravelAgency(travelAgencySessionBean.getTravelAgencyById(id));
-        System.out.println("IN MANAGED BEAN: " + travelAgency);
+        
         travelAgencySessionBean.deleteTravelAgency(travelAgency);
 
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Travel Agency has been deleted!", "");
@@ -956,6 +960,52 @@ public class TravelAgencyManagedBean {
         setTravelAgencies(travelAgencySessionBean.getAllTravelAgencies());
 
         return "ViewAllTravelAgencies";
+    }
+    
+    public String viewPNRs(Long id) {
+        
+        setTravelAgency(travelAgencySessionBean.getTravelAgencyById(id));
+        setPendingPNRs(travelAgencySessionBean.retrievePendingPNRs(travelAgency));
+        
+        return "ViewTravelAgencyPNRs";
+    }
+    
+    public String confirmPNR(){
+        
+        System.out.println("IN MANAGE BEAN");
+        
+        double purePrice = selectedPNR.getTotalPrice();
+        
+        for (int i=0; i<selectedPNR.getBookings().size(); i++) {
+            if (selectedPNR.getBookings().get(i).isBoughtInsurance())
+                purePrice -= 15.0;
+        }
+        
+        travelAgencySessionBean.confirmPNR(travelAgency, selectedPNR, purePrice);
+        
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "PNR has been confirmed!", "");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+        
+        System.out.println("AT THE END OF MANAGE BEAN");
+        
+        return "ViewTravelAgencyPNRs";
+    }
+    
+    public String cancelPNR() {
+       
+        double purePrice = selectedPNR.getTotalPrice();
+        
+        for (int i=0; i<selectedPNR.getBookings().size(); i++) {
+            if (selectedPNR.getBookings().get(i).isBoughtInsurance())
+                purePrice -= 15.0;
+        }
+        
+        travelAgencySessionBean.cancelPNR(travelAgency, selectedPNR, purePrice);
+        
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "PNR has been cancelled!", "");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+        
+        return "ViewTravelAgencyPNRs";
     }
 
     /**
@@ -1852,6 +1902,62 @@ public class TravelAgencyManagedBean {
 
     public void setSystemDate(Date systemDate) {
         this.systemDate = systemDate;
+    }
+
+    /**
+     * @return the pendingPNRs
+     */
+    public List<PNR> getPendingPNRs() {
+        return pendingPNRs;
+    }
+
+    /**
+     * @param pendingPNRs the pendingPNRs to set
+     */
+    public void setPendingPNRs(List<PNR> pendingPNRs) {
+        this.pendingPNRs = pendingPNRs;
+    }
+
+    /**
+     * @return the selectedPNR
+     */
+    public PNR getSelectedPNR() {
+        return selectedPNR;
+    }
+
+    /**
+     * @param selectedPNR the selectedPNR to set
+     */
+    public void setSelectedPNR(PNR selectedPNR) {
+        this.selectedPNR = selectedPNR;
+    }
+
+    /**
+     * @return the selectedPNRId
+     */
+    public String getSelectedPNRId() {
+        return selectedPNRId;
+    }
+
+    /**
+     * @param selectedPNRId the selectedPNRId to set
+     */
+    public void setSelectedPNRId(String selectedPNRId) {
+        this.selectedPNRId = selectedPNRId;
+    }
+
+    /**
+     * @return the allPNRs
+     */
+    public List<PNR> getAllPNRs() {
+        return allPNRs;
+    }
+
+    /**
+     * @param allPNRs the allPNRs to set
+     */
+    public void setAllPNRs(List<PNR> allPNRs) {
+        this.allPNRs = allPNRs;
     }
 
 }
