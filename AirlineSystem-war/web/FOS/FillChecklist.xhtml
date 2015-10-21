@@ -33,16 +33,16 @@ and open the template in the editor.
                 
                 
     <h:form id="iform">
-        <h3>Fill in #{checklistManagedBean.checklistName} checklist</h3>
-        <p:selectManyCheckbox  value="#{checklistManagedBean.selectedItemNames}" layout="grid" columns="1">
-            <f:selectItems value="#{checklistManagedBean.checklistItemsForChecklist}" var="item" itemLabel="#{item.name}" itemValue="#{item.name}"/>
+        <h3>Fill in #{ChecklistManagedBean.checklistName} checklist</h3>
+        <p:selectManyCheckbox  value="#{ChecklistManagedBean.selectedItemNames}" layout="grid" columns="1">
+            <f:selectItems value="#{ChecklistManagedBean.checklistItemsForChecklist}" var="item" itemLabel="#{item.name}" itemValue="#{item.name}"/>
         </p:selectManyCheckbox>
 
         <h4>Comments</h4>
-        <p:inputTextarea rows="5" cols="50" value ="#{checklistManagedBean.comments}" />
+        <p:inputTextarea rows="5" cols="50" value ="#{ChecklistManagedBean.comments}" />
 
         <div class="text-center">
-            <h:commandButton class="btn btn-outline btn-success" value="Submit checklist"  action="#{checklistManagedBean.submitChecklist()}"/>
+            <h:commandButton class="btn btn-outline btn-success" value="Submit checklist"  action="#{ChecklistManagedBean.submitChecklist()}"/>
         </div>
 
     </h:form>

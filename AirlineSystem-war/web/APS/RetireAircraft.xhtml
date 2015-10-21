@@ -20,7 +20,7 @@
     <h:body>
         <!--            To add the same header on all dashboard pages  
 -->
-<ui:include src="/CI/dashboardHeader.xhtml"/><!--
+<!--<ui:include src="/CI/dashboardHeader.xhtml"/>
     To add the same sidebar on all dashboard pages -->  
         <ui:include src="/CI/dashboardSidebar.xhtml"/>
         <div id="page-wrapper">
@@ -65,7 +65,7 @@
                                 <h:outputText value="#{aircraft.status}" />
                             </p:column>
                             
-                            <p:column headerText="Retire Aircraft" style="width:70px" rendered="#{loginManageBean.accessRightIDs.contains(9)}">
+                            <p:column headerText="Retire Aircraft" style="width:70px" rendered="#{loginManagedBean.accessRightIDs.contains(9)}">
                                 <h:commandLink action="#{fleetManageBean.retireAircraft(aircraft.tailNo)}"><i class="fa fa-trash-o"></i> </h:commandLink>
                             </p:column>
 

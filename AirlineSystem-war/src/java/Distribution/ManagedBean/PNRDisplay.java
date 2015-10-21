@@ -6,6 +6,7 @@
 package Distribution.ManagedBean;
 
 import APS.Entity.Schedule;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -19,7 +20,8 @@ public class PNRDisplay {
     private String serviceType;
     private List<String> travellerNames;
     int noOfBags;
-
+    Date bookingDate;
+    
     public String getId() {
         return id;
     }
@@ -66,6 +68,14 @@ public class PNRDisplay {
 
     public void setNoOfBags(int noOfBags) {
         this.noOfBags = noOfBags;
+    }
+
+    public Date getBookingDate() {
+        return bookingDate;
+    }
+
+    public void setBookingDate(Date bookingDate) {
+        this.bookingDate = bookingDate;
     }
     
     

@@ -1,0 +1,249 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:jsf="http://xmlns.jcp.org/jsf"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<h:head>        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js" />
+</h:head>
+
+        <div id="wrapper">
+             <!--Navigation--> 
+            <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#{request.contextPath}/CI/EmployeeDashBoard.xhtml">Merlion Airlines Admin Dashboard</a>
+                </div>
+<!--                 /.navbar-header -->
+
+                <ul class="nav navbar-top-links navbar-right">
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-envelope fa-fw"></i>  <i class="fa fa-caret-down"></i>
+                            <h:panelGroup rendered="#{not empty messageManagedBean.unReadMsg}">
+                                <span class="label label-danger">#{messageManagedBean.unReadMsg.size()}</span>
+                            </h:panelGroup>
+                            <!--<span class="label label-danger">4</span>-->
+                        </a>
+                        
+                        <ul class="dropdown-menu dropdown-messages">
+                            
+                            <ui:repeat value="#{messageManagedBean.unReadMsg}" var="message">
+                            <li>
+                                <a href="#">
+                                    <div>
+                                        <strong>#{message.sender}</strong>
+                                        <span class="pull-right text-muted">
+                                            <em>#{message.sendTime}</em>
+                                        </span>
+                                    </div>
+                                    <div>#{message.msgText}</div>
+                                </a>
+                            </li>
+
+                            </ui:repeat>
+                            <li>
+                                <a href="#">
+                                    <div><h:outputText value="You do not have any unread message." rendered="#{empty messageManagedBean.unReadMsg}" /></div>
+                                </a>
+                                
+                            </li>
+                                <li class="divider"></li>
+                            <li>
+                                <h:form>
+                                    <a class="text-center" jsf:action="/CI/Message" jsf:actionListener="#{messageManagedBean.receiveReadMessage}">
+                                    <strong>Read all past messages</strong>
+                                    <i class="fa fa-angle-right"></i>
+                                </a>
+                                </h:form>
+                            </li>
+                        </ul>
+                          </li>
+                
+                        
+               
+                         <!--/.dropdown-messages--> 
+                    
+                     <!--/.dropdown--> 
+<!--                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-tasks fa-fw"></i>  <i class="fa fa-caret-down"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-tasks">
+                            <li>
+                                <a href="#">
+                                    <div>
+                                        <p>
+                                            <strong>Task 1</strong>
+                                            <span class="pull-right text-muted">40% Complete</span>
+                                        </p>
+                                        <div class="progress progress-striped active">
+                                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+                                                <span class="sr-only">40% Complete (success)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="#">
+                                    <div>
+                                        <p>
+                                            <strong>Task 2</strong>
+                                            <span class="pull-right text-muted">20% Complete</span>
+                                        </p>
+                                        <div class="progress progress-striped active">
+                                            <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
+                                                <span class="sr-only">20% Complete</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="#">
+                                    <div>
+                                        <p>
+                                            <strong>Task 3</strong>
+                                            <span class="pull-right text-muted">60% Complete</span>
+                                        </p>
+                                        <div class="progress progress-striped active">
+                                            <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%">
+                                                <span class="sr-only">60% Complete (warning)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="#">
+                                    <div>
+                                        <p>
+                                            <strong>Task 4</strong>
+                                            <span class="pull-right text-muted">80% Complete</span>
+                                        </p>
+                                        <div class="progress progress-striped active">
+                                            <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%">
+                                                <span class="sr-only">80% Complete (danger)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a class="text-center" href="#">
+                                    <strong>See All Tasks</strong>
+                                    <i class="fa fa-angle-right"></i>
+                                </a>
+                            </li>
+                        </ul>-->
+                         <!--/.dropdown-tasks--> 
+<!--                    </li>
+                     /.dropdown 
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-bell fa-fw"></i>  <i class="fa fa-caret-down"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-alerts">
+                            <li>
+                                <a href="#">
+                                    <div>
+                                        <i class="fa fa-comment fa-fw"></i> New Comment
+                                        <span class="pull-right text-muted small">4 minutes ago</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="#">
+                                    <div>
+                                        <i class="fa fa-twitter fa-fw"></i> 3 New Followers
+                                        <span class="pull-right text-muted small">12 minutes ago</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="#">
+                                    <div>
+                                        <i class="fa fa-envelope fa-fw"></i> Message Sent
+                                        <span class="pull-right text-muted small">4 minutes ago</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="#">
+                                    <div>
+                                        <i class="fa fa-tasks fa-fw"></i> New Task
+                                        <span class="pull-right text-muted small">4 minutes ago</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="#">
+                                    <div>
+                                        <i class="fa fa-upload fa-fw"></i> Server Rebooted
+                                        <span class="pull-right text-muted small">4 minutes ago</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a class="text-center" href="#">
+                                    <strong>See All Alerts</strong>
+                                    <i class="fa fa-angle-right"></i>
+                                </a>
+                            </li>
+                        </ul>
+                         /.dropdown-alerts 
+                    </li>-->
+                     <!--/.dropdown--> 
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#{request.contextPath}/CI/EmployeeProfile.xhtml"><i class="fa fa-user fa-fw"></i> User Profile</a>
+                            </li>
+<!--                            <li><a href="#{request.contextPath}/CI/employeeProfile.xhtml"><i class="fa fa-gear fa-fw"></i> Settings</a>
+                            </li>-->
+                            <li class="divider"></li>
+                            <h:form>
+                            <li><a jsf:action="#{loginManagedBean.logout()}"><i class="fa fa-sign-out fa-fw"></i> Logout </a></li>
+                            </h:form>
+                            
+                        </ul>
+                         </li>
+                    
+                         <!--/.dropdown-user--> 
+                    <!--</li>-->
+                     <!--/.dropdown--> 
+                <!--</ul>-->
+                 <!--/.navbar-top-links--> 
+                </ul>
+            </nav>
+        </div>
+
+<!--  <h:outputScript library="js" name="jQuery/jQuery-2.1.4.min.js" />-->
+    <h:outputScript library="js" name="bootstrap.min.js" /> 
+    <h:outputScript library="js" name="metisMenu/metisMenu.min.js" />
+    <h:outputScript library="js" name="sb-admin-2.js" />
+</html>
