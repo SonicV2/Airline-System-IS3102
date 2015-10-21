@@ -114,3 +114,42 @@ h5 {
         .flight-list-view:hover .book a{
             background: #00ADEF;
         }
+        
+        
+        .lowest-fare-slider  {
+            margin-top: 40px;
+        }
+        .lowest-fare-slider .owl-carousel .owl-controls .owl-nav .owl-prev, 
+        .lowest-fare-slider .owl-carousel .owl-controls .owl-nav .owl-next {
+            position: absolute;
+            top: 21%;
+        }
+        .lowest-fare-slider .owl-carousel .owl-controls .owl-nav .owl-next {
+            right: 0;
+        }
+        .lowest-fare-slider .owl-carousel .owl-controls .owl-nav .owl-prev {
+            left: 0;
+        }
+        .lowest-fare-slider .owl-theme .owl-dots {
+            display: none !important;
+        }
+        .lowest-fare-slider h5 {
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .lowest-fare-slider span {
+            font-size: 13px;
+        }
+        .flight-listing .sort {
+            margin-top: 30px;
+        }
+        .lowest-fare-slider .owl-theme .owl-nav [class*="owl-"] {
+            background: #F2676B;
+            padding: 5px 3px;
+            margin: 0;
+            border-radius: 0;
+        }
+        .lowest-fare-slider .owl-carousel .owl-item {
+            background: #f7f7f7;
+            padding-bottom: 10px;
+        }

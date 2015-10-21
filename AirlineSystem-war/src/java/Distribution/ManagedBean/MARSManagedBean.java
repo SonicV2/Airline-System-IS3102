@@ -268,6 +268,28 @@ public class MARSManagedBean {
         setServiceType(oneWayServiceType);
         setDepartureDate(oneWayDepartureDate);
     }
+    
+    //helps users to view other departure flights within the week
+    public String viewOtherDepartureFlights(Date date){
+        if (oneWayFlight){
+        setDepartureDate(date);
+        return displayDepartureFlights(true);
+        }
+        else{
+            setDepartureDate(date);
+            return displayDepartureFlights(false);
+        }
+    }
+    
+    public String viewOtherReturnFlights(Date date){
+        
+            setReturnDate(date);
+            String tempOrigin = originIATA;
+            setOriginIATA(destinationIATA);
+            setDestinationIATA(tempOrigin);
+            return displayReturnFlights();
+        
+    }
 
     public String displayDepartureFlights(Boolean oneWay) {
 
