@@ -19,7 +19,7 @@ import Distribution.Session.DistributionSessionBeanLocal;
 import Distribution.Session.PassengerBookingSessionBeanLocal;
 import Inventory.Entity.Booking;
 import Inventory.Entity.SeatAvailability;
-import Inventory.Session.PricingManagementLocal;
+import Inventory.Session.PricingSessionBeanLocal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -56,7 +56,7 @@ public class MARSManagedBean {
     private ScheduleSessionBeanLocal scheduleSessionBean;
 
     @EJB
-    private PricingManagementLocal pm;
+    private PricingSessionBeanLocal pm;
 
     @EJB
     private PassengerBookingSessionBeanLocal passengerBookingSessionBean;

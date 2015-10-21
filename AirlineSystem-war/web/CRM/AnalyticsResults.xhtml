@@ -13,23 +13,15 @@
             google.setOnLoadCallback(drawChart);
             function drawChart() {
                 var size =#{cRMAnalyticsManagedBean.csList.size()};
-                
-                var data = google.visualization.arrayToDataTable([
-                    ['Customer', 'Score'], 
-                    ['#{cRMAnalyticsManagedBean.getName(0)}', #{cRMAnalyticsManagedBean.getScore(0)}],
-                    ['#{cRMAnalyticsManagedBean.getName(1)}', #{cRMAnalyticsManagedBean.getScore(1)}],
-                    ['#{cRMAnalyticsManagedBean.getName(2)}', #{cRMAnalyticsManagedBean.getScore(2)}],
-                    ['#{cRMAnalyticsManagedBean.getName(3)}', #{cRMAnalyticsManagedBean.getScore(3)}],
-                    ['#{cRMAnalyticsManagedBean.getName(4)}', #{cRMAnalyticsManagedBean.getScore(4)}]
-                    ]);
+               
 
-              var data2 = [['Customer', 'Score']];
-             for (  i = 0; i &lt;5; i++) {
-                    data2[i + 1] = ['#{cRMAnalyticsManagedBean.getName(i)}', #{cRMAnalyticsManagedBean.getScore(i)}];
-             }
                 
 
-            var dataDraw = google.visualization.arrayToDataTable(data2);
+             #{cRMAnalyticsManagedBean.histogramArray}
+            
+            
+
+            var dataDraw = google.visualization.arrayToDataTable(results);
 
                 var options = {
                     title: 'Customer Scores',
@@ -43,6 +35,9 @@
         </script>
     </h:head>
     <h:body>
+        
+        <h:outputLabel class="col-md-4 control-label" value="#{cRMAnalyticsManagedBean.type}" />
+        
         <div id="chart_div" style="width: 900px; height: 500px;"></div>
 
         <br/>

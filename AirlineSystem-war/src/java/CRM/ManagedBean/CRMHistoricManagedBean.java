@@ -10,7 +10,7 @@ import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
 import CRM.Session.AnalyticsSessionBeanLocal;
-import Inventory.Session.ClassManagementLocal;
+import Inventory.Session.ClassSessionBeanLocal;
 import javax.ejb.EJB;
 
 /**

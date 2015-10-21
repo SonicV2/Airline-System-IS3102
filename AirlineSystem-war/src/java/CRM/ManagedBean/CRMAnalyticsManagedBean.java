@@ -14,6 +14,8 @@ import javax.faces.bean.ManagedBean;
 import CRM.Session.CustomerScore;
 import java.util.List;
 import java.util.HashMap;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 
 
 
@@ -33,7 +35,7 @@ public class CRMAnalyticsManagedBean implements Serializable {
     private String type;
     private int from;
     private int to;
-    private double mean;
+    private String mean;
     private int median;
     private int mode;
     private List<CustomerScore> csList;
@@ -47,10 +49,26 @@ public class CRMAnalyticsManagedBean implements Serializable {
      * Creates a new instance of CRMAnalyticsManagedBean
      */
     public CRMAnalyticsManagedBean() {
-        test= "haha";
+  
     }
 
     public String retrieveCustomerList() {
+        if(to>0){
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "The To Percentile Has To Be Less Than 100", "");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+            return "RFM";
+        }
+        
+        if (from>=to){
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "The From Percentile Has To Be Less Than the To Percentile", "");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+            return "RFM";
+        }
+        
+        if(type.isEmpty()){
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please Select Type of Score", "");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        }
         if (type.equals("Recency")) {
             csList = am.getRecency(from, to);
         } else if (type.equals("Frequency")) {
@@ -59,7 +77,7 @@ public class CRMAnalyticsManagedBean implements Serializable {
             csList = am.getMonetary(from, to);
         }
 
-        return "viewListResults";
+        return "ViewListResults";
     }
 
     public String getTest() {
@@ -68,6 +86,25 @@ public class CRMAnalyticsManagedBean implements Serializable {
 
     public void setTest(String test) {
         this.test = test;
+    }
+    
+    public String getHistogramArray()
+    {
+        int size = csList.size();
+        String results=" var results = [";
+        results += "['Customer', 'Score'],";
+     
+        for(int i= 0; i< size-1; i++){
+            results += "[";
+            results += "'"+this.getName(i)+"'"+","+ this.getScore(i);
+            results += "],";
+        }
+        results += "[";
+        results += "'"+this.getName(size-1)+"'"+","+ this.getScore(size-1);
+        results += "]";
+        results += "]";
+        return results;
+        
     }
     
 
@@ -80,7 +117,7 @@ public class CRMAnalyticsManagedBean implements Serializable {
             totalScore += cs.getScore();
         }
 
-        mean = totalScore / size;
+        mean = String.format("%1$,.2f", totalScore / size);
 
     }
 
@@ -131,18 +168,18 @@ public class CRMAnalyticsManagedBean implements Serializable {
         
    
         
-        return "analyticsResults";
+        return "AnalyticsResults";
     }
     
     public String getName(int index){
         
         return csList.get(index).getName();
     }
-    public double getScore(int index){
-        System.out.println("Get Score!!!");
-        System.out.println(index);
-        System.out.println(csList.get(index).getScore());
-        return csList.get(index).getScore();
+    public String getScore(int index){
+        
+        double score= csList.get(index).getScore();   
+        String result = String.format("%1$,.2f", score);
+        return result;
     }
 
     public List<CustomerScore> getCsList() {
@@ -177,11 +214,11 @@ public class CRMAnalyticsManagedBean implements Serializable {
         this.to = to;
     }
 
-    public double getMean() {
+    public String getMean() {
         return mean;
     }
 
-    public void setMean(double mean) {
+    public void setMean(String mean) {
         this.mean = mean;
     }
 

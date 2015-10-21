@@ -25,8 +25,8 @@
 
     <h:body>
 
-       <ui:include src="/CI/dashboardHeader.xhtml"/>      
-        <ui:include src="/CI/dashboardSidebar.xhtml"/>
+<!--       <ui:include src="/CI/DashboardHeader.xhtml"/>      
+        <ui:include src="/CI/DashboardSidebar.xhtml"/>-->
         
         <div id="page-wrapper">
 
@@ -47,11 +47,11 @@
                             <p:ajax event="rowEdit" listener="#{classManageBean.onRowEdit}" update=":iform:msgs" />
                             <p:ajax event="rowEditCancel" listener="#{classManageBean.onRowCancel}" update=":iform:msgs" />
 
-                            <p:column headerText="Class Code" style="width:60px">
+                            <p:column filterBy="#{bookingclass.classcode}" filterMatchMode="contains" headerText="Class Code" style="width:60px">
                                 <h:outputText value="#{bookingclass.classcode}" />
                             </p:column>
 
-                            <p:column headerText="Service Type">
+                            <p:column filterBy="#{bookingclass.serviceClass}" filterMatchMode="contains" headerText="Service Type">
                                 <p:cellEditor>
                                     <f:facet name="output"><h:outputText value="#{bookingclass.serviceClass}" /></f:facet>
                                     <f:facet name="input">
@@ -67,7 +67,7 @@
                                 </p:cellEditor>
                             </p:column>
                             
-                            <p:column headerText="Season Demand">
+                            <p:column headerText="Season Demand" filterBy="#{bookingclass.season}" filterMatchMode="contains">
                                 <p:cellEditor>
                                     <f:facet name="output"><h:outputText value="#{bookingclass.season}" /></f:facet>
                                     <f:facet name="input">
@@ -80,35 +80,35 @@
                                 </p:cellEditor>
                             </p:column>
 
-                            <p:column headerText="Advanced Sales">
+                            <p:column filterBy="#{bookingclass.advancedSales}" filterMatchMode="contains" headerText="Advanced Sales">
                                 <p:cellEditor>
                                     <f:facet name="output"><h:outputText value="#{bookingclass.advancedSales}" /></f:facet>
                                     <f:facet name="input"><p:inputText value="#{bookingclass.advancedSales}" style="width:100%" /></f:facet>
                                 </p:cellEditor>
                             </p:column>
 
-                            <p:column headerText="Percentage Sold">
+                            <p:column filterBy="#{bookingclass.percentSold}" filterMatchMode="contains" headerText="Percentage Sold">
                                 <p:cellEditor>
                                     <f:facet name="output"><h:outputText value="#{bookingclass.percentSold}" /></f:facet>
                                     <f:facet name="input"><p:inputText value="#{bookingclass.percentSold}" style="width:100%" /></f:facet>
                                 </p:cellEditor>
                             </p:column>
 
-                            <p:column headerText="% of Base Price">
+                            <p:column filterBy="#{bookingclass.pricePercent}" filterMatchMode="contains" headerText="% of Base Price">
                                 <p:cellEditor>
                                     <f:facet name="output"><h:outputText value="#{bookingclass.pricePercent}" /></f:facet>
                                     <f:facet name="input"><p:inputText value="#{bookingclass.pricePercent}" style="width:100%" /></f:facet>
                                 </p:cellEditor>
                             </p:column>
 
-                            <p:column headerText="Millage Accrual %">
+                            <p:column filterBy="#{bookingclass.millageAccru}" filterMatchMode="contains" headerText="Millage Accrual %">
                                 <p:cellEditor>
                                     <f:facet name="output"><h:outputText value="#{bookingclass.millageAccru}" /></f:facet>
                                     <f:facet name="input"><p:inputText value="#{bookingclass.millageAccru}" style="width:100%" /></f:facet>
                                 </p:cellEditor>
                             </p:column>
                             
-                            <p:column headerText="Season">
+                            <p:column filterBy="#{bookingclass.season}" filterMatchMode="contains" headerText="Season">
                                 <p:cellEditor>
                                     <f:facet name="output"><h:outputText value="#{bookingclass.season}" /></f:facet>
                                     <f:facet name="input">
@@ -122,7 +122,7 @@
                                 </p:cellEditor>
                             </p:column>
 
-                            <p:column headerText="Baggage Class">
+                            <p:column filterBy="#{bookingclass.baggage}" filterMatchMode="contains" headerText="Baggage Class">
                                 <p:cellEditor>
                                     <f:facet name="output"><h:outputText value="#{bookingclass.baggage}" /></f:facet>
                                     <f:facet name="input">
@@ -136,7 +136,7 @@
                                 </p:cellEditor>
                             </p:column>
 
-                            <p:column headerText="Rebook">
+                            <p:column  headerText="Rebook">
                                 <p:cellEditor>
                                     <f:facet name="output"><h:outputText value="#{bookingclass.rebook}" /></f:facet>
                                     <f:facet name="input">

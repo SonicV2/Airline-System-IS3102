@@ -1,0 +1,188 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <h:head>
+        <p:growl id="growl" sticky="true" showDetail="true"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <h:outputStylesheet library ="css"  name="bootstrap.css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
+        <h:outputStylesheet library="css" name="admindb.css" />
+        <h:outputStylesheet library="css" name="morrisjs/morris.css" />
+        <title>Display Seasons</title>
+    </h:head>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+        google.load("visualization", "1", {packages: ["geochart"]});
+        google.setOnLoadCallback(drawRegionsMap);
+
+        function drawRegionsMap() {
+
+        #{seasonManageBean.geoArray}
+
+            var data = google.visualization.arrayToDataTable(results);
+
+
+
+            var options = {};
+
+            var chart = new google.visualization.GeoChart(document.getElementById('regions_div'));
+
+            chart.draw(data, options);
+        }
+    </script>
+    <style>
+        .form-control {
+            display:inline;
+        }
+    </style>
+
+    <h:body>
+
+        <!--       <ui:include src="/CI/DashboardHeader.xhtml"/>      
+                <ui:include src="/CI/DashboardSidebar.xhtml"/>-->
+
+        <div id="regions_div" style="width: 1200px; height: 900px;"></div>
+        
+
+
+        <div id="page-wrapper">
+            
+            <h:form>
+                <div class="form-group">
+                    <h:outputLabel class="col-md-4 control-label" value="Seasonality" />
+                    <h:selectOneMenu class="form-control"  value="#{seasonManageBean.month}" converter="javax.faces.Integer" style="width:150px">
+                        <f:selectItem itemLabel="January" itemValue= "0" />
+                        <f:selectItem itemLabel="Febuary" itemValue= "1" />
+                        <f:selectItem itemLabel="March" itemValue= "2" />
+                        <f:selectItem itemLabel="April" itemValue= "3" />
+                        <f:selectItem itemLabel="May" itemValue= "4" />
+                        <f:selectItem itemLabel="June" itemValue= "5" />
+                        <f:selectItem itemLabel="July" itemValue= "6" />
+                        <f:selectItem itemLabel="August" itemValue= "7" />
+                        <f:selectItem itemLabel="September" itemValue= "8" />
+                        <f:selectItem itemLabel="October" itemValue= "9" />
+                        <f:selectItem itemLabel="November" itemValue= "10" />
+                        <f:selectItem itemLabel="December" itemValue= "11" />
+                    </h:selectOneMenu>
+                    <br/>
+
+                </div> 
+                
+                <div class="form-group">
+                    <h:outputLabel class="col-md-4 control-label" value="Enter Year: " />
+                    <p:inputText value="#{seasonManageBean.year}"  />
+                    <br/>
+
+                </div>
+                
+                 <div class="text-center">
+                     <h:commandButton class="btn btn-outline btn-success" value="Get Geo Map" action="#{seasonManageBean.refresh}"/>
+                    <br></br>
+                </div>
+                
+            </h:form>
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <h3 class="page-header">All Seasons</h3>
+                </div>
+
+                <div class="col-lg-12">
+                    <h:form id="iform">
+                        <p:growl id="msgs" showDetail="true"/>
+
+                        <p:dataTable id="fareClasses" var="season" value="#{seasonManageBean.sList}" editable="true" style="margin-bottom:20px">
+                            <f:facet name="header">
+                                Seasons
+                            </f:facet>
+
+                            <p:ajax event="rowEdit" listener="#{seasonManageBean.onRowEdit}" update=":iform:msgs" />
+                            <p:ajax event="rowEditCancel" listener="#{seasonManageBean.onRowCancel}" update=":iform:msgs" />
+
+                            <p:column filterBy="#{season.id}" filterMatchMode="contains" headerText="Season Id" style="width:60px">
+                                <h:outputText value="#{season.id}" />
+                            </p:column>
+
+                            <p:column filterBy="#{season.location.city}" filterMatchMode="contains" headerText="Season City" style="width:60px">
+                                <h:outputText value="#{season.location.city}" />
+                            </p:column>
+
+                            <p:column filterBy="#{season.location.country}" filterMatchMode="contains" headerText="Season Country" style="width:60px">
+                                <h:outputText value="#{season.location.country}" />
+                            </p:column>
+
+                            <p:column filterBy="#{season.demand}" filterMatchMode="contains" headerText="Demand">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{season.demand}" /></f:facet>
+                                    <f:facet name="input">
+                                        <p:selectOneMenu  value="#{season.demand}" style="width:150px">
+                                            <f:selectItem itemLabel="Select One" itemValue="" />
+                                            <f:selectItem itemLabel="High" itemValue="High" />
+                                            <f:selectItem itemLabel="Low" itemValue="Low" />                                 
+                                        </p:selectOneMenu>
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+                            <p:column  headerText="Origin">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{season.origin}" /></f:facet>
+                                    <f:facet name="input">
+                                        <p:selectBooleanCheckbox value="#{season.origin}" />
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                            <p:column headerText="Destination">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{season.destination}" /></f:facet>
+                                    <f:facet name="input">
+                                        <p:selectBooleanCheckbox value="#{season.destination}" />
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+
+                            <p:column headerText="Season Start Date"  style="width:10%">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{season.start}" /></f:facet>
+                                    <f:facet name="input"><p:calendar id="startDate" value="#{season.start}" pattern="MM/dd/yyyy"/></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+                            <p:column headerText="Season End Date"  style="width:10%">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{season.end}" /></f:facet>
+                                    <f:facet name="input"><p:calendar id="endDate" value="#{season.end}" pattern="MM/dd/yyyy"/></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+                            <p:column style="width:32px">
+                                <p:rowEditor />
+                            </p:column>
+
+                            <p:column style="width:32px" >
+
+                                <h:commandLink onclick="if (!confirm('Do you really want to delete this season?')) {
+                                            return false;
+                                        }
+                                        ;
+                                        return true;" action="#{seasonManageBean.deleteSeason(season)}"><i class="fa fa-trash-o"></i> </h:commandLink>
+                            </p:column>
+
+
+                        </p:dataTable>
+                    </h:form>
+
+                </div>
+            </div>
+        </div>
+    </h:body>
+
+</html>

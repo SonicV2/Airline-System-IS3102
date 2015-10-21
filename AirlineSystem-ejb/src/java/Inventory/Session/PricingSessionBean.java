@@ -25,7 +25,7 @@ import APS.Entity.Route;
  * @author YiQuan
  */
 @Stateless
-public class PricingManagement implements PricingManagementLocal {
+public class PricingSessionBean implements PricingSessionBeanLocal {
 
     @PersistenceContext(unitName = "AirlineSystem-ejbPU")
     private EntityManager em;
@@ -46,11 +46,16 @@ public class PricingManagement implements PricingManagementLocal {
         }
         else{
           int[] seats = new int[5];
-        seats[0] = (economy/3)*(100+ Integer.valueOf(calTurnOut(flightNo,"Economy Saver").substring(0,2)))/100 ;
-        seats[1] = (economy/3)*(100+ Integer.valueOf(calTurnOut(flightNo,"Economy Basic").substring(0,2)))/100 ;
-        seats[2] = (economy/3)*(100+ Integer.valueOf(calTurnOut(flightNo,"Economy Premium").substring(0,2)))/100 ;
-        seats[3] = (business)*(100+ Integer.valueOf(calTurnOut(flightNo,"Business").substring(0,2)))/100 ;
-        seats[4] = (firstClass)*(100+ Integer.valueOf(calTurnOut(flightNo,"First Class").substring(0,2)))/100 ;
+           double es = Double.valueOf(calTurnOut(flightNo,"Economy Saver"));
+           double eb= Double.valueOf(calTurnOut(flightNo,"Economy Basic"));
+           double ep = Double.valueOf(calTurnOut(flightNo,"Economy Premium"));
+           double b = Double.valueOf(calTurnOut(flightNo,"Business"));
+           double fc = Double.valueOf(calTurnOut(flightNo,"First Class"));
+        seats[0] = (economy/3)*(100+ (int)es)/100 ;
+        seats[1] = (economy/3)*(100+ (int)eb)/100 ;
+        seats[2] = (economy/3)*(100+ (int)ep)/100 ;
+        seats[3] = (business)*(100+ (int)b)/100 ;
+        seats[4] = (firstClass)*(100+ (int)fc)/100 ;
         return seats; 
         }
     }
@@ -75,7 +80,8 @@ public class PricingManagement implements PricingManagementLocal {
                 turnOut++;
         }
         Double result = turnOut*100.0/size;
-        return String.valueOf(result).substring(0, 5)+"%";
+        return String.format("%1$,.2f", result);
+
     }
 
     //Find the seat availability of a particular flight no and time
@@ -127,20 +133,6 @@ public class PricingManagement implements PricingManagementLocal {
         }
     }
 
-    //Convert a string storing date and time to a date object
-    public Date convertToDate(String flightDate, String flightTime) {
-        Date date = new Date();
-        int day = Integer.parseInt(flightDate.substring(0, 2));
-        int month = Integer.parseInt(flightDate.substring(2, 4));
-        month = month - 1;
-        int year = Integer.parseInt(flightDate.substring(4));
-        int hour = Integer.parseInt(flightTime.substring(0, 2));
-        int min = Integer.parseInt(flightTime.substring(2));
-        Calendar cflightDate = Calendar.getInstance();
-        cflightDate.set(year, month, day, hour, min, 0);
-        date = cflightDate.getTime();
-        return date;
-    }
 
     // Get the base price of a particular flight number
     public double getBasePrice(String flightNo) {

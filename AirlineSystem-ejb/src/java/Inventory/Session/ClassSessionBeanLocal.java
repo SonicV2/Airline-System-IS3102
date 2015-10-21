@@ -13,7 +13,7 @@ import javax.ejb.Local;
  * @author YiQuan
  */
 @Local
-public interface ClassManagementLocal {
+public interface ClassSessionBeanLocal {
     
     // Add a booking class
      public String addClassCode(String classcode, int pricePercent, int advancedSales

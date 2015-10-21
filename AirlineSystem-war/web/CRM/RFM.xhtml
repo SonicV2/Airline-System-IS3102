@@ -7,6 +7,16 @@
       xmlns:f="http://java.sun.com/jsf/core">
     <h:head>
         <title>RFM</title>
+         <p:growl id="growl" sticky="true" showDetail="true"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <h:outputStylesheet library ="css"  name="bootstrap.css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
+        <h:outputStylesheet library="css" name="admindb.css" />
+        <h:outputStylesheet library="css" name="morrisjs/morris.css" />
+        <title>Create a Booking Class</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     </h:head>
     <h:body>
        <h:form class="form col-md-10 center-block">
@@ -26,7 +36,7 @@
 
                 
                 <div class="form-group">
-                    <h:outputLabel class="col-md-4 control-label" value="Service Class" />
+                    <h:outputLabel class="col-md-4 control-label" value="Recency/Frequency/Monetary" />
                     <h:selectOneMenu class="form-control" id="serviceClass" value="#{cRMAnalyticsManagedBean.type}" style="width:150px">
                         <f:selectItem itemLabel="Select One" itemValue="" />
                         <f:selectItem itemLabel="Recency" itemValue="Recency" />

@@ -6,6 +6,7 @@
 package Inventory.Managedbean;
 
 import APS.Entity.Location;
+import Inventory.Entity.BookingClass;
 import Inventory.Session.SeasonSessionBeanLocal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -15,6 +16,12 @@ import javax.inject.Named;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import java.util.List;
+import Inventory.Entity.Season;
+import java.util.Calendar;
+import java.util.HashMap;
+import javax.annotation.PostConstruct;
+import org.primefaces.event.RowEditEvent;
 
 /**
  *
@@ -23,7 +30,7 @@ import javax.faces.context.FacesContext;
 @Named(value = "seasonManageBean")
 @ManagedBean
 @SessionScoped
-public class seasonManageBean {
+public class SeasonManageBean {
 
     /**
      * Creates a new instance of seasonManageBean
@@ -39,6 +46,99 @@ public class seasonManageBean {
     private String remarks;
     private String IATA;
     private String country;
+    private List<Season> sList;
+    private HashMap hm;
+    private int month;
+    private int year;
+    
+    
+    @PostConstruct
+    public void init() {
+        setsList(sm.getSeasons());
+        Date now= new  Date();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(now);
+        month = cal.get(Calendar.MONTH);
+        year = cal.get(Calendar.YEAR);
+    }
+    
+    public void onRowEdit(RowEditEvent event) {
+        Season edited = (Season)event.getObject();
+              
+            sm.editSeason(edited);
+            FacesMessage msg = new FacesMessage("Season Edited" );
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+     
+    public void onRowCancel(RowEditEvent event) {
+        FacesMessage msg = new FacesMessage("Edit Cancelled");
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+
+
+    
+    public void deleteSeason(Season season){
+        sm.deleteSeason(season);
+        setsList(sm.getSeasons());
+    }
+    
+    public String refresh(){
+        return "DisplaySeasons";
+    }
+    
+    public String getGeoArray()
+    {   
+        hm = new HashMap<String, Integer>();
+        int size = sList.size();
+        String results=" var results = [";
+        results += "['Country', 'Popularity'],";
+        List <String> countries = new ArrayList();
+       
+        for (int i = 0; i < size; i++) {
+            Season season = sList.get(i);
+            Date startDate = season.getStart();
+            Date endDate = season.getEnd();
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(startDate);
+            int from = cal.get(Calendar.MONTH);
+            cal.setTime(endDate);
+            int end = cal.get(Calendar.MONTH);
+            int seasonYear = cal.get(Calendar.YEAR);           
+            if(from<=month && month<=end && year==seasonYear){
+            String country =season.getLocation().getCountry();
+            if (hm.get(country) != null) {
+                int count=0; 
+                if(season.getDemand().equals("High"))
+                    count=1;
+                if(season.getDemand().equals("Low"))
+                    count= -1;
+                
+                int score = (int)hm.get(country);
+                score += count;          
+                hm.put(country, score);
+
+            } else {
+                hm.put(country, 0);
+                countries.add(country);
+            }
+            }
+        }
+         
+     
+        for(int i= 0; i< countries.size()-1; i++){
+            results += "[";
+            results += "'"+countries.get(i)+"'"+"," + hm.get(countries.get(i)).toString();
+            results += "],";
+        }
+        results += "[";
+        results += "'"+countries.get(countries.size()-1)+"'"+"," + hm.get(countries.get(countries.size()-1)).toString();
+        results += "]";
+        results += "]";
+        return results;
+        
+    }
+
+    
 
     public void addSeason() {
         if (start == null) {
@@ -82,6 +182,15 @@ public class seasonManageBean {
         }
     }
 
+    public List<Season> getsList() {
+        return sList;
+    }
+
+    public void setsList(List<Season> sList) {
+        this.sList = sList;
+    }
+
+    
     public String getCountry() {
         return country;
     }
@@ -113,6 +222,31 @@ public class seasonManageBean {
     public void setEnd(Date end) {
         this.end = end;
     }
+
+    public HashMap getHm() {
+        return hm;
+    }
+
+    public void setHm(HashMap hm) {
+        this.hm = hm;
+    }
+
+    public int getMonth() {
+        return month;
+    }
+
+    public void setMonth(int month) {
+        this.month = month;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
+    }
+    
 
     public boolean isOrigin() {
         return origin;

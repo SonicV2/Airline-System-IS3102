@@ -28,7 +28,7 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import Inventory.Entity.SeatAvailability;
-import Inventory.Session.PricingManagementLocal;
+import Inventory.Session.PricingSessionBeanLocal;
 import javax.ejb.EJB;
 
 /**
@@ -42,7 +42,7 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
     private EntityManager em;
 
     @EJB
-    private PricingManagementLocal rm;
+    private PricingSessionBeanLocal rm;
     @EJB
     private ChecklistSessionBeanLocal cs;
 
