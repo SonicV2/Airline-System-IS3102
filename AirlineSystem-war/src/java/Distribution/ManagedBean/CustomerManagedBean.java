@@ -139,11 +139,11 @@ public class CustomerManagedBean {
 
         if (doLogin(customerEmail, customerPassword)) {
             isCustomerLoggedOn = true;
-            return "MerlionAirlines";
+            return "MerlionAirlines?faces-redirect=true";
 
             //return "CustomerDashboard";
         } else {
-            return "SignUpConfirmation";
+            return "SignUpConfirmation?faces-redirect=true";
         }
 
     }
@@ -156,7 +156,7 @@ public class CustomerManagedBean {
 
             //return "CustomerDashboard";
         } else {
-            return "SignUpConfirmation";
+            return "SignUpConfirmation?faces-redirect=true";
         }
 
     }
@@ -197,7 +197,7 @@ public class CustomerManagedBean {
     //redirect to customer's dashboard
     public String redirect() {
 
-        return "CustomerDashboard";
+        return "CustomerDashboard?faces-redirect=true";
 
     }
 
@@ -223,6 +223,7 @@ public class CustomerManagedBean {
                     int noOfTravellers = eachCustomerPNR.getNoOfTravellers();
 
                     eachPNRDisplay.setNoOfTravellers(noOfTravellers);
+                    eachPNRDisplay.setBookingDate(eachCustomerPNR.getDateOfBooking());
 
                     for (Booking eachBooking : eachCustomerPNR.getBookings()) {
                         if (!addedNames.contains(eachBooking.getTravellerFristName() + " " + eachBooking.getTravellerLastName())) {
@@ -264,11 +265,11 @@ public class CustomerManagedBean {
 
             }
 
-            return "DisplayCustomerPNRs";
+            return "DisplayCustomerPNRs?faces-redirect=true";
         } else {//customer is null
 
             System.out.println("Customer is null");
-            return "ViewPNR";
+            return "ViewPNR?faces-redirect=true";
         }
     }
 
@@ -282,7 +283,7 @@ public class CustomerManagedBean {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Booking has been successfully cancelled!", "");
         FacesContext.getCurrentInstance().addMessage(null, message);
 
-        return "CustomerDashboard";
+        return displayCustomerPNRs();
     }
 
     public String updateProfile() {

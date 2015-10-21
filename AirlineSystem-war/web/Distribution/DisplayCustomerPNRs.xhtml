@@ -7,99 +7,188 @@
       xmlns:c="http://java.sun.com/jsp/jstl/core"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <!-- Custom Theme files -->
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <h:outputStylesheet library ="css"  name="bootstrap.css" />
+        <h:outputStylesheet library ="css"  name="styleMerlion.css" />
+        <h:outputStylesheet library ="css"  name="JFFormStyle.css" />
+        <h:outputStylesheet library ="css"  name="flexslider.css" />
+
+        <h:outputScript library="js" name="modernizr.custom.js" /> 
+
+
+        <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+        <!-- //Custom Theme files -->
+
+        <!-- fonts -->
+        <link href='//fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,700,500italic,700italic,900,900italic' rel='stylesheet' type='text/css'></link>
+        <link href='//fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'></link>
+        <!-- //fonts -->	
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('#horizontalTab').easyResponsiveTabs({
+                    type: 'default', //Types: default, vertical, accordion           
+                    width: 'auto', //auto or any width like 600px
+                    fit: true   // 100% fit in a container
+                });
+            });
+        </script>
+        <!--pop-up-->
+        <h:outputScript library="js" name="menu_jquery.js" /> 
+        <!--//pop-up-->	
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
+        <h:outputStylesheet library ="css"  name="flightdisplay2.css" />
         <p:growl id="growl" sticky="true" showDetail="true"/>
         <title>Display Customer PNR</title>
     </h:head>
     <h:body>
-
-        <h:form> 
-
-            <ui:repeat var="pnr" value="#{customerManagedBean.pnrDisplayList}" >
-
-                <div class ="col-lg-12">
-                    <h:outputText value="PNR:" />
-                    <h:outputText value="#{pnr.id}" style="font-weight: bold"/>
-
-                    <h:commandButton onclick="if (!confirm('Do you really want to cancel this booking?')) {
-                                            return false;
-                                        }
-                                        ;
-                                        return true;
-                                        " class="btn btn-outline btn-success" value="Cancel " action="#{customerManagedBean.deleteCustomerPNR(pnr.id)}" />
-           
+        <ui:include src="CustomerDashboardHeader.xhtml"/>
+        <div class="banner-bottom">
+            <!-- container -->
+            <div class="container">
+                <div class="about-info">
+                    <h3>Here are your existing bookings: </h3>
                 </div>
+                <h:form>
+                    <p:growl id="growl" sticky="true" showDetail="false"/> 
+                    <div class="faqs-top-grids terms-grids">
+                        <ui:repeat var="pnr" value="#{customerManagedBean.pnrDisplayList}" >
+                            <div class="blog-grids">
 
-                <div class ="col-lg-12">
-                    <h:outputText value="No of travellers:" />
-                    <h:outputText value="#{pnr.noOfTravellers}" style="font-weight: bold"/>
-                </div>
+                                <div class="col-md-8 col-sm-8 booking-sidebar">
+                                    <div class="flight-list-v2">
+                                        <div class="sidebar-item">
+                                            <h4><i class="fa fa-bookmark"></i>Booking Details</h4>
 
-                <div class ="col-lg-12">
-                    <h:outputText value="Flights booked:" />
 
-                    <ui:repeat value="#{pnr.uniqueSchedules}" var="schedules">
+                                            <div class="sidebar-body">
+                                                <table class="table">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>PNR ID</td>
+                                                            <td>#{pnr.id}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>No of travellers</td>
+                                                            <td>#{pnr.noOfTravellers}</td>
+                                                        </tr>
+                                                        <tr>
+                                                    <td>Date of Booking</td>
+                                                    <td>#{pnr.bookingDate}</td>
+                                                </tr>
+                                                        <tr>
 
-                        <div class ="col-lg-12">
-                            <h:outputText value="Flight Number:" />
-                            <h:outputText value="#{schedules.flight.flightNo}" style="font-weight: bold"/>
-                        </div>
+                                                            <td>Number of bags allowed</td>
+                                                            <td>#{pnr.noOfBags}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Service Type</td>
+                                                            <td>#{pnr.serviceType}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <div class='pull-right'>
+                                                                <h:commandButton onclick="if (!confirm('Do you really want to cancel this booking?')) {
+                                    return false;
+                                }
+                                ;
+                                return true;
+                                                                                 " class="btn btn-outline btn-success" value="Cancel Booking" action="#{customerManagedBean.deleteCustomerPNR(pnr.id)}" />
+                                                            </div>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
 
-                        <div class ="col-lg-12">
-                            <h:outputText value="Origin:" />
-                            <h:outputText value="#{schedules.flight.route.originIATA}" style="font-weight: bold"/>
-                        </div>
 
-                        <div class ="col-lg-12">
-                            <h:outputText value="Destination:" />
-                            <h:outputText value="#{schedules.flight.route.destinationIATA}" style="font-weight: bold"/>
-                        </div>
 
-                        <div class ="col-lg-12">
-                            <h:outputText value="Departure:" />
-                            <h:outputText value="#{schedules.startDate}" style="font-weight: bold">
-                                <f:convertDateTime pattern ="hh:mm a (EEE, MMM d, yyyy)" />
-                            </h:outputText>
-                        </div>
+                                        </div>
 
-                        <div class ="col-lg-12">
-                            <h:outputText value="Arrival:" />
-                            <h:outputText value="#{schedules.endDate}" style="font-weight: bold">
-                                <f:convertDateTime pattern ="hh:mm a (EEE, MMM d, yyyy)" />
-                            </h:outputText>
-                        </div>
+                                    </div>
+                                </div>
+                                <ui:repeat value="#{pnr.travellerNames}" var="travellers">
+                                    <div class="col-md-4 col-sm-4 booking-sidebar">
+                                        <div class="flight-list-v2">
+                                            <div class="sidebar-item">
+                                                <h4><i class="fa fa-bookmark"></i>Traveler Details</h4>
+                                                <div class="sidebar-body">
+                                                    <table class="table">
+                                                        <tbody><tr>
+                                                                <td>Traveler #{pnr.travellerNames.indexOf(travellers) + 1} </td>
+                                                                <td>#{travellers}</td>
+                                                            </tr>
+                                                        </tbody></table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ui:repeat>
 
-                    </ui:repeat>
+                                <div class="col-md-8 col-sm-8">
+                                    <ui:repeat value="#{pnr.uniqueSchedules}" var="schedules">
+                                        <div class="flight-list-v2">
+                                            <div class="flight-list-main">	
+                                                <div class="col-md-2 col-sm-2 text-center airline">
+                                                    <br></br>
+                                                    <h4 style='color:#26c6da;'>Merlion Airlines</h4>
 
-                </div>
+                                                    <h5>#{schedules.flight.flightNo}</h5>
+                                                </div>
+                                                <div class="col-md-3 col-sm-3 departure">
 
-                <div class ="col-lg-12">
-                    <h:outputText value="Service Type:" />
-                    <h:outputText value="#{pnr.serviceType}" style="font-weight: bold"/>
-                </div>
+                                                    <h3><i class="fa fa-plane"></i> #{schedules.flight.route.originIATA} </h3>
+                                                    <h4><h:outputText value="#{schedules.startDate}">
+                                                            <f:convertDateTime pattern ="hh:mm a"/>
+                                                        </h:outputText></h4>
 
-                <div class ="col-lg-12">
-                    <h:outputText value="Traveller details:" />
+                                                    <h5 class="bold"><h:outputText value="#{schedules.startDate}">
 
-                    <ui:repeat value="#{pnr.travellerNames}" var="travellers">
+                                                            <f:convertDateTime pattern ="EEE, MMM d, yyyy"/>
+                                                        </h:outputText></h5>
 
-                        <div class ="col-lg-12">
-                            <h:outputText value="#{travellers}" style="font-weight: bold"/>
-                        </div>
+                                                    <h5>#{schedules.flight.route.originCity}, #{schedules.flight.route.originCountry}</h5>
+                                                </div>
 
-                    </ui:repeat>
-                </div>
 
-                <div class ="col-lg-12">
-                    <h:outputText value="Number of bags allowed:" />
-                    <h:outputText value="#{pnr.noOfBags}" style="font-weight: bold"/>
-                </div>
+                                                <div class="col-md-4 col-sm-4 stop-duration">
+                                                    <div class="duration text-center">
+                                                        <h1><i class="fa fa-long-arrow-right"></i></h1>
+                                                        <span><i class="fa fa-clock-o"></i> 
+                                                            #{mARSManagedBean.convertToHours(schedules.flight.flightDuration)} Hours                                            
+                                                            #{mARSManagedBean.convertToMins(schedules.flight.flightDuration)} Mins 
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3 col-sm-3 destination">
+                                                    <h3><i class="fa fa-plane fa-rotate-90"></i> #{schedules.flight.route.destinationIATA} </h3>
+                                                    <h4><h:outputText value="#{schedules.endDate}">
+                                                            <f:convertDateTime pattern ="hh:mm a"/>
+                                                        </h:outputText></h4>
+                                                    <h5 class="bold"><h:outputText value="#{schedules.endDate}">
+                                                            <f:convertDateTime pattern ="EEE, MMM d, yyyy"/>
+                                                        </h:outputText></h5>
+                                                    <h5>#{schedules.flight.route.destinationCity}, #{schedules.flight.route.destinationCountry}</h5>
+                                                </div>
+                                            </div>
+                                            <div class="clearfix"></div>
+                                            <div class="flight-list-footer">
+                                                <div class="col-md-6 col-sm-6 col-xs-6 sm-invisible">
+                                                    <span><i class="fa fa-plane"></i>#{pnr.serviceType}</span>
+                                                </div>
+                                            </div>
+                                        </div>
 
-            </ui:repeat>
+                                    </ui:repeat>
+                                </div>
+                            </div>
 
-            <!--            <div class="text-center">
-            
-                        </div>-->
-
-        </h:form>
+                        </ui:repeat>
+                        <div class="clearfix"> </div>
+                    </div>
+                </h:form>
+            </div>
+        </div>
     </h:body>
 </html>
+
