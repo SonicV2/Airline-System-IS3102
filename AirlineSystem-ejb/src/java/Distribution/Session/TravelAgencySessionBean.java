@@ -260,6 +260,23 @@ public class TravelAgencySessionBean implements TravelAgencySessionBeanLocal {
     }
     
     @Override
+    public void deductCredit(TravelAgency travelAgency, double price) {
+        double balance = travelAgency.getCurrentCredit();
+        travelAgency.setCurrentCredit(balance-price);
+        em.merge(travelAgency);
+        em.flush();
+    }
+    
+    @Override
+    public void linkPNR(TravelAgency travelAgency, PNR pnr){
+        
+        List<PNR> existingCustomerPNRs = travelAgency.getPnrs();
+            existingCustomerPNRs.add(pnr);
+            travelAgency.setPnrs(existingCustomerPNRs);
+            em.merge(travelAgency);
+    }
+    
+    @Override
     public List<PNR> retrievePendingPNRs(TravelAgency travelAgency) {
         if (travelAgency.getPnrs() == null || travelAgency.getPnrs().isEmpty()) {
             return null;

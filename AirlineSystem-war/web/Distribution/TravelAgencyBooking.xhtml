@@ -1,0 +1,143 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+
+    <h:head>
+        <p:growl id="growl" sticky="true" showDetail="true"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <!-- Custom Theme files -->
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <h:outputStylesheet library ="css"  name="bootstrap.css" />
+        <h:outputStylesheet library ="css"  name="styleMerlion.css" />
+        <h:outputStylesheet library ="css"  name="JFFormStyle.css" />
+        <h:outputStylesheet library ="css"  name="flexslider.css" />
+        <h:outputScript library="js" name="jQuery/jQuery-2.1.4.min.js" />
+        <h:outputScript library="js" name="modernizr.custom.js" /> 
+
+
+        <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+        <!-- //Custom Theme files -->
+
+        <!-- fonts -->
+        <link href='//fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,700,500italic,700italic,900,900italic' rel='stylesheet' type='text/css'></link>
+        <link href='//fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'></link>
+        <!-- //fonts -->	
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('#horizontalTab').easyResponsiveTabs({
+                    type: 'default', //Types: default, vertical, accordion           
+                    width: 'auto', //auto or any width like 600px
+                    fit: true   // 100% fit in a container
+                });
+            });
+        </script>
+        <!--pop-up-->
+        <h:outputScript library="js" name="menu_jquery.js" /> 
+        <!--//pop-up-->	
+        <title>Booking</title>
+    </h:head>
+
+    <h:body>
+        
+        <div class="banner-bottom">
+            <div class="container">
+                <div class="faqs-top-grids">
+                    <div class="book-grids">
+                        <div class="col-md-6 book-left">
+
+                            <div class="book-left-info">
+                                <h3>Please fill in passenger details:</h3>
+                            </div>
+                            <h:form>
+                                <div class="book-left-form">
+                                    <p>Primary Email:</p>
+
+                                    <h:inputText id="PE" required="true" validatorMessage="Not a valid email addess " requiredMessage="Please fill in Personal email field!" value="#{travelAgencyManagedBean.primaryEmail}" >
+                                        <f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
+                                    </h:inputText> 
+
+
+                                    <div class="missingfield"> 
+                                        <h:message errorStyle="color:red; display:block" for="PE" />
+                                    </div>
+
+                                    <p>Primary Contact Number</p>
+                                    <h:inputText id="contact" required="true" requiredMessage="Please fill in contact number field!" value="#{travelAgencyManagedBean.primaryContactNo}" />
+
+
+                                    <ui:repeat value="#{travelAgencyManagedBean.passengerList}" var="passenger">
+
+                                        <p> Passenger #{passenger.id} </p>
+                                        <p> Traveller Title </p>
+                                        <!--                    <div class="col-md-8">-->
+                                        <h:panelGrid>
+
+                                            <h:selectOneRadio id="title" required="true" requiredMessage="Please Select Traveller Title!" value="#{passenger.title}">
+                                                <f:selectItem itemLabel="Mr" itemValue="Mr" />
+                                                <f:selectItem itemLabel="Mdm" itemValue="Mdm" />
+                                                <f:selectItem itemLabel="Mrs" itemValue="Mrs" />
+                                                <f:selectItem itemLabel="Miss" itemValue="Miss" />
+                                            </h:selectOneRadio>
+                                        </h:panelGrid>
+                                        <!--                    </div>-->
+
+                                        <p> First Name </p>
+                                        <h:inputText id="firstname" required="true" requiredMessage="Please fill in first name field!" value="#{passenger.firstName}" />
+                                        <p> Last Name </p>
+                                        <h:inputText id="lastname" required="true" requiredMessage="Please fill in last name field!" value="#{passenger.lastName}" />
+                                        <p> Passport Number </p>
+                                        <h:inputText id="passport" required="true" requiredMessage="Please fill in passport number field!" value="#{passenger.passport}" />
+
+
+
+                                        <p>Nationality</p>
+
+                                        <h:inputText id="nationality" required="true" requiredMessage="Please fill in mailing nationality field!" value="#{passenger.nationality}" />
+
+                                        <p>Merlion Airlines Customer ID </p>
+                                        <h:inputText id="customerId" value="#{passenger.customerId}" />
+                                        
+                                        <p>Would you like to purchase insurance for $15 for each flight? </p>
+                                        <h:panelGrid>
+                                            <h:selectOneRadio id="insurance" required="true" requiredMessage="Please Select insurance!" value="#{passenger.insurance}">
+                                                <f:selectItem itemLabel="Yes" itemValue="true" />
+                                                <f:selectItem itemLabel="No" itemValue="false" />
+                                            </h:selectOneRadio>
+                                        </h:panelGrid>
+                                        <h:outputLabel for="foodId" value="Food Selection:" />
+                                        <span>
+                                            <h:selectOneMenu class="form-control" id="foodId" value="#{passenger.foodSelection}">
+                                                <f:selectItem itemLabel="Select One" itemValue="" />
+                                                <f:selectItem itemLabel="Western" itemValue="Western" />
+                                                <f:selectItem itemLabel="Oriental" itemValue="Oriental" />
+                                                <f:selectItem itemLabel="Vegetarian" itemValue="Vegetarian" />
+                                            </h:selectOneMenu>
+                                        </span>
+                                    </ui:repeat>
+
+                                    <div class="text-center">
+                                        <br></br>
+                                        <h:commandButton class="btn btn-outline btn-success" value="Confirm" action="#{travelAgencyManagedBean.createBooking()}" />
+                                    </div>
+
+
+                                </div>
+                                <div class="clearfix"> </div>
+
+                            </h:form>
+                            
+                        </div>
+                        <div class="clearfix"> </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </h:body>
+</html>

@@ -54,5 +54,9 @@ public interface TravelAgencySessionBeanLocal {
 
     public Boolean emailExists(String agencyEmail);
 
+    public void deductCredit(TravelAgency travelAgency, double price);
+
+    public void linkPNR(TravelAgency travelAgency, PNR pnr);
+
     
 }
