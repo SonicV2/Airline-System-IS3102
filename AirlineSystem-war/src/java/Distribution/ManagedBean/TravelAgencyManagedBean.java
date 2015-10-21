@@ -63,6 +63,8 @@ public class TravelAgencyManagedBean {
 
     @PostConstruct
     public void retrieve() {
+        
+        setTravelAgencies(travelAgencySessionBean.getAllTravelAgencies());
 
     }
 
@@ -86,7 +88,8 @@ public class TravelAgencyManagedBean {
         setFeedbackMessage("Travel Agency is registered successfully!");
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, feedbackMessage, "");
         FacesContext.getCurrentInstance().addMessage(null, message);
-
+        
+        setTravelAgencies(travelAgencySessionBean.getAllTravelAgencies());
         clear();
     }
 
@@ -104,7 +107,7 @@ public class TravelAgencyManagedBean {
     public void sendEmail(String email) {
 
         setSubject("*Confidential*--- Merlion Airelines Travel Agency Account ");
-        setBody("Your password: " + password + "\nTravel Agency Id: " + travelAgency.getId()
+        setBody("Welcome " + travelAgency.getName() + "!\n You can now log into our system using your email and password: " + password + "\nTravel Agency Id: " + travelAgency.getId()
                 + "\n\nTravel Agency Id is a unique identification number provided to each agency."
                 + "\nPlease log in to the system using your email, not the Travel Agency Id"
                 + "\n\nThank you.");
@@ -251,13 +254,17 @@ public class TravelAgencyManagedBean {
 
     public String viewTravelAgencies(){
         if (travelAgencies==null || travelAgencies.isEmpty()){
-            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Your password has been updated!", "");
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "No record found!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
         }
         return "ViewAllTravelAgencies";
     }
     
-    public String viewTravelAgencyProfile(){
+    public String viewTravelAgencyProfile(Long id){
+        travelAgencyDisplay = new TravelAgencyDisplay();
+         
+        setTravelAgency(travelAgencySessionBean.getTravelAgencyById(id));
+        
         int noOfBookings = travelAgencySessionBean.noOfConfirmedBookings(travelAgency);
         travelAgencyDisplay.setTravelAgency(travelAgency);
         travelAgencyDisplay.setNoOfConfirmedBookings(noOfBookings);
@@ -265,6 +272,47 @@ public class TravelAgencyManagedBean {
         return "ViewTravelAgencyProfile";
     }
     
+    public String manageTravelAgency(Long id){
+        travelAgencyDisplay = new TravelAgencyDisplay();
+        
+        setTravelAgency(travelAgencySessionBean.getTravelAgencyById(id));
+        travelAgencyDisplay.setTravelAgency(travelAgency);
+        
+        return "ManageTravelAgency";
+        
+        
+    }
+    
+    public void reset() {
+        
+        travelAgencySessionBean.resetCreditsAndCommission(travelAgency);
+        
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Credits and Commission have been reset!", "");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+        
+    }
+    
+    public void changeLimit() {
+        
+        travelAgencySessionBean.changeCreditLimit(travelAgency, maxCredit);
+        
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Credit Limit has been changed!", "");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+    
+    public String deleteTravelAgency(Long id) {
+        
+        setTravelAgency(travelAgencySessionBean.getTravelAgencyById(id));
+        System.out.println("IN MANAGED BEAN: " + travelAgency);
+        travelAgencySessionBean.deleteTravelAgency(travelAgency);
+        
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Travel Agency has been deleted!", "");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+        
+        setTravelAgencies(travelAgencySessionBean.getAllTravelAgencies());
+        
+        return "ViewAllTravelAgencies";
+    }
     /**
      * @return the travelAgencies
      */
