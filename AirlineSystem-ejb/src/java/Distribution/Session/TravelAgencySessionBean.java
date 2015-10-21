@@ -369,6 +369,8 @@ public class TravelAgencySessionBean implements TravelAgencySessionBeanLocal {
     
     @Override
     public void deleteTravelAgency(TravelAgency travelAgency) {
+        
+        System.out.println("IN SESSION BEAN: " + travelAgency);
         List<PNR> pnrsForTravelAgency = travelAgency.getPnrs();
         if (pnrsForTravelAgency != null && !pnrsForTravelAgency.isEmpty()) {
             for (PNR eachPNR : pnrsForTravelAgency) {
@@ -377,10 +379,11 @@ public class TravelAgencySessionBean implements TravelAgencySessionBeanLocal {
                 }
             }
             
-        }        
-        em.remove(travelAgency);
+        }
+        travelAgency.setPnrs(null);
         em.merge(travelAgency);
-        em.flush();        
+        em.flush();
+        em.remove(travelAgency);
     }
     
     @Override

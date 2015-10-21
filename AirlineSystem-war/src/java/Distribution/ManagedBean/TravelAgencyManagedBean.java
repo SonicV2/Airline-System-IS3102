@@ -260,6 +260,9 @@ public class TravelAgencyManagedBean {
     }
     
     public String viewTravelAgencyProfile(Long id){
+        travelAgencyDisplay = new TravelAgencyDisplay();
+         
+        setTravelAgency(travelAgencySessionBean.getTravelAgencyById(id));
         
         int noOfBookings = travelAgencySessionBean.noOfConfirmedBookings(travelAgency);
         travelAgencyDisplay.setTravelAgency(travelAgency);
@@ -268,6 +271,43 @@ public class TravelAgencyManagedBean {
         return "ViewTravelAgencyProfile";
     }
     
+    public String manageTravelAgency(Long id){
+        travelAgencyDisplay = new TravelAgencyDisplay();
+        
+        setTravelAgency(travelAgencySessionBean.getTravelAgencyById(id));
+        travelAgencyDisplay.setTravelAgency(travelAgency);
+        
+        return "ManageTravelAgency";
+        
+        
+    }
+    
+    public void reset() {
+        
+        travelAgencySessionBean.resetCreditsAndCommission(travelAgency);
+        
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Credits and Commission have been reset!", "");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+        
+    }
+    
+    public void changeLimit() {
+        
+        travelAgencySessionBean.changeCreditLimit(travelAgency, maxCredit);
+        
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Credit Limit has been changed!", "");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+    
+    public void deleteTravelAgency(Long id) {
+        
+        setTravelAgency(travelAgencySessionBean.getTravelAgencyById(id));
+        System.out.println("IN MANAGED BEAN: " + travelAgency);
+        travelAgencySessionBean.deleteTravelAgency(travelAgency);
+        
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Travel Agency has been deleted!", "");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
     /**
      * @return the travelAgencies
      */

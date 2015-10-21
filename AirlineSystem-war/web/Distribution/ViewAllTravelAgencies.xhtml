@@ -47,7 +47,7 @@ and open the template in the editor.
                             </f:facet>
 
                             <p:column filterBy="#{agency.name}" headerText="Name" filterMatchMode="contains">
-                                <h:outputText value="#{location.country}" />
+                                <h:outputText value="#{agency.name}" />
                             </p:column>
 
                             <p:column headerText="View Profile" style="width:60px;">
@@ -72,7 +72,7 @@ and open the template in the editor.
                                         }
                                         ;
                                         return true;
-                                        " action="#{travelAgencyManagedBean.deletePNRs(agency.id)}"><i class="fa fa-remove"></i></h:commandLink>
+                                        " action="#{travelAgencyManagedBean.deleteTravelAgency(agency.id)}"><i class="fa fa-remove"></i></h:commandLink>
                             </p:column>
 
                         </p:dataTable>
