@@ -44,46 +44,7 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
         <title>Display Direct Flight</title>
     </h:head>
-    <style>
-        .lowest-fare-slider  {
-	margin-top: 40px;
-}
-.lowest-fare-slider .owl-carousel .owl-controls .owl-nav .owl-prev, 
-.lowest-fare-slider .owl-carousel .owl-controls .owl-nav .owl-next {
-	position: absolute;
-	top: 21%;
-}
-.lowest-fare-slider .owl-carousel .owl-controls .owl-nav .owl-next {
-	right: 0;
-}
-.lowest-fare-slider .owl-carousel .owl-controls .owl-nav .owl-prev {
-	left: 0;
-}
-.lowest-fare-slider .owl-theme .owl-dots {
-	display: none !important;
-}
-.lowest-fare-slider h5 {
-	margin-bottom: 5px;
-	font-weight: bold;
-}
-.lowest-fare-slider span {
-	font-size: 13px;
-}
-.flight-listing .sort {
-	margin-top: 30px;
-}
-.lowest-fare-slider .owl-theme .owl-nav [class*="owl-"] {
-	background: #F2676B;
-	padding: 5px 3px;
-	margin: 0;
-	border-radius: 0;
-}
-.lowest-fare-slider .owl-carousel .owl-item {
-	background: #f7f7f7;
-	padding-bottom: 10px;
-}
-        </style>
-    
+   
     <h:body>
         <ui:fragment rendered ="#{customerManagedBean.isCustomerLoggedOn}">
             <ui:include src="CustomerDashboardHeader.xhtml"/>
@@ -100,6 +61,7 @@
                 <div class="faqs-top-grids terms-grids">
                     <h:form>
                         <ui:repeat value='#{mARSManagedBean.directFlightSchedules}' var='schedules'>
+                            
                             <div class="flight-list-v2">
                                 <div class="flight-list-main">	
                                     <div class="col-md-2 col-sm-2 text-center airline">
@@ -159,31 +121,38 @@
                                             </div>
                                         </div>
                             </div>
-
-                        </ui:repeat>
-                        
-                        
-                        
+                        </ui:repeat>                        
                     </h:form>
                     <h:form>
                         <br></br><br></br>
                         <h3>Prices on other days:</h3>
-                        <ui:repeat value="#{mARSManagedBean.minPricesForWeekDirectFlight}" var="price">
-                        <div class="col-md-2 flight-list-view">
+                        <c:forEach items="${mARSManagedBean.minPricesForWeekDirectFlight}" var="price" varStatus="loop">
+                        
+                            <div class="col-md-2 flight-list-view">
                         <div class="clearfix visible-sm-block visible-xs-block"></div>
+                        <p> <h:outputText value="#{mARSManagedBean.weekDates.get(loop.index)}" >
+                                            <f:convertDateTime pattern ="EEE, MMM d, yyyy"/>
+                                            </h:outputText>
+                                             </p>  
                         <div class="col-md-2 flight-book text-center clear-padding">
-                                    <div class="price">
-                                        <h6> date </h6>
+                                        <ui:fragment rendered="#{price ==0}">
+                                            <div class="price">
+                                            <h5> No flight</h5>
+                                            </div>
+                                        </ui:fragment>
+                                         <ui:fragment rendered="#{price >0}">
+                                             <div class="price">
                                         <h4>#{price}/Adult</h4>
                                         <h5>#{price *0.75}/Child</h5>
-                                        
+                                             </div>
+                                        <div class="book">
+                                            <a jsf:action="#{mARSManagedBean.viewOtherDepartureFlights(mARSManagedBean.weekDates.get(loop.index))}">View</a>
                                     </div>
-                                    <div class="book">
-                                        <a jsf:action="#">BOOK</a>
-                                    </div>
+                                         </ui:fragment>
                                 </div>
                         </div>
-                        </ui:repeat>
+                        
+                        </c:forEach>
                         
                     
                     </h:form>

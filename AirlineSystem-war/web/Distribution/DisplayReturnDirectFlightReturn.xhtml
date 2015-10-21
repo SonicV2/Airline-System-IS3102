@@ -3,9 +3,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:jsf="http://xmlns.jcp.org/jsf"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:jsf="http://xmlns.jcp.org/jsf"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <h:head>
         <p:growl id="growl" sticky="true" showDetail="true"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -37,19 +38,21 @@
         <!--pop-up-->
         <h:outputScript library="js" name="menu_jquery.js" /> 
         <!--//pop-up-->	
-                <h:outputStylesheet library ="css"  name="flightdisplay.css" />
+
+        <h:outputStylesheet library ="css"  name="flightdisplay.css" />
+        <h:outputStylesheet library ="css"  name="flightdisplay2.css" />
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
-        <title>Display Return Flight</title>
+        <title>Display Direct Return Flight</title>
     </h:head>
-        
+    
     <h:body>
         <ui:fragment rendered ="#{customerManagedBean.isCustomerLoggedOn}">
-        <ui:include src="CustomerDashboardHeader.xhtml"/>
+            <ui:include src="CustomerDashboardHeader.xhtml"/>
         </ui:fragment>
         <ui:fragment rendered ="#{!customerManagedBean.isCustomerLoggedOn}">
-        <ui:include src="MerlionAirlinesHeader.xhtml"/>
-        </ui:fragment> 
-        
+            <ui:include src="MerlionAirlinesHeader.xhtml"/>
+        </ui:fragment>   
+
         <div class="banner-bottom">
             <div class="container">
                 <div class="about-info">
@@ -57,63 +60,106 @@
                 </div>
                 <div class="faqs-top-grids terms-grids">
                     <h:form>
-                <ui:repeat value="#{mARSManagedBean.directFlightSchedules}" var="schedules" >
-                            <div class="flight-list-view">
-                                <div class="airline-logo col-md-2 text-center clear-padding">
-                                    <br></br>
-                                    
-                                    <h4>Merlion Airlines</h4>
-                                    <h5> #{schedules.flight.flightNo}</h5>
-                                    <br></br>
-                                      
+                        <ui:repeat value='#{mARSManagedBean.directFlightSchedules}' var='schedules'>
+
+                            <div class="flight-list-v2">
+                                <div class="flight-list-main">	
+                                    <div class="col-md-2 col-sm-2 text-center airline">
+                                        <br></br>
+                                        <h4 style='color:#26c6da;'>Merlion Airlines</h4>
+
+                                        <h5>#{schedules.flight.flightNo}</h5>
+                                    </div>
+                                    <div class="col-md-3 col-sm-3 departure">
+
+                                        <h3><i class="fa fa-plane"></i> #{schedules.flight.route.originIATA} </h3>
+                                        <h4><h:outputText value="#{schedules.startDate}">
+                                                <f:convertDateTime pattern ="hh:mm a"/>
+                                            </h:outputText></h4>
+
+                                        <h5 class="bold"><h:outputText value="#{schedules.startDate}">
+                                                <f:convertDateTime pattern ="EEE, MMM d, yyyy"/>
+                                            </h:outputText></h5>
+                                        <h5>#{schedules.flight.route.originCity}, #{schedules.flight.route.originCountry}</h5>
+                                    </div>
+
+
+                                    <div class="col-md-4 col-sm-4 stop-duration">
+                                        <div class="duration text-center">
+                                            <h1><i class="fa fa-long-arrow-right"></i></h1>
+                                            <span><i class="fa fa-clock-o"></i> 
+                                                #{mARSManagedBean.convertToHours(schedules.flight.flightDuration)} Hours                                            
+                                                #{mARSManagedBean.convertToMins(schedules.flight.flightDuration)} Mins 
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 col-sm-3 destination">
+                                        <h3><i class="fa fa-plane fa-rotate-90"></i> #{schedules.flight.route.destinationIATA} </h3>
+                                        <h4><h:outputText value="#{schedules.endDate}">
+                                                <f:convertDateTime pattern ="hh:mm a"/>
+                                            </h:outputText></h4>
+                                        <h5 class="bold"><h:outputText value="#{schedules.endDate}">
+                                                <f:convertDateTime pattern ="EEE, MMM d, yyyy"/>
+                                            </h:outputText></h5>
+                                        <h5>#{schedules.flight.route.destinationCity}, #{schedules.flight.route.destinationCountry}</h5>
+                                    </div>
                                 </div>
-                                <div class="col-md-6 col-sm-6 col-xs-8 text-center clear-padding flight-desc">
-                                    <div class="take-off">
-                                        <br></br>
-                                        <h4><i class="fa fa-plane"></i> <h:outputText value="#{schedules.startDate}">
-                                                <f:convertDateTime pattern ="hh:mm a (EEE, MMM d, yyyy)"/>
-                                            </h:outputText></h4> 
-                                        <h5><i class="fa fa-map-marker"></i> #{schedules.flight.route.originCity}, #{schedules.flight.route.originCountry} (#{schedules.flight.route.originIATA}) </h5>
+                                <div class="clearfix"></div>
+                                <div class="flight-list-footer">
+                                    <div class="col-md-6 col-sm-6 col-xs-6 sm-invisible">
+                                        <span><i class="fa fa-plane"></i> #{mARSManagedBean.serviceType}</span>
+
                                     </div>
-                                    <div class="landing">
-                                        <br></br>
-                                        <h4><i class="fa fa-plane fa-rotate-90"></i> <h:outputText value="#{schedules.endDate}">
-                                                <f:convertDateTime pattern ="hh:mm a (EEE, MMM d, yyyy)"/>
-                                            </h:outputText></h4> 
-                                        <h5><i class="fa fa-map-marker"></i> #{schedules.flight.route.destinationCity}, #{schedules.flight.route.destinationCountry} (#{schedules.flight.route.destinationIATA})</h5>
-                                    </div>
-                                </div>
-                                <div class="col-md-2 col-sm-6 col-xs-4 clear-padding flight-desc text-center">
-                                    <div class="duration">
-                                        <br></br>
-                                        <h4><i class="fa fa-clock-o"></i> #{mARSManagedBean.directFlightDuration}</h4>
-                                        <h5>Direct Flight</h5>
-                                        <br></br>
-                                    </div>
-                                </div>
-                                <div class="clearfix visible-sm-block visible-xs-block"></div>
-                                <div class="col-md-2 flight-book text-center clear-padding">
-                                    <div class="price">
-                                        <br></br><br></br>
-                                        <h4>$ #{mARSManagedBean.selectedDatePrices.get(mARSManagedBean.directFlightSchedules.indexOf(schedules))}</h4>
-                                        <h5>Per Adult</h5>
-                                        <ui:fragment rendered="#{mARSManagedBean.children > 0}">
-                                            <h4>$ #{mARSManagedBean.selectedDatePrices.get(mARSManagedBean.directFlightSchedules.indexOf(schedules))*0.75}</h4>
-                                            <h5>Per Child</h5>
-                                        </ui:fragment>
-                                    </div>
-                                    <div class="book">
-                                        <a jsf:action="#{mARSManagedBean.bookDirectReturnSchedule(schedules)}">BOOK</a>
+                                    <div class="col-md-6 col-sm-6 col-xs-12 clear-padding">
+                                        <div class="pull-right">
+                                            <span>$ #{mARSManagedBean.selectedDatePrices.get(mARSManagedBean.directFlightSchedules.indexOf(schedules))}/Adult</span>
+                                            <ui:fragment rendered="#{mARSManagedBean.children > 0}">
+                                                <span>, $ #{mARSManagedBean.selectedDatePrices.get(mARSManagedBean.directFlightSchedules.indexOf(schedules))*0.75}/Child</span>
+                                            </ui:fragment>
+                                            <a jsf:action="#{mARSManagedBean.bookDirectReturnSchedule(schedules)}">BOOK</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </ui:repeat>
+                        </ui:repeat>                        
                     </h:form>
+                    <h:form>
+                        <br></br><br></br>
+                        <h3>Prices on other days:</h3>
+                        <c:forEach items="${mARSManagedBean.minPricesForWeekDirectFlight}" var="price" varStatus="loop">
+
+                            <div class="col-md-2 flight-list-view">
+                                <div class="clearfix visible-sm-block visible-xs-block"></div>
+                                <p> <h:outputText value="#{mARSManagedBean.weekDates.get(loop.index)}" >
+                                        <f:convertDateTime pattern ="EEE, MMM d, yyyy"/>
+                                    </h:outputText>
+                                </p>  
+                                <div class="col-md-2 flight-book text-center clear-padding">
+                                    <ui:fragment rendered="#{price ==0}">
+                                        <div class="price">
+                                            <h5> No flight</h5>
+                                        </div>
+                                    </ui:fragment>
+                                    <ui:fragment rendered="#{price >0}">
+                                        <div class="price">
+                                            <h4>#{price}/Adult</h4>
+                                            <h5>#{price *0.75}/Child</h5>
+                                        </div>
+                                        <div class="book">
+                                            <a jsf:action="#{mARSManagedBean.viewOtherReturnFlights(mARSManagedBean.weekDates.get(loop.index))}">View</a>
+                                        </div>
+                                    </ui:fragment>
+                                </div>
+                            </div>
+
+                        </c:forEach>
+
+
+                    </h:form>
+                    <div class="clearfix"></div>
                 </div>
-             
             </div>
         </div>
-
         <ui:include src="MerlionAirlinesFooter.xhtml"/>
         <h:outputScript library="js" name="jquery.flexslider.js"/> 
         <h:outputScript library="js" name="easyResponsiveTabs.js" /> 
@@ -132,6 +178,5 @@
                 });
             });
         </script>
-      
     </h:body>
 </html>
