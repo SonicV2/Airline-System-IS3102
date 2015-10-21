@@ -380,10 +380,10 @@ public class TravelAgencySessionBean implements TravelAgencySessionBeanLocal {
             }
             
         }
+        System.out.println("AFTER DELETEING PNR");
         travelAgency.setPnrs(null);
-        em.merge(travelAgency);
-        em.flush();
-        em.remove(travelAgency);
+        TravelAgency toBeRemoved = em.merge(travelAgency);
+        em.remove(toBeRemoved);
     }
     
     @Override

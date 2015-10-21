@@ -88,7 +88,8 @@ public class TravelAgencyManagedBean {
         setFeedbackMessage("Travel Agency is registered successfully!");
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, feedbackMessage, "");
         FacesContext.getCurrentInstance().addMessage(null, message);
-
+        
+        setTravelAgencies(travelAgencySessionBean.getAllTravelAgencies());
         clear();
     }
 
@@ -106,7 +107,7 @@ public class TravelAgencyManagedBean {
     public void sendEmail(String email) {
 
         setSubject("*Confidential*--- Merlion Airelines Travel Agency Account ");
-        setBody("Your password: " + password + "\nTravel Agency Id: " + travelAgency.getId()
+        setBody("Welcome " + travelAgency.getName() + "!\n You can now log into our system using your email and password: " + password + "\nTravel Agency Id: " + travelAgency.getId()
                 + "\n\nTravel Agency Id is a unique identification number provided to each agency."
                 + "\nPlease log in to the system using your email, not the Travel Agency Id"
                 + "\n\nThank you.");
@@ -299,7 +300,7 @@ public class TravelAgencyManagedBean {
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
     
-    public void deleteTravelAgency(Long id) {
+    public String deleteTravelAgency(Long id) {
         
         setTravelAgency(travelAgencySessionBean.getTravelAgencyById(id));
         System.out.println("IN MANAGED BEAN: " + travelAgency);
@@ -307,6 +308,10 @@ public class TravelAgencyManagedBean {
         
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Travel Agency has been deleted!", "");
         FacesContext.getCurrentInstance().addMessage(null, message);
+        
+        setTravelAgencies(travelAgencySessionBean.getAllTravelAgencies());
+        
+        return "ViewAllTravelAgencies";
     }
     /**
      * @return the travelAgencies
