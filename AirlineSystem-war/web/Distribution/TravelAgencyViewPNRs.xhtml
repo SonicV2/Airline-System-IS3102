@@ -25,7 +25,7 @@
             <p:contextMenu for="pnrs">
                 <p:menuitem value="View Details" update="pnrDetail" icon="ui-icon-search" oncomplete="PF('pnrDialog').show()"/>
                 <p:menuitem value="Confirm Booking" update="pnrs" icon="ui-icon-check" actionListener="#{travelAgencyManagedBean.confirmPNR()}"/>
-                <p:menuitem onclick="if (!confirm('Do you really want to delete all PNRs that were pending for more than 14 days?')) {
+                <p:menuitem onclick="if (!confirm('Do you really want to cancel this booking?')) {
                                             return false;
                                         }
                                         ;
