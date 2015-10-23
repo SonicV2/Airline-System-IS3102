@@ -13,6 +13,7 @@ import Distribution.Entity.PNR;
 import Distribution.Entity.TravelAgency;
 import Inventory.Entity.Booking;
 import Inventory.Entity.SeatAvailability;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -298,6 +299,7 @@ public class TravelAgencySessionBean implements TravelAgencySessionBeanLocal {
         }
 
         pnr.setPnrStatus("Confirmed");
+        pnr.setDateOfConfirmation(new Date());
         em.merge(pnr);
 
         existingCustomerPNRs.set(i, pnr);
@@ -510,6 +512,7 @@ public class TravelAgencySessionBean implements TravelAgencySessionBeanLocal {
 
     }
 
+    @Override
     public void cancelExpiredPendingPNRs() {
         List<TravelAgency> allTravelAgencies = getAllTravelAgencies();
         List<PNR> eachTravelAgencyPNRs = new ArrayList();
@@ -539,4 +542,32 @@ public class TravelAgencySessionBean implements TravelAgencySessionBeanLocal {
         }
 
     }
+    
+    @Override
+      public double getCurrentMonthSettlement(TravelAgency travelAgency, Date date){
+          SimpleDateFormat formatter = new SimpleDateFormat ("ddMMyyyy");
+          String formattedDate = formatter.format(date);
+          double settlementAmount = 0;
+          
+          List<PNR> travelAgencyPNRs = new ArrayList();
+          travelAgencyPNRs = travelAgency.getPnrs();
+          if (travelAgencyPNRs!=null && !travelAgencyPNRs.isEmpty()){
+              for (PNR eachPNR: travelAgencyPNRs){
+                  String formattedEachDate = formatter.format(eachPNR.getDateOfConfirmation());
+                  if (eachPNR.getPnrStatus().equalsIgnoreCase("Confirmed") && formattedDate.substring(2, 8).equals(formattedEachDate.substring(2, 8))){
+                      double purePrice = eachPNR.getTotalPrice();
+                            for (int i = 0; i < eachPNR.getBookings().size(); i++) {
+                                if (eachPNR.getBookings().get(i).isBoughtInsurance()) {
+                                    purePrice -= 15.0;
+                                }
+                            }
+                      
+                      settlementAmount +=purePrice;
+                  }
+              }
+          }
+          return settlementAmount;
+      }
+    
+    
 }

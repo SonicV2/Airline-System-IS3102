@@ -893,7 +893,7 @@ public class MARSManagedBean {
                 bookingList.add(eachBooking);
             }
         }
-        pnr = passengerBookingSessionBean.createPNR((adults + children), getPrimaryEmail(), getPrimaryContactNo(), "Booked", totalPriceWinsurance, new Date(), "MerlionAirlines");
+        pnr = passengerBookingSessionBean.createPNR((adults + children), getPrimaryEmail(), getPrimaryContactNo(), "Booked", totalPriceWinsurance, new Date(), new Date(),"MerlionAirlines");
         if (passengerBookingSessionBean.isPassengerAFrequentFlyer(Long.parseLong(passengerList.get(0).getCustomerId()))) {
             primaryCustomer = passengerBookingSessionBean.getCustomerByCustomerId(Long.parseLong(passengerList.get(0).getCustomerId()));
         } else {

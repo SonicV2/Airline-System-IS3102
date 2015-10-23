@@ -107,10 +107,10 @@ public class PassengerBookingSessionBean implements PassengerBookingSessionBeanL
     }
 
     @Override
-    public PNR createPNR(int noOfTravellers, String email, String contactNo, String pnrStatus, Double totalPrice, Date dateOfBooking, String bookingAvenue) {
+    public PNR createPNR(int noOfTravellers, String email, String contactNo, String pnrStatus, Double totalPrice, Date dateOfBooking, Date dateOfConfirmation, String bookingAvenue) {
         PNR pnr = new PNR();
         String pnrNo = generatePNRNumber();
-        pnr.createPNR(pnrNo, noOfTravellers, email, contactNo, pnrStatus, totalPrice, dateOfBooking, bookingAvenue);
+        pnr.createPNR(pnrNo, noOfTravellers, email, contactNo, pnrStatus, totalPrice, dateOfBooking, dateOfConfirmation, bookingAvenue);
         pnr.setBookings(new ArrayList<Booking>());
         return pnr;
     }

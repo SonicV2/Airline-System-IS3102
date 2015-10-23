@@ -704,7 +704,7 @@ public class TravelAgencyManagedBean {
                 }
             }
         }
-        pnr = passengerBookingSessionBean.createPNR((adults + children), getPrimaryEmail(), getPrimaryContactNo(), "Pending", totalPriceWinsurance, new Date(), "TravelAgency");
+        pnr = passengerBookingSessionBean.createPNR((adults + children), getPrimaryEmail(), getPrimaryContactNo(), "Pending", totalPriceWinsurance, new Date(), null, "TravelAgency");
 
         passengerBookingSessionBean.persistBookingAndPNR(pnr, bookingList, null);
 

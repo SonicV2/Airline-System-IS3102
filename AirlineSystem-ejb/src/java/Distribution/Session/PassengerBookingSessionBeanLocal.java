@@ -27,7 +27,7 @@ public interface PassengerBookingSessionBeanLocal {
     //initialize PNR, baggageList, reduce seatAvailablity --merge seatAvailablility        
     public Booking createBooking(double price, SeatAvailability seatAvail, String flightNo, Date flightDate, String bookingStatus, String classCode, String serviceType, String travellerTitle, String travellerFirstName, String travellerLastName, String passportNumber, String nationality, long customerId, boolean IsChild, boolean boughtInsurance, double insuranceFare, String foodSelection); 
     //initialize Bookings list
-    public PNR createPNR (int noOfTravellers, String email, String contactNo, String pnrStatus, Double totalPrice, Date dateOfBooking, String bookingAvenue);
+ public PNR createPNR(int noOfTravellers, String email, String contactNo, String pnrStatus, Double totalPrice, Date dateOfBooking, Date dateOfConfirmation, String bookingAvenue);
     public String generatePNRNumber ();
     //associate customer with PNR; pnr with bookings; booking with PNR; persist all
     public void persistBookingAndPNR (PNR pnr, List<Booking> bookings, Customer primaryCustomer);

@@ -42,6 +42,7 @@ public interface TravelAgencySessionBeanLocal {
     public int noOfConfirmedBookings (TravelAgency travelAgency);
     public TravelAgency getTravelAgencyById(Long id);
     public void cancelExpiredPendingPNRs();
+    public double getCurrentMonthSettlement(TravelAgency travelAgency, Date date);
     
     public List<TravelAgency> getAllTravelAgencies();
 
