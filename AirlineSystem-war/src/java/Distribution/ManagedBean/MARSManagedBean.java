@@ -414,10 +414,11 @@ public class MARSManagedBean {
                     if (i % 2 == 1) {
                         oneStopFlightDuration.add(distributionSessionBean.getTotalDurationForOneStop(flightOption.get(0), flightOption.get(1)));
                         oneStopFlightLayover.add(distributionSessionBean.getLayoverTime(flightOption.get(0), flightOption.get(1)));
+                        selectedDatePrices.add(priceForOne);
                     }
                 }
                 
-                selectedDatePrices.add(priceForOne);
+                
 
                 List<String> flightNosWithAdjustedEndDates = new ArrayList();
 
@@ -431,6 +432,11 @@ public class MARSManagedBean {
                 setIsDirect(false);
                 int c = 0;
 
+                System.out.println("The size of one stop schedules are!!!!!" + oneStopFlightSchedules.size());
+                System.out.println("The size of one stop layover!!!!!" + oneStopFlightLayover.size());
+                System.out.println("The size of one stop flight duration!!!!!" + oneStopFlightDuration.size());
+                System.out.println("The size of selectedDates prices!!!!!" + selectedDatePrices.size());
+                
                 for (int a = 0; a < oneStopFlightSchedules.size(); a++) {
                     FlightOptions newFlightOptions = new FlightOptions();
                     int b = a;
@@ -552,9 +558,10 @@ public class MARSManagedBean {
                 if (i % 2 == 1) {
                     oneStopFlightDuration.add(distributionSessionBean.getTotalDurationForOneStop(flightOption.get(0), flightOption.get(1)));
                     oneStopFlightLayover.add(distributionSessionBean.getLayoverTime(flightOption.get(0), flightOption.get(1)));
+                     selectedDatePrices.add(priceForOne);
                 }
             }
-            selectedDatePrices.add(priceForOne);
+           
 
             List<String> flightNosWithAdjustedEndDates = new ArrayList();
 
