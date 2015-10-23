@@ -656,9 +656,8 @@ public class MARSManagedBean {
                     priceForEachFlightOption += priceForOne;
 
                     if (k % 2 == 1) {
-                        if (priceForEachFlightOption < minPrice) {
+                        if (priceForEachFlightOption < minPrice) 
                             minPrice = priceForEachFlightOption;
-                        }
                         priceForEachFlightOption = 0.0;
                     }
                 }
