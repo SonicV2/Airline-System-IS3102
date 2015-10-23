@@ -1,0 +1,195 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+
+
+    <h:head>
+        <p:growl id="growl" sticky="true" showDetail="true"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title>Merlion Airlines Reservation System</title>
+        <!-- Custom Theme files -->
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <h:outputStylesheet library ="css"  name="bootstrap.css" />
+        <h:outputStylesheet library ="css"  name="styleMerlion.css" />
+        <h:outputStylesheet library ="css"  name="JFFormStyle.css" />
+        <h:outputStylesheet library ="css"  name="flexslider.css" />
+        <!--<h:outputScript library="js" name="jQuery/jQuery-2.1.4.min.js" />-->
+        <h:outputScript library="js" name="modernizr.custom.js" /> 
+
+
+        <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+        <!-- //Custom Theme files -->
+
+        <!-- fonts -->
+        <link href='//fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,700,500italic,700italic,900,900italic' rel='stylesheet' type='text/css'></link>
+        <link href='//fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'></link>
+        <!-- //fonts -->	
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('#horizontalTab').easyResponsiveTabs({
+                    type: 'default', //Types: default, vertical, accordion           
+                    width: 'auto', //auto or any width like 600px
+                    fit: true   // 100% fit in a container
+                });
+            });
+        </script>
+        <!--pop-up-->
+        <h:outputScript library="js" name="menu_jquery.js" /> 
+        <!--//pop-up-->	
+    </h:head>
+    <style>
+        .ui-selectonemenu .ui-selectonemenu-trigger {
+            width: 23px;
+        }
+    </style>
+    <h:body>
+        <!--this is the common header of all the mARS pages-->
+        <ui:fragment rendered ="#{customerManagedBean.isCustomerLoggedOn}">
+            <ui:include src="CustomerDashboardHeader.xhtml"/>
+        </ui:fragment>
+        <ui:fragment rendered ="#{!customerManagedBean.isCustomerLoggedOn}">
+            <ui:include src="MerlionAirlinesHeader.xhtml"/>
+        </ui:fragment>
+        
+       <div class="banner-bottom">
+		<!-- container -->
+		<div class="container">
+			<div class="about-info">
+				<h2>Privacy Policy</h2>
+			</div>
+			<div class="faqs-top-grids terms-grids">	
+				<h5>Phasellus dignissim massa nisl, et elementum lacus gravida at. Suspendisse vel turpis mi. Praesent luctus, est hendrerit ornare faucibus, ex neque tristique lorem, quis lacinia lorem metus ac sem.</h5>																
+				<p>Morbi vestibulum dictum nulla non pharetra. Etiam mattis, neque sit amet bibendum porttitor, massa ligula aliquam purus, efficitur sodales mauris libero vel metus. Nulla efficitur tempor pellentesque. Vivamus finibus ultricies facilisis. Pellentesque eu fringilla augue, vitae ullamcorper mauris. Nullam eget pretium arcu.
+					Aliquam suscipit diam eget dolor dapibus consequat ut sit amet lorem. Duis iaculis tristique mauris a aliquam. Aliquam scelerisque eros lacus, sit amet tincidunt eros bibendum in. Aliquam erat volutpat. Cras tincidunt quis erat ac ornare. Aliquam porttitor mattis sem, commodo semper risus tempus vestibulum. Proin ipsum est, 
+					consectetur vel rutrum non, laoreet non libero.
+				</p>
+				<div class="terms-bottom-grids">
+					<h6>1.Aliquam suscipit diam eget</h6>
+					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis at tincidunt quam. Fusce mollis sit amet sapien id tincidunt. Nam bibendum felis eu massa feugiat ullamcorper. Nam in purus pharetra, semper sapien vel, gravida massa. Aliquam ac vulputate ex. Ut congue vitae sapien et tincidunt. Integer semper accumsan tortor vitae faucibus</p>
+					<ol>
+						<li>
+							<p class="terms-info-text">Pellentesque consequat ligula dui, in aliquam libero pellentesque sit amet. Ut viverra, urna vitae 
+								volutpat rhoncus, lectus sem tincidunt mauris, eu pretium neque urna nec lorem. Mauris cursus rhoncus 
+								feugiat. Proin quis nisl augue. Nulla eleifend velit neque, id cursus erat interdum sit amet.
+							</p>
+						</li>
+						<li>
+							<p class="terms-info-text">Pellentesque consequat ligula dui, in aliquam libero pellentesque sit amet. Ut viverra, urna vitae 
+								volutpat rhoncus, lectus sem tincidunt mauris, eu pretium neque urna nec lorem. Mauris cursus rhoncus 
+								feugiat. Proin quis nisl augue. Nulla eleifend velit neque, id cursus erat interdum sit amet.
+							</p>
+						</li>
+						<li>
+							<p class="terms-info-text">Pellentesque consequat ligula dui, in aliquam libero pellentesque sit amet. Ut viverra, urna vitae 
+								volutpat rhoncus, lectus sem tincidunt mauris, eu pretium neque urna nec lorem. Mauris cursus rhoncus 
+								feugiat. Proin quis nisl augue. Nulla eleifend velit neque, id cursus erat interdum sit amet.
+							</p>
+						</li>
+					</ol>
+				</div>
+				<div class="terms-bottom-grids">
+					<h6>2.Dolor dapibus consequat ut sit amet lorem</h6>
+					<p>Ut facilisis non lacus eget condimentum. Vestibulum porta lobortis risus quis egestas. In hac habitasse platea dictumst. Nunc lacinia vitae nunc nec tristique. Morbi nec purus id augue malesuada rutrum. Maecenas eget diam dignissim, scelerisque est ac, fringilla ante. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum pulvinar eleifend urna, a euismod nibh porta a.</p>
+					<ol>
+						<li>
+							<p class="terms-info-text">Pellentesque consequat ligula dui, in aliquam libero pellentesque sit amet. Ut viverra, urna vitae 
+								volutpat rhoncus, lectus sem tincidunt mauris, eu pretium neque urna nec lorem. Mauris cursus rhoncus 
+								feugiat. Proin quis nisl augue. Nulla eleifend velit neque, id cursus erat interdum sit amet.
+							</p>
+						</li>
+						<li>
+							<p class="terms-info-text">Pellentesque consequat ligula dui, in aliquam libero pellentesque sit amet. Ut viverra, urna vitae 
+								volutpat rhoncus, lectus sem tincidunt mauris, eu pretium neque urna nec lorem. Mauris cursus rhoncus 
+								feugiat. Proin quis nisl augue. Nulla eleifend velit neque, id cursus erat interdum sit amet.
+							</p>
+						</li>
+						<li>
+							<p class="terms-info-text">Pellentesque consequat ligula dui, in aliquam libero pellentesque sit amet. Ut viverra, urna vitae 
+								volutpat rhoncus, lectus sem tincidunt mauris, eu pretium neque urna nec lorem. Mauris cursus rhoncus 
+								feugiat. Proin quis nisl augue. Nulla eleifend velit neque, id cursus erat interdum sit amet.
+							</p>
+						</li>
+						<li>
+							<p class="terms-info-text">Pellentesque consequat ligula dui, in aliquam libero pellentesque sit amet. Ut viverra, urna vitae 
+								volutpat rhoncus, lectus sem tincidunt mauris, eu pretium neque urna nec lorem. Mauris cursus rhoncus 
+								feugiat. Proin quis nisl augue. Nulla eleifend velit neque, id cursus erat interdum sit amet.
+							</p>
+						</li>
+						<li>
+							<p class="terms-info-text">Pellentesque consequat ligula dui, in aliquam libero pellentesque sit amet. Ut viverra, urna vitae 
+								volutpat rhoncus, lectus sem tincidunt mauris, eu pretium neque urna nec lorem. Mauris cursus rhoncus 
+								feugiat. Proin quis nisl augue. Nulla eleifend velit neque, id cursus erat interdum sit amet.
+							</p>
+						</li>
+					</ol>
+				</div>
+				<div class="terms-bottom-grids">
+					<h6>3.Aliquam suscipit diam eget</h6>
+					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis at tincidunt quam. Fusce mollis sit amet sapien id tincidunt. Nam bibendum felis eu massa feugiat ullamcorper. Nam in purus pharetra, semper sapien vel, gravida massa. Aliquam ac vulputate ex. Ut congue vitae sapien et tincidunt. Integer semper accumsan tortor vitae faucibus Ut facilisis non lacus eget condimentum. Vestibulum porta lobortis risus quis egestas. In hac habitasse platea dictumst.</p>
+					<ol>
+						<li>
+							<p class="terms-info-text">Pellentesque consequat ligula dui, in aliquam libero pellentesque sit amet. Ut viverra, urna vitae 
+								volutpat rhoncus, lectus sem tincidunt mauris, eu pretium neque urna nec lorem. Mauris cursus rhoncus 
+								feugiat. Proin quis nisl augue. Nulla eleifend velit neque, id cursus erat interdum sit amet.
+							</p>
+						</li>
+						<li>
+							<p class="terms-info-text">Pellentesque consequat ligula dui, in aliquam libero pellentesque sit amet. Ut viverra, urna vitae 
+								volutpat rhoncus, lectus sem tincidunt mauris, eu pretium neque urna nec lorem. Mauris cursus rhoncus 
+								feugiat. Proin quis nisl augue. Nulla eleifend velit neque, id cursus erat interdum sit amet.
+							</p>
+						</li>
+					</ol>
+				</div>
+				<div class="terms-bottom-grids">
+					<h6>4.Vestibulum porta lobortis risus quis egestas</h6>
+					<p>Ut facilisis non lacus eget condimentum. Vestibulum porta lobortis risus quis egestas. In hac habitasse platea dictumst. Nunc lacinia vitae nunc nec tristique. Morbi nec purus id augue malesuada rutrum. Maecenas eget diam dignissim, scelerisque est ac, fringilla ante. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum pulvinar eleifend urna, a euismod nibh porta a.</p>
+					<ol>
+						<li>
+							<p class="terms-info-text">Pellentesque consequat ligula dui, in aliquam libero pellentesque sit amet. Ut viverra, urna vitae 
+								volutpat rhoncus, lectus sem tincidunt mauris, eu pretium neque urna nec lorem. Mauris cursus rhoncus 
+								feugiat. Proin quis nisl augue. Nulla eleifend velit neque, id cursus erat interdum sit amet.
+							</p>
+						</li>		
+					</ol>
+				</div>
+				<div class="terms-bottom-grids">
+					<h6>5.Consectetur adipiscing elit duis at tincidunt quam</h6>
+					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis at tincidunt quam. Fusce mollis sit amet sapien id tincidunt. Ut facilisis non lacus eget condimentum. Vestibulum porta lobortis risus quis egestas. In hac habitasse platea dictumst. Nunc lacinia vitae nunc nec tristique. Morbi nec purus id augue malesuada rutrum. Maecenas eget diam dignissim, scelerisque est ac, fringilla ante. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum pulvinar eleifend urna, a euismod nibh porta a. </p>
+				</div>
+			</div>
+		</div>
+		<!-- //container -->
+	</div>
+        <ui:include src="MerlionAirlinesFooter.xhtml"/>
+        <h:outputScript library="js" name="jquery.flexslider.js"/> 
+        <h:outputScript library="js" name="easyResponsiveTabs.js" /> 
+        <h:outputScript library="js" name="scriptMerlion.js"></h:outputScript>
+
+        <script type="text/javascript">
+            $(function () {
+                SyntaxHighlighter.all();
+            });
+            $(window).load(function () {
+                $('.flexslider').flexslider({
+                    animation: "slide",
+                    start: function (slider) {
+                        $('body').removeClass('loading');
+                    }
+                });
+            });
+        </script>
+    </h:body>
+        
+</html>

@@ -1,0 +1,104 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+
+
+    <h:head>
+        <p:growl id="growl" sticky="true" showDetail="true"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title>Merlion Airlines Reservation System</title>
+        <!-- Custom Theme files -->
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <h:outputStylesheet library ="css"  name="bootstrap.css" />
+        <h:outputStylesheet library ="css"  name="styleMerlion.css" />
+        <h:outputStylesheet library ="css"  name="JFFormStyle.css" />
+        <h:outputStylesheet library ="css"  name="flexslider.css" />
+        <!--<h:outputScript library="js" name="jQuery/jQuery-2.1.4.min.js" />-->
+        <h:outputScript library="js" name="modernizr.custom.js" /> 
+
+
+        <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+        <!-- //Custom Theme files -->
+
+        <!-- fonts -->
+        <link href='//fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,700,500italic,700italic,900,900italic' rel='stylesheet' type='text/css'></link>
+        <link href='//fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'></link>
+        <!-- //fonts -->	
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('#horizontalTab').easyResponsiveTabs({
+                    type: 'default', //Types: default, vertical, accordion           
+                    width: 'auto', //auto or any width like 600px
+                    fit: true   // 100% fit in a container
+                });
+            });
+        </script>
+        <!--pop-up-->
+        <h:outputScript library="js" name="menu_jquery.js" /> 
+        <!--//pop-up-->	
+    </h:head>
+    <style>
+        .ui-selectonemenu .ui-selectonemenu-trigger {
+            width: 23px;
+        }
+    </style>
+    <h:body>
+        <!--this is the common header of all the mARS pages-->
+        <ui:fragment rendered ="#{customerManagedBean.isCustomerLoggedOn}">
+            <ui:include src="CustomerDashboardHeader.xhtml"/>
+        </ui:fragment>
+        <ui:fragment rendered ="#{!customerManagedBean.isCustomerLoggedOn}">
+            <ui:include src="MerlionAirlinesHeader.xhtml"/>
+        </ui:fragment>
+        
+        <div class="banner-bottom">
+		<!-- container -->
+		<div class="container">
+			<div class="about-info">
+				<h2>A brief history of Merlion Airlines</h2>
+			</div>
+			<div class="about-grids">
+				<div class="col-md-8 about-left">
+					<h3>Phasellus dignissim massa nisl, et elementum lacus gravida at. Suspendisse vel turpis mi.Praesent luctus, est hendrerit ornare faucibus, ex neque tristique lorem</h3>
+					<p>Aliquam suscipit diam eget dolor dapibus consequat ut sit amet lorem. Duis iaculis tristique mauris a aliquam. Aliquam scelerisque eros lacus, sit amet tincidunt eros bibendum in. Aliquam erat volutpat. Cras tincidunt quis erat ac ornare. Aliquam porttitor mattis sem, commodo semper risus tempus vestibulum. Proin ipsum est Aliquam suscipit diam eget dolor dapibus consequat ut sit amet lorem. Duis iaculis tristique mauris a aliquam. Aliquam scelerisque eros lacus, sit amet tincidunt eros bibendum in. Aliquam erat volutpat. Cras tincidunt quis erat ac ornare. Aliquam porttitor mattis sem, commodo semper risus tempus vestibulum. Proin ipsum est</p>
+				</div>
+				<div class="col-md-4 about-right">
+					<h:graphicImage library="images" name="w1.jpg" />
+				</div>
+				<div class="clearfix"> </div>
+			</div>
+		</div>
+		<!-- //container -->
+	</div>
+        <ui:include src="MerlionAirlinesFooter.xhtml"/>
+        <h:outputScript library="js" name="jquery.flexslider.js"/> 
+        <h:outputScript library="js" name="easyResponsiveTabs.js" /> 
+        <h:outputScript library="js" name="scriptMerlion.js"></h:outputScript>
+
+        <script type="text/javascript">
+            $(function () {
+                SyntaxHighlighter.all();
+            });
+            $(window).load(function () {
+                $('.flexslider').flexslider({
+                    animation: "slide",
+                    start: function (slider) {
+                        $('body').removeClass('loading');
+                    }
+                });
+            });
+        </script>
+    </h:body>
+        
+</html>
