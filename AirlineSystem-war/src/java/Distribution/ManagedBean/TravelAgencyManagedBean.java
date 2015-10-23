@@ -363,7 +363,6 @@ public class TravelAgencyManagedBean {
                 return "TravelAgencyDirectFlight";
 
             } else { //Retrieve one stop flights
-                System.out.println("managedbean::::one stop flights...");
                 legOneSchedules.clear();
                 legTwoSchedules.clear();
                 oneStopFlightDuration = new ArrayList();
@@ -392,10 +391,11 @@ public class TravelAgencyManagedBean {
                     if (i % 2 == 1) {
                         oneStopFlightDuration.add(distributionSessionBean.getTotalDurationForOneStop(flightOption.get(0), flightOption.get(1)));
                         oneStopFlightLayover.add(distributionSessionBean.getLayoverTime(flightOption.get(0), flightOption.get(1)));
+                        priceForOne = 0;
+                        selectedDatePrices.add(priceForOne);
                     }
+                    
                 }
-
-                selectedDatePrices.add(priceForOne);
 
                 List<String> flightNosWithAdjustedEndDates = new ArrayList();
 
@@ -527,9 +527,10 @@ public class TravelAgencyManagedBean {
                 if (i % 2 == 1) {
                     oneStopFlightDuration.add(distributionSessionBean.getTotalDurationForOneStop(flightOption.get(0), flightOption.get(1)));
                     oneStopFlightLayover.add(distributionSessionBean.getLayoverTime(flightOption.get(0), flightOption.get(1)));
+                    selectedDatePrices.add(priceForOne);
+                    priceForOne = 0;
                 }
             }
-            selectedDatePrices.add(priceForOne);
 
             List<String> flightNosWithAdjustedEndDates = new ArrayList();
 

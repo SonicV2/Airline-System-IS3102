@@ -1,161 +1,71 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
-<!DOCTYPE html>
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
       xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
       xmlns:jsf="http://xmlns.jcp.org/jsf"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
-    <h:head>
-        <p:growl id="growl" sticky="true" showDetail="true"/>
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 
+    <h:head>  
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Merlion Airlines Travel Agency Dashboard</title>
-        <!-- Custom Theme files -->
-        <meta name="viewport" content="width=device-width, initial-scale=1"/>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <h:outputStylesheet library ="css"  name="bootstrap.css" />
-        <h:outputStylesheet library ="css"  name="styleMerlion.css" />
-        <h:outputStylesheet library ="css"  name="JFFormStyle.css" />
-        <h:outputStylesheet library ="css"  name="flexslider.css" />
-        <h:outputScript library="js" name="jQuery/jQuery-2.1.4.min.js" />
-        <h:outputScript library="js" name="modernizr.custom.js" /> 
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
+        <h:outputStylesheet library="css" name="travelagentdb.css" />
+        <h:outputStylesheet library="css" name="morrisjs/morris.css" />
+
+        <title>Travel Agency Dashboard</title>
 
 
-        <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
-        <!-- //Custom Theme files -->
-
-        <!-- fonts -->
-        <link href='//fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,700,500italic,700italic,900,900italic' rel='stylesheet' type='text/css'></link>
-        <link href='//fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'></link>
-        <!-- //fonts -->	
-        <script type="text/javascript">
-            $(document).ready(function () {
-                $('#horizontalTab').easyResponsiveTabs({
-                    type: 'default', //Types: default, vertical, accordion           
-                    width: 'auto', //auto or any width like 600px
-                    fit: true   // 100% fit in a container
-                });
-            });
-        </script>
-        <!--pop-up-->
-        <h:outputScript library="js" name="menu_jquery.js" /> 
-        <!--//pop-up-->	
     </h:head>
+
+
     <h:body>
-        <!--this is the common header of all the MARS pages-->
-        <div class="banner-bottom">
-            <!-- container -->
-            <div class="container">
-                <div class="banner-bottom-grids">
-                    <div class="col-md-8 banner-bottom-grid">
-                        <div class="top-destinations-info">
-                            <h4>Hello #{customerManagedBean.customer.firstName} #{customerManagedBean.customer.lastName}! Welcome to Merlion Airlines!</h4>
-                        </div>
-                        <div class="customer-grid">
-                            <div class="customer-left-grid">
-                                <div class="c-left-grids">
-                                    <div class="c-left">
-                                        <span class="glyphicon glyphicon-print" aria-hidden="true"></span>
-                                    </div>
-                                    <div class="c-right">
-                                        <a href="#">Print E-Ticket</a>
-                                    </div>
-                                    <div class="clearfix"> </div>
-                                </div>
-                                <div class="c-left-grids">
-                                    <div class="c-left">
-                                        <span class="glyphicon glyphicon-road" aria-hidden="true"></span>
-                                    </div>
-                                    <div class="c-right">
-                                        <a href="#{request.contextPath}/Distribution/TravelAgencySearchFlights.xhtml">Search Flights</a>
-                                    </div>
-                                    <div class="clearfix"> </div>
-                                </div>
-                                <h:form>
-                                    <div class="c-left-grids">
-                                        <div class="c-left">
-                                            <span class="glyphicon glyphicon-lock" aria-hidden="true"></span>
-                                        </div>
-                                        <div class="c-right">
-                                            <a href="#{request.contextPath}/Distribution/TravelAgencyViewPNRs.xhtml">Manage PNRs</a>
-                                        </div>
-                                        <div class="clearfix"> </div>
-                                    </div>
-                                
-                                <div class="c-left-grids">
-                                    <div class="c-left">
-                                        <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
-                                    </div>
-                                    <div class="c-right">
-                                        <a jsf:action="#{travelAgencyManagedBean.updateProfile()}">Update Profile</a>
-                                    </div>
-                                    <div class="clearfix"> </div>
-                                </div>
-                                    </h:form>
-                               
-                                <div class="c-left-grids">
-                                    <div class="c-left">
-                                        <span class="glyphicon glyphicon-lock" aria-hidden="true"></span>
-                                      
-                                    </div>
-                                    <div class="c-right">
-                                        <a href="#{request.contextPath}/Distribution/TravelAgencyChangePassword.xhtml">Change Password</a>
-                                    </div>
-                                    <div class="clearfix"> </div>
-                                </div>
-                            </div>
-                            
-                            <div class="customer-left-grid">
-                                <div class="c-left-grids">
-                                    <div class="c-left">
-                                        <span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span>
-                                    </div>
-                                    <div class="c-right">
-                                        <a href="#">Cancellation</a>
-                                    </div>
-                                    <div class="clearfix"> </div>
-                                </div>
-                                <div class="c-left-grids">
-                                    <div class="c-left">
-                                        <span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span>
-                                    </div>
-                                    <div class="c-right">
-                                        <a href="faqs.html">FAQs</a>
-                                    </div>
-                                    <div class="clearfix"> </div>
-                                </div>
-                                <div class="c-left-grids">
-                                    <div class="c-left">
-                                        <span class="glyphicon glyphicon-phone-alt" aria-hidden="true"></span>
-                                    </div>
-                                    <div class="c-right">
-                                        <a href="#">Complaints</a>
-                                    </div>
-                                    <div class="clearfix"> </div>
-                                </div>
-                                <div class="c-left-grids">
-                                    <div class="c-left">
-                                        <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
-                                    </div>
-                                    <div class="c-right">
-                                        <a href="contact.html">Contact</a>
-                                    </div>
-                                    <div class="clearfix"> </div>
-                                </div>
-                            </div>
-                            <div class="clearfix"> </div>
-                        </div>
+
+
+ <div id="wrapper">
+
+        <!-- Navigation -->
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <ui:include src="TravelAgentHeader.xhtml" />
+            <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
+            <ui:include src="TravelAgentSidebar.xhtml"/>
+            <!-- /.navbar-collapse -->
+        </nav>
+
+        <div id="page-wrapper">
+
+            <div class="container-fluid">
+
+                <!-- Page Heading -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1 class="page-header">
+                            Dashboard <small>Statistics Overview</small>
+                        </h1>
+                        <ol class="breadcrumb">
+                            <li class="active">
+                                <i class="fa fa-dashboard"></i> Dashboard
+                            </li>
+                        </ol>
                     </div>
                 </div>
+                <!-- /.row -->
+
             </div>
+            <!-- /.container-fluid -->
+
         </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
     </h:body>
+
 </html>
+
