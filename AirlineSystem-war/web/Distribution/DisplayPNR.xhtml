@@ -178,7 +178,12 @@
                                     </ui:repeat>
 
                                     <div class="text-center">
-                                        <h:commandButton class="btn btn-outline btn-success" value="Cancel Booking" action="#{mARSManagedBean.deletePNR()}" />
+                                        <h:commandButton onclick="if (!confirm('Do you really want to cancel this booking?')) {
+                                    return false;
+                                }
+                                ;
+                                return true;
+                                                                                 " class="btn btn-outline btn-success" value="Cancel Booking" action="#{mARSManagedBean.deletePNR()}" />
                                     </div>
                                 </div>
 
