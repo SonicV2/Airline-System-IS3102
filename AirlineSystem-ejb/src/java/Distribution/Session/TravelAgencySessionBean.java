@@ -467,7 +467,6 @@ public class TravelAgencySessionBean implements TravelAgencySessionBeanLocal {
             }
             
         }
-        System.out.println("AFTER DELETEING PNR");
         travelAgency.setPnrs(null);
         TravelAgency toBeRemoved = em.merge(travelAgency);
         em.remove(toBeRemoved);
@@ -509,6 +508,32 @@ public class TravelAgencySessionBean implements TravelAgencySessionBeanLocal {
             System.out.println("\nEntity not found error" + "enfe.getMessage()");
         }
         return agency;
+        
+    }
+    
+    public void cancelExpiredPendingPNRs(){
+        List<TravelAgency> allTravelAgencies = getAllTravelAgencies();
+        List<PNR> allTravelAgenciesPNRs = new ArrayList();
+        List<PNR> eachTravelAgencyPNRs = new ArrayList();
+        
+        if (allTravelAgencies!=null && !allTravelAgencies.isEmpty()){
+            for (TravelAgency eachTravelAgency: allTravelAgencies){
+                eachTravelAgencyPNRs = eachTravelAgency.getPnrs();
+                if (eachTravelAgencyPNRs!=null && !eachTravelAgencyPNRs.isEmpty()){
+                    for (PNR eachPNR : eachTravelAgencyPNRs){
+                        allTravelAgenciesPNRs.add(eachPNR);
+                    }
+                }
+            }
+        }
+        if (allTravelAgenciesPNRs!=null && !allTravelAgencies.isEmpty()){
+            for (PNR eachPNR : allTravelAgenciesPNRs){
+                int noOfDays = noOfDaysSinceDate(eachPNR.getDateOfBooking());
+                if (noOfDays > 14 && eachPNR.getPnrStatus().equalsIgnoreCase("Pending")){
+                    deletePNR(eachPNR);
+                }
+            }
+        }
         
     }
 }
