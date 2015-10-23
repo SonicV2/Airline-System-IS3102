@@ -271,7 +271,8 @@ public class MARSManagedBean {
     //helps users to view other departure flights within the week
     public String viewOtherDepartureFlights(Date date) {
         if (oneWayFlight) {
-            setDepartureDate(date);
+            
+            setOneWayDepartureDate(date);
             return displayDepartureFlights(true);
         } else {
             setDepartureDate(date);
@@ -382,7 +383,7 @@ public class MARSManagedBean {
                 setIsDirect(true);
                 retrieveMinWeekPricesForDirect(originIATA, destinationIATA, departureDate, serviceType, adults, children);
                 setPriceForDirect(selectedDatePrices.get(0));
-
+                System.out.println("displayingggggg....");
                 return "DisplayDepartureDirectFlightReturn";
 
             } else { //Retrieve one stop flights
