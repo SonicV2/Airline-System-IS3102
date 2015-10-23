@@ -1,0 +1,184 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+
+
+    <h:head>
+        <p:growl id="growl" sticky="true" showDetail="true"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <h:outputStylesheet library ="css"  name="bootstrap.css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
+        <h:outputStylesheet library="css" name="travelagentdb.css" />
+        <h:outputStylesheet library="css" name="morrisjs/morris.css" />
+        <title>Travel Agency Search Flights</title>
+
+    </h:head>
+    <h:body>
+        <div id="wrapper">
+
+            <!-- Navigation -->
+            <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <ui:include src="TravelAgentHeader.xhtml" />
+                <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
+                <ui:include src="TravelAgentSidebar.xhtml"/>
+                <!-- /.navbar-collapse -->
+            </nav>
+
+            <div id="page-wrapper">
+
+                <div class="container-fluid">
+                    <!-- banner -->
+                    <div class="banner">
+                        <!-- container -->
+                        <div class="container">
+                            <div class="col-md-8 banner-right">
+                                <div class="sap_tabs">	
+                                    <div class="booking-info">
+
+                                        <h2>Book Flight Tickets</h2>
+                                    </div>
+                                    <div id="horizontalTab" style="display: block; width: 100%; margin: 0px;">
+
+
+                                        <div class="resp-tabs-container">
+                                            <!--for two way flight booking-->
+
+                                            <div class="tab-1 resp-tab-content" aria-labelledby="tab_item-0">
+                                                <div class="facts">
+                                                    <div class="booking-form">
+                                                        <div class="online_reservation">
+                                                            <div class="b_room">
+                                                                <div class="booking_room">
+                                                                    <h:form>
+                                                                        <div class="reservation">
+                                                                            <ul>		
+                                                                                <li class="span1_of_1 desti">
+
+                                                                                    <h5>Flying from</h5>
+                                                                                    <div class="book_date">
+                                                                                        <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
+                                                                                        <p:selectOneMenu value="#{travelAgencyManagedBean.originCity}" editable="true" style="width:200px">
+                                                                                            <f:selectItem itemLabel="Select Origin City" itemValue="" />
+                                                                                            <f:selectItems value="#{travelAgencyManagedBean.origins}"/>
+                                                                                        </p:selectOneMenu>
+                                                                                    </div>
+                                                                                </li>
+                                                                                <li class="span1_of_1 left desti">
+                                                                                    <h5>Flying to</h5>
+                                                                                    <div class="book_date">
+                                                                                        <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
+                                                                                        <p:selectOneMenu value="#{travelAgencyManagedBean.destinationCity}" editable="true">
+                                                                                            <f:selectItem itemLabel="Select Destination City" itemValue="" />
+                                                                                            <f:selectItems value="#{travelAgencyManagedBean.destinations}"/>
+                                                                                        </p:selectOneMenu>
+                                                                                    </div>
+                                                                                </li>
+                                                                                <div class="clearfix"></div>
+                                                                            </ul>
+                                                                        </div>
+                                                                        <div class="reservation">
+                                                                            <ul>	
+                                                                                <li  class="span1_of_1">
+                                                                                    <h5>Departure</h5>
+                                                                                    <div class="book_date">
+
+                                                                                        <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                                                                                        <p:calendar id="button" value="#{travelAgencyManagedBean.departureDate}" navigator="true" pattern="yyyy-MMM-dd" mindate="#{travelAgencyManagedBean.systemDate}" onchange="#{travelAgencyManagedBean.setDepartureDate(departureDate)}"/>
+                                                                                    </div>		
+                                                                                </li>
+                                                                                <li class="span1_of_1 left">
+                                                                                    <h5>Return</h5>
+                                                                                    <div class="book_date">
+                                                                                        <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                                                                                        <p:calendar id="restricted" value="#{travelAgencyManagedBean.returnDate}" navigator="true" pattern="yyyy-MMM-dd" mindate="#{travelAgencyManagedBean.departureDate}"/>
+                                                                                    </div>					
+                                                                                </li>
+                                                                                <li class="span1_of_1 left adult"> 
+                                                                                    <h5>Adults (18+)</h5>
+                                                                                    <div class="section_room">
+                                                                                        <p:selectOneMenu value="#{travelAgencyManagedBean.adults}">
+                                                                                            <f:selectItem itemLabel="0" itemValue="0" />
+                                                                                            <f:selectItem itemLabel="1" itemValue="1" />
+                                                                                            <f:selectItem itemLabel="2" itemValue="2" />
+                                                                                            <f:selectItem itemLabel="3" itemValue="3" />
+                                                                                            <f:selectItem itemLabel="4" itemValue="4" />
+                                                                                            <f:selectItem itemLabel="5" itemValue="5" />
+                                                                                        </p:selectOneMenu>
+                                                                                    </div>
+                                                                                </li>
+                                                                                <li class="span1_of_1 left children">                                                             
+                                                                                    <h5>Children (0-17)</h5>
+                                                                                    <div class="section_room">                                                                      
+                                                                                        <p:selectOneMenu value="#{travelAgencyManagedBean.children}">
+                                                                                            <f:selectItem itemLabel="0" itemValue="0" />
+                                                                                            <f:selectItem itemLabel="1" itemValue="1" />
+                                                                                            <f:selectItem itemLabel="2" itemValue="2" />
+                                                                                            <f:selectItem itemLabel="3" itemValue="3" />
+                                                                                            <f:selectItem itemLabel="4" itemValue="4" />
+                                                                                            <f:selectItem itemLabel="5" itemValue="5" />
+                                                                                        </p:selectOneMenu>
+                                                                                    </div>
+                                                                                </li>
+                                                                                <li class="span1_of_1 economy">
+                                                                                    <h5>Class</h5>
+                                                                                    <div class="section_room">
+                                                                                        <p:selectOneMenu value="#{travelAgencyManagedBean.serviceType}">
+                                                                                            <f:selectItem itemLabel="Economy Saver" itemValue="Economy Saver" />
+                                                                                            <f:selectItem itemLabel="Economy Basic" itemValue="Economy Basic" />
+                                                                                            <f:selectItem itemLabel="Economy Premium" itemValue="Economy Premium" />
+                                                                                            <f:selectItem itemLabel="Business" itemValue="Business" />
+                                                                                            <f:selectItem itemLabel="First Class" itemValue="First Class" />
+                                                                                        </p:selectOneMenu>
+                                                                                    </div>	
+                                                                                </li>
+                                                                                <div class="clearfix"></div>
+                                                                            </ul>
+                                                                        </div>
+                                                                        <div class="reservation">
+                                                                            <ul>	
+                                                                                <li class="span1_of_3">
+                                                                                    <div class="date_btn">
+                                                                                        <h:commandButton class="btn btn-outline btn-success" value="Search"  action="#{travelAgencyManagedBean.displayDepartureFlights(false)}"/>
+                                                                                    </div>
+                                                                                </li>
+                                                                                <div class="clearfix"></div>
+                                                                            </ul>
+                                                                        </div>
+                                                                    </h:form>
+                                                                </div>
+                                                                <div class="clearfix"></div>
+                                                            </div>
+                                                        </div>
+                                                        <!---->
+
+                                                    </div>	
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+    </h:body>
+</html>
