@@ -9,9 +9,6 @@ import APS.Entity.Flight;
 import APS.Entity.Route;
 import APS.Entity.Schedule;
 import APS.Session.FlightSessionBeanLocal;
-import APS.Session.RouteSessionBeanLocal;
-import APS.Session.ScheduleSessionBeanLocal;
-import CI.Managedbean.LoginManagedBean;
 import CI.Session.EmailSessionBeanLocal;
 import Distribution.Entity.Customer;
 import Distribution.Entity.FlightOptions;
@@ -22,6 +19,7 @@ import Distribution.Session.PassengerBookingSessionBeanLocal;
 import Inventory.Entity.Booking;
 import Inventory.Entity.SeatAvailability;
 import Inventory.Session.PricingManagementLocal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -35,7 +33,6 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import org.primefaces.context.RequestContext;
 
 /**
  *
@@ -911,6 +908,8 @@ public class MARSManagedBean {
     
     public void sendEmail(String email){
         
+        SimpleDateFormat formatter = new SimpleDateFormat ("dd-MM-yyyy hh:mm");
+        
         setSubject("Merlion Airlines Booking Confirmation");
         
         String flight = "";
@@ -920,12 +919,12 @@ public class MARSManagedBean {
             flight = "Flight Number: " + selectedSchedules.get(i).getFlight().getFlightNo()
                     + "\nOrigin Country: " + selectedSchedules.get(i).getFlight().getRoute().getOriginCity() + ", " + selectedSchedules.get(i).getFlight().getRoute().getOriginCountry()
                     + "\nDestination Country: " + selectedSchedules.get(i).getFlight().getRoute().getDestinationCity() + ", " + selectedSchedules.get(i).getFlight().getRoute().getDestinationCountry()
-                    + "\nDeparture Date: " + selectedSchedules.get(i).getStartDate() + "," +
-                    "\nArrival Date: " + selectedSchedules.get(i).getEndDate() + "\n\n";
+                    + "\nDeparture Date: " + formatter.format(selectedSchedules.get(i).getStartDate()) + "," +
+                    "\nArrival Date: " + formatter.format(selectedSchedules.get(i).getEndDate()) + "\n\n";
             tempBody += flight;
         }
                 
-        setBody("Thank you for using Merlion Airlines. \n\nYour PNR Id: " + pnr.getPnrID() + "\nDate of Booking: " + pnr.getDateOfBooking() +
+        setBody("Thank you for using Merlion Airlines. \n\nYour PNR Id: " + pnr.getPnrID() + "\nDate of Booking: " + formatter.format(pnr.getDateOfBooking()) +
                 "\nNumber of Travellers: " + pnr.getNoOfTravellers() + "\nTotal Price Paid: " + pnr.getTotalPrice() +
                 "\n\n" + tempBody + "\n\nYou can always view the details of your booking at our website.");
         
