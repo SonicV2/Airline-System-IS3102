@@ -25,12 +25,13 @@
             <p:contextMenu for="pnrs">
                 <p:menuitem value="View Details" update="pnrDetail" icon="ui-icon-search" oncomplete="PF('pnrDialog').show()"/>
                 <p:menuitem value="Confirm Booking" update="pnrs" icon="ui-icon-check" actionListener="#{travelAgencyManagedBean.confirmPNR()}"/>
-                <p:menuitem onclick="if (!confirm('Do you really want to cancel this booking?')) {
+                <p:menuitem onclick="if (!confirm('Do you really want to delete this travel agency?')) {
                                             return false;
                                         }
                                         ;
                                         return true;
-                                        " value="Cancel" update="pnrs" icon="ui-icon-trash" action="#{travelAgencyManagedBean.cancelPNR()}"/>
+                                                                " update="pnrs" icon="ui-icon-trash" value="Cancel" action="#{travelAgencyManagedBean.cancelPNR()}"/>
+
             </p:contextMenu>
 
             <p:dataTable id="pnrs" var="pnr" value="#{travelAgencyManagedBean.travelAgency.pnrs}" rowKey="#{pnr.pnrID}"

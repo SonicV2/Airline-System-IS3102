@@ -931,6 +931,17 @@ public class TravelAgencyManagedBean {
         return "ManageTravelAgency";
 
     }
+    
+    public String deletePNRs() {
+        
+        travelAgencySessionBean.deletePendingPNRs();
+        
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "All pending PNRs have been deleted!", "");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+        
+        return "SalesDepartmentDashboard";
+        
+    }
 
     public void reset() {
 
