@@ -20,65 +20,72 @@
     </h:head>
 
     <h:body>
+        <div id="page-wrapper">
 
-        <h:form id="form">
-            <p:contextMenu for="pnrs">
-                <p:menuitem value="View Details" update="pnrDetail" icon="ui-icon-search" oncomplete="PF('pnrDialog').show()"/>
-                <p:menuitem value="Confirm Booking" update="pnrs" icon="ui-icon-check" actionListener="#{travelAgencyManagedBean.confirmPNR()}"/>
-                <p:menuitem onclick="if (!confirm('Do you really want to delete this travel agency?')) {
-                                            return false;
-                                        }
-                                        ;
-                                        return true;
-                                                                " update="pnrs" icon="ui-icon-trash" value="Cancel" action="#{travelAgencyManagedBean.cancelPNR()}"/>
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2 class="page-header">View Flights</h2>
+                </div>
 
-            </p:contextMenu>
+                <div class="col-lg-12"> 
 
-            <p:dataTable id="pnrs" var="pnr" value="#{travelAgencyManagedBean.travelAgency.pnrs}" rowKey="#{pnr.pnrID}"
-                         selection="#{travelAgencyManagedBean.selectedPNR}" selectionMode="single" widgetVar="pnrTable" paginator="true" rows="10">
+                    <h:form id="form">
+                        <p:contextMenu for="pnrs">
+                            <p:menuitem value="View Details" update="pnrDetail" icon="ui-icon-search" oncomplete="PF('pnrDialog').show()"/>
+                            <p:menuitem value="Confirm Booking" update="pnrs" icon="ui-icon-check" actionListener="#{travelAgencyManagedBean.confirmPNR()}"/>
+                            <p:menuitem update="pnrs" icon="ui-icon-trash" value="Cancel" actionListener="#{travelAgencyManagedBean.cancelPNR()}"/>
 
-                <f:facet name="header">
-                    Right Click to View Options
-                    <p:outputPanel>
-                        <h:outputText value="Search all fields:" />
-                        <p:inputText id="globalFilter" onkeyup="PF('pnrTable').filter()" style="width:150px" placeholder="Enter keyword"/>
-                    </p:outputPanel>
-                </f:facet>
+                        </p:contextMenu>
 
-                <p:column filterBy="#{pnr.pnrID}" headerText="PNR ID" filterMatchMode="contains">
-                    <h:outputText value="#{pnr.pnrID}" />
-                </p:column>
+                        <p:dataTable id="pnrs" var="pnr" value="#{travelAgencyManagedBean.travelAgency.pnrs}" rowKey="#{pnr.pnrID}"
+                                     selection="#{travelAgencyManagedBean.selectedPNR}" selectionMode="single" widgetVar="pnrTable" paginator="true" rows="10">
 
-                <p:column filterBy="#{pnr.pnrStatus}" headerText="Status" filterMatchMode="contains">
-                    <h:outputText value="#{pnr.pnrStatus}" />
-                </p:column>
+                            <f:facet name="header">
+                                Right Click to View Options
+                                <p:outputPanel>
+                                    <h:outputText value="Search all fields:" />
+                                    <p:inputText id="globalFilter" onkeyup="PF('pnrTable').filter()" style="width:150px" placeholder="Enter keyword"/>
+                                </p:outputPanel>
+                            </f:facet>
 
-                <p:column filterBy="#{pnr.dateOfBooking}" headerText="Date of Booking" filterMatchMode="contains">
-                    <h:outputText value="#{pnr.dateOfBooking}" />
-                </p:column>
+                            <p:column filterBy="#{pnr.pnrID}" headerText="PNR ID" filterMatchMode="contains">
+                                <h:outputText value="#{pnr.pnrID}" />
+                            </p:column>
+
+                            <p:column filterBy="#{pnr.pnrStatus}" headerText="Status" filterMatchMode="contains">
+                                <h:outputText value="#{pnr.pnrStatus}" />
+                            </p:column>
+
+                            <p:column filterBy="#{pnr.dateOfBooking}" headerText="Date of Booking" filterMatchMode="contains">
+                                <h:outputText value="#{pnr.dateOfBooking}" />
+                            </p:column>
 
 
-            </p:dataTable> 
+                        </p:dataTable> 
 
-            <p:dialog header="PNR Info #{travelAgencyManagedBean.selectedPNR}" widgetVar="pnrDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
-                <p:outputPanel id="pnrDetail" style="text-align:center;">
-                    <p:panelGrid  columns="2" rendered="#{not empty travelAgencyManagedBean.selectedPNR}" columnClasses="label,value">
+                        <p:dialog header="PNR Info #{travelAgencyManagedBean.selectedPNR}" widgetVar="pnrDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                            <p:outputPanel id="pnrDetail" style="text-align:center;">
+                                <p:panelGrid  columns="2" rendered="#{not empty travelAgencyManagedBean.selectedPNR}" columnClasses="label,value">
 
-                        <ui:repeat var="booking" value="#{travelAgencyManagedBean.selectedPNR.bookings}" >
-                            <h:outputText value="Flight Number:" />
-                            <h:outputText value="#{booking.seatAvail.schedule.flight.flightNo}" />
+                                    <ui:repeat var="booking" value="#{travelAgencyManagedBean.selectedPNR.bookings}" >
+                                        <h:outputText value="Flight Number:" />
+                                        <h:outputText value="#{booking.seatAvail.schedule.flight.flightNo}" />
 
-                            <h:outputText value="Origin IATA: " />
-                            <h:outputText value="#{booking.seatAvail.schedule.flight.route.originIATA}" />
+                                        <h:outputText value="Origin IATA: " />
+                                        <h:outputText value="#{booking.seatAvail.schedule.flight.route.originIATA}" />
 
-                            <h:outputText value="Destination IATA: " />
-                            <h:outputText value="#{booking.seatAvail.schedule.flight.route.destinationIATA}" />
-                        </ui:repeat>
+                                        <h:outputText value="Destination IATA: " />
+                                        <h:outputText value="#{booking.seatAvail.schedule.flight.route.destinationIATA}" />
+                                    </ui:repeat>
 
-                    </p:panelGrid>
-                </p:outputPanel>
-            </p:dialog>
-        </h:form>
+                                </p:panelGrid>
+                            </p:outputPanel>
+                        </p:dialog>
+                    </h:form>
+                </div>
+            </div>
+        </div>
+
 
     </h:body>
 </html>

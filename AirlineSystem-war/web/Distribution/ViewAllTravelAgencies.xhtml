@@ -65,6 +65,11 @@ and open the template in the editor.
                                     action="#{travelAgencyManagedBean.viewPNRs(agency.id)}"><i class="fa fa-dashcube"></i></h:commandLink>
                             </p:column>
                             
+                            <p:column headerText="View Settlement and Commssion" style="width:60px;">
+                                <h:commandLink
+                                    action="#{travelAgencyManagedBean.viewSettlementAndCommission(agency.id)}"><i class="fa fa-dollar"></i></h:commandLink>
+                            </p:column>
+                            
                             <p:column headerText="Delete Travel Agency" style="width:60px;">
                                 <h:commandLink
                                     onclick="if (!confirm('Do you really want to delete this travel agency?')) {

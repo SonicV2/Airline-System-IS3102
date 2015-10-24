@@ -244,9 +244,9 @@ public class TravelAgencySessionBean implements TravelAgencySessionBeanLocal {
     }
 
     @Override
-    public void resetCreditsAndCommission(TravelAgency travelAgency) {
+    public void resetCreditsAndCommission(TravelAgency travelAgency, double currentSettlement) {
         travelAgency.setCommission(0.0);
-        travelAgency.setCurrentCredit(travelAgency.getMaxCredit());
+        travelAgency.setCurrentCredit(travelAgency.getCurrentCredit() + currentSettlement);
         em.merge(travelAgency);
         em.flush();
     }
@@ -305,7 +305,7 @@ public class TravelAgencySessionBean implements TravelAgencySessionBeanLocal {
         existingCustomerPNRs.set(i, pnr);
 
         travelAgency.setPnrs(existingCustomerPNRs);
-        travelAgency.setCommission(price * 0.30);
+        travelAgency.setCommission(price * 0.10);
         em.merge(travelAgency);
 
         em.flush();
@@ -332,7 +332,7 @@ public class TravelAgencySessionBean implements TravelAgencySessionBeanLocal {
 
         //Return Commission only for confirmed pnrs, not for pending pnrs
         if (pnr.getPnrStatus().equals("Confirmed")) {
-            travelAgency.setCommission(travelAgency.getCommission() - price * 0.30);
+            travelAgency.setCommission(travelAgency.getCommission() - price * 0.10);
         }
 
         pnr.setPnrStatus("Cancelled");
@@ -406,10 +406,11 @@ public class TravelAgencySessionBean implements TravelAgencySessionBeanLocal {
     }
 
     @Override
-    public void deletePendingPNRs() {
+    public int deletePendingPNRs() {
         List<PNR> pnrsForEachTravelAgency = new ArrayList();
         List<TravelAgency> allTravelAgencies = getAllTravelAgencies();
         double currentCreditForAgency;
+        int count =0;
 
         if (allTravelAgencies != null) {
             for (TravelAgency eachTravelAgency : allTravelAgencies) {
@@ -420,6 +421,7 @@ public class TravelAgencySessionBean implements TravelAgencySessionBeanLocal {
                         if (eachPNR.getPnrStatus().equalsIgnoreCase("Pending") && noOfDaysSinceDate(eachPNR.getDateOfBooking()) > 14) {
                             currentCreditForAgency += eachPNR.getTotalPrice();
                             deletePNR(eachPNR);
+                            count++;
                         }
                     }
 
@@ -428,8 +430,9 @@ public class TravelAgencySessionBean implements TravelAgencySessionBeanLocal {
                 em.merge(eachTravelAgency);
                 em.flush();
             }
+            
         }
-
+        return count;
     }
 
     @Override
@@ -542,32 +545,33 @@ public class TravelAgencySessionBean implements TravelAgencySessionBeanLocal {
         }
 
     }
-    
+
     @Override
-      public double getCurrentMonthSettlement(TravelAgency travelAgency, Date date){
-          SimpleDateFormat formatter = new SimpleDateFormat ("ddMMyyyy");
-          String formattedDate = formatter.format(date);
-          double settlementAmount = 0;
-          
-          List<PNR> travelAgencyPNRs = new ArrayList();
-          travelAgencyPNRs = travelAgency.getPnrs();
-          if (travelAgencyPNRs!=null && !travelAgencyPNRs.isEmpty()){
-              for (PNR eachPNR: travelAgencyPNRs){
-                  String formattedEachDate = formatter.format(eachPNR.getDateOfConfirmation());
-                  if (eachPNR.getPnrStatus().equalsIgnoreCase("Confirmed") && formattedDate.substring(2, 8).equals(formattedEachDate.substring(2, 8))){
-                      double purePrice = eachPNR.getTotalPrice();
-                            for (int i = 0; i < eachPNR.getBookings().size(); i++) {
-                                if (eachPNR.getBookings().get(i).isBoughtInsurance()) {
-                                    purePrice -= 15.0;
-                                }
+    public double getCurrentMonthSettlement(TravelAgency travelAgency, Date date) {
+        SimpleDateFormat formatter = new SimpleDateFormat("ddMMyyyy");
+        String formattedDate = formatter.format(date);
+        double settlementAmount = 0;
+
+        List<PNR> travelAgencyPNRs = new ArrayList();
+        travelAgencyPNRs = travelAgency.getPnrs();
+        if (travelAgencyPNRs != null && !travelAgencyPNRs.isEmpty()) {
+            for (PNR eachPNR : travelAgencyPNRs) {
+                if (eachPNR.getDateOfConfirmation() != null) {
+                    String formattedEachDate = formatter.format(eachPNR.getDateOfConfirmation());
+                    if (eachPNR.getPnrStatus().equalsIgnoreCase("Confirmed") && formattedDate.substring(2, 8).equals(formattedEachDate.substring(2, 8))) {
+                        double purePrice = eachPNR.getTotalPrice();
+                        for (int i = 0; i < eachPNR.getBookings().size(); i++) {
+                            if (eachPNR.getBookings().get(i).isBoughtInsurance()) {
+                                purePrice -= 15.0;
                             }
-                      
-                      settlementAmount +=purePrice;
-                  }
-              }
-          }
-          return settlementAmount;
-      }
-    
-    
+                        }
+
+                        settlementAmount += purePrice;
+                    }
+                }
+            }
+        }
+        return settlementAmount;
+    }
+
 }
