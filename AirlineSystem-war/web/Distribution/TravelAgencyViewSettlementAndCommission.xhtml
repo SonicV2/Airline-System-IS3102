@@ -14,7 +14,6 @@ and open the template in the editor.
 
 
     <h:head>
-        <p:growl id="growl" sticky="true" showDetail="true"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -58,7 +57,9 @@ and open the template in the editor.
                 <div class="faqs-top-grids">
                     <div class="book-grids">
                         <h:form id="sign-up-form">
-                            <p:growl id="growl" sticky="true" showDetail="false"/>
+                            <div class="col-md-12">
+                                <p:messages id="messages" autoUpdate="true"/>
+                            </div>
                             <div class="col-md-5 book-left">
 
                                 <div class="book-left-info">
@@ -76,10 +77,10 @@ and open the template in the editor.
 
                                     <p>Commission Amount</p>
                                     <h:outputText id="commission" value="#{travelAgencyManagedBean.currentCommission}" />
-   
+
                                 </div>
                             </div>
-                            
+
                         </h:form>
 
 
