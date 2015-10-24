@@ -24,6 +24,7 @@ and open the template in the editor.
         </button>
         <a class="navbar-brand" href="index.html">Merlion Airlines Travel Agency Reservation System</a>
     </div>
+    <h:form>
     <!-- Top Menu Items -->
     <ul class="nav navbar-right top-nav">
 
@@ -37,24 +38,22 @@ and open the template in the editor.
                     <a href="#"><i class="fa fa-fw fa-envelope"></i> Inbox</a>
                 </li>
                 <li>
-                    <h:form>
-                        <a jsf:action="#{travelAgencyManagedBean.updateProfile()}">Update Profile</a>
-                    </h:form>
+                    
+                    <a jsf:action="#{travelAgencyManagedBean.updateProfile()}"><i class="fa fa-fw fa-user"></i>Update Profile</a>
+                    
                 </li>
                 <li>
-                    <h:form>
-                        <a href="#{request.contextPath}/Distribution/TravelAgencyChangePassword.xhtml">Change Password</a>
-                    </h:form>
+                        <a href="#{request.contextPath}/Distribution/TravelAgencyChangePassword.xhtml"><i class="fa fa-fw"></i>Change Password</a>
+
                 </li>
                 <li class="divider"></li>
                 <li>
-                    <h:form>
                         <a jsf:action="#{travelAgencyManagedBean.logout()}"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
-                    </h:form>
                 </li>
             </ul>
         </li>
     </ul>
+                        </h:form>
     <h:outputScript library="js" name="bootstrap.min.js" /> 
     <h:outputScript library="js" name="metisMenu/metisMenu.min.js" />
     <h:outputScript library="js" name="sb-admin-2.js" />
