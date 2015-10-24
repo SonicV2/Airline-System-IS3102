@@ -207,7 +207,7 @@ public class TravelAgencyManagedBean {
     
     private List<Schedule> uniqueSchedules;
     private List<String> uniqueTravellerNames;
-            
+    private String tempDate;
             
 
     @PostConstruct
@@ -838,10 +838,6 @@ public class TravelAgencyManagedBean {
 
                 return false;
             } else if (travelAgencySessionBean.isSameHash(agencyEmail, agencyPassword)) {
-                setFeedbackMessage("Login Successful!");
-                FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, feedbackMessage, "");
-                FacesContext.getCurrentInstance().addMessage(null, message);
-
                 return true;
                 //means the password and email match
 //                  redirect();
@@ -1111,7 +1107,8 @@ public class TravelAgencyManagedBean {
     }
 
     public String viewSettlementAndCommission(Long id) {
-
+        
+        setSelectedMonth(null);
         setTravelAgency(travelAgencySessionBean.getTravelAgencyById(id));
 
         return "SelectMonth";
@@ -1155,7 +1152,10 @@ public class TravelAgencyManagedBean {
             FacesContext.getCurrentInstance().addMessage(null, message);
             return null;
         }
-
+        
+        setTempDate(selectedMonth);
+        setSelectedMonth(null);
+        
         return "ViewSettlementAndCommission";
     }
 
@@ -1196,6 +1196,9 @@ public class TravelAgencyManagedBean {
             FacesContext.getCurrentInstance().addMessage(null, message);
             return null;
         }
+        
+        setTempDate(selectedMonth);
+        setSelectedMonth(null);
 
         return "TravelAgencyViewSettlementAndCommission";
     }
@@ -1228,6 +1231,12 @@ public class TravelAgencyManagedBean {
         }
 
         return "TravelAgencyViewPNRDetails";
+    }
+    
+    public String clearForm() {
+        setSelectedMonth(null);
+        
+        return "TravelAgencySelectsMonth";
     }
 
         public String travelAgencyPNRDetails(PNR pnr) {
@@ -2275,6 +2284,20 @@ public class TravelAgencyManagedBean {
 
     public void setUniqueTravellerNames(List<String> uniqueTravellerNames) {
         this.uniqueTravellerNames = uniqueTravellerNames;
+    }
+
+    /**
+     * @return the tempDate
+     */
+    public String getTempDate() {
+        return tempDate;
+    }
+
+    /**
+     * @param tempDate the tempDate to set
+     */
+    public void setTempDate(String tempDate) {
+        this.tempDate = tempDate;
     }
 
 }

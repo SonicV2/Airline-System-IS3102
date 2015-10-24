@@ -18,9 +18,11 @@
                     <li>
                         <a href="#{request.contextPath}/Distribution/TravelAgencyViewPNRs.xhtml">Manage PNRs</a>
                     </li>
+                    <h:form>
                     <li>
-                        <a href="#{request.contextPath}/Distribution/TravelAgencySelectsMonth.xhtml">View Financials</a>
+                        <a jsf:action="#{travelAgencyManagedBean.clearForm()}">View Financials</a>
                     </li>
+                        </h:form>
                     <h:form>
                     <li>
                         <a jsf:action="#{travelAgencyManagedBean.viewAccount()}">View Account</a>
