@@ -188,6 +188,7 @@ public class TravelAgencyManagedBean {
     private double totalPriceWinsurance;
     private double adultPrice;
     private double childPrice;
+    private double creditUsed;
 
     private List<Passenger> passengerList;
 
@@ -398,8 +399,8 @@ public class TravelAgencyManagedBean {
                     if (i % 2 == 1) {
                         oneStopFlightDuration.add(distributionSessionBean.getTotalDurationForOneStop(flightOption.get(0), flightOption.get(1)));
                         oneStopFlightLayover.add(distributionSessionBean.getLayoverTime(flightOption.get(0), flightOption.get(1)));
-                        priceForOne = 0;
                         selectedDatePrices.add(priceForOne);
+                        priceForOne = 0;
                     }
 
                 }
@@ -681,6 +682,24 @@ public class TravelAgencyManagedBean {
 
     public String createBooking() {
 
+        for (int i = 0; i < passengerList.size(); i++) {
+            if (passengerList.get(i).getCustomerId().isEmpty()) {
+                continue;
+            }
+            if (!isInteger(passengerList.get(i).getCustomerId())) {
+                message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Invalid Customer Id!", "");
+                FacesContext.getCurrentInstance().addMessage(null, message);
+                return null;
+            }
+            if (!passengerList.get(i).getCustomerId().equals("")) {
+                if (!passengerBookingSessionBean.isPassengerAFrequentFlyer(Long.parseLong(passengerList.get(i).getCustomerId()))) {
+                    message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Customer Id does not exist!", "");
+                    FacesContext.getCurrentInstance().addMessage(null, message);
+                    return null;
+                }
+            }
+        }
+
         for (Schedule eachSelectedSchedule : selectedSchedules) {
             eachSelectedSchedule.setStartDate(distributionSessionBean.convertTimeZone(eachSelectedSchedule.getStartDate(), distributionSessionBean.getTimeZoneFromIata(eachSelectedSchedule.getFlight().getRoute().getOriginIATA()), distributionSessionBean.getSingaporeTimeZone()));
             eachSelectedSchedule.setEndDate(distributionSessionBean.convertTimeZone(eachSelectedSchedule.getEndDate(), distributionSessionBean.getTimeZoneFromIata(eachSelectedSchedule.getFlight().getRoute().getDestinationIATA()), distributionSessionBean.getSingaporeTimeZone()));
@@ -723,6 +742,17 @@ public class TravelAgencyManagedBean {
         travelAgencySessionBean.linkPNR(travelAgency, pnr);
 
         return "TravelAgencyConfirmation";
+    }
+
+    public static boolean isInteger(String s) {
+        try {
+            Integer.parseInt(s);
+        } catch (NumberFormatException e) {
+            return false;
+        } catch (NullPointerException e) {
+            return false;
+        }
+        return true;
     }
 
     public void addTravelAgency() {
@@ -878,15 +908,23 @@ public class TravelAgencyManagedBean {
         return "TravelAgencyDashboard";
 
     }
-    
+
     public String logout() {
-        
+
         setTravelAgency(null);
-        
+
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Logged Out Successfully!", "");
-            FacesContext.getCurrentInstance().addMessage(null, message);
-        
+        FacesContext.getCurrentInstance().addMessage(null, message);
+
         return "TravelAgencyLogin";
+    }
+
+    public String viewAccount() {
+        setMaxCredit(travelAgency.getMaxCredit());
+        setCurrentCredit(travelAgency.getCurrentCredit());
+        setCreditUsed(maxCredit - currentCredit);
+
+        return "TravelAgencyViewAccount";
     }
 
     public String updateProfile() {
@@ -1013,7 +1051,7 @@ public class TravelAgencyManagedBean {
             return null;
 
         }
-        
+
         if (selectedPNR.getPnrStatus().equals("Confirmed")) {
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "PNR is already confirmed!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
@@ -1038,7 +1076,7 @@ public class TravelAgencyManagedBean {
     }
 
     public String cancelPNR() {
-        
+
         if (selectedPNR.getPnrStatus().equals("Cancelled")) {
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "PNR is already cancelled!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
@@ -1110,9 +1148,8 @@ public class TravelAgencyManagedBean {
 
         return "ViewSettlementAndCommission";
     }
-    
-        
-        public String agencyCalculateSettlementAndCommission() {
+
+    public String agencyCalculateSettlementAndCommission() {
 
         setCurrentSettlement(0);
         setCurrentCommission(0);
@@ -1152,8 +1189,6 @@ public class TravelAgencyManagedBean {
 
         return "TravelAgencyViewSettlementAndCommission";
     }
-    
-    
 
     /**
      * @return the travelAgencies
@@ -1565,6 +1600,14 @@ public class TravelAgencyManagedBean {
 
     public Double getDistance() {
         return distance;
+    }
+
+    public double getCreditUsed() {
+        return creditUsed;
+    }
+
+    public void setCreditUsed(double creditUsed) {
+        this.creditUsed = creditUsed;
     }
 
     public void setDistance(Double distance) {
