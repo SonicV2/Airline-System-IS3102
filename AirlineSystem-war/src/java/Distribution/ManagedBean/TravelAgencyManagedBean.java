@@ -878,6 +878,16 @@ public class TravelAgencyManagedBean {
         return "TravelAgencyDashboard";
 
     }
+    
+    public String logout() {
+        
+        setTravelAgency(null);
+        
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Logged Out Successfully!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        
+        return "TravelAgencyLogin";
+    }
 
     public String updateProfile() {
 

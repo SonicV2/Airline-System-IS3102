@@ -30,6 +30,7 @@
                 <div class="col-lg-12"> 
 
                     <h:form id="form">
+                        <p:growl id="growlll" sticky="true" showDetail="true"/>
                         <p:contextMenu for="pnrs">
                             <p:menuitem value="View Details" update="pnrDetail" icon="ui-icon-search" oncomplete="PF('pnrDialog').show()"/>
                             <p:menuitem value="Confirm Booking" update="pnrs" icon="ui-icon-check" actionListener="#{travelAgencyManagedBean.confirmPNR()}"/>

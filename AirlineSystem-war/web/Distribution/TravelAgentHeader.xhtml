@@ -11,49 +11,51 @@ and open the template in the editor.
       xmlns:p="http://primefaces.org/ui"
       xmlns:jsf="http://xmlns.jcp.org/jsf"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
-    
+
     <h:head>        
         <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js" />-->
-</h:head>
+    </h:head>
     <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="index.html">Merlion Airlines Travel Agency Reservation System</a>
-            </div>
-            <!-- Top Menu Items -->
-            <ul class="nav navbar-right top-nav">
-                
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> #{travelAgencyManagedBean.name} <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li>
-                            <a href="#"><i class="fa fa-fw fa-user"></i> Profile</a>
-                        </li>
-                        <li>
-                            <a href="#"><i class="fa fa-fw fa-envelope"></i> Inbox</a>
-                        </li>
-                        <li>
-                            <h:form>
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="index.html">Merlion Airlines Travel Agency Reservation System</a>
+    </div>
+    <!-- Top Menu Items -->
+    <ul class="nav navbar-right top-nav">
+
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> #{travelAgencyManagedBean.name} <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+                <li>
+                    <a href="#"><i class="fa fa-fw fa-user"></i> Profile</a>
+                </li>
+                <li>
+                    <a href="#"><i class="fa fa-fw fa-envelope"></i> Inbox</a>
+                </li>
+                <li>
+                    <h:form>
                         <a jsf:action="#{travelAgencyManagedBean.updateProfile()}">Update Profile</a>
-                        </h:form>
-                        </li>
-                        <li>
-                            <h:form>
+                    </h:form>
+                </li>
+                <li>
+                    <h:form>
                         <a href="#{request.contextPath}/Distribution/TravelAgencyChangePassword.xhtml">Change Password</a>
-                        </h:form>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="#"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
-                        </li>
-                    </ul>
+                    </h:form>
+                </li>
+                <li class="divider"></li>
+                <li>
+                    <h:form>
+                        <a jsf:action="#{travelAgencyManagedBean.logout()}"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
+                    </h:form>
                 </li>
             </ul>
-                <h:outputScript library="js" name="bootstrap.min.js" /> 
+        </li>
+    </ul>
+    <h:outputScript library="js" name="bootstrap.min.js" /> 
     <h:outputScript library="js" name="metisMenu/metisMenu.min.js" />
     <h:outputScript library="js" name="sb-admin-2.js" />
 </html>
