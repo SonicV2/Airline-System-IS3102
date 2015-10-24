@@ -9,59 +9,44 @@
 
     <h:head>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <!-- Custom Theme files -->
-        <meta name="viewport" content="width=device-width, initial-scale=1"/>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <h:outputStylesheet library ="css"  name="bootstrap.css" />
-        <h:outputStylesheet library ="css"  name="styleMerlion.css" />
-        <h:outputStylesheet library ="css"  name="JFFormStyle.css" />
-        <h:outputStylesheet library ="css"  name="flexslider.css" />
-        <h:outputScript library="js" name="jQuery/jQuery-2.1.4.min.js" />
-        <h:outputScript library="js" name="modernizr.custom.js" /> 
-
-
-        <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
-        <!-- //Custom Theme files -->
-
-        <!-- fonts -->
-        <link href='//fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,700,500italic,700italic,900,900italic' rel='stylesheet' type='text/css'></link>
-        <link href='//fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'></link>
-        <!-- //fonts -->	
-        <script type="text/javascript">
-            $(document).ready(function () {
-                $('#horizontalTab').easyResponsiveTabs({
-                    type: 'default', //Types: default, vertical, accordion           
-                    width: 'auto', //auto or any width like 600px
-                    fit: true   // 100% fit in a container
-                });
-            });
-        </script>
-        <!--pop-up-->
-        <h:outputScript library="js" name="menu_jquery.js" /> 
-        <!--//pop-up-->	
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
+        <h:outputStylesheet library="css" name="travelagentdb.css" />
+        <h:outputStylesheet library="css" name="morrisjs/morris.css" />
+        <h:outputStylesheet library ="css"  name="flightdisplay2.css" />
         <title>Booking</title>
     </h:head>
 
     <h:body>
+<div id="wrapper">
+            <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+                <!--    To add the same header on all dashboard pages  -->
+                <ui:include src="TravelAgentHeader.xhtml"/>
+                <!--    To add the same sidebar on all dashboard pages  -->
+                <ui:include src="TravelAgentSidebar.xhtml"/>
+            </nav>
+            <div id="page-wrapper">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h2 class="page-header">Please fill in passenger details:</h2>
+                        </div>
 
-        <div class="banner-bottom">
-            <div class="container">
-                <div class="faqs-top-grids">
-                    <div class="book-grids">
+        
                         <div class="col-md-6 book-left">
 
-                            <div class="book-left-info">
-                                <h3>Please fill in passenger details:</h3>
-                            </div>
+                            
                             <h:form>
                                 <div class="col-md-12">
                                 <p:messages id="messages" autoUpdate="true"/>
                                 </div>
                                 
-                                <div class="book-left-form">
+                                <div class="form-group">
                                     <p>Primary Email:</p>
 
-                                    <h:inputText id="PE" required="true" validatorMessage="Not a valid email addess " requiredMessage="Please fill in Personal email field!" value="#{travelAgencyManagedBean.primaryEmail}" >
+                                    <h:inputText id="PE" required="true" validatorMessage="Not a valid email addess " requiredMessage="Please fill in Personal email field!" value="#{travelAgencyManagedBean.primaryEmail}" class="form-control">
                                         <f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
                                     </h:inputText> 
 
@@ -71,40 +56,42 @@
                                     </div>
 
                                     <p>Primary Contact Number</p>
-                                    <h:inputText id="contact" required="true" requiredMessage="Please fill in contact number field!" value="#{travelAgencyManagedBean.primaryContactNo}" />
+                                    <h:inputText id="contact" required="true" requiredMessage="Please fill in contact number field!" value="#{travelAgencyManagedBean.primaryContactNo}" class="form-control" />
 
 
                                     <ui:repeat value="#{travelAgencyManagedBean.passengerList}" var="passenger">
 
-                                        <p> Passenger #{passenger.id} </p>
+                                        <h3> Passenger #{passenger.id} </h3>
+                                        <div class="form-inline">
                                         <p> Traveller Title </p>
                                         <!--                    <div class="col-md-8">-->
                                         <h:panelGrid>
 
-                                            <h:selectOneRadio id="title" required="true" requiredMessage="Please Select Traveller Title!" value="#{passenger.title}">
+                                            <h:selectOneRadio id="title" required="true" requiredMessage="Please Select Traveller Title!" value="#{passenger.title}" style="margin-top: 5px;">
                                                 <f:selectItem itemLabel="Mr" itemValue="Mr" />
                                                 <f:selectItem itemLabel="Mdm" itemValue="Mdm" />
                                                 <f:selectItem itemLabel="Mrs" itemValue="Mrs" />
                                                 <f:selectItem itemLabel="Miss" itemValue="Miss" />
                                             </h:selectOneRadio>
                                         </h:panelGrid>
+                                        </div>
                                         <!--                    </div>-->
 
                                         <p> First Name </p>
-                                        <h:inputText id="firstname" required="true" requiredMessage="Please fill in first name field!" value="#{passenger.firstName}" />
+                                        <h:inputText id="firstname" required="true" requiredMessage="Please fill in first name field!" value="#{passenger.firstName}" class="form-control" />
                                         <p> Last Name </p>
-                                        <h:inputText id="lastname" required="true" requiredMessage="Please fill in last name field!" value="#{passenger.lastName}" />
+                                        <h:inputText id="lastname" required="true" requiredMessage="Please fill in last name field!" value="#{passenger.lastName}"  class="form-control"/>
                                         <p> Passport Number </p>
-                                        <h:inputText id="passport" required="true" requiredMessage="Please fill in passport number field!" value="#{passenger.passport}" />
+                                        <h:inputText id="passport" required="true" requiredMessage="Please fill in passport number field!" value="#{passenger.passport}" class="form-control" />
 
 
 
                                         <p>Nationality</p>
 
-                                        <h:inputText id="nationality" required="true" requiredMessage="Please fill in mailing nationality field!" value="#{passenger.nationality}" />
+                                        <h:inputText id="nationality" required="true" requiredMessage="Please fill in mailing nationality field!" value="#{passenger.nationality}" class="form-control"/>
 
                                         <p>Merlion Airlines Customer ID </p>
-                                        <h:inputText id="customerId" value="#{passenger.customerId}" />
+                                        <h:inputText id="customerId" value="#{passenger.customerId}" class="form-control"/>
 
                                         <p>Would you like to purchase insurance for $15 for each flight? </p>
                                         <h:panelGrid>
