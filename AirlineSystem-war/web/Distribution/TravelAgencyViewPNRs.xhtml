@@ -13,13 +13,20 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <h:outputStylesheet library ="css"  name="bootstrap.css" />
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
-        <h:outputStylesheet library="css" name="admindb.css" />
+        <h:outputStylesheet library="css" name="travelagentdb.css" />
         <h:outputStylesheet library="css" name="morrisjs/morris.css" />
 
         <title>Manage PNRs</title>
     </h:head>
 
     <h:body>
+        <div id="wrapper">
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <!--    To add the same header on all dashboard pages  -->
+        <ui:include src="TravelAgentHeader.xhtml"/>
+        <!--    To add the same sidebar on all dashboard pages  -->
+        <ui:include src="TravelAgentSidebar.xhtml"/>
+        </nav>
         <div id="page-wrapper">
 
             <div class="row">
@@ -39,7 +46,7 @@
                         </p:contextMenu>
 
                         <p:dataTable id="pnrs" var="pnr" value="#{travelAgencyManagedBean.travelAgency.pnrs}" rowKey="#{pnr.pnrID}"
-                                     selection="#{travelAgencyManagedBean.selectedPNR}" selectionMode="single" widgetVar="pnrTable" paginator="true" rows="10">
+                                     selection="#{travelAgencyManagedBean.selectedPNR}" selectionMode="single" widgetVar="pnrTable" rows="10">
 
                             <f:facet name="header">
                                 Right Click to View Options
@@ -86,7 +93,7 @@
                 </div>
             </div>
         </div>
-
+        </div>
 
     </h:body>
 </html>
