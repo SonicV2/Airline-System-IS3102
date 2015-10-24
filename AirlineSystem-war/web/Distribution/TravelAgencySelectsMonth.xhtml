@@ -12,7 +12,7 @@ and open the template in the editor.
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <h:head>
-        <p:growl id="growl" sticky="true" showDetail="true"/>
+   
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -51,12 +51,13 @@ and open the template in the editor.
                             <!-- container -->
                            
                             <h:form>
+                                
                                             <div class="col-md-6">                     
-                                                
+                                                <p:messages id="messages" autoUpdate="true"/>
                                                     <p>View Financial for a specific period</p>
 
                                                     <p:outputLabel value="Month and Year: " />
-                                                    <p:inputText required="true" requiredMessage="Please Enter Month and Year!" class="form-control" placeholder="MM/YYYY" value="#{travelAgencyManagedBean.selectedMonth}"  />                             
+                                                    <p:inputText id="test" required="true" requiredMessage="Please Enter Month and Year!" class="form-control" placeholder="MM/YYYY" value="#{travelAgencyManagedBean.selectedMonth}"  />   
                                                     <br/>
                                                     <br></br>
                                                     <div class="text-center">
