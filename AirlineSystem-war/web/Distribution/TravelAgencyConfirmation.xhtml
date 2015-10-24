@@ -5,54 +5,38 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
-    <h:head>
+   <h:head>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <!-- Custom Theme files -->
-        <meta name="viewport" content="width=device-width, initial-scale=1"/>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <h:outputStylesheet library ="css"  name="bootstrap.css" />
-        <h:outputStylesheet library ="css"  name="styleMerlion.css" />
-        <h:outputStylesheet library ="css"  name="JFFormStyle.css" />
-        <h:outputStylesheet library ="css"  name="flexslider.css" />
-        <h:outputScript library="js" name="jQuery/jQuery-2.1.4.min.js" />
-        <h:outputScript library="js" name="modernizr.custom.js" /> 
-
-
-        <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
-        <!-- //Custom Theme files -->
-
-        <!-- fonts -->
-        <link href='//fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,700,500italic,700italic,900,900italic' rel='stylesheet' type='text/css'></link>
-        <link href='//fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'></link>
-        <!-- //fonts -->	
-        <script type="text/javascript">
-            $(document).ready(function () {
-                $('#horizontalTab').easyResponsiveTabs({
-                    type: 'default', //Types: default, vertical, accordion           
-                    width: 'auto', //auto or any width like 600px
-                    fit: true   // 100% fit in a container
-                });
-            });
-        </script>
-        <!--pop-up-->
-        <h:outputScript library="js" name="menu_jquery.js" /> 
-        <!--//pop-up-->	
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
-        <h:outputStylesheet library ="css"  name="flightdisplay2.css" />
+        <h:outputStylesheet library="css" name="travelagentdb.css" />
+        <h:outputStylesheet library="css" name="morrisjs/morris.css" />
+          <h:outputStylesheet library ="css"  name="flightdisplay2.css" />
         <title>Confirmation</title>
     </h:head>
     <h:body>
+        
+        <div id="wrapper">
+            <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+                <!--    To add the same header on all dashboard pages  -->
+                <ui:include src="TravelAgentHeader.xhtml"/>
+                <!--    To add the same sidebar on all dashboard pages  -->
+                <ui:include src="TravelAgentSidebar.xhtml"/>
+            </nav>
+            <div id="page-wrapper">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h2 class="page-header">Flight is booked successfully!</h2>
+                        </div>
         <div class="col-md-12">
             <p:messages id="messages" autoUpdate="true"/>
         </div>
-        <div class="banner-bottom">
-            <!-- container -->
-            <div class="container">
-                <div class="faqs-top-grids">
-                    <div class="about-info">
-                        <h3>Flight is booked successfully!</h3>
-                    </div>
-                    <div class="blog-grids">
+        
+                        
+                    
                         <div class="col-md-8 col-sm-8">
                             <ui:repeat value='#{travelAgencyManagedBean.selectedSchedules}' var='schedules'>
                                 <div class="flight-list-v2">
@@ -182,24 +166,7 @@
             </div>
         </div>
 
-        <h:outputScript library="js" name="jquery.flexslider.js"/> 
-        <h:outputScript library="js" name="easyResponsiveTabs.js" /> 
-        <h:outputScript library="js" name="scriptMerlion.js"></h:outputScript>
-
-        <script type="text/javascript">
-            $(function () {
-                SyntaxHighlighter.all();
-            });
-            $(window).load(function () {
-                $('.flexslider').flexslider({
-                    animation: "slide",
-                    start: function (slider) {
-                        $('body').removeClass('loading');
-                    }
-                });
-            });
-        </script>
-
+    
 
     </h:body>
 </html>

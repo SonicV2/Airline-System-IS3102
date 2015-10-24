@@ -814,7 +814,7 @@ public class TravelAgencyManagedBean {
         if (doLogin(email, password)) {
             setIsAgencyLoggedOn(true);
             setTravelAgency(travelAgencySessionBean.getAgencyUseEmail(email));
-            return "TravelAgencyDashboard";
+            return "TravelAgencySearchFlights";
 
             //return "CustomerDashboard";
         } else {
