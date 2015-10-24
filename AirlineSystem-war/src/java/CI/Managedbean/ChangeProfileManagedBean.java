@@ -35,8 +35,8 @@ public class ChangeProfileManagedBean {
     private EmployeeSessionBeanLocal employeeSessionBean;
     
 
-     @ManagedProperty(value = "#{loginManageBean}")
-    private LoginManagedBean loginManagedBean;
+     @ManagedProperty(value = "#{loginManagedBean}")
+    private LoginManagedBean loginManageBean;
      
     private String userName;
     private Date employeeDOB;
@@ -56,31 +56,31 @@ public class ChangeProfileManagedBean {
        
     public void updateInfo(ActionEvent event){
         
-        setUserName(loginManagedBean.employeeUserName);
+        setUserName(loginManageBean.employeeUserName);
         if(employeeDOB==null){
-            setEmployeeDOB(employeeSessionBean.getEmployee(loginManagedBean.employeeUserName).getEmployeeDOB());
+            setEmployeeDOB(employeeSessionBean.getEmployee(loginManageBean.employeeUserName).getEmployeeDOB());
         }
         if(employeeGender==null){
-            setEmployeeGender(employeeSessionBean.getEmployee(loginManagedBean.employeeUserName).getEmployeeGender());
+            setEmployeeGender(employeeSessionBean.getEmployee(loginManageBean.employeeUserName).getEmployeeGender());
         }
         if(employeeHomeAddress.equals("")){
-            setEmployeeHomeAddress(employeeSessionBean.getEmployee(loginManagedBean.employeeUserName).getEmployeeMailingAddress());
+            setEmployeeHomeAddress(employeeSessionBean.getEmployee(loginManageBean.employeeUserName).getEmployeeMailingAddress());
         }
         if(employeeOfficeNumber.equals("")){
-            setEmployeeOfficeNumber(employeeSessionBean.getEmployee(loginManagedBean.employeeUserName).getEmployeeOfficeNumber());
+            setEmployeeOfficeNumber(employeeSessionBean.getEmployee(loginManageBean.employeeUserName).getEmployeeOfficeNumber());
         }
         if(employeePrivateEmail.equals("")){
-            setEmployeePrivateEmail(employeeSessionBean.getEmployee(loginManagedBean.employeeUserName).getEmployeePrivateEmail());
+            setEmployeePrivateEmail(employeeSessionBean.getEmployee(loginManageBean.employeeUserName).getEmployeePrivateEmail());
         }
         if(employeeHpNumber.equals("")){
-            setEmployeeHpNumber(employeeSessionBean.getEmployee(loginManagedBean.employeeUserName).getEmployeeHpNumber());
+            setEmployeeHpNumber(employeeSessionBean.getEmployee(loginManageBean.employeeUserName).getEmployeeHpNumber());
         }
         System.out.println("managebean: "+userName);
         System.out.println(employeeDOB+ " "+ employeeGender+ " "+ employeeHomeAddress+ " "+ employeeOfficeNumber+ " "+ employeeHpNumber);
         employeeSessionBean.updateInfo(userName, employeeDOB, employeeGender, employeeHomeAddress, employeeOfficeNumber, employeeHpNumber
                                        ,employeePrivateEmail);
         clear();
-        loginManagedBean.refresh();
+        loginManageBean.refresh();
     }
     
     public void clear(){
@@ -94,21 +94,21 @@ public class ChangeProfileManagedBean {
     //to prepopulate data in change profile managedBean
     @PostConstruct
     public void init() {
-        userName = loginManagedBean.getEmployee().getEmployeeUserName();
-        employeeDOB = loginManagedBean.getEmployee().getEmployeeDOB();
-        employeeGender = loginManagedBean.getEmployee().getEmployeeGender();
-        employeeHomeAddress = loginManagedBean.getEmployee().getEmployeeMailingAddress();
-        employeeOfficeNumber = loginManagedBean.getEmployee().getEmployeeOfficeNumber();
-        employeeHpNumber = loginManagedBean.getEmployee().getEmployeeHpNumber();
-        employeeEmail = loginManagedBean.getEmployee().getEmployeeEmailAddress();
-        employeePrivateEmail = loginManagedBean.getEmployee().getEmployeePrivateEmail();
+        userName = loginManageBean.getEmployee().getEmployeeUserName();
+        employeeDOB = loginManageBean.getEmployee().getEmployeeDOB();
+        employeeGender = loginManageBean.getEmployee().getEmployeeGender();
+        employeeHomeAddress = loginManageBean.getEmployee().getEmployeeMailingAddress();
+        employeeOfficeNumber = loginManageBean.getEmployee().getEmployeeOfficeNumber();
+        employeeHpNumber = loginManageBean.getEmployee().getEmployeeHpNumber();
+        employeeEmail = loginManageBean.getEmployee().getEmployeeEmailAddress();
+        employeePrivateEmail = loginManageBean.getEmployee().getEmployeePrivateEmail();
     // Or here, especially if you depend on injected dependencies.
 }
     
     public void changePwd(){
        
          FacesMessage message = null;
-         String employeeUserName = loginManagedBean.employeeUserName;
+         String employeeUserName = loginManageBean.employeeUserName;
          if(getEmployeeNewPwd().equals(getEmployeeNewPwdRe())){
             employeeSessionBean.hashNewPwd(employeeUserName, getEmployeeNewPwd());
             employeeSessionBean.employeeActivate(employeeUserName);
@@ -262,17 +262,17 @@ public class ChangeProfileManagedBean {
     }
 
     /**
-     * @return the loginManagedBean
+     * @return the loginManageBean
      */
     public LoginManagedBean getLoginManageBean() {
-        return loginManagedBean;
+        return loginManageBean;
     }
 
     /**
-     * @param loginManageBean the loginManagedBean to set
+     * @param loginManageBean the loginManageBean to set
      */
     public void setLoginManageBean(LoginManagedBean loginManageBean) {
-        this.loginManagedBean = loginManageBean;
+        this.loginManageBean = loginManageBean;
     }
 
     /**
