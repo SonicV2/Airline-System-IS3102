@@ -12,17 +12,14 @@ and open the template in the editor.
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <h:head>
-
         <p:growl id="growl" sticky="true" showDetail="true"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <h:outputStylesheet library ="css"  name="bootstrap.css" />
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
-        <h:outputStylesheet library="css" name="admindb.css" />
-        <h:outputStylesheet library="css" name="morrisjs/morris.css" /><!--
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js" />
-        -->
+        <h:outputStylesheet library="css" name="travelagentdb.css" />
+        <h:outputStylesheet library="css" name="morrisjs/morris.css" />
         <title>Select Month</title>
     </h:head>
 
@@ -34,43 +31,51 @@ and open the template in the editor.
 
 
     <h:body>
-        <div class="banner-bottom">
-            <!-- container -->
-            <div class="container">
-                <div class="faqs-top-grids">
-                    <div class="book-grids">
-                        <h:form id="sign-up-form">
-                            <div class="col-md-6 book-left">
 
-                                <div class="book-left-info">
-                                    <h3>Select Month</h3>
-                                </div>
-                                <div class="book-left-form">
+        <div id="wrapper">
+            <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+                <!--    To add the same header on all dashboard pages  -->
+                <ui:include src="TravelAgentHeader.xhtml"/>
+                <!--    To add the same sidebar on all dashboard pages  -->
+                <ui:include src="TravelAgentSidebar.xhtml"/>
+            </nav>
+            <div id="page-wrapper">
 
-
-
-                                    <p>View Financial for Month</p>
-
-                                <p:outputLabel value="Month and Year: " />
-                                <p:inputText required="true" requiredMessage="Please Enter Month and Year!" class="form-control input-lg" placeholder="MM/YYYY" value="#{travelAgencyManagedBean.selectedMonth}"  />                             
-                                <br/>
-                            </div> 
-                                
-                                </div>
-
-                         <h:commandButton class="btn btn-primary btn-lg btn-block" value="View" action="#{travelAgencyManagedBean.agencyCalculateSettlementAndCommission()}"/>
-                        </h:form>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h2 class="page-header">View Financials</h2>
                     </div>
 
+                    <div class="col-lg-12"> 
+                        
+                            <!-- container -->
+                           
+                            <h:form>
+                                            <div class="col-md-6">                     
+                                                
+                                                    <p>View Financial for a specific period</p>
 
-
-                    <div class="modal-footer">
+                                                    <p:outputLabel value="Month and Year: " />
+                                                    <p:inputText required="true" requiredMessage="Please Enter Month and Year!" class="form-control" placeholder="MM/YYYY" value="#{travelAgencyManagedBean.selectedMonth}"  />                             
+                                                    <br/>
+                                                    <br></br>
+                                                    <div class="text-center">
+                                                <h:commandButton class="btn btn-primary" value="View" action="#{travelAgencyManagedBean.agencyCalculateSettlementAndCommission()}"/>
+                                            </div>
+                                             
+                                            </div>
+                                            
+                                        </h:form>
+                                 
+                                   
+                                    
                     </div>
                 </div>
             </div>
         </div>
 
+
     </h:body>
-    
+
 </html>
 
