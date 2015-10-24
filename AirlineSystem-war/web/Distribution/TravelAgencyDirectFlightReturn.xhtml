@@ -8,7 +8,6 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <h:head>
-        <p:growl id="growl" sticky="true" showDetail="true"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -82,6 +81,9 @@
                 </div>
                 <div class="faqs-top-grids terms-grids">
                     <h:form>
+                        <div class="col-md-12">
+                                <p:messages id="messages" autoUpdate="true"/>
+                                </div>
                 <ui:repeat value="#{mARSManagedBean.directFlightSchedules}" var="schedules" >
                             <div class="flight-list-view">
                                 <div class="airline-logo col-md-2 text-center clear-padding">

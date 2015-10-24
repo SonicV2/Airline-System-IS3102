@@ -7,7 +7,6 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
-        <p:growl id="growl" sticky="true" showDetail="true"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <!-- Custom Theme files -->
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -50,6 +49,9 @@
                 </div>
                 <div class="faqs-top-grids terms-grids">
                     <h:form>
+                        <div class="col-md-12">
+                                <p:messages id="messages" autoUpdate="true"/>
+                                </div>
                         <ui:repeat value="#{travelAgencyManagedBean.flightOptionsList}" var="flightOptions" >
                             <div class="flight-list-v2">
                                 <div class="flight-list-main">	

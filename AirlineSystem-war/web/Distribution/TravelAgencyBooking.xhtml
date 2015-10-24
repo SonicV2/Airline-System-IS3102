@@ -8,7 +8,6 @@
 
 
     <h:head>
-        <p:growl id="growl" sticky="true" showDetail="true"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <!-- Custom Theme files -->
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -44,7 +43,7 @@
     </h:head>
 
     <h:body>
-        
+
         <div class="banner-bottom">
             <div class="container">
                 <div class="faqs-top-grids">
@@ -55,6 +54,10 @@
                                 <h3>Please fill in passenger details:</h3>
                             </div>
                             <h:form>
+                                <div class="col-md-12">
+                                <p:messages id="messages" autoUpdate="true"/>
+                                </div>
+                                
                                 <div class="book-left-form">
                                     <p>Primary Email:</p>
 
@@ -102,7 +105,7 @@
 
                                         <p>Merlion Airlines Customer ID </p>
                                         <h:inputText id="customerId" value="#{passenger.customerId}" />
-                                        
+
                                         <p>Would you like to purchase insurance for $15 for each flight? </p>
                                         <h:panelGrid>
                                             <h:selectOneRadio id="insurance" required="true" requiredMessage="Please Select insurance!" value="#{passenger.insurance}">
@@ -131,7 +134,7 @@
                                 <div class="clearfix"> </div>
 
                             </h:form>
-                            
+
                         </div>
                         <div class="clearfix"> </div>
                     </div>
