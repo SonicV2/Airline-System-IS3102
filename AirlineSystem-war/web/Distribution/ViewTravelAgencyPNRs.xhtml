@@ -37,7 +37,7 @@ and open the template in the editor.
                 <div class="col-lg-12">
 
                     <h:form id="form">
-                        <p:dataTable var="pnr" value="#{travelAgencyManagedBean.pendingPNRs}" widgetVar="pnrTable" paginator="true" rows="10">
+                        <p:dataTable var="pnr" value="#{travelAgencyManagedBean.pendingPNRs}" widgetVar="pnrTable">
 
                             <f:facet name="header">
                                 <p:outputPanel>
@@ -53,32 +53,13 @@ and open the template in the editor.
                             <p:column filterBy="#{pnr.dateOfBooking}" headerText="Date of Booking" filterMatchMode="contains">
                                 <h:outputText value="#{pnr.dateOfBooking}" />
                             </p:column>
-
-                            <p:column headerText="View Details">
-                                <p:commandLink update=":form:pnrDetail" oncomplete="PF('pnrDialog').show()" title="View Detail">
-                                    <h:outputText styleClass="ui-icon ui-icon-search" style="margin:0 auto;" />
-                                    <f:setPropertyActionListener value="#{pnr}" target="#{travelAgencyManagedBean.selectedPNR}" />
-                                </p:commandLink>
+                            
+                            <p:column headerText="View Details" style="width:60px;">
+                                <h:commandLink
+                                    action="#{travelAgencyManagedBean.travelAgencyPNRDetails(pnr)}"><i class="fa fa-newspaper-o"></i></h:commandLink>
                             </p:column>
+                            
                             </p:dataTable>
-
-                            <p:dialog header="PNR Info #{travelAgencyManagedBean.selectedPNR}" widgetVar="pnrDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
-                                <p:outputPanel id="pnrDetail" style="text-align:center;">
-                                    <p:panelGrid  columns="2" rendered="#{not empty travelAgencyManagedBean.selectedPNR}" columnClasses="label,value">
-
-                                        <ui:repeat var="booking" value="#{travelAgencyManagedBean.selectedPNR.bookings}" >
-                                            <h:outputText value="Flight Number:" />
-                                            <h:outputText value="#{booking.seatAvail.schedule.flight.flightNo}" />
-
-                                            <h:outputText value="Origin IATA: " />
-                                            <h:outputText value="#{booking.seatAvail.schedule.flight.route.originIATA}" />
-
-                                            <h:outputText value="Destination IATA: " />
-                                            <h:outputText value="#{booking.seatAvail.schedule.flight.route.destinationIATA}" />
-                                        </ui:repeat>
-                                    </p:panelGrid>
-                                </p:outputPanel>
-                            </p:dialog>
 
                     </h:form>
                 </div>

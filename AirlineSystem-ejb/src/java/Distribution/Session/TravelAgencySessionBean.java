@@ -326,7 +326,7 @@ public class TravelAgencySessionBean implements TravelAgencySessionBeanLocal {
 
         for (Booking eachPnrBooking : pnr.getBookings()) {
             eachPnrBooking.setBookingStatus("Cancelled");
-            eachPnrBooking.setPnr(null);
+//            eachPnrBooking.setPnr(null);
             em.merge(eachPnrBooking);
         }
 

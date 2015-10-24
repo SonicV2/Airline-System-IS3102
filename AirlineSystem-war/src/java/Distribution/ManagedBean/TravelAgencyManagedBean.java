@@ -204,6 +204,11 @@ public class TravelAgencyManagedBean {
     private double currentSettlement;
 
     private String selectedMonth;
+    
+    private List<Schedule> uniqueSchedules;
+    private List<String> uniqueTravellerNames;
+            
+            
 
     @PostConstruct
     public void retrieve() {
@@ -1043,8 +1048,10 @@ public class TravelAgencyManagedBean {
         return "ViewTravelAgencyPNRs";
     }
 
-    public String confirmPNR() {
-
+    public String confirmPNR(PNR pnr) {
+        
+        setSelectedPNR(pnr);
+        
         if (selectedPNR.getPnrStatus().equals("Cancelled")) {
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Cancelled PNR cannot be confirmed!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
@@ -1072,11 +1079,14 @@ public class TravelAgencyManagedBean {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "PNR has been confirmed!", "");
         FacesContext.getCurrentInstance().addMessage(null, message);
 
-        return "ViewTravelAgencyPNRs";
+        return "TravelAgencyViewPNRs";
     }
 
-    public String cancelPNR() {
+    public String cancelPNR(PNR pnr) {
 
+       
+        setSelectedPNR(pnr);
+        
         if (selectedPNR.getPnrStatus().equals("Cancelled")) {
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "PNR is already cancelled!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
@@ -1097,7 +1107,7 @@ public class TravelAgencyManagedBean {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "PNR has been cancelled!", "");
         FacesContext.getCurrentInstance().addMessage(null, message);
 
-        return "ViewTravelAgencyPNRs";
+        return "TravelAgencyViewPNRs";
     }
 
     public String viewSettlementAndCommission(Long id) {
@@ -1189,7 +1199,66 @@ public class TravelAgencyManagedBean {
 
         return "TravelAgencyViewSettlementAndCommission";
     }
+    
+    public String viewPNRDetails(PNR pnr) {
 
+        setSelectedPNR(pnr);
+        
+        List<Long> addedSchedules = new ArrayList();
+        uniqueSchedules = new ArrayList();
+        uniqueTravellerNames = new ArrayList();
+
+        
+        for (Booking eachBooking : selectedPNR.getBookings()) {
+
+            if (!uniqueTravellerNames.contains(eachBooking.getTravellerFristName() + " " + eachBooking.getTravellerLastName())) {
+                uniqueTravellerNames.add(eachBooking.getTravellerFristName() + " " + eachBooking.getTravellerLastName());
+            }
+
+            if (!addedSchedules.contains(eachBooking.getSeatAvail().getSchedule().getScheduleId())) {
+                addedSchedules.add(eachBooking.getSeatAvail().getSchedule().getScheduleId());
+                uniqueSchedules.add(eachBooking.getSeatAvail().getSchedule());
+
+            }
+        }
+
+        for (Schedule eachSelectedSchedule : uniqueSchedules) {
+            eachSelectedSchedule.setStartDate(distributionSessionBean.convertTimeZone(eachSelectedSchedule.getStartDate(), distributionSessionBean.getSingaporeTimeZone(), distributionSessionBean.getTimeZoneFromIata(eachSelectedSchedule.getFlight().getRoute().getOriginIATA())));
+            eachSelectedSchedule.setEndDate(distributionSessionBean.convertTimeZone(eachSelectedSchedule.getEndDate(), distributionSessionBean.getSingaporeTimeZone(), distributionSessionBean.getTimeZoneFromIata(eachSelectedSchedule.getFlight().getRoute().getDestinationIATA())));
+        }
+
+        return "TravelAgencyViewPNRDetails";
+    }
+
+        public String travelAgencyPNRDetails(PNR pnr) {
+
+        setSelectedPNR(pnr);
+        
+        List<Long> addedSchedules = new ArrayList();
+        uniqueSchedules = new ArrayList();
+        uniqueTravellerNames = new ArrayList();
+
+        
+        for (Booking eachBooking : selectedPNR.getBookings()) {
+
+            if (!uniqueTravellerNames.contains(eachBooking.getTravellerFristName() + " " + eachBooking.getTravellerLastName())) {
+                uniqueTravellerNames.add(eachBooking.getTravellerFristName() + " " + eachBooking.getTravellerLastName());
+            }
+
+            if (!addedSchedules.contains(eachBooking.getSeatAvail().getSchedule().getScheduleId())) {
+                addedSchedules.add(eachBooking.getSeatAvail().getSchedule().getScheduleId());
+                uniqueSchedules.add(eachBooking.getSeatAvail().getSchedule());
+
+            }
+        }
+
+        for (Schedule eachSelectedSchedule : uniqueSchedules) {
+            eachSelectedSchedule.setStartDate(distributionSessionBean.convertTimeZone(eachSelectedSchedule.getStartDate(), distributionSessionBean.getSingaporeTimeZone(), distributionSessionBean.getTimeZoneFromIata(eachSelectedSchedule.getFlight().getRoute().getOriginIATA())));
+            eachSelectedSchedule.setEndDate(distributionSessionBean.convertTimeZone(eachSelectedSchedule.getEndDate(), distributionSessionBean.getSingaporeTimeZone(), distributionSessionBean.getTimeZoneFromIata(eachSelectedSchedule.getFlight().getRoute().getDestinationIATA())));
+        }
+
+        return "SalesDepartmentViewPNRDetails";
+    }
     /**
      * @return the travelAgencies
      */
@@ -2190,6 +2259,22 @@ public class TravelAgencyManagedBean {
      */
     public void setSelectedMonth(String selectedMonth) {
         this.selectedMonth = selectedMonth;
+    }
+
+    public List<Schedule> getUniqueSchedules() {
+        return uniqueSchedules;
+    }
+
+    public void setUniqueSchedules(List<Schedule> uniqueSchedules) {
+        this.uniqueSchedules = uniqueSchedules;
+    }
+
+    public List<String> getUniqueTravellerNames() {
+        return uniqueTravellerNames;
+    }
+
+    public void setUniqueTravellerNames(List<String> uniqueTravellerNames) {
+        this.uniqueTravellerNames = uniqueTravellerNames;
     }
 
 }
