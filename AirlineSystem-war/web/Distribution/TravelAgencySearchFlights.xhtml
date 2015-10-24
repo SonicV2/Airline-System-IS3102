@@ -48,7 +48,7 @@ and open the template in the editor.
                     <div class="sap_tabs">	
                         <div class="booking-info">
                             
-                            <h2>Book Flight Tickets</h2>
+                            <h2>Book One-Way Flight</h2>
                         </div>
                         <div id="horizontalTab" style="display: block; width: 100%; margin: 0px;">
                             	
@@ -69,19 +69,19 @@ and open the template in the editor.
                                                     <div class="booking_room">
                                                         <div class="reservation">
                                                             <ul>		
-                                                                <li  class="span1_of_1 desti">
+                                                                
                                                                     <h5>Flying from</h5>
                                                                     <div class="book_date">
                                                                             
                                                                         <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
-                                                                        <p:selectOneMenu value="#{travelAgencyManagedBean.oneWayOriginCity}" editable="true" style="width:100%">
+                                                                        <p:selectOneMenu value="#{travelAgencyManagedBean.oneWayOriginCity}" editable="true">
                                                                                 <f:selectItem itemLabel="Select Origin City" itemValue="" />
                                                                                 <f:selectItems value="#{travelAgencyManagedBean.origins}"/>
                                                                         </p:selectOneMenu>
 
                                                                     </div>					
-                                                                </li>
-                                                                <li  class="span1_of_1 left desti">
+                                                            
+                                                                
                                                                     <h5>Flying to</h5>
                                                                     <div class="book_date">
 
@@ -92,21 +92,21 @@ and open the template in the editor.
                                                                             </p:selectOneMenu>
 
                                                                     </div>		
-                                                                </li>
+                                                                
                                                                 <div class="clearfix"></div>
                                                             </ul>
                                                         </div>
                                                         <div class="reservation">
-                                                            <ul>	
-                                                                <li  class="span1_of_1">
+                                                            	
+                                                            <ul>       
                                                                     <h5>Departure</h5>
                                                                     <div class="book_date">
                                                                         <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
                                                                         <p:calendar id="button" value="#{travelAgencyManagedBean.oneWayDepartureDate}" navigator="true" pattern="yyyy-MMM-dd" mindate="#{travelAgencyManagedBean.systemDate}"/>
 
                                                                     </div>		
-                                                                </li>
-                                                                <li class="span1_of_1 left">
+                                                                
+                                                                
                                                                     <h5>Adults (18+)</h5>
                                                                     <!-- start section_room -->
                                                                     <div class="section_room">
@@ -119,8 +119,8 @@ and open the template in the editor.
                                                                                 <f:selectItem itemLabel="5" itemValue="5" />
                                                                         </p:selectOneMenu>
                                                                     </div>	
-                                                                </li>
-                                                                <li class="span1_of_1 left tab-children">
+                                                              
+                                                                
                                                                     <h5>Children (0-17)</h5>
                                                                     <!-- start section_room -->
                                                                     <div class="section_room">
@@ -133,7 +133,7 @@ and open the template in the editor.
                                                                                 <f:selectItem itemLabel="5" itemValue="5" />
                                                                         </p:selectOneMenu>
                                                                     </div>	
-                                                                </li>
+                                                               
                                                                 <li class="span1_of_1 economy">
                                                                     <h5>Class</h5>
                                                                     <!-- start section_room -->
