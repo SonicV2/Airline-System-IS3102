@@ -745,6 +745,22 @@ public class TravelAgencyManagedBean {
 
         travelAgencySessionBean.deductCredit(travelAgency, totalSelectedPrice);
         travelAgencySessionBean.linkPNR(travelAgency, pnr);
+        
+        
+    setOneWayDepartureDate(null);
+    setOneWayAdult(0);
+    setOneWayChildren(0);
+    setOneWayServiceType(null);
+    setOneWayOriginCity(null);
+    setOneWayDestinationCity(null);
+    
+    setDestinationCity(null);
+    setOriginCity(null);
+    setDepartureDate(null);
+    setReturnDate(null);
+    setAdults (0);
+    setChildren(0);
+    
 
         return "TravelAgencyConfirmation";
     }
