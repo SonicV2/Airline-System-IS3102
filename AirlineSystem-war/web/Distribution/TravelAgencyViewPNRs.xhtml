@@ -33,13 +33,13 @@
                     <div class="col-lg-12">
                         <h2 class="page-header">View PNRs</h2>
                     </div>
-
+<div class="col-md-12">
+                                <p:messages id="messages" autoUpdate="true"/>
+                            </div>
                     <div class="col-lg-12"> 
 
                         <h:form id="form">
-                            <div class="col-md-12">
-                                <p:messages id="messages" autoUpdate="true"/>
-                            </div>
+                            
 
                             <p:dataTable id="pnrs" var="pnr" value="#{travelAgencyManagedBean.travelAgency.pnrs}" widgetVar="pnrTable">
 
@@ -50,7 +50,7 @@
                                     </p:outputPanel>
                                 </f:facet>
 
-                                <p:column filterBy="#{pnr.pnrID}" headerText="PNR ID" filterMatchMode="contains">
+                                <p:column filterBy="#{pnr.pnrID}" headerText="PNR ID" filterMatchMode="contains" style="width:150px">
                                     <h:outputText value="#{pnr.pnrID}" />
                                 </p:column>
 
@@ -62,12 +62,12 @@
                                     <h:outputText value="#{pnr.dateOfBooking}" />
                                 </p:column>
                                 
-                                <p:column headerText="View Details" style="width:60px;">
+                                <p:column headerText="Booking Details" style="width:80px;">
                                 <h:commandLink
                                     action="#{travelAgencyManagedBean.viewPNRDetails(pnr)}"><i class="fa fa-dashcube"></i></h:commandLink>
                             </p:column>
                             
-                            <p:column headerText="Confirm Booking" style="width:60px;">
+                            <p:column headerText="Confirm Booking" style="width:80px;">
                                 <h:commandLink onclick="if (!confirm('Do you really want to confirm this booking?')) {
                                             return false;
                                         }
@@ -76,7 +76,7 @@
                                         " action="#{travelAgencyManagedBean.confirmPNR(pnr)}"><i class="fa fa-check"></i></h:commandLink>
                             </p:column>
                             
-                            <p:column headerText="Cancel Booking" style="width:60px;">
+                            <p:column headerText="Cancel Booking" style="width:80px;">
                                 <h:commandLink
                                     onclick="if (!confirm('Do you really want to delete this booking?')) {
                                             return false;

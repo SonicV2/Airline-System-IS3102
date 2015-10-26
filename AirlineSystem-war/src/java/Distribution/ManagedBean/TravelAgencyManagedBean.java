@@ -941,7 +941,7 @@ public class TravelAgencyManagedBean {
         setCurrentCredit(travelAgency.getCurrentCredit());
         setCreditUsed(maxCredit - currentCredit);
 
-        return "TravelAgencyViewAccount";
+        return "TravelAgencyViewAccount?faces-redirect=true";
     }
 
     public String updateProfile() {
@@ -1252,7 +1252,7 @@ public class TravelAgencyManagedBean {
     public String clearForm() {
         setSelectedMonth(null);
         
-        return "TravelAgencySelectsMonth";
+        return "TravelAgencySelectsMonth?faces-redirect=true";
     }
 
         public String travelAgencyPNRDetails(PNR pnr) {

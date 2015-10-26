@@ -6,51 +6,36 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:jsf="http://xmlns.jcp.org/jsf"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+     <h:form>
 <div class="collapse navbar-collapse navbar-ex1-collapse">
                 <ul class="nav navbar-nav side-nav">
-                    
                     <li>
-                        <a href="#{request.contextPath}/Distribution/TravelAgencySearchFlights.xhtml">Search One-Way Flights</a>
-                    </li>
-                    <li>
-                        <a href="#{request.contextPath}/Distribution/TravelAgencySearchReturnFlights.xhtml">Search Return Flights</a>
-                    </li>
-                    <li>
-                        <a href="#{request.contextPath}/Distribution/TravelAgencyViewPNRs.xhtml">Manage PNRs</a>
-                    </li>
-                    <h:form>
-                    <li>
-                        <a jsf:action="#{travelAgencyManagedBean.clearForm()}">View Financials</a>
-                    </li>
-                        </h:form>
-                    <h:form>
-                    <li>
-                        <a jsf:action="#{travelAgencyManagedBean.viewAccount()}">View Account</a>
-                    </li>
-                        </h:form>
-                    <li>
-                        <a href="bootstrap-elements.html"><i class="fa fa-fw fa-desktop"></i> Bootstrap Elements</a>
-                    </li>
-                    <li>
-                        <a href="bootstrap-grid.html"><i class="fa fa-fw fa-wrench"></i> Bootstrap Grid</a>
-                    </li>
-                    <li>
-                        <a href="javascript:;" data-toggle="collapse" data-target="#demo"><i class="fa fa-fw fa-arrows-v"></i> Dropdown <i class="fa fa-fw fa-caret-down"></i></a>
+                        <a href="javascript:;" data-toggle="collapse" data-target="#demo"><i class="fa fa-fw fa-search"></i> Search For Flights <i class="fa fa-fw fa-caret-down"></i></a>
                         <ul id="demo" class="collapse">
-                            <li>
-                                <a href="#">Dropdown Item</a>
-                            </li>
-                            <li>
-                                <a href="#">Dropdown Item</a>
-                            </li>
+                            
+                    <li>
+                        <a href="#{request.contextPath}/Distribution/TravelAgencySearchFlights.xhtml"><i class="fa fa-fw fa-search"></i>Search One-Way Trip</a>
+                    </li>
+                            
+                    <li>
+                        <a href="#{request.contextPath}/Distribution/TravelAgencySearchReturnFlights.xhtml"><i class="fa fa-fw fa-search"></i>Search Round Trip</a>
+                    </li>
                         </ul>
                     </li>
+                    
+                   
                     <li>
-                        <a href="blank-page.html"><i class="fa fa-fw fa-file"></i> Blank Page</a>
+                        <a href="#{request.contextPath}/Distribution/TravelAgencyViewPNRs.xhtml"><i class="fa fa-fw fa-file"></i> Manage PNRs</a>
                     </li>
+                    
                     <li>
-                        <a href="index-rtl.html"><i class="fa fa-fw fa-dashboard"></i> RTL Dashboard</a>
+                        <a jsf:action="#{travelAgencyManagedBean.clearForm()}"><i class="fa fa-fw fa-dollar"></i>View Financials</a>
                     </li>
+                        
+                   
+                    
+                    
                 </ul>
             </div>
+          </h:form>
 </html>

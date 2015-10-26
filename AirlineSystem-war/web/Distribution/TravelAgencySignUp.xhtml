@@ -77,75 +77,75 @@ and open the template in the editor.
                                 <i class="icon-calendar"></i>
                                 <h3 class="panel-title">Please Enter Travel Agency Information</h3>
                             </div>
-    
-                                    
-                                        <p:growl id="growl" sticky="true" showDetail="false"/>
-                               
-
-                                            
-
-                                            <div class="panel-body">
-
-                                                <div class="form-group">
-                                                    <h:outputLabel value="Name: " class="col-md-4 control-label" />
-                                                    <div class="col-md-8">
-                                                        <h:inputText id="name" required="true" requiredMessage="Please fill in the name field!" class="form-control" value="#{travelAgencyManagedBean.name}" />
-                                                    </div>
-                                                </div>
-
-                                                <div class="form-group">
-                                                    <h:outputLabel value="Primary Contact Name: " class="col-md-4 control-label" />
-                                                    <div class="col-md-8">
-                                                        <h:inputText id="primaryContact" required="true" requiredMessage="Please fill in the primary contact field!" class="form-control" value="#{travelAgencyManagedBean.primaryContact}" />
-                                                    </div>
-
-                                                </div>
-
-                                                <div class="form-group">
-                                                    <h:outputLabel value="Contact Number: " class="col-md-4 control-label" />
-                                                    <div class="col-md-8">
-                                                        <h:inputText id="contactNo" required="true" requiredMessage="Please fill in the contact number field!" class="form-control" value="#{travelAgencyManagedBean.contactNo}" />
-                                                    </div>
-
-                                                </div>
-
-                                                <div class="form-group">
-                                                    <h:outputLabel value="Email Address: " class="col-md-4 control-label" />
-                                                    <div class="col-md-8">
-                                                        <h:inputText id="PE" required="true" validatorMessage="Not a valid email addess " requiredMessage="Please fill in Personal email field!" class="form-control" value="#{travelAgencyManagedBean.email}" >
-                                                            <f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
-                                                        </h:inputText> 
-                                                    </div>
-
-                                                </div>
-
-                                                <div class="form-group">
-                                                    <h:outputLabel value="Address: " class="col-md-4 control-label" />
-                                                    <div class="col-md-8">
-                                                        <h:inputText id="homeadd" required="true" requiredMessage="Please fill in address field!"  class="form-control"  value="#{travelAgencyManagedBean.address}" />
-                                                    </div>
-                                                </div>
 
 
-                                                <div class="form-group">
-                                                    <h:outputLabel value="Maximum Credit: " class="col-md-4 control-label" />
-                                                    <div class="col-md-8">
-                                                        <h:inputText id="maxCredit" required="true" requiredMessage="Please fill in the maximum credit for the travel agent!"  class="form-control" value="#{travelAgencyManagedBean.maxCredit}" />
-                                                    </div>
-                                                </div>
+                            <p:growl id="growl" sticky="true" showDetail="false"/>
 
-                                                <div class="text-center">
-                                                    <h:commandButton class="btn btn-outline btn-success" value="Register" action="#{travelAgencyManagedBean.addTravelAgency()}"/>
-                                                </div>
-                                            </div>
-                                       </div>    
-                                    </h:form>
 
-    
+
+
+                            <div class="panel-body">
+
+                                <div class="form-group">
+                                    <h:outputLabel value="Name: " class="col-md-4 control-label" />
+                                    <div class="col-md-8">
+                                        <h:inputText id="name" required="true" requiredMessage="Please fill in the name field!" class="form-control" value="#{travelAgencyManagedBean.name}" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <h:outputLabel value="Primary Contact Name: " class="col-md-4 control-label" />
+                                    <div class="col-md-8">
+                                        <h:inputText id="primaryContact" required="true" requiredMessage="Please fill in the primary contact field!" class="form-control" value="#{travelAgencyManagedBean.primaryContact}" />
+                                    </div>
+
+                                </div>
+
+                                <div class="form-group">
+                                    <h:outputLabel value="Contact Number: " class="col-md-4 control-label" />
+                                    <div class="col-md-8">
+                                        <h:inputText id="contactNo" required="true" requiredMessage="Please fill in the contact number field!" class="form-control" value="#{travelAgencyManagedBean.contactNo}" />
+                                    </div>
+
+                                </div>
+
+                                <div class="form-group">
+                                    <h:outputLabel value="Email Address: " class="col-md-4 control-label" />
+                                    <div class="col-md-8">
+                                        <h:inputText id="PE" required="true" validatorMessage="Not a valid email addess " requiredMessage="Please fill in Personal email field!" class="form-control" value="#{travelAgencyManagedBean.email}" >
+                                            <f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
+                                        </h:inputText> 
+                                    </div>
+
+                                </div>
+
+                                <div class="form-group">
+                                    <h:outputLabel value="Address: " class="col-md-4 control-label" />
+                                    <div class="col-md-8">
+                                        <h:inputText id="homeadd" required="true" requiredMessage="Please fill in address field!"  class="form-control"  value="#{travelAgencyManagedBean.address}" />
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <h:outputLabel value="Maximum Credit: " class="col-md-4 control-label" />
+                                    <div class="col-md-8">
+                                        <h:inputText id="maxCredit" required="true" requiredMessage="Please fill in the maximum credit for the travel agent!"  class="form-control" value="#{travelAgencyManagedBean.maxCredit}" />
+                                    </div>
+                                </div>
+
+                                <div class="text-center">
+                                    <h:commandButton class="btn btn-outline btn-success" value="Register" action="#{travelAgencyManagedBean.addTravelAgency()}"/>
+                                </div>
                             </div>
-                        </div>
+                        </div>    
+                    </h:form>
+
+
+                </div>
+            </div>
         </div>
-                    
+
 
 
 
