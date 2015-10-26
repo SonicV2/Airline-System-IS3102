@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <p:growl id="growl" sticky="true" showDetail="true"/>
+        <title>Maintenance Checklist Item</title>
+    </h:head>
+    <h:body>
+        <h:form>
+            
+            <p:selectManyCheckbox id="grid" value="#{maintainChecklistManagedBean.checkedLists}" layout="grid" columns="3">
+                <f:selectItems value="#{maintainChecklistManagedBean.selectedChecklistItems}" var="item" itemLabel="#{item.content} &lt;br/&gt; " itemValue="#{item.content}" itemDisabled="#{item.checked}" />
+            </p:selectManyCheckbox>
+            
+            <p:inputTextarea rows="5" cols="30" counter="display" maxlength="10000" counterTemplate="{0} characters remaining." autoResize="false" value="#{maintainChecklistManagedBean.comments}"/>
+            <h:outputText id="display" />
+            <br />
+            <h:commandButton value="Save" actionListener="#{maintainChecklistManagedBean.saveChecklist}" action="/CI/EmployeeDashBoard"/>
+            <h:commandButton value="Submit" actionListener="#{maintainChecklistManagedBean.submitChecklist}" action="/CI/EmployeeDashBoard"/>
+        </h:form>
+    </h:body>
+</html>
+

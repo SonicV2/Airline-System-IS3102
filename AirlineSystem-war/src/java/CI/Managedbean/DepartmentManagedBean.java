@@ -176,7 +176,7 @@ public class DepartmentManagedBean {
         if (departments != null) {
 
             for (String s : departments) {
-                if (s.substring(0, s.indexOf("(")).equals("FLIGHT CREW")) {
+                if (s.substring(0, s.indexOf("(")).equals("FLIGHT CREW") || (s.substring(0, s.indexOf("(")).equals("GROUND CREW"))) {
                     CCdepartments.add(s);
                 }
             }

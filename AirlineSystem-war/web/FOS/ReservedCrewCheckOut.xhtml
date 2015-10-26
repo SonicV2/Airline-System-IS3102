@@ -12,7 +12,7 @@
             <h:panelGrid columns="1" style="margin-bottom:10px" cellpadding="5">
                 <h:outputLabel for="sln2" />
                 <p:selectOneRadio id="sln2"  layout="grid" columns="1" >
-                    <f:selectItems itemLabelEscaped="false" value="#{ReservedCrewScheduleManagedBean.reservedCrewScheduleResult}" var="sln2" itemLabel=" #{sln2} " itemValue="#{sln2}" />
+                    <f:selectItems itemLabelEscaped="false" value="#{reservedCrewScheduleManagedBean.reservedCrewScheduleResult}" var="sln2" itemLabel=" #{sln2} " itemValue="#{sln2}" />
                 </p:selectOneRadio>
 
 
@@ -23,13 +23,13 @@
 
                 <h:outputLabel for="sln1" />
                 <p:selectOneRadio id="sln1"  layout="grid" columns="1" style="padding-right:40px;" disabled="true">
-                    <f:selectItems itemLabelEscaped="false" value="#{ReservedCrewScheduleManagedBean.reservedCrewScheduleResultDisabled}" var="sln" itemLabel=" #{sln} " />
+                    <f:selectItems itemLabelEscaped="false" value="#{reservedCrewScheduleManagedBean.reservedCrewScheduleResultDisabled}" var="sln" itemLabel=" #{sln} " />
                 </p:selectOneRadio>
 
 
 
             </h:panelGrid>
-            <h:commandButton value="Check Out" actionListener="#{ReservedCrewScheduleManagedBean.assignBack}"/>
+            <h:commandButton value="Check Out" actionListener="#{reservedCrewScheduleManagedBean.assignBack}"/>
         </h:form>
     </h:body>
 </html>

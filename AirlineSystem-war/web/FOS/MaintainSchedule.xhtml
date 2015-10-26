@@ -8,9 +8,9 @@
     </h:head>
     <h:body>
         <h:form>
-            <h:commandButton  value="Generate Schedule" actionListener="#{MaintainScheduleManagedBean.generateMaintainSchedules}"/>
+            <h:commandButton  value="Generate Schedule" actionListener="#{maintainScheduleManagedBean.generateMaintainSchedules}"/>
 
-            <p:dataTable var="ma" value="#{MaintainScheduleManagedBean.maintainSchedules}">
+            <p:dataTable var="ma" value="#{maintainScheduleManagedBean.maintainSchedules}">
                 <p:column headerText="Id">
                     <h:outputText value="#{ma.id}" />
                 </p:column>

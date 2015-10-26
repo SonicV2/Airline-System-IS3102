@@ -21,9 +21,9 @@
     <h:body> 
 
         <!--            To add the same header on all dashboard pages  
-        -->        <ui:include src="/CI/dashboardHeader.xhtml"/><!--
+        -->        <ui:include src="/CI/DashboardHeader.xhtml"/><!--
                     To add the same sidebar on all dashboard pages -->  
-        <ui:include src="/CI/dashboardSidebar.xhtml"/>
+        <ui:include src="/CI/DashboardSidebar.xhtml"/>
         <div id="page-wrapper">
 
             <div class="row">
@@ -43,14 +43,14 @@
                                 
                                     <h:panelGrid columns="1" style="margin-bottom:10px" cellpadding="5">
                                         <h:outputLabel for="sln1" />
-                                        <p:selectOneRadio id="sln1" value="#{CrewScheduleManagedBean.sln1}"  layout="grid" columns="1" style="padding-right:40px;">
-                                            <f:selectItems itemLabelEscaped="false" value="#{CrewScheduleManagedBean.scheduleResult}" var="sln" itemLabel=" #{sln} " itemValue="#{sln}"/>
+                                        <p:selectOneRadio id="sln1" value="#{crewScheduleManagedBean.sln1}"  layout="grid" columns="1" style="padding-right:40px;">
+                                            <f:selectItems itemLabelEscaped="false" value="#{crewScheduleManagedBean.scheduleResult}" var="sln" itemLabel=" #{sln} " itemValue="#{sln}"/>
                                         </p:selectOneRadio>
                                     </h:panelGrid>
                                 
 
                                 <div class="text-center">
-                                    <h:commandButton class="btn btn-outline btn-success" value="Assign Team"  action="DisplayAssignedTeam" actionListener="#{CrewScheduleManagedBean.getSelectPairingID}"/>
+                                    <h:commandButton class="btn btn-outline btn-success" value="Assign Team"  action="DisplayAssignedTeam" actionListener="#{crewScheduleManagedBean.getSelectPairingID}"/>
                                 </div>
                             </div>
                         </h:form>

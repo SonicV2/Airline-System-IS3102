@@ -48,7 +48,7 @@ public class CrewSignInManagedBean {
     @EJB
     private CrewSignInSessionBeanLocal crewSignInSessionBean;
 
-    @ManagedProperty(value = "#{loginManageBean}")
+    @ManagedProperty(value = "#{loginManagedBean}")
     private LoginManagedBean loginManageBean;
 
     private Team team;
@@ -625,7 +625,7 @@ public class CrewSignInManagedBean {
             }
         }
 
-        System.out.println("::::::::::::::Pairing: "+ targetPairing.getFlightTimes() +"::::::::::::Flight Number: "+targetPairing.getFlightNumbers());
+        
         for (int i = 0; i < targetPairing.getFlightNumbers().size(); i++) {
             if (targetPairing.getFlightNumbers().size() == 1) {
                 schs.add(crewSignInSessionBean.getScheduleBy(submitFlightNumber, targetPairing.getFDate()));

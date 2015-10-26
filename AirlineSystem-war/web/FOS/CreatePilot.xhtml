@@ -59,9 +59,9 @@
     <h:body>
 
         <!--    To add the same header on all dashboard pages  -->
-               <ui:include src="/CI/dashboardHeader.xhtml"/>
+               <ui:include src="/CI/DashboardHeader.xhtml"/>
         <!--    To add the same sidebar on all dashboard pages  -->
-        <ui:include src="/CI/dashboardSidebar.xhtml"/>
+        <ui:include src="/CI/DashboardSidebar.xhtml"/>
 
         <div id="page-wrapper">
 
@@ -82,7 +82,7 @@
                                 <div class="form-group">
                                     <h:outputLabel value="NRIC Number: " class="col-md-4 control-label" />
                                     <div class="col-md-8">
-                                        <h:inputText id="nric" required="true" requiredMessage="Please fill in NRIC field!" class="form-control" value="#{EmployeeManagedBean.employeeID}" />
+                                        <h:inputText id="nric" required="true" requiredMessage="Please fill in NRIC field!" class="form-control" value="#{employeeManagedBean.employeeID}" />
                                     </div>
                                     <div class="missingfield">
                                         <h:message for="nric"  />
@@ -91,7 +91,7 @@
                                 <div class="form-group">
                                     <h:outputLabel value="First Name: " class="col-md-4 control-label" />
                                     <div class="col-md-8">
-                                        <h:inputText id="firstname" required="true" requiredMessage="Please fill in first name field!" class="form-control" value="#{EmployeeManagedBean.employeeDisplayFirstName}" />
+                                        <h:inputText id="firstname" required="true" requiredMessage="Please fill in first name field!" class="form-control" value="#{employeeManagedBean.employeeDisplayFirstName}" />
                                     </div>
 
                                     <div class="missingfield">
@@ -102,7 +102,7 @@
                                 <div class="form-group">
                                     <h:outputLabel value="Last Name: " class="col-md-4 control-label" />
                                     <div class="col-md-8">
-                                        <h:inputText id="lastname" required="true" requiredMessage="Please fill in last name field!" class="form-control" value="#{EmployeeManagedBean.employeeDisplayLastName}" />
+                                        <h:inputText id="lastname" required="true" requiredMessage="Please fill in last name field!" class="form-control" value="#{employeeManagedBean.employeeDisplayLastName}" />
                                     </div>
                                     <div class="missingfield">
                                         <h:message for="lastname"  />
@@ -113,7 +113,7 @@
                                 <div class="form-group">
                                     <h:outputLabel value="Date of Birth: " class="col-md-4 control-label" />
                                     <div class="col-md-8">
-                                        <p:calendar id="button" required="true" requiredMessage="Please fill in Date of Birth field!" value="#{EmployeeManagedBean.employeeDOB}" showOn="button" navigator="true" yearRange="c-100:c"/>
+                                        <p:calendar id="button" required="true" requiredMessage="Please fill in Date of Birth field!" value="#{employeeManagedBean.employeeDOB}" showOn="button" navigator="true" yearRange="c-100:c"/>
 
                                     </div>
                                     <div class="missingfield">
@@ -127,7 +127,7 @@
                                     <div class="col-md-8">
                                         <h:panelGrid>
 
-                                            <h:selectOneRadio id="gender" required="true" requiredMessage="Please Select Gender!" value="#{EmployeeManagedBean.employeeGender}">
+                                            <h:selectOneRadio id="gender" required="true" requiredMessage="Please Select Gender!" value="#{employeeManagedBean.employeeGender}">
                                                 <f:selectItem itemLabel="Male" itemValue="Male" />
                                                 <f:selectItem itemLabel="Female" itemValue="Female" />
                                             </h:selectOneRadio>
@@ -143,7 +143,7 @@
                                 <div class="form-group">
                                     <h:outputLabel value="Personal Email Address: " class="col-md-4 control-label" />
                                     <div class="col-md-8">
-                                        <h:inputText id="PE" required="true" validatorMessage="Not a valid email addess " requiredMessage="Please fill in Personal email field!" class="form-control" value="#{EmployeeManagedBean.employeePrivateEmail}" >
+                                        <h:inputText id="PE" required="true" validatorMessage="Not a valid email addess " requiredMessage="Please fill in Personal email field!" class="form-control" value="#{employeeManagedBean.employeePrivateEmail}" >
                                             <f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
                                         </h:inputText> 
                                     </div>
@@ -162,7 +162,7 @@
 
                                 <div class="form-group">
                                     <p:outputLabel for="department" value="Department: " class="col-md-4 control-label" />
-                                    <h:selectOneMenu required="true" id="department" styleClass="dropdown-menu select"  value="#{EmployeeManagedBean.employeeDepartment}" >
+                                    <h:selectOneMenu required="true" id="department" styleClass="dropdown-menu select"  value="#{employeeManagedBean.employeeDepartment}" >
 
                                         <f:selectItem itemLabel="Select department" itemValue="" noSelectionOption="true" />
                                         <f:selectItems value="#{DepartmentManagedBean.CCdepartments}" />
@@ -172,7 +172,7 @@
                                 <div class="form-group">
                                     <h:outputLabel value="Mobile Number: " class="col-md-4 control-label" />
                                     <div class="col-md-8">
-                                        <h:inputText id="mobile" required="true" requiredMessage="Please fill in mobile number field!" class="form-control" value="#{EmployeeManagedBean.employeeHpNumber}" />
+                                        <h:inputText id="mobile" required="true" requiredMessage="Please fill in mobile number field!" class="form-control" value="#{employeeManagedBean.employeeHpNumber}" />
                                     </div>
                                     <div class="missingfield">
                                         <h:message for="mobile" />
@@ -182,7 +182,7 @@
                                 <div class="form-group">
                                     <h:outputLabel value="Office Number: " class="col-md-4 control-label" />
                                     <div class="col-md-8">
-                                        <h:inputText id="office" required="true" requiredMessage="Please fill in office number field!" class="form-control" value="#{EmployeeManagedBean.employeeOfficeNumber}" />
+                                        <h:inputText id="office" required="true" requiredMessage="Please fill in office number field!" class="form-control" value="#{employeeManagedBean.employeeOfficeNumber}" />
                                     </div>
                                     <div class="missingfield"> 
                                         <h:message for="office" />
@@ -192,7 +192,7 @@
                                 <div class="form-group">
                                     <h:outputLabel value="Mailing Address: " class="col-md-4 control-label" />
                                     <div class="col-md-8">
-                                        <h:inputText id="address" required="true" requiredMessage="Please fill in mailing address field!" class="form-control" value="#{EmployeeManagedBean.employeeMailingAddress}" />
+                                        <h:inputText id="address" required="true" requiredMessage="Please fill in mailing address field!" class="form-control" value="#{employeeManagedBean.employeeMailingAddress}" />
                                     </div>
                                     <div class="missingfield">
                                         <h:message for="address"  />
@@ -201,7 +201,7 @@
                                 
                                 <div class="form-group">
                                     <p:outputLabel for="p" value="Position: " class="col-md-4 control-label" />
-                                    <h:selectOneMenu  required="true" id="p" styleClass="dropdown-menu select" value="#{EmployeeManagedBean.position}"  >
+                                    <h:selectOneMenu  required="true" id="p" styleClass="dropdown-menu select" value="#{employeeManagedBean.position}"  >
 
                                         <f:selectItem itemLabel="Select Position" itemValue="" noSelectionOption="true" />
                                         <f:selectItem itemLabel="Captain" itemValue="Captain"  />
@@ -218,7 +218,7 @@
                                 <div class="form-group">
                                     <h:outputLabel value="Year of Experience: " class="col-md-4 control-label" />
                                     <div class="col-md-8">
-                                        <h:inputText id="experience" required="true" requiredMessage="Please fill in year of experience field!" class="form-control" value="#{EmployeeManagedBean.experience}" />
+                                        <h:inputText id="experience" required="true" requiredMessage="Please fill in year of experience field!" class="form-control" value="#{employeeManagedBean.experience}" />
                                     </div>
                                     <div class="missingfield"> 
                                         <h:message for="experience" />
@@ -230,7 +230,7 @@
 
                                 <div class="form-group" style="margin-left:95px">
                                     <b>Skills:</b>
-                                    <p:selectManyCheckbox required="true" id="grid" value="#{EmployeeManagedBean.skills}" layout="grid" columns="4">
+                                    <p:selectManyCheckbox required="true" id="grid" value="#{employeeManagedBean.skills}" layout="grid" columns="4">
                                         <f:selectItem itemLabel="A380" itemValue="A380" />
                                         <f:selectItem itemLabel="A330" itemValue="A330" />
                                         <f:selectItem itemLabel="A340" itemValue="A340" />
@@ -243,7 +243,7 @@
                         </div>
 
                         <div class="text-center">
-                            <h:commandButton class="btn btn-outline btn-success" value="Save Information" actionListener="#{EmployeeManagedBean.addPilot}" action="/CI/employeeInformation?faces-redirect=true"/>
+                            <h:commandButton class="btn btn-outline btn-success" value="Save Information" actionListener="#{employeeManagedBean.addPilot}" action="/CI/employeeInformation?faces-redirect=true"/>
                         </div>
 
 

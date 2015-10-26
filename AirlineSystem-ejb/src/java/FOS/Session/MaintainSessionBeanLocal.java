@@ -5,7 +5,10 @@
  */
 package FOS.Session;
 
+import APS.Entity.Aircraft;
+import FOS.Entity.GroundCrew;
 import FOS.Entity.MaintainSchedule;
+import FOS.Entity.MaintainanceTeam;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -22,4 +25,15 @@ public interface MaintainSessionBeanLocal {
 
     public void assignTeam();
 
+    public Aircraft getAircraftByTailNo(String tailNo);
+
+    public void generateTeam();
+
+    public void assignMainCrews();
+
+    public List<MaintainanceTeam> getUnassignedMaintainTeams();
+
+    public MaintainanceTeam getCrewMaintainTeam(String username);
+
+    public GroundCrew getGroundCrew(String username);
 }

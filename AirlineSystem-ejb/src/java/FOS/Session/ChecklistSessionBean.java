@@ -453,6 +453,7 @@ public class ChecklistSessionBean implements ChecklistSessionBeanLocal {
 
     }
 
+    @Override
     public List<ChecklistItem> retrieveChecklistItemsByScheduleAndChecklistName(Schedule schedule, String checklistName) {
         Checklist matchedChecklist = new Checklist();
         List<Checklist> checklistsForSchedule = schedule.getChecklists();

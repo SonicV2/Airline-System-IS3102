@@ -20,9 +20,9 @@
     <h:body>
         
                 <!--            To add the same header on all dashboard pages  
--->        <ui:include src="/CI/dashboardHeader.xhtml"/><!--
+-->        <ui:include src="/CI/DashboardHeader.xhtml"/><!--
             To add the same sidebar on all dashboard pages -->  
-        <ui:include src="/CI/dashboardSidebar.xhtml"/>
+        <ui:include src="/CI/DashboardSidebar.xhtml"/>
         <div id="page-wrapper">
 
             <div class="row">
@@ -34,23 +34,23 @@
 
             <h:outputLabel value="Your team ID is: "/>
 
-            <h:outputLabel value="#{CrewSignInManagedBean.team.id}"/>
+            <h:outputLabel value="#{crewSignInManagedBean.team.id}"/>
             <br/>
 
             <!--     view Team Members-->
 
             <br/><br/>
-            <h:outputLabel value="#{CrewSignInManagedBean.messages.get(0)}"/>
+            <h:outputLabel value="#{crewSignInManagedBean.messages.get(0)}"/>
 
             <br/>
-            <p:dataList value="#{CrewSignInManagedBean.pilots}" var="p" type="ordered">
+            <p:dataList value="#{crewSignInManagedBean.pilots}" var="p" type="ordered">
                 #{p.employeeDisplayFirstName} #{p.employeeDisplayLastName} ( #{p.position} )
             </p:dataList>
 
             <br/>
-            <h:outputLabel value="#{CrewSignInManagedBean.messages.get(1)}"/>
+            <h:outputLabel value="#{crewSignInManagedBean.messages.get(1)}"/>
             <br/>
-            <p:dataList value="#{CrewSignInManagedBean.ccs}" var="cs" type="ordered">
+            <p:dataList value="#{crewSignInManagedBean.ccs}" var="cs" type="ordered">
                 #{cs.employeeDisplayFirstName} #{cs.employeeDisplayLastName} ( #{cs.position} )
             </p:dataList>    
             <!--  view Team Members-->

@@ -19,9 +19,9 @@
     </h:head>
     <h:body>
                 <!--            To add the same header on all dashboard pages  
--->        <ui:include src="/CI/dashboardHeader.xhtml"/><!--
+-->        <ui:include src="/CI/DashboardHeader.xhtml"/><!--
             To add the same sidebar on all dashboard pages -->  
-        <ui:include src="/CI/dashboardSidebar.xhtml"/>
+        <ui:include src="/CI/DashboardSidebar.xhtml"/>
         <div id="page-wrapper">
 
             <div class="row">
@@ -38,12 +38,12 @@
 <div class="panel-body">
             <h:panelGrid columns="1" style="margin-bottom:10px" cellpadding="5">
                 <p:outputLabel for="sln1" value="" />
-                <p:selectOneRadio id="sln1" value="#{CrewScheduleManagedBean.sln1}"  layout="grid" columns="2">
-                    <f:selectItems  value="#{CrewScheduleManagedBean.restPairingA380}" var="sln" itemLabel=" #{sln.FDate} #{sln.flightHour}   #{sln.flightNumbers} #{sln.flightTimes} #{sln.flightCities} " itemValue="#{sln}"/>
+                <p:selectOneRadio id="sln1" value="#{crewScheduleManagedBean.sln1}"  layout="grid" columns="2">
+                    <f:selectItems  value="#{crewScheduleManagedBean.restPairingA380}" var="sln" itemLabel=" #{sln.FDate} #{sln.flightHour}   #{sln.flightNumbers} #{sln.flightTimes} #{sln.flightCities} " itemValue="#{sln}"/>
                 </p:selectOneRadio>
             </h:panelGrid>
             <div class="text-center">
-            <h:commandButton class="btn btn-outline btn-success" value="Assign Team"  action="DisplayAssignedTeamA380" actionListener="#{CrewScheduleManagedBean.getSelectPairingID}"/>
+            <h:commandButton class="btn btn-outline btn-success" value="Assign Team"  action="DisplayAssignedTeamA380" actionListener="#{crewScheduleManagedBean.getSelectPairingID}"/>
             </div>
             </div>
 

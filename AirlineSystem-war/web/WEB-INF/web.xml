@@ -35,6 +35,7 @@
         <param-name>primefaces.PRIVATE_CAPTCHA_KEY</param-name>
         <param-value>6LctFwwTAAAAADv6k2J5qjbnZ254DxFqTiyfix7z</param-value>
     </context-param>
+   
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>*.xhtml</url-pattern>

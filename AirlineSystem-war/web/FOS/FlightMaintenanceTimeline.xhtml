@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pe="http://primefaces.org/ui/extensions">
+    <h:head>
+        <title>Maintenance Timeline</title>
+
+    </h:head>
+    <h:body>
+        <h:form>
+            <h:commandButton value="Generate Team" actionListener="#{maintainScheduleManagedBean.generateTeam}"/>
+            <h:commandButton value="Assign Ground Crews" actionListener="#{maintainScheduleManagedBean.assignCrew}"/>
+            <h:commandButton value="Assign Schedule" actionListener="#{maintainScheduleManagedBean.assignTeam}"/>
+        </h:form>
+        <pe:timeline id="timeline" value="#{maintainScheduleManagedBean.model}" varGroup="group"
+                     eventMargin="10" eventMarginAxis="0"  
+
+                     showNavigation="true" showButtonNew="true"  
+                     axisOnTop="true" stackEvents="false" >
+
+
+        </pe:timeline>
+
+
+    </h:body>
+</html>
+
