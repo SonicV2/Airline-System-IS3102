@@ -1,3 +1,4 @@
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -7,10 +8,13 @@ package FOS.Entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -25,28 +29,36 @@ public class MaintainSchedule implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    
+
     @Temporal(TemporalType.TIMESTAMP)
     private Date mainStartDate;
-    
+
     @Temporal(TemporalType.TIMESTAMP)
     private Date mainEndDate;
 
     private long tailNumber;
     private String teamId;
     private String type;
-    
-    public MaintainSchedule(){}
 
-    public void create(Date startDate, Date endDate, long tailNumber, String teamId, String type){
+    @ManyToOne(cascade = {CascadeType.PERSIST})
+    private MaintainanceTeam mTeam = new MaintainanceTeam();
+
+    @OneToOne(cascade={CascadeType.PERSIST})
+    private AMaintainChecklist amaintainChecklist;
+    
+    public MaintainSchedule() {
+    }
+
+  
+
+    public void create(Date startDate, Date endDate, long tailNumber, String teamId, String type) {
         this.mainStartDate = startDate;
         this.mainEndDate = endDate;
         this.setTailNumber(tailNumber);
-        this.teamId= teamId;
+        this.teamId = teamId;
         this.type = type;
     }
-    
-    
+
     public Long getId() {
         return id;
     }
@@ -108,7 +120,6 @@ public class MaintainSchedule implements Serializable {
         this.mainEndDate = mainEndDate;
     }
 
-    
     /**
      * @return the teamId
      */
@@ -149,6 +160,34 @@ public class MaintainSchedule implements Serializable {
      */
     public void setTailNumber(long tailNumber) {
         this.tailNumber = tailNumber;
+    }
+
+    /**
+     * @return the mTeam
+     */
+    public MaintainanceTeam getmTeam() {
+        return mTeam;
+    }
+
+    /**
+     * @param mTeam the mTeam to set
+     */
+    public void setmTeam(MaintainanceTeam mTeam) {
+        this.mTeam = mTeam;
+    }
+
+    /**
+     * @return the amaintainChecklist
+     */
+    public AMaintainChecklist getAmaintainChecklist() {
+        return amaintainChecklist;
+    }
+
+    /**
+     * @param amaintainChecklist the amaintainChecklist to set
+     */
+    public void setAmaintainChecklist(AMaintainChecklist amaintainChecklist) {
+        this.amaintainChecklist = amaintainChecklist;
     }
 
 }

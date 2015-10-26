@@ -6,6 +6,7 @@ import CI.Entity.Salt;
 import CI.Entity.OrganizationUnit;
 import CI.Entity.Pilot;
 import CI.Entity.Role;
+import FOS.Entity.GroundCrew;
 import FOS.Entity.Team;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -42,6 +43,7 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
     
     private CabinCrew cc;
     private Pilot pp; //pilot
+    private GroundCrew gc;
     
     @Override
     public Boolean lockoutEmployee(String employeeID){
@@ -218,6 +220,64 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
         em.persist(pp);
     }
     
+    
+    @Override
+    public void addGroundCrew(String employeeID, String employeeDisplayFirstName, String employeeDisplayLastName,
+            String employeeDepartment,Date employeeDOB,String employeeGender, String employeeHpNumber, 
+            String employeeMailingAddress, String employeeOfficeNumber, String employeePrivateEmail,
+             String position, String mainCrewExp){
+        
+         gc=new GroundCrew();
+        
+//        List<String> role=new ArrayList<String>();
+//        role.add("Cabin Crew");
+//        
+        gc.create(position);
+        gc.setEmployeeID(employeeID);
+        gc.setEmployeeDisplayFirstName(employeeDisplayFirstName);
+        gc.setEmployeeDisplayLastName(employeeDisplayLastName);
+        gc.setEmployeeDOB(employeeDOB);
+        gc.setEmployeeGender(employeeGender);
+        gc.setEmployeeHpNumber(employeeHpNumber);
+        gc.setEmployeeMailingAddress(employeeMailingAddress);
+        gc.setEmployeeOfficeNumber(employeeOfficeNumber);
+        gc.setEmployeePrivateEmail(employeePrivateEmail);
+        gc.setEmployeeDepartment("Ground Crew");
+        gc.setEmployeeRole("Ground Crew");
+        gc.setEmployeePassword("password");
+        gc.setExperience(mainCrewExp);
+        gc.setmTeam(null);
+      
+        
+        String userName = generateUserName(employeeDisplayFirstName, employeeDisplayLastName);
+        
+        gc.setEmployeeUserName(userName);
+        gc.setEmployeeEmailAddress(userName + "@merlion.com.sg");
+        
+        department= new OrganizationUnit();
+        department=getDepartment(employeeDepartment);
+        
+        employeelist=department.getEmployee();
+        employeelist.add(gc);
+        department.setEmployee(employeelist);
+        gc.setOrganizationUnit(department);
+        em.persist(gc);
+        
+        
+   
+        role=getRole("Ground Crew");
+        List<Employee> employeelist_role=new ArrayList<Employee>();
+        
+        rolelist=gc.getRoles();
+        rolelist.add(role);
+        gc.setRoles(rolelist);
+        employeelist_role=role.getEmployees();
+        employeelist_role.add(gc);
+        role.setEmployees(employeelist_role);
+        
+        
+        em.persist(gc);
+    }
     
     @Override
     public void addEmployee(String userID,String employeeID, String employeeDisplayFirstName, String employeeDisplayLastName,

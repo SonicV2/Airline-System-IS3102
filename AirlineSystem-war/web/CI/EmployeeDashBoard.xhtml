@@ -44,6 +44,10 @@
                     <h:commandButton value="Pilot Leave Submitt" action="/FOS/PilotLeaveSubmit"/>
                     <h:commandButton value="Pilot Timetable" action="/FOS/ViewPilotTimetable"/>
                     <h:commandButton value="Reserved Pilot Timetable" action="/FOS/ViewReservedPilotTimetable"/>
+                    
+                    <h:commandButton value="Ground Crew Checklists" actionListener="#{maintainChecklistManagedBean.getCrewAvailChecklist}" action="/FOS/DisplayCrewAvailChecklists"/>
+                    <h:commandButton value="Ground Crew Timetable"  action="/FOS/GroundCrewTimetable"/>
+                    
                     </h:form>
                 </div>
 

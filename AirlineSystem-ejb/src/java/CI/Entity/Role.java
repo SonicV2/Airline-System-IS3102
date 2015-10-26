@@ -27,8 +27,6 @@ public class Role implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long roleID;
     
-    //private static long roleNo=10;
-    
     private String roleName;
     
     @ManyToMany(cascade = {CascadeType.PERSIST}, mappedBy="roles")

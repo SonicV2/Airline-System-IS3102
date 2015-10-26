@@ -27,16 +27,18 @@ public class RoleSessionBean implements RoleSessionBeanLocal {
     @PersistenceContext(unitName = "AirlineSystem-ejbPU")
     private EntityManager em;
 
-   
+    //Role role_db;
 
     private List<Role> rolelist = new ArrayList<Role>();
     private Role role;
     List<Employee> employeelist_role = new ArrayList<Employee>();
-
+     Role role_db;
     @Override
     public void addRole(String roleName, List<AccessRight> allAccessRights) {
-        Role role_db = new Role();
-        System.out.println("----------------------------"+role_db.getRoleID());
+
+        role_db = new Role();
+        role_db.setRoleID((long) 2);
+
         role_db.create(roleName.toUpperCase());
         role_db.setAccessRights(allAccessRights);
 

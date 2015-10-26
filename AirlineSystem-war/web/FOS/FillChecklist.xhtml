@@ -24,25 +24,25 @@ and open the template in the editor.
     
     <body>
  <!--    To add the same header on all dashboard pages  -->
-               <ui:include src="/CI/dashboardHeader.xhtml"/>
+               <ui:include src="/CI/DashboardHeader.xhtml"/>
 <!--            To add the same sidebar on all dashboard pages  -->
-        <ui:include src="/CI/dashboardSidebar.xhtml"/>
+        <ui:include src="/CI/DashboardSidebar.xhtml"/>
 
         <div id="page-wrapper">
             <div class="row">
                 
                 
     <h:form id="iform">
-        <h3>Fill in #{ChecklistManagedBean.checklistName} checklist</h3>
-        <p:selectManyCheckbox  value="#{ChecklistManagedBean.selectedItemNames}" layout="grid" columns="1">
-            <f:selectItems value="#{ChecklistManagedBean.checklistItemsForChecklist}" var="item" itemLabel="#{item.name}" itemValue="#{item.name}"/>
+        <h3>Fill in #{checklistManagedBean.checklistName} checklist</h3>
+        <p:selectManyCheckbox  value="#{checklistManagedBean.selectedItemNames}" layout="grid" columns="1">
+            <f:selectItems value="#{checklistManagedBean.checklistItemsForChecklist}" var="item" itemLabel="#{item.name}" itemValue="#{item.name}"/>
         </p:selectManyCheckbox>
 
         <h4>Comments</h4>
-        <p:inputTextarea rows="5" cols="50" value ="#{ChecklistManagedBean.comments}" />
+        <p:inputTextarea rows="5" cols="50" value ="#{checklistManagedBean.comments}" />
 
         <div class="text-center">
-            <h:commandButton class="btn btn-outline btn-success" value="Submit checklist"  action="#{ChecklistManagedBean.submitChecklist()}"/>
+            <h:commandButton class="btn btn-outline btn-success" value="Submit checklist"  action="#{checklistManagedBean.submitChecklist()}"/>
         </div>
 
     </h:form>

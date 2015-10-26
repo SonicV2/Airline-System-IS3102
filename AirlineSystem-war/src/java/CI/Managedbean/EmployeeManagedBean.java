@@ -76,6 +76,8 @@ public class EmployeeManagedBean {
     //For Logging purposes
     private FileHandler fh;
     private String userID;
+    
+    private String mainCrewExp;
    
 
     public EmployeeManagedBean() {
@@ -204,6 +206,38 @@ public class EmployeeManagedBean {
         fh.close();
     }
 
+    
+    
+      public void addGroundCrew(ActionEvent event) {
+        setEmployeeRole("Ground Crew");
+        employeeSessionBean.addGroundCrew(employeeID, employeeDisplayFirstName, employeeDisplayLastName, employeeDepartment, employeeDOB, employeeGender, employeeHpNumber,
+                employeeMailingAddress, employeeOfficeNumber, employeePrivateEmail,  position,mainCrewExp);
+
+        employee = getEmployee(employeeID);
+        employeeUserName = employee.getEmployeeUserName();
+        employeeEmailAddress = employee.getEmployeeEmailAddress();
+        employeeSessionBean.hashPwd(employeeID);
+        
+         
+        Logger logger = Logger.getLogger(EmployeeSessionBean.class.getName());
+        try {   
+        fh = new FileHandler("%h/addPilot.txt",99999,1,true);  
+        logger.addHandler(fh);
+        SimpleFormatter formatter = new SimpleFormatter();  
+        fh.setFormatter(formatter);  
+
+        } catch (SecurityException e) {  
+        e.printStackTrace();  
+        } catch (IOException e) {  
+        e.printStackTrace();  
+        } 
+        logger.info("User: "+ userID 
+                + " has added Pilot: " + employeeID);
+        fh.close();
+    }
+
+      
+      
     public String changePwd() {
         HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
         //String userID= session.getAttribute("isLogin").toString();
@@ -438,6 +472,20 @@ public class EmployeeManagedBean {
 
     public void setSecondLang(String secondLang) {
         this.secondLang = secondLang;
+    }
+
+    /**
+     * @return the mainCrewExp
+     */
+    public String getMainCrewExp() {
+        return mainCrewExp;
+    }
+
+    /**
+     * @param mainCrewExp the mainCrewExp to set
+     */
+    public void setMainCrewExp(String mainCrewExp) {
+        this.mainCrewExp = mainCrewExp;
     }
 
 }

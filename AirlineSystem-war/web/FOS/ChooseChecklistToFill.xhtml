@@ -20,9 +20,9 @@
 
     <body>
 <!--                    To add the same header on all dashboard pages  -->
-               <ui:include src="/CI/dashboardHeader.xhtml"/>
+               <ui:include src="/CI/DashboardHeader.xhtml"/>
 <!--                   To add the same sidebar on all dashboard pages   -->
-        <ui:include src="/CI/dashboardSidebar.xhtml"/>
+        <ui:include src="/CI/DashboardSidebar.xhtml"/>
         <div id="page-wrapper">
             <div class="row">
             <div class="col-lg-12">
@@ -34,8 +34,8 @@
             <h:form id="form">
 
 
-                <p:dataTable id="schedules" var="schedule" value="#{ChecklistManagedBean.currentDaySchedulesForTeam}" rowKey="#{schedule.scheduleId}"
-                             selection="#{ScheduleManageBean.selectedSchedule}" selectionMode="single" paginator="true" rows="10" widgetVar="schedulesTable">
+                <p:dataTable id="schedules" var="schedule" value="#{checklistManagedBean.currentDaySchedulesForTeam}" rowKey="#{schedule.scheduleId}"
+                             selection="#{scheduleManageBean.selectedSchedule}" selectionMode="single" paginator="true" rows="10" widgetVar="schedulesTable">
 
                     <f:facet name="header">
 
@@ -69,7 +69,7 @@
 
                     <p:column headerText="List" style="width:60px;">
                         <h:commandLink
-                            action="#{ChecklistManagedBean.fillParticularChecklist(schedule.scheduleId)}"><i class="fa fa-edit"></i></h:commandLink>
+                            action="#{checklistManagedBean.fillParticularChecklist(schedule.scheduleId)}"><i class="fa fa-edit"></i></h:commandLink>
                     </p:column>
 
                 </p:dataTable>

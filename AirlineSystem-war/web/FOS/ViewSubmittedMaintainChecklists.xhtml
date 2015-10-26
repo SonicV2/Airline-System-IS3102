@@ -1,0 +1,93 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <h:head>
+        <p:growl id="growl" sticky="true" showDetail="true"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <h:outputStylesheet library ="css"  name="bootstrap.css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
+        <h:outputStylesheet library="css" name="admindb.css" />
+        <h:outputStylesheet library="css" name="morrisjs/morris.css" />
+        <title>Search Team</title>
+    </h:head>
+    <style>
+        .ui-panelgrid .ui-panelgrid-cell {
+            color:black;
+        }
+    </style>
+    <h:body>
+        <!--            To add the same header on all dashboard pages  
+ <ui:include src="/CI/DashboardHeader.xhtml"/>
+            To add the same sidebar on all dashboard pages -->  
+        <ui:include src="/CI/DashboardSidebar.xhtml"/>
+        <div id="page-wrapper">
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2 class="page-header">View Submitted Maintenance Checklists</h2>
+                </div>
+
+
+
+                <div class="col-lg-12">
+                    <h:form id="form">
+                        <p:dataGrid var="checklist" value="#{maintainChecklistManagedBean.submittedListsDB}" columns="3" layout="grid"
+                                    rows="12" paginator="true" id="cars"
+                                    paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                    rowsPerPageTemplate="6,12,16">
+
+                            <f:facet name="header">
+                                Checklist
+                            </f:facet>
+
+                            <p:panel header="#{checklist.id}" style="text-align:center">
+                                <h:panelGrid columns="1" style="width:100%">
+
+                                    <h:outputText value="#{checklist.lastEditDate}" />
+
+                                    <h:outputText value="Show Member Details" />
+
+                                    <p:commandLink update=":form:teamDetail" oncomplete="PF('teamDialog').show()" title="View Detail">
+                                        <h:outputText styleClass="ui-icon ui-icon-search" style="margin:0 auto;" />
+                                        <f:setPropertyActionListener value="#{checklist}" target="#{maintainChecklistManagedBean.selectedSubmittedChecklist}" />
+                                    </p:commandLink>
+                                </h:panelGrid>
+                            </p:panel>
+
+                        </p:dataGrid>
+
+                        <p:dialog header="Checklist Details" widgetVar="teamDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                            <p:outputPanel id="teamDetail" style="text-align:center;">
+
+                                <p:dataTable id="checkboxDT" var="item" value="#{maintainChecklistManagedBean.selectedSubmittedChecklist.maintainChecklistItems}"  style="margin-bottom:0">
+                                    <f:facet name="header">
+                                        All Submitted Checklists
+                                    </f:facet>
+                                   
+                                    <p:column headerText="Checklist Items" style="width: 30%">
+                                        <h:outputText value="#{item.content}" />
+                                        <h:selectBooleanCheckbox value="#{item.checked}" onclick="return false;" onkeydown="return false"/>
+                                    </p:column>
+                                   
+                                </p:dataTable>
+
+
+                            </p:outputPanel>
+                        </p:dialog>
+
+                       
+                    </h:form>   
+                </div>
+            </div>
+        </div>
+
+    </h:body>
+</html>
+

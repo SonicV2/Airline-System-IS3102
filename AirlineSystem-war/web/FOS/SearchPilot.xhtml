@@ -1,0 +1,109 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <p:growl id="growl" sticky="true" showDetail="true"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <h:outputStylesheet library ="css"  name="bootstrap.css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
+        <h:outputStylesheet library="css" name="admindb.css" />
+        <h:outputStylesheet library="css" name="morrisjs/morris.css" />
+        <title>Search Pilot</title>
+    </h:head>
+    <style>
+        .ui-selectcheckboxmenu .ui-selectcheckboxmenu-label{
+            height:20px;
+        }
+        .ui-selectcheckboxmenu .ui-selectcheckboxmenu-trigger{
+            width:23px;
+        }
+    </style>
+
+    <h:body>
+        <!--            To add the same header on all dashboard pages  
+-->        <ui:include src="/CI/dashboardHeader.xhtml"/><!--
+            To add the same sidebar on all dashboard pages -->  
+        <ui:include src="/CI/dashboardSidebar.xhtml"/>
+        <div id="page-wrapper">
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2 class="page-header">Pilot Management</h2>
+                </div>
+
+                <h:form>
+                    <div class="col-md-12">
+
+                        <p:dataTable var="pilot" value="#{searchCrewManagedBean.pilots}" widgetVar="pilotsTable" paginator="true" rows="10">
+
+                            <f:facet name="header">
+                                <p:outputPanel>
+                                    <h:outputText value="Search all fields:" />
+                                    <p:inputText id="globalFilter" onkeyup="PF('pilotsTable').filter()" style="width:150px" placeholder="Enter keyword"/>
+                                </p:outputPanel>
+                            </f:facet>
+
+                            <p:column filterBy="#{pilot.employeeDisplayFirstName}" headerText="First Name" filterMatchMode="contains">
+                                <h:outputText value="#{pilot.employeeDisplayFirstName}" />
+                            </p:column>
+
+                            <p:column filterBy="#{pilot.employeeDisplayLastName}" headerText="Last Name" filterMatchMode="contains">
+                                <h:outputText value="#{pilot.employeeDisplayLastName}" />
+                            </p:column>
+
+                            <p:column filterBy="#{pilot.position}" headerText="Position" filterMatchMode="exact">
+                                <f:facet name="filter">
+                                    <h:selectOneMenu class="form-control" onchange="PF('pilotsTable').filter()" >
+                                        <f:selectItem itemLabel="Select One" itemValue="#{null}" noSelectionOption="true" />
+                                        <f:selectItems value="#{searchCrewManagedBean.pilotPosition}" />
+                                    </h:selectOneMenu>
+                                </f:facet>
+                                <h:outputText value="#{pilot.position}" />
+                            </p:column>
+
+                            <p:column filterBy="#{pilot.team.id}" headerText="Team ID" filterMatchMode="contains">
+                                <h:outputText value="#{pilot.team.id}" />
+                            </p:column>
+
+                            <p:column filterBy="#{pilot.experience}" headerText="Experience" filterMatchMode="contains">
+                                <h:outputText value="#{pilot.experience}" />
+                            </p:column>
+
+                            <p:column filterBy="#{pilot.skillsets.get(0)}" headerText="Main skill" filterMatchMode="in">
+                                <f:facet name="filter">
+                                    <p:selectCheckboxMenu label="Skillsets" onchange="PF('pilotsTable').filter()" panelStyle="width:125px" scrollHeight="150">
+                                        <f:selectItems value="#{searchCrewManagedBean.pilotSkillsets}" />
+                                    </p:selectCheckboxMenu>
+                                </f:facet>
+                                <h:outputText value="#{pilot.skillsets}" />
+                            </p:column>
+
+                            <p:column filterBy="#{pilot.assigned}" headerText="Assigned" filterMatchMode="equals">
+                                <f:facet name="filter">
+                                    <p:selectOneButton onchange="PF('pilotsTable').filter()">
+                                        <f:converter converterId="javax.faces.Boolean" />
+                                        <f:selectItem itemLabel="All" itemValue="" />
+                                        <f:selectItem itemLabel="Assigned" itemValue="true" />
+                                        <f:selectItem itemLabel="Unassigned" itemValue="false" />
+                                    </p:selectOneButton>
+                                </f:facet>
+                                <h:outputText value="#{pilot.assigned? 'Assigned': 'Unassigned'}" />
+
+                            </p:column>
+
+                        </p:dataTable>
+
+                    </div>
+                </h:form> 
+            </div>
+        </div>
+
+    </h:body>
+</html>
+

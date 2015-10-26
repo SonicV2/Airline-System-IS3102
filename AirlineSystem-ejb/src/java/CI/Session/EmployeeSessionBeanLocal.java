@@ -44,6 +44,11 @@ public interface EmployeeSessionBeanLocal {
             String employeeMailingAddress, String employeeOfficeNumber, String employeePrivateEmail,
             String experience, List<String>skills, String position);
     
+    public void addGroundCrew(String employeeID, String employeeDisplayFirstName, String employeeDisplayLastName,
+            String employeeDepartment,Date employeeDOB,String employeeGender, String employeeHpNumber, 
+            String employeeMailingAddress, String employeeOfficeNumber, String employeePrivateEmail,
+             String position,String mainCrewExp);
+    
     public List<Employee> retrieveAllEmployees();
     public Boolean lockoutEmployee(String employeeID);
     public List<Employee> retrieveAllActiveEmployees();

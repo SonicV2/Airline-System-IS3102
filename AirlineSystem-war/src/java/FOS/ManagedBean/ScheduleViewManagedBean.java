@@ -9,9 +9,13 @@ import APS.Entity.Schedule;
 import CI.Entity.CabinCrew;
 import CI.Entity.Pilot;
 import CI.Managedbean.LoginManagedBean;
+import FOS.Entity.GroundCrew;
+import FOS.Entity.MaintainSchedule;
+import FOS.Entity.MaintainanceTeam;
 import FOS.Entity.Pairing;
 import FOS.Entity.Team;
 import FOS.Session.CrewSignInSessionBeanLocal;
+import FOS.Session.MaintainSessionBeanLocal;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -35,18 +39,25 @@ import org.primefaces.model.ScheduleModel;
 @ManagedBean
 @SessionScoped
 public class ScheduleViewManagedBean {
+    @EJB
+    private MaintainSessionBeanLocal maintainSessionBean;
 
     @EJB
     private CrewSignInSessionBeanLocal crewSignInSessionBean;
+    
+    
 
-    @ManagedProperty(value = "#{loginManageBean}")
+    @ManagedProperty(value = "#{loginManagedBean}")
     private LoginManagedBean loginManageBean;
 
     private ScheduleModel eventModel;
     private ScheduleModel pilotEventModel;
     private ScheduleModel eventReservedCrewModel;
     private ScheduleModel eventReservedPilotModel;
+    private ScheduleModel eventGroundCrewModel;
+    
     private Team team;
+    private MaintainanceTeam maintainTeam;
 
     /**
      * Creates a new instance of ScheduleViewManagedBean
@@ -62,6 +73,7 @@ public class ScheduleViewManagedBean {
         addPilotEvent();
         addReservedCrewEvent();
         addReservedPilotEvent() ;
+        addGroundCrewEvent();
     }
 
     public void getCCTeam() {
@@ -370,6 +382,22 @@ public class ScheduleViewManagedBean {
         }
 
     }
+    
+    public void addGroundCrewEvent(){
+        eventGroundCrewModel = new DefaultScheduleModel();
+        
+        String userName = loginManageBean.getEmployeeUserName();
+        GroundCrew gc = maintainSessionBean.getGroundCrew(userName);
+        if(gc == null || gc.getPosition().contains("Check-in")){
+            return;
+        }
+        MaintainanceTeam mTeam = maintainSessionBean.getCrewMaintainTeam(userName);
+        List<MaintainSchedule> schedules = mTeam.getmSchedules();
+        for(MaintainSchedule s : schedules){
+            eventGroundCrewModel.addEvent(new DefaultScheduleEvent("Maintenance Duty", s.getMainStartDate(), s.getMainEndDate()));
+        }
+        
+    }
 
     /**
      * @return the eventModel
@@ -467,6 +495,34 @@ public class ScheduleViewManagedBean {
      */
     public void setEventReservedPilotModel(ScheduleModel eventReservedPilotModel) {
         this.eventReservedPilotModel = eventReservedPilotModel;
+    }
+
+    /**
+     * @return the eventGroundCrewModel
+     */
+    public ScheduleModel getEventGroundCrewModel() {
+        return eventGroundCrewModel;
+    }
+
+    /**
+     * @param eventGroundCrewModel the eventGroundCrewModel to set
+     */
+    public void setEventGroundCrewModel(ScheduleModel eventGroundCrewModel) {
+        this.eventGroundCrewModel = eventGroundCrewModel;
+    }
+
+    /**
+     * @return the maintainTeam
+     */
+    public MaintainanceTeam getMaintainTeam() {
+        return maintainTeam;
+    }
+
+    /**
+     * @param maintainTeam the maintainTeam to set
+     */
+    public void setMaintainTeam(MaintainanceTeam maintainTeam) {
+        this.maintainTeam = maintainTeam;
     }
 
 }

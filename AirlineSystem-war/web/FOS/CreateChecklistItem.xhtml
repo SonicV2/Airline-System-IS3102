@@ -26,9 +26,9 @@ and open the template in the editor.
     <h:body>
         
 <!--             To add the same header on all dashboard pages  -->
-        <ui:include src="/CI/dashboardHeader.xhtml"/>
+        <ui:include src="/CI/DashboardHeader.xhtml"/>
  <!--            To add the same sidebar on all dashboard pages  -->
-        <ui:include src="/CI/dashboardSidebar.xhtml"/>
+        <ui:include src="/CI/DashboardSidebar.xhtml"/>
         
         <div id="page-wrapper">
             
@@ -47,7 +47,7 @@ and open the template in the editor.
             <div class="form-group">
                 <h:outputLabel value="Checklist Item Name: " class="col-md-4 control-label" />
                 <div class="col-md-6">
-                    <h:inputText id="itemname" required="true" requiredMessage="Please fill in the checklist item name" class="form-control" value="#{ChecklistManagedBean.checklistItemName}" />
+                    <h:inputText id="itemname" required="true" requiredMessage="Please fill in the checklist item name" class="form-control" value="#{checklistManagedBean.checklistItemName}" />
                 </div>
                 <div class="missingfield">
                     <h:message for="lastname"  />
@@ -58,7 +58,7 @@ and open the template in the editor.
                 <br></br>
                 <br></br>
             <div class="form-group text-center">
-                <h:commandButton class="btn btn-outline btn-success" value="Create New Item"  action="#{ChecklistManagedBean.addItem()}"/>
+                <h:commandButton class="btn btn-outline btn-success" value="Create New Item"  action="#{checklistManagedBean.addItem()}"/>
             </div>
             </div>
 

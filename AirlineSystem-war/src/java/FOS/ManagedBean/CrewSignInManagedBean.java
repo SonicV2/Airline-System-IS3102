@@ -48,7 +48,7 @@ public class CrewSignInManagedBean {
     @EJB
     private CrewSignInSessionBeanLocal crewSignInSessionBean;
 
-    @ManagedProperty(value = "#{loginManageBean}")
+    @ManagedProperty(value = "#{loginManagedBean}")
     private LoginManagedBean loginManageBean;
 
     private Team team;
@@ -625,6 +625,7 @@ public class CrewSignInManagedBean {
             }
         }
 
+        
         for (int i = 0; i < targetPairing.getFlightNumbers().size(); i++) {
             if (targetPairing.getFlightNumbers().size() == 1) {
                 schs.add(crewSignInSessionBean.getScheduleBy(submitFlightNumber, targetPairing.getFDate()));
@@ -650,10 +651,14 @@ public class CrewSignInManagedBean {
                         int submitMonth = Integer.parseInt(scheduleMonth);
                         int submitYear = Integer.parseInt(scheduleYear);
 
-                        if (tYear == submitYear && tMonth == submitMonth && tDay >= submitDay) {
+                        if (tYear == submitYear && tMonth == submitMonth && tDay == submitDay) {
 
                             schs.add(crewSignInSessionBean.getScheduleBy(targetPairing.getFlightNumbers().get(i + 1), tDate));
                             break; // once found the schedule returns to base, stop searching
+                        } else if (tYear == submitYear && tMonth == submitMonth && tDay > submitDay) {
+                            schs.add(crewSignInSessionBean.getScheduleBy(targetPairing.getFlightNumbers().get(i + 1), tDate));
+                            break;
+
                         }
 
                     } else {
