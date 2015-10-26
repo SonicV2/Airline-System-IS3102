@@ -26,6 +26,9 @@ public class Role implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long roleID;
+    
+    //private static long roleNo=10;
+    
     private String roleName;
     
     @ManyToMany(cascade = {CascadeType.PERSIST}, mappedBy="roles")
@@ -39,8 +42,13 @@ public class Role implements Serializable {
     private List<AccessRight> accessRights = new ArrayList<AccessRight>();
 
     
+    public Role(){
+    }
+    
     public void create(String roleName){
         this.roleName=roleName;
+      //  roleID=roleNo;
+       // roleNo=roleNo+1;
     }
     
     public String getRoleName() {

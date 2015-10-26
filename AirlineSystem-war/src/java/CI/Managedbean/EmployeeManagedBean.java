@@ -33,7 +33,7 @@ public class EmployeeManagedBean {
     @EJB
     private EmployeeSessionBeanLocal employeeSessionBean;
 
-    @ManagedProperty(value = "#{loginManageBean}")
+    @ManagedProperty(value = "#{loginManagedBean}")
     private LoginManagedBean loginManageBean;
 
     public EmployeeSessionBeanLocal getEmployeeSessionBean() {
