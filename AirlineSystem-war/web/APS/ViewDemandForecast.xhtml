@@ -1,0 +1,95 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:head>
+        <p:growl id="growl" sticky="true" showDetail="true"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <h:outputStylesheet library ="css"  name="bootstrap.css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
+        <h:outputStylesheet library="css" name="admindb.css" />
+        <h:outputStylesheet library="css" name="morrisjs/morris.css" />
+
+        <title>View Demand Forecast</title>
+    </h:head>
+
+    <!--            To add the same header on all dashboard pages  
+<ui:include src="/CI/dashboardHeader.xhtml"/>--><!--
+    To add the same sidebar on all dashboard pages -->  
+    <ui:include src="/CI/dashboardSidebar.xhtml"/>
+    <body>
+        <div id="page-wrapper">
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2 class="page-header">View Demand Forecast</h2>
+                </div>
+
+                <div class="col-lg-12"> 
+
+                    <h:form id="form">
+              
+                       <p:growl id="message" showDetail="true"/>
+                       <p:dataTable id="forecasts" var="forecast" value="#{flightManageBean.forecast}" style="margin-bottom:20px" paginator="true" rows="10" widgetVar="forecastTable">
+
+                            <f:facet name="header">
+
+                                <p:outputPanel>
+                                    <h:outputText value="Search all fields:" />
+                                    <p:inputText id="globalFilter" onkeyup="PF('flightsTable').filter()" style="width:150px" placeholder="Enter keyword"/>
+                                </p:outputPanel>
+                            </f:facet>
+
+                            <p:column filterBy="#{flight.flightNo}" headerText="Flight Number" filterMatchMode="contains">
+                                <h:outputText value="#{flight.flightNo}" />
+                            </p:column>
+
+                            <p:column filterBy="#{flight.route.routeId}" headerText="Route ID" filterMatchMode="contains">
+                                <h:outputText value="#{flight.route.routeId}" />
+                            </p:column>
+
+                            <p:column filterBy="#{flight.route.originCountry}" headerText="Origin Country" filterMatchMode="contains">
+                                <h:outputText value="#{flight.route.originCountry}" />
+                            </p:column>
+
+                            <p:column filterBy="#{flight.route.originCity}" headerText="Origin City" filterMatchMode="contains">
+                                <h:outputText value="#{flight.route.originCity}" />
+                            </p:column>
+
+                            <p:column filterBy="#{flight.route.destinationCountry}" headerText="Destination Country" filterMatchMode="contains">
+                                <h:outputText value="#{flight.route.destinationCountry}" />
+                            </p:column>
+
+                            <p:column filterBy="#{flight.route.destinationCity}" headerText="Destination City" filterMatchMode="contains">
+                                <h:outputText value="#{flight.route.destinationCity}" />
+                            </p:column>
+
+
+                            <p:column filterBy="#{flight.aircraftType.id}" headerText="Aircraft Type" filterMatchMode="contains">
+                                <h:outputText value="#{flight.aircraftType.id}" />
+                            </p:column>
+                            
+<!--                            only operations manager can delete flight-->
+                            <p:column headerText="Delete Flight" style="width:60px" rendered="#{loginManageBean.accessRightIDs.contains(11)}">
+
+                                <h:commandLink onclick="if (!confirm('Do you really want to delete this flight? It will delete all the related schedules!')) {
+                                            return false;
+                                        }
+                                        ;
+                                        return true;
+                                        " action="#{flightManageBean.deleteFlight(flight.flightNo)}"><i class="fa fa-trash-o"></i> </h:commandLink>
+                            </p:column>
+
+                        </p:dataTable>
+                    </h:form>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

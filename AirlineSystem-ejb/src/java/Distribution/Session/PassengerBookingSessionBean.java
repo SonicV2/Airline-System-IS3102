@@ -107,10 +107,10 @@ public class PassengerBookingSessionBean implements PassengerBookingSessionBeanL
     }
 
     @Override
-    public PNR createPNR(int noOfTravellers, String email, String contactNo, String pnrStatus, Double totalPrice, Date dateOfBooking, String bookingAvenue) {
+    public PNR createPNR(int noOfTravellers, String email, String contactNo, String pnrStatus, Double totalPrice, Date dateOfBooking, Date dateOfConfirmation, String bookingAvenue) {
         PNR pnr = new PNR();
         String pnrNo = generatePNRNumber();
-        pnr.createPNR(pnrNo, noOfTravellers, email, contactNo, pnrStatus, totalPrice, dateOfBooking, bookingAvenue);
+        pnr.createPNR(pnrNo, noOfTravellers, email, contactNo, pnrStatus, totalPrice, dateOfBooking, dateOfConfirmation, bookingAvenue);
         pnr.setBookings(new ArrayList<Booking>());
         return pnr;
     }
@@ -173,9 +173,7 @@ public class PassengerBookingSessionBean implements PassengerBookingSessionBeanL
     public void deletePNR(PNR pnr) {
         SeatAvailability seatAvailForBooking = new SeatAvailability();
         String serviceType;
-        int noOfSeatsBooked;
-        
-         
+        int noOfSeatsBooked;      
           
         for (Booking eachPnrBooking : pnr.getBookings()) {
             seatAvailForBooking = eachPnrBooking.getSeatAvail();
@@ -204,6 +202,7 @@ public class PassengerBookingSessionBean implements PassengerBookingSessionBeanL
         }
         pnr.setPnrStatus("Cancelled");
          em.merge(pnr);
+         em.flush();
     }
 
     @Override

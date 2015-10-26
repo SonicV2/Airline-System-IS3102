@@ -35,7 +35,7 @@ public class ChangeProfileManagedBean {
     private EmployeeSessionBeanLocal employeeSessionBean;
     
 
-     @ManagedProperty(value = "#{loginManageBean}")
+     @ManagedProperty(value = "#{loginManagedBean}")
     private LoginManagedBean loginManageBean;
      
     private String userName;

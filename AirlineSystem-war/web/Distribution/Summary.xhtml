@@ -38,212 +38,16 @@
         <!--pop-up-->
         <h:outputScript library="js" name="menu_jquery.js" /> 
         <!--//pop-up-->	
+        <h:outputStylesheet library ="css"  name="flightdisplay2.css" />
         <title>Summary</title>
     </h:head>
-    <style>
-        .flight-list-v2 {
-            margin: 40px 15px 0px 15px;
-            overflow: hidden;
-            border: 1px solid #e6e6e6;
-            box-shadow: 0px 0px 5px #e6e6e6;	
-        }
-        .flight-list-v2:hover {
-            border: 1px solid #F19C4F;
-            box-shadow: 0px 0px 5px #F19C4F;
-        }
-        .flight-list-v2 .airline {
-            padding: 20px 0px;
-        }
-        .flight-list-v2 .airline h6 {
-            margin-top: 5px;
-        }
-        .flight-list-v2 img {
-            max-width: 100%;
-        }
-        .flight-list-v2 .bold {
-            font-weight: normal;
-        }
-        .flight-list-v2  h3{
-            font-weight: bold;
-            margin: 20px 0px 0px;
-        }
-        .stop-duration {
-            padding: 15px;
-        }
-        .flight-list-v2 .stop {
-            height: 15px;
-            width: 15px;
-            border-radius: 50%;
-            background: #e6e6e6;
-            margin-top: -8px;
-            margin-left: 47%;
-        }
-        .flight-list-v2 .stop-box {
-            padding: 8px 10px;
-            margin-left: 36%;
-            width: 70px;
-            position: relative;
-            border: 1px solid #e6e6e6;
-            z-index: -1;
-            margin-top: 6px;
-            text-align: center;
-        }
-        .flight-list-v2 .stop-box:before {
-            border-left: 1px solid #e6e6e6;
-            border-top: 1px solid #e6e6e6;
-            content: "";
-            background: #ffffff;
-            height: 10px;
-            left: 42%;
-            position: absolute;
-            top: -6px;
-            -webkit-transform: rotate(45deg);
-            -ms-transform: rotate(45deg);
-            -o-transform: rotate(45deg);
-            -moz-transform: rotate(45deg);
-            transform: rotate(45deg);
-            width: 10px;
-        }
-        .flight-list-v2 .departure {
-            text-align: right;
-        }
-        .flight-list-v2 .destination {
-            text-align: left;
-        }
-        .flight-list-v2 .duration {
-            margin-top: 5px;
-        }
-        .flight-direction {
-            border: 1px solid #e6e6e6;
-            position: relative;
-            margin-top: 15px;
-            z-index: -1;
-        }
-        .flight-direction:after {
-            background: #e6e6e6 none repeat scroll 0 0;
-            border-radius: 50%;
-            color: #0A3152;
-            content: "";
-            height: 15px;
-            position: absolute;
-            right: -2px;
-            top: -7px;
-            width: 15px;
-        }
-        .flight-direction:before {
-            background: #e6e6e6 none repeat scroll 0 0;
-            border-radius: 50%;
-            color: #0A3152;
-            content: "";
-            height: 15px;
-            position: absolute;
-            left: -2px;
-            top: -7px;
-            width: 15px;
-        }
-        .flight-list-footer {
-            overflow: hidden;
-            background: #f7f7f7;
-            padding: 10px 0px;
-            color: #0A3152;
-        }
-        .flight-list-footer span{
-            padding: 0px 10px;
-            font-size: 13px;
-        }
-        .flight-list-footer .pull-right span{
-            font-weight: bold;
-            font-size: 18px;
-            padding: 0;
-        }
-        .flight-list-footer .pull-right a {
-            color: #ffffff;
-            background: #F2676B;
-            padding: 15px;
-            margin-left: 20px;
-            font-weight: bold;
-        }
-        .flight-list-v2:hover .flight-list-footer .pull-right a {
-            background: #00ADEF;
-        }
-        .flight-list-footer .refund {
-            color: #F2676B;
-            border-left: 1px solid #0A3152;
-            border-right: 1px solid #0A3152;
-        }
-        .flight-list-footer .fa-info-circle {
-            cursor: pointer;
-        }
-        .flight-list-v2 h5 {
-            color: #0A3152;
-            font-size: 13px;
-            margin: 5px 0px;
-        }
-        .booking-sidebar .sidebar-item {
-            border: 1px solid #e6e6e6;
-            box-shadow: 0px 0px 5px #e6e6e6;
-        }
-        .booking-sidebar .sidebar-item h4 {
-            background: #e6e6e6 none repeat scroll 0 0;
-            padding: 20px 15px;
-            font-weight: bold;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            margin: 0px;
-        }
-        .booking-sidebar .sidebar-item h4 i {
-            color: #F2676B;
-            margin-right: 10px;
-        }
-        .booking-sidebar .sidebar-body {
-            padding: 20px;
-        }
-        .booking-sidebar .sidebar-body .table {
-            margin-bottom: 0px;
-        }
-        .booking-sidebar .sidebar-body table tr {
-            border-bottom: 1px solid #e6e6e6;
-        }
-        .booking-sidebar .sidebar-body table tr:last-child {
-            border-bottom: none;
-        }
-        .booking-sidebar .sidebar-body table td {
-            border-top: none;
-        }
-        .booking-sidebar .sidebar-body .total {
-            font-size: 20px;
-            font-weight: bold;
-        }
-        /*        for responsive implementation*/
-        @media (max-width: 767px) {
-            .flight-list-v2 .departure ,
-            .flight-list-v2 .destination {
-                text-align: center;
-            }
-            .flight-list-v2 .stop-box {
-                margin-left: 38%;
-            }
-            .flight-list-v2 h3 {
-                margin: 0px;
-            }
-            .sm-invisible {
-                display: none;
-            }
-            .flight-list-main {
-                padding-bottom: 20px;
-            }
-            .flight-list-v2 .airline {
-                padding: 20px 0px 10px 0px;
-            }
-        }
 
-    </style>
     <h:body>
         <ui:fragment rendered ="#{customerManagedBean.isCustomerLoggedOn}">
-        <ui:include src="CustomerDashboardHeader.xhtml"/>
+            <ui:include src="CustomerDashboardHeader.xhtml"/>
         </ui:fragment>
         <ui:fragment rendered ="#{!customerManagedBean.isCustomerLoggedOn}">
-        <ui:include src="MerlionAirlinesHeader.xhtml"/>
+            <ui:include src="MerlionAirlinesHeader.xhtml"/>
         </ui:fragment>
         <div class="banner-bottom">
             <!-- container -->
@@ -252,9 +56,8 @@
                     <h2>Here's your itinerary for the trip:</h2>
                 </div>
                 <div class="faqs-top-grids terms-grids">
-
-                    <ui:repeat value='#{mARSManagedBean.selectedSchedules}' var='schedules'>
-                        <div class="col-md-8 col-sm-8">
+                    <div class="col-md-8 col-sm-8">
+                        <ui:repeat value='#{mARSManagedBean.selectedSchedules}' var='schedules'>
                             <div class="flight-list-v2">
                                 <div class="flight-list-main">	
                                     <div class="col-md-2 col-sm-2 text-center airline">
@@ -283,8 +86,8 @@
                                         <div class="duration text-center">
                                             <h1><i class="fa fa-long-arrow-right"></i></h1>
                                             <span><i class="fa fa-clock-o"></i> 
-                                                    #{mARSManagedBean.convertToHours(schedules.flight.flightDuration)} Hours                                            
-                                                    #{mARSManagedBean.convertToMins(schedules.flight.flightDuration)} Mins 
+                                                #{mARSManagedBean.convertToHours(schedules.flight.flightDuration)} Hours                                            
+                                                #{mARSManagedBean.convertToMins(schedules.flight.flightDuration)} Mins 
                                             </span>
                                         </div>
                                     </div>
@@ -313,10 +116,72 @@
                                                                         </div>-->
                                 </div>
                             </div>
-                        </div>
-                    </ui:repeat>
+
+                        </ui:repeat>
+
+
+                        <ui:fragment rendered="#{!customerManagedBean.loggedIn}">
+                            <div class="login-box">
+                                <h3>Book Flight</h3>
+                                <div class="booking-form">
+                                    <div class="col-md-6 col-sm-6">
+                                        <h:form>
+                                            <p:growl id="growl" sticky="true" showDetail="true"/>
+                                            <label>Email</label>
+                                            <h:inputText id="PE" required="true" validatorMessage="Not a valid email addess " requiredMessage="Please fill in Personal email field!" class="form-control" value="#{mARSManagedBean.customerEmail}" >
+                                                <f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
+                                            </h:inputText> 
+
+                                            <label>Password</label>
+
+                                            <h:inputSecret class="form-control" value="#{mARSManagedBean.customerPassword}" />
+
+                                            <div class="social-sits">
+                                                <div class="button-bottom">
+                                                    <p class="pull-left">New account? <a href="#{request.contextPath}/Distribution/MerlionAirlinesSignUp.xhtml">Signup Now!</a></p>
+
+                                                    <h:commandButton class="btn btn-outline btn-success pull-right" value="Sign in" action="#{mARSManagedBean.loginCheckAtSummary()}"/>
+                                                    <br></br>
+                                                </div>
+                                            </div>
+
+
+
+                                        </h:form>
+                                    </div>
+                                    <div class="col-md-6 col-sm-6 text-center">
+                                        <div class="social-media-login">
+                                            <h:form id="form">
+
+                                                <div class="form-group text-center">
+                                                    <h:commandButton class="btn btn-outline btn-success" value="Continue as a Guest"  action="Booking"/>
+                                                </div>
+                                            </h:form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ui:fragment>
+
+
+                        <ui:fragment rendered="#{customerManagedBean.loggedIn}">
+                            <div class='col-md-10'>
+                                <h:form id="customer">
+
+                                    <div class="form-group text-center">
+                                        <br></br>
+                                        <h:commandButton class="btn btn-outline btn-success" value="Proceed to Booking"  action="Booking"/>
+                                    </div>
+                                </h:form>
+                            </div>
+                        </ui:fragment>
+
+
+
+                    </div>
 
                     <div class="col-md-4 col-sm-4 booking-sidebar">
+                        <div class="flight-list-v2">
                         <div class="sidebar-item">
                             <h4><i class="fa fa-bookmark"></i>Fare Details</h4>
                             <div class="sidebar-body">
@@ -337,60 +202,16 @@
                                     </tbody></table>
                             </div>
                         </div>
+                        </div>
                     </div>
-                    
-                    <div class='col-md-10'>
-                        <p>Log in with your username (email) and password:</p>
-                        <br></br>
-                        <h:form id="loginForm">
-                            <p:growl id="growl" sticky="true" showDetail="true"/>
-                            <div class="login-grid-left">
-                                <fieldset id="body2">
-                                    <fieldset>
-                                        <!--                                    <label for="email">Email Address</label>-->
-                                        <p>Email</p>
-    <!--                                    <p:inputText value="#{customerManagedBean.customerEmail}" ></p:inputText>-->
-                                        <h:inputText id="PE" required="true" validatorMessage="Not a valid email addess " requiredMessage="Please fill in Personal email field!" class="form-control" value="#{customerManagedBean.customerEmail}" >
-                                            <f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
-                                        </h:inputText> 
-                                    </fieldset>
-                                    <fieldset>
-                                        <!--                                    <label for="password">Password</label>-->
-                                        <p>Password</p>
-                                        <p:password value="#{customerManagedBean.customerPassword}" />
-                                    </fieldset>
-
-                                    <h:commandButton class="pull-right" value="Sign in" action="#{customerManagedBean.loginCheckAtSummary()}"/>
-                                    <label for="checkbox"><input type="checkbox" id="checkbox"/> <i>Remember me</i></label>
-                                </fieldset>
-                                <span><a href="#">Forgot your password?</a></span>                                
-                            
-                            <div class="social-sits">
-                            <div class="button-bottom">
-                                <p>New account? <a href="#{request.contextPath}/Distribution/MerlionAirlinesSignUp.xhtml">Signup Now!</a></p>
-                            </div>
-                                </div>
-                                </div>
-                            <!--                        </form>-->
-                        </h:form>
-                    </div>
-                    </div>
-
-                    <div class='col-md-10'>
-                        <h:form id="form">
-
-                            <div class="form-group text-center">
-                                <h:commandButton class="btn btn-outline btn-success" value="Continue as a Guest"  action="Booking"/>
-                            </div>
-                        </h:form>
-                    </div>
-
 
 
                     <div class="clearfix"> </div>
-                </div>
 
+                </div>
             </div>
+
+        </div>
 
 
 
@@ -415,41 +236,11 @@
 
     </h:body>
 
-<!--                                      <p:dataList value="#{mARSManagedBean.selectedSchedules}" var="schedules" type="definition">
-
-                            <div class="col-lg-12">
-                                <h:outputLabel value="Flight Number: " />
-                                <h:outputText value="#{schedules.flight.flightNo}">
-                                </h:outputText>
-                            </div>
-
-                            <div class="col-lg-12">
-                                <h:outputLabel value="Origin: " />
-                                <h:outputText value="#{schedules.flight.route.originIATA}">
-                                </h:outputText>
-                            </div>
-
-                            <div class="col-lg-12">
-                                <h:outputLabel value="Destination: " />
-                                <h:outputText value="#{schedules.flight.route.destinationIATA}">
-                                </h:outputText>
-                            </div>
-
-                            <div class="col-lg-12">
-                                <h:outputLabel value="Departure Time: " />
-                                <h:outputText value="#{schedules.startDate}">
-                                    <f:convertDateTime pattern ="hh:mm a (EEE, MMM d, yyyy)"/>
-                                                <f:convertDateTime pattern ="dd-mm-yyyy HH:mm"/>
-                                </h:outputText>
-                            </div>
-
-                            <div class="col-lg-12">
-                                <h:outputLabel value="Arrival Time: " />
-                                <h:outputText value="#{schedules.endDate}">
-                                    <f:convertDateTime pattern ="hh:mm a (EEE, MMM d, yyyy)"/>
-                                                <f:convertDateTime pattern ="dd-mm-yyyy HH:mm"/>
-                                </h:outputText>
-                            </div>
-
-                        </p:dataList>-->
 </html>
+
+
+
+
+
+
+

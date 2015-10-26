@@ -105,7 +105,7 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
         int firstClass = aircraftType.getFirstSeats();
         int[] seats = rm.generateAvailability(flightId, economy, business, firstClass);
 
-        //Add a list schedule until 6 months later
+        //Add a list schedule until 12 months later
         while (curr.before(endTime)) {
             schedule = new Schedule();
             sa = new SeatAvailability();
@@ -376,38 +376,28 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
         return schedules;
     }
 
-    //Alternate getSchedules algo
-    private List<Schedule> getSchedules(Date currTime) {
-        schedules = new ArrayList<Schedule>();
-        try {
-
-            Query q = em.createQuery("SELECT a FROM Schedule a" + "AS a WHERE a.startDate>:startDate");
-            q.setParameter("startDate", currTime);
-
-            List<Schedule> results = q.getResultList();
-            if (!results.isEmpty()) {
-                schedules = results;
-
-            } else {
-                schedules = null;
-                System.out.println("No Schedules Added!");
-            }
-
-        } catch (EntityNotFoundException enfe) {
-            System.out.println("\nEntity not found error" + "enfe.getMessage()");
-        }
-        return schedules;
-    }
-
-    //Check whether all schedules are assigned
-    private boolean isAllAssigned(List<Schedule> schedules) {
-        for (Schedule schedule1 : schedules) {
-            if (!schedule1.isAssigned()) {
-                return false;
-            }
-        }
-        return true;
-    }
+//    //Alternate getSchedules algo
+//    private List<Schedule> getSchedules(Date currTime) {
+//        schedules = new ArrayList<Schedule>();
+//        try {
+//
+//            Query q = em.createQuery("SELECT a FROM Schedule a" + "AS a WHERE a.startDate>:startDate");
+//            q.setParameter("startDate", currTime);
+//
+//            List<Schedule> results = q.getResultList();
+//            if (!results.isEmpty()) {
+//                schedules = results;
+//
+//            } else {
+//                schedules = null;
+//                System.out.println("No Schedules Added!");
+//            }
+//
+//        } catch (EntityNotFoundException enfe) {
+//            System.out.println("\nEntity not found error" + "enfe.getMessage()");
+//        }
+//        return schedules;
+//    }
 
     //Given a start time of a flight, calculate the touch down time
     private Date calcEndTime(Date startTime, Flight flight) {

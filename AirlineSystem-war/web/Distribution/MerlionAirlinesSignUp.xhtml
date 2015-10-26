@@ -67,7 +67,7 @@ and open the template in the editor.
                                 </div>
                                 <div class="book-left-form">
 
-                                     <div style="display:inline;">
+                                    <div style="display:inline;">
                                         <p>Title </p>
                                         <h:panelGrid>
                                             <h:selectOneRadio id="title" required="true" requiredMessage="Please Select Title!" value="#{customerManagedBean.title}" >
@@ -78,7 +78,7 @@ and open the template in the editor.
                                             </h:selectOneRadio>
                                         </h:panelGrid>
                                     </div>
-                                    
+
                                     <p>First Name</p>
 
                                     <h:inputText id="firstname" required="true" requiredMessage="Please fill in first name field!"  value="#{customerManagedBean.customerFirstName}" />
@@ -93,7 +93,7 @@ and open the template in the editor.
                                     <p>Nationality</p>
 
                                     <h:inputText id="nationality" required="true" requiredMessage="Please fill in nationality field!" value="#{customerManagedBean.nationality}" />
-                                    
+
                                     <div style="display:inline;">
                                         <p>Gender </p>
                                         <h:panelGrid>
@@ -109,10 +109,7 @@ and open the template in the editor.
 
                                     <p>Handphone Number</p>
                                     <h:inputText id="hpnum" required="true" requiredMessage="Please fill in handphone number field!"  value="#{customerManagedBean.customerHpNumber}" />
-                                    
-                                    <p>Residential Number</p>
 
-                                    <h:inputText id="homenum" required="true" requiredMessage="Please fill in residential number field!"  value="#{customerManagedBean.customerHomeNumber}" />
 
 
                                 </div>
@@ -121,8 +118,11 @@ and open the template in the editor.
 
                                 <div class="book-left-form">
 
-                                    
-                                    
+                                    <p>Residential Number</p>
+
+                                    <h:inputText id="homenum" required="true" requiredMessage="Please fill in residential number field!"  value="#{customerManagedBean.customerHomeNumber}" />
+
+
                                     <p>Email Address</p>
                                     <h:inputText id="PE" required="true" validatorMessage="Not a valid email addess " requiredMessage="Please fill in Personal email field!" class="form-control" value="#{customerManagedBean.customerEmail}" >
                                         <f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
@@ -138,10 +138,10 @@ and open the template in the editor.
                                     <p>Home Address</p>
                                     <h:inputText id="homeadd" required="true" requiredMessage="Please fill in home address field!"  value="#{customerManagedBean.customerAddress}" />
                                     <div class="form-group">
-                                    <div id="capt">
-                                    <p:captcha id="captcha" label="Captcha" secure="true" theme="clean"/>
-                                    <p:message for="captcha" />
-                                    </div>
+                                        <div id="capt">
+                                            <p:captcha id="captcha" label="Captcha" secure="true" theme="clean"/>
+                                            <p:message for="captcha" />
+                                        </div>
                                     </div>
                                     <h:commandButton class="pull-right" value="Register" action="#{customerManagedBean.addCustomer()}"/>
                                     <!--                                    <input class="pull-right" type="submit" id="login" value="Register"/>-->
