@@ -18,7 +18,7 @@ import Distribution.Session.PassengerBookingSessionBeanLocal;
 import Distribution.Session.TravelAgencySessionBeanLocal;
 import Inventory.Entity.Booking;
 import Inventory.Entity.SeatAvailability;
-import Inventory.Session.PricingManagementLocal;
+import Inventory.Session.PricingSessionBeanLocal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -56,7 +56,7 @@ public class TravelAgencyManagedBean {
     private DistributionSessionBeanLocal distributionSessionBean;
 
     @EJB
-    private PricingManagementLocal pm;
+    private PricingSessionBeanLocal pm;
 
     @EJB
     private PassengerBookingSessionBeanLocal passengerBookingSessionBean;
