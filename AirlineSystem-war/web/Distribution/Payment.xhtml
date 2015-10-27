@@ -117,18 +117,15 @@
             <!-- container -->
             <div class="container">
                 <div class="about-info">
-                    <h2>Total Payment to be made $#{mARSManagedBean.totalSelectedPrice}</h2>
+                    <h2>Total Payment to be made $#{mARSManagedBean.totalPriceWinsurance}</h2>
                 </div>
                 <div class="faqs-top-grids terms-grids">
-                    <h:outputLabel value="Credit Card: " class="col-md-4 control-label" />
+                    
                     <div class="passenger-detail-body">
                         <div class="add-new-card">
                             <h4>Add New Card</h4>
                             <h:form>
                                 <div class="col-md-6 ol-sm-6">
-                                    <label>Card Type</label>
-
-
                                     <label>Card Type</label>
                                     <select name="carttype" class="form-control">
                                         <option>Visa Card</option>
@@ -139,25 +136,26 @@
                                     <label>Card Number</label>
                                     <h:inputText id="credit" required="true" requiredMessage="Please fill in credit card field!" class="form-control"  value="#{mARSManagedBean.creditCard}" />
                                 </div>
+                                
                                 <div class="col-md-6 ol-sm-6">
                                     <label>Card Expiry</label>
-                                    <select name="cardexpiry" class="form-control">
-                                        <option>Select</option>
-                                        <option>Dec 2015</option>
-                                        <option>Jan 2016</option>
-                                        <option>Feb 2016</option>
-                                        <option>Mar 2016</option>
-                                        <option>Apr 2016</option>
-                                    </select>
+                                    <div class="form-inline">
+                                    
+                                    <div class="form-group">
+                                        <label>Month: </label><h:inputText id="cardexp" required="true" requiredMessage="Please fill in credit card field!" class="form-control" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Year: </label><h:inputText id="cardexpyr" required="true" requiredMessage="Please fill in credit card field!" class="form-control" />
+                                    </div>
+                                    </div>
                                 </div>
+                                
                                 <div class="col-md-6 ol-sm-6">
                                     <label>CSV Number</label>
                                     <p:password required="true" requiredMessage="Please fill in csv field!" class="form-control" value="#{mARSManagedBean.csv}"/>
                                 </div>
-                                <div class="col-md-12">
-                                    <label><input type="checkbox" name="alert"/> Save this card for future</label>
-                                </div>
-                                <div>
+                                
+                                <div class="col-md-12 ol-sm-12">
                                     <div class="text-center">
                                         <h:commandButton class="btn btn-outline btn-success" value="Confirm" action="#{mARSManagedBean.createBooking()}" />
                                     </div>

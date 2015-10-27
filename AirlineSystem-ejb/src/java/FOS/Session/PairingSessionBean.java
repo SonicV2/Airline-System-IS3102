@@ -69,6 +69,10 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
         if (legs.size() == 0) {
         } else {
             sortList(legs);
+            for(Leg l1 : legs){
+                System.out.println("SORTTTT: "+l1.getDate1() + "ddd" +l1.getStartHour()+ "FORmatedate: " + l1.getFinishHour());
+            }
+            
             String destination = legs.get(0).getDestination();
             int startHour = legs.get(0).getStartHour();
             int finishHour = legs.get(0).getFinishHour();
@@ -180,6 +184,7 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
 
                     //System.out.println("h%%%%%%%dest: " + destCity);
                     Leg l = new Leg(flightNumber, deptCity, destCity, formatStartTime, formatEndTime, formattedDate);
+                    
                     legss.add(l);
 
                 }

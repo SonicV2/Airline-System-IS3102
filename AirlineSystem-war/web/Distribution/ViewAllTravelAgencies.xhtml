@@ -1,66 +1,89 @@
-<?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
+
+
     <h:head>
-        <title>View Travel Agency</title>
+        <p:growl id="growl" sticky="true" showDetail="true"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <h:outputStylesheet library ="css"  name="bootstrap.css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
+        <h:outputStylesheet library="css" name="admindb.css" />
+        <h:outputStylesheet library="css" name="morrisjs/morris.css" />
+        <title>View All Travel Agencies</title>
     </h:head>
 
     <h:body>
 
-        <h:form id="form">
-            <p:dataGrid var="agency" value="#{travelAgencyManagedBean.travelAgencies}" columns="1" layout="grid"
-                        rows="5" paginator="true" id="cars"
-                        paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                        rowsPerPageTemplate="6,12,16" widgetVar="travelAgencies">
+        <div id="page-wrapper">
 
-                <f:facet name="header">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2 class="page-header">View All Travel Agencies</h2>
+                </div>
 
-                    <p:outputPanel>
-                        <h:outputText value="Search all fields:" />
-                        <p:inputText id="globalFilter" onkeyup="PF('travelAgencies').filter()" style="width:150px" placeholder="Enter keyword"/>
-                    </p:outputPanel>
-                </f:facet>
+                <div class="col-lg-12">
 
+                    <h:form>
+                        <p:dataTable var="agency" value="#{travelAgencyManagedBean.travelAgencies}" widgetVar="agencyTable" paginator="true" rows="10">
 
-                    <h:panelGrid columns="1" style="width:100%">
-                        
-                        <h:outputText value="#{agency.id}" />
-                        <h:outputText value="#{agency.name}" />
-                        <h:outputText value="#{agency.contactNo}" />
+                            <f:facet name="header">
+                                <p:outputPanel>
+                                    <h:outputText value="Search all fields:" />
+                                    <p:inputText id="globalFilter" onkeyup="PF('agencyTable').filter()" style="width:150px" placeholder="Enter keyword"/>
+                                </p:outputPanel>
+                            </f:facet>
 
-                        <p:commandLink update=":form:agencyDetail" oncomplete="PF('agencyDialog').show()" title="View Detail">
-                            <h:outputText styleClass="ui-icon ui-icon-search" style="margin:0 auto;" />
-                            <f:setPropertyActionListener value="#{agency}" target="#{travelAgencyManagedBean.selectedAgency}" />
-                        </p:commandLink>
-                    </h:panelGrid>
+                            <p:column filterBy="#{agency.name}" headerText="Name" filterMatchMode="contains">
+                                <h:outputText value="#{agency.name}" />
+                            </p:column>
 
-            </p:dataGrid>
+                            <p:column headerText="View Profile" style="width:60px;">
+                                <h:commandLink
+                                    action="#{travelAgencyManagedBean.viewTravelAgencyProfile(agency.id)}"><i class="fa fa-newspaper-o"></i></h:commandLink>
+                            </p:column>
 
-            <p:dialog header="Travel Agency Info" widgetVar="agencyDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
-                <p:outputPanel id="agencyDetail" style="text-align:center;">
-                    <p:panelGrid  columns="2" rendered="#{not empty travelAgencyManagedBean.selectedAgency}" columnClasses="label,value">
-                        
+                            <p:column headerText="Manage Travel Agency" style="width:60px;">
+                                <h:commandLink
+                                    action="#{travelAgencyManagedBean.manageTravelAgency(agency.id)}"><i class="fa fa-edit"></i></h:commandLink>
+                            </p:column>
 
-                        <h:outputText value="No. of Bookings:" />
-                        <h:outputText value="#{travelAgencyManagedBean.selectedAgency.pnrs.size}" />
+                            <p:column headerText="View Pending PNRs" style="width:60px;">
+                                <h:commandLink
+                                    action="#{travelAgencyManagedBean.viewPNRs(agency.id)}"><i class="fa fa-dashcube"></i></h:commandLink>
+                            </p:column>
+                            
+                            <p:column headerText="View Financials" style="width:60px;">
+                                <h:commandLink
+                                    action="#{travelAgencyManagedBean.viewSettlementAndCommission(agency.id)}"><i class="fa fa-dollar"></i></h:commandLink>
+                            </p:column>
+                            
+                            <p:column headerText="Delete Travel Agency" style="width:60px;">
+                                <h:commandLink
+                                    onclick="if (!confirm('Do you really want to delete this travel agency?')) {
+                                            return false;
+                                        }
+                                        ;
+                                        return true;
+                                        " action="#{travelAgencyManagedBean.deleteTravelAgency(agency.id)}"><i class="fa fa-remove"></i></h:commandLink>
+                            </p:column>
 
-                        <h:outputText value="Commission to be paid" />
-                        <h:outputText value="#{travelAgencyManagedBean.selectedAgency.commission}" />
-                        
-                        <h:outputText value="Credit Limit:" />
-                        <h:outputText value="#{travelAgencyManagedBean.selectedAgency.maxCredit}" />
-
-                        <h:outputText value="Curren Credit Balance:" />
-                        <h:outputText value="#{travelAgencyManagedBean.selectedAgency.currentCredit}" />
-
-                    </p:panelGrid>
-                </p:outputPanel>
-            </p:dialog>
-        </h:form>
-
+                        </p:dataTable>
+                    </h:form>
+                </div>
+            </div>
+        </div>
     </h:body>
 </html>

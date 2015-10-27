@@ -32,15 +32,17 @@ public interface TravelAgencySessionBeanLocal {
     public TravelAgency getAgencyUseEmail(String agencyEmail);
 
     public void persistTravelAgency (TravelAgency travelAgency);
-    public void resetCreditsAndCommission (TravelAgency travelAgency);
+    public void resetCreditsAndCommission(TravelAgency travelAgency, double currentSettlement);
     public void changeCreditLimit (TravelAgency travelAgency, double newLimit);
     public List<PNR> retrievePendingPNRs (TravelAgency travelAgency);
     public int noOfDaysSinceDate (Date date);
-    public void deletePendingPNRs ();
+    public int deletePendingPNRs ();
     public void deletePNR(PNR pnr);
     public void deleteTravelAgency (TravelAgency travelAgency);
     public int noOfConfirmedBookings (TravelAgency travelAgency);
     public TravelAgency getTravelAgencyById(Long id);
+    public void cancelExpiredPendingPNRs();
+    public double getCurrentMonthSettlement(TravelAgency travelAgency, Date date);
     
     public List<TravelAgency> getAllTravelAgencies();
 
@@ -53,6 +55,15 @@ public interface TravelAgencySessionBeanLocal {
     public void updateAgencyProfile(TravelAgency travelAgency);
 
     public Boolean emailExists(String agencyEmail);
+
+    public void deductCredit(TravelAgency travelAgency, double price);
+
+    public void linkPNR(TravelAgency travelAgency, PNR pnr);
+    
+    public void cancelPNR(TravelAgency travelAgency, PNR pnr, double price);
+
+    public void confirmPNR(TravelAgency travelAgency, PNR pnr, double price);
+
 
     
 }

@@ -98,7 +98,7 @@ public String directToChooseChecklistToFill(String name){
 }
 
 
-public String directToChooseChecklistToAddTo(){
+public String S(){
     return"/FOS/ChooseChecklistToAddTo";
 }
 
@@ -124,7 +124,7 @@ public String addChecklistItem(Long scheduleKey, String checklistToAdd ){
 
 public String homePage(){
     setComments("");
-    return "/CI/employeeDashBoard";
+    return "/CI/EmployeeDashBoard";
 }
 
 public String addItem(){
@@ -142,7 +142,7 @@ public String addItem(){
     }
     else{
     checklistSessionBean.addChecklistItemByScheduleAndChecklistName(schedule,checklistName, checklistItemName);
-    return "/CI/employeeDashBoard";
+    return "/CI/EmployeeDashBoard";
     }
     
     
@@ -193,7 +193,7 @@ public String fillParticularChecklist (Long scheduleKey ){
     }
     
     public String editChecklistDone(){
-        return "/CI/employeeDashBoard";
+        return "/CI/EmployeeDashBoard";
     }
     
     public String submitChecklist(){
@@ -203,7 +203,7 @@ public String fillParticularChecklist (Long scheduleKey ){
         //setChecklistName("");
         //setSelectedItems(null);
         //setComments("");
-        return "/CI/employeeDashBoard";
+        return "/CI/EmployeeDashBoard";
     }
     
     public String directToChooseChecklistToView(){
@@ -217,7 +217,7 @@ public String fillParticularChecklist (Long scheduleKey ){
          setSchedule(scheduleSessionBean.getSchedule(scheduleId));
          setChecklistItemsForChecklist(checklistSessionBean.retrieveChecklistItemsByScheduleAndChecklistName(schedule, checklistName));
          setComments(checklistSessionBean.retrieveChecklistCommentsByScheduleAndChecklistName(schedule, checklistName));
-         return "/FOS/displayFilledChecklist";
+         return "/FOS/DisplayFilledChecklist";
     }
 
 

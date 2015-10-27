@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:jsf="http://xmlns.jcp.org/jsf"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+     <h:form>
+<div class="collapse navbar-collapse navbar-ex1-collapse">
+                <ul class="nav navbar-nav side-nav">
+                    <li>
+                        <a href="javascript:;" data-toggle="collapse" data-target="#demo"><i class="fa fa-fw fa-search"></i> Search For Flights <i class="fa fa-fw fa-caret-down"></i></a>
+                        <ul id="demo" class="collapse">
+                            
+                    <li>
+                        <a href="#{request.contextPath}/Distribution/TravelAgencySearchFlights.xhtml"><i class="fa fa-fw fa-search"></i>Search One-Way Trip</a>
+                    </li>
+                            
+                    <li>
+                        <a href="#{request.contextPath}/Distribution/TravelAgencySearchReturnFlights.xhtml"><i class="fa fa-fw fa-search"></i>Search Round Trip</a>
+                    </li>
+                        </ul>
+                    </li>
+                    
+                   
+                    <li>
+                        <a href="#{request.contextPath}/Distribution/TravelAgencyViewPNRs.xhtml"><i class="fa fa-fw fa-file"></i> Manage PNRs</a>
+                    </li>
+                    
+                    <li>
+                        <a jsf:action="#{travelAgencyManagedBean.clearForm()}"><i class="fa fa-fw fa-dollar"></i>View Financials</a>
+                    </li>
+                        
+                   
+                    
+                    
+                </ul>
+            </div>
+          </h:form>
+</html>

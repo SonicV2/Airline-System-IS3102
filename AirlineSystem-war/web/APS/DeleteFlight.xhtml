@@ -23,7 +23,7 @@
 -->
 <!--    <ui:include src="/CI/dashboardHeader.xhtml"/>-->
        <!--  To add the same sidebar on all dashboard pages -->  
-    <ui:include src="/CI/dashboardSidebar.xhtml"/>
+<!--    <ui:include src="/CI/dashboardSidebar.xhtml"/>-->
     <body>
         <div id="page-wrapper">
 
@@ -37,7 +37,7 @@
                     <h:form id="form">
               
                        <p:growl id="message" showDetail="true"/>
-                       <p:dataTable id="flights" var="flight" value="#{flightManageBean.flights}" style="margin-bottom:20px" paginator="true" rows="10" widgetVar="flightsTable">
+                       <p:dataTable id="flights" var="flight" value="#{flightManagedBean.flights}" style="margin-bottom:20px" paginator="true" rows="10" widgetVar="flightsTable">
 
                             <f:facet name="header">
 
@@ -77,14 +77,14 @@
                             </p:column>
                             
 <!--                            only operations manager can delete flight-->
-                            <p:column headerText="Delete Flight" style="width:60px" rendered="#{loginManagedBean.accessRightIDs.contains(11)}" >
-
+<!--                            <p:column headerText="Delete Flight" style="width:60px" rendered="#{loginManagedBean.accessRightIDs.contains(11)}" >-->
+                            <p:column headerText="Delete Flight" style="width:60px">
                                 <h:commandLink onclick="if (!confirm('Do you really want to delete this flight? It will delete all the related schedules!')) {
                                             return false;
                                         }
                                         ;
                                         return true;
-                                        " action="#{flightManageBean.deleteFlight(flight.flightNo)}"><i class="fa fa-trash-o"></i> </h:commandLink>
+                                        " action="#{flightManagedBean.deleteFlight(flight.flightNo)}"><i class="fa fa-trash-o"></i> </h:commandLink>
                             </p:column>
 
                         </p:dataTable>

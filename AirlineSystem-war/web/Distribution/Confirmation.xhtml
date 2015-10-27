@@ -42,7 +42,12 @@
         <title>Confirmation</title>
     </h:head>
     <h:body>
-        <ui:include src="CustomerDashboardHeader.xhtml"/>
+         <ui:fragment rendered ="#{customerManagedBean.isCustomerLoggedOn}">
+            <ui:include src="CustomerDashboardHeader.xhtml"/>
+        </ui:fragment>
+        <ui:fragment rendered ="#{!customerManagedBean.isCustomerLoggedOn}">
+            <ui:include src="MerlionAirlinesHeader.xhtml"/>
+        </ui:fragment>
         <div class="banner-bottom">
             <!-- container -->
             <div class="container">

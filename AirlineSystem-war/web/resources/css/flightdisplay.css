@@ -35,6 +35,13 @@ h5 {
 }
 
         @media (max-width: 991px) {
+            .flight-list-view {
+            margin: 40px 15px 0px;
+            border: 1px solid #e6e6e6;
+            box-shadow: 0px 0px 5px #e6e6e6;
+            overflow: hidden;
+            height:auto !important;
+            }
             .flight-list-view .flight-desc {
                 border-top: 1px solid #e6e6e6; 
             }
@@ -59,6 +66,7 @@ h5 {
             border: 1px solid #e6e6e6;
             box-shadow: 0px 0px 5px #e6e6e6;
             overflow: hidden;
+            height: 150px;
         }
         .flight-list-view:hover {
             border: 1px solid #F19C4F;
@@ -113,4 +121,43 @@ h5 {
         }
         .flight-list-view:hover .book a{
             background: #00ADEF;
+        }
+        
+        
+        .lowest-fare-slider  {
+            margin-top: 40px;
+        }
+        .lowest-fare-slider .owl-carousel .owl-controls .owl-nav .owl-prev, 
+        .lowest-fare-slider .owl-carousel .owl-controls .owl-nav .owl-next {
+            position: absolute;
+            top: 21%;
+        }
+        .lowest-fare-slider .owl-carousel .owl-controls .owl-nav .owl-next {
+            right: 0;
+        }
+        .lowest-fare-slider .owl-carousel .owl-controls .owl-nav .owl-prev {
+            left: 0;
+        }
+        .lowest-fare-slider .owl-theme .owl-dots {
+            display: none !important;
+        }
+        .lowest-fare-slider h5 {
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .lowest-fare-slider span {
+            font-size: 13px;
+        }
+        .flight-listing .sort {
+            margin-top: 30px;
+        }
+        .lowest-fare-slider .owl-theme .owl-nav [class*="owl-"] {
+            background: #F2676B;
+            padding: 5px 3px;
+            margin: 0;
+            border-radius: 0;
+        }
+        .lowest-fare-slider .owl-carousel .owl-item {
+            background: #f7f7f7;
+            padding-bottom: 10px;
         }

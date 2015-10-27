@@ -1,0 +1,133 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+
+    <h:head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <h:outputStylesheet library ="css"  name="bootstrap.css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
+        <h:outputStylesheet library="css" name="travelagentdb.css" />
+        <h:outputStylesheet library="css" name="morrisjs/morris.css" />
+        <h:outputStylesheet library ="css"  name="flightdisplay2.css" />
+        <title>Booking</title>
+    </h:head>
+
+    <h:body>
+<div id="wrapper">
+            <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+                <!--    To add the same header on all dashboard pages  -->
+                <ui:include src="TravelAgentHeader.xhtml"/>
+                <!--    To add the same sidebar on all dashboard pages  -->
+                <ui:include src="TravelAgentSidebar.xhtml"/>
+            </nav>
+            <div id="page-wrapper">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h2 class="page-header">Please fill in passenger details:</h2>
+                        </div>
+
+        
+                        <div class="col-md-6 book-left">
+
+                            
+                            <h:form>
+                                <div class="col-md-12">
+                                <p:messages id="messages" autoUpdate="true"/>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <p>Primary Email:</p>
+
+                                    <h:inputText id="PE" required="true" validatorMessage="Not a valid email addess " requiredMessage="Please fill in Personal email field!" value="#{travelAgencyManagedBean.primaryEmail}" class="form-control">
+                                        <f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
+                                    </h:inputText> 
+
+
+                                    <div class="missingfield"> 
+                                        <h:message errorStyle="color:red; display:block" for="PE" />
+                                    </div>
+
+                                    <p>Primary Contact Number</p>
+                                    <h:inputText id="contact" required="true" requiredMessage="Please fill in contact number field!" value="#{travelAgencyManagedBean.primaryContactNo}" class="form-control" />
+
+
+                                    <ui:repeat value="#{travelAgencyManagedBean.passengerList}" var="passenger">
+
+                                        <h3> Passenger #{passenger.id} </h3>
+                                        <div class="form-inline">
+                                        <p> Traveller Title </p>
+                                        <!--                    <div class="col-md-8">-->
+                                        <h:panelGrid>
+
+                                            <h:selectOneRadio id="title" required="true" requiredMessage="Please Select Traveller Title!" value="#{passenger.title}" style="margin-top: 5px;">
+                                                <f:selectItem itemLabel="Mr" itemValue="Mr" />
+                                                <f:selectItem itemLabel="Mdm" itemValue="Mdm" />
+                                                <f:selectItem itemLabel="Mrs" itemValue="Mrs" />
+                                                <f:selectItem itemLabel="Miss" itemValue="Miss" />
+                                            </h:selectOneRadio>
+                                        </h:panelGrid>
+                                        </div>
+                                        <!--                    </div>-->
+
+                                        <p> First Name </p>
+                                        <h:inputText id="firstname" required="true" requiredMessage="Please fill in first name field!" value="#{passenger.firstName}" class="form-control" />
+                                        <p> Last Name </p>
+                                        <h:inputText id="lastname" required="true" requiredMessage="Please fill in last name field!" value="#{passenger.lastName}"  class="form-control"/>
+                                        <p> Passport Number </p>
+                                        <h:inputText id="passport" required="true" requiredMessage="Please fill in passport number field!" value="#{passenger.passport}" class="form-control" />
+
+
+
+                                        <p>Nationality</p>
+
+                                        <h:inputText id="nationality" required="true" requiredMessage="Please fill in mailing nationality field!" value="#{passenger.nationality}" class="form-control"/>
+
+                                        <p>Merlion Airlines Customer ID </p>
+                                        <h:inputText id="customerId" value="#{passenger.customerId}" class="form-control"/>
+
+                                        <p>Would you like to purchase insurance for $15 for each flight? </p>
+                                        <h:panelGrid>
+                                            <h:selectOneRadio id="insurance" required="true" requiredMessage="Please Select insurance!" value="#{passenger.insurance}">
+                                                <f:selectItem itemLabel="Yes" itemValue="true" />
+                                                <f:selectItem itemLabel="No" itemValue="false" />
+                                            </h:selectOneRadio>
+                                        </h:panelGrid>
+                                        <h:outputLabel for="foodId" value="Food Selection:" />
+                                        <span>
+                                            <h:selectOneMenu class="form-control" id="foodId" value="#{passenger.foodSelection}">
+                                                <f:selectItem itemLabel="Select One" itemValue="" />
+                                                <f:selectItem itemLabel="Western" itemValue="Western" />
+                                                <f:selectItem itemLabel="Oriental" itemValue="Oriental" />
+                                                <f:selectItem itemLabel="Vegetarian" itemValue="Vegetarian" />
+                                            </h:selectOneMenu>
+                                        </span>
+                                    </ui:repeat>
+
+                                    <div class="text-center">
+                                        <br></br>
+                                        <h:commandButton class="btn btn-outline btn-success" value="Confirm" action="#{travelAgencyManagedBean.createBooking()}" />
+                                    </div>
+
+
+                                </div>
+                                <div class="clearfix"> </div>
+
+                            </h:form>
+
+                        </div>
+                        <div class="clearfix"> </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </h:body>
+</html>

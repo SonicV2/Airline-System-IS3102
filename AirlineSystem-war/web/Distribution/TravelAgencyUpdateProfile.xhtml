@@ -1,130 +1,133 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
-<!DOCTYPE html>
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
-
-
-
-    <h:head>
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head> 
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Update your profile</title>
-        <!-- Custom Theme files -->
-        <meta name="viewport" content="width=device-width, initial-scale=1"/>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <h:outputStylesheet library ="css"  name="bootstrap.css" />
-        <h:outputStylesheet library ="css"  name="styleMerlion.css" />
-        <h:outputStylesheet library ="css"  name="JFFormStyle.css" />
-        <h:outputStylesheet library ="css"  name="flexslider.css" />
-        <h:outputScript library="js" name="jQuery/jQuery-2.1.4.min.js" />
-        <h:outputScript library="js" name="modernizr.custom.js" /> 
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
+        <h:outputStylesheet library="css" name="travelagentdb.css" />
+        <h:outputStylesheet library="css" name="morrisjs/morris.css" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js" />
+        <title>Change Travel Agency Profile</title>
 
+        <style>
+            .table > tbody > tr > td{
+                border-top: #fff;
+            }
+        </style>
 
-        <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
-        <!-- //Custom Theme files -->
-
-        <!-- fonts -->
-        <link href='//fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,700,500italic,700italic,900,900italic' rel='stylesheet' type='text/css'></link>
-        <link href='//fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'></link>
-        <!-- //fonts -->	
-        <script type="text/javascript">
-            $(document).ready(function () {
-                $('#horizontalTab').easyResponsiveTabs({
-                    type: 'default', //Types: default, vertical, accordion           
-                    width: 'auto', //auto or any width like 600px
-                    fit: true   // 100% fit in a container
-                });
-            });
-        </script>
-        <!--pop-up-->
-        <h:outputScript library="js" name="menu_jquery.js" /> 
-        <!--//pop-up-->	
     </h:head>
     <h:body>
-        <!-- banner-bottom -->
-        <div class="banner-bottom">
-            <!-- container -->
-            <div class="container">
-                <div class="faqs-top-grids">
-                    <div class="book-grids">
-                        <h:form id="sign-up-form">
-                            <p:growl id="growl" sticky="true" showDetail="false"/>
-                            <div class="col-md-5 book-left">
-
-                                <div class="book-left-info">
-                                    <h3>Update your Profile</h3>
-                                </div>
-                                <div class="book-left-form">
-
-                                    
-                                    <p>Name</p>
-
-                                    <h:inputText id="name" required="true" requiredMessage="Please fill in name field!"  value="#{travelAgencyManagedBean.name}" />
-
-                                    <p>Email Address</p>
-                                    <h:inputText id="email" required="true" validatorMessage="Not a valid email address " requiredMessage="Please fill in email field!" class="form-control" value="#{travelAgencyManagedBean.email}" >
-                                        <f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
-                                    </h:inputText> 
-                                    
-                                    <p>Primary Contact</p>
-
-                                    <h:inputText id="PC" required="true" requiredMessage="Please fill in primary contact field!"  value="#{travelAgencyManagedBean.primaryContact}" />
-
-                                    <p>Contact Number</p>
-                                    <h:inputText id="contact" required="true" requiredMessage="Please fill in contact number field!" value="#{travelAgencyManagedBean.contactNo}" />
-
-                                    <p>Address</p>
-
-                                    <h:inputText id="address" required="true" requiredMessage="Please fill in address field!" value="#{travelAgencyManagedBean.address}" />
-                                    
-                                </div>
-                            </div>
-                            <div class="col-md-5 book-left book-right">
-
-                                <div class="book-left-form">
-                                                                           
-                                    <p>Travel Agency Id</p>
-                                    <h:outputText id="agencyId" value="#{travelAgencyManagedBean.id}" />
-                                    
-                                    <p>Maxium Credit</p>
-                                    <h:outputText id="maxC" value="#{travelAgencyManagedBean.maxCredit}" />
-                                    
-                                    <p>Current Credit Balance</p>
-                                    <h:outputText id="curC" value="#{travelAgencyManagedBean.currentCredit}" />
-                                    
-                                    <h:commandButton class="pull-right" value="Save" action="#{travelAgencyManagedBean.persistUpdatedProfile()}"/>
-                                    <!--                                    <input class="pull-right" type="submit" id="login" value="Register"/>-->
-
-                                </div>
-                            </div>
-                        </h:form>
-
-
-
-                        <div class="clearfix"> </div>
-                    </div>
+       <div id="wrapper">
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <!--    To add the same header on all dashboard pages  -->
+        <ui:include src="TravelAgentHeader.xhtml"/>
+        <!--    To add the same sidebar on all dashboard pages  -->
+        <ui:include src="TravelAgentSidebar.xhtml"/>
+        </nav>
+        <div id="page-wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2 class="page-header"> Update Profile</h2>
                 </div>
+
+
+                <h:form class="form center-block">
+                    
+                    <div class="col-md-12">
+                                <p:messages id="messages" autoUpdate="true"/>
+                                </div>
+                    
+                    <div class="col-md-10">
+                        <div class="panel panel-yellow">
+                            <div class="panel-heading">
+                               #{travelAgencyManagedBean.name}
+                            </div>
+                            <div class="panel-body">
+
+                                <!--                            <div class="table-responsive">-->
+                                <table class="table">
+                                    <tbody>
+                                        <td style="width: 30%;">Name </td>
+                                        <td><h:inputText id="name" required="true" requiredMessage="Please fill in name field!"  value="#{travelAgencyManagedBean.name}" /></td>
+                                        <td></td>
+                                        <tr>
+                                            <td>Email Address</td>
+                                            <td> <h:inputText id="email" required="true" validatorMessage="Not a valid email address " requiredMessage="Please fill in email field!" class="form-control" value="#{travelAgencyManagedBean.email}" >
+                                        <f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
+                                    </h:inputText> </td>
+                                            <td></td>
+                                        </tr>
+                                        <div class="form-group">
+                                            <tr>
+                                                <td>Primary Contact</td>
+                                                <td><h:inputText id="PC" required="true" requiredMessage="Please fill in primary contact field!"  value="#{travelAgencyManagedBean.primaryContact}" /></td>
+                                                <td></td>
+                                            </tr>
+                                        </div>
+                                        <div class="form-group">
+                                            <tr>
+                                                <td>Contact Number </td>
+                                                <td> <h:inputText id="contact" required="true" requiredMessage="Please fill in contact number field!" value="#{travelAgencyManagedBean.contactNo}" /></td>
+                                            </tr>
+                                        </div>
+                                        <div class="form-group">
+                                            <tr>
+                                                <td>Address</td>
+                                                <td>
+                                                    <h:inputText id="address" required="true" requiredMessage="Please fill in address field!" value="#{travelAgencyManagedBean.address}" />
+                                    
+                                                </td>
+                                            </tr>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <tr>
+                                                <td>Tavel Agency Id</td>
+                                                <td>
+                                                     <h:outputText id="agencyId" value="#{travelAgencyManagedBean.id}" />
+                                                </td>
+                                            </tr>
+                                        </div>
+                                        <div class="form-group">
+                                            <tr>
+                                                <td>Maximum Credit</td>
+                                                <td>
+                                                    <h:outputText id="maxC" value="#{travelAgencyManagedBean.maxCredit}" />
+                                                </td>
+                                            </tr>
+                                        </div>
+                                        <div class="form-group">
+                                            <tr>
+                                                <td>Current Credit Balance</td>
+                                                <td>
+                                                    <h:outputText id="curC" value="#{travelAgencyManagedBean.currentCredit}" />
+                                                </td>
+                                            </tr>
+                                        </div>
+                                    </tbody>
+
+
+                                </table>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <h:commandButton class="btn btn-warning" value="Save" action="#{travelAgencyManagedBean.persistUpdatedProfile()}"/>
+
+                        </div>
+                        <br></br>
+                        <br></br>
+                    </div>
+                </h:form>
             </div>
-            <!-- //container -->
         </div>
-
-
-
-        <ui:include src="MerlionAirlinesFooter.xhtml"/>
-        <h:outputScript library="js" name="jquery.flexslider.js"/> 
-        <h:outputScript library="js" name="easyResponsiveTabs.js" /> 
-        <h:outputScript library="js" name="jquery-ui.js" /> 
-        <h:outputScript library="js" name="scriptMerlion.js"></h:outputScript>	
+       </div>
+    
     </h:body>
-
-
 </html>

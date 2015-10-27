@@ -5,7 +5,8 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:jsf="http://xmlns.jcp.org/jsf"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <h:head>
         <p:growl id="growl" sticky="true" showDetail="true"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -37,10 +38,12 @@
         <!--pop-up-->
         <h:outputScript library="js" name="menu_jquery.js" /> 
         <!--//pop-up-->	
+        <h:outputStylesheet library ="css"  name="flightdisplay.css" />
         <h:outputStylesheet library ="css"  name="flightdisplay2.css" />
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
         <title>Display One Stop Flight for Outbound Departure Journey</title>
     </h:head>
+
     <h:body>
         <ui:fragment rendered ="#{customerManagedBean.isCustomerLoggedOn}">
             <ui:include src="CustomerDashboardHeader.xhtml"/>
@@ -137,7 +140,7 @@
                                             </div>
                                             <div class="col-md-6 col-sm-6 col-xs-12 clear-padding">
                                                 <div class="pull-right">
-                                                    <span>$#{flightOptions.price}/Person</span>
+                                                    <span>$#{flightOptions.price}/Adult</span>
                                                     <ui:fragment rendered="#{mARSManagedBean.children > 0}">
                                                 <span>, $#{flightOptions.price * 0.75}/Child</span>
                                             </ui:fragment>
@@ -148,6 +151,43 @@
                                     </div>
                         </ui:repeat>
                     </h:form>
+                    
+                    <h:form>
+                        <br></br><br></br>
+                        <h3>Prices on other days:</h3>
+                        <c:forEach items="${mARSManagedBean.minPricesForWeekOneStopFlight}" var="price" varStatus="loop">
+                        
+                            <div class="col-md-2 flight-list-view">
+                        <div class="clearfix visible-sm-block visible-xs-block"></div>
+                        <p> <h:outputText value="#{mARSManagedBean.weekDates.get(loop.index)}" >
+                                            <f:convertDateTime pattern ="EEE, MMM d, yyyy"/>
+                                            </h:outputText>
+                                             </p>  
+                        <div class="col-md-2 flight-book text-center clear-padding">
+                                        <ui:fragment rendered="#{price ==0}">
+                                            <div class="price">
+                                            <h5> No flight</h5>
+                                            </div>
+                                        </ui:fragment>
+                                         <ui:fragment rendered="#{price >0}">
+                                             <div class="price">
+                                        <h4>#{price}/Adult</h4>
+                                        <ui:fragment rendered="#{mARSManagedBean.children > 0}">
+                                        <h5>#{price *0.75}/Child</h5>
+                                        </ui:fragment>
+                                             </div>
+                                        <div class="book">
+                                            <a jsf:action="#{mARSManagedBean.viewOtherDepartureFlights(mARSManagedBean.weekDates.get(loop.index))}">View</a>
+                                    </div>
+                                         </ui:fragment>
+                                </div>
+                        </div>
+                        
+                        </c:forEach>
+                        
+                    
+                    </h:form>
+                    <div class="clearfix"></div>
                 </div>
             </div>
         </div>

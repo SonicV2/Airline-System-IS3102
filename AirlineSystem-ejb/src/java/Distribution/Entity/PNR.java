@@ -38,15 +38,19 @@ public class PNR implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateOfBooking;
     
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dateOfConfirmation;
+    
     private String bookingAvenue; 
 
-    public void createPNR(String pnrID, int noOfTravellers, String email, String contactNo, String pnrStatus, double totalPrice, Date date, String bookingAvenue){
+    public void createPNR(String pnrID, int noOfTravellers, String email, String contactNo, String pnrStatus, double totalPrice, Date dateOfBooking, Date dateOfConfirmation, String bookingAvenue){
         this.pnrID = pnrID;
         this.noOfTravellers = noOfTravellers;
         this.email = email;
         this.contactNo = contactNo;
         this.totalPrice = totalPrice;  
-        this.dateOfBooking = date;
+        this.dateOfBooking = dateOfBooking;
+        this.dateOfConfirmation = dateOfConfirmation;
         this.bookingAvenue = bookingAvenue;
         this.pnrStatus = pnrStatus;
     }
@@ -121,6 +125,14 @@ public class PNR implements Serializable {
 
     public void setBookingAvenue(String bookingAvenue) {
         this.bookingAvenue = bookingAvenue;
+    }
+
+    public Date getDateOfConfirmation() {
+        return dateOfConfirmation;
+    }
+
+    public void setDateOfConfirmation(Date dateOfConfirmation) {
+        this.dateOfConfirmation = dateOfConfirmation;
     }
      
     

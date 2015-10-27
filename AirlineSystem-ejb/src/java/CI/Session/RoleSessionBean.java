@@ -27,7 +27,7 @@ public class RoleSessionBean implements RoleSessionBeanLocal {
     @PersistenceContext(unitName = "AirlineSystem-ejbPU")
     private EntityManager em;
 
-    Role role_db = new Role();
+   
 
     private List<Role> rolelist = new ArrayList<Role>();
     private Role role;
@@ -35,7 +35,8 @@ public class RoleSessionBean implements RoleSessionBeanLocal {
 
     @Override
     public void addRole(String roleName, List<AccessRight> allAccessRights) {
-
+        Role role_db = new Role();
+        System.out.println("----------------------------"+role_db.getRoleID());
         role_db.create(roleName.toUpperCase());
         role_db.setAccessRights(allAccessRights);
 
@@ -44,6 +45,9 @@ public class RoleSessionBean implements RoleSessionBeanLocal {
                 System.out.println("session bean: " + aar);
             }
         }
+        
+         System.out.println("----------------------------1"+role_db.getRoleID());
+        em.flush();
         em.merge(role_db);
     }
 
@@ -228,7 +232,7 @@ public class RoleSessionBean implements RoleSessionBeanLocal {
         return "Removed Access Right Successfully!";
 
     }
-
+    
     public void addNewRole(Employee employee, String new_Role) {
         rolelist = employee.getRoles();
 
