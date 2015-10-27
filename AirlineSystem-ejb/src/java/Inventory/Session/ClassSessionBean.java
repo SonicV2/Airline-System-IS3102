@@ -26,12 +26,12 @@ public class ClassSessionBean implements ClassSessionBeanRemote, ClassSessionBea
     // Add a booking class
     public String addClassCode(String classcode, int pricePercent, int advancedSales
     , int percentSold, String serviceClass, boolean rebook, boolean cancel, 
-    int baggage, int millageAccru, String season){
+    int baggage, int millageAccru, String season, boolean travelagent){
         BookingClass bc = new BookingClass();
         BookingClass bc1 = em.find(BookingClass.class,classcode);
         if (bc1==null){
             bc.createClass(classcode, pricePercent, advancedSales, percentSold,
-                    serviceClass, rebook, cancel, baggage, millageAccru, season);
+                    serviceClass, rebook, cancel, baggage, millageAccru, season, travelagent);
             em.persist(bc);
             return "Fare Class Added";
         }

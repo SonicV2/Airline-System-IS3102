@@ -53,7 +53,7 @@ public class ClassSessionBeanTest {
         String expResult = "Fare Class Added";
         
          
-        String result = cm.addClassCode(classcode, pricePercent, advancedSales, percentSold, serviceClass, rebook, cancel, baggage, millageAccru, season);
+        String result = cm.addClassCode(classcode, pricePercent, advancedSales, percentSold, serviceClass, rebook, cancel, baggage, millageAccru, season, false);
         System.out.println("Expected Result:"+ expResult);
         System.out.println("Result:"+result);
         assertEquals(expResult, result);

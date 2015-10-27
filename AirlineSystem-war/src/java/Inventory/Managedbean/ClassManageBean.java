@@ -38,6 +38,7 @@ public class ClassManageBean {
     private int millageAccru;
     private List<BookingClass> bookingClass;
     private String season;
+    private boolean travelagent;
     
     
      @PostConstruct
@@ -63,6 +64,7 @@ public class ClassManageBean {
         this.serviceClass = null;
         this.rebook = false;
         this.cancel = false;
+        this.travelagent = false;
         this.baggage = 0;
         this.millageAccru =0;
     }
@@ -103,7 +105,7 @@ public class ClassManageBean {
         else{
             String message = cm.addClassCode(getClasscode(), getPricePercent(), getAdvancedSales(), 
             getPercentSold(), getServiceClass(), isRebook(), isCancel(), 
-            getBaggage(), getMillageAccru(), getSeason());
+            getBaggage(), getMillageAccru(), getSeason(),travelagent);
             FacesMessage msg = new FacesMessage(message);
             FacesContext.getCurrentInstance().addMessage(null, msg);
             setBookingClass(cm.retrieveBookingClasses());
@@ -111,6 +113,16 @@ public class ClassManageBean {
         }
     
     }
+
+    public boolean isTravelagent() {
+        return travelagent;
+    }
+
+    public void setTravelagent(boolean travelagent) {
+        this.travelagent = travelagent;
+    }
+    
+    
     
     public void deleteClass(String classCode){
         cm.deleteClassCode(classCode);

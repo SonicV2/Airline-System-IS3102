@@ -140,9 +140,8 @@ public class AnalyticsSessionBean implements AnalyticsSessionBeanLocal {
         Query q = em.createQuery("SELECT o FROM Customer o");
         List<Customer> cList = q.getResultList();
         int size = cList.size();
-        int totalScore = 0;
-        int score = 0;
         for (int i = 0; i < size; i++) {
+            int score = 0;
             Customer customer = cList.get(i);
             Long customerId = customer.getId();
             Calendar lastYear = Calendar.getInstance();
@@ -192,9 +191,8 @@ public class AnalyticsSessionBean implements AnalyticsSessionBeanLocal {
         Query q = em.createQuery("SELECT o FROM Customer o");
         List<Customer> cList = q.getResultList();
         int size = cList.size();
-        double totalScore = 0.0;
-        double score = 0.0;
         for (int i = 0; i < size; i++) {
+            double score = 0.0;
             Customer customer = cList.get(i);
             Long customerId = customer.getId();
             Calendar lastYear = Calendar.getInstance();
@@ -322,7 +320,9 @@ public class AnalyticsSessionBean implements AnalyticsSessionBeanLocal {
             
             check = false;
         }
-        double result=customerList.size()/(customerList.size()+customerList.size());
+        if(customerList2.size()==0)
+            return 1.0;
+        double result=customerList.size()/(customerList.size()+customerList2.size());
         return result;
     }
     

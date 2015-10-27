@@ -152,6 +152,15 @@
                                     </f:facet>
                                 </p:cellEditor>
                             </p:column>
+                            
+                            <p:column headerText="Cancel">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{bookingclass.travelagent}" /></f:facet>
+                                    <f:facet name="input">
+                                        <p:selectBooleanCheckbox value="#{bookingclass.travelagent}" />
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
 
                             <p:column style="width:32px">
                                 <p:rowEditor />
