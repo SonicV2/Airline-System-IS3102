@@ -4,17 +4,17 @@
  * and open the template in the editor.
  */
 package Inventory.Session;
-
 import Inventory.Entity.BookingClass;
 import java.util.List;
-import javax.ejb.Local;
+import javax.ejb.Remote;
 
 /**
  *
  * @author YiQuan
  */
-@Local
-public interface ClassSessionBeanLocal {
+@Remote
+public interface ClassSessionBeanRemote {
+    
      // Add a booking class
      public String addClassCode(String classcode, int pricePercent, int advancedSales
     , int percentSold, String serviceClass, boolean rebook, boolean cancel, 
@@ -31,4 +31,5 @@ public interface ClassSessionBeanLocal {
      
      // Find a specific booking class using its classcode
      public BookingClass findClass(String classCode);
+    
 }

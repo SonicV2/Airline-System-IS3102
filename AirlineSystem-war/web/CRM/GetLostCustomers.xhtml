@@ -12,7 +12,7 @@
         <h:form id="form">
             <p:growl id="msgs" showDetail="true"/>
 
-            <p:dataTable id="schedules" var="customer" value="#{cRMAnalyticsManagedBean.csList}" editable="true" style="margin-bottom:20px" paginator="true" rows="10" widgetVar="csTable">
+            <p:dataTable id="schedules" var="customer" value="#{cRMAnalyticsManagedBean.customerList}" editable="true" style="margin-bottom:20px" paginator="true" rows="10" widgetVar="csTable">
                 <f:facet name="header">
                     <p:outputPanel>
                         <h:outputText value="Search all fields:" />
@@ -24,18 +24,24 @@
                     <h:outputText value="#{customer.id}" />
                 </p:column>
                 
-                <p:column filterBy="#{customer.name}" headerText="Customer Name" filterMatchMode="contains" style="width:10%">
-                    <h:outputText value="#{customer.name}" />
+                <p:column filterBy="#{customer.name}" headerText="Customer's First Name" filterMatchMode="contains" style="width:10%">
+                    <h:outputText value="#{customer.firstName}" />
                 </p:column>
                 
-                <p:column filterBy="#{customer.email}" headerText="Customer Email" filterMatchMode="contains" style="width:10%">
+                 <p:column filterBy="#{customer.name}" headerText="Customer's Last Name" filterMatchMode="contains" style="width:10%">
+                    <h:outputText value="#{customer.firstName}" />
+                </p:column>
+                
+                <p:column filterBy="#{customer.email}" headerText="Customer's Email" filterMatchMode="contains" style="width:10%">
                     <h:outputText value="#{customer.email}" />
                 </p:column>
                 
-
-                <p:column headerText="Customer Score" filterBy="#{customer.score}" filterMatchMode="contains" style="width:10%">              
-                    <h:outputText value="#{customer.score}" />    
-                </p:column>               
+                <p:column filterBy="#{customer.hpNumber}" headerText="Customer's HP Num" filterMatchMode="contains" style="width:10%">
+                    <h:outputText value="#{customer.hpNumber}" />
+                </p:column>
+                
+                
+             
 
 
             </p:dataTable>

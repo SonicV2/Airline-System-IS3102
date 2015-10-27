@@ -91,7 +91,7 @@ public class SeasonManageBean {
         hm = new HashMap<String, Integer>();
         int size = sList.size();
         String results=" var results = [";
-        results += "['Country', 'Popularity'],";
+        results += "['Country', 'Popularity']";
         List <String> countries = new ArrayList();
        
         for (int i = 0; i < size; i++) {
@@ -124,7 +124,13 @@ public class SeasonManageBean {
             }
         }
          
-     
+        if (countries.isEmpty()){
+            results +="]";
+            return results;
+        }
+        
+        else{
+        results+=",";
         for(int i= 0; i< countries.size()-1; i++){
             results += "[";
             results += "'"+countries.get(i)+"'"+"," + hm.get(countries.get(i)).toString();
@@ -135,7 +141,7 @@ public class SeasonManageBean {
         results += "]";
         results += "]";
         return results;
-        
+        }
     }
 
     

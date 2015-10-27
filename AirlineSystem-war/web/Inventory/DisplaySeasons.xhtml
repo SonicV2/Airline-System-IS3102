@@ -31,6 +31,12 @@
 
 
             var options = {};
+            var options = {
+           colorAxis: {
+            values: [-300, 0, 300],
+            colors: ['blue', 'white', 'red']
+        }
+            };
 
             var chart = new google.visualization.GeoChart(document.getElementById('regions_div'));
 
@@ -49,11 +55,11 @@
                 <ui:include src="/CI/DashboardSidebar.xhtml"/>-->
 
         <div id="regions_div" style="width: 1200px; height: 900px;"></div>
-        
+
 
 
         <div id="page-wrapper">
-            
+
             <h:form>
                 <div class="form-group">
                     <h:outputLabel class="col-md-4 control-label" value="Seasonality" />
@@ -74,19 +80,19 @@
                     <br/>
 
                 </div> 
-                
+
                 <div class="form-group">
                     <h:outputLabel class="col-md-4 control-label" value="Enter Year: " />
                     <p:inputText value="#{seasonManageBean.year}"  />
                     <br/>
 
                 </div>
-                
-                 <div class="text-center">
-                     <h:commandButton class="btn btn-outline btn-success" value="Get Geo Map" action="#{seasonManageBean.refresh}"/>
+
+                <div class="text-center">
+                    <h:commandButton class="btn btn-outline btn-success" value="Get Geo Map" action="#{seasonManageBean.refresh}"/>
                     <br></br>
                 </div>
-                
+
             </h:form>
 
             <div class="row">

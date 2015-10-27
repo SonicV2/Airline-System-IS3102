@@ -4,12 +4,12 @@
  * and open the template in the editor.
  */
 package Inventory.Managedbean;
-import Inventory.Session.ClassSessionBeanLocal;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.faces.bean.SessionScoped;
 import java.util.List;
 import Inventory.Entity.BookingClass;
+import Inventory.Session.ClassSessionBeanLocal;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;

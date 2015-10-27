@@ -12,6 +12,7 @@ import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.bean.ManagedBean;
 import CRM.Session.CustomerScore;
+import Distribution.Entity.Customer;
 import java.util.List;
 import java.util.HashMap;
 import javax.faces.application.FacesMessage;
@@ -41,8 +42,9 @@ public class CRMAnalyticsManagedBean implements Serializable {
     private List<CustomerScore> csList;
     private int hmSize;
     private HashMap<Integer, Integer> hm;
-    private String test;
-    private List<Double> doubleList;
+    private List<Customer> customerList;
+    private String retentionRate;
+    private String description= "HiHi";
 
 
     /**
@@ -75,17 +77,11 @@ public class CRMAnalyticsManagedBean implements Serializable {
             csList = am.getFrequency(from, to);
         } else if (type.equals("Monetary")) {
             csList = am.getMonetary(from, to);
+        } else if (type.equals("Customer Lifetime Value")){
+            double retention = am.getRetentionRate();
+            csList = am.getCLV(from, to, retention);
         }
-
         return "ViewListResults";
-    }
-
-    public String getTest() {
-        return test;
-    }
-
-    public void setTest(String test) {
-        this.test = test;
     }
     
     public String getHistogramArray()
@@ -154,22 +150,59 @@ public class CRMAnalyticsManagedBean implements Serializable {
 
     }
 
-    public String calMMM() {
-        if (type.equals("Recency")) {
-            csList = am.getRecency(0, 100);
-        } else if (type.equals("Frequency")) {
-            csList = am.getFrequency(0, 100);
-        } else if (type.equals("Monetary")) {
-            csList = am.getMonetary(0, 100);
-        }
+    public String calRecencyMMM() {     
+            csList = am.getRecency(0, 100);      
         calculateAvg();
         calculateMedian();
-        calculateMode();
-        
-   
-        
+        calculateMode();      
         return "AnalyticsResults";
     }
+    
+    public String calFrequencyMMM() {      
+            csList = am.getFrequency(0, 100);   
+        calculateAvg();
+        calculateMedian();
+        calculateMode();      
+        return "AnalyticsResults";
+    }
+    
+    public String calMonetaryMMM() {       
+            csList = am.getMonetary(0, 100);
+        calculateAvg();
+        calculateMedian();
+        calculateMode();      
+        return "AnalyticsResults";
+    }
+    
+    
+    
+    public String calCLVMMM() {
+        
+        csList = am.getRecency(0, 100);
+        double retention= am.getRetentionRate()*100;
+        retentionRate = String.format("%1$,.2f", retention) + "%";
+        
+        calculateAvg();
+        calculateMedian();
+        calculateMode();      
+        return "CLVAnalyticsResults";
+    }
+
+    public String getRetentionRate() {
+        return retentionRate;
+    }
+
+    public void setRetentionRate(String retentionRate) {
+        this.retentionRate = retentionRate;
+    }
+    
+    
+    
+    public String retrieveLostCustomers(){
+        customerList = am.getLostCustomers();
+        return "GetLostCustomers";
+    }
+    
     
     public String getName(int index){
         
@@ -181,6 +214,16 @@ public class CRMAnalyticsManagedBean implements Serializable {
         String result = String.format("%1$,.2f", score);
         return result;
     }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+    
+    
 
     public List<CustomerScore> getCsList() {
         return csList;
@@ -206,6 +249,14 @@ public class CRMAnalyticsManagedBean implements Serializable {
         this.from = from;
     }
 
+    public List<Customer> getCustomerList() {
+        return customerList;
+    }
+
+    public void setCustomerList(List<Customer> customerList) {
+        this.customerList = customerList;
+    }
+    
     public int getTo() {
         return to;
     }
