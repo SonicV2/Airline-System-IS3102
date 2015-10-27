@@ -955,7 +955,7 @@ public class TravelAgencyManagedBean {
         currentCredit = travelAgency.getCurrentCredit();
         id = travelAgency.getId();
 
-        return "TravelAgencyUpdateProfile";
+        return "TravelAgencyUpdateProfile?faces-redirect=true";
     }
 
     public String persistUpdatedProfile() {
@@ -971,7 +971,7 @@ public class TravelAgencyManagedBean {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Your profile has been updated!", "");
         FacesContext.getCurrentInstance().addMessage(null, message);
 
-        return "TravelAgencyDashboard";
+        return "TravelAgencyDashboard?faces-redirect=true";
     }
 
     public String viewTravelAgencies() {
@@ -979,7 +979,7 @@ public class TravelAgencyManagedBean {
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "No record found!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
         }
-        return "ViewAllTravelAgencies";
+        return "/Distribution/ViewAllTravelAgencies?faces-redirect=true";
     }
 
     public String viewTravelAgencyProfile(Long id) {
@@ -991,7 +991,7 @@ public class TravelAgencyManagedBean {
         travelAgencyDisplay.setTravelAgency(travelAgency);
         travelAgencyDisplay.setNoOfConfirmedBookings(noOfBookings);
 
-        return "ViewTravelAgencyProfile";
+        return "ViewTravelAgencyProfile?faces-redirect=true";
     }
 
     public String manageTravelAgency(Long id) {
@@ -1003,7 +1003,7 @@ public class TravelAgencyManagedBean {
         setCurrentSettlement(travelAgencySessionBean.getCurrentMonthSettlement(travelAgency, new Date()));
         setCurrentCommission(0.1 * currentSettlement);
 
-        return "ManageTravelAgency";
+        return "ManageTravelAgency?faces-redirect=true";
 
     }
 
@@ -1017,7 +1017,7 @@ public class TravelAgencyManagedBean {
             FacesContext.getCurrentInstance().addMessage(null, message);
         }
 
-        return "SalesDepartmentDashboard";
+        return "SalesDepartmentDashboard?faces-redirect=true";
 
     }
 
@@ -1049,7 +1049,7 @@ public class TravelAgencyManagedBean {
 
         setTravelAgencies(travelAgencySessionBean.getAllTravelAgencies());
 
-        return "ViewAllTravelAgencies";
+        return "ViewAllTravelAgencies?faces-redirect=true";
     }
 
     public String viewPNRs(Long id) {
@@ -1057,7 +1057,7 @@ public class TravelAgencyManagedBean {
         setTravelAgency(travelAgencySessionBean.getTravelAgencyById(id));
         setPendingPNRs(travelAgencySessionBean.retrievePendingPNRs(travelAgency));
 
-        return "ViewTravelAgencyPNRs";
+        return "ViewTravelAgencyPNRs?faces-redirect=true";
     }
 
     public String confirmPNR(PNR pnr) {
@@ -1091,7 +1091,7 @@ public class TravelAgencyManagedBean {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "PNR has been confirmed!", "");
         FacesContext.getCurrentInstance().addMessage(null, message);
 
-        return "TravelAgencyViewPNRs";
+        return "TravelAgencyViewPNRs?faces-redirect=true";
     }
 
     public String cancelPNR(PNR pnr) {
@@ -1119,7 +1119,7 @@ public class TravelAgencyManagedBean {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "PNR has been cancelled!", "");
         FacesContext.getCurrentInstance().addMessage(null, message);
 
-        return "TravelAgencyViewPNRs";
+        return "TravelAgencyViewPNRs?faces-redirect=true";
     }
 
     public String viewSettlementAndCommission(Long id) {
@@ -1127,7 +1127,7 @@ public class TravelAgencyManagedBean {
         setSelectedMonth(null);
         setTravelAgency(travelAgencySessionBean.getTravelAgencyById(id));
 
-        return "SelectMonth";
+        return "SelectMonth?faces-redirect=true";
 
     }
 
@@ -1216,7 +1216,7 @@ public class TravelAgencyManagedBean {
         setTempDate(selectedMonth);
         setSelectedMonth(null);
 
-        return "TravelAgencyViewSettlementAndCommission";
+        return "TravelAgencyViewSettlementAndCommission?faces-redirect=true";
     }
     
     public String viewPNRDetails(PNR pnr) {
@@ -1246,7 +1246,7 @@ public class TravelAgencyManagedBean {
             eachSelectedSchedule.setEndDate(distributionSessionBean.convertTimeZone(eachSelectedSchedule.getEndDate(), distributionSessionBean.getSingaporeTimeZone(), distributionSessionBean.getTimeZoneFromIata(eachSelectedSchedule.getFlight().getRoute().getDestinationIATA())));
         }
 
-        return "TravelAgencyViewPNRDetails";
+        return "TravelAgencyViewPNRDetails?faces-redirect=true";
     }
     
     public String clearForm() {
@@ -1282,7 +1282,7 @@ public class TravelAgencyManagedBean {
             eachSelectedSchedule.setEndDate(distributionSessionBean.convertTimeZone(eachSelectedSchedule.getEndDate(), distributionSessionBean.getSingaporeTimeZone(), distributionSessionBean.getTimeZoneFromIata(eachSelectedSchedule.getFlight().getRoute().getDestinationIATA())));
         }
 
-        return "SalesDepartmentViewPNRDetails";
+        return "SalesDepartmentViewPNRDetails?faces-redirect=true";
     }
     /**
      * @return the travelAgencies

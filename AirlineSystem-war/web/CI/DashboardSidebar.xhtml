@@ -209,8 +209,8 @@
                     <li>
                         <a href="#{request.contextPath}/FOS/ViewTimetable.xhtml"><i class="fa fa-plus fa-dollar"></i> View Timetable</a>
                     </li>
-                    
-                    
+
+
                     <h:form>
                         <li>        
                             <a><h:commandLink class="commandLink" action="/FOS/ViewSchedule" actionListener="#{crewSignInManagedBean.viewPairing}"><i class="fa fa-plus fa-eye"></i> Crew Sign In</h:commandLink></a>
@@ -278,6 +278,20 @@
                         </li>
                     </h:form>
                 </ui:fragment>
+
+                <!-- this is for travel agency management, sales manager-->
+                <ui:fragment rendered="#{loginManagedBean.accessRightIDs.contains(24)}">
+                    
+                        <li>
+                            <a href="#{request.contextPath}/Distribution/TravelAgencySignUp.xhtml"><i class="fa fa-search"></i> Register Travel Agency</a>
+                        </li>
+                    <h:form>
+                        <li>
+                            <a><h:commandLink class="commandLink" action="#{travelAgencyManagedBean.viewTravelAgencies()}"><i class="fa fa-pencil"></i> Travel Agency Management</h:commandLink></a>
+                        </li>
+                     </h:form>
+                </ui:fragment>
+                   
 
             </ul>
 

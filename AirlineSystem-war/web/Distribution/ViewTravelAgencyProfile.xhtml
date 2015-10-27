@@ -1,128 +1,107 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
-<!DOCTYPE html>
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
-
-
-
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    
     <h:head>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Update your profile</title>
-        <!-- Custom Theme files -->
-        <meta name="viewport" content="width=device-width, initial-scale=1"/>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <h:outputStylesheet library ="css"  name="bootstrap.css" />
-        <h:outputStylesheet library ="css"  name="styleMerlion.css" />
-        <h:outputStylesheet library ="css"  name="JFFormStyle.css" />
-        <h:outputStylesheet library ="css"  name="flexslider.css" />
-        <h:outputScript library="js" name="jQuery/jQuery-2.1.4.min.js" />
-        <h:outputScript library="js" name="modernizr.custom.js" /> 
-
-
-        <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
-        <!-- //Custom Theme files -->
-
-        <!-- fonts -->
-        <link href='//fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,700,500italic,700italic,900,900italic' rel='stylesheet' type='text/css'></link>
-        <link href='//fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'></link>
-        <!-- //fonts -->	
-        <script type="text/javascript">
-            $(document).ready(function () {
-                $('#horizontalTab').easyResponsiveTabs({
-                    type: 'default', //Types: default, vertical, accordion           
-                    width: 'auto', //auto or any width like 600px
-                    fit: true   // 100% fit in a container
-                });
-            });
-        </script>
-        <!--pop-up-->
-        <h:outputScript library="js" name="menu_jquery.js" /> 
-        <!--//pop-up-->	
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
+        <h:outputStylesheet library="css" name="admindb.css" />
+        <h:outputStylesheet library="css" name="morrisjs/morris.css" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js" />
+        <!--        <title>Create Role</title>-->
+        <title>Travel Agency Information</title>
+        <style>
+            .table > tbody > tr > td{
+                border-top: #fff;
+            }
+        </style>
     </h:head>
     <h:body>
-        <!-- banner-bottom -->
-        <div class="banner-bottom">
-            <!-- container -->
-            <div class="container">
-                <div class="faqs-top-grids">
-                    <div class="book-grids">
-                        <h:form id="sign-up-form">
-                            <p:growl id="growl" sticky="true" showDetail="false"/>
-                            <div class="col-md-5 book-left">
-
-                                <div class="book-left-info">
-                                    <h3>View Travel Agency Profile</h3>
-                                </div>
-                                <div class="book-left-form">
-
-                                    
-                                    <p>Name</p>
-
-                                    <h:outputText id="name" value="#{travelAgencyManagedBean.travelAgencyDisplay.travelAgency.name}" />
-
-                                    <p>Email Address</p>
-                                    <h:outputText id="email" value="#{travelAgencyManagedBean.travelAgencyDisplay.travelAgency.email}" />
-                                    
-                                    <p>Primary Contact</p>
-
-                                    <h:outputText id="PC" value="#{travelAgencyManagedBean.travelAgencyDisplay.travelAgency.primaryContact}" />
-                                    
-                                    <p>Contact Number</p>
-                                    <h:outputText id="contact" value="#{travelAgencyManagedBean.travelAgencyDisplay.travelAgency.contactNo}" />
-                                    <p>Address</p>
-
-                                    <h:outputText id="address" value="#{travelAgencyManagedBean.travelAgencyDisplay.travelAgency.address}" />
-                                </div>
-                            </div>
-                            <div class="col-md-5 book-left book-right">
-
-                                <div class="book-left-form">
-                                                                           
-                                    <p>Travel Agency Id</p>
-                                    <h:outputText id="TAid" value="#{travelAgencyManagedBean.travelAgencyDisplay.travelAgency.id}" />
-                                    
-                                    <p>Maximum Credit</p>
-                                    <h:outputText id="MC" value="#{travelAgencyManagedBean.travelAgencyDisplay.travelAgency.maxCredit}" />
-                                    
-                                    <p>Current Credit Balance</p>
-                                    <h:outputText id="CC" value="#{travelAgencyManagedBean.travelAgencyDisplay.travelAgency.currentCredit}" />
-                                    
-                                    <p>Number of Confirmed Bookings</p>
-                                    <h:outputText id="bookings" value="#{travelAgencyManagedBean.travelAgencyDisplay.noOfConfirmedBookings}" />
-                                    
-                                    <h:commandButton class="pull-right" value="Go Back to Dashboard" action="SalesDepartmentDashboard"/>
-
-                                </div>
-                            </div>
-                        </h:form>
-
-
-
-                        <div class="clearfix"> </div>
-                    </div>
+        
+         <!--    To add the same header on all dashboard pages  -->
+        <ui:include src="/CI/DashboardHeader.xhtml"/>
+        <!--    To add the same sidebar on all dashboard pages  -->
+        <ui:include src="/CI/DashboardSidebar.xhtml"/>
+        
+        <div id="page-wrapper">
+            
+            
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2 class="page-header"> Information for #{travelAgencyManagedBean.travelAgencyDisplay.travelAgency.name}</h2>
                 </div>
             </div>
-            <!-- //container -->
+            <div class="panel panel-yellow">
+                <div class="panel-heading">
+                   Travel Agency ID : #{travelAgencyManagedBean.travelAgencyDisplay.travelAgency.id}
+                </div>
+                
+                <div class="panel-body">
+
+                    <!--                            <div class="table-responsive">-->
+                    <table class="table">
+                        <tbody>
+                            <td style="width: 30%;">Name:  </td>
+                            <td><h:outputText value="#{travelAgencyManagedBean.travelAgencyDisplay.travelAgency.name}" /></td>
+                <td></td>
+            
+                
+           
+            <tr>
+                 <td><h:outputText value="Email Address" /></td>
+                 <td><h:outputText value="#{travelAgencyManagedBean.travelAgencyDisplay.travelAgency.email}" /></td>
+            </tr>
+            <tr>
+                 <td><h:outputText value="Primary Contact" /></td>
+                 <td><h:outputText value="#{travelAgencyManagedBean.travelAgencyDisplay.travelAgency.primaryContact}" /></td>
+            </tr>
+            <tr>
+                <td> <h:outputText value="Contact Number" /></td>
+                <td><h:outputText value="#{travelAgencyManagedBean.travelAgencyDisplay.travelAgency.contactNo}" /></td>
+            </tr>
+            <tr>
+                <td> <h:outputText value="Address" /></td>
+                <td><h:outputText value="#{travelAgencyManagedBean.travelAgencyDisplay.travelAgency.address}"/>
+                        
+                </td>
+            </tr>
+            <tr>
+                <td> <h:outputText value="Maximum Credit" /></td>
+                <td><h:outputText value="#{travelAgencyManagedBean.travelAgencyDisplay.travelAgency.maxCredit}" /></td>
+            </tr>
+            <tr>
+                 <td><h:outputText value="Current Credit Balance" /></td>
+                 <td><h:outputText value="#{travelAgencyManagedBean.travelAgencyDisplay.travelAgency.currentCredit}" /></td>
+            </tr>
+            <tr>
+                 <td><h:outputText value="Number of Confirmed Bookings" /></td>
+                 <td><h:outputText value="#{travelAgencyManagedBean.travelAgencyDisplay.noOfConfirmedBookings}" /></td>
+            </tr>
+            </tbody>
+        </table>
         </div>
-
-
-
-        <ui:include src="MerlionAirlinesFooter.xhtml"/>
-        <h:outputScript library="js" name="jquery.flexslider.js"/> 
-        <h:outputScript library="js" name="easyResponsiveTabs.js" /> 
-        <h:outputScript library="js" name="jquery-ui.js" /> 
-        <h:outputScript library="js" name="scriptMerlion.js"></h:outputScript>	
+    </div>
+            <div class="text-center">
+                <h:form>
+                <h:commandButton class="btn btn-warning" value="Go Back to All Travel Agencies" action="ViewAllTravelAgencies.xhtml?faces-redirect=true" />
+                </h:form>
+                
+            </div>
+        
+        <br></br>
+        <br></br>
+        </div>
+        
+       <br></br>
+        <br></br>
+            
     </h:body>
-
-
 </html>
+
