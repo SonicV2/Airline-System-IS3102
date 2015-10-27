@@ -13,6 +13,7 @@ import Inventory.Entity.Season;
 import java.util.Date;
 import javax.persistence.Query;
 import java.util.List;
+import java.util.ArrayList;
 
 /**
  *
@@ -23,6 +24,12 @@ public class SeasonSessionBean implements SeasonSessionBeanLocal {
 
     @PersistenceContext(unitName = "AirlineSystem-ejbPU")
     private EntityManager em;
+    
+    public List<Season> getSeasons(){
+        Query q = em.createQuery("SELECT o from Season o");
+        List<Season> sList= q.getResultList();
+        return sList;
+    }
 
     public String addSeason(Date start, Date end, boolean origin, boolean destination,
     String demand, Location location, String remarks) {
@@ -65,7 +72,12 @@ public class SeasonSessionBean implements SeasonSessionBeanLocal {
     }
     
     public void deleteSeason(Season season){
-        em.remove(season);
+        Season season1 = em.find(Season.class, season.getId());
+        em.remove(season1);
+    }
+    
+    public Season findSeason(Long id){
+        return em.find(Season.class, id);
     }
     
     public Location findLocation(String IATA){

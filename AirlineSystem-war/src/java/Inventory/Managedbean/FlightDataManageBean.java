@@ -18,7 +18,7 @@ import javax.ejb.EJB;
 @Named(value = "flightDataManageBean")
 @ManagedBean
 @SessionScoped
-public class flightDataManageBean {
+public class FlightDataManageBean {
      @EJB
     private BookingSessionBeanLocal bs;
      
@@ -27,7 +27,7 @@ public class flightDataManageBean {
     /**
      * Creates a new instance of flightDataManageBean
      */
-    public flightDataManageBean() {
+    public FlightDataManageBean() {
     }
     
    

@@ -8,6 +8,7 @@ package Inventory.Session;
 import APS.Entity.Location;
 import Inventory.Entity.Season;
 import java.util.Date;
+import java.util.List;
 import javax.ejb.Local;
 
 /**
@@ -28,4 +29,8 @@ public interface SeasonSessionBeanLocal {
     
     public String addCountrySeason(Date start, Date end, boolean origin, boolean destination,
     String demand, String remarks,String country);
+    
+    public List<Season> getSeasons();
+    
+    public Season findSeason(Long id);
 }

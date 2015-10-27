@@ -57,7 +57,7 @@
                             <p:ajax event="rowEdit" listener="#{scheduleManageBean.onRowEdit}" update=":form:msgs" />
                             <p:ajax event="rowEditCancel" listener="#{scheduleManageBean.onRowCancel}" update=":form:msgs" />
 
-                            <p:column filterBy="#{schedule.scheduleId}" headerText="Schedule ID" filterMatchMode="contains" style="width:10%">
+                            <p:column filterBy="#{schedule.scheduleId}" filterMatchMode="contains" headerText="Schedule ID"  style="width:10%">
                                 <h:outputText value="#{schedule.scheduleId}" />
                             </p:column>
 
