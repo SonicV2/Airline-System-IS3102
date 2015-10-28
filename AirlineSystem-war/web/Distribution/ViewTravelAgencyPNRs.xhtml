@@ -26,6 +26,10 @@ and open the template in the editor.
     </h:head>
 
     <h:body>
+        <!--    To add the same header on all dashboard pages  -->
+        <ui:include src="/CI/DashboardHeader.xhtml"/>
+        <!--    To add the same sidebar on all dashboard pages  -->
+        <ui:include src="/CI/DashboardSidebar.xhtml"/>
 
         <div id="page-wrapper">
 
@@ -53,13 +57,21 @@ and open the template in the editor.
                             <p:column filterBy="#{pnr.dateOfBooking}" headerText="Date of Booking" filterMatchMode="contains">
                                 <h:outputText value="#{pnr.dateOfBooking}" />
                             </p:column>
-                            
-                            <p:column headerText="View Details" style="width:60px;">
+
+                            <p:column headerText="View Details" style="width:10%;">
                                 <h:commandLink
                                     action="#{travelAgencyManagedBean.travelAgencyPNRDetails(pnr)}"><i class="fa fa-newspaper-o"></i></h:commandLink>
                             </p:column>
-                            
-                            </p:dataTable>
+
+                        </p:dataTable>
+
+                        <div class="text-center">
+                            <br></br>
+                            <br></br>
+                            <h:commandButton class="btn btn-warning" value="Go Back to All Travel Agencies" action="ViewAllTravelAgencies.xhtml?faces-redirect=true" />
+
+
+                        </div>
 
                     </h:form>
                 </div>

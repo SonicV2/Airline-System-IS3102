@@ -26,6 +26,10 @@ and open the template in the editor.
     </h:head>
 
     <h:body>
+                <!--    To add the same header on all dashboard pages  -->
+                <ui:include src="/CI/DashboardHeader.xhtml"/>
+        <!--    To add the same sidebar on all dashboard pages  -->
+        <ui:include src="/CI/DashboardSidebar.xhtml"/>
 
         <div id="page-wrapper">
 
@@ -33,10 +37,21 @@ and open the template in the editor.
                 <div class="col-lg-12">
                     <h2 class="page-header">View All Travel Agencies</h2>
                 </div>
+                
+                
 
                 <div class="col-lg-12">
-
                     <h:form>
+                        <h:commandButton onclick="if (!confirm('Do you really want to delete all PNRs that were pending for more than 14 days?')) {
+                                            return false;
+                                        }
+                                        ;
+                                        return true;
+                                        " class="btn btn-outline btn-success pull-right" value="Delete All Pending PNRs" action="#{travelAgencyManagedBean.deletePNRs()}" />
+                        <br></br>
+                        <br></br>
+                    
+                    
                         <p:dataTable var="agency" value="#{travelAgencyManagedBean.travelAgencies}" widgetVar="agencyTable" paginator="true" rows="10">
 
                             <f:facet name="header">
@@ -50,27 +65,27 @@ and open the template in the editor.
                                 <h:outputText value="#{agency.name}" />
                             </p:column>
 
-                            <p:column headerText="View Profile" style="width:60px;">
+                            <p:column headerText="View Profile" style="width:10%;">
                                 <h:commandLink
                                     action="#{travelAgencyManagedBean.viewTravelAgencyProfile(agency.id)}"><i class="fa fa-newspaper-o"></i></h:commandLink>
                             </p:column>
 
-                            <p:column headerText="Manage Travel Agency" style="width:60px;">
+                            <p:column headerText="Update Credits &amp; Comissions" style="width:10%;">
                                 <h:commandLink
                                     action="#{travelAgencyManagedBean.manageTravelAgency(agency.id)}"><i class="fa fa-edit"></i></h:commandLink>
                             </p:column>
 
-                            <p:column headerText="View Pending PNRs" style="width:60px;">
+                            <p:column headerText="View Pending PNRs" style="width:10%;">
                                 <h:commandLink
                                     action="#{travelAgencyManagedBean.viewPNRs(agency.id)}"><i class="fa fa-dashcube"></i></h:commandLink>
                             </p:column>
                             
-                            <p:column headerText="View Financials" style="width:60px;">
+                            <p:column headerText="View Financials" style="width:10%;">
                                 <h:commandLink
                                     action="#{travelAgencyManagedBean.viewSettlementAndCommission(agency.id)}"><i class="fa fa-dollar"></i></h:commandLink>
                             </p:column>
                             
-                            <p:column headerText="Delete Travel Agency" style="width:60px;">
+                            <p:column headerText="Delete Travel Agency" style="width:10%;">
                                 <h:commandLink
                                     onclick="if (!confirm('Do you really want to delete this travel agency?')) {
                                             return false;

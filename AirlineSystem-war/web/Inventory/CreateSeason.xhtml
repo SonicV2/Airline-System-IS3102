@@ -26,8 +26,7 @@
 
     <body>
 
-<!--                        <ui:include src="/CI/dashboardHeader.xhtml"/>
-                <ui:include src="/CI/dashboardSidebar.xhtml"/>-->
+
 
 
         <div id="page-wrapper">
@@ -89,11 +88,11 @@
                 </div> 
                 <div class="form-group">
                     <h:outputLabel class="col-md-4 control-label" value=" Start day and time:" />
-                    <p:calendar  value="#{seasonManageBean.start}" pattern="MM/dd/yyyy HH:mm"/>
+                    <p:calendar  value="#{seasonManageBean.start}" pattern="MM/dd/yyyy"/>
                 </div>
                 <div class="form-group">
                     <h:outputLabel class="col-md-4 control-label"  value="End day and time:" />
-                    <p:calendar  value="#{seasonManageBean.end}" pattern="MM/dd/yyyy HH:mm"/>
+                    <p:calendar  value="#{seasonManageBean.end}" pattern="MM/dd/yyyy"/>
                 </div>
                 <div class="form-group">
                     <h:outputLabel class="col-md-4 control-label" value="Seasonality" />
@@ -113,7 +112,7 @@
                 </div> 
 
                 <div class="text-center">
-                    <h:commandButton class="btn btn-outline btn-success" value="Add Seasonality" actionListener="#{seasonManageBean.addSeason()}"/>
+                    <h:commandButton class="btn btn-outline btn-success" value="Add Seasonality" actionListener="#{seasonManageBean.addSeason}"/>
                     <br></br>
                     <br></br>
                 </div>

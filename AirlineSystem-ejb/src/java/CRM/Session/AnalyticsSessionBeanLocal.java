@@ -5,6 +5,7 @@
  */
 package CRM.Session;
 
+import Distribution.Entity.Customer;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -25,6 +26,12 @@ public interface AnalyticsSessionBeanLocal {
     public List<CustomerScore> getFrequency(int from, int to);
 
     public List<CustomerScore> getMonetary(int from, int to);
+    
+    public List<Customer> getLostCustomers();
+    
+    public double getRetentionRate();
+    
+    public List<CustomerScore> getCLV(int from, int to, double retention);
 
 
 }

@@ -4,12 +4,12 @@
  * and open the template in the editor.
  */
 package Inventory.Managedbean;
-import Inventory.Session.ClassManagementLocal;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.faces.bean.SessionScoped;
 import java.util.List;
 import Inventory.Entity.BookingClass;
+import Inventory.Session.ClassSessionBeanLocal;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -23,10 +23,10 @@ import org.primefaces.event.RowEditEvent;
 @Named(value = "classManageBean")
 @ManagedBean
 @SessionScoped
-public class classManageBean {
+public class ClassManageBean {
     
     @EJB
-    private ClassManagementLocal cm;
+    private ClassSessionBeanLocal cm;
     private String classcode; 
     private int pricePercent;
     private int advancedSales;
@@ -112,8 +112,8 @@ public class classManageBean {
     
     }
     
-    public void deleteClass(String classC){
-        cm.deleteClassCode(classC);
+    public void deleteClass(String classCode){
+        cm.deleteClassCode(classCode);
         setBookingClass(cm.retrieveBookingClasses());
     }
      
