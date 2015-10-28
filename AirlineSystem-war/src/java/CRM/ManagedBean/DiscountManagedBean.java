@@ -100,9 +100,9 @@ public class DiscountManagedBean {
      }
      
         public String deleteDiscountType(){
-            
-         //MAKE SURE selectedDiscountType IS SET BEFORE   
-         if (discountSessionBean.discountTypeHasUnclaimedCodes(selectedDiscountType)){
+          //MAKE SURE selectedDiscountType IS SET BEFORE   
+         
+            if (discountSessionBean.discountTypeHasUnclaimedCodes(selectedDiscountType)){
              message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Discount Type cannot be deleted as it has unclaimed codes!", "");
                 FacesContext.getCurrentInstance().addMessage(null, message);
                 return null;
@@ -136,7 +136,7 @@ public class DiscountManagedBean {
             else{
                 for (CustomerScore eachCustomerScore: customers){
                     String code = discountSessionBean.addDiscountCode(selectedDiscountType);
-                    sendEmail (eachCustomerScore.getEmail(), eachCustomerScore.getName(),selectedDiscountType, code);     
+                    sendEmailToTopCustomers (eachCustomerScore.getEmail(), eachCustomerScore.getName(),selectedDiscountType, code);     
                 }
                 message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Discount codes sent!", "");
                 FacesContext.getCurrentInstance().addMessage(null, message);
@@ -144,14 +144,12 @@ public class DiscountManagedBean {
             return null;
         }
         
-        public void sendEmail(String email, String name, DiscountType selectedDiscountType, String code) {
+        public void sendEmailToTopCustomers(String email, String name, DiscountType selectedDiscountType, String code) {
         
         String body = "";
         body += "Dear " + name + ",\n\nCongratulations! As part of our ongoing promotional campaign at Merlion Airlines, we are pleased to announced that you have been awarded a " + selectedDiscountType.getDiscount() + "% discount voucher which can be redeemed on your next booking at Merlion Airlines websiste.";
         body += "\n\nYour discount voucher code is "+ code + ".";
         body += "\n\nWe look forward to seeing you on board soon!";
-     
-
         emailSessionBean.sendEmail(email, "Merlion Airlines Promotionanl Code", body);
     }
 

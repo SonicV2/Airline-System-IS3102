@@ -7,6 +7,8 @@ package Distribution.ManagedBean;
 
 import APS.Entity.Schedule;
 import CI.Session.EmailSessionBeanLocal;
+import CRM.Entity.DiscountType;
+import CRM.Session.DiscountSessionBeanLocal;
 import Distribution.Entity.Customer;
 import Distribution.Entity.PNR;
 import Distribution.Session.CustomerSessionBeanLocal;
@@ -21,7 +23,6 @@ import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
@@ -47,6 +48,9 @@ public class CustomerManagedBean {
 
     @EJB
     private EmailSessionBeanLocal emailSessionBean;
+    
+    @EJB
+    private DiscountSessionBeanLocal discountSessionBean;
 
     private Long customerID;
     private String customerFirstName;
@@ -80,11 +84,16 @@ public class CustomerManagedBean {
     private String pass;
     private String body;
     private String subject;
+    private List<DiscountType> discountTypes;
+    private DiscountType selectedDiscountType;
 
     @PostConstruct
     public void init() {
         customer = null;
         isCustomerLoggedOn = false;
+        discountTypes = new ArrayList();
+        discountTypes = discountSessionBean.retrieveAllDiscountTypes();
+        
         //pnrDisplayList = new ArrayList();
     }
 
@@ -381,6 +390,45 @@ public class CustomerManagedBean {
         RequestContext.getCurrentInstance().update("growll");
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
+    
+    public String showDiscountTypes(){
+        if (discountTypes ==null|| discountTypes.isEmpty()){
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "There are no redemptions available at the moment. Please try later!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return null;
+        }
+        return "DiscountTypes";
+    }
+    
+    public String redeemDiscountTypes(){
+        //SET selectedDiscountType
+        
+        if (customer.getMileagePoints()<selectedDiscountType.getMileagePointsToRedeem()){
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "You do not have enough mileage points!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        }
+        else{
+            customer.setMileagePoints(customer.getMileagePoints()-(int)selectedDiscountType.getMileagePointsToRedeem());
+            customerSessionBean.updateCustomerProfile(customer);
+            String code = discountSessionBean.addDiscountCode(selectedDiscountType);
+            sendCodeToCustomer(code);
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Check your email for the discount code!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        }      
+        return null;
+    }
+    
+     public void sendCodeToCustomer(String code) {
+        
+        String body = "";
+        body += "Dear " + customer.getFirstName() + ",\n\nYou have successfully redeemed a " + selectedDiscountType.getDiscount() + "% discount voucher which can be redeemed on your next booking at Merlion Airlines websiste.";
+        body += " You have a balanace of " + customer.getMileagePoints() + " mileage points left.";
+        body += "\n\nYour discount voucher code is "+ code + ".";
+        body += "\n\nWe look forward to seeing you on board soon!";
+        emailSessionBean.sendEmail(customer.getEmail(), "Merlion Airlines Promotionanl Code", body);
+    }
+    
+    
 
     /**
      * @return the customerSessionBean
@@ -742,6 +790,22 @@ public class CustomerManagedBean {
      */
     public void setCustomerNewPassword(String customerNewPassword) {
         this.customerNewPassword = customerNewPassword;
+    }
+
+    public List<DiscountType> getDiscountTypes() {
+        return discountTypes;
+    }
+
+    public void setDiscountTypes(List<DiscountType> discountTypes) {
+        this.discountTypes = discountTypes;
+    }
+
+    public DiscountType getSelectedDiscountType() {
+        return selectedDiscountType;
+    }
+
+    public void setSelectedDiscountType(DiscountType selectedDiscountType) {
+        this.selectedDiscountType = selectedDiscountType;
     }
 
 }
