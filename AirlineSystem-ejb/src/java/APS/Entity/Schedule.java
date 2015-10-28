@@ -58,6 +58,9 @@ public class Schedule implements Serializable {
     @OneToMany(cascade = {CascadeType.REMOVE})
     private List<Checklist> checklists = new ArrayList<Checklist>();
     
+    
+    private List<String> selectedSeats = new ArrayList<String>();
+    
     public void createSchedule(Date startDate, Date endDate){
         this.startDate = startDate;
         this.endDate = endDate;
