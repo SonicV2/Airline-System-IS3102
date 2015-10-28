@@ -52,11 +52,12 @@ public class AnalyticsSessionBean implements AnalyticsSessionBeanLocal {
         Query q = em.createQuery("SELECT b FROM Booking b");
         List<Booking> bList = q.getResultList();
         int bSize = bList.size();
-        for (int i = 0; i < bSize; i++) {
+        int minus = bList.size()/12;
+        for (int i = 0; i < bSize - minus; i++) {
             Booking b = bList.get(i);
             Random random = new Random();
-            int roll = random.nextInt(1000);
-            int roll2 = random.nextInt(24);
+            int roll = random.nextInt(900);
+            int roll2 = random.nextInt(18);
             String lastName = Integer.toString(roll);
             Query q1 = em.createQuery("SELECT o FROM Customer o WHERE o.lastName =:lastName");
             q1.setParameter("lastName", lastName);
@@ -68,7 +69,24 @@ public class AnalyticsSessionBean implements AnalyticsSessionBeanLocal {
             Calendar cal = Calendar.getInstance();
             cal.setTime(flightDate);
             cal.setTimeInMillis(cal.getTimeInMillis()-(roll2*1000*60*60*24*30));
-            b.setFlightDate(flightDate);
+            b.setFlightDate(cal.getTime());
+        }
+         for (int i = bSize - minus; i < bSize ; i++) {
+            Booking b = bList.get(i);
+            Random random = new Random();
+            int roll = 900+random.nextInt(100);
+            String lastName = Integer.toString(roll);
+            Query q1 = em.createQuery("SELECT o FROM Customer o WHERE o.lastName =:lastName");
+            q1.setParameter("lastName", lastName);
+            List<Customer> cList = q1.getResultList();
+            Customer c = cList.get(0);
+            b.setCustomerId(c.getId());
+            b.setPrice(random.nextInt(500) + 100.0);
+            Date flightDate= b.getFlightDate();
+            Calendar cal = Calendar.getInstance();
+            cal.set(Calendar.YEAR-2, Calendar.MONTH+3, Calendar.DATE);
+            System.out.println(cal.getTime());
+            b.setFlightDate(cal.getTime());
         }
 
     }
@@ -76,6 +94,7 @@ public class AnalyticsSessionBean implements AnalyticsSessionBeanLocal {
     public List<CustomerScore> getRecency(int from, int to) {
         List<CustomerScore> scoreList = new ArrayList();
         Query q = em.createQuery("SELECT o FROM Customer o");
+        Date date = new Date();
         List<Customer> cList = q.getResultList();
         int size = cList.size();
         for (int i = 0; i < size; i++) {

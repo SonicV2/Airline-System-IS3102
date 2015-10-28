@@ -21,7 +21,7 @@ public interface ClassSessionBeanRemote {
     int baggage, int millageAccru, String season, boolean travelagent);
      
      // Delete a booking class
-     public void deleteClassCode(String classcode);
+     public String deleteClassCode(String classcode);
      
      // Edit a booking class
      public void editClassCode(BookingClass bc);
