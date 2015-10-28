@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package Inventory.Session;
+
 import Inventory.Entity.BookingClass;
 import java.util.List;
 import javax.ejb.Local;
@@ -13,9 +14,8 @@ import javax.ejb.Local;
  * @author YiQuan
  */
 @Local
-public interface ClassManagementLocal {
-    
-    // Add a booking class
+public interface ClassSessionBeanLocal {
+     // Add a booking class
      public String addClassCode(String classcode, int pricePercent, int advancedSales
     , int percentSold, String serviceClass, boolean rebook, boolean cancel, 
     int baggage, int millageAccru, String season);

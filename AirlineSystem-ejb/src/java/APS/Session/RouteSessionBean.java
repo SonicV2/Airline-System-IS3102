@@ -15,7 +15,7 @@ import javax.persistence.Query;
  * @author Yunna
  */
 @Stateless
-public class RouteSessionBean implements RouteSessionBeanLocal {
+public class RouteSessionBean implements RouteSessionBeanLocal, RouteSessionBeanRemote {
     @PersistenceContext(unitName = "AirlineSystem-ejbPU")
     private EntityManager em;
     
