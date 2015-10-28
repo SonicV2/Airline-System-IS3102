@@ -37,6 +37,7 @@ public class SearchBookingManagedBean implements Serializable {
     private Booking reqBooking; // use passport number & pnr number from searchbooking.xhtml
     private Schedule checkinSchedule;
     private List<Schedule> restSchedules; // not valid for checkin
+    private String serviceClass;
 
     public SearchBookingManagedBean() {
     }
@@ -56,14 +57,38 @@ public class SearchBookingManagedBean implements Serializable {
             restSchedules = new ArrayList<Schedule>();
             setReqBooking(b.get(0));
             setCheckinSchedule(passengerNameRecordSessionBean.getCheckinSchedule(pnrNumber, passportNumber));
-            
+
             if (b.size() > 1) {
                 for (int i = 1; i < b.size(); i++) {
-                    System.out.println("FFFFFFF: "+b.get(i).getSeatAvail().getSchedule());
+                    System.out.println("FFFFFFF: " + b.get(i).getSeatAvail().getSchedule());
                     restSchedules.add(b.get(i).getSeatAvail().getSchedule());
                 }
             }
         }
+    }
+
+    public String retrieveFlightType() {
+        retrieveClass();
+        if (checkinSchedule.getFlight().getAircraftType().equals("Airbus A330-300")) {
+            return "A330_300.xhtml";
+        } else if (checkinSchedule.getFlight().getAircraftType().equals("Airbus A380-800")) {
+            return "A380_800.xhtml";
+        } else if (checkinSchedule.getFlight().getAircraftType().equals("Boeing 777-200")) {
+            return "B777_200.xhtml";
+        } else if (checkinSchedule.getFlight().getAircraftType().equals("Boeing 777-200ER")) {
+            return "B777_200ER.xhtml";
+        } else if (checkinSchedule.getFlight().getAircraftType().equals("Boeing 777-300")) {
+            return "B777_300.xhtml";
+        } else if (checkinSchedule.getFlight().getAircraftType().equals("Boeing 777-300ER")) {
+            return "B777_300ER.xhtml";
+        } else {
+            return "SearchBooking.xhtml";
+        }
+
+    }
+
+    public void retrieveClass() {
+        setServiceClass(passengerNameRecordSessionBean.retrieveClass(reqBooking.getClassCode()));
     }
 
     /**
@@ -134,6 +159,20 @@ public class SearchBookingManagedBean implements Serializable {
      */
     public void setRestSchedules(List<Schedule> restSchedules) {
         this.restSchedules = restSchedules;
+    }
+
+    /**
+     * @return the serviceClass
+     */
+    public String getServiceClass() {
+        return serviceClass;
+    }
+
+    /**
+     * @param serviceClass the serviceClass to set
+     */
+    public void setServiceClass(String serviceClass) {
+        this.serviceClass = serviceClass;
     }
 
 }

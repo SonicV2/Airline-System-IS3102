@@ -10,6 +10,7 @@ import APS.Entity.Schedule;
 
 import Distribution.Entity.PNR;
 import Inventory.Entity.Booking;
+import Inventory.Entity.BookingClass;
 import Inventory.Entity.SeatAvailability;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -106,6 +107,18 @@ public class PassengerNameRecordSessionBean implements PassengerNameRecordSessio
         
     }
     
+    @Override
+    public String retrieveClass(String classcode){
+        Query q = em.createQuery("SELECT b FROM BookingClass b");
+        List<BookingClass> bc = q.getResultList();
+        
+        for(BookingClass b: bc){
+            if(b.getClasscode().equals(classcode)){
+                return b.getServiceClass();
+            }
+        }
+        return "null";
+    }
     
 
     public long checkTime(String time1, String time2) {

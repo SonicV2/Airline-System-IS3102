@@ -21,9 +21,11 @@ public interface PassengerNameRecordSessionBeanLocal {
 
     public PNR getPNR(String pnrNumber);
 
-    public List<Booking>getBooking(String pnrNumber, String passportNumber);
+    public List<Booking> getBooking(String pnrNumber, String passportNumber);
 
     public Schedule getCheckinSchedule(String pnrNumber, String passportNumber);
 
     public Flight getCheckinFlight(String pnrNumber, String passportNumber);
+
+    public String retrieveClass(String classcode);
 }
