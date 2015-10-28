@@ -1,131 +1,123 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
-<!DOCTYPE html>
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
-
-
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 
     <h:head>
-        <p:growl id="growl" sticky="true" showDetail="true"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Manage Travel Agency</title>
-        <!-- Custom Theme files -->
-        <meta name="viewport" content="width=device-width, initial-scale=1"/>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <h:outputStylesheet library ="css"  name="bootstrap.css" />
-        <h:outputStylesheet library ="css"  name="styleMerlion.css" />
-        <h:outputStylesheet library ="css"  name="JFFormStyle.css" />
-        <h:outputStylesheet library ="css"  name="flexslider.css" />
-        <h:outputScript library="js" name="jQuery/jQuery-2.1.4.min.js" />
-        <h:outputScript library="js" name="modernizr.custom.js" /> 
-
-
-        <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
-        <!-- //Custom Theme files -->
-
-        <!-- fonts -->
-        <link href='//fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,700,500italic,700italic,900,900italic' rel='stylesheet' type='text/css'></link>
-        <link href='//fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'></link>
-        <!-- //fonts -->	
-        <script type="text/javascript">
-            $(document).ready(function () {
-                $('#horizontalTab').easyResponsiveTabs({
-                    type: 'default', //Types: default, vertical, accordion           
-                    width: 'auto', //auto or any width like 600px
-                    fit: true   // 100% fit in a container
-                });
-            });
-        </script>
-        <!--pop-up-->
-        <h:outputScript library="js" name="menu_jquery.js" /> 
-        <!--//pop-up-->	
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
+        <h:outputStylesheet library="css" name="admindb.css" />
+        <h:outputStylesheet library="css" name="morrisjs/morris.css" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js" />
+        <title>Manage Travel Agency</title>
+        <style>
+            .table > tbody > tr > td{
+                border-top: #fff;
+            }
+        </style>
     </h:head>
     <h:body>
-        <!-- banner-bottom -->
-        <div class="banner-bottom">
-            <!-- container -->
-            <div class="container">
-                <div class="faqs-top-grids">
-                    <div class="book-grids">
-                        <h:form id="sign-up-form">
-                            <p:growl id="growl" sticky="true" showDetail="false"/>
-                            <div class="col-md-5 book-left">
 
-                                <div class="book-left-info">
-                                    <h3>Manage Travel Agency</h3>
-                                </div>
-                                <div class="book-left-form">
+        <!--    To add the same header on all dashboard pages  -->
+                <ui:include src="/CI/DashboardHeader.xhtml"/>
+        <!--    To add the same sidebar on all dashboard pages  -->
+        <ui:include src="/CI/DashboardSidebar.xhtml"/>
+
+        <div id="page-wrapper">
 
 
-                                    <p>Name</p>
-
-                                    <h:outputText id="name" value="#{travelAgencyManagedBean.travelAgencyDisplay.travelAgency.name}" />
-
-                                    <p>Maximum Credit</p>
-                                    <h:outputText id="MC" value="#{travelAgencyManagedBean.travelAgencyDisplay.travelAgency.maxCredit}" />
-
-                                    <p>Current Credit Balance</p>
-                                    <h:outputText id="CC" value="#{travelAgencyManagedBean.travelAgencyDisplay.travelAgency.currentCredit}" />
-
-                                    <p>Commission for This Month</p>
-                                    <h:outputText id="commission" value="#{travelAgencyManagedBean.currentCommission}" />
-                                    
-                                    <p>Confirmed Bookings Amount for This Month</p>
-                                    <h:outputText id="settlement" value="#{travelAgencyManagedBean.currentSettlement}" />
-
-                                 
-                                </div>
-                            </div>
-                            
-                            <div class="col-md-5 book-left book-right">
-
-                                <div class="book-left-form">
-                                    
-                                    <div class="form-group">
-                                        <h:commandButton class="pull-right" value="Reset Credit and Commission" action="#{travelAgencyManagedBean.reset()}"/>
-                                    </div>
-                                    
-                                    <div class="form-group">                          
-                                        <p:inputText value="#{travelAgencyManagedBean.maxCredit}"  />
-                                    </div>
-                                    <h:commandButton class="pull-right" value="Change Maximum Credit Limit" action="#{travelAgencyManagedBean.changeLimit()}"/>
-                                    
-                                    <div class="form-group">
-                                    <h:commandButton class="pull-right" value="Go Back to Dashboard" action="SalesDepartmentDashboard"/>
-                                    </div>
-                                    
-                                    
-                                  </div>
-                            </div>  
-                        </h:form>
-
-
-
-                        <div class="clearfix"> </div>
-                    </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2 class="page-header"> Credit Information for #{travelAgencyManagedBean.travelAgencyDisplay.travelAgency.name}</h2>
                 </div>
             </div>
-            <!-- //container -->
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    Travel Agency ID : #{travelAgencyManagedBean.travelAgencyDisplay.travelAgency.id}
+                </div>
+
+                <div class="panel-body">
+
+                    <!--                            <div class="table-responsive">-->
+                    <table class="table">
+                        <tbody>
+                            <td style="width: 30%;">Name:  </td>
+                            <td><h:outputText value="#{travelAgencyManagedBean.travelAgencyDisplay.travelAgency.name}" /></td>
+                            <td></td>
+
+
+
+                            <tr>
+                                <td><h:outputText value="Maximum Credit" /></td>
+                                <td><h:outputText value="$ #{travelAgencyManagedBean.travelAgencyDisplay.travelAgency.maxCredit}" /></td>
+                            </tr>
+                            <tr>
+                                <td><h:outputText value="Current Credit Balance" /></td>
+                                <td><h:outputText value="$ #{travelAgencyManagedBean.travelAgencyDisplay.travelAgency.currentCredit}" /></td>
+                            </tr>
+                            <tr>
+                                <td><h:outputText value="Commission for This Month" /></td>
+                                <td><h:outputText value="$ #{travelAgencyManagedBean.currentCommission}" /></td>
+                            </tr>
+                            <tr>
+                                <td><h:outputText value="Confirmed Booking Amount for This Month" /></td>
+                                <td><h:outputText value="$ #{travelAgencyManagedBean.currentSettlement}" /></td>
+                            </tr>
+                        </tbody>
+
+
+
+                    </table>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2 class="page-header"> Update Credits and Commission</h2>
+                </div>
+                <div class="col-lg-6">
+
+                    <h:form>
+
+                        <div class="form-group">
+                            <h:commandButton class="btn btn-default" value="Reset Credit and Commission" action="#{travelAgencyManagedBean.reset()}"/>
+                            <br></br>
+                            <br></br>
+                        </div>
+
+
+                        <div class="form-group"> 
+
+                            <label> New Maximum Credit: </label>
+                            
+                            <h:inputText class="form-control" style="width:220px" value="#{travelAgencyManagedBean.maxCredit}"  />
+                            <br></br>
+                            <h:commandButton class="btn btn-default" value="Change Maximum Credit Limit" action="#{travelAgencyManagedBean.changeLimit()}"/>
+
+                        </div>
+                        <div class="form-group">
+                            <br></br>
+                            <br></br>
+                            <div class="text-center">
+                            <h:commandButton class="btn btn-primary" value="Go Back to View All Travel Agencies" action="ViewAllTravelAgencies.xhtml"/>
+                            </div>
+                        </div>
+                    </h:form>
+                </div>
+
+                <br></br>
+                <br></br>
+            </div>
         </div>
 
 
 
-        <ui:include src="MerlionAirlinesFooter.xhtml"/>
-        <h:outputScript library="js" name="jquery.flexslider.js"/> 
-        <h:outputScript library="js" name="easyResponsiveTabs.js" /> 
-        <h:outputScript library="js" name="jquery-ui.js" /> 
-        <h:outputScript library="js" name="scriptMerlion.js"></h:outputScript>	
     </h:body>
-
-
 </html>
+

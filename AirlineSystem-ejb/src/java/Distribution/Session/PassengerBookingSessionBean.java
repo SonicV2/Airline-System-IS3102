@@ -118,7 +118,7 @@ public class PassengerBookingSessionBean implements PassengerBookingSessionBeanL
     @Override
     public String generatePNRNumber() {
         String pnr = "";
-        String possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        String possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
         for (int i = 0; i < 5; i++) {
             pnr += possible.charAt((int) Math.floor(Math.random() * possible.length()));
