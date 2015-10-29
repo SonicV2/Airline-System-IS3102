@@ -199,7 +199,7 @@ public class PricingSessionBean implements PricingSessionBeanLocal {
             Query q = em.createQuery("SELECT o FROM BookingClass o WHERE o.serviceClass = :serviceClass AND o.season =:season AND o.travelagent =:travelagent");
             q.setParameter("serviceClass", serviceClass);
             q.setParameter("season", currentSeason);
-            q.setParameter("season", travelagent);
+            q.setParameter("travelagent", travelagent);
             List<BookingClass> classList = q.getResultList();
             int size = classList.size();
             List<BookingClass> updatedList = new ArrayList();
