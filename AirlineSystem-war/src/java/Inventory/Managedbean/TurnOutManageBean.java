@@ -42,15 +42,15 @@ public class TurnOutManageBean {
     
     public String displayRates(String flightNo){
         fList= new ArrayList();
-       FallOut fallout = new FallOut("Economy Saver", pm.calTurnOut(flightNo,"Economy Saver")+"%");
+       FallOut fallout = new FallOut("Economy Saver", pm.calTurnOut(flightNo,"Economy Saver"));
        fList.add(fallout);
-       FallOut fallout1 = new FallOut("Economy Basic", pm.calTurnOut(flightNo,"Economy Basic")+"%");
+       FallOut fallout1 = new FallOut("Economy Basic", pm.calTurnOut(flightNo,"Economy Basic"));
        fList.add(fallout1);
-       FallOut fallout2 = new FallOut("Economy Premium", pm.calTurnOut(flightNo,"Economy Premium")+"%");
+       FallOut fallout2 = new FallOut("Economy Premium", pm.calTurnOut(flightNo,"Economy Premium"));
        fList.add(fallout2);
-       FallOut fallout3 = new FallOut("Business", pm.calTurnOut(flightNo,"Business")+"%");
+       FallOut fallout3 = new FallOut("Business", pm.calTurnOut(flightNo,"Business"));
        fList.add(fallout3);
-       FallOut fallout4 = new FallOut("First Class", pm.calTurnOut(flightNo,"First Class")+"%");
+       FallOut fallout4 = new FallOut("First Class", pm.calTurnOut(flightNo,"First Class"));
        fList.add(fallout4);
         
        return "DisplayTurnOut";

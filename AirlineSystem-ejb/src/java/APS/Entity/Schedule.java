@@ -59,7 +59,7 @@ public class Schedule implements Serializable {
     private List<Checklist> checklists = new ArrayList<Checklist>();
     
     
-    private List<String> selectedSeats = new ArrayList<String>();
+   // private List<String> selectedSeats = new ArrayList<String>();
     
     public void createSchedule(Date startDate, Date endDate){
         this.startDate = startDate;

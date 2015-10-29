@@ -68,11 +68,14 @@ public class SeasonManageBean {
             sm.editSeason(edited);
             FacesMessage msg = new FacesMessage("Season Edited" );
             FacesContext.getCurrentInstance().addMessage(null, msg);
+            setsList(sm.getSeasons());
+            
     }
      
     public void onRowCancel(RowEditEvent event) {
         FacesMessage msg = new FacesMessage("Edit Cancelled");
         FacesContext.getCurrentInstance().addMessage(null, msg);
+        setsList(sm.getSeasons());
     }
 
 
@@ -83,7 +86,9 @@ public class SeasonManageBean {
     }
     
     public String refresh(){
+        setsList(sm.getSeasons());
         return "DisplaySeasons";
+  
     }
     
     public String getGeoArray()

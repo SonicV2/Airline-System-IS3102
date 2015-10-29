@@ -25,7 +25,7 @@ import APS.Entity.Route;
  * @author YiQuan
  */
 @Stateless
-public class PricingSessionBean implements PricingSessionBeanLocal {
+public class PricingSessionBean implements PricingSessionBeanLocal, PricingSessionBeanRemote {
 
     @PersistenceContext(unitName = "AirlineSystem-ejbPU")
     private EntityManager em;
@@ -80,7 +80,8 @@ public class PricingSessionBean implements PricingSessionBeanLocal {
                 turnOut++;
         }
         Double result = turnOut*100.0/size;
-        return String.format("%1$,.2f", result);
+        String result1 = String.format("%1$,.2f", result)+"%";
+        return result1;
 
     }
 

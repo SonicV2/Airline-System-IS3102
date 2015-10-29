@@ -18,7 +18,7 @@
         <h:form id="form">
             <p:growl id="msgs" showDetail="true"/>
 
-            <p:dataTable id="flights" var="flight" value="#{flightManageBean.flights}" editable="true" style="margin-bottom:20px" paginator="true" rows="10" widgetVar="flightsTable">
+            <p:dataTable id="flights" var="flight" value="#{flightManagedBean.flights}" editable="true" style="margin-bottom:20px" paginator="true" rows="10" widgetVar="flightsTable">
                 <f:facet name="header">
                     <p:outputPanel>
                         <h:outputText value="Search all fields:" />
