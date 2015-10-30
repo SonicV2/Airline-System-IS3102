@@ -12,11 +12,22 @@
         <div>Select Seat B777_200</div>
 
         <h:form>
-            
-                <p:inputText id="seat" value="#{seatManagedBean.choose}" />    
-                <h:commandButton value="Choose" actionListener="#{seatManagedBean.chooseSeatB777_200()}" />
-                       
-                <p:dataGrid var="seat" value="#{seatManagedBean.b777_200seatArrange}" columns="10" layout="grid"
+            <div>
+                <h:commandButton disabled="true" value="Flight Number: #{searchBookingManagedBean.checkinSchedule.flight.flightNo}"/>
+                &nbsp; &nbsp;
+                <h:commandButton disabled="true" value="Flight Date: #{searchBookingManagedBean.checkinSchedule.startDate}"/>
+                &nbsp; &nbsp;
+                <h:commandButton disabled="true" value="Departure City: #{searchBookingManagedBean.checkinSchedule.flight.route.originCity}"/>
+                &nbsp; &nbsp;
+                <h:commandButton disabled="true" value="Departure City: #{searchBookingManagedBean.checkinSchedule.flight.route.destinationCity}"/>
+                &nbsp; &nbsp;
+                <h:commandButton disabled="true" value="Service Class: #{searchBookingManagedBean.serviceClass}"/>
+            </div>
+
+            <p:inputText id="seat" value="#{seatManagedBean.choose}" />    
+            <h:commandButton value="Choose" actionListener="#{seatManagedBean.chooseSeatB777_200()}" />
+
+            <p:dataGrid var="seat" value="#{seatManagedBean.b777_200seatArrange}" columns="10" layout="grid"
                         rows="940" id="seats" style="width:300px;height:100%; padding:0px;">
                 <p:panel style=" padding:0px;margin:0px; border-style: none " >
                     <h:panelGrid  style=" font-size:15px ;text-align:left; height:30%;">                            
@@ -25,9 +36,9 @@
                 </p:panel>
 
             </p:dataGrid>
-             
-           
-            
+
+
+
         </h:form>
 
     </h:body>

@@ -59,7 +59,11 @@ public class Schedule implements Serializable {
     private List<Checklist> checklists = new ArrayList<Checklist>();
     
     
-    private List<String> selectedSeats = new ArrayList<String>();
+    private List<String> selectedSeatsF = new ArrayList<String>();
+    
+    private List<String> selectedSeatsB = new ArrayList<String>();
+    
+    private List<String> selectedSeatsE = new ArrayList<String>();
     
     public void createSchedule(Date startDate, Date endDate){
         this.startDate = startDate;
@@ -168,6 +172,48 @@ public class Schedule implements Serializable {
 
     public void setChecklists(List<Checklist> checklists) {
         this.checklists = checklists;
+    }
+
+    /**
+     * @return the selectedSeatsF
+     */
+    public List<String> getSelectedSeatsF() {
+        return selectedSeatsF;
+    }
+
+    /**
+     * @param selectedSeatsF the selectedSeatsF to set
+     */
+    public void setSelectedSeatsF(List<String> selectedSeatsF) {
+        this.selectedSeatsF = selectedSeatsF;
+    }
+
+    /**
+     * @return the selectedSeatsB
+     */
+    public List<String> getSelectedSeatsB() {
+        return selectedSeatsB;
+    }
+
+    /**
+     * @param selectedSeatsB the selectedSeatsB to set
+     */
+    public void setSelectedSeatsB(List<String> selectedSeatsB) {
+        this.selectedSeatsB = selectedSeatsB;
+    }
+
+    /**
+     * @return the selectedSeatsE
+     */
+    public List<String> getSelectedSeatsE() {
+        return selectedSeatsE;
+    }
+
+    /**
+     * @param selectedSeatsE the selectedSeatsE to set
+     */
+    public void setSelectedSeatsE(List<String> selectedSeatsE) {
+        this.selectedSeatsE = selectedSeatsE;
     }
 
 }
