@@ -26,10 +26,10 @@
         }
     </style>
     <h:body>
-<!--                    To add the same header on all dashboard pages  -->
-<!--                <ui:include src="/CI/dashboardHeader.xhtml"/>-->
-                    <!--To add the same sidebar on all dashboard pages -->
-        <ui:include src="/CI/dashboardSidebar.xhtml"/>
+        <!--                    To add the same header on all dashboard pages  -->
+        <!--                <ui:include src="/CI/DashboardHeader.xhtml"/>-->
+        <!--To add the same sidebar on all dashboard pages -->
+        <ui:include src="/CI/DashboardSidebar.xhtml"/>
 
 
         <div id="page-wrapper">
@@ -40,7 +40,7 @@
                 </div>
 
                 <div class="col-lg-12">
-                    <p:dataTable id="radioDT" var="aircraftType" value="#{fleetManageBean.aircraftTypes}" style="margin-bottom:40px">
+                    <p:dataTable id="radioDT" var="aircraftType" value="#{fleetManagedBean.aircraftTypes}" style="margin-bottom:40px">
                         <p:column headerText="Aircraft Type" sortBy="#{aircraftType.id}">
                             <h:outputText value="#{aircraftType.id}" />
                         </p:column>
@@ -80,21 +80,27 @@
                 </div>
 
                 <h:form class="form col-md-8 center-block">
+                    <div class="form-group">                          
+                        <h:outputLabel class="col-md-4 control-label" value="Tail Number: "/>
+                        <p:inputText id="tailNo" value="#{fleetManagedBean.tailNo}"  />
+                        <p:watermark for="tailNo" value="e.g. 9V-ABC for SG planes" />
+                        <br/>
+                    </div>
 
                     <div class="form-group">
-                        <h:outputLabel for="aircraftTypeId" value="Aircraft Type:" />
+                        <h:outputLabel class="col-md-4 control-label" for="aircraftTypeId" value="Aircraft Type:" />
                         <span>
-                            <h:selectOneMenu class="form-control" id="aircraftTypeId" value="#{fleetManageBean.aircraftTypeId}" style="width:180px">
+                            <h:selectOneMenu class="form-control" id="aircraftTypeId" value="#{fleetManagedBean.aircraftTypeId}" style="width:180px">
                                 <f:selectItem itemLabel="Select One" itemValue="" />
-                                <f:selectItems value="#{fleetManageBean.aircraftTypeIds}" />
+                                <f:selectItems value="#{fleetManagedBean.aircraftTypeIds}" />
                             </h:selectOneMenu>
                         </span>
                     </div>
 
                     <div class="form-group">
-                        <h:outputLabel for="hub" value="Location of the aircraft:" />
+                        <h:outputLabel class="col-md-4 control-label" for="hub" value="Location of the aircraft:" />
                         <span>
-                            <h:selectOneMenu class="form-control" id="hub" value="#{fleetManageBean.hub}" style="width:125px">
+                            <h:selectOneMenu class="form-control" id="hub" value="#{fleetManagedBean.hub}" style="width:125px">
                                 <f:selectItem itemLabel="Select One" itemValue="" />
                                 <f:selectItem itemLabel="Singapore" itemValue="SIN" />
                                 <f:selectItem itemLabel="Tokyo" itemValue="NRT" />
@@ -104,40 +110,35 @@
                     </div>
 
                     <div class="form-group">
-
-                        <h:outputLabel value="Date Purchased: " />
+                        <h:outputLabel class="col-md-4 control-label" value="Date Purchased: " />
                         <span>
-                            <p:calendar id="button" value="#{fleetManageBean.datePurchased}" navigator="true" pattern="yyyy-MMM-dd"/>
+                            <p:calendar id="button" value="#{fleetManagedBean.datePurchased}" navigator="true" pattern="yyyy-MMM-dd"/>
                         </span>
                         <br/>
-
-
                     </div>
 
 
                     <div class="form-group">
-                        <h:outputLabel value="Last Maintained: " />
+                        <h:outputLabel class="col-md-4 control-label" value="Last Maintained: " />
                         <span>
-                            <p:calendar id="button1" value="#{fleetManageBean.lastMaintained}" navigator="true" pattern="yyyy-MMM-dd"/>
+                            <p:calendar id="button1" value="#{fleetManagedBean.lastMaintained}" navigator="true" pattern="yyyy-MMM-dd"/>
                         </span>
                         <br/>
-
                     </div>
 
                     <div class="form-group">
-                        <h:outputLabel for="status" value="Status of the aircraft:" />
+                        <h:outputLabel class="col-md-4 control-label" for="status" value="Status of the aircraft:" />
                         <span>
-                            <h:selectOneMenu class="form-control" id="status" value="#{fleetManageBean.status}" style="width:125px">
+                            <h:selectOneMenu class="form-control" id="status" value="#{fleetManagedBean.status}" style="width:125px">
                                 <f:selectItem itemLabel="Select One" itemValue="" />
+                                <f:selectItem itemLabel="Ready" itemValue="Ready" />
                                 <f:selectItem itemLabel="Stand-By" itemValue="Stand-By" />
-                                <f:selectItem itemLabel="Reserve" itemValue="Reserve" />
                             </h:selectOneMenu>
                         </span>
                     </div>
 
                     <div class="text-center">
-                        <h:commandButton class="btn btn-outline btn-success" value="Aquire Aircraft" actionListener="#{fleetManageBean.acquireAircraft}"/>
-
+                        <h:commandButton class="btn btn-outline btn-success" value="Aquire Aircraft" actionListener="#{fleetManagedBean.acquireAircraft}"/>
                     </div>
 
                     <br></br>

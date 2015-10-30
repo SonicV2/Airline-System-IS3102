@@ -31,9 +31,9 @@
     <h:body>
 
         <!--            To add the same header on all dashboard pages  
-               <ui:include src="/CI/dashboardHeader.xhtml"/>--> 
-        To add the same sidebar on all dashboard pages  
-        <ui:include src="/CI/dashboardSidebar.xhtml"/>
+               <ui:include src="/CI/DashboardHeader.xhtml"/>--> 
+        <!--To add the same sidebar on all dashboard pages-->  
+        <ui:include src="/CI/DashboardSidebar.xhtml"/>
 
         <div id="page-wrapper">
 
@@ -41,19 +41,18 @@
                 <div class="col-lg-12">
                     <h2 class="page-header">Generate Demand Forecast</h2>
                 </div>
-                
-                <h:form>
-                    <div class="text-center">
-                        <h:commandButton class="btn btn-outline btn-success" value="Test Forecast!!!" actionListener="#{flightManageBean.testForecast}"/>
-                        <br></br>
-                        <br></br>
-                    </div>
-                </h:form>
-                
-                <div class="col-lg-12">
-                    <h:form>
-                        <p:dataTable var="route" value="#{flightManageBean.routes}" widgetVar="routesTable" paginator="true" rows="10">
 
+                <div class="col-lg-12">
+
+                    <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+
+                    <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+                        <p:graphicImage name="/images/ajax-loader.gif" />
+                    </p:dialog>
+
+                    <h:form>
+                        <p:dataTable var="route" value="#{flightManagedBean.routes}" widgetVar="routesTable" paginator="true" rows="10">
+                            <p:ajax event="page" global="false"/>
                             <f:facet name="header">
                                 <p:outputPanel>
                                     <h:outputText value="Search all fields:" />
@@ -65,47 +64,39 @@
                                 <h:outputText value="#{route.routeId}" />
                             </p:column>
 
-                            <p:column filterBy="#{route.originCountry}" headerText="Origin Country" filterMatchMode="contains">
-                                <h:outputText value="#{route.originCountry}" />
+                            <p:column filterBy="#{route.originIATA} #{route.destinationIATA}" headerText="Route" filterMatchMode="contains">
+                                <h:outputText value="#{route.originIATA} - #{route.destinationIATA}" />
                             </p:column>
 
-                            <p:column filterBy="#{route.originCity}" headerText="Origin City" filterMatchMode="contains">
-                                <h:outputText value="#{route.originCity}" />
+                            <p:column filterBy="#{route.originCity} #{route.originCountry}" headerText="Origin" filterMatchMode="contains">
+                                <h:outputText value="#{route.originCity}, #{route.originCountry}" />
                             </p:column>
 
-                            <p:column filterBy="#{route.originIATA}" headerText="Origin IATA" filterMatchMode="contains">
-                                <h:outputText value="#{route.originIATA}" />
-                            </p:column>
-
-                            <p:column filterBy="#{route.destinationCountry}" headerText="Destination Country" filterMatchMode="contains">
-                                <h:outputText value="#{route.destinationCountry}" />
-                            </p:column>
-
-                            <p:column filterBy="#{route.destinationCity}" headerText="Destination City" filterMatchMode="contains">
-                                <h:outputText value="#{route.destinationCity}" />
-                            </p:column>
-
-                            <p:column filterBy="#{route.destinationIATA}" headerText="Destination IATA" filterMatchMode="contains">
-                                <h:outputText value="#{route.destinationIATA}" />
+                            <p:column filterBy="#{route.destinationCity} #{route.destinationCountry}" headerText="Destination" filterMatchMode="contains">
+                                <h:outputText value="#{route.destinationCity}, #{route.destinationCountry}" />
                             </p:column>
 
                         </p:dataTable>
                     </h:form>   
                 </div>
+
                 <div class="col-md-8">
                     <h:form class="form center-block">
-                        <br></br>              <div class="form-group">                          
+                        <br></br>              
+                        <div class="form-group">                          
                             <h:outputLabel class="col-md-4 control-label" value="Year of Forecast: " />
-                            <p:inputText value="#{flightManageBean.year}" onchange="submit()" valueChangeListener="#{flightManageBean.setYear(flightManageBean.year)}" />
+                            <p:inputText style="width:100px" value="#{flightManagedBean.forecastYear}"/>
+                            &nbsp;
+                            <p:commandButton class="btn btn-info btn-xs" update="growl" global="false" value="Check" action="#{flightManagedBean.checkForecastYear(flightManagedBean.forecastYear)}" />                      
                             <br/>
                         </div>
 
                         <div class="form-group">                          
                             <h:outputLabel class="col-md-4 control-label" value="Route ID: "/>
                             <span>
-                                <h:selectOneMenu class="form-control" id="routeId" value="#{flightManageBean.routeId}" style="width:180px">
+                                <h:selectOneMenu class="form-control" id="routeId" value="#{flightManagedBean.routeId}" style="width:180px">
                                     <f:selectItem itemLabel="Select One" itemValue="" />
-                                    <f:selectItems value="#{flightManageBean.routeIds}" />
+                                    <f:selectItems value="#{flightManagedBean.routeIds}" />
                                 </h:selectOneMenu>
                             </span>
                             <br/>
@@ -114,7 +105,7 @@
                         <div class="form-group">                          
                             <h:outputLabel class="col-md-4 control-label" value="Base Duration for Forecast: " />
                             <span>
-                                <h:selectOneMenu class="form-control" id="period" value="#{flightManageBean.period}" style="width:125px">
+                                <h:selectOneMenu class="form-control" id="period" value="#{flightManagedBean.period}" style="width:125px">
                                     <f:selectItem itemLabel="Select One" itemValue="0" />
                                     <f:selectItem itemLabel="Quarter" itemValue="4" />
                                     <f:selectItem itemLabel="Year" itemValue="12" />
@@ -124,27 +115,12 @@
                         </div>
 
                         <div class="text-center">
-                            <p:commandButton class="btn btn-outline btn-success" value="Generate Forecast!" rendered="#{flightManageBean.isFarApart(flightManageBean.year) == false}" actionListener="#{flightManageBean.generateForecast}"/>
-
-                            <p:growl id="message" showDetail="true" />
-
-                            <p:commandButton class="btn btn-outline btn-success" value="Generate Forecast!" rendered="#{flightManageBean.isFarApart(flightManageBean.year) == true}" actionListener="#{flightManageBean.generateForecast}">
-                                <p:confirm header="Confirmation" message="There are no recent data for the year you have chosen.
-                                           Are you sure you want to generate the forecast with the current data set?" icon="ui-icon-alert" />
-                            </p:commandButton>
-
-                            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" width="450px" >
-                                <div align="center">
-                                    <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
-                                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
-                                </div>
-                            </p:confirmDialog>
+                            <p:commandButton class="btn btn-outline btn-success" update="growl" value="Generate Forecast!" actionListener="#{flightManagedBean.generateForecast}"/>
                             <br></br>
                             <br></br>
                         </div>
                     </h:form>
                 </div>
-
             </div>
         </div>
     </h:body>

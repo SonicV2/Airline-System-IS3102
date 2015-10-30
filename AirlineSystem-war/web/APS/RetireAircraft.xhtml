@@ -20,9 +20,9 @@
     <h:body>
         <!--            To add the same header on all dashboard pages  
 -->
-<!--<ui:include src="/CI/dashboardHeader.xhtml"/>
+<!--<ui:include src="/CI/DashboardHeader.xhtml"/>
     To add the same sidebar on all dashboard pages -->  
-        <ui:include src="/CI/dashboardSidebar.xhtml"/>
+        <ui:include src="/CI/DashboardSidebar.xhtml"/>
         <div id="page-wrapper">
 
             <div class="row">
@@ -36,7 +36,7 @@
                     <h:form id="form">
                         
                         <p:growl id="message" showDetail="true"/>
-                        <p:dataTable id="aircrafts" var="aircraft" value="#{fleetManageBean.aircrafts}" style="margin-bottom:20px" paginator="true" rows="10" widgetVar="aircraftsTable">
+                        <p:dataTable id="aircrafts" var="aircraft" value="#{fleetManagedBean.aircrafts}" style="margin-bottom:20px" paginator="true" rows="10" widgetVar="aircraftsTable">
 
                             <f:facet name="header">
                                 <p:outputPanel>
@@ -53,12 +53,12 @@
                                 <h:outputText value="#{aircraft.aircraftType.id}" />
                             </p:column>
 
-                            <p:column filterBy="#{fleetManageBean.getDateFormat(aircraft.datePurchased)}" headerText="Date of Purchase" filterMatchMode="contains">
-                                <h:outputText value="#{fleetManageBean.getDateFormat(aircraft.datePurchased)}" />
+                            <p:column filterBy="#{fleetManagedBean.getDateFormat(aircraft.datePurchased)}" headerText="Date of Purchase" filterMatchMode="contains">
+                                <h:outputText value="#{fleetManagedBean.getDateFormat(aircraft.datePurchased)}" />
                             </p:column>
 
-                            <p:column filterBy="#{fleetManageBean.getDateFormat(aircraft.lastMaintained)}" headerText="Date of Maintenance" filterMatchMode="contains">
-                                <h:outputText value="#{fleetManageBean.getDateFormat(aircraft.lastMaintained)}" />
+                            <p:column filterBy="#{fleetManagedBean.getDateFormat(aircraft.lastMaintained)}" headerText="Date of Maintenance" filterMatchMode="contains">
+                                <h:outputText value="#{fleetManagedBean.getDateFormat(aircraft.lastMaintained)}" />
                             </p:column>
 
                             <p:column filterBy="#{aircraft.status}" headerText="Status" filterMatchMode="contains">
@@ -66,7 +66,7 @@
                             </p:column>
                             
                             <p:column headerText="Retire Aircraft" style="width:70px" rendered="#{loginManagedBean.accessRightIDs.contains(9)}">
-                                <h:commandLink action="#{fleetManageBean.retireAircraft(aircraft.tailNo)}"><i class="fa fa-trash-o"></i> </h:commandLink>
+                                <h:commandLink action="#{fleetManagedBean.retireAircraft(aircraft.tailNo)}"><i class="fa fa-trash-o"></i> </h:commandLink>
                             </p:column>
 
                         </p:dataTable>

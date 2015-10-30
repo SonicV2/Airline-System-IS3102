@@ -1,8 +1,9 @@
 package APS.Entity;
 
 import java.io.Serializable;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -28,25 +29,44 @@ public class Flight implements Serializable {
     private double flightDuration;
     private Double basicFare;
     private String flightDaysString;
+    private Long archiveData;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date startDateTime;
-    
+
     @ManyToOne(cascade = {CascadeType.PERSIST})
     private Route route = new Route();
-    
+
     @ManyToOne(cascade = {CascadeType.PERSIST})
     private AircraftType aircraftType = new AircraftType();
-    
+
     @OneToMany(cascade = {CascadeType.PERSIST}, mappedBy = "flight")
     private List<Schedule> schedule = new ArrayList<Schedule>();
-    
+
     public void createFlight(String flightNo, String flightDays, Double basicFare, Date startDateTime) {
         this.flightNo = flightNo;
         this.flightDays = flightDays;
         flightDuration = 0.0;
         this.basicFare = basicFare;
         this.startDateTime = startDateTime;
+    }
+
+    public Date getLatestScheduleDate() {
+        //Create comparator for sorting of Schedules according to starting time
+        Comparator<Schedule> comparator = new Comparator<Schedule>() {
+            @Override
+            public int compare(Schedule o1, Schedule o2) {
+                int result = o1.getStartDate().compareTo(o2.getStartDate());
+                if (result == 0) {
+                    return o1.getStartDate().before(o2.getStartDate()) ? -1 : 1;
+                } else {
+                    return result;
+                }
+            }
+        };
+        
+        Collections.sort(schedule,comparator);
+        return schedule.get(schedule.size()-1).getStartDate();
     }
 
     public String getFlightNo() {
@@ -64,7 +84,7 @@ public class Flight implements Serializable {
     public void setFlightDays(String flightDays) {
         this.flightDays = flightDays;
     }
-    
+
     public String getFlightDaysString() {
         return flightDaysString;
     }
@@ -119,6 +139,14 @@ public class Flight implements Serializable {
 
     public void setAircraftType(AircraftType aircraftType) {
         this.aircraftType = aircraftType;
+    }
+
+    public Long getArchiveData() {
+        return archiveData;
+    }
+
+    public void setArchiveData(Long archiveData) {
+        this.archiveData = archiveData;
     }
 
     @Override

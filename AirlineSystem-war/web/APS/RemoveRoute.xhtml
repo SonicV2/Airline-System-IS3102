@@ -20,10 +20,10 @@
     </h:head>
 
     <body>
-<!--                            To add the same header on all dashboard pages  -->
-<!--        <ui:include src="/CI/dashboardHeader.xhtml"/>
-                    To add the same sidebar on all dashboard pages -->  
-        <ui:include src="/CI/dashboardSidebar.xhtml"/>
+        <!--                            To add the same header on all dashboard pages  -->
+        <!--        <ui:include src="/CI/DashboardHeader.xhtml"/>
+                            To add the same sidebar on all dashboard pages -->  
+        <ui:include src="/CI/DashboardSidebar.xhtml"/>
         <div id="page-wrapper">
 
             <div class="row">
@@ -35,9 +35,9 @@
 
 
                     <h:form id="form">
-              
+
                         <p:growl id="message" showDetail="true"/>
-                        <p:dataTable id="routes" var="route" value="#{routeManageBean.routes}" style="margin-bottom:20px" paginator="true" rows="10" widgetVar="routesTable">
+                        <p:dataTable id="routes" var="route" value="#{routeManagedBean.routes}" style="margin-bottom:20px" paginator="true" rows="10" widgetVar="routesTable">
 
                             <f:facet name="header">
                                 <p:outputPanel>
@@ -46,42 +46,31 @@
                                 </p:outputPanel>
                             </f:facet>
 
-                            <p:column filterBy="#{route.routeId}" headerText="Route Id" filterMatchMode="contains">
+                            <p:column filterBy="#{route.routeId}" headerText="Route ID" filterMatchMode="contains">
                                 <h:outputText value="#{route.routeId}" />
                             </p:column>
 
-                            <p:column filterBy="#{route.originIATA}" headerText="Origin IATA" filterMatchMode="contains">
-                                <h:outputText value="#{route.originIATA}" />
+                            <p:column filterBy="#{route.originIATA} #{route.destinationIATA}" headerText="Route" filterMatchMode="contains">
+                                <h:outputText value="#{route.originIATA} - #{route.destinationIATA}" />
                             </p:column>
 
-                            <p:column filterBy="#{route.originCountry}" headerText="Origin Country" filterMatchMode="contains">
-                                <h:outputText value="#{route.originCountry}" />
+                            <p:column filterBy="#{route.originCity} #{route.originCountry}" headerText="Origin" filterMatchMode="contains">
+                                <h:outputText value="#{route.originCity}, #{route.originCountry}" />
                             </p:column>
 
-                            <p:column filterBy="#{route.originCity}" headerText="Origin City" filterMatchMode="contains">
-                                <h:outputText value="#{route.originCity}" />
+                            <p:column filterBy="#{route.destinationCity} #{route.destinationCountry}" headerText="Destination" filterMatchMode="contains">
+                                <h:outputText value="#{route.destinationCity}, #{route.destinationCountry}" />
                             </p:column>
 
-                            <p:column filterBy="#{route.destinationIATA}" headerText="Destination IATA" filterMatchMode="contains">
-                                <h:outputText value="#{route.destinationIATA}" />
-                            </p:column>
-
-                            <p:column filterBy="#{route.destinationCountry}" headerText="Destination Country" filterMatchMode="contains">
-                                <h:outputText value="#{route.destinationCountry}" />
-                            </p:column>
-
-                            <p:column filterBy="#{route.destinationCity}" headerText="Destination City" filterMatchMode="contains">
-                                <h:outputText value="#{route.destinationCity}" />
-                            </p:column>
-                                            
                             <!-- this is for route management, operations manager -->
-                            <p:column headerText="Delete Route" style="width:60px" rendered="#{loginManagedBean.accessRightIDs.contains(7)}">
-
-                                <h:commandLink onclick="if (!confirm('Do you really want to delete this route?')) {
+                            <p:column headerText="Delete Route" style="width:120px" rendered="#{loginManagedBean.accessRightIDs.contains(7)}">
+                                <div align="center">
+                                    <h:commandLink style="center" onclick="if (!confirm('Do you really want to delete this route?')) {
                                             return false;
                                         }
                                         ;
-                                        return true;" action="#{routeManageBean.removeRoute(route.routeId)}"><i class="fa fa-trash-o"></i> </h:commandLink>
+                                        return true;" action="#{routeManagedBean.removeRoute(route.routeId)}"><i class="fa fa-trash-o"></i> </h:commandLink>
+                                </div>
                             </p:column>
 
                         </p:dataTable>

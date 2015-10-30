@@ -18,6 +18,7 @@ import javax.ejb.Local;
 @Local
 public interface ScheduleSessionBeanLocal {
 
+    public void addSchedules(int duration, String flightNo, boolean isUpdate);
     public void deleteSchedule(Long id);
     public Schedule getSchedule(Long id);
     public List<Schedule> getSchedules();
@@ -30,4 +31,6 @@ public interface ScheduleSessionBeanLocal {
     public List<Schedule> filterForPastSchedules (List<Schedule> schedules);
     public List<Schedule> filterForFutureSchedules (List<Schedule> schedules);
     public List<Schedule> filterForCurrentDaySchedules (List<Schedule> schedules);
+
 }
+    
