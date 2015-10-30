@@ -19,8 +19,14 @@ public interface DemandForecastSessionBeanLocal {
 
     public void generateDemandForecast(Long routeId, int year, int period, boolean isUpdate);
 
-    public Forecast getForecast(int year, long routeId);
+    public Forecast getForecast(Long routeId);
 
-    public boolean isValidYear();
+    public List<Forecast> getForecasts();
+
+    public Forecast hasForecast(int forecastYear, Long routeId);
+
+    public boolean isValidYear(Long routeId);
+
+    public void testForecast();
 
 }

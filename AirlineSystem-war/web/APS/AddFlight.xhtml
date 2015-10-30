@@ -32,7 +32,7 @@
 
         <!--            To add the same header on all dashboard pages  
                <ui:include src="/CI/dashboardHeader.xhtml"/>--> 
-<!--        To add the same sidebar on all dashboard pages -->
+        <!--        To add the same sidebar on all dashboard pages -->
         <ui:include src="/CI/DashboardSidebar.xhtml"/> 
 
         <div id="page-wrapper">
@@ -54,9 +54,15 @@
                     </div>
                 </h:form>
                 <div class="col-lg-12">
+                    <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+
+                    <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+                        <p:graphicImage name="/images/ajax-loader.gif" />
+                    </p:dialog>
+
                     <h:form>
                         <p:dataTable var="route" value="#{routeManagedBean.routes}" widgetVar="routesTable" paginator="true" rows="10">
-
+                            <p:ajax event="page" global="false"/>
                             <f:facet name="header">
                                 <p:outputPanel>
                                     <h:outputText value="Search all fields:" />
@@ -68,28 +74,16 @@
                                 <h:outputText value="#{route.routeId}" />
                             </p:column>
 
-                            <p:column filterBy="#{route.originCountry}" headerText="Origin Country" filterMatchMode="contains">
-                                <h:outputText value="#{route.originCountry}" />
+                            <p:column filterBy="#{route.originIATA} #{route.destinationIATA}" headerText="Route" filterMatchMode="contains">
+                                <h:outputText value="#{route.originIATA} - #{route.destinationIATA}" />
                             </p:column>
 
-                            <p:column filterBy="#{route.originCity}" headerText="Origin City" filterMatchMode="contains">
-                                <h:outputText value="#{route.originCity}" />
+                            <p:column filterBy="#{route.originCity} #{route.originCountry}" headerText="Origin" filterMatchMode="contains">
+                                <h:outputText value="#{route.originCity}, #{route.originCountry}" />
                             </p:column>
 
-                            <p:column filterBy="#{route.originIATA}" headerText="Origin IATA" filterMatchMode="contains">
-                                <h:outputText value="#{route.originIATA}" />
-                            </p:column>
-
-                            <p:column filterBy="#{route.destinationCountry}" headerText="Destination Country" filterMatchMode="contains">
-                                <h:outputText value="#{route.destinationCountry}" />
-                            </p:column>
-
-                            <p:column filterBy="#{route.destinationCity}" headerText="Destination City" filterMatchMode="contains">
-                                <h:outputText value="#{route.destinationCity}" />
-                            </p:column>
-
-                            <p:column filterBy="#{route.destinationIATA}" headerText="Destination IATA" filterMatchMode="contains">
-                                <h:outputText value="#{route.destinationIATA}" />
+                            <p:column filterBy="#{route.destinationCity} #{route.destinationCountry}" headerText="Destination" filterMatchMode="contains">
+                                <h:outputText value="#{route.destinationCity}, #{route.destinationCountry}" />
                             </p:column>
 
                         </p:dataTable>
@@ -99,20 +93,24 @@
                     <h:form class="form center-block">
                         <br></br>
                         <div class="form-group">                          
-                            <h:outputLabel class="col-md-4 control-label" value="Route ID: "/>
-                            <p:inputText value="#{flightManagedBean.routeId}"  />
-                            <br/>
-                        </div>
-                        <div class="form-group">                          
-                            <h:outputLabel class="col-md-4 control-label" value="Flight Number: " />
+                            <p:outputLabel class="col-md-4 control-label" value="Flight Number: " />
                             <span>
                                 <h:outputText value="MA"/><p:inputMask id ="tempNo" mask ="99?999999" style="width:180px" value="#{flightManagedBean.tempNo}"/>
                             </span>
+
+                            &nbsp;
+                            <p:commandButton class="btn btn-info btn-xs" update="growl" value="Check" ajax="false" action="#{flightManagedBean.checkFlight(flightManagedBean.tempNo)}" />                      
                             <br/>
                         </div>
 
+                        <div class="form-group" >                          
+                            <p:outputLabel class="col-md-4 control-label" value="Route ID: " rendered="#{flightManagedBean.past == false}" />
+                            <p:inputText value="#{flightManagedBean.routeId}" rendered="#{flightManagedBean.past == false}" />
+                        </div>
+
                         <div class="form-group col-lg-12">
-                            <h:outputLabel class="control-label" value="Flight Days (Days of the week):" />
+                            <br/>
+                            <p:outputLabel class="control-label" value="Flight Days (Days of the week):" />
                             <p:selectManyCheckbox id="basic" value="#{flightManagedBean.selectedFlightDays}" layout="grid" columns="7">
                                 <f:selectItem itemLabel="Monday" itemValue="Monday" />
                                 <f:selectItem itemLabel="Tuesday" itemValue="Tuesday" />
@@ -127,24 +125,28 @@
                         <br></br>
 
                         <div class="form-group">
-                            <h:outputLabel class="col-md-4 control-label" for="datetime" value="Flight start day and time:" />
-                            <p:calendar id="datetime" value="#{flightManagedBean.startDateTime}" pattern="MM/dd/yyyy HH:mm"/>
+                            <p:outputLabel class="col-md-4 control-label" for="date" value="Flight start date:" />
+                            <p:calendar id="date" value="#{flightManagedBean.entryDate}" pattern="dd-MM-yyyy" />
                         </div>
 
                         <div class="form-group">
-                            <h:outputLabel class="col-md-4 control-label" value="Set basic fare for flight:" />
+                            <p:outputLabel class="col-md-4 control-label" for="time" value="Flight time:" />
+                            <p:calendar id="time" value="#{flightManagedBean.entryTime}" pattern="HH:mm" timeOnly="true" />
+                        </div>
+
+                        <div class="form-group">
+                            <p:outputLabel class="col-md-4 control-label" value="Set basic fare for flight:" />
                             <p:inputText value="#{flightManagedBean.basicFare}" />
                             <br/>
                         </div>           
 
                         <div class="text-center">
-                            <h:commandButton class="btn btn-outline btn-success" value="Add Flight" actionListener="#{flightManagedBean.createFlight}"/>
+                            <p:commandButton class="btn btn-outline btn-success" update="growl" value="Add Flight" actionListener="#{flightManagedBean.createFlight}"/>
                             <br></br>
                             <br></br>
                         </div>
                     </h:form>
                 </div>
-
             </div>
         </div>
     </h:body>

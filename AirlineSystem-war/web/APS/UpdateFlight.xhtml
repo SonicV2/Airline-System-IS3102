@@ -3,81 +3,106 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
-    
+
     <h:head>
-        <title>Update Flight</title>
+        <p:growl id="growl" sticky="true" showDetail="true"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <h:outputStylesheet library ="css"  name="bootstrap.css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
+        <h:outputStylesheet library="css" name="admindb.css" />
+        <h:outputStylesheet library="css" name="morrisjs/morris.css" />
+
+        <title>Delete Flight</title>
     </h:head>
+
+    <style>
+        .fixed-size {
+            table-layout: fixed;
+            word-wrap: break-word;
+        }
+        .ui-datatable-tablewrapper {
+            font-size: 90%;
+        }
+        .ui-datatable .ui-column-filter {
+            width:80px;
+        }
+        .selectOneMenu{
+            color:black
+        }
+    </style>
     
+    <!--            To add the same header on all dashboard pages  
+    -->
+    <!--    <ui:include src="/CI/DashboardHeader.xhtml"/>-->
+    <!--  To add the same sidebar on all dashboard pages -->  
+    <ui:include src="/CI/DashboardSidebar.xhtml"/>
     <body>
-        
-        <h:form>
-            <h:commandButton class="btn btn-primary btn-lg btn-block" value="Retrieve" actionListener="#{flightManageBean.retrieve}"/>
-        </h:form>
+        <div id="page-wrapper">
 
-        <h:form id="form">
-            <p:growl id="msgs" showDetail="true"/>
-            
-            <p:dataTable id="flights" var="flight" value="#{flightManageBean.flights}" editable="true" style="margin-bottom:20px" paginator="true" rows="10" widgetVar="flightsTable">
-                <f:facet name="header">
-                    Click the icon on right column to Edit
-                    <p:outputPanel>
-                        <h:outputText value="Search all fields:" />
-                        <p:inputText id="globalFilter" onkeyup="PF('flightsTable').filter()" style="width:150px" placeholder="Enter keyword"/>
-                    </p:outputPanel>
-                </f:facet>
- 
-       <p:ajax event="rowEdit" listener="#{flightManageBean.onRowEdit}" update=":form:msgs" />
-       <p:ajax event="rowEditCancel" listener="#{flightManageBean.onRowCancel}" update=":form:msgs" />
- 
-       <p:column filterBy="#{flight.flightNo}" headerText="Flight Number" filterMatchMode="contains">
-            <h:outputText value="#{flight.flightNo}" />
-       </p:column>
-       
-       <p:column filterBy="#{flight.route.routeId}" headerText="Route ID" filterMatchMode="contains">
-                <h:outputText value="#{flight.route.routeId}" />
-            </p:column>
-            
-                <p:column filterBy="#{flight.route.originCountry}" headerText="Origin Country" filterMatchMode="contains">
-                <h:outputText value="#{flight.route.originCountry}" />
-            </p:column>
-                
-                <p:column filterBy="#{flight.route.originCity}" headerText="Origin City" filterMatchMode="contains">
-                <h:outputText value="#{flight.route.originCity}" />
-            </p:column>
-            
-            <p:column filterBy="#{flight.route.destinationCountry}" headerText="Destination Country" filterMatchMode="contains">
-                <h:outputText value="#{flight.route.destinationCountry}" />
-            </p:column>
-            
-            <p:column filterBy="#{flight.route.destinationCity}" headerText="Destination City" filterMatchMode="contains">
-                <h:outputText value="#{flight.route.destinationCity}" />
-            </p:column>
- 
-       <p:column headerText="Flight Days">
-           <p:cellEditor>
-               <f:facet name="output"><h:outputText value="#{flight.flightDaysString}" /></f:facet>
-               <f:facet name="input">
-                   <p:selectCheckboxMenu id="menu" value="#{flightManageBean.selectedFlightDays}" label="Days" panelStyle="width:250px">
-                       <f:selectItem itemLabel="Monday" itemValue="Monday" />
-                       <f:selectItem itemLabel="Tuesday" itemValue="Tuesday" />
-                       <f:selectItem itemLabel="Wednesday" itemValue="Wednesday" />
-                       <f:selectItem itemLabel="Thursday" itemValue="Thursday" />
-                       <f:selectItem itemLabel="Friday" itemValue="Friday" />
-                       <f:selectItem itemLabel="Saturday" itemValue="Saturday" />
-                       <f:selectItem itemLabel="Sunday" itemValue="Sunday" />
-                    </p:selectCheckboxMenu>
-               </f:facet>
-           </p:cellEditor>
-       </p:column>
-       
-       <p:column style="width:32px">
-           <p:rowEditor />
-       </p:column>
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2 class="page-header">Update Flights</h2>
+                </div>
 
-            </p:dataTable>
-        </h:form>
-        
+                <div class="col-lg-12"> 
+
+                    <h:form id="form">
+
+                        <p:growl id="msgs" showDetail="true"/>
+                        <p:dataTable id="flights" var="flight" value="#{flightManagedBean.flights}" editable="true" style="margin-bottom:20px" paginator="true" rows="10" widgetVar="flightsTable">
+
+                            <f:facet name="header">
+                                <p:outputPanel>
+                                    <h:outputText value="Search all fields:" />
+                                    <p:inputText id="globalFilter" onkeyup="PF('flightsTable').filter()" style="width:150px" placeholder="Enter keyword"/>
+                                </p:outputPanel>
+                            </f:facet>
+
+                            <p:ajax event="rowEdit" listener="#{flightManagedBean.onRowEdit}" update=":form:msgs" />
+                            <p:ajax event="rowEditCancel" listener="#{flightManagedBean.onRowCancel}" update=":form:msgs" />
+
+                            <p:column sortBy="#{flight.flightNo}" filterBy="#{flight.flightNo}" headerText="Flight Number" filterMatchMode="contains" style="width:7%">
+                                <h:outputText value="#{flight.flightNo}" />
+                            </p:column>
+
+                            <p:column filterBy="#{flight.route.routeId}" headerText="Route ID" filterMatchMode="contains" style="width:7%">
+                                <h:outputText value="#{flight.route.routeId}" />
+                            </p:column>
+
+                            <p:column filterBy="#{flight.route.originCity} #{flight.route.originCountry}" headerText="Origin" filterMatchMode="contains" style="width:14%">
+                                <h:outputText value="#{flight.route.originCity}, #{flight.route.originCountry}" />
+                            </p:column>
+
+                            <p:column filterBy="#{flight.route.destinationCity} #{flight.route.destinationCountry}" headerText="Destination" filterMatchMode="contains" style="width:14%">
+                                <h:outputText value="#{flight.route.destinationCity}, #{flight.route.destinationCountry}" />
+                            </p:column>
+
+                            <p:column filterBy="#{flight.aircraftType.id}" headerText="Aircraft Type" filterMatchMode="contains" style="width:9%">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{flight.aircraftType.id}" /></f:facet>
+                                    <f:facet name="input">
+                                        <h:selectOneMenu value="#{flight.aircraftType.id}" style="width:100%" styleClass="selectOneMenu">
+                                            <f:selectItems value="#{flightManagedBean.aircraftTypes}" var="aircraftType" itemLabel="#{aircraftType.id}" itemValue="#{aircraftType.id}"/>
+                                        </h:selectOneMenu>
+                                    </f:facet>
+                                    
+                                </p:cellEditor>
+                            </p:column>
+
+                            <!--                            only operations manager can delete flight -->
+                            <!--rendered="#{loginManagedBean.accessRightIDs.contains(11)}"-->
+                            <p:column headerText="Edit" style="width:3%">
+                                <p:rowEditor />
+                            </p:column>
+
+                        </p:dataTable>
+                    </h:form>
+                </div>
+            </div>
+        </div>
     </body>
 </html>
-

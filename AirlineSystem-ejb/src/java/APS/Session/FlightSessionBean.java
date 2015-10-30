@@ -6,8 +6,10 @@ import APS.Entity.Route;
 import APS.Entity.Schedule;
 import Inventory.Entity.SeatAvailability;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
@@ -32,30 +34,69 @@ public class FlightSessionBean implements FlightSessionBeanLocal {
     private AircraftType aircraftType;
     private List<Schedule> schedules;
     private SeatAvailability seatAvail;
+
     //Add new flight entity
     @Override
-    public void addFlight(String flightNo, String flightDays, Double basicFare, Date startDateTime, Long routeId) {
-        flight = new Flight();
+    public void addFlight(String flightNo, String flightDays, Double basicFare, Date startDateTime, Long routeId, boolean pastFlight) {
+        if (pastFlight) {
+            flight = getFlight(flightNo);
+        } else {
+            flight = new Flight();
+        }
         route = getRoute(routeId);
+        
+        //Set up the startDateTime for storing
+        TimeZone tz = TimeZone.getTimeZone("GMT+8:00"); //Set Timezone to Singapore
+        Calendar tmp = Calendar.getInstance(tz);
+        tmp.setTime(startDateTime);
+        tmp.set(Calendar.SECOND, 0);
 
         //Create link with route
-        flight.createFlight(flightNo, flightDays, basicFare, startDateTime);
+        flight.createFlight(flightNo, flightDays, basicFare, tmp.getTime());
         flight.setRoute(route);
         route.getFlights().add(flight);
         flight.setAircraftType(aircraftType);
         flight.setSchedule(schedules);
-        em.persist(flight);
+        
+         if (pastFlight) {
+            em.merge(flight);
+            em.flush();
+        } else {
+            em.persist(flight);
+        }
     }
 
-    //Delete an existing flight entity
+    //Delete or Archieve an existing flight entity depending on the situation
     @Override
-    public void deleteFlight(String flightNo) {
+    public void deleteFlight(String flightNo, boolean isArchive) {
         flight = getFlight(flightNo);
-        em.remove(flight);
-        em.flush();
+        Long archieveData;
+
+        //search for Flight Num in Flight lists linked to the Route and remove the Flight
+        List<Flight> temp = flight.getRoute().getFlights();
+        temp.remove(flight);
+        Route tmpRoute = flight.getRoute();
+        tmpRoute.setFlights(temp);
+        flight.setRoute(null);
+        archieveData = tmpRoute.getRouteId();
+
+        //search for Flight Num in Flight lists linked to the Aircraft Type and remove the Flight
+        List<Flight> temp1 = flight.getAircraftType().getFlights();
+        temp1.remove(flight);
+        AircraftType tmpAC = flight.getAircraftType();
+        tmpAC.setFlights(temp1);
+        flight.setAircraftType(null);
+
+        if (isArchive) {
+            flight.setArchiveData(archieveData);
+            em.merge(flight);
+            em.flush();
+        } else {
+            em.remove(flight);
+        }
     }
 
-    //Delete an existing schedule entity
+    //Delete schedule implementation when archiving flight
     @Override
     public void deleteSchedule(Long scheduleId) {
         schedule = getSchedule(scheduleId);
@@ -64,10 +105,34 @@ public class FlightSessionBean implements FlightSessionBeanLocal {
         seatAvail.setSchedule(null);
 
         schedule.setSeatAvailability(null);
-        
+
         em.remove(seatAvail);
         em.remove(schedule);
         em.flush();
+    }
+    
+    @Override
+    public void edit(Flight edited, Flight original){
+        AircraftType editedAC = em.find(AircraftType.class, edited.getAircraftType().getId());
+        AircraftType originalAC = em.find(AircraftType.class, original.getAircraftType().getId());
+        
+        List<Flight> tmp = originalAC.getFlights();
+        tmp.remove(original);
+        originalAC.setFlights(tmp);
+        em.merge(originalAC);
+        
+        tmp = editedAC.getFlights();
+        tmp.add(edited);
+        editedAC.setFlights(tmp);
+        em.merge(editedAC);
+        
+        Flight update = em.find(Flight.class, original.getFlightNo());
+        update.setAircraftType(editedAC);
+        em.merge(update);
+        em.flush();
+        
+        AircraftType tt = em.find(AircraftType.class, editedAC.getId());
+        System.out.println(tt.getFlights());
     }
 
     //Get a specific schedule with schedule id
@@ -139,13 +204,37 @@ public class FlightSessionBean implements FlightSessionBeanLocal {
         return route;
     }
 
-    //Retrieve all the existing flights
+    //Retrieve all the flights in the database
     @Override
     public List<Flight> retrieveFlights() {
         flights = new ArrayList<Flight>();
 
         try {
             Query q = em.createQuery("SELECT a from Flight a");
+
+            List<Flight> results = q.getResultList();
+            if (!results.isEmpty()) {
+
+                flights = results;
+
+            } else {
+                flights = null;
+                System.out.println("no flight!");
+            }
+        } catch (EntityNotFoundException enfe) {
+            System.out.println("\nEntity not found error" + "enfe.getMessage()");
+        }
+
+        return flights;
+    }
+
+    //Retrieve all the existing routes that the flights fly
+    @Override
+    public List<Flight> retrieveActiveFlights() {
+         flights = new ArrayList<Flight>();
+
+        try {
+            Query q = em.createQuery("SELECT a from Flight " + "AS a WHERE a.archiveData = null");
 
             List<Flight> results = q.getResultList();
             if (!results.isEmpty()) {
@@ -193,7 +282,7 @@ public class FlightSessionBean implements FlightSessionBeanLocal {
 
         return routesWithFlights;
     }
-    
+
     //Retrieve all the existing routes that the flights fly
     @Override
     public List<Long> retrieveFlightRouteIds() {
@@ -223,5 +312,27 @@ public class FlightSessionBean implements FlightSessionBeanLocal {
         }
 
         return routeIds;
+    }
+
+    private AircraftType getAircraftType(String aircraftTypeId) {
+
+        AircraftType type1 = new AircraftType();
+        try {
+
+            Query q = em.createQuery("SELECT a FROM AircraftType " + "AS a WHERE a.id=:id");
+            q.setParameter("id", aircraftTypeId);
+
+            List results = q.getResultList();
+            if (!results.isEmpty()) {
+                type1 = (AircraftType) results.get(0);
+
+            } else {
+                type1 = null;
+            }
+
+        } catch (EntityNotFoundException enfe) {
+            System.out.println("\nEntity not found error" + "enfe.getMessage()");
+        }
+        return type1;
     }
 }

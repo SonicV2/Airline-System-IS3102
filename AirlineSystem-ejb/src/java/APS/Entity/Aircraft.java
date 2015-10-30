@@ -7,14 +7,13 @@
 //Author
 package APS.Entity;
 
+import FOS.Entity.MaintainSchedule;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -29,8 +28,7 @@ import javax.persistence.TemporalType;
 public class Aircraft implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long tailNo;
+    private String tailNo;
     @Temporal(TemporalType.DATE)
     private Date datePurchased;
     @Temporal(TemporalType.DATE)
@@ -43,8 +41,12 @@ public class Aircraft implements Serializable {
     
     @OneToMany(cascade = {CascadeType.PERSIST}, mappedBy = "aircraft")
     private List<Schedule> schedules = new ArrayList<Schedule>();
-    
-    public void createAircraft(Date datePurchased, Date lastMaintained, String hub, String status) {
+
+    @OneToMany(cascade = {CascadeType.PERSIST}, mappedBy = "aircraft")
+    private List<MaintainSchedule> maintainSchedules = new ArrayList<MaintainSchedule>();
+
+    public void createAircraft(String tailNo, Date datePurchased, Date lastMaintained, String hub, String status) {
+        this.tailNo = tailNo;
         this.datePurchased = datePurchased;
         this.lastMaintained = lastMaintained;
         this.status = status;
@@ -52,11 +54,11 @@ public class Aircraft implements Serializable {
         this.status = status;
     }
     
-    public Long getTailNo() {
+    public String getTailNo() {
         return tailNo;
     }
 
-    public void setTailNo(Long tailNo) {
+    public void setTailNo(String tailNo) {
         this.tailNo = tailNo;
     }
     
@@ -106,6 +108,14 @@ public class Aircraft implements Serializable {
 
     public void setSchedules(List<Schedule> schedules) {
         this.schedules = schedules;
+    }
+
+    public List<MaintainSchedule> getMaintainSchedules() {
+        return maintainSchedules;
+    }
+
+    public void setMaintainSchedules(List<MaintainSchedule> maintainSchedules) {
+        this.maintainSchedules = maintainSchedules;
     }
     
     @Override

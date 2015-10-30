@@ -6,6 +6,7 @@
 package APS.Entity;
 
 import java.io.Serializable;
+import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,33 +23,9 @@ public class Forecast implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private Long forecastId;
 
-    private int yearOfForecast;
-//    private double originalMth1;
-//    private double originalMth2;
-//    private double originalMth3;
-//    private double originalMth4;
-//    private double originalMth5;
-//    private double originalMth6;
-//    private double originalMth7;
-//    private double originalMth8;
-//    private double originalMth9;
-//    private double originalMth10;
-//    private double originalMth11;
-//    private double originalMth12;
-//    private double originalMth13;
-//    private double originalMth14;
-//    private double originalMth15;
-//    private double originalMth16;
-//    private double originalMth17;
-//    private double originalMth18;
-//    private double originalMth19;
-//    private double originalMth20;
-//    private double originalMth21;
-//    private double originalMth22;
-//    private double originalMth23;
-//    private double originalMth24;
+    private int forecastYear;
     private double mth1Forecast;
     private double mth2Forecast;
     private double mth3Forecast;
@@ -61,36 +38,14 @@ public class Forecast implements Serializable {
     private double mth10Forecast;
     private double mth11Forecast;
     private double mth12Forecast;
+    private double[] rawData;
     
     @ManyToOne
     private Route route = new Route();
 
-    public void createForecastReport(int yearOfForecast, double[] dForecast) {
-        this.yearOfForecast = yearOfForecast;
-//        this.setOriginalMth1(dForecast[0]);
-//        this.setOriginalMth2(dForecast[1]);
-//        this.setOriginalMth3(dForecast[2]);
-//        this.setOriginalMth4(dForecast[3]);
-//        this.setOriginalMth5(dForecast[4]);
-//        this.setOriginalMth6(dForecast[5]);
-//        this.setOriginalMth7(dForecast[6]);
-//        this.setOriginalMth8(dForecast[7]);
-//        this.setOriginalMth9(dForecast[8]);
-//        this.setOriginalMth10(dForecast[9]);
-//        this.setOriginalMth11(dForecast[10]);
-//        this.setOriginalMth12(dForecast[11]);
-//        this.setOriginalMth13(dForecast[12]);
-//        this.setOriginalMth14(dForecast[13]);
-//        this.setOriginalMth15(dForecast[14]);
-//        this.setOriginalMth16(dForecast[15]);
-//        this.setOriginalMth17(dForecast[16]);
-//        this.setOriginalMth18(dForecast[17]);
-//        this.setOriginalMth19(dForecast[18]);
-//        this.setOriginalMth20(dForecast[19]);
-//        this.setOriginalMth21(dForecast[20]);
-//        this.setOriginalMth22(dForecast[21]);
-//        this.setOriginalMth23(dForecast[22]);
-//        this.setOriginalMth24(dForecast[23]);
+    public void createForecastReport(int forecastYear, double[] dForecast) {
+        this.forecastYear = forecastYear;
+        this.rawData = dForecast;
         this.setMth1Forecast(dForecast[24]);
         this.setMth2Forecast(dForecast[25]);
         this.setMth3Forecast(dForecast[26]);
@@ -105,20 +60,20 @@ public class Forecast implements Serializable {
         this.setMth12Forecast(dForecast[35]);
     }
 
-    public Long getId() {
-        return id;
+    public Long getForecastId() {
+        return forecastId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setForecastId(Long id) {
+        this.forecastId = id;
     }
 
-    public int getYear() {
-        return yearOfForecast;
+    public int getForecastYear() {
+        return forecastYear;
     }
 
-    public void setYear(int year) {
-        this.yearOfForecast = year;
+    public void setForecastYear(int forecastYear) {
+        this.forecastYear = forecastYear;
     }
 
 //    public double getOriginalMth1() {
@@ -409,6 +364,14 @@ public class Forecast implements Serializable {
         this.mth12Forecast = mth12Forecast;
     }
 
+    public double[] getRawData() {
+        return rawData;
+    }
+
+    public void setRawData(double[] rawData) {
+        this.rawData = rawData;
+    }
+
     public Route getRoute() {
         return route;
     }
@@ -420,7 +383,7 @@ public class Forecast implements Serializable {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 97 * hash + this.yearOfForecast;
+        hash = 47 * hash + Objects.hashCode(this.forecastId);
         return hash;
     }
 
@@ -433,7 +396,7 @@ public class Forecast implements Serializable {
             return false;
         }
         final Forecast other = (Forecast) obj;
-        if (this.yearOfForecast != other.yearOfForecast) {
+        if (!Objects.equals(this.forecastId, other.forecastId)) {
             return false;
         }
         return true;
@@ -441,6 +404,6 @@ public class Forecast implements Serializable {
 
     @Override
     public String toString() {
-        return "Forecast{" + "id=" + yearOfForecast + '}';
+        return "Forecast{" + "forecastId=" + forecastId + '}';
     }
 }

@@ -36,7 +36,7 @@ public class MaintainSchedule implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date mainEndDate;
 
-    private long tailNumber;
+    private String tailNumber;
     private String teamId;
     private String type;
 
@@ -51,7 +51,7 @@ public class MaintainSchedule implements Serializable {
 
   
 
-    public void create(Date startDate, Date endDate, long tailNumber, String teamId, String type) {
+    public void create(Date startDate, Date endDate, String tailNumber, String teamId, String type) {
         this.mainStartDate = startDate;
         this.mainEndDate = endDate;
         this.setTailNumber(tailNumber);
@@ -151,14 +151,14 @@ public class MaintainSchedule implements Serializable {
     /**
      * @return the tailNumber
      */
-    public long getTailNumber() {
+    public String getTailNumber() {
         return tailNumber;
     }
 
     /**
      * @param tailNumber the tailNumber to set
      */
-    public void setTailNumber(long tailNumber) {
+    public void setTailNumber(String tailNumber) {
         this.tailNumber = tailNumber;
     }
 
