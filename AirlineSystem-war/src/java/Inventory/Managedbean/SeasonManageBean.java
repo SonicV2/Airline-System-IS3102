@@ -110,21 +110,21 @@ public class SeasonManageBean {
             int end = cal.get(Calendar.MONTH);
             int seasonYear = cal.get(Calendar.YEAR);           
             if(from<=month && month<=end && year==seasonYear){
-            String country =season.getLocation().getCountry();
-            if (hm.get(country) != null) {
+            String countryGeo =season.getLocation().getCountry();
+            if (hm.get(countryGeo) != null) {
                 int count=0; 
                 if(season.getDemand().equals("High"))
                     count=1;
                 if(season.getDemand().equals("Low"))
                     count= -1;
                 
-                int score = (int)hm.get(country);
+                int score = (int)hm.get(countryGeo);
                 score += count;          
-                hm.put(country, score);
+                hm.put(countryGeo, score);
 
             } else {
-                hm.put(country, 0);
-                countries.add(country);
+                hm.put(countryGeo, 0);
+                countries.add(countryGeo);
             }
             }
         }
@@ -178,8 +178,12 @@ public class SeasonManageBean {
                 FacesContext.getCurrentInstance().addMessage(null, msg);
                 return;
             }
-            if (country == null) {
+            System.out.println("Look Here!!!!!");
+            System.out.println(country);
+            if (country.isEmpty()) {
+            System.out.println("Add Season!!!");
             String message = sm.addSeason(start, end, origin, destination, demand, location, remarks);
+            System.out.println(message);
             FacesMessage msg = new FacesMessage(message);
             FacesContext.getCurrentInstance().addMessage(null, msg);
             }
