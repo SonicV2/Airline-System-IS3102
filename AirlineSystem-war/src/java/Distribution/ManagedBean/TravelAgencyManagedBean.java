@@ -1036,6 +1036,7 @@ public class TravelAgencyManagedBean {
 
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Credit Limit has been changed!", "");
         FacesContext.getCurrentInstance().addMessage(null, message);
+        maxCredit = 0;
     }
 
     public String deleteTravelAgency(Long id) {

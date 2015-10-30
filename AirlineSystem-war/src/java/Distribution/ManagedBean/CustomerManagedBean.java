@@ -412,7 +412,7 @@ public class CustomerManagedBean {
             customerSessionBean.updateCustomerProfile(customer);
             String code = discountSessionBean.addDiscountCode(selectedDiscountType);
             sendCodeToCustomer(code);
-            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Check your email for the discount code!", "");
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Discount Code Redeemed.Check your email!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
         }      
         return null;
