@@ -16,16 +16,28 @@ import javax.ejb.Local;
  */
 @Local
 public interface DepartmentSessionBeanLocal {
+
     public void addDepartment(String departName, String departLocation);
+
     public List<String> retrive();
+
     public String searchEmployee(String staffID);
-    public String changeDepartment(String staffID,String deptName,String deptNameOld);
-    public String adminChangeDepartment(String staffID,String deptName,String deptNameOld);
+
+    public String changeDepartment(String staffID, String deptName, String deptNameOld);
+
+    public String adminChangeDepartment(String staffID, String deptNameCom, String deptNameOldCom, String deptNewLocation, String deptOldLocation);
+
     public List<OrganizationUnit> retrieveAllDepts();
-    public OrganizationUnit getDepartment(String deptName);
+
+    public OrganizationUnit getDepartment(String deptName, String deptLocation);
+
     public OrganizationUnit getDepartmentUseID(Long deptID);
-    public String deleteOrgUnit(String OUName);
+
+    public String deleteOrgUnit(String OUName, String location);
+
     public String updateOrgUnit(OrganizationUnit oldOUnit, OrganizationUnit newOUnit);
+
     public void editGender(Employee edited);
+
     public Employee searchStaff(String id);
 }

@@ -6,22 +6,27 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
-        <title>Facelet Title</title>
+        <title>Choose Seat</title>
     </h:head>
     <h:body>
         <div>Select Seat A330-300</div>
 
         <h:form>
+            <div>
             <h:commandButton disabled="true" value="Flight Number: #{searchBookingManagedBean.checkinSchedule.flight.flightNo}"/>
-            <br />
+            &nbsp; &nbsp;
             <h:commandButton disabled="true" value="Flight Date: #{searchBookingManagedBean.checkinSchedule.startDate}"/>
-            <br />
+            &nbsp; &nbsp;
             <h:commandButton disabled="true" value="Departure City: #{searchBookingManagedBean.checkinSchedule.flight.route.originCity}"/>
-            <br />
+            &nbsp; &nbsp;
             <h:commandButton disabled="true" value="Departure City: #{searchBookingManagedBean.checkinSchedule.flight.route.destinationCity}"/>
-            <br />
+            &nbsp; &nbsp;
             <h:commandButton disabled="true" value="Service Class: #{searchBookingManagedBean.serviceClass}"/>
-
+            &nbsp; &nbsp;
+            <h:commandButton disabled="true" value="Boarding Time: #{searchBookingManagedBean.boardingTime}"/>
+            </div>
+            
+            <div>
             <p:inputText id="seat" value="#{seatManagedBean.choose}" />    
             <h:commandButton value="Choose" actionListener="#{seatManagedBean.chooseSeatA330()}" />
 
@@ -35,7 +40,7 @@
 
             </p:dataGrid>
 
-
+            </div>
 
         </h:form>
 
