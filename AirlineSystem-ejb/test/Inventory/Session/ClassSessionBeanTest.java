@@ -14,6 +14,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import Inventory.Entity.BookingClass;
 
 /**
  *
@@ -50,10 +51,9 @@ public class ClassSessionBeanTest {
         int baggage = 1;
         int millageAccru = 50;
         String season = "High";
-        String expResult = "Fare Class Added";
         
-         
-        String result = cm.addClassCode(classcode, pricePercent, advancedSales, percentSold, serviceClass, rebook, cancel, baggage, millageAccru, season);
+        String expResult = "Fare Class Added";
+        String result = cm.addClassCode(classcode, pricePercent, advancedSales, percentSold, serviceClass, rebook, cancel, baggage, millageAccru, season, false);
         System.out.println("Expected Result:"+ expResult);
         System.out.println("Result:"+result);
         assertEquals(expResult, result);
@@ -65,15 +65,8 @@ public class ClassSessionBeanTest {
      */
     @Test
     public void testFindClass() throws Exception {
-        
-    }
-
-    /**
-     * Test of retrieveBookingClasses method, of class ClassSessionBean.
-     */
-    @Test
-    public void testRetrieveBookingClasses() throws Exception {
-       
+        BookingClass result = cm.findClass("A11"); 
+        assertNotNull( result);
     }
 
     /**
@@ -81,16 +74,13 @@ public class ClassSessionBeanTest {
      */
     @Test
     public void testDeleteClassCode() throws Exception {
-        
+        String expResult = "Fare Class Deleted";
+        String result = cm.deleteClassCode("Z11");
+        System.out.println("Expected Result:"+ expResult);
+        System.out.println("Result:"+result);
+        assertEquals(expResult, result);
     }
 
-    /**
-     * Test of editClassCode method, of class ClassSessionBean.
-     */
-    @Test
-    public void testEditClassCode() throws Exception {
-     
-    }
     
     private ClassSessionBeanRemote lookup() 
     {

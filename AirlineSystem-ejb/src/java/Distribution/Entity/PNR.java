@@ -5,7 +5,7 @@
  */
 package Distribution.Entity;
 
-import static FOS.Entity.Team_.id;
+//import static FOS.Entity.Team_.id;
 import Inventory.Entity.Booking;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -143,7 +143,7 @@ public class PNR implements Serializable {
 
     @Override
     public String toString() {
-        return "Distribution.Entity.PNR[ id=" + id + " ]";
+        return "Distribution.Entity.PNR[ id=" + pnrID + " ]";
     }
     
 }
