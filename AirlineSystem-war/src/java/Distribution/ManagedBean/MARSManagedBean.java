@@ -999,6 +999,8 @@ public class MARSManagedBean {
         }
 
         setPnrDisplayList(eachPNRDisplay);
+        setPrimaryEmail(null);
+        setPnrId(null);
 
         return "DisplayPNR";
     }

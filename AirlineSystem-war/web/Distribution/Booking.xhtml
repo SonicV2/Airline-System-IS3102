@@ -47,10 +47,10 @@
 
         <!--this is the common header of all the MARS pages-->
         <ui:fragment rendered ="#{customerManagedBean.isCustomerLoggedOn}">
-        <ui:include src="CustomerDashboardHeader.xhtml"/>
+            <ui:include src="CustomerDashboardHeader.xhtml"/>
         </ui:fragment>
         <ui:fragment rendered ="#{!customerManagedBean.isCustomerLoggedOn}">
-        <ui:include src="MerlionAirlinesHeader.xhtml"/>
+            <ui:include src="MerlionAirlinesHeader.xhtml"/>
         </ui:fragment>
         <div class="banner-bottom">
             <div class="container">
@@ -69,14 +69,14 @@
                                         <f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
                                     </h:inputText> 
 
-
-                                    <div class="missingfield"> 
-                                        <h:message errorStyle="color:red; display:block" for="PE" />
-                                    </div>
+                                    <h:message errorStyle="color:red; display:block" for="PE" />
+                                    <br></br>
 
                                     <p>Primary Contact Number</p>
                                     <h:inputText id="contact" required="true" requiredMessage="Please fill in contact number field!" value="#{mARSManagedBean.primaryContactNo}" />
 
+                                    <h:message errorStyle="color:red; display:block" for="contact" />
+                                    <br></br>
 
                                     <ui:repeat value="#{mARSManagedBean.passengerList}" var="passenger">
 
@@ -93,21 +93,28 @@
                                                 <f:selectItem itemLabel="Miss" itemValue="Miss" />
                                             </h:selectOneRadio>
                                         </h:panelGrid>
-                                        <!--                    </div>-->
+                                        <h:message errorStyle="color:red; display:block" for="title" />
+                                        <br></br>
 
                                         <p> First Name </p>
                                         <h:inputText id="firstname" required="true" requiredMessage="Please fill in first name field!" value="#{passenger.firstName}" />
+                                        <h:message errorStyle="color:red; display:block" for="firstname" />
+                                        <br></br>
                                         <p> Last Name </p>
                                         <h:inputText id="lastname" required="true" requiredMessage="Please fill in last name field!" value="#{passenger.lastName}" />
+                                        <h:message errorStyle="color:red; display:block" for="lastname" />
+                                        <br></br>
                                         <p> Passport Number </p>
                                         <h:inputText id="passport" required="true" requiredMessage="Please fill in passport number field!" value="#{passenger.passport}" />
-
+                                        <h:message errorStyle="color:red; display:block" for="passport" />
+                                        <br></br>
 
 
                                         <p>Nationality</p>
 
                                         <h:inputText id="nationality" required="true" requiredMessage="Please fill in mailing nationality field!" value="#{passenger.nationality}" />
-
+                                        <h:message errorStyle="color:red; display:block" for="nationality" />
+                                        <br></br>
 
 
                                         <p>Customer ID </p>
@@ -142,7 +149,7 @@
                                 <div class="clearfix"> </div>
 
                             </h:form>
-                            
+
                         </div>
                         <div class="clearfix"> </div>
                     </div>
