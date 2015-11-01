@@ -44,8 +44,31 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
         <title>Display Direct Return Flight</title>
     </h:head>
+    <style>
+        .ui-selectonemenu .ui-selectonemenu-trigger {
+            width: 23px;
+        }
+        
+        .loader {
+	position: fixed;
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	height: 100%;
+	z-index: 1000;
+        opacity: 0.8;
+	background: url(#{resource['images/loader.gif']}) 50% 50% no-repeat rgb(249,249,249);
+}
+    </style>
+    <script>
+        function showLoader(){
+    $(".loader").show();
+}
+        </script>
     
     <h:body>
+        <div class="loader" style="display:none">
+        </div>
         <ui:fragment rendered ="#{customerManagedBean.isCustomerLoggedOn}">
             <ui:include src="CustomerDashboardHeader.xhtml"/>
         </ui:fragment>
@@ -116,7 +139,7 @@
                                             <ui:fragment rendered="#{mARSManagedBean.children > 0}">
                                                 <span>, $ #{mARSManagedBean.selectedDatePrices.get(mARSManagedBean.directFlightSchedules.indexOf(schedules))*0.75}/Child</span>
                                             </ui:fragment>
-                                            <a jsf:action="#{mARSManagedBean.bookDirectReturnSchedule(schedules)}">BOOK</a>
+                                            <a jsf:action="#{mARSManagedBean.bookDirectReturnSchedule(schedules)}" >BOOK</a>
                                         </div>
                                     </div>
                                 </div>
