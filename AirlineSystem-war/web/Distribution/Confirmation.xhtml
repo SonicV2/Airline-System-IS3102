@@ -138,9 +138,29 @@
                                                 <td>Number of Travellers</td>
                                                 <td>#{mARSManagedBean.pnr.noOfTravellers}</td>
                                             </tr>
+                                            <tr>
+                                            <td>Total Base Fare (#{mARSManagedBean.adults} X Adult &amp; #{mARSManagedBean.children} X Child)</td>
+                                            <td>#{0.85* (mARSManagedBean.totalSelectedPrice)}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Airport / Government Taxes</td>
+                                            <td>#{0.05* (mARSManagedBean.totalSelectedPrice)}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Carrier Surcharges</td>
+                                            <td>#{0.10* (mARSManagedBean.totalSelectedPrice)}</td>
+                                        </tr>
+                                            <ui:fragment rendered="#{mARSManagedBean.boughtInsurance}">
+                                         <tr>
+                                            <td>Insurance</td>
+                                            <td>#{(mARSManagedBean.totalPriceWinsurance) - (mARSManagedBean.totalSelectedPrice)}</td>
+                                        </tr>
+                                            </ui:fragment>
+
+                          
 
                                             <tr>
-                                                <td>Total Price</td>
+                                                <td><b>Total Price (SGD)</b></td>
                                                 <td class="total">$#{mARSManagedBean.totalPriceWinsurance}</td>
                                             </tr>
                                         </tbody></table>
