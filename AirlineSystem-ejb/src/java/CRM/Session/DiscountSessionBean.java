@@ -135,7 +135,8 @@ public class DiscountSessionBean implements DiscountSessionBeanLocal {
     
     @Override
     public void deleteDiscountType (DiscountType discountType){
-        em.remove(discountType);
+        DiscountType mergedDiscountType = em.merge(discountType);
+        em.remove(mergedDiscountType);
         em.flush();
     }
     
@@ -185,6 +186,27 @@ public class DiscountSessionBean implements DiscountSessionBeanLocal {
           em.merge(discountType);
           em.flush();
           return codeGenerated;
+      }
+      
+      @Override
+      public DiscountCode getDiscountCodeFromCode (String code){
+          List<DiscountCode> allDiscountCodes = retrieveAllDiscountCodes();
+          if (allDiscountCodes!=null && !allDiscountCodes.isEmpty()){
+              for (DiscountCode eachDiscountCode : allDiscountCodes){
+                  if (eachDiscountCode.getCodeNumber().equals(code))
+                      return eachDiscountCode;
+              }
+              return null;
+          }
+          else 
+              return null;
+      }
+      
+      @Override
+      public void markCodeAsClaimed (DiscountCode discountCode){
+          discountCode.setClaimed(true);
+          em.merge(discountCode);
+          em.flush();
       }
      
      

@@ -28,5 +28,7 @@ public interface DiscountSessionBeanLocal {
     public int claimedCodesForDiscountType (DiscountType discountType);
     public int unclaimedCodesForDiscountType (DiscountType discountType);
     public String addDiscountCode(DiscountType discountType);
+    public DiscountCode getDiscountCodeFromCode (String code);
+    public void markCodeAsClaimed (DiscountCode discountCode);
     
 }
