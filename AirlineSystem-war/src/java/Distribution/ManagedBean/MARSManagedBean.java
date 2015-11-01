@@ -382,7 +382,7 @@ public class MARSManagedBean {
                 retrieveMinWeekPricesForDirect(originIATA, destinationIATA, departureDate, serviceType, adults, children);
                 setPriceForDirect(selectedDatePrices.get(0));
                 System.out.println("displayingggggg....");
-                return "DisplayDepartureDirectFlightReturn";
+                return "DisplayDepartureDirectFlightReturn?faces-redirect=true";
 
             } else { //Retrieve one stop flights
                 System.out.println("managedbean::::one stop flights...");

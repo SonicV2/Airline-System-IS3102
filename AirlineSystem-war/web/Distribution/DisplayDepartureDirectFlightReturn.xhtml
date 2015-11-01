@@ -34,6 +34,11 @@
                     fit: true   // 100% fit in a container
                 });
             });
+            
+        
+$(window).load(function() {
+	$(".loader").fadeOut("slow");
+})
         </script>
         <!--pop-up-->
         <h:outputScript library="js" name="menu_jquery.js" /> 
@@ -44,8 +49,20 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
         <title>Display Direct Flight</title>
     </h:head>
+    <style>
+         .loader {
+	position: fixed;
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	height: 100%;
+	z-index: 9999;
+	background: url(#{resource['images/loader.gif']}) 50% 50% no-repeat rgb(249,249,249);
+}
+    </style>
    
     <h:body>
+        <div class="loader"></div>
         <ui:fragment rendered ="#{customerManagedBean.isCustomerLoggedOn}">
             <ui:include src="CustomerDashboardHeader.xhtml"/>
         </ui:fragment>
