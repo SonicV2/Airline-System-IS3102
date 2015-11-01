@@ -27,6 +27,9 @@ public class Baggage implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private double baggageWeight;
+    private double extraWeight;
+    private String baggageStatus; // backup attribute
+    
     @ManyToOne(cascade = {CascadeType.PERSIST})
     private Booking booking = new Booking();
     
@@ -37,6 +40,8 @@ public class Baggage implements Serializable {
     public void createBaggage(double baggageWeight, Booking booking){
         this.setBaggageWeight(baggageWeight);
         this.setBooking(booking);
+        this.extraWeight = 0.0;
+        this.baggageStatus="N.A";
     }
 
     public Long getId() {
@@ -103,5 +108,35 @@ public class Baggage implements Serializable {
     public void setBaggageTag(BaggageTag baggageTag) {
         this.baggageTag = baggageTag;
     }
+
+    /**
+     * @return the extraWeight
+     */
+    public double getExtraWeight() {
+        return extraWeight;
+    }
+
+    /**
+     * @param extraWeight the extraWeight to set
+     */
+    public void setExtraWeight(double extraWeight) {
+        this.extraWeight = extraWeight;
+    }
+
+    /**
+     * @return the baggageStatus
+     */
+    public String getBaggageStatus() {
+        return baggageStatus;
+    }
+
+    /**
+     * @param baggageStatus the baggageStatus to set
+     */
+    public void setBaggageStatus(String baggageStatus) {
+        this.baggageStatus = baggageStatus;
+    }
     
 }
+
+

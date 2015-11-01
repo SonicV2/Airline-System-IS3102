@@ -29,3 +29,5 @@ public interface PassengerNameRecordSessionBeanLocal {
 
     public String retrieveClass(String classcode);
 }
+
+
