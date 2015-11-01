@@ -247,12 +247,23 @@ public class TravelAgencySessionBean implements TravelAgencySessionBeanLocal {
     public void resetCreditsAndCommission(TravelAgency travelAgency, double currentSettlement) {
         travelAgency.setCommission(0.0);
         travelAgency.setCurrentCredit(travelAgency.getCurrentCredit() + currentSettlement);
+        if (travelAgency.getCurrentCredit()>travelAgency.getMaxCredit())
+            travelAgency.setCurrentCredit(travelAgency.getMaxCredit());
         em.merge(travelAgency);
         em.flush();
     }
 
     @Override
     public void changeCreditLimit(TravelAgency travelAgency, double newLimit) {
+        double limitDifference = newLimit-travelAgency.getMaxCredit();
+        double newCurrentCredit = 0;
+        if (travelAgency.getCurrentCredit()>=newLimit)
+           newCurrentCredit = newLimit;
+        else 
+            newCurrentCredit = travelAgency.getCurrentCredit()+limitDifference;
+        if (newCurrentCredit<0)
+            newCurrentCredit = 0;
+        travelAgency.setCurrentCredit(newCurrentCredit);
         travelAgency.setMaxCredit(newLimit);
         em.merge(travelAgency);
         em.flush();

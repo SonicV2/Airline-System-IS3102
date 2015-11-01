@@ -186,6 +186,27 @@ public class DiscountSessionBean implements DiscountSessionBeanLocal {
           em.flush();
           return codeGenerated;
       }
+      
+      @Override
+      public DiscountCode getDiscountCodeFromCode (String code){
+          List<DiscountCode> allDiscountCodes = retrieveAllDiscountCodes();
+          if (allDiscountCodes!=null && !allDiscountCodes.isEmpty()){
+              for (DiscountCode eachDiscountCode : allDiscountCodes){
+                  if (eachDiscountCode.getCodeNumber().equals(code))
+                      return eachDiscountCode;
+              }
+              return null;
+          }
+          else 
+              return null;
+      }
+      
+      @Override
+      public void markCodeAsClaimed (DiscountCode discountCode){
+          discountCode.setClaimed(true);
+          em.merge(discountCode);
+          em.flush();
+      }
      
      
 }
