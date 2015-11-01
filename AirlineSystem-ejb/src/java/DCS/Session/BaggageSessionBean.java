@@ -27,10 +27,13 @@ public class BaggageSessionBean implements BaggageSessionBeanLocal {
     private EntityManager em;
 
     private static int tagNumber = 12345;
-
+    
+    
+    
     @Override
     public String addBaggage(Booking booking, Double baggageWeight, Double totalAllowedWeights) {
 
+        
         double weights = retrieveTotalBaggageWeights(booking);
 
         if ((weights + baggageWeight) > totalAllowedWeights) {
@@ -41,31 +44,48 @@ public class BaggageSessionBean implements BaggageSessionBeanLocal {
 
         if (baggages.isEmpty()) {
             Baggage baggage = new Baggage();
-            baggage.createBaggage(baggageWeight, booking);
+            baggage.createBaggage(baggageWeight);
+            
             baggages.add(baggage);
+            booking.setBaggages(baggages);
+            
             baggage.setBooking(booking);
-            em.persist(baggages);
-
+         
+            //em.merge(booking);
+           
+            
             BaggageTag bagTag = new BaggageTag();
             String arrivalCity = findArrivalCityIATA(booking);
             generateTagNumber();
+            
+           
+            
             bagTag.create(tagNumber + "", booking.getFlightNo(), booking.getFlightDate(), arrivalCity, booking.getServiceType());
             baggage.setBaggageTag(bagTag);
-            em.persist(baggage);
+            em.merge(booking);
             return "good";
         } else {
             Baggage baggage = new Baggage();
-            baggage.createBaggage(baggageWeight, booking);
+            baggage.createBaggage(baggageWeight);
+           
+            
             baggages.add(baggage);
+            booking.setBaggages(baggages);
+            
             baggage.setBooking(booking);
-            em.persist(baggages);
+         
 
+             
             BaggageTag bagTag = new BaggageTag();
             String arrivalCity = findArrivalCityIATA(booking);
             generateTagNumber();
+            
+           
+            
             bagTag.create(tagNumber + "", booking.getFlightNo(), booking.getFlightDate(), arrivalCity, booking.getServiceType());
             baggage.setBaggageTag(bagTag);
-            em.persist(baggage);
+            em.merge(booking);
+            em.flush();
             return "good";
 
         }
@@ -74,7 +94,8 @@ public class BaggageSessionBean implements BaggageSessionBeanLocal {
 
     @Override
     public List<Baggage> retrieveAllBaggages(Booking booking) {
-        List<Baggage> baggages = booking.getBaggages();
+        em.flush();     
+        List<Baggage> baggages =booking.getBaggages();
         return baggages;
     }
 
@@ -114,75 +135,81 @@ public class BaggageSessionBean implements BaggageSessionBeanLocal {
         }
         return null;
     }
-
-    public int calcualtePenalty(String departure, String destination, int allowed, int totalWeight) {
-        int exceed = totalWeight - allowed;
-        int penalty = 0;
+    
+    @Override
+    public double calcualtePenalty(String departure, String destination, double allowed, double totalWeight) {
+        double exceed = (totalWeight - allowed);
+        System.out.println("AAAAAA exceed" + exceed);
+        double penalty = 0.0;
         String dept = bandSearch(departure);
+        System.out.println("AAAAAA dept" + dept);
+        
         String dest = bandSearch(destination);
-
+         System.out.println("AAAAAA dest" + dest);
+         
         if (departure.equals("Singapore")) {
+             System.out.println("AAAAAA in");
             if (dest.equals("band1")) {
-                penalty += exceed * 8;
+                penalty += exceed * 8.0;
             } else if (dest.equals("band2")) {
-                penalty += exceed * 12;
+                penalty += exceed * 12.0;
             } else if (dest.equals("band3")) {
-                penalty += exceed * 30;
+                penalty += exceed * 30.0;
             } else if (dest.equals("band4")) {
-                penalty += exceed * 55;
+                penalty += exceed * 55.0;
             }
 
         } else if (dept.equals("band1") && destination.equals("Singapore")) {
-            penalty += exceed * 8;
+            penalty += exceed * 8.0;
 
         } else if (dept.equals("band1") && dest.equals("band1")) {
-            penalty += exceed * 16;
+            penalty += exceed * 16.0;
 
         } else if (dept.equals("band1") && dest.equals("band2")) {
-            penalty += exceed * 20;
+            penalty += exceed * 20.0;
         } else if (dept.equals("band1") && dest.equals("band3")) {
-            penalty += exceed * 38;
+            penalty += exceed * 38.0;
         } else if (dept.equals("band1") && dest.equals("band3")) {
-            penalty += exceed * 68;
+            penalty += exceed * 68.0;
 
         } else if (dept.equals("band2") && destination.equals("Singapore")) {
-            penalty += exceed * 12;
+            penalty += exceed * 12.0;
         } else if (dept.equals("band2") && dest.equals("band1")) {
-            penalty += exceed * 20;
+            penalty += exceed * 20.0;
 
         } else if (dept.equals("band2") && dest.equals("band2")) {
-            penalty += exceed * 24;
+            penalty += exceed * 24.0;
         } else if (dept.equals("band2") && dest.equals("band3")) {
-            penalty += exceed * 42;
+            penalty += exceed * 42.0;
         } else if (dept.equals("band2") && dest.equals("band3")) {
-            penalty += exceed * 67;
+            penalty += exceed * 67.0;
         } else if (dept.equals("band3") && destination.equals("Singapore")) {
-            penalty += exceed * 30;
+            penalty += exceed * 30.0;
         } else if (dept.equals("band3") && dest.equals("band1")) {
-            penalty += exceed * 38;
+            penalty += exceed * 38.0;
 
         } else if (dept.equals("band3") && dest.equals("band2")) {
-            penalty += exceed * 42;
+            penalty += exceed * 42.0;
         } else if (dept.equals("band3") && dest.equals("band3")) {
-            penalty += exceed * 60;
+            penalty += exceed * 60.0;
         } else if (dept.equals("band3") && dest.equals("band3")) {
-            penalty += exceed * 85;
+            penalty += exceed * 85.0;
         } else if (dept.equals("band4") && destination.equals("Singapore")) {
-            penalty += exceed * 55;
+            penalty += exceed * 55.0;
         } else if (dept.equals("band4") && dest.equals("band1")) {
-            penalty += exceed * 63;
+            penalty += exceed * 63.0;
 
         } else if (dept.equals("band4") && dest.equals("band2")) {
-            penalty += exceed * 67;
+            penalty += exceed * 67.0;
         } else if (dept.equals("band4") && dest.equals("band3")) {
-            penalty += exceed * 85;
+            penalty += exceed * 85.0;
         } else if (dept.equals("band4") && dest.equals("band3")) {
-            penalty += exceed * 110;
+            penalty += exceed * 110.0;
         }
 
         return penalty;
     }
-
+    @Override
     public String bandSearch(String city) {
         String band = "";
 
@@ -194,7 +221,7 @@ public class BaggageSessionBean implements BaggageSessionBeanLocal {
             "Uzbekistan", "Tajikistan", "Russia"};
 
         String[] band3 = {"Japan", "Korea", "South West Pacific", "Guam", "Marshall Islands", "Micronesia", "Northern Mariana Islands", "Palau",
-            "Timor Leste", "Middle East"};
+            "Timor Leste", "Middle East", "Australia","New Zealand"};
 
         String[] band4 = {"Denmark", "Finland", "Iceland", "Ireland", "Lithuania", " Norway", "United Kingdom", "Greece",
             "Italy", "Spain", "Germany", "France", " Netherlands", "Switzerland", "United States", "South Africa"};

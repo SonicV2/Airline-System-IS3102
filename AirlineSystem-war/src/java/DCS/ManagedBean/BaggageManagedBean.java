@@ -17,6 +17,7 @@ import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
@@ -25,7 +26,7 @@ import javax.faces.event.ActionEvent;
  * @author smu
  */
 @Named(value = "baggageManagedBean")
-@SessionScoped
+@RequestScoped
 @ManagedBean
 public class BaggageManagedBean implements Serializable {
 
@@ -34,26 +35,81 @@ public class BaggageManagedBean implements Serializable {
 
     @ManagedProperty(value = "#{searchBookingManagedBean}")
     private SearchBookingManagedBean searchBookingManagedBean;
-
-    private Double totalWeightAllowed;
+    
+    @ManagedProperty(value = "#{baggagePaymentManagedBean}")
+    private BaggagePaymentManagedBean baggagePaymentManagedBean;
+    
+    
+    private double totalWeightAllowed;
     private List<Baggage> allBaggage; //baggage weights for all added baggage
     private double addBagWeight; // add baggage
 
+    private double totalweight;
+    
+    private double extraPayment;
+    
+    private String banddepart;
+    private String bandarr;
+    
+    String departure;
+    String destination;
+    
     public BaggageManagedBean() {
     }
 
     @PostConstruct
     public void init() {
-
+        retrieveAllBaggages();
+        totalweight=baggageSessionBean.retrieveTotalBaggageWeights(searchBookingManagedBean.getReqBooking());
+    }
+    
+    
+    public void calculateExtra(ActionEvent event){
+        retrieveAllBaggages();
+        totalweight=baggageSessionBean.retrieveTotalBaggageWeights(searchBookingManagedBean.getReqBooking());
+        
+        
+        
+        departure=searchBookingManagedBean.getReqBooking().getSeatAvail().getSchedule().getFlight().getRoute().getOriginCountry();
+        destination=searchBookingManagedBean.getReqBooking().getSeatAvail().getSchedule().getFlight().getRoute().getDestinationCountry();
+        
+        if(departure.equals("Singapore")){
+        banddepart="Singapore";}else{
+            banddepart=baggageSessionBean.bandSearch(departure);
+        }
+        
+         if(destination.equals("Singapore")){
+        bandarr="Singapore";}else{
+            bandarr=baggageSessionBean.bandSearch(destination);
+        }
+            
+        
+        
+        retrieveNumberofBaggageAllowed();
+        
+        double temp=(totalweight+addBagWeight);
+        
+        System.out.println("AAAAA total allow" + totalWeightAllowed );
+        
+        this.extraPayment=baggageSessionBean.calcualtePenalty(departure,destination,totalWeightAllowed,temp);
+        
+        baggagePaymentManagedBean.setExtra(extraPayment);
+    
+    
     }
 
     public void addBaggage(ActionEvent event) {
         FacesMessage message = null;
+        retrieveNumberofBaggageAllowed();
+        retrieveAllBaggages();
+        totalweight=baggageSessionBean.retrieveTotalBaggageWeights(searchBookingManagedBean.getReqBooking());
+    
+       
         String msg = baggageSessionBean.addBaggage(searchBookingManagedBean.getReqBooking(), addBagWeight, totalWeightAllowed);
         if (msg.equals("excess")) {
             message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Overweight, Please Pay Additional Charge!", "");
         } else {
-            message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Baggage Added Successfully!", "");
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Baggage Added Successfully!", "");
         }
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
@@ -70,14 +126,14 @@ public class BaggageManagedBean implements Serializable {
     /**
      * @return the totalWeightAllowed
      */
-    public Double getTotalWeightAllowed() {
+    public double getTotalWeightAllowed() {
         return totalWeightAllowed;
     }
 
     /**
      * @param totalWeightAllowed the totalWeightAllowed to set
      */
-    public void setTotalWeightAllowed(Double totalWeightAllowed) {
+    public void setTotalWeightAllowed(double totalWeightAllowed) {
         this.totalWeightAllowed = totalWeightAllowed;
     }
 
@@ -122,5 +178,56 @@ public class BaggageManagedBean implements Serializable {
     public void setAllBaggage(List<Baggage> allBaggage) {
         this.allBaggage = allBaggage;
     }
+
+    public double getTotalweight() {
+        return totalweight;
+    }
+
+    public void setTotalweight(double totalweight) {
+        this.totalweight = totalweight;
+    }
+
+    public double getExtraPayment() {
+        return extraPayment;
+    }
+
+    public void setExtraPayment(double extraPayment) {
+        this.extraPayment = extraPayment;
+    }
+
+    public String getBanddepart() {
+        return banddepart;
+    }
+
+    public String getBandarr() {
+        return bandarr;
+    }
+
+    public String getDeparture() {
+        return departure;
+    }
+
+    public void setDeparture(String departure) {
+        this.departure = departure;
+    }
+
+    public String getDestination() {
+        return destination;
+    }
+
+    public void setDestination(String destination) {
+        this.destination = destination;
+    }
+
+    public BaggagePaymentManagedBean getBaggagePaymentManagedBean() {
+        return baggagePaymentManagedBean;
+    }
+
+    public void setBaggagePaymentManagedBean(BaggagePaymentManagedBean baggagePaymentManagedBean) {
+        this.baggagePaymentManagedBean = baggagePaymentManagedBean;
+    }
+    
+    
+    
 
 }

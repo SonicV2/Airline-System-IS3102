@@ -37,9 +37,12 @@ public class Baggage implements Serializable {
     @OneToOne(cascade={CascadeType.PERSIST})
     private BaggageTag baggageTag = new BaggageTag();
     
-    public void createBaggage(double baggageWeight, Booking booking){
-        this.setBaggageWeight(baggageWeight);
-        this.setBooking(booking);
+    
+    public Baggage(){}
+    
+    public void createBaggage(double baggageWeight){
+        setBaggageWeight(baggageWeight);
+        //setBooking(booking);
         this.extraWeight = 0.0;
         this.baggageStatus="N.A";
     }
@@ -69,32 +72,6 @@ public class Baggage implements Serializable {
     }
 
     
-    
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Baggage)) {
-            return false;
-        }
-        Baggage other = (Baggage) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "Distribution.Entity.Baggage[ id=" + id + " ]";
-    }
-
     /**
      * @return the baggageTag
      */
