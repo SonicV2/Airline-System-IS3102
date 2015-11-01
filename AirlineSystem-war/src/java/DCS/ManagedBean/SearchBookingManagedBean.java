@@ -6,6 +6,7 @@
 package DCS.ManagedBean;
 
 import APS.Entity.Schedule;
+import DCS.Session.BaggageSessionBeanLocal;
 import DCS.Session.PassengerNameRecordSessionBeanLocal;
 import Distribution.Entity.PNR;
 import Inventory.Entity.Booking;
@@ -31,6 +32,9 @@ import javax.faces.event.ActionEvent;
 public class SearchBookingManagedBean implements Serializable {
 
     @EJB
+    private BaggageSessionBeanLocal baggageSessionBean;
+
+    @EJB
     private PassengerNameRecordSessionBeanLocal passengerNameRecordSessionBean;
 
     private String pnrNumber;
@@ -41,6 +45,7 @@ public class SearchBookingManagedBean implements Serializable {
     private String serviceClass;
     private String boardingTime;
     private String aircraftType;
+    private String totalWeightAllowed;
 
     public SearchBookingManagedBean() {
     }
@@ -70,9 +75,9 @@ public class SearchBookingManagedBean implements Serializable {
 
     public String retrieveFlightType() {
         retrieveClass();
+        retrieveNumberofBaggageAllowed();
+        aircraftType = checkinSchedule.getFlight().getAircraftType().getId();
 
-        aircraftType=checkinSchedule.getFlight().getAircraftType().getId();
-        
         if (checkinSchedule.getFlight().getAircraftType().getId().equals("Airbus A330-300")) {
             return "A330_300.xhtml";
         } else if (checkinSchedule.getFlight().getAircraftType().getId().equals("Airbus A380-800")) {
@@ -91,14 +96,19 @@ public class SearchBookingManagedBean implements Serializable {
 
     }
 
-    public void calBoardingTime() { 
+    public void calBoardingTime() {
         Date departTime = checkinSchedule.getStartDate();
-  
+
         departTime.setTime(departTime.getTime() - 1800 * 1000); // half an hour before
         setBoardingTime(departTime.toString());
 
-        departTime.setTime(departTime.getTime() +1800 * 1000);
-       
+        departTime.setTime(departTime.getTime() + 1800 * 1000);
+
+    }
+
+    public void retrieveNumberofBaggageAllowed() {
+        int i = baggageSessionBean.retrieveNumberOfBaggageAllowed(getReqBooking().getClassCode());
+        setTotalWeightAllowed((i * 15) + "");
     }
 
     public void retrieveClass() {
@@ -210,7 +220,19 @@ public class SearchBookingManagedBean implements Serializable {
     public void setAircraftType(String aircraftType) {
         this.aircraftType = aircraftType;
     }
-    
-    
+
+    /**
+     * @return the totalWeightAllowed
+     */
+    public String getTotalWeightAllowed() {
+        return totalWeightAllowed;
+    }
+
+    /**
+     * @param totalWeightAllowed the totalWeightAllowed to set
+     */
+    public void setTotalWeightAllowed(String totalWeightAllowed) {
+        this.totalWeightAllowed = totalWeightAllowed;
+    }
 
 }

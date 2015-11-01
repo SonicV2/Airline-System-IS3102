@@ -6,6 +6,7 @@
 package DCS.ManagedBean;
 
 import DCS.Session.BaggageSessionBeanLocal;
+import Distribution.Entity.Baggage;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
@@ -13,7 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
 /**
@@ -28,82 +32,95 @@ public class BaggageManagedBean implements Serializable {
     @EJB
     private BaggageSessionBeanLocal baggageSessionBean;
 
-    private int counter;
-    private List<String> baggageWeight;
-    private List<String> counters;
+    @ManagedProperty(value = "#{searchBookingManagedBean}")
+    private SearchBookingManagedBean searchBookingManagedBean;
+
+    private Double totalWeightAllowed;
+    private List<Baggage> allBaggage; //baggage weights for all added baggage
+    private double addBagWeight; // add baggage
 
     public BaggageManagedBean() {
     }
 
     @PostConstruct
     public void init() {
-        baggageWeight = new ArrayList<String>();
-        baggageWeight.add("");
-        counters = new ArrayList<String>();
-        counters.add("1");
-        counters.add("2");
-        counters.add("3");
-        counters.add("4");
-        counters.add("5");
-        counters.add("6");
-        counters.add("7");
-        counters.add("8");
-        counters.add("9");
-        counters.add("10");
-        counter = 0;
+
     }
 
-    //add baggage
-    public void extend() {
-        baggageWeight.add("");
-        counter ++;
+    public void addBaggage(ActionEvent event) {
+        FacesMessage message = null;
+        String msg = baggageSessionBean.addBaggage(searchBookingManagedBean.getReqBooking(), addBagWeight, totalWeightAllowed);
+        if (msg.equals("excess")) {
+            message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Overweight, Please Pay Additional Charge!", "");
+        } else {
+            message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Baggage Added Successfully!", "");
+        }
+        FacesContext.getCurrentInstance().addMessage(null, message);
     }
-    
-    
-    public void submit(){
-        System.out.println("ddddd"+ baggageWeight);
+
+    public void retrieveAllBaggages() {
+        setAllBaggage(baggageSessionBean.retrieveAllBaggages(searchBookingManagedBean.getReqBooking()));
+    }
+
+    public void retrieveNumberofBaggageAllowed() {
+        int i = baggageSessionBean.retrieveNumberOfBaggageAllowed(getSearchBookingManagedBean().getReqBooking().getClassCode());
+        setTotalWeightAllowed((i * 15.00));
     }
 
     /**
-     * @return the baggageWeight
+     * @return the totalWeightAllowed
      */
-    public List<String> getBaggageWeight() {
-        return baggageWeight;
+    public Double getTotalWeightAllowed() {
+        return totalWeightAllowed;
     }
 
     /**
-     * @param baggageWeight the baggageWeight to set
+     * @param totalWeightAllowed the totalWeightAllowed to set
      */
-    public void setBaggageWeight(List<String> baggageWeight) {
-        this.baggageWeight = baggageWeight;
+    public void setTotalWeightAllowed(Double totalWeightAllowed) {
+        this.totalWeightAllowed = totalWeightAllowed;
     }
 
     /**
-     * @return the counters
+     * @return the searchBookingManagedBean
      */
-    public List<String> getCounters() {
-        return counters;
+    public SearchBookingManagedBean getSearchBookingManagedBean() {
+        return searchBookingManagedBean;
     }
 
     /**
-     * @param counters the counters to set
+     * @param searchBookingManagedBean the searchBookingManagedBean to set
      */
-    public void setCounters(List<String> counters) {
-        this.counters = counters;
+    public void setSearchBookingManagedBean(SearchBookingManagedBean searchBookingManagedBean) {
+        this.searchBookingManagedBean = searchBookingManagedBean;
     }
 
     /**
-     * @return the counter
+     * @return the addBagWeight
      */
-    public int getCounter() {
-        return counter;
+    public double getAddBagWeight() {
+        return addBagWeight;
     }
 
     /**
-     * @param counter the counter to set
+     * @param addBagWeight the addBagWeight to set
      */
-    public void setCounter(int counter) {
-        this.counter = counter;
+    public void setAddBagWeight(double addBagWeight) {
+        this.addBagWeight = addBagWeight;
+    }
+
+    /**
+     * @return the allBaggage
+     */
+    public List<Baggage> getAllBaggage() {
+        return allBaggage;
+    }
+
+    /**
+     * @param allBaggage the allBaggage to set
+     */
+    public void setAllBaggage(List<Baggage> allBaggage) {
+        this.allBaggage = allBaggage;
     }
 
 }
