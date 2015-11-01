@@ -8,6 +8,7 @@
 
 
     <h:head>
+        <p:growl id="growl" sticky="true" showDetail="false"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <!-- Custom Theme files -->
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -16,7 +17,7 @@
         <h:outputStylesheet library ="css"  name="styleMerlion.css" />
         <h:outputStylesheet library ="css"  name="JFFormStyle.css" />
         <h:outputStylesheet library ="css"  name="flexslider.css" />
-        <h:outputScript library="js" name="jQuery/jQuery-2.1.4.min.js" />
+<!--        <h:outputScript library="js" name="jQuery/jQuery-2.1.4.min.js" />-->
         <h:outputScript library="js" name="modernizr.custom.js" /> 
 
 
@@ -40,7 +41,6 @@
         <h:outputScript library="js" name="menu_jquery.js" /> 
         <!--//pop-up-->	
         <title>Booking</title>
-        <p:growl id="growl" sticky="true" showDetail="true"/>
     </h:head>
 
     <h:body>
@@ -69,13 +69,11 @@
                                         <f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
                                     </h:inputText> 
 
-                                    <h:message errorStyle="color:red; display:block" for="PE" />
                                     <br></br>
 
                                     <p>Primary Contact Number</p>
                                     <h:inputText id="contact" required="true" requiredMessage="Please fill in contact number field!" value="#{mARSManagedBean.primaryContactNo}" />
 
-                                    <h:message errorStyle="color:red; display:block" for="contact" />
                                     <br></br>
 
                                     <ui:repeat value="#{mARSManagedBean.passengerList}" var="passenger">
@@ -93,33 +91,32 @@
                                                 <f:selectItem itemLabel="Miss" itemValue="Miss" />
                                             </h:selectOneRadio>
                                         </h:panelGrid>
-                                        <h:message errorStyle="color:red; display:block" for="title" />
+
                                         <br></br>
 
                                         <p> First Name </p>
                                         <h:inputText id="firstname" required="true" requiredMessage="Please fill in first name field!" value="#{passenger.firstName}" />
-                                        <h:message errorStyle="color:red; display:block" for="firstname" />
+
                                         <br></br>
                                         <p> Last Name </p>
                                         <h:inputText id="lastname" required="true" requiredMessage="Please fill in last name field!" value="#{passenger.lastName}" />
-                                        <h:message errorStyle="color:red; display:block" for="lastname" />
+            
                                         <br></br>
                                         <p> Passport Number </p>
                                         <h:inputText id="passport" required="true" requiredMessage="Please fill in passport number field!" value="#{passenger.passport}" />
-                                        <h:message errorStyle="color:red; display:block" for="passport" />
+       
                                         <br></br>
 
 
                                         <p>Nationality</p>
 
                                         <h:inputText id="nationality" required="true" requiredMessage="Please fill in mailing nationality field!" value="#{passenger.nationality}" />
-                                        <h:message errorStyle="color:red; display:block" for="nationality" />
+
                                         <br></br>
 
 
                                         <p>Customer ID </p>
                                         <h:inputText id="customerId" value="#{passenger.customerId}" />
-
 
                                         <p>Would you like to purchase insurance for $15 for each flight? </p>
                                         <h:panelGrid>

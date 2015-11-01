@@ -229,6 +229,7 @@ public class CustomerManagedBean {
                     PNRDisplay eachPNRDisplay = new PNRDisplay();
 
                     eachPNRDisplay.setId(eachCustomerPNR.getPnrID());
+                    eachPNRDisplay.setRefundable(distributionSessionBean.isPNRRefundable(eachCustomerPNR));
                     int noOfTravellers = eachCustomerPNR.getNoOfTravellers();
 
                     eachPNRDisplay.setNoOfTravellers(noOfTravellers);
@@ -397,7 +398,7 @@ public class CustomerManagedBean {
             FacesContext.getCurrentInstance().addMessage(null, message);
             return null;
         }
-        return "DiscountTypes";
+        return "CustomerDiscountTypes";
     }
     
     public String redeemDiscountTypes(){
@@ -412,7 +413,7 @@ public class CustomerManagedBean {
             customerSessionBean.updateCustomerProfile(customer);
             String code = discountSessionBean.addDiscountCode(selectedDiscountType);
             sendCodeToCustomer(code);
-            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Discount Code Redeemed.Check your email!", "");
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Discount code has been redeemed. Please check your email!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
         }      
         return null;

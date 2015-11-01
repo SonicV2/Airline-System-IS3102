@@ -21,6 +21,7 @@ public class PNRDisplay {
     private List<String> travellerNames;
     int noOfBags;
     Date bookingDate;
+    boolean refundable;
     
     public String getId() {
         return id;
@@ -76,6 +77,14 @@ public class PNRDisplay {
 
     public void setBookingDate(Date bookingDate) {
         this.bookingDate = bookingDate;
+    }
+
+    public boolean isRefundable() {
+        return refundable;
+    }
+
+    public void setRefundable(boolean refundable) {
+        this.refundable = refundable;
     }
     
     

@@ -10,6 +10,8 @@ import APS.Entity.Location;
 import APS.Entity.Route;
 import APS.Entity.Schedule;
 import Distribution.Entity.FlightOptions;
+import Distribution.Entity.PNR;
+import Inventory.Entity.Booking;
 import Inventory.Entity.SeatAvailability;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -394,6 +396,14 @@ public class DistributionSessionBean implements DistributionSessionBeanLocal {
     
     public void persistFlightOptions (FlightOptions flightOptions) {
         em.persist(flightOptions);
+    }
+    
+    public boolean isPNRRefundable(PNR eachCustomerPNR){
+        for (Booking eachBooking : eachCustomerPNR.getBookings()){
+            if (eachBooking.getServiceType().equals("Economy Basic") || eachBooking.getServiceType().equals("Economy Saver"))
+                return false;               
+        }
+       return true;         
     }
 
 }

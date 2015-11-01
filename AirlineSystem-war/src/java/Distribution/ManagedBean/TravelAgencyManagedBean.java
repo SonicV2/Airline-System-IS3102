@@ -208,6 +208,8 @@ public class TravelAgencyManagedBean {
     private List<Schedule> uniqueSchedules;
     private List<String> uniqueTravellerNames;
     private String tempDate;
+    private String refundStatus;
+    private int weightAllowed;
             
 
     @PostConstruct
@@ -281,8 +283,28 @@ public class TravelAgencyManagedBean {
         setServiceType(oneWayServiceType);
         setDepartureDate(oneWayDepartureDate);
     }
+    
+    public void setClassRules(){
+         if (serviceType.equals("Economy Saver") || serviceType.equals("Economy Basic")){
+            refundStatus = "Not refundable";
+            weightAllowed = 15;
+        }
+        else if (serviceType.equals("Economy Premium")){
+            refundStatus = "Refundable";
+            weightAllowed = 15;
+        }
+        else if (serviceType.equals("Business")){
+            refundStatus = "Refundable";
+            weightAllowed = 30;
+        }
+        else if (serviceType.equals("First Class")){
+            refundStatus = "Refundable";
+            weightAllowed = 45;
+        }
+    }
 
     public String displayDepartureFlights(Boolean oneWay) {
+        
 
         oneWayFlight = oneWay;
         /*Convert the chosen origin and destination cities into IATAs*/
@@ -356,6 +378,8 @@ public class TravelAgencyManagedBean {
             selectedDatePrices.clear();
             directFlightSchedules = new ArrayList();
             setDirectFlightDuration("");
+            setClassRules();
+            
 
             //Check whether there is direct flight
             if (distributionSessionBean.existsDirectFlight(originIATA, destinationIATA)) {
@@ -922,7 +946,7 @@ public class TravelAgencyManagedBean {
 
         }
 
-        return "TravelAgencyDashboard";
+        return "TravelAgencySearchFlights";
 
     }
 
@@ -955,7 +979,7 @@ public class TravelAgencyManagedBean {
         currentCredit = travelAgency.getCurrentCredit();
         id = travelAgency.getId();
 
-        return "TravelAgencyUpdateProfile?faces-redirect=true";
+        return "TravelAgencyUpdateProfile";
     }
 
     public String persistUpdatedProfile() {
@@ -1092,7 +1116,7 @@ public class TravelAgencyManagedBean {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "PNR has been confirmed!", "");
         FacesContext.getCurrentInstance().addMessage(null, message);
 
-        return "TravelAgencyViewPNRs?faces-redirect=true";
+        return "TravelAgencyViewPNRs";
     }
 
     public String cancelPNR(PNR pnr) {
@@ -2043,6 +2067,22 @@ public class TravelAgencyManagedBean {
 
     public void setNationality(String nationality) {
         this.nationality = nationality;
+    }
+
+    public String getRefundStatus() {
+        return refundStatus;
+    }
+
+    public void setRefundStatus(String refundStatus) {
+        this.refundStatus = refundStatus;
+    }
+
+    public int getWeightAllowed() {
+        return weightAllowed;
+    }
+
+    public void setWeightAllowed(int weightAllowed) {
+        this.weightAllowed = weightAllowed;
     }
 
     public boolean isIsChild() {

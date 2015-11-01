@@ -13,6 +13,7 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
         <h:outputStylesheet library="css" name="travelagentdb.css" />
         <h:outputStylesheet library="css" name="morrisjs/morris.css" />
+        <h:outputScript library="js" name="jQuery/jQuery-2.1.4.min.js" />
         <h:outputStylesheet library ="css"  name="flightdisplay2.css" />
         <title>Summary</title>
     </h:head>
@@ -81,8 +82,10 @@
                                     </div>
                                     <div class="clearfix"></div>
                                     <div class="flight-list-footer">
-                                        <div class="col-md-6 col-sm-6 col-xs-6 sm-invisible">
+                                        <div class="col-md-8 col-sm-8 col-xs-8 sm-invisible">
                                             <span><i class="fa fa-plane"></i>#{travelAgencyManagedBean.serviceType}</span>
+                                            <span><i class="fa fa-suitcase"></i> #{travelAgencyManagedBean.weightAllowed} kg</span>
+                                                <span><i class="fa fa-usd"></i> #{travelAgencyManagedBean.refundStatus} </span>
                                             <!--                                        <span class="refund"><i class="fa fa-undo"></i> Refundable</span>-->
 
                                         </div>
@@ -114,18 +117,22 @@
                                 <div class="sidebar-body">
                                     <table class="table">
                                         <tbody><tr>
-                                                <td>Adult </td>
-                                                <td>#{travelAgencyManagedBean.adults}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Children </td>
-                                                <td>#{travelAgencyManagedBean.children}</td>
-                                            </tr>
+                                            <td>Total Base Fare (#{travelAgencyManagedBean.adults} X Adult &amp; #{travelAgencyManagedBean.children} X Child)</td>
+                                            <td>#{0.85* (travelAgencyManagedBean.totalSelectedPrice)}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Airport / Government Taxes</td>
+                                            <td>#{0.05* (travelAgencyManagedBean.totalSelectedPrice)}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Carrier Surcharges</td>
+                                            <td>#{0.10* (travelAgencyManagedBean.totalSelectedPrice)}</td>
+                                        </tr>
 
-                                            <tr>
-                                                <td>You Pay</td>
-                                                <td class="total">#{travelAgencyManagedBean.totalSelectedPrice}</td>
-                                            </tr>
+                                        <tr>
+                                            <td><b>You Pay (SGD)</b></td>
+                                            <td class="total">#{travelAgencyManagedBean.totalSelectedPrice}</td>
+                                        </tr>
                                         </tbody></table>
                                 </div>
                             </div>

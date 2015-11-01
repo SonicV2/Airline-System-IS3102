@@ -196,6 +196,9 @@ public class MARSManagedBean {
 
     private PNRDisplay pnrDisplayList;
     private DiscountCode discountCode;
+    private boolean discountCodeApplied;
+    private String refundStatus;
+    private int weightAllowed;
 
     @PostConstruct
     public void retrieve() {
@@ -294,8 +297,29 @@ public class MARSManagedBean {
         return displayReturnFlights();
 
     }
+    
+    public void setClassRules(){
+        if (serviceType.equals("Economy Saver") || serviceType.equals("Economy Basic")){
+            refundStatus = "Not refundable";
+            weightAllowed = 15;
+        }
+        else if (serviceType.equals("Economy Premium")){
+            refundStatus = "Refundable";
+            weightAllowed = 15;
+        }
+        else if (serviceType.equals("Business")){
+            refundStatus = "Refundable";
+            weightAllowed = 30;
+        }
+        else if (serviceType.equals("First Class")){
+            refundStatus = "Refundable";
+            weightAllowed = 45;
+        }
+    }
 
     public String displayDepartureFlights(Boolean oneWay) {
+        
+        discountCodeApplied = false;
         discountCode = null;
         oneWayFlight = oneWay;
         /*Convert the chosen origin and destination cities into IATAs*/
@@ -370,6 +394,7 @@ public class MARSManagedBean {
             selectedDatePrices.clear();
             directFlightSchedules = new ArrayList();
             setDirectFlightDuration("");
+            setClassRules();
 
             //Check whether there is direct flight
             if (distributionSessionBean.existsDirectFlight(originIATA, destinationIATA)) {
@@ -607,6 +632,8 @@ public class MARSManagedBean {
 
         for (i = -3; i <= 3; i++) {
             Date eachDate = distributionSessionBean.addDaysToDate(date, i);
+            if (eachDate.compareTo(new Date())<0)
+                continue;
             weekDates.add(eachDate);
             schedulesForEachDate = distributionSessionBean.retrieveDirectFlightsForDate(originIATA, destinationIATA, eachDate, serviceType, adults, children);
             if (schedulesForEachDate.size() > 0) {
@@ -640,6 +667,8 @@ public class MARSManagedBean {
 
         for (i = -3; i <= 3; i++) {
             Date eachDate = distributionSessionBean.addDaysToDate(date, i);
+            if (eachDate.compareTo(new Date())<0)
+                continue;
             weekDates.add(eachDate);
             legOneSchedules.clear();
             legTwoSchedules.clear();
@@ -859,6 +888,7 @@ public class MARSManagedBean {
             return null;
 
         }
+        
 
         if (csv.length() != 3) {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Invalid csv!", "");
@@ -945,9 +975,11 @@ public class MARSManagedBean {
                     + "\nArrival Date: " + formatter.format(selectedSchedules.get(i).getEndDate()) + "\n\n";
             tempBody += flight;
         }
+        
+        
 
         setBody("Thank you for using Merlion Airlines. \n\nYour PNR Id: " + pnr.getPnrID() + "\nDate of Booking: " + formatter.format(pnr.getDateOfBooking())
-                + "\nNumber of Travellers: " + pnr.getNoOfTravellers() + "\nTotal Price Paid: " + pnr.getTotalPrice()
+                + "\nNumber of Travellers: " + pnr.getNoOfTravellers() + "\nTotal Baggage Allowance: " + (weightAllowed*pnr.getNoOfTravellers()) + "kgs\nBooking Refund Status: " + refundStatus + "\nTotal Price Paid: " + pnr.getTotalPrice()
                 + "\n\n" + tempBody + "\n\nYou can always view the details of your booking at our website.");
 
         emailSessionBean.sendEmail(email, getSubject(), getBody());
@@ -957,7 +989,7 @@ public class MARSManagedBean {
     public String searchPNR() {
 
         searchedPNR = passengerBookingSessionBean.getPNR(pnrId);
-        if (searchedPNR == null || !primaryEmail.equals(searchedPNR.getEmail())) {
+        if (searchedPNR == null || !primaryEmail.equals(searchedPNR.getEmail()) || searchedPNR.getPnrStatus().equalsIgnoreCase("Flown")) {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Booking record is not found!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
             return null;
@@ -977,6 +1009,7 @@ public class MARSManagedBean {
 
         eachPNRDisplay.setNoOfTravellers(noOfTravellers);
         eachPNRDisplay.setBookingDate(searchedPNR.getDateOfBooking());
+        eachPNRDisplay.setRefundable(distributionSessionBean.isPNRRefundable(searchedPNR));
 
         for (Booking eachBooking : searchedPNR.getBookings()) {
             if (!addedNames.contains(eachBooking.getTravellerFristName() + " " + eachBooking.getTravellerLastName())) {
@@ -1060,9 +1093,15 @@ public class MARSManagedBean {
         else if (discountSessionBean.discountCodeValid(code) == false) {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Discount Code is Invalid!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
-        } else {
+        }
+        else if (discountCodeApplied ==true){
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "A Discount Code has already been applied!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        }
+        else {
             discountCode = discountSessionBean.getDiscountCodeFromCode(code);
             totalSelectedPrice = totalSelectedPrice - (discountCode.getDiscountType().getDiscount()/100*totalSelectedPrice);
+            discountCodeApplied = true;
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Discount Code Applied!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
         }
@@ -2104,6 +2143,22 @@ public class MARSManagedBean {
 
     public void setDiscountCode(DiscountCode discountCode) {
         this.discountCode = discountCode;
+    }
+
+    public String getRefundStatus() {
+        return refundStatus;
+    }
+
+    public void setRefundStatus(String refundStatus) {
+        this.refundStatus = refundStatus;
+    }
+
+    public int getWeightAllowed() {
+        return weightAllowed;
+    }
+
+    public void setWeightAllowed(int weightAllowed) {
+        this.weightAllowed = weightAllowed;
     }
     
 
