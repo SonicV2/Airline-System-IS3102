@@ -5,6 +5,7 @@
  */
 package Distribution.Entity;
 
+import DCS.Entity.BaggageTag;
 import Inventory.Entity.Booking;
 import java.io.Serializable;
 import javax.persistence.CascadeType;
@@ -13,6 +14,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 /**
  *
@@ -27,6 +29,10 @@ public class Baggage implements Serializable {
     private double baggageWeight;
     @ManyToOne(cascade = {CascadeType.PERSIST})
     private Booking booking = new Booking();
+    
+    
+    @OneToOne(cascade={CascadeType.PERSIST})
+    private BaggageTag baggageTag = new BaggageTag();
     
     public void createBaggage(double baggageWeight, Booking booking){
         this.setBaggageWeight(baggageWeight);
@@ -82,6 +88,20 @@ public class Baggage implements Serializable {
     @Override
     public String toString() {
         return "Distribution.Entity.Baggage[ id=" + id + " ]";
+    }
+
+    /**
+     * @return the baggageTag
+     */
+    public BaggageTag getBaggageTag() {
+        return baggageTag;
+    }
+
+    /**
+     * @param baggageTag the baggageTag to set
+     */
+    public void setBaggageTag(BaggageTag baggageTag) {
+        this.baggageTag = baggageTag;
     }
     
 }

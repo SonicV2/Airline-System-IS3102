@@ -26,12 +26,12 @@ public class ClassSessionBean implements ClassSessionBeanRemote, ClassSessionBea
     // Add a booking class
     public String addClassCode(String classcode, int pricePercent, int advancedSales
     , int percentSold, String serviceClass, boolean rebook, boolean cancel, 
-    int baggage, int millageAccru, String season){
+    int baggage, int millageAccru, String season, boolean travelagent){
         BookingClass bc = new BookingClass();
         BookingClass bc1 = em.find(BookingClass.class,classcode);
         if (bc1==null){
             bc.createClass(classcode, pricePercent, advancedSales, percentSold,
-                    serviceClass, rebook, cancel, baggage, millageAccru, season);
+                    serviceClass, rebook, cancel, baggage, millageAccru, season, travelagent);
             em.persist(bc);
             return "Fare Class Added";
         }
@@ -72,15 +72,17 @@ public class ClassSessionBean implements ClassSessionBeanRemote, ClassSessionBea
     }
     
     // Delete a booking class
-    public void deleteClassCode(String classcode){
+    public String deleteClassCode(String classcode){
         try{
             BookingClass bc = em.find(BookingClass.class, classcode);
             em.remove(bc);
+            return "Fare Class Deleted";
         }
         catch(EntityNotFoundException ex){
             System.out.println("\nEntity Not Found" );
             System.out.println(ex);
         }
+        return "Fare Class Not Deleted";
     }
     
     // Edit a booking class

@@ -68,8 +68,8 @@ public class AdminManagedBean {
         Employee original = departmentSessionBean.searchStaff(edited.getEmployeeID());
 
         //if the department is changed:
-        if (!edited.getOrganizationUnit().getDepartmentName().equals(employeeNewDeptName)){
-            departmentSessionBean.adminChangeDepartment(edited.getEmployeeID(), employeeNewDeptName, edited.getOrganizationUnit().getDepartmentName());
+        if (!(edited.getOrganizationUnit().getDepartmentName().equals(employeeNewDeptName) && edited.getOrganizationUnit().getLocation().equals(employeeNewDeptLocation))){
+            departmentSessionBean.adminChangeDepartment(edited.getEmployeeID(), employeeNewDeptName, edited.getOrganizationUnit().getDepartmentName(), employeeNewDeptLocation, edited.getOrganizationUnit().getLocation());
             setAllActiveEmployees(employeeSessionBean.retrieveAllActiveEmployees());
         }
         

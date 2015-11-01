@@ -127,9 +127,9 @@ public class DepartmentManagedBean {
         setEmployeeDept("");
     }
 
-    public String deleteDepartment(String ouName) {
+    public String deleteDepartment(String ouName, String location) {
 //        setDeleteOUName(ouName);
-        setErrorMsg(departmentSessionBean.deleteOrgUnit(ouName));
+        setErrorMsg(departmentSessionBean.deleteOrgUnit(ouName, location));
 //        setErrorMsg(roleSessionBean.deleteRole(deleteRoleName));
 //        setDeleteRoleName("");
 //        setDelete

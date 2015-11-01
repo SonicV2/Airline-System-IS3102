@@ -332,6 +332,7 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
     public OrganizationUnit getDepartment(String depart){
         
         String department=depart.substring(0, depart.indexOf("("));
+        String location =depart.substring(depart.indexOf("(")+1, depart.indexOf(")"));
         
         OrganizationUnit department1 = new OrganizationUnit();
         try {
@@ -339,18 +340,24 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
             Query q = em.createQuery("SELECT a FROM OrganizationUnit " + "AS a WHERE a.departmentName=:departmentName");
             q.setParameter("departmentName", department);
 
-            List results = q.getResultList();
+            List<OrganizationUnit> results = q.getResultList();
             if (!results.isEmpty()) {
-                department1 = (OrganizationUnit) results.get(0);
+                for(OrganizationUnit o : results){
+                    if(o.getLocation().equals(location)){
+                        return o;
+                    }
+                }
+               // department1 = (OrganizationUnit) results.get(0);
                 
             } else {
-                department1 = null;
+                return null;
             }
 
         } catch (EntityNotFoundException enfe) {
             System.out.println("\nEntity not found error" + "enfe.getMessage()");
         }
-        return department1;
+        return null;
+//        return department1;
     }
     
     // get role object when searching with role name

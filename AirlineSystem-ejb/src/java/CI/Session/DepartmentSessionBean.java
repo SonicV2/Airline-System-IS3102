@@ -49,10 +49,10 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal{
     }
     
     @Override
-    public String deleteOrgUnit(String OUName){
+    public String deleteOrgUnit(String OUName,String location){
         //String msg;
         OrganizationUnit orgUnit = new OrganizationUnit();
-        orgUnit = getDepartment(OUName);
+        orgUnit = getDepartment(OUName, location);
         List<Employee> employees = orgUnit.getEmployee();
         
         for (Employee e: employees){
@@ -152,11 +152,14 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal{
     @Override
     public String changeDepartment(String staffID,String deptNameCom,String deptNameOldCom){
         String deptName = deptNameCom.substring(0, deptNameCom.indexOf("("));
+        String deptNameLocation = deptNameCom.substring(deptNameCom.indexOf("(")+1, deptNameCom.indexOf(")"));
+         
         String deptNameOld = deptNameOldCom.substring(0, deptNameOldCom.indexOf("("));
+        String deptNameOldLoation = deptNameOldCom.substring(deptNameOldCom.indexOf("(")+1, deptNameOldCom.indexOf(")"));
         
         Employee employee = getEmployeeUseID(staffID);
-        OrganizationUnit ouOld =getDepartment(deptNameOld);
-        OrganizationUnit ouNew = getDepartment(deptName);
+        OrganizationUnit ouOld =getDepartment(deptNameOld,deptNameLocation);
+        OrganizationUnit ouNew = getDepartment(deptName,deptNameOldLoation);
         
         List<Employee> employees = ouOld.getEmployee();
         employees.remove(employee);
@@ -174,13 +177,13 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal{
     }
     
     @Override
-    public String adminChangeDepartment(String staffID,String deptNameCom,String deptNameOldCom){
+    public String adminChangeDepartment(String staffID,String deptNameCom,String deptNameOldCom, String deptNewLocation, String deptOldLocation){
         String deptName = deptNameCom;
         String deptNameOld = deptNameOldCom;
         
         Employee employee = getEmployeeUseID(staffID);
-        OrganizationUnit ouOld =getDepartment(deptNameOld);
-        OrganizationUnit ouNew = getDepartment(deptName);
+        OrganizationUnit ouOld =getDepartment(deptNameOld,deptOldLocation);
+        OrganizationUnit ouNew = getDepartment(deptName,deptNewLocation);
         
         List<Employee> employees = ouOld.getEmployee();
         employees.remove(employee);
@@ -200,13 +203,18 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal{
 
     
     @Override
-    public OrganizationUnit getDepartment(String deptName){
+    public OrganizationUnit getDepartment(String deptName, String deptLocation){
         Query q = em.createQuery("SELECT a FROM OrganizationUnit a WHERE a.departmentName =:deptName");
         q.setParameter("deptName", deptName);
         
          List<OrganizationUnit> results = q.getResultList();
          
-         return results.get(0);
+         for(OrganizationUnit o: results){
+             if(o.getLocation().equals(deptLocation)){
+                 return o;
+             }
+         }
+         return null;
          
     }
     
