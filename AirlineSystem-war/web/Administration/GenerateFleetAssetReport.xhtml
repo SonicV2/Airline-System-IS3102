@@ -17,7 +17,7 @@
         <h:outputStylesheet library="css" name="admindb.css" />
         <h:outputStylesheet library="css" name="morrisjs/morris.css" />
         <!--        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js" />-->
-        <title>Acquire Aircraft</title>
+        <title>Fleet Asset Report</title>
     </h:head>
 
     <style>
@@ -36,13 +36,17 @@
 
             <div class="row">
                 <div class="col-lg-12">
-                    <h2 class="page-header">Acquire Aircrafts</h2>
+                    <h2 class="page-header">Fleet Asset Report</h2>
                 </div>
 
                 <div class="col-lg-12">
-                    <p:dataTable id="radioDT" var="aircraftType" value="#{fleetManagedBean.aircraftTypes}" style="margin-bottom:40px">
+                    <p:dataTable id="radioDT" var="aircraftType" value="#{administrationManagedBean.aircraftTypes}" style="margin-bottom:40px">
                         <p:column headerText="Aircraft Type" sortBy="#{aircraftType.id}">
                             <h:outputText value="#{aircraftType.id}" />
+                        </p:column>
+                        
+                        <p:column headerText="In Service" sortBy="#{aircraftType.aircrafts.size()}">
+                            <h:outputText value="#{aircraftType.aircrafts.size()}" />
                         </p:column>
 
                         <p:column headerText="Travel Range in km" sortBy="#{aircraftType.travelRange}">
@@ -78,71 +82,6 @@
                         </p:column>
                     </p:dataTable>
                 </div>
-
-                <h:form class="form col-md-8 center-block">
-
-                    <div class="form-group">
-                        <h:outputLabel for="aircraftTypeId" value="Aircraft Type:" />
-                        <span>
-                            <h:selectOneMenu class="form-control" id="aircraftTypeId" value="#{fleetManagedBean.aircraftTypeId}" style="width:180px">
-                                <f:selectItem itemLabel="Select One" itemValue="" />
-                                <f:selectItems value="#{fleetManagedBean.aircraftTypeIds}" />
-                            </h:selectOneMenu>
-                        </span>
-                    </div>
-
-                    <div class="form-group">
-                        <h:outputLabel for="hub" value="Location of the aircraft:" />
-                        <span>
-                            <h:selectOneMenu class="form-control" id="hub" value="#{fleetManagedBean.hub}" style="width:125px">
-                                <f:selectItem itemLabel="Select One" itemValue="" />
-                                <f:selectItem itemLabel="Singapore" itemValue="SIN" />
-                                <f:selectItem itemLabel="Tokyo" itemValue="NRT" />
-                                <f:selectItem itemLabel="Frankfurt" itemValue="FRA" />
-                            </h:selectOneMenu>
-                        </span>
-                    </div>
-
-                    <div class="form-group">
-
-                        <h:outputLabel value="Date Purchased: " />
-                        <span>
-                            <p:calendar id="button" value="#{fleetManagedBean.datePurchased}" navigator="true" pattern="yyyy-MMM-dd"/>
-                        </span>
-                        <br/>
-
-
-                    </div>
-
-
-                    <div class="form-group">
-                        <h:outputLabel value="Last Maintained: " />
-                        <span>
-                            <p:calendar id="button1" value="#{fleetManagedBean.lastMaintained}" navigator="true" pattern="yyyy-MMM-dd"/>
-                        </span>
-                        <br/>
-
-                    </div>
-
-                    <div class="form-group">
-                        <h:outputLabel for="status" value="Status of the aircraft:" />
-                        <span>
-                            <h:selectOneMenu class="form-control" id="status" value="#{fleetManagedBean.status}" style="width:125px">
-                                <f:selectItem itemLabel="Select One" itemValue="" />
-                                <f:selectItem itemLabel="Stand-By" itemValue="Stand-By" />
-                                <f:selectItem itemLabel="Reserve" itemValue="Reserve" />
-                            </h:selectOneMenu>
-                        </span>
-                    </div>
-
-                    <div class="text-center">
-                        <h:commandButton class="btn btn-outline btn-success" value="Aquire Aircraft" actionListener="#{fleetManagedBean.acquireAircraft}"/>
-
-                    </div>
-
-                    <br></br>
-                    <br></br>
-                </h:form>
             </div>
         </div>
     </h:body>

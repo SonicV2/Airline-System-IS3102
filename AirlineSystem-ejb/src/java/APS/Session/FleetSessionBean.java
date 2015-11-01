@@ -11,6 +11,9 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.TimeZone;
+import java.util.concurrent.TimeUnit;
 
 /**
  *
@@ -54,7 +57,7 @@ public class FleetSessionBean implements FleetSessionBeanLocal {
     public void persistAircraft(Aircraft aircraft){
         em.merge(aircraft);
     }
-
+    
     // get aircraftType object when searching with aircraftTypeId
     @Override
     public AircraftType getAircraftType(String aircraftTypeId) {

@@ -59,7 +59,7 @@ public class LoginFilter implements Filter {
             if (url[2].equals("Login.xhtml") || reqURI.contains("javax.faces.resource") || url[2].equals("ForgetPassword.xhtml") || url[2].equals("APS")
 
                    || url[2].equals("CI")||url[2].equals("CRM") || url[2].equals("FOS" )|| url[2].equals("Inventory" ) || url[2].equals("Distribution")
-                   || url[2].equals("DCS")/*Delete when necessary*/) {
+                   || url[2].equals("DCS") || url[2].equals("Administration")/*Delete when necessary*/) {
 
                 System.out.println("Process ");
                 chain.doFilter(request, response);
