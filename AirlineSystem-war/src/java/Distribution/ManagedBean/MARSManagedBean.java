@@ -196,6 +196,7 @@ public class MARSManagedBean {
 
     private PNRDisplay pnrDisplayList;
     private DiscountCode discountCode;
+    private boolean discountCodeApplied;
 
     @PostConstruct
     public void retrieve() {
@@ -296,6 +297,7 @@ public class MARSManagedBean {
     }
 
     public String displayDepartureFlights(Boolean oneWay) {
+        discountCodeApplied = false;
         discountCode = null;
         oneWayFlight = oneWay;
         /*Convert the chosen origin and destination cities into IATAs*/
@@ -389,7 +391,7 @@ public class MARSManagedBean {
                 retrieveMinWeekPricesForDirect(originIATA, destinationIATA, departureDate, serviceType, adults, children);
                 setPriceForDirect(selectedDatePrices.get(0));
                 System.out.println("displayingggggg....");
-                return "DisplayDepartureDirectFlightReturn";
+                return "DisplayDepartureDirectFlightReturn?faces-redirect=true";
 
             } else { //Retrieve one stop flights
                 System.out.println("managedbean::::one stop flights...");
@@ -1065,9 +1067,15 @@ public class MARSManagedBean {
         else if (discountSessionBean.discountCodeValid(code) == false) {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Discount Code is Invalid!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
-        } else {
+        }
+        else if (discountCodeApplied ==true){
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "A Discount Code has already been applied!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        }
+        else {
             discountCode = discountSessionBean.getDiscountCodeFromCode(code);
             totalSelectedPrice = totalSelectedPrice - (discountCode.getDiscountType().getDiscount()/100*totalSelectedPrice);
+            discountCodeApplied = true;
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Discount Code Applied!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
         }

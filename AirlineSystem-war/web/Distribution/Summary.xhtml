@@ -204,6 +204,31 @@
                         </div>
                         </div>
                     </div>
+                    
+                    <h:form>
+                        <p:growl id="growll" sticky="true" showDetail="true"/>
+                    <div class="col-md-4 col-sm-4 booking-sidebar">
+                        <div class="flight-list-v2">
+                        <div class="sidebar-item">
+                            <h4><i class="fa fa-bookmark"></i>Apply Discount Code</h4>
+                            <div class="sidebar-body">
+                                <table class="table">
+                                    <tbody><tr>
+                                            <td>Discount Code: </td>
+                                            <td><h:inputText id="discount-code" required="true" requiredMessage="Please fill in discount code field!" value="#{code}" /></td>
+                                        </tr>
+                                        
+
+                                        <tr>
+                                            <td></td>
+                                            <td><h:commandButton class="btn btn-outline btn-success" value="Apply"  action="#{mARSManagedBean.redeemDiscountCode(code)}"/></td>
+                                        </tr>
+                                    </tbody></table>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                    </h:form>
 
 
                     <div class="clearfix"> </div>

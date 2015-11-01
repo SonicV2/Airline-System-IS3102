@@ -33,15 +33,13 @@
                     <div class="col-lg-12">
                         <h2 class="page-header">View PNRs</h2>
                     </div>
-                    <div class="col-md-12">
+                    <h:form id="form">
+                        <div class="col-md-12">
                         <p:messages id="messages" autoUpdate="true"/>
                     </div>
+                   
                     <div class="col-lg-12"> 
-
-                        <h:form id="form">
-
-
-                            <p:dataTable id="pnrs" var="pnr" value="#{travelAgencyManagedBean.travelAgency.pnrs}" widgetVar="pnrTable">
+                                         <p:dataTable id="pnrs" var="pnr" value="#{travelAgencyManagedBean.travelAgency.pnrs}" widgetVar="pnrTable">
 
                                 <f:facet name="header">
                                     <p:outputPanel>
@@ -88,8 +86,10 @@
 
 
                             </p:dataTable> 
-                        </h:form>
+                       
                     </div>
+                        
+                         </h:form>
                 </div>
             </div>
         </div>
