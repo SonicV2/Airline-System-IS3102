@@ -135,7 +135,8 @@ public class DiscountSessionBean implements DiscountSessionBeanLocal {
     
     @Override
     public void deleteDiscountType (DiscountType discountType){
-        em.remove(discountType);
+        DiscountType mergedDiscountType = em.merge(discountType);
+        em.remove(mergedDiscountType);
         em.flush();
     }
     

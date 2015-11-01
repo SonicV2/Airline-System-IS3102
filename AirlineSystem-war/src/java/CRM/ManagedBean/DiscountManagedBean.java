@@ -70,7 +70,9 @@ public class DiscountManagedBean {
         discount = 0.0;
         noOfMileagePointsToRedeem = 0.0;
         description = "";
-        if (!discountTypes.isEmpty()) {
+        
+        
+        if (discountTypes != null) {
             DiscountTypeDisplay eachDiscountTypeDisplay;
             for (DiscountType eachDiscountType : discountTypes) {
                 eachDiscountTypeDisplay = new DiscountTypeDisplay();
@@ -98,15 +100,16 @@ public class DiscountManagedBean {
 
     }
 
-    public String deleteDiscountType() {
-          //MAKE SURE selectedDiscountType IS SET BEFORE   
-
+    public String deleteDiscountType(DiscountType userSelectedDiscountType) {
+        setSelectedDiscountType(userSelectedDiscountType);
         if (discountSessionBean.discountTypeHasUnclaimedCodes(selectedDiscountType)) {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Discount Type cannot be deleted as it has unclaimed codes!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
             return null;
         } else {
+            System.out.println("Before");
             discountSessionBean.deleteDiscountType(selectedDiscountType);
+            System.out.println("After");
             discountTypes = discountSessionBean.retrieveAllDiscountTypes();
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Discount Type deleted!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
