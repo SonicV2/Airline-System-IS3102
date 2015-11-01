@@ -176,15 +176,28 @@
                                         </div>
 
                                     </ui:repeat>
-
-                                    <div class="text-center">
-                                        <h:commandButton onclick="if (!confirm('Do you really want to cancel this booking?')) {
+                                    
+                                    <div class ="text-center">
+                                    <ui:fragment rendered="#{mARSManagedBean.pnrDisplayList.refundable}">
+                                                                <h:commandButton onclick="if (!confirm('Do you want to cancel this booking for a refund?')) {
                                     return false;
                                 }
                                 ;
                                 return true;
-                                                                                 " class="btn btn-outline btn-success" value="Cancel Booking" action="#{mARSManagedBean.deletePNR()}" />
-                                    </div>
+                                                                                 " class="btn btn-outline btn-danger" value="Cancel Booking" action="#{mARSManagedBean.deletePNR()}" />
+                                                            
+                                                                </ui:fragment>
+                                                                <ui:fragment rendered="#{!mARSManagedBean.pnrDisplayList.refundable}">
+                                                                <h:commandButton onclick="if (!confirm('This booking is not refundable. Do you really want to cancel it? ')) {
+                                    return false;
+                                }
+                                ;
+                                return true;
+                                                                                 " class="btn btn-outline btn-danger" value="Cancel Booking" action="#{mARSManagedBean.deletePNR()}" />
+                                                            
+                                                                </ui:fragment></div>
+
+                                    
                                 </div>
 
                         </h:form>
