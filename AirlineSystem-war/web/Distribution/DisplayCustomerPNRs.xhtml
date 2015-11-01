@@ -89,12 +89,25 @@
                                                         </tr>
                                                         <tr>
                                                             <div class='pull-right'>
-                                                                <h:commandButton onclick="if (!confirm('Do you really want to cancel this booking?')) {
+                                                                
+                                                                <ui:fragment rendered="#{pnr.refundable}">
+                                                                <h:commandButton onclick="if (!confirm('Do you want to cancel this booking for a refund?')) {
                                     return false;
                                 }
                                 ;
                                 return true;
                                                                                  " class="btn btn-outline btn-danger" value="Cancel Booking" action="#{customerManagedBean.deleteCustomerPNR(pnr.id)}" />
+                                                            
+                                                                </ui:fragment>
+                                                                <ui:fragment rendered="#{!pnr.refundable}">
+                                                                <h:commandButton onclick="if (!confirm('This booking is not refundable. Do you really want to cancel it? ')) {
+                                    return false;
+                                }
+                                ;
+                                return true;
+                                                                                 " class="btn btn-outline btn-danger" value="Cancel Booking" action="#{customerManagedBean.deleteCustomerPNR(pnr.id)}" />
+                                                            
+                                                                </ui:fragment>
                                                             </div>
                                                         </tr>
                                                     </tbody>
