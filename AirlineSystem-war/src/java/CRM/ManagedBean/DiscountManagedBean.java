@@ -116,7 +116,7 @@ public class DiscountManagedBean {
     }
 
     private String sendDiscountCodesToTopCustomers() {
-        //Set analysisType,selectedpercentile & selectedDiscountType, from, to
+        //Set analysisTypes,electedDiscountType, from, to
         if (from > to || from < 0 || from > 100 || to < 0 || to > 100) {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Entered range is incorrect", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
