@@ -14,6 +14,7 @@
         <h:outputStylesheet library="css" name="travelagentdb.css" />
         <h:outputStylesheet library="css" name="morrisjs/morris.css" />
           <h:outputStylesheet library ="css"  name="flightdisplay2.css" />
+                  <h:outputScript library="js" name="jQuery/jQuery-2.1.4.min.js" />
         <title>Confirmation</title>
     </h:head>
     <h:body>
@@ -117,10 +118,31 @@
                                                     <td>#{travelAgencyManagedBean.pnr.noOfTravellers}</td>
                                                 </tr>
 
-                                                <tr>
-                                                    <td>Total Price</td>
-                                                    <td class="total">$#{travelAgencyManagedBean.totalPriceWinsurance}</td>
-                                                </tr>
+                                               <tr>
+                                                   <td>Total Base Fare </td>
+                                            <td>#{0.85* (travelAgencyManagedBean.totalSelectedPrice)}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Airport / Government Taxes</td>
+                                            <td>#{0.05* (travelAgencyManagedBean.totalSelectedPrice)}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Carrier Surcharges</td>
+                                            <td>#{0.10* (travelAgencyManagedBean.totalSelectedPrice)}</td>
+                                        </tr>
+                                                
+                                         <tr>
+                                            <td>Insurance</td>
+                                            <td>#{(travelAgencyManagedBean.totalPriceWinsurance) - (travelAgencyManagedBean.totalSelectedPrice)}</td>
+                                        </tr>
+                                        
+
+                          
+
+                                            <tr>
+                                                <td><b>Total Price (SGD)</b></td>
+                                                <td class="total">$#{travelAgencyManagedBean.totalPriceWinsurance}</td>
+                                            </tr>
                                             </tbody></table>
                                     </div>
                                 </div>
