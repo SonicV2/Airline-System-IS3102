@@ -609,6 +609,8 @@ public class MARSManagedBean {
 
         for (i = -3; i <= 3; i++) {
             Date eachDate = distributionSessionBean.addDaysToDate(date, i);
+            if (eachDate.compareTo(new Date())<0)
+                continue;
             weekDates.add(eachDate);
             schedulesForEachDate = distributionSessionBean.retrieveDirectFlightsForDate(originIATA, destinationIATA, eachDate, serviceType, adults, children);
             if (schedulesForEachDate.size() > 0) {
@@ -642,6 +644,8 @@ public class MARSManagedBean {
 
         for (i = -3; i <= 3; i++) {
             Date eachDate = distributionSessionBean.addDaysToDate(date, i);
+            if (eachDate.compareTo(new Date())<0)
+                continue;
             weekDates.add(eachDate);
             legOneSchedules.clear();
             legTwoSchedules.clear();
@@ -861,6 +865,7 @@ public class MARSManagedBean {
             return null;
 
         }
+        
 
         if (csv.length() != 3) {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Invalid csv!", "");
@@ -959,7 +964,7 @@ public class MARSManagedBean {
     public String searchPNR() {
 
         searchedPNR = passengerBookingSessionBean.getPNR(pnrId);
-        if (searchedPNR == null || !primaryEmail.equals(searchedPNR.getEmail())) {
+        if (searchedPNR == null || !primaryEmail.equals(searchedPNR.getEmail()) || searchedPNR.getPnrStatus().equalsIgnoreCase("Flown")) {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Booking record is not found!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
             return null;

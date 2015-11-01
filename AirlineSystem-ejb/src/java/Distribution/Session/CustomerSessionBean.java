@@ -270,7 +270,7 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
         if (customer != null) {
             List<PNR> customerBookedPNRs = new ArrayList();
             for (PNR eachCustomerPNR : customer.getPnrs()) {
-                if (eachCustomerPNR.getPnrStatus().equals("Booked")) {
+                if (eachCustomerPNR.getPnrStatus().equals("Booked") || eachCustomerPNR.getPnrStatus().equals("Confirmed")) {
                     customerBookedPNRs.add(eachCustomerPNR);
                 }
             }
