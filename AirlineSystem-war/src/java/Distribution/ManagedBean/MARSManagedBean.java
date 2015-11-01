@@ -975,9 +975,11 @@ public class MARSManagedBean {
                     + "\nArrival Date: " + formatter.format(selectedSchedules.get(i).getEndDate()) + "\n\n";
             tempBody += flight;
         }
+        
+        
 
         setBody("Thank you for using Merlion Airlines. \n\nYour PNR Id: " + pnr.getPnrID() + "\nDate of Booking: " + formatter.format(pnr.getDateOfBooking())
-                + "\nNumber of Travellers: " + pnr.getNoOfTravellers() + "\nTotal Price Paid: " + pnr.getTotalPrice()
+                + "\nNumber of Travellers: " + pnr.getNoOfTravellers() + "\nTotal Baggage Allowance: " + (weightAllowed*pnr.getNoOfTravellers()) + "kgs\nBooking Refund Status: " + refundStatus + "\nTotal Price Paid: " + pnr.getTotalPrice()
                 + "\n\n" + tempBody + "\n\nYou can always view the details of your booking at our website.");
 
         emailSessionBean.sendEmail(email, getSubject(), getBody());
