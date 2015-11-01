@@ -104,8 +104,10 @@
                                     </div>
                                     <div class="clearfix"></div>
                                     <div class="flight-list-footer">
-                                        <div class="col-md-6 col-sm-6 col-xs-6 sm-invisible">
+                                        <div class="col-md-8 col-sm-8 col-xs-8 sm-invisible">
                                             <span><i class="fa fa-plane"></i>#{mARSManagedBean.serviceType}</span>
+                                              <span><i class="fa fa-suitcase"></i> #{mARSManagedBean.weightAllowed * (mARSManagedBean.adults + mARSManagedBean.children)} kg</span>
+                                                <span><i class="fa fa-usd"></i> #{mARSManagedBean.refundStatus} </span>
                                         </div>
                                     </div>
                                 </div>
