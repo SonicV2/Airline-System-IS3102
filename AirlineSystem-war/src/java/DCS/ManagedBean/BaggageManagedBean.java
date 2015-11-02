@@ -5,8 +5,12 @@
  */
 package DCS.ManagedBean;
 
+import DCS.Entity.BaggageTag;
+import DCS.Entity.BoardingPass;
 import DCS.Session.BaggageSessionBeanLocal;
+import DCS.Session.BoardingPassSessionBeanLocal;
 import Distribution.Entity.Baggage;
+import Inventory.Entity.Booking;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
@@ -29,15 +33,20 @@ import javax.faces.event.ActionEvent;
 @RequestScoped
 @ManagedBean
 public class BaggageManagedBean implements Serializable {
+    @EJB
+    private BoardingPassSessionBeanLocal boardingPassSessionBean;
 
     @EJB
     private BaggageSessionBeanLocal baggageSessionBean;
-
+    
+    
+    
     @ManagedProperty(value = "#{searchBookingManagedBean}")
     private SearchBookingManagedBean searchBookingManagedBean;
     
     @ManagedProperty(value = "#{baggagePaymentManagedBean}")
     private BaggagePaymentManagedBean baggagePaymentManagedBean;
+    
     
     
     private double totalWeightAllowed;
@@ -54,6 +63,11 @@ public class BaggageManagedBean implements Serializable {
     String departure;
     String destination;
     
+    private List<BaggageTag> baggageTags; 
+    private BoardingPass boardingpass;
+    
+  
+    
     public BaggageManagedBean() {
     }
 
@@ -62,6 +76,24 @@ public class BaggageManagedBean implements Serializable {
         retrieveAllBaggages();
         totalweight=baggageSessionBean.retrieveTotalBaggageWeights(searchBookingManagedBean.getReqBooking());
     }
+    
+    
+   public void showBaggageTag(ActionEvent event){
+       Booking booking= searchBookingManagedBean.getReqBooking();
+       List<Baggage> baggages= booking.getBaggages();
+       
+       baggageTags=new ArrayList<BaggageTag>();
+       for(Baggage b : baggages){
+           baggageTags.add(b.getBaggageTag());
+       }
+   }
+    
+   public void showBoardingPass(ActionEvent event){
+       Booking booking= searchBookingManagedBean.getReqBooking();
+       
+
+       boardingpass=boardingPassSessionBean.findBoardingpass(booking);
+   }
     
     
     public void calculateExtra(ActionEvent event){
@@ -89,13 +121,17 @@ public class BaggageManagedBean implements Serializable {
         
         double temp=(totalweight+addBagWeight);
         
-        System.out.println("AAAAA total allow" + totalWeightAllowed );
+       
         
         this.extraPayment=baggageSessionBean.calcualtePenalty(departure,destination,totalWeightAllowed,temp);
         
         baggagePaymentManagedBean.setExtra(extraPayment);
-    
-    
+        
+         System.out.println("AAAAA booking" + searchBookingManagedBean.getReqBooking().getFlightNo());
+        baggagePaymentManagedBean.setBooking(searchBookingManagedBean.getReqBooking());
+        
+        
+        baggagePaymentManagedBean.setAddbagWeight(addBagWeight);
     }
 
     public void addBaggage(ActionEvent event) {
@@ -226,7 +262,40 @@ public class BaggageManagedBean implements Serializable {
     public void setBaggagePaymentManagedBean(BaggagePaymentManagedBean baggagePaymentManagedBean) {
         this.baggagePaymentManagedBean = baggagePaymentManagedBean;
     }
-    
+
+    public BaggageSessionBeanLocal getBaggageSessionBean() {
+        return baggageSessionBean;
+    }
+
+    public void setBaggageSessionBean(BaggageSessionBeanLocal baggageSessionBean) {
+        this.baggageSessionBean = baggageSessionBean;
+    }
+
+    public List<BaggageTag> getBaggageTags() {
+        return baggageTags;
+    }
+
+    public void setBaggageTags(List<BaggageTag> baggageTags) {
+        this.baggageTags = baggageTags;
+    }
+
+    public BoardingPassSessionBeanLocal getBoardingPassSessionBean() {
+        return boardingPassSessionBean;
+    }
+
+    public void setBoardingPassSessionBean(BoardingPassSessionBeanLocal boardingPassSessionBean) {
+        this.boardingPassSessionBean = boardingPassSessionBean;
+    }
+
+    public BoardingPass getBoardingpass() {
+        return boardingpass;
+    }
+
+    public void setBoardingpass(BoardingPass boardingpass) {
+        this.boardingpass = boardingpass;
+    }
+
+ 
     
     
 

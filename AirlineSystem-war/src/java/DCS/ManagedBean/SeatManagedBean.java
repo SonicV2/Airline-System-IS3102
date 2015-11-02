@@ -2,7 +2,10 @@ package DCS.ManagedBean;
 
 import APS.Entity.Schedule;
 import CI.Managedbean.LoginManagedBean;
+import DCS.Session.BoardingPassSessionBeanLocal;
+import DCS.Session.CheckInRecordSessionBeanLocal;
 import DCS.Session.SeatSessionBeanLocal;
+import Inventory.Entity.Booking;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -23,12 +26,20 @@ import javax.inject.Named;
 @ManagedBean
 @RequestScoped
 public class SeatManagedBean {
+    @EJB
+    private BoardingPassSessionBeanLocal boardingPassSessionBean;
+    @EJB
+    private CheckInRecordSessionBeanLocal checkInRecordSessionBean;
 
     @EJB
     private SeatSessionBeanLocal seatSessionBean;
+    
+    
 
     @ManagedProperty(value = "#{searchBookingManagedBean}")
     private SearchBookingManagedBean searchBookingManagedBean;
+    
+    private Booking booking;
 
     private List<String> A330seatArrange = new ArrayList<String>();
     private List<String> B777_200seatArrange = new ArrayList<String>();
@@ -51,7 +62,7 @@ public class SeatManagedBean {
     @PostConstruct
     public void init() {
 
-                
+        booking=searchBookingManagedBean.getReqBooking();
         schedule = searchBookingManagedBean.getCheckinSchedule();
         setOccupied(seatSessionBean.retrieveOccupiedSeats(searchBookingManagedBean.getCheckinSchedule()));
         if (occupied.isEmpty()) {
@@ -182,6 +193,8 @@ public class SeatManagedBean {
                 getOccupied().add(getChoose().toUpperCase());
 
                 seatSessionBean.inputChosenE(schedule, choose.toUpperCase());
+                checkInRecordSessionBean.addSeat(booking, choose.toUpperCase());
+                boardingPassSessionBean.addSeat(booking, choose.toUpperCase());
 
             } else if (getClasstype().equals("Business") && Integer.parseInt(getChoose().substring(1)) < 9) {
                 getA330seatArrange().set(getA330seatArrange().indexOf("\uD83D\uDCBA" + getChoose().toUpperCase()), "\n" + "\u26D4" + "\n" + getChoose().toUpperCase());
@@ -189,7 +202,8 @@ public class SeatManagedBean {
                 getOccupied().add(getChoose().toUpperCase());
 
                 seatSessionBean.inputChosenB(schedule, choose.toUpperCase());
-
+                checkInRecordSessionBean.addSeat(booking, choose.toUpperCase());
+                boardingPassSessionBean.addSeat(booking, choose.toUpperCase());
             } else {
                 message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "please choose the correct class", "");
                 FacesContext.getCurrentInstance().addMessage(null, message);
@@ -290,14 +304,16 @@ public class SeatManagedBean {
                 getOccupied().add(getChoose().toUpperCase());
 
                 seatSessionBean.inputChosenE(schedule, choose.toUpperCase());
-
+                checkInRecordSessionBean.addSeat(booking, choose.toUpperCase());
+                boardingPassSessionBean.addSeat(booking, choose.toUpperCase());
             } else if (getClasstype().equals("Business") && Integer.parseInt(getChoose().substring(1)) < 11) {
                 getB777_200seatArrange().set(getB777_200seatArrange().indexOf("\uD83D\uDCBA" + getChoose().toUpperCase()), "\n" + "\u26D4" + "\n" + getChoose().toUpperCase());
 
                 getOccupied().add(getChoose().toUpperCase());
 
                 seatSessionBean.inputChosenB(schedule, choose.toUpperCase());
-
+                checkInRecordSessionBean.addSeat(booking, choose.toUpperCase());
+                boardingPassSessionBean.addSeat(booking, choose.toUpperCase());
             } else {
                 message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "please choose the correct class", "");
                 FacesContext.getCurrentInstance().addMessage(null, message);
@@ -398,14 +414,18 @@ public class SeatManagedBean {
 
                 getOccupied().add(getChoose().toUpperCase());
                 seatSessionBean.inputChosenE(schedule, choose.toUpperCase());
-
+                checkInRecordSessionBean.addSeat(booking, choose.toUpperCase());
+                boardingPassSessionBean.addSeat(booking, choose.toUpperCase());
+                
             } else if (getClasstype().equals("Business") && Integer.parseInt(getChoose().substring(1)) < 9) {
                 getB777_200ERseatArrange().set(getB777_200ERseatArrange().indexOf("\uD83D\uDCBA" + getChoose().toUpperCase()), "\n" + "\u26D4" + "\n" + getChoose().toUpperCase());
 
                 getOccupied().add(getChoose().toUpperCase());
 
                 seatSessionBean.inputChosenB(schedule, choose.toUpperCase());
-
+                checkInRecordSessionBean.addSeat(booking, choose.toUpperCase());
+                boardingPassSessionBean.addSeat(booking, choose.toUpperCase());
+                
             } else {
                 message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "please choose the correct class", "");
                 FacesContext.getCurrentInstance().addMessage(null, message);
@@ -526,20 +546,26 @@ public class SeatManagedBean {
 
                 getOccupied().add(getChoose().toUpperCase());
                 seatSessionBean.inputChosenE(schedule, choose.toUpperCase());
-
+                checkInRecordSessionBean.addSeat(booking, choose.toUpperCase());
+                boardingPassSessionBean.addSeat(booking, choose.toUpperCase());
+                
             } else if (getClasstype().equals("Business") && Integer.parseInt(getChoose().substring(1)) > 2 && Integer.parseInt(getChoose().substring(1)) < 12) {
                 getB777_300seatArrange().set(getB777_300seatArrange().indexOf("\uD83D\uDCBA" + getChoose().toUpperCase()), "\n" + "\u26D4" + "\n" + getChoose().toUpperCase());
 
                 getOccupied().add(getChoose().toUpperCase());
                 seatSessionBean.inputChosenB(schedule, choose.toUpperCase());
-
+                checkInRecordSessionBean.addSeat(booking, choose.toUpperCase());
+                boardingPassSessionBean.addSeat(booking, choose.toUpperCase());
+                
             } else if (getClasstype().equals("First Class") && Integer.parseInt(getChoose().substring(1)) < 3) {
                 getB777_300seatArrange().set(getB777_300seatArrange().indexOf("\uD83D\uDCBA" + getChoose().toUpperCase()), "\n" + "\u26D4" + "\n" + getChoose().toUpperCase());
 
                 getOccupied().add(getChoose().toUpperCase());
 
                 seatSessionBean.inputChosenF(schedule, choose.toUpperCase());
-
+                checkInRecordSessionBean.addSeat(booking, choose.toUpperCase());
+                boardingPassSessionBean.addSeat(booking, choose.toUpperCase());
+                
             } else {
                 message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "please choose the correct class", "");
                 FacesContext.getCurrentInstance().addMessage(null, message);
@@ -634,20 +660,26 @@ public class SeatManagedBean {
 
                 getOccupied().add(getChoose().toUpperCase());
                 seatSessionBean.inputChosenE(schedule, choose.toUpperCase());
-
+                checkInRecordSessionBean.addSeat(booking, choose.toUpperCase());
+                boardingPassSessionBean.addSeat(booking, choose.toUpperCase());
+                
             } else if (getClasstype().equals("Business") && Integer.parseInt(getChoose().substring(1)) > 1 && Integer.parseInt(getChoose().substring(1)) < 10) {
                 getB777_300ERseatArrange().set(getB777_300ERseatArrange().indexOf("\uD83D\uDCBA" + getChoose().toUpperCase()), "\n" + "\u26D4" + "\n" + getChoose().toUpperCase());
 
                 getOccupied().add(getChoose().toUpperCase());
 
                 seatSessionBean.inputChosenB(schedule, choose.toUpperCase());
-
+                checkInRecordSessionBean.addSeat(booking, choose.toUpperCase());
+                boardingPassSessionBean.addSeat(booking, choose.toUpperCase());
+                
             } else if (getClasstype().equals("First Class") && Integer.parseInt(getChoose().substring(1)) < 2) {
                 getB777_300ERseatArrange().set(getB777_300ERseatArrange().indexOf("\uD83D\uDCBA" + getChoose().toUpperCase()), "\n" + "\u26D4" + "\n" + getChoose().toUpperCase());
 
                 getOccupied().add(getChoose().toUpperCase());
                 seatSessionBean.inputChosenF(schedule, choose.toUpperCase());
-
+                checkInRecordSessionBean.addSeat(booking, choose.toUpperCase());
+                boardingPassSessionBean.addSeat(booking, choose.toUpperCase());
+                
             } else {
                 message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "please choose the correct class", "");
                 FacesContext.getCurrentInstance().addMessage(null, message);

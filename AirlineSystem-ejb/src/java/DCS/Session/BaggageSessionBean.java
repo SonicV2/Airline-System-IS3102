@@ -29,11 +29,56 @@ public class BaggageSessionBean implements BaggageSessionBeanLocal {
     private static int tagNumber = 12345;
     
     
-    
+    @Override
+    public void addExtraBaggage(Booking booking, double baggageWeight, double extra) {
+        List<Baggage> baggages = booking.getBaggages();
+
+        if (baggages.isEmpty()) {
+            Baggage baggage = new Baggage();
+            baggage.createBaggage(baggageWeight);
+
+            baggages.add(baggage);
+            booking.setBaggages(baggages);
+
+            baggage.setBooking(booking);
+            baggage.setBaggageStatus(extra+"");
+
+            //em.merge(booking);
+            BaggageTag bagTag = new BaggageTag();
+            String arrivalCity = findArrivalCityIATA(booking);
+            generateTagNumber();
+
+            bagTag.create(tagNumber + "", booking.getFlightNo(), booking.getFlightDate(), arrivalCity, booking.getServiceType());
+            baggage.setBaggageTag(bagTag);
+            baggage.setBaggageStatus("Confrimed(Overweight)");
+            em.merge(baggage);
+        } else {
+            Baggage baggage = new Baggage();
+            baggage.createBaggage(baggageWeight);
+
+            baggages.add(baggage);
+            booking.setBaggages(baggages);
+
+            baggage.setBooking(booking);
+            baggage.setBaggageStatus(extra+"");
+            
+            BaggageTag bagTag = new BaggageTag();
+            String arrivalCity = findArrivalCityIATA(booking);
+            generateTagNumber();
+
+            bagTag.create(tagNumber + "", booking.getFlightNo(), booking.getFlightDate(), arrivalCity, booking.getServiceType());
+            baggage.setBaggageTag(bagTag);
+             baggage.setBaggageStatus("Confrimed(Overweight)");
+            em.merge(baggage);
+            em.flush();
+
+        }
+
+    }
+
     @Override
     public String addBaggage(Booking booking, Double baggageWeight, Double totalAllowedWeights) {
 
-        
         double weights = retrieveTotalBaggageWeights(booking);
 
         if ((weights + baggageWeight) > totalAllowedWeights) {
@@ -45,46 +90,39 @@ public class BaggageSessionBean implements BaggageSessionBeanLocal {
         if (baggages.isEmpty()) {
             Baggage baggage = new Baggage();
             baggage.createBaggage(baggageWeight);
-            
+
             baggages.add(baggage);
             booking.setBaggages(baggages);
-            
+
             baggage.setBooking(booking);
-         
+
             //em.merge(booking);
-           
-            
             BaggageTag bagTag = new BaggageTag();
             String arrivalCity = findArrivalCityIATA(booking);
             generateTagNumber();
-            
-           
-            
+
             bagTag.create(tagNumber + "", booking.getFlightNo(), booking.getFlightDate(), arrivalCity, booking.getServiceType());
             baggage.setBaggageTag(bagTag);
-            em.merge(booking);
+            baggage.setBaggageStatus("Confrimed");
+            em.merge(baggage);
             return "good";
         } else {
             Baggage baggage = new Baggage();
             baggage.createBaggage(baggageWeight);
-           
-            
+
             baggages.add(baggage);
             booking.setBaggages(baggages);
-            
-            baggage.setBooking(booking);
-         
 
-             
+            baggage.setBooking(booking);
+
             BaggageTag bagTag = new BaggageTag();
             String arrivalCity = findArrivalCityIATA(booking);
             generateTagNumber();
-            
-           
-            
+
             bagTag.create(tagNumber + "", booking.getFlightNo(), booking.getFlightDate(), arrivalCity, booking.getServiceType());
             baggage.setBaggageTag(bagTag);
-            em.merge(booking);
+            baggage.setBaggageStatus("Confrimed");
+            em.merge(baggage);
             em.flush();
             return "good";
 
@@ -94,8 +132,8 @@ public class BaggageSessionBean implements BaggageSessionBeanLocal {
 
     @Override
     public List<Baggage> retrieveAllBaggages(Booking booking) {
-        em.flush();     
-        List<Baggage> baggages =booking.getBaggages();
+        em.flush();
+        List<Baggage> baggages = booking.getBaggages();
         return baggages;
     }
 
@@ -135,7 +173,7 @@ public class BaggageSessionBean implements BaggageSessionBeanLocal {
         }
         return null;
     }
-    
+
     @Override
     public double calcualtePenalty(String departure, String destination, double allowed, double totalWeight) {
         double exceed = (totalWeight - allowed);
@@ -143,12 +181,12 @@ public class BaggageSessionBean implements BaggageSessionBeanLocal {
         double penalty = 0.0;
         String dept = bandSearch(departure);
         System.out.println("AAAAAA dept" + dept);
-        
+
         String dest = bandSearch(destination);
-         System.out.println("AAAAAA dest" + dest);
-         
+        System.out.println("AAAAAA dest" + dest);
+
         if (departure.equals("Singapore")) {
-             System.out.println("AAAAAA in");
+            System.out.println("AAAAAA in");
             if (dest.equals("band1")) {
                 penalty += exceed * 8.0;
             } else if (dest.equals("band2")) {
@@ -209,6 +247,7 @@ public class BaggageSessionBean implements BaggageSessionBeanLocal {
 
         return penalty;
     }
+
     @Override
     public String bandSearch(String city) {
         String band = "";
@@ -221,7 +260,7 @@ public class BaggageSessionBean implements BaggageSessionBeanLocal {
             "Uzbekistan", "Tajikistan", "Russia"};
 
         String[] band3 = {"Japan", "Korea", "South West Pacific", "Guam", "Marshall Islands", "Micronesia", "Northern Mariana Islands", "Palau",
-            "Timor Leste", "Middle East", "Australia","New Zealand"};
+            "Timor Leste", "Middle East", "Australia", "New Zealand"};
 
         String[] band4 = {"Denmark", "Finland", "Iceland", "Ireland", "Lithuania", " Norway", "United Kingdom", "Greece",
             "Italy", "Spain", "Germany", "France", " Netherlands", "Switzerland", "United States", "South Africa"};
@@ -298,5 +337,3 @@ public class BaggageSessionBean implements BaggageSessionBeanLocal {
         return 0;
     }
 }
-
-
