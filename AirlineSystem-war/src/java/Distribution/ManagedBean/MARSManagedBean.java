@@ -35,6 +35,7 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import org.primefaces.event.SelectEvent;
 
 /**
  *
@@ -843,7 +844,12 @@ public class MARSManagedBean {
         }
 
     }
-
+    public void timeframeEndChanged(SelectEvent event){
+        setDepartureDate((Date)event.getObject());
+        System.out.println(":::managedbean departure date:::" +departureDate);
+    }
+            
+    
     public String payment() {
 
         for (int i = 0; i < passengerList.size(); i++) {

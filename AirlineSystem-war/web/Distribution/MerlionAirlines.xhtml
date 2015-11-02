@@ -187,14 +187,23 @@ function showLoader(){
                                                                         <div class="book_date">
 
                                                                             <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
-                                                                            <p:calendar id="button" value="#{mARSManagedBean.departureDate}" navigator="true" pattern="yyyy-MMM-dd" mindate="#{mARSManagedBean.systemDate}" onchange="#{mARSManagedBean.setDepartureDate(departureDate)}"/>
+                                                                            <p:calendar id="frmD" value="#{mARSManagedBean.departureDate}" navigator="true" pattern="yyyy-MMM-dd" mindate="#{mARSManagedBean.systemDate}" >
+<!--                                                                                <p:ajax event="dateSelect" update="toD"/>
+                                                                                <p:ajax event="change" update="toD"/>-->
+<!--                                                                                <f:ajax event="change" execute="@this" render="toD"/>-->
+                                                                            </p:calendar>
                                                                         </div>		
                                                                     </li>
                                                                     <li class="span1_of_1 left">
                                                                         <h5>Return</h5>
                                                                         <div class="book_date">
                                                                             <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
-                                                                            <p:calendar id="restricted" value="#{mARSManagedBean.returnDate}" navigator="true" pattern="yyyy-MMM-dd" mindate="#{mARSManagedBean.departureDate}"/>
+<!--                                                                            <h:outputText value="#{mARSManagedBean.departureDate}" id="tooD"/>-->
+
+                                                                            <p:calendar id="tooD" value="#{mARSManagedBean.returnDate}" navigator="true" pattern="yyyy-MMM-dd" mindate="#{mARSManagedBean.departureDate}"/>
+<!--                                                                            <p:ajax event="dateSelect" update="frmD"></p:ajax>
+                                                                            <p:ajax event="change" update="frmD"/>
+                                                                            </p:calendar>-->
                                                                         </div>					
                                                                     </li>
                                                                     <li class="span1_of_1 left adult"> 
