@@ -36,7 +36,7 @@ public class Booking implements Serializable {
     private String flightNo;
     @Temporal(TemporalType.TIMESTAMP)
     private Date flightDate;
-    private String bookingStatus;
+    private String bookingStatus;  // will change to accept when checked in
     private String classCode;
     private String serviceType;
     
@@ -58,10 +58,10 @@ public class Booking implements Serializable {
     @ManyToOne
     private PNR pnr;
     
-    private double totalWeightAllowed;
-    private int totalNumBaggeAlloewd;
+    private String seatNumber;   // seat number
+    private String field;    //for back up usage
     
-   
+   public Booking(){}
     
     public void YQcreateBooking(String serviceType, 
             SeatAvailability seatAvail){
@@ -231,13 +231,6 @@ public class Booking implements Serializable {
         return baggages;
     }
 
-    public double getTotalWeightAllowed() {
-        return totalWeightAllowed;
-    }
-
-    public int getTotalNumBaggeAlloewd() {
-        return totalNumBaggeAlloewd;
-    }
 
     public void setTravellerTitle(String travellerTitle) {
         this.travellerTitle = travellerTitle;
@@ -283,14 +276,23 @@ public class Booking implements Serializable {
         this.baggages = baggages;
     }
 
-    public void setTotalWeightAllowed(double totalWeightAllowed) {
-        this.totalWeightAllowed = totalWeightAllowed;
+    public String getSeatNumber() {
+        return seatNumber;
     }
 
-    public void setTotalNumBaggeAlloewd(int totalNumBaggeAlloewd) {
-        this.totalNumBaggeAlloewd = totalNumBaggeAlloewd;
+    public void setSeatNumber(String seatNumber) {
+        this.seatNumber = seatNumber;
+    }
+
+    public String getField() {
+        return field;
+    }
+
+    public void setField(String field) {
+        this.field = field;
     }
    
+    
     
     
 }

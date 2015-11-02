@@ -7,6 +7,7 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 
     <h:head>
+        <p:growl id="growl" sticky="true" showDetail="true"/>
 
         <title>Add Baggage</title>
     </h:head>
@@ -27,18 +28,22 @@
                 &nbsp; &nbsp;
                 <h:commandButton disabled="true" value="Boarding Time: #{searchBookingManagedBean.boardingTime}"/>
                 &nbsp; &nbsp;
-                <h:commandButton disabled="true" value="Total Weight Allowed: #{searchBookingManagedBean.totalWeightAllowed}"/>
+                <h:commandButton disabled="true" value="Total Weight Allowed: #{searchBookingManagedBean.totalWeightAllowed} KG"/>
 
             </div>
+
 
             <p:dataList value="#{baggageManagedBean.allBaggage}" var="bag" type="ordered">
                 <f:facet name="header">
                     Added Baggage
-                </f:facet>
-                <h:outputLabel value="BaggageID"/>
-                #{bag.id} 
+                    ( #{baggageManagedBean.totalweight} KG)
+
+                </f:facet> 
+
                 <h:outputLabel value="BaggageWeight"/>
                 #{bag.baggageWeight}
+
+
             </p:dataList>
 
             <br /> <br />
@@ -46,11 +51,13 @@
             <h:inputText value="#{baggageManagedBean.addBagWeight}" />
 
             <br />
-            <h:commandButton value="Add Baggage" actionListener="#{baggageManagedBean.addBaggage}"/>
-
-        </h:form>   
-
-
+            <h:commandButton value="Add Baggage" actionListener="#{baggageManagedBean.addBaggage}"  />
+            <h:commandButton value="update" action="AddBaggage.xhtml"/>
+            
+            <h:commandButton value="Pay extra weight" action="PayExtraWeight.xhtml" actionListener="#{baggageManagedBean.calculateExtra}"  />
+            
+            <h:commandButton value="Proceed" action="GenerateBaggageTag.xhtml"/>
+        </h:form>
     </h:body>
 </html>
 

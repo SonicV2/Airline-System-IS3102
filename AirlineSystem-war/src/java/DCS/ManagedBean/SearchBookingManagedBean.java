@@ -7,6 +7,8 @@ package DCS.ManagedBean;
 
 import APS.Entity.Schedule;
 import DCS.Session.BaggageSessionBeanLocal;
+import DCS.Session.BoardingPassSessionBeanLocal;
+import DCS.Session.CheckInRecordSessionBeanLocal;
 import DCS.Session.PassengerNameRecordSessionBeanLocal;
 import Distribution.Entity.PNR;
 import Inventory.Entity.Booking;
@@ -30,12 +32,19 @@ import javax.faces.event.ActionEvent;
 @SessionScoped
 @ManagedBean
 public class SearchBookingManagedBean implements Serializable {
+    @EJB
+    private BoardingPassSessionBeanLocal boardingPassSessionBean;
+    @EJB
+    private CheckInRecordSessionBeanLocal checkInRecordSessionBean;
 
     @EJB
     private BaggageSessionBeanLocal baggageSessionBean;
 
     @EJB
     private PassengerNameRecordSessionBeanLocal passengerNameRecordSessionBean;
+    
+    
+    
 
     private String pnrNumber;
     private String passportNumber;
@@ -64,7 +73,9 @@ public class SearchBookingManagedBean implements Serializable {
             setReqBooking(b.get(0));
             setCheckinSchedule(passengerNameRecordSessionBean.getCheckinSchedule(pnrNumber, passportNumber));
             calBoardingTime();
-
+            
+            checkInRecordSessionBean.addBooking(reqBooking);
+            boardingPassSessionBean.addBooking(reqBooking);
             if (b.size() > 1) {
                 for (int i = 1; i < b.size(); i++) {
                     restSchedules.add(b.get(i).getSeatAvail().getSchedule());
@@ -72,6 +83,8 @@ public class SearchBookingManagedBean implements Serializable {
             }
         }
     }
+    
+
 
     public String retrieveFlightType() {
         retrieveClass();

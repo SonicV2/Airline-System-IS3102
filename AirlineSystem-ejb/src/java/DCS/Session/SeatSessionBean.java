@@ -74,10 +74,11 @@ public class SeatSessionBean implements SeatSessionBeanLocal {
             System.out.println("duplicated seat");
         }else{
             seats.add(seat);
-            
-
             schedule.setSelectedSeatsE(seats);
             em.merge(schedule);
+            
+            
+            
         }
     }
     @Override
