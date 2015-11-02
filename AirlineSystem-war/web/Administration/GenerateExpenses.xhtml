@@ -57,36 +57,44 @@ and open the template in the editor.
                                     <br></br>
 
                                     <h4>Airport Rental</h4>
-                                    <h:outputText id="rental" value="#{administrationManagedBean.airportRental}" />
+                                    <h:outputText id="rental" value="#{administrationManagedBean.airportRental}">
+                                        <f:convertNumber pattern="#,###.00" />
+                                    </h:outputText>
                                     <br></br>
 
                                     <h4>Airport Taxes</h4>
-                                    <h:outputText id="tax" value="#{administrationManagedBean.airportTaxes}" />
+                                    <h:outputText id="tax" value="#{administrationManagedBean.airportTaxes}">
+                                        <f:convertNumber pattern="#,###.00" />
+                                    </h:outputText>
                                     <br></br>
 
                                     <h4>Employee Salaries</h4>
-                                    <h:outputText id="salaries" value="#{administrationManagedBean.employeeSalaries}" />
+                                    <h:outputText id="salaries" value="#{administrationManagedBean.employeeSalaries}">
+                                        <f:convertNumber pattern="#,###.00" />
+                                    </h:outputText>
                                     <br></br>
 
                                     <h4>Commission Paid</h4>
-                                    <h:outputText id="commission" value="#{administrationManagedBean.commission}" />
+                                    <h:outputText id="commission" value="#{administrationManagedBean.commission}">
+                                        <f:convertNumber pattern="#,###.00" />
+                                    </h:outputText>
                                     <br></br>
 
                                     <h4>Aircrafts Acquired</h4>
-                                    <h:outputText id="aircraft" value="$#{administrationManagedBean.aircraftAcquired}">
-                                        <f:convertNumber pattern="#0.00" />
+                                    <h:outputText id="aircraft" value="#{administrationManagedBean.aircraftAcquired}">
+                                        <f:convertNumber pattern="#,###.00" />
                                     </h:outputText>
                                     <br></br>
 
                                     <h4>Fuel Costs</h4>
-                                    <h:outputText id="fuel" value="$#{administrationManagedBean.fuelCosts}">
-                                        <f:convertNumber pattern="#0.00" />
+                                    <h:outputText id="fuel" value="#{administrationManagedBean.fuelCosts}">
+                                        <f:convertNumber pattern="#,###.00" />
                                     </h:outputText>
                                     <br></br>
 
                                     <h4>Total Expenses</h4>
-                                    <h:outputText id="expenses" value="$#{administrationManagedBean.totalExpenses}">
-                                        <f:convertNumber pattern="#0.00" />
+                                    <h:outputText id="expenses" value="#{administrationManagedBean.totalExpenses}">
+                                        <f:convertNumber pattern="#,###.00" />
                                     </h:outputText>
                                     <br></br>
 
