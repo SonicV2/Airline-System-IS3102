@@ -129,12 +129,13 @@ and open the template in the editor.
                                     </h:inputText> 
 
                                     <p>Password</p>
+                                    <p:password class="form-control" validatorMessage="Password required 6 to 20 characters string with at least one digit, one upper case letter, one lower case letter and one special symbol" value="#{customerManagedBean.customerPassword}">
+                                        <f:validateRegex pattern="((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^*()-+]).{6,20})" />
+                                    </p:password>
 
-                                    <h:inputSecret id="password" required="true" requiredMessage="Please fill in your password!"  value="#{customerManagedBean.customerPassword}" />
-                                    <!--                                    <input type="password" name="password" id="password"/>-->
                                     <p>Confirm Password</p>
-                                    <h:inputSecret id="passwordconfirm" required="true" requiredMessage="Please confirmed password!"  value="#{customerManagedBean.customerConfirmedPassword}" />
-                                    <!--                                    <label for="checkbox"><input type="checkbox" id="checkbox"/> <i>Remember me</i></label>-->
+                                    <p:password class="form-control" value="#{customerManagedBean.customerConfirmedPassword}"/>
+
                                     <p>Home Address</p>
                                     <h:inputText id="homeadd" required="true" requiredMessage="Please fill in home address field!"  value="#{customerManagedBean.customerAddress}" />
                                     <div class="form-group">
@@ -144,7 +145,6 @@ and open the template in the editor.
                                         </div>
                                     </div>
                                     <h:commandButton class="pull-right" value="Register" action="#{customerManagedBean.addCustomer()}"/>
-                                    <!--                                    <input class="pull-right" type="submit" id="login" value="Register"/>-->
 
                                 </div>
                             </div>
