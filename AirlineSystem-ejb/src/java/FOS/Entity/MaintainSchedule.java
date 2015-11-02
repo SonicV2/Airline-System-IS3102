@@ -6,6 +6,7 @@
  */
 package FOS.Entity;
 
+import APS.Entity.Aircraft;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.CascadeType;
@@ -45,6 +46,9 @@ public class MaintainSchedule implements Serializable {
 
     @OneToOne(cascade={CascadeType.PERSIST})
     private AMaintainChecklist amaintainChecklist;
+    
+     @ManyToOne(cascade = {CascadeType.PERSIST})
+    private Aircraft aircraft;
     
     public MaintainSchedule() {
     }
