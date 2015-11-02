@@ -61,7 +61,7 @@ public class Booking implements Serializable {
     private double totalWeightAllowed;
     private int totalNumBaggeAlloewd;
     
-   
+   public Booking(){}
     
     public void YQcreateBooking(String serviceType, 
             SeatAvailability seatAvail){

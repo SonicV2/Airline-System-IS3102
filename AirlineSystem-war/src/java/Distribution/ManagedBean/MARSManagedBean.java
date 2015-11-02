@@ -197,6 +197,8 @@ public class MARSManagedBean {
     private PNRDisplay pnrDisplayList;
     private DiscountCode discountCode;
     private boolean discountCodeApplied;
+    private String refundStatus;
+    private int weightAllowed;
 
     @PostConstruct
     public void retrieve() {
@@ -295,8 +297,28 @@ public class MARSManagedBean {
         return displayReturnFlights();
 
     }
+    
+    public void setClassRules(){
+        if (serviceType.equals("Economy Saver") || serviceType.equals("Economy Basic")){
+            refundStatus = "Not refundable";
+            weightAllowed = 15;
+        }
+        else if (serviceType.equals("Economy Premium")){
+            refundStatus = "Refundable";
+            weightAllowed = 15;
+        }
+        else if (serviceType.equals("Business")){
+            refundStatus = "Refundable";
+            weightAllowed = 30;
+        }
+        else if (serviceType.equals("First Class")){
+            refundStatus = "Refundable";
+            weightAllowed = 45;
+        }
+    }
 
     public String displayDepartureFlights(Boolean oneWay) {
+        
         discountCodeApplied = false;
         discountCode = null;
         oneWayFlight = oneWay;
@@ -372,6 +394,7 @@ public class MARSManagedBean {
             selectedDatePrices.clear();
             directFlightSchedules = new ArrayList();
             setDirectFlightDuration("");
+            setClassRules();
 
             //Check whether there is direct flight
             if (distributionSessionBean.existsDirectFlight(originIATA, destinationIATA)) {
@@ -952,9 +975,11 @@ public class MARSManagedBean {
                     + "\nArrival Date: " + formatter.format(selectedSchedules.get(i).getEndDate()) + "\n\n";
             tempBody += flight;
         }
+        
+        
 
         setBody("Thank you for using Merlion Airlines. \n\nYour PNR Id: " + pnr.getPnrID() + "\nDate of Booking: " + formatter.format(pnr.getDateOfBooking())
-                + "\nNumber of Travellers: " + pnr.getNoOfTravellers() + "\nTotal Price Paid: " + pnr.getTotalPrice()
+                + "\nNumber of Travellers: " + pnr.getNoOfTravellers() + "\nTotal Baggage Allowance: " + (weightAllowed*pnr.getNoOfTravellers()) + "kgs\nBooking Refund Status: " + refundStatus + "\nTotal Price Paid: " + pnr.getTotalPrice()
                 + "\n\n" + tempBody + "\n\nYou can always view the details of your booking at our website.");
 
         emailSessionBean.sendEmail(email, getSubject(), getBody());
@@ -2118,6 +2143,22 @@ public class MARSManagedBean {
 
     public void setDiscountCode(DiscountCode discountCode) {
         this.discountCode = discountCode;
+    }
+
+    public String getRefundStatus() {
+        return refundStatus;
+    }
+
+    public void setRefundStatus(String refundStatus) {
+        this.refundStatus = refundStatus;
+    }
+
+    public int getWeightAllowed() {
+        return weightAllowed;
+    }
+
+    public void setWeightAllowed(int weightAllowed) {
+        this.weightAllowed = weightAllowed;
     }
     
 

@@ -1,0 +1,115 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <h:form class="col-md-6">
+            <div>
+                <h:commandButton disabled="true" value="Flight Number: #{searchBookingManagedBean.checkinSchedule.flight.flightNo}"/>
+                &nbsp; &nbsp;
+                <h:commandButton disabled="true" value="Flight Date: #{searchBookingManagedBean.checkinSchedule.startDate}"/>
+                &nbsp; &nbsp;
+                <h:commandButton disabled="true" value="Departure City: #{searchBookingManagedBean.checkinSchedule.flight.route.originCity}"/>
+                &nbsp; &nbsp;
+                <h:commandButton disabled="true" value="Departure City: #{searchBookingManagedBean.checkinSchedule.flight.route.destinationCity}"/>
+                &nbsp; &nbsp;
+                <h:commandButton disabled="true" value="Service Class: #{searchBookingManagedBean.serviceClass}"/>
+                &nbsp; &nbsp;
+                <h:commandButton disabled="true" value="Boarding Time: #{searchBookingManagedBean.boardingTime}"/>
+                &nbsp; &nbsp;
+                <h:commandButton disabled="true" value="Total Weight Allowed: #{searchBookingManagedBean.totalWeightAllowed} KG"/>
+
+            </div>
+
+            <h:outputLabel value="Departure Country: " /> 
+            #{baggageManagedBean.departure}
+            <br/>
+            <h:outputLabel value="Departure Country Band: " /> 
+            #{baggageManagedBean.banddepart}
+
+            <br/>
+
+            <h:outputLabel value="Arrival Country: " /> 
+            #{baggageManagedBean.destination}
+            <br/>
+            <h:outputLabel value="Arrival Country Band: " /> 
+            #{baggageManagedBean.bandarr}
+            <br/>
+            <h:outputLabel value="Extra Payment Needed: " /> 
+            USD #{baggageManagedBean.extraPayment}
+
+        </h:form>
+
+
+        <div>
+            <table >
+                <tr>
+                    <th>From/To</th>
+                    <th>Singapore</th> 
+                    <th>Band 1</th>
+                    <th>Band 2</th>
+                    <th>Band 3</th>
+                    <th>Band 4</th>
+
+                </tr>
+                <tr>
+                    <td>Singapore</td>
+                    <td> </td> 
+                    <td>USD 8/kg</td>
+                    <td>USD 12/kg</td>
+                    <td>USD 30/kg</td>
+                    <td>USD 55/kg</td>
+                </tr>
+                <tr>
+                    <td>Band 1</td>
+                    <td>USD 8/kg</td>
+                    <td>USD 16/kg</td>
+                    <td>USD 20/kg</td>
+                    <td>USD 38/kg</td>
+                    <td>USD 63/kg</td>
+                </tr>
+                <tr>
+                    <td>Band 2</td>
+                    <td>USD 12/kg</td>
+                    <td>USD 20/kg</td>
+                    <td>USD 24/kg</td>
+                    <td>USD 42/kg</td>
+                    <td>USD 67/kg</td>
+                </tr>
+                <tr>
+                    <td>Band 3</td>
+                    <td>USD 30/kg</td>
+                    <td>USD 38/kg</td>
+                    <td>USD 42/kg</td>
+                    <td>USD 60/kg</td>
+                    <td>USD 85/kg</td>
+                </tr>
+                <tr>
+                    <td>Band 4</td>
+                    <td>USD 55/kg</td>
+                    <td>USD 63/kg</td>
+                    <td>USD 67/kg</td>
+                    <td>USD 85/kg</td>
+                    <td>USD 110/kg</td>
+                </tr>
+            </table>
+
+        </div>    
+
+
+        <h:form>
+            <h:commandButton value="Make Payment" action="BaggagePayment.xhtml"/>
+
+        </h:form> 
+
+
+
+
+
+    </h:body>
+</html>
+
