@@ -1,0 +1,89 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:head>
+
+        <p:growl id="growl" sticky="true" showDetail="true"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <h:outputStylesheet library ="css"  name="bootstrap.css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
+        <h:outputStylesheet library="css" name="admindb.css" />
+        <h:outputStylesheet library="css" name="morrisjs/morris.css" /><!--
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js" />
+        -->
+        <title>Book Management</title>
+    </h:head>
+
+    <style>
+        .form-control {
+            display:inline;
+        }
+    </style>
+    <h:body>
+        <!--                    To add the same header on all dashboard pages  -->
+        <!--                <ui:include src="/CI/DashboardHeader.xhtml"/>-->
+        <!--To add the same sidebar on all dashboard pages -->
+        <ui:include src="/CI/DashboardSidebar.xhtml"/>
+
+
+        <div id="page-wrapper">
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2 class="page-header">Book Management</h2>
+                </div>
+
+
+                <div class="col-lg-12">
+                    <p:growl id="msgs" showDetail="true"/>
+                    <p:dataTable id="radioDT" var="book" value="#{bookkeepingManagedBean.acBooks}" style="margin-bottom:40px">
+
+                        <p:ajax event="rowEdit" listener="#{bookkeepingManagedBean.onRowEdit}" update=":form:msgs" />
+                        <p:ajax event="rowEditCancel" listener="#{bookkeepingManagedBean.onRowCancel}" update=":form:msgs" />
+
+                        <p:column headerText="Books of Accounting" sortBy="#{book.year}">
+                            <h:outputText value="#{book.year}" />
+                        </p:column>
+
+                        <p:column headerText="Books of Accounting">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:graphicImage class="fa fa-check" rendered="#{book.active}"/></f:facet>
+                                <f:facet name="input">
+                                    <p:selectBooleanCheckbox value="#{book.active}">
+                                        <p:ajax update="msgs" listener="#{bookkeepingManagedBean.checkBook(book.year)}" />
+                                    </p:selectBooleanCheckbox>
+                                </f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+                        <p:column headerText="Mark Current Book">
+                            <p:rowEditor />
+                        </p:column>
+                    </p:dataTable>
+                </div>
+
+                <h:form class="form col-md-8 center-block">
+                    <div class="form-group">                          
+                        <h:outputLabel class="col-md-4 control-label" value="Year: "/>
+                        <p:inputText id="tailNo" value="#{bookkeepingManagedBean.year}"  />
+                        <br/>
+                    </div>
+
+                    <div class="text-center">
+                        <h:commandButton class="btn btn-outline btn-success" value="Add Accounting Book" actionListener="#{bookkeepingManagedBean.createBookofAccounting}"/>
+                    </div>
+
+                    <br></br>
+                    <br></br>
+                </h:form>
+            </div>
+        </div>
+    </h:body>
+</html>

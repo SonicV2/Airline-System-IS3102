@@ -3,7 +3,6 @@ package APS.Session;
 import javax.ejb.Stateless;
 import APS.Entity.AircraftType;
 import APS.Entity.Aircraft;
-import APS.Entity.Schedule;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -30,32 +29,43 @@ public class FleetSessionBean implements FleetSessionBeanLocal {
     private AircraftType aircraftType;
 
     @Override
-    public void acquireAircraft(Date datePurchased, Date lastMaintained, String aircraftTypeId, String hub, String status) {
+    public void acquireAircraft(String tailNo, Date datePurchased, Date lastMaintained, String aircraftTypeId, String hub, String status) {
         aircraft = new Aircraft();
         aircraftType = new AircraftType();
         aircraftType = getAircraftType(aircraftTypeId);
         aircraft.setAircraftType(aircraftType);
-        aircraft.createAircraft(datePurchased, lastMaintained, hub, status);
+        aircraft.createAircraft(tailNo, datePurchased, lastMaintained, hub, status);
         aircraftType.getAircrafts().add(aircraft);
         em.persist(aircraft);
     }
 
     @Override
-    public void retireAircraft(Long tailNo) {
+    public void retireAircraft(String retireNo, String takeoverNo) {
 
-        aircraft = getAircraft(tailNo);
-        em.remove(aircraft);
+        Aircraft retire = getAircraft(retireNo);
+        Aircraft takeover = getAircraft(takeoverNo);
+        
+        //Move the schedules over to the takeover aircraft
+        for (int i = 0; i < retire.getSchedules().size(); i++) {
+            retire.getSchedules().get(i).setAircraft(takeover);
+            em.merge(retire.getSchedules().get(i));
+        }
+        
+        if(retire.getSchedules().isEmpty()){
+            System.out.println("LOLOLOL");
+        }
+        
+        takeover.setSchedules(retire.getSchedules());
+        retire.setSchedules(null);
+        em.merge(takeover);
 
-    }
-    
-    @Override
-    public void persistSchedule(Schedule schedule){
-        em.merge(schedule);
-    }
-    
-    @Override
-    public void persistAircraft(Aircraft aircraft){
-        em.merge(aircraft);
+        //Remove the aircraft from the list in aircraft type
+        List<Aircraft> temp1 = retire.getAircraftType().getAircrafts();
+        temp1.remove(retire);
+
+        retire.getAircraftType().setAircrafts(temp1);
+        retire.setAircraftType(null);
+        em.remove(retire);
     }
     
     // get aircraftType object when searching with aircraftTypeId
@@ -84,14 +94,14 @@ public class FleetSessionBean implements FleetSessionBeanLocal {
 
     // get aircraft object when searching with tail num
     @Override
-    public Aircraft getAircraft(Long tailNum) {
+    public Aircraft getAircraft(String tailNo) {
 
         Aircraft aircraft1 = new Aircraft();
 
         try {
 
             Query q = em.createQuery("SELECT a FROM Aircraft " + "AS a WHERE a.tailNo=:tailNo");
-            q.setParameter("tailNo", tailNum);
+            q.setParameter("tailNo", tailNo);
 
             List results = q.getResultList();
             if (!results.isEmpty()) {
@@ -106,7 +116,7 @@ public class FleetSessionBean implements FleetSessionBeanLocal {
         }
         return aircraft1;
     }
-    
+
     //retireve all the existing aircraft types
     @Override
     public List<AircraftType> retrieveAircraftTypes() {
@@ -130,7 +140,7 @@ public class FleetSessionBean implements FleetSessionBeanLocal {
 
         return allTypes;
     }
-    
+
     //retrieve all the aircrafts
     @Override
     public List<Aircraft> retrieveAircrafts() {
@@ -154,31 +164,30 @@ public class FleetSessionBean implements FleetSessionBeanLocal {
 
         return allAircrafts;
     }
-    
+
     //get all the reserve aircrafts
     @Override
-    public List<Aircraft> getReserveAircrafts(String status){
-        
+    public List<Aircraft> getReserveAircrafts(String status) {
+
         List<Aircraft> reserveAircrafts = new ArrayList<Aircraft>();
-        
-        try{
+
+        try {
             Query q = em.createQuery("SELECT a FROM Aircraft " + "AS a WHERE a.status=:status");
             q.setParameter("status", status);
-            
+
             List<Aircraft> results = q.getResultList();
-            if (!results.isEmpty()){
-                
+            if (!results.isEmpty()) {
+
                 reserveAircrafts = results;
-                
-            }else
-            {
+
+            } else {
                 reserveAircrafts = null;
                 System.out.println("no reserve aircraft!");
             }
-        }catch (EntityNotFoundException enfe) {
+        } catch (EntityNotFoundException enfe) {
             System.out.println("\nEntity not found error" + "enfe.getMessage()");
         }
-       
+
         return reserveAircrafts;
     }
 }

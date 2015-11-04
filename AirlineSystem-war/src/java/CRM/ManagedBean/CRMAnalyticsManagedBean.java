@@ -72,7 +72,7 @@ public class CRMAnalyticsManagedBean implements Serializable {
             description = "Recency Score is based on how many days since the customer last flown with Merlion Airlines compared to the current date. The lower the better,";
             csList = am.getRecency(from, to);
         } else if (type.equals("Frequency")) {
-            description = "Frequency Score is  the many times  the customer flew with Merlion Airlines in the last year. The higher the better.";
+            description = "Frequency Score is the amount of times the customer flew with Merlion Airlines in the last year. The higher the better.";
             csList = am.getFrequency(from, to);
         } else if (type.equals("Monetary")) {
             description = "Monetary Score is  the amount the customer spent with Merlion Airlines in the last year. The higher the better";

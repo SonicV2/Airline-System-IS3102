@@ -15,7 +15,7 @@ import javax.persistence.Query;
  * @author Yunna
  */
 @Stateless
-public class RouteSessionBean implements RouteSessionBeanLocal, RouteSessionBeanRemote {
+public class RouteSessionBean implements RouteSessionBeanLocal{
     @PersistenceContext(unitName = "AirlineSystem-ejbPU")
     private EntityManager em;
     
@@ -111,6 +111,7 @@ public class RouteSessionBean implements RouteSessionBeanLocal, RouteSessionBean
     }
     
     //Get all the existing locations
+    @Override
     public List<Location> retrieveLocations(){
         List<Location> allLocations = new ArrayList<Location>();
         
@@ -135,6 +136,7 @@ public class RouteSessionBean implements RouteSessionBeanLocal, RouteSessionBean
     }
     
     //Get all the existing locations from same country
+    @Override
     public List<Location> searchLocationsByCountry(String searchCountry){
         
         List<Location> allLocations = new ArrayList<Location>();
@@ -161,6 +163,7 @@ public class RouteSessionBean implements RouteSessionBeanLocal, RouteSessionBean
     }
     
     //Get all the existing locations from same city
+    @Override
     public List<Location> searchLocationsByCity(String searchCity){
         
         List<Location> allLocations = new ArrayList<Location>();
@@ -187,6 +190,7 @@ public class RouteSessionBean implements RouteSessionBeanLocal, RouteSessionBean
     }
     
     //Retrieve all the existing routes
+    @Override
     public List<Route> retrieveRoutes(){
         List<Route> allRoutes = new ArrayList<Route>();
         
@@ -211,7 +215,8 @@ public class RouteSessionBean implements RouteSessionBeanLocal, RouteSessionBean
     }
     
     //Calculate the distance between two airports, using latitudes and longtitudes
-    public static Double haversineDist(Double lat1, Double long1, Double lat2, Double long2) {
+    @Override
+    public Double haversineDist(Double lat1, Double long1, Double lat2, Double long2) {
     Double earthRadius = 6372.8; //kilometers
     Double dLat = Math.toRadians(lat2-lat1);
     Double dLong = Math.toRadians(long2-long1);

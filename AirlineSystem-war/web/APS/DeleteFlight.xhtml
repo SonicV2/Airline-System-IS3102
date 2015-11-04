@@ -20,10 +20,10 @@
     </h:head>
 
     <!--            To add the same header on all dashboard pages  
--->
-<!--    <ui:include src="/CI/dashboardHeader.xhtml"/>-->
-       <!--  To add the same sidebar on all dashboard pages -->  
-<!--    <ui:include src="/CI/dashboardSidebar.xhtml"/>-->
+    -->
+    <!--    <ui:include src="/CI/DashboardHeader.xhtml"/>-->
+    <!--  To add the same sidebar on all dashboard pages -->  
+    <ui:include src="/CI/DashboardSidebar.xhtml"/>
     <body>
         <div id="page-wrapper">
 
@@ -35,9 +35,9 @@
                 <div class="col-lg-12"> 
 
                     <h:form id="form">
-              
-                       <p:growl id="message" showDetail="true"/>
-                       <p:dataTable id="flights" var="flight" value="#{flightManagedBean.flights}" style="margin-bottom:20px" paginator="true" rows="10" widgetVar="flightsTable">
+
+                        <p:growl id="message" showDetail="true"/>
+                        <p:dataTable id="flights" var="flight" value="#{flightManagedBean.flights}" style="margin-bottom:20px" paginator="true" rows="10" widgetVar="flightsTable">
 
                             <f:facet name="header">
 
@@ -47,44 +47,37 @@
                                 </p:outputPanel>
                             </f:facet>
 
-                            <p:column filterBy="#{flight.flightNo}" headerText="Flight Number" filterMatchMode="contains">
+                            <p:column sortBy="#{flight.flightNo}" filterBy="#{flight.flightNo}" headerText="Flight Number" filterMatchMode="contains" style="width:7%">
                                 <h:outputText value="#{flight.flightNo}" />
                             </p:column>
 
-                            <p:column filterBy="#{flight.route.routeId}" headerText="Route ID" filterMatchMode="contains">
+                            <p:column filterBy="#{flight.route.routeId}" headerText="Route ID" filterMatchMode="contains" style="width:7%">
                                 <h:outputText value="#{flight.route.routeId}" />
                             </p:column>
 
-                            <p:column filterBy="#{flight.route.originCountry}" headerText="Origin Country" filterMatchMode="contains">
-                                <h:outputText value="#{flight.route.originCountry}" />
+                            <p:column filterBy="#{flight.route.originCity} #{flight.route.originCountry}" headerText="Origin" filterMatchMode="contains" style="width:14%">
+                                <h:outputText value="#{flight.route.originCity}, #{flight.route.originCountry}" />
                             </p:column>
 
-                            <p:column filterBy="#{flight.route.originCity}" headerText="Origin City" filterMatchMode="contains">
-                                <h:outputText value="#{flight.route.originCity}" />
+                            <p:column filterBy="#{flight.route.destinationCity} #{flight.route.destinationCountry}" headerText="Destination" filterMatchMode="contains" style="width:14%">
+                                <h:outputText value="#{flight.route.destinationCity}, #{flight.route.destinationCountry}" />
                             </p:column>
 
-                            <p:column filterBy="#{flight.route.destinationCountry}" headerText="Destination Country" filterMatchMode="contains">
-                                <h:outputText value="#{flight.route.destinationCountry}" />
-                            </p:column>
-
-                            <p:column filterBy="#{flight.route.destinationCity}" headerText="Destination City" filterMatchMode="contains">
-                                <h:outputText value="#{flight.route.destinationCity}" />
-                            </p:column>
-
-
-                            <p:column filterBy="#{flight.aircraftType.id}" headerText="Aircraft Type" filterMatchMode="contains">
+                            <p:column filterBy="#{flight.aircraftType.id}" headerText="Aircraft Type" filterMatchMode="contains" style="width:9%">
                                 <h:outputText value="#{flight.aircraftType.id}" />
                             </p:column>
-                            
-<!--                            only operations manager can delete flight-->
-<!--                            <p:column headerText="Delete Flight" style="width:60px" rendered="#{loginManagedBean.accessRightIDs.contains(11)}" >-->
-                            <p:column headerText="Delete Flight" style="width:60px">
-                                <h:commandLink onclick="if (!confirm('Do you really want to delete this flight? It will delete all the related schedules!')) {
-                                            return false;
-                                        }
-                                        ;
-                                        return true;
-                                        " action="#{flightManagedBean.deleteFlight(flight.flightNo)}"><i class="fa fa-trash-o"></i> </h:commandLink>
+
+                            <!--                            only operations manager can delete flight-->
+                            <p:column headerText="Delete Flight" style="width:7%" rendered="#{loginManagedBean.accessRightIDs.contains(11)}">
+
+                                <div align="center">
+                                    <h:commandLink onclick="if (!confirm('Do you really want to archieve this flight? It will remove some schedules!')) {
+                                                return false;
+                                            }
+                                            ;
+                                            return true;
+                                                   " action="#{flightManagedBean.deleteFlight(flight.flightNo)}"><i class="fa fa-trash-o"></i> </h:commandLink>
+                                </div>
                             </p:column>
 
                         </p:dataTable>

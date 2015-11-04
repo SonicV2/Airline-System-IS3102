@@ -190,23 +190,23 @@ public class RouteSessionBeanTest {
 //    /**
 //     * Test of haversineDist method, of class RouteSessionBean.
 //     */
-    @Test
-    public void testHaversineDist() throws Exception {
-        System.out.println("haversineDist");
-        Double lat1 = 100.0;
-        Double long1 = 200.0;
-        Double lat2 = 300.0;
-        Double long2 = 400.0;
-        String expResult = "15623.85";
-        Double result = RouteSessionBean.haversineDist(lat1, long1, lat2, long2);
-        String resultString = result.toString();
-        int index = resultString.indexOf(".") +3;
-        resultString = resultString.substring(0,index);
-        System.out.println(resultString);
-        assertEquals(expResult, resultString);       
-        // TODO review the generated test code and remove the default call to fail.
-    }
-    
+//    @Test
+//    public void testHaversineDist() throws Exception {
+//        System.out.println("haversineDist");
+//        Double lat1 = 100.0;
+//        Double long1 = 200.0;
+//        Double lat2 = 300.0;
+//        Double long2 = 400.0;
+//        String expResult = "15623.85";
+//        Double result = RouteSessionBean.haversineDist(lat1, long1, lat2, long2);
+//        String resultString = result.toString();
+//        int index = resultString.indexOf(".") +3;
+//        resultString = resultString.substring(0,index);
+//        System.out.println(resultString);
+//        assertEquals(expResult, resultString);       
+//        // TODO review the generated test code and remove the default call to fail.
+//    }
+//    
     private RouteSessionBeanRemote lookup() 
     {
         try 

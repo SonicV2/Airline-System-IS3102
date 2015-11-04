@@ -20,13 +20,12 @@ import javax.ejb.Schedules;
 @Local
 public interface FleetSessionBeanLocal {
 
-    public void acquireAircraft(Date datePurchased, Date lastMaintained, String aircraftTypeId, String hub, String status);
-    public void retireAircraft(Long tailNo);
+    public void acquireAircraft(String tailNo, Date datePurchased, Date lastMaintained, String aircraftTypeId, String hub, String status);
+    public void retireAircraft(String retireNo, String takeoverNo);
     public AircraftType getAircraftType(String aircraftTypeId);
-    public Aircraft getAircraft(Long tailNum);
+    public Aircraft getAircraft(String tailNum);
     public List<AircraftType> retrieveAircraftTypes();
     public List<Aircraft> retrieveAircrafts();
     public List<Aircraft> getReserveAircrafts(String status);
-    public void persistSchedule(Schedule schedule);
-    public void persistAircraft(Aircraft aircraft);
+
 }
