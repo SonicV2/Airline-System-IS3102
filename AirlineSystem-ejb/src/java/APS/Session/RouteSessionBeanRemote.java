@@ -16,15 +16,16 @@ import javax.ejb.Remote;
  */
 @Remote
 public interface RouteSessionBeanRemote {
-    public void addRoute(String origin, String destination);
+    public String addRoute(String origin, String destination);
     public Location findLocation(String location);
 
     public Route getRoute(Long id);
 
-    public void deleteRoute(Long id);
+    public String deleteRoute(Long id);
     public List<Location> retrieveLocations();
     public List<Route> retrieveRoutes();
     public Location getLocation(String country1);
     public List<Location> searchLocationsByCountry(String searchCountry);
     public List<Location> searchLocationsByCity(String searchCity);
+    public Double haversineDist(Double lat1, Double long1, Double lat2, Double long2);
 }

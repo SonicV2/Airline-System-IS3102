@@ -7,19 +7,16 @@ package APS.Session;
 
 import APS.Entity.Aircraft;
 import APS.Entity.AircraftType;
-import APS.Entity.Schedule;
 import java.util.Date;
 import java.util.List;
-import javax.ejb.Local;
-import javax.ejb.Schedules;
+import javax.ejb.Remote;
 
 /**
  *
- * @author Yunna
+ * @author YiQuan
  */
-@Local
-public interface FleetSessionBeanLocal {
-
+@Remote
+public interface FleetSessionBeanRemote {
     public String acquireAircraft(String tailNo, Date datePurchased, Date lastMaintained, String aircraftTypeId, String hub, String status);
     public String retireAircraft(String retireNo, String takeoverNo);
     public AircraftType getAircraftType(String aircraftTypeId);
@@ -27,5 +24,4 @@ public interface FleetSessionBeanLocal {
     public List<AircraftType> retrieveAircraftTypes();
     public List<Aircraft> retrieveAircrafts();
     public List<Aircraft> getReserveAircrafts(String status);
-
 }

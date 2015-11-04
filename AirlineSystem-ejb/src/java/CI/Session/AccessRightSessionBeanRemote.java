@@ -7,16 +7,14 @@ package CI.Session;
 
 import CI.Entity.AccessRight;
 import java.util.List;
-import javax.ejb.Local;
+import javax.ejb.Remote;
 
 /**
  *
- * @author Yuqing
+ * @author YiQuan
  */
-@Local
-public interface AccessRightSessionBeanLocal {
-    
+@Remote
+public interface AccessRightSessionBeanRemote {
     public String addAccessRight(String accessRightName);
     public List<AccessRight> retrieveAllAccessRight();
-    
 }

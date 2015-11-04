@@ -26,10 +26,11 @@ import static org.junit.Assert.*;
  */
 public class RouteSessionBeanTest {
     
+    private RouteSessionBeanRemote rm = lookup();
+    
     public RouteSessionBeanTest() {
     }
     
-    private RouteSessionBeanRemote rm = lookup();
     
     @BeforeClass
     public static void setUpClass() {
@@ -38,175 +39,85 @@ public class RouteSessionBeanTest {
     @AfterClass
     public static void tearDownClass() {
     }
+    
+    @Test
+    public void testDeleteRoute() throws Exception {
+        System.out.println("deleteRoute");
+        Long routeId = Long.valueOf("859");
+        String result = rm.deleteRoute(routeId);
+        assertEquals("Route Deleted",result);
+    }
+
+
+    @Test
+    public void testAddRoute() throws Exception {
+        System.out.println("addRoute");
+        String origin = "SIN";
+        String destination = "CPH";
+        String result = rm.addRoute(origin, destination);
+        assertEquals("Route Added",result);
+    }
+
+
+
+ 
+
+
+    @Test
+    public void testFindLocation() throws Exception {
+        System.out.println("getLocation");
+        String country1 = "SIN";
+        assertNotNull(rm.getLocation(country1));
+    }
+
+
+    @Test
+    public void testRetrieveLocations() throws Exception {
+        System.out.println("retrieveLocations");
+        assertNotNull(rm.retrieveLocations());
+    }
 
     /**
-     * Test of addRoute method, of class RouteSessionBean.
+     * Test of searchLocationsByCountry method, of class RouteSessionBean.
      */
-//    @Test
-//    public void testAddRoute() throws Exception {
-//        System.out.println("addRoute");
-//        String origin = "";
-//        String destination = "";
-//        EJBContainer container = javax.ejb.embeddable.EJBContainer.createEJBContainer();
-//        RouteSessionBeanLocal instance = (RouteSessionBeanLocal)container.getContext().lookup("java:global/classes/RouteSessionBean");
-//        instance.addRoute(origin, destination);
-//        container.close();
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of deleteRoute method, of class RouteSessionBean.
-//     */
-//    @Test
-//    public void testDeleteRoute() throws Exception {
-//        System.out.println("deleteRoute");
-//        Long routeId = null;
-//        EJBContainer container = javax.ejb.embeddable.EJBContainer.createEJBContainer();
-//        RouteSessionBeanLocal instance = (RouteSessionBeanLocal)container.getContext().lookup("java:global/classes/RouteSessionBean");
-//        instance.deleteRoute(routeId);
-//        container.close();
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of getRoute method, of class RouteSessionBean.
-//     */
-//    @Test
-//    public void testGetRoute() throws Exception {
-//        System.out.println("getRoute");
-//        Long id = null;
-//        EJBContainer container = javax.ejb.embeddable.EJBContainer.createEJBContainer();
-//        RouteSessionBeanLocal instance = (RouteSessionBeanLocal)container.getContext().lookup("java:global/classes/RouteSessionBean");
-//        Route expResult = null;
-//        Route result = instance.getRoute(id);
-//        assertEquals(expResult, result);
-//        container.close();
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of getLocation method, of class RouteSessionBean.
-//     */
-//    @Test
-//    public void testGetLocation() throws Exception {
-//        System.out.println("getLocation");
-//        String country1 = "";
-//        EJBContainer container = javax.ejb.embeddable.EJBContainer.createEJBContainer();
-//        RouteSessionBeanLocal instance = (RouteSessionBeanLocal)container.getContext().lookup("java:global/classes/RouteSessionBean");
-//        Location expResult = null;
-//        Location result = instance.getLocation(country1);
-//        assertEquals(expResult, result);
-//        container.close();
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of findLocation method, of class RouteSessionBean.
-//     */
-//    @Test
-//    public void testFindLocation() throws Exception {
-//        System.out.println("findLocation");
-//        String location = "";
-//        EJBContainer container = javax.ejb.embeddable.EJBContainer.createEJBContainer();
-//        RouteSessionBeanLocal instance = (RouteSessionBeanLocal)container.getContext().lookup("java:global/classes/RouteSessionBean");
-//        Location expResult = null;
-//        Location result = instance.findLocation(location);
-//        assertEquals(expResult, result);
-//        container.close();
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of retrieveLocations method, of class RouteSessionBean.
-//     */
-//    @Test
-//    public void testRetrieveLocations() throws Exception {
-//        System.out.println("retrieveLocations");
-//        EJBContainer container = javax.ejb.embeddable.EJBContainer.createEJBContainer();
-//        RouteSessionBeanLocal instance = (RouteSessionBeanLocal)container.getContext().lookup("java:global/classes/RouteSessionBean");
-//        List<Location> expResult = null;
-//        List<Location> result = instance.retrieveLocations();
-//        assertEquals(expResult, result);
-//        container.close();
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of searchLocationsByCountry method, of class RouteSessionBean.
-//     */
-//    @Test
-//    public void testSearchLocationsByCountry() throws Exception {
-//        System.out.println("searchLocationsByCountry");
-//        String searchCountry = "";
-//        EJBContainer container = javax.ejb.embeddable.EJBContainer.createEJBContainer();
-//        RouteSessionBeanLocal instance = (RouteSessionBeanLocal)container.getContext().lookup("java:global/classes/RouteSessionBean");
-//        List<Location> expResult = null;
-//        List<Location> result = instance.searchLocationsByCountry(searchCountry);
-//        assertEquals(expResult, result);
-//        container.close();
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of searchLocationsByCity method, of class RouteSessionBean.
-//     */
-//    @Test
-//    public void testSearchLocationsByCity() throws Exception {
-//        System.out.println("searchLocationsByCity");
-//        String searchCity = "";
-//        EJBContainer container = javax.ejb.embeddable.EJBContainer.createEJBContainer();
-//        RouteSessionBeanLocal instance = (RouteSessionBeanLocal)container.getContext().lookup("java:global/classes/RouteSessionBean");
-//        List<Location> expResult = null;
-//        List<Location> result = instance.searchLocationsByCity(searchCity);
-//        assertEquals(expResult, result);
-//        container.close();
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of retrieveRoutes method, of class RouteSessionBean.
-//     */
-//    @Test
-//    public void testRetrieveRoutes() throws Exception {
-//        System.out.println("retrieveRoutes");
-//        EJBContainer container = javax.ejb.embeddable.EJBContainer.createEJBContainer();
-//        RouteSessionBeanLocal instance = (RouteSessionBeanLocal)container.getContext().lookup("java:global/classes/RouteSessionBean");
-//        List<Route> expResult = null;
-//        List<Route> result = instance.retrieveRoutes();
-//        assertEquals(expResult, result);
-//        container.close();
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of haversineDist method, of class RouteSessionBean.
-//     */
-//    @Test
-//    public void testHaversineDist() throws Exception {
-//        System.out.println("haversineDist");
-//        Double lat1 = 100.0;
-//        Double long1 = 200.0;
-//        Double lat2 = 300.0;
-//        Double long2 = 400.0;
-//        String expResult = "15623.85";
-//        Double result = RouteSessionBean.haversineDist(lat1, long1, lat2, long2);
-//        String resultString = result.toString();
-//        int index = resultString.indexOf(".") +3;
-//        resultString = resultString.substring(0,index);
-//        System.out.println(resultString);
-//        assertEquals(expResult, resultString);       
-//        // TODO review the generated test code and remove the default call to fail.
-//    }
-//    
+    @Test
+    public void testSearchLocationsByCountry() throws Exception {
+        System.out.println("searchLocationsByCountry");
+        String searchCountry = "China";
+        assertNotNull(rm.searchLocationsByCountry(searchCountry));
+       
+    }
+
+  
+    /**
+     * Test of retrieveRoutes method, of class RouteSessionBean.
+     */
+    @Test
+    public void testRetrieveRoutes() throws Exception {
+        System.out.println("retrieveRoutes");
+        assertNotNull(rm.retrieveRoutes());
+    }
+
+    /**
+     * Test of haversineDist method, of class RouteSessionBean.
+     */
+    @Test
+    public void testHaversineDist() throws Exception {
+        System.out.println("haversineDist");
+        Double lat1 = 100.0;
+        Double long1 = 200.0;
+        Double lat2 = 300.0;
+        Double long2 = 400.0;
+        String expResult = "15623.85";
+        Double result = rm.haversineDist(lat1, long1, lat2, long2);
+        String resultString = result.toString();
+        int index = resultString.indexOf(".") +3;
+        resultString = resultString.substring(0,index);
+        System.out.println(resultString);
+        assertEquals(expResult, resultString);       
+        // TODO review the generated test code and remove the default call to fail.
+    }
+    
     private RouteSessionBeanRemote lookup() 
     {
         try 

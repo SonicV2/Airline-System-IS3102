@@ -21,7 +21,7 @@ import javax.persistence.Query;
  * @author Yanlong
  */
 @Stateless
-public class FlightSessionBean implements FlightSessionBeanLocal {
+public class FlightSessionBean implements FlightSessionBeanLocal, FlightSessionBeanRemote {
 
     @PersistenceContext(unitName = "AirlineSystem-ejbPU")
     private EntityManager em;
@@ -37,7 +37,7 @@ public class FlightSessionBean implements FlightSessionBeanLocal {
 
     //Add new flight entity
     @Override
-    public void addFlight(String flightNo, String flightDays, Double basicFare, Date startDateTime, Long routeId, boolean pastFlight) {
+    public String addFlight(String flightNo, String flightDays, Double basicFare, Date startDateTime, Long routeId, boolean pastFlight) {
         if (pastFlight) {
             flight = getFlight(flightNo);
         } else {
@@ -64,14 +64,16 @@ public class FlightSessionBean implements FlightSessionBeanLocal {
         } else {
             em.persist(flight);
         }
+      return "Flight Added";
     }
 
     //Delete or Archieve an existing flight entity depending on the situation
     @Override
-    public void deleteFlight(String flightNo, boolean isArchive) {
+    public String deleteFlight(String flightNo, boolean isArchive) {
         flight = getFlight(flightNo);
         Long archieveData;
-
+        Route route = flight.getRoute();
+        System.out.println(route.getDestinationCity());
         //search for Flight Num in Flight lists linked to the Route and remove the Flight
         List<Flight> temp = flight.getRoute().getFlights();
         temp.remove(flight);
@@ -94,6 +96,8 @@ public class FlightSessionBean implements FlightSessionBeanLocal {
         } else {
             em.remove(flight);
         }
+        
+        return "Flight Deleted";
     }
 
     //Delete schedule implementation when archiving flight

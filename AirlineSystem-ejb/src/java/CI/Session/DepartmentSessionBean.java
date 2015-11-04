@@ -20,18 +20,21 @@ import javax.persistence.Query;
  * @author HOULIANG
  */
 @Stateless
-public class DepartmentSessionBean implements DepartmentSessionBeanLocal{
+public class DepartmentSessionBean implements DepartmentSessionBeanLocal, DepartmentSessionBeanRemote{
 
     @PersistenceContext(unitName = "AirlineSystem-ejbPU")
     private EntityManager em;
 
     OrganizationUnit department;
 
-    public void addDepartment(String departName, String departLocation) {
+    public String addDepartment(String departName, String departLocation) {
         department = new OrganizationUnit();
         department.create(departName.toUpperCase(), departLocation.toUpperCase());
         em.persist(department);
+        return "Department Added";
     }
+    
+    
     
     @Override
     public String updateOrgUnit(OrganizationUnit oldOUnit, OrganizationUnit newOUnit){
@@ -45,7 +48,7 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal{
 
         em.merge(newOUnit);
         System.out.println("merged organization unit");
-        return "Updated successfully!";
+        return "Updated successfully";
     }
     
     @Override

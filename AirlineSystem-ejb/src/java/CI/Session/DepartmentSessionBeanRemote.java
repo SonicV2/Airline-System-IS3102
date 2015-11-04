@@ -8,14 +8,14 @@ package CI.Session;
 import CI.Entity.Employee;
 import CI.Entity.OrganizationUnit;
 import java.util.List;
-import javax.ejb.Local;
+import javax.ejb.Remote;
 
 /**
  *
- * @author HOULIANG
+ * @author YiQuan
  */
-@Local
-public interface DepartmentSessionBeanLocal {
+@Remote
+public interface DepartmentSessionBeanRemote {
     public String addDepartment(String departName, String departLocation);
     public List<String> retrive();
     public String searchEmployee(String staffID);
