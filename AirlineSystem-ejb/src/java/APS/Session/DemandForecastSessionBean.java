@@ -7,6 +7,7 @@ package APS.Session;
 
 import APS.Entity.Flight;
 import APS.Entity.Forecast;
+import APS.Entity.ForecastEntry;
 import APS.Entity.Route;
 import APS.Entity.Schedule;
 import Inventory.Entity.SeatAvailability;
@@ -41,6 +42,8 @@ public class DemandForecastSessionBean implements DemandForecastSessionBeanLocal
     private List<Schedule> schedules;
     private Forecast dForecast;
     private List<Forecast> forecasts;
+    private ForecastEntry forecastEntry;
+    private List<ForecastEntry> forecastEntries;
     private int[] demand;
     //Create comparator for sorting of Schedules according to starting time
     private Comparator<Schedule> comparator = new Comparator<Schedule>() {
@@ -62,7 +65,12 @@ public class DemandForecastSessionBean implements DemandForecastSessionBeanLocal
         schedule = new Schedule();
         schedules = new ArrayList<Schedule>();
         sa = new SeatAvailability();
-        dForecast = new Forecast();
+        forecastEntries = new ArrayList<ForecastEntry>();
+        if (isUpdate) {
+            dForecast = hasForecast(year, routeId);
+            forecastEntries = dForecast.getForecastEntry();
+        }
+        dForecast.createForecastReport(year);
         demand = new int[24]; //Historical demand for the past 24 full months
         double[] result = new double[36];
         TimeZone tz = TimeZone.getTimeZone("GMT+8:00"); //Set Timezone to Singapore
@@ -97,44 +105,77 @@ public class DemandForecastSessionBean implements DemandForecastSessionBeanLocal
             int totalBooked = 0;
             schedule = schedules.get(0); //Save current Schedule
             counter = findLastScheduleOfMonth(schedules, schedule.getStartDate());
+            forecastEntry = new ForecastEntry();
             //Add the demand for all schedules of a month
             for (int j = 0; j <= counter; j++) {
                 sa = schedules.get(j).getSeatAvailability();
                 totalBooked += sa.getBusinessBooked() + sa.getEconomyBasicBooked() + sa.getEconomyPremiumBooked() + sa.getEconomySaverBooked() + sa.getFirstClassBooked();
             }
             demand[i] = totalBooked;
+            if (isUpdate) {
+                forecastEntries.get(i).createEntry(schedule.getStartDate(), 0.0, Double.valueOf(totalBooked));
+            } else {
+                forecastEntry.createEntry(schedule.getStartDate(), 0.0, Double.valueOf(totalBooked));
+                forecastEntries.add(forecastEntry);
+            }
             totalBooked = 0;
             schedules = removeScheduleBeforeIndex(schedules, counter);
         }
 
         result = forecast(demand, period, 12);
+        tmp.set(Calendar.YEAR, year);
+        tmp.set(Calendar.DAY_OF_MONTH, 1);
+
+        //Create the forecast entries
+        for (int i = 0; i < 36; i++) {
+            forecastEntry = new ForecastEntry();
+
+            if (i > 23) {
+                tmp.set(Calendar.MONTH, i - 24);
+                if (isUpdate) {
+                    forecastEntry = forecastEntries.get(i);
+                    forecastEntry.createEntry(tmp.getTime(), result[i], 0.0);
+                } else {
+                    forecastEntry.createEntry(tmp.getTime(), result[i], 0.0);
+                    forecastEntries.add(forecastEntry);
+                }
+            } else {
+                forecastEntry = forecastEntries.get(i);
+                forecastEntry.setForecastValue(result[i]);
+            }
+            forecastEntry.setForecast(dForecast);
+            if (isUpdate) {
+                em.merge(forecastEntry);
+            } else {
+                em.persist(forecastEntry);
+            }
+        }
+
+        dForecast.setForecastEntry(forecastEntries);
 
         if (isUpdate) {
-            dForecast = hasForecast(year, routeId);
-            dForecast.createForecastReport(year, result);
             em.merge(dForecast);
             em.flush();
         } else {
-            dForecast.createForecastReport(year, result);
             dForecast.setRoute(route);
             em.persist(dForecast);
         }
-
-//        //Print Array
-//        System.out.println("demand:(");
-//        for (int i = 0; i < demand.length; i++) {
-//            System.out.print(demand[i] + ", ");
-//        }
-//        System.out.println(")");
-//
-//        //Print Array
-//        System.out.println("result:(");
-//        for (int i = 0; i < result.length; i++) {
-//            System.out.print(result[i] + ", ");
-//        }
-//        System.out.println(")");
     }
 
+//    @Override
+//    public void deleteForecastEntries(Long forecastId) {
+//        dForecast = getForecast(forecastId);
+//        forecastEntries = dForecast.getForecastEntry();
+//        System.out.println(forecastEntries.size());
+//        dForecast.setForecastEntry(null);
+//
+//        for (int i = 0; i < forecastEntries.size(); i++) {
+//            forecastEntries.get(i).setForecast(null);
+//            System.out.println(forecastEntries.get(i));
+//            em.remove(forecastEntries.get(i));
+//        }
+//        em.flush();
+//    }
     @Override
     public Forecast getForecast(Long forecastId) {
         dForecast = new Forecast();
@@ -209,10 +250,10 @@ public class DemandForecastSessionBean implements DemandForecastSessionBeanLocal
         route = getRoute(routeId);
         flights = route.getFlights();
         schedules = new ArrayList<Schedule>();
-        for(int i = 0; i<flights.size();i++){
+        for (int i = 0; i < flights.size(); i++) {
             schedules.addAll(flights.get(i).getSchedule());
         }
-        
+
         Collections.sort(schedules, comparator);//Sort the schedules from database
         TimeZone tz = TimeZone.getTimeZone("GMT+8:00"); //Set Timezone to Singapore
         Calendar tmp = Calendar.getInstance(tz);

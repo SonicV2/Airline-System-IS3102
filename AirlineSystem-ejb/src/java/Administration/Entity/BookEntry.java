@@ -17,20 +17,23 @@ import javax.persistence.ManyToOne;
  * @author Yanlong
  */
 @Entity
-public class Entry implements Serializable {
+public class BookEntry implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    private Double amount;
+    private boolean credit = false;
+    private boolean debit = false;    
     
-    private int amount;
+    @ManyToOne
+    private BookAccount account;
     
     @ManyToOne
     private Posting posting;
-    @ManyToOne
-    private Account account;
     
-    public void createEntry(int amount){
+    public void createEntry(Double amount){
         this.amount = amount;
     }
 
@@ -42,20 +45,12 @@ public class Entry implements Serializable {
         this.id = id;
     }
          
-    public Account getAccount() {
+    public BookAccount getAccount() {
         return account;
     }
 
-    public void setAccount(Account account) {
+    public void setAccount(BookAccount account) {
         this.account = account;
-    }
-
-    public int getAmount() {
-        return amount;
-    }
-
-    public void setAmount(int amount) {
-        this.amount = amount;
     }
 
     public Posting getPosting() {
@@ -64,6 +59,30 @@ public class Entry implements Serializable {
 
     public void setPosting(Posting posting) {
         this.posting = posting;
+    }
+    
+    public Double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Double amount) {
+        this.amount = amount;
+    }
+
+    public boolean isCredit() {
+        return credit;
+    }
+
+    public void setCredit(boolean credit) {
+        this.credit = credit;
+    }
+
+    public boolean isDebit() {
+        return debit;
+    }
+
+    public void setDebit(boolean debit) {
+        this.debit = debit;
     }
 
     @Override
@@ -76,10 +95,10 @@ public class Entry implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Entry)) {
+        if (!(object instanceof BookEntry)) {
             return false;
         }
-        Entry other = (Entry) object;
+        BookEntry other = (BookEntry) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }

@@ -31,7 +31,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author Yunna
  */
-@Named(value = "fleetManageBean")
+@Named(value = "fleetManagedBean")
 @ManagedBean
 @SessionScoped
 

@@ -31,11 +31,12 @@ public class BookingClass implements Serializable {
     private int baggage;
     private int millageAccru;
     private String season;
+    private boolean travelagent;
     
     
     public void createClass(String classcode, int pricePercent, int advancedSales
     , int percentSold, String serviceClass, boolean rebook, boolean cancel, 
-    int baggage, int millageAccru, String season){
+    int baggage, int millageAccru, String season, boolean travelagent){
         this.classcode= classcode;
         this.pricePercent = pricePercent;
         this.advancedSales = advancedSales;
@@ -46,7 +47,18 @@ public class BookingClass implements Serializable {
         this.baggage = baggage;
         this.millageAccru = millageAccru;
         this.season = season; 
+        this.travelagent = travelagent;
     }
+
+    public boolean isTravelagent() {
+        return travelagent;
+    }
+
+    public void setTravelagent(boolean travelagent) {
+        this.travelagent = travelagent;
+    }
+    
+    
     /**
      * @return the classcode
      */

@@ -18,9 +18,6 @@ import java.util.HashMap;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 
-
-
-
 /**
  *
  * @author YiQuan
@@ -44,67 +41,68 @@ public class CRMAnalyticsManagedBean implements Serializable {
     private HashMap<Integer, Integer> hm;
     private List<Customer> customerList;
     private String retentionRate;
-    private String description= "HiHi";
-
+    private String description = "HiHi";
 
     /**
      * Creates a new instance of CRMAnalyticsManagedBean
      */
     public CRMAnalyticsManagedBean() {
-  
+
     }
 
     public String retrieveCustomerList() {
-        if(to>0){
+        if (to > 100) {
             FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "The To Percentile Has To Be Less Than 100", "");
             FacesContext.getCurrentInstance().addMessage(null, msg);
-            return "RFM";
+            return "Index";
         }
-        
-        if (from>=to){
+
+        if (from >= to) {
             FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "The From Percentile Has To Be Less Than the To Percentile", "");
             FacesContext.getCurrentInstance().addMessage(null, msg);
-            return "RFM";
+            return "Index";
         }
-        
-        if(type.isEmpty()){
+
+        if (type.isEmpty()) {
             FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please Select Type of Score", "");
             FacesContext.getCurrentInstance().addMessage(null, msg);
+            return "Index";
         }
         if (type.equals("Recency")) {
+            description = "Recency Score is based on how many days since the customer last flown with Merlion Airlines compared to the current date. The lower the better,";
             csList = am.getRecency(from, to);
         } else if (type.equals("Frequency")) {
+            description = "Frequency Score is the amount of times the customer flew with Merlion Airlines in the last year. The higher the better.";
             csList = am.getFrequency(from, to);
         } else if (type.equals("Monetary")) {
+            description = "Monetary Score is  the amount the customer spent with Merlion Airlines in the last year. The higher the better";
             csList = am.getMonetary(from, to);
-        } else if (type.equals("Customer Lifetime Value")){
+        } else if (type.equals("Customer Lifetime Value")) {
+            description = "Customer Lifetime Value is a prediction of how valuable a customer is to Merlion Airlines";
             double retention = am.getRetentionRate();
             csList = am.getCLV(from, to, retention);
         }
         return "ViewListResults";
     }
-    
-    public String getHistogramArray()
-    {
+
+    public String getHistogramArray() {
         int size = csList.size();
-        String results=" var results = [";
+        String results = " var results = [";
         results += "['Customer', 'Score'],";
-     
-        for(int i= 0; i< size-1; i++){
+
+        for (int i = 0; i < size - 1; i++) {
             results += "[";
-            results += "'"+this.getName(i)+"'"+","+ this.getScore(i);
+            results += "'" + csList.get(i).getName() + "'" + "," + csList.get(i).getScore();
             results += "],";
         }
         results += "[";
-        results += "'"+this.getName(size-1)+"'"+","+ this.getScore(size-1);
+        results += "'" + csList.get(size - 1).getName() + "'" + "," + csList.get(size - 1).getScore();
         results += "]";
         results += "]";
         return results;
-        
-    }
-    
 
-    
+    }
+
     public void calculateAvg() {
         int size = csList.size();
         double totalScore = 0.0;
@@ -132,7 +130,7 @@ public class CRMAnalyticsManagedBean implements Serializable {
             array[i] = score.intValue();
         }
         hm = new HashMap<Integer, Integer>();
-        int max = 1, temp =0;
+        int max = 1, temp = 0;
         for (int i = 0; i < array.length; i++) {
             if (hm.get(array[i]) != null) {
                 int count = hm.get(array[i]);
@@ -146,45 +144,48 @@ public class CRMAnalyticsManagedBean implements Serializable {
                 hm.put(array[i], 1);
             }
         }
-        mode= temp;
+        mode = temp;
 
     }
 
-    public String calRecencyMMM() {     
-            csList = am.getRecency(0, 100);      
-        calculateAvg();
-        calculateMedian();
-        calculateMode();      
-        return "AnalyticsResults";
-    }
-    
-    public String calFrequencyMMM() {      
-            csList = am.getFrequency(0, 100);   
-        calculateAvg();
-        calculateMedian();
-        calculateMode();      
-        return "AnalyticsResults";
-    }
-    
-    public String calMonetaryMMM() {       
-            csList = am.getMonetary(0, 100);
-        calculateAvg();
-        calculateMedian();
-        calculateMode();      
-        return "AnalyticsResults";
-    }
-    
-    
-    
-    public String calCLVMMM() {
-        
+    public String calRecencyMMM() {
+        description = "Recency Score is based on how many days since the customer last flown with Merlion Airlines compared to the current date. The lower the better,";
+
         csList = am.getRecency(0, 100);
-        double retention= am.getRetentionRate()*100;
-        retentionRate = String.format("%1$,.2f", retention) + "%";
-        
         calculateAvg();
         calculateMedian();
-        calculateMode();      
+        calculateMode();
+        return "AnalyticsResults";
+    }
+
+    public String calFrequencyMMM() {
+        description = "Frequency Score is  the many times  the customer flew with Merlion Airlines in the last year. The higher the better.";
+
+        csList = am.getFrequency(0, 100);
+        calculateAvg();
+        calculateMedian();
+        calculateMode();
+        return "AnalyticsResults";
+    }
+
+    public String calMonetaryMMM() {
+        description = "Monetary Score is  the amount the customer spent with Merlion Airlines in the last year. The higher the better";
+        csList = am.getMonetary(0, 100);
+        calculateAvg();
+        calculateMedian();
+        calculateMode();
+        return "AnalyticsResults";
+    }
+
+    public String calCLVMMM() {
+        description = "Customer Lifetime Value is a prediction of how valuable a customer is to Merlion Airlines";
+        csList = am.getRecency(0, 100);
+        double retention = am.getRetentionRate() * 100;
+        System.out.println(retention);
+        retentionRate = String.format("%1$,.2f", retention) + "%";
+        calculateAvg();
+        calculateMedian();
+        calculateMode();
         return "CLVAnalyticsResults";
     }
 
@@ -195,24 +196,11 @@ public class CRMAnalyticsManagedBean implements Serializable {
     public void setRetentionRate(String retentionRate) {
         this.retentionRate = retentionRate;
     }
-    
-    
-    
-    public String retrieveLostCustomers(){
+
+    public String retrieveLostCustomers() {
+        description="Lost customers are customers who previously flew with Merlion Airlines but had not flown for with Merlion Airlines for a year or more.";
         customerList = am.getLostCustomers();
         return "GetLostCustomers";
-    }
-    
-    
-    public String getName(int index){
-        
-        return csList.get(index).getName();
-    }
-    public String getScore(int index){
-        
-        double score= csList.get(index).getScore();   
-        String result = String.format("%1$,.2f", score);
-        return result;
     }
 
     public String getDescription() {
@@ -222,8 +210,6 @@ public class CRMAnalyticsManagedBean implements Serializable {
     public void setDescription(String description) {
         this.description = description;
     }
-    
-    
 
     public List<CustomerScore> getCsList() {
         return csList;
@@ -256,7 +242,7 @@ public class CRMAnalyticsManagedBean implements Serializable {
     public void setCustomerList(List<Customer> customerList) {
         this.customerList = customerList;
     }
-    
+
     public int getTo() {
         return to;
     }
@@ -304,9 +290,5 @@ public class CRMAnalyticsManagedBean implements Serializable {
     public void setHm(HashMap<Integer, Integer> hm) {
         this.hm = hm;
     }
-    
-    
-
-    
 
 }

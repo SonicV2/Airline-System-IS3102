@@ -366,7 +366,7 @@ public class TravelAgencyManagedBean {
                     eachSchedule.setStartDate(distributionSessionBean.convertTimeZone(eachSchedule.getStartDate(), distributionSessionBean.getSingaporeTimeZone(), distributionSessionBean.getTimeZoneFromIata(eachSchedule.getFlight().getRoute().getOriginIATA())));
                     eachSchedule.setEndDate(distributionSessionBean.convertTimeZone(eachSchedule.getEndDate(), distributionSessionBean.getSingaporeTimeZone(), distributionSessionBean.getTimeZoneFromIata(eachSchedule.getFlight().getRoute().getDestinationIATA())));
 
-                    double priceForOne = pm.getPrice(pm.getClassCode(eachSchedule, serviceType, adults + children), eachSchedule);
+                    double priceForOne = pm.getPrice(pm.getClassCode(eachSchedule, serviceType, adults + children, true), eachSchedule);
                     selectedDatePrices.add(priceForOne);
 
                 }
@@ -400,7 +400,7 @@ public class TravelAgencyManagedBean {
 
                 for (i = 0; i < oneStopFlightSchedules.size(); i++) {
                     flightOption.set(i % 2, oneStopFlightSchedules.get(i));
-                    priceForOne += pm.getPrice(pm.getClassCode(oneStopFlightSchedules.get(i), serviceType, adults + children), oneStopFlightSchedules.get(i));
+                    priceForOne += pm.getPrice(pm.getClassCode(oneStopFlightSchedules.get(i), serviceType, adults + children, true), oneStopFlightSchedules.get(i));
                     if (i % 2 == 1) {
                         oneStopFlightDuration.add(distributionSessionBean.getTotalDurationForOneStop(flightOption.get(0), flightOption.get(1)));
                         oneStopFlightLayover.add(distributionSessionBean.getLayoverTime(flightOption.get(0), flightOption.get(1)));
@@ -508,7 +508,7 @@ public class TravelAgencyManagedBean {
             for (Schedule eachSchedule : directFlightSchedules) {
                 eachSchedule.setStartDate(distributionSessionBean.convertTimeZone(eachSchedule.getStartDate(), distributionSessionBean.getSingaporeTimeZone(), distributionSessionBean.getTimeZoneFromIata(eachSchedule.getFlight().getRoute().getOriginIATA())));
                 eachSchedule.setEndDate(distributionSessionBean.convertTimeZone(eachSchedule.getEndDate(), distributionSessionBean.getSingaporeTimeZone(), distributionSessionBean.getTimeZoneFromIata(eachSchedule.getFlight().getRoute().getDestinationIATA())));
-                double priceForOne = pm.getPrice(pm.getClassCode(eachSchedule, serviceType, adults + children), eachSchedule);
+                double priceForOne = pm.getPrice(pm.getClassCode(eachSchedule, serviceType, adults + children, true), eachSchedule);
                 selectedDatePrices.add(priceForOne);
             }
 
@@ -536,7 +536,7 @@ public class TravelAgencyManagedBean {
 
             for (i = 0; i < oneStopFlightSchedules.size(); i++) {
                 flightOption.set(i % 2, oneStopFlightSchedules.get(i));
-                priceForOne += pm.getPrice(pm.getClassCode(oneStopFlightSchedules.get(i), serviceType, adults + children), oneStopFlightSchedules.get(i));
+                priceForOne += pm.getPrice(pm.getClassCode(oneStopFlightSchedules.get(i), serviceType, adults + children, true), oneStopFlightSchedules.get(i));
                 if (i % 2 == 1) {
                     oneStopFlightDuration.add(distributionSessionBean.getTotalDurationForOneStop(flightOption.get(0), flightOption.get(1)));
                     oneStopFlightLayover.add(distributionSessionBean.getLayoverTime(flightOption.get(0), flightOption.get(1)));
@@ -651,7 +651,7 @@ public class TravelAgencyManagedBean {
 
         double priceForEachSchedule = 0;
         for (Schedule eachSelectedSchedule : selectedSchedules) {
-            priceForEachSchedule = pm.getPrice(pm.getClassCode(eachSelectedSchedule, serviceType, (adults + children)), eachSelectedSchedule);
+            priceForEachSchedule = pm.getPrice(pm.getClassCode(eachSelectedSchedule, serviceType, (adults + children), true), eachSelectedSchedule);
             totalSelectedPrice += (priceForEachSchedule * adults) + (priceForEachSchedule * 0.75 * children);
         }
         adultPrice = priceForEachSchedule;
@@ -717,7 +717,7 @@ public class TravelAgencyManagedBean {
         totalPriceWinsurance = totalSelectedPrice;
 
         for (Schedule eachSelectedSchedule : selectedSchedules) {
-            classCode = pm.getClassCode(eachSelectedSchedule, serviceType, (adults + children));
+            classCode = pm.getClassCode(eachSelectedSchedule, serviceType, (adults + children), true);
             priceForEachBooking = pm.getPrice(classCode, eachSelectedSchedule);
             setSeatAvail(eachSelectedSchedule.getSeatAvailability());
             setFlightNo(eachSelectedSchedule.getFlight().getFlightNo());

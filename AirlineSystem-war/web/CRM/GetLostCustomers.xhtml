@@ -9,6 +9,9 @@
         <title>View Customer List</title>
     </h:head>
     <h:body>
+        <p>
+        Lost Customers are customers who flew with MAS in the previous year but not in the current year.
+        </p>
         <h:form id="form">
             <p:growl id="msgs" showDetail="true"/>
 
@@ -29,7 +32,7 @@
                 </p:column>
                 
                  <p:column filterBy="#{customer.name}" headerText="Customer's Last Name" filterMatchMode="contains" style="width:10%">
-                    <h:outputText value="#{customer.firstName}" />
+                     <h:outputText value="#{customer.lastName}" />
                 </p:column>
                 
                 <p:column filterBy="#{customer.email}" headerText="Customer's Email" filterMatchMode="contains" style="width:10%">

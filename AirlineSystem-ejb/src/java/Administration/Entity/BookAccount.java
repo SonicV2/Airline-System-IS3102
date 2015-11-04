@@ -9,9 +9,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 /**
@@ -19,18 +21,21 @@ import javax.persistence.OneToMany;
  * @author Yanlong
  */
 @Entity
-public class Account implements Serializable {
+public class BookAccount implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long accountId;
     private String accountName;
 
     public enum Type {
 
-        ASSET(-1),
-        LIABILITY(1),
-        INCOME(1),
-        EXPENSE(-1);
+        ASSET(1),
+        LIABILITY(-1),
+        INCOME(-1),
+        EXPENSE(1),
+        EQUITY(-1);
 
         private int normalBalanceSign;
 
@@ -51,9 +56,12 @@ public class Account implements Serializable {
     }
 
     private Type type;
-    
+
     @OneToMany(mappedBy = "account")
-    private List<Entry> entries = new ArrayList<Entry>();
+    private List<BookEntry> entries = new ArrayList<BookEntry>();
+    
+    @ManyToOne
+    private AccountingBook acBook = new AccountingBook();
 
     public void createAccount(String accountName, Type type) {
 
@@ -61,15 +69,13 @@ public class Account implements Serializable {
         this.type = type;
     }
 
-//    public List<Entry> getEntries() {
-//        List<Entry> allEntries = new ArrayList<Entry>(entries);
-//
-//        for (Account a : subAccounts.values()) {
-//            allEntries.addAll(a.getEntries());
-//        }
-//
-//        return allEntries;
-//    }
+    public Long getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(Long accountId) {
+        this.accountId = accountId;
+    }
 
     public String getAccountName() {
         return accountName;
@@ -79,7 +85,6 @@ public class Account implements Serializable {
         this.accountName = accountName;
     }
 
-
     public Type getType() {
         return type;
     }
@@ -88,28 +93,26 @@ public class Account implements Serializable {
         this.type = type;
     }
 
-    public List<Entry> getEntries() {
+    public List<BookEntry> getEntries() {
         return entries;
     }
 
-    public void setEntries(List<Entry> entries) {
+    public void setEntries(List<BookEntry> entries) {
         this.entries = entries;
     }
-    
-//    public int getTrialBalance() {
-//        int balance = 0;
-//
-//        for (Entry e : getEntries()) {
-//            balance += e.getAmount();
-//        }
-//
-//        return balance;
-//    }
+
+    public AccountingBook getAcBook() {
+        return acBook;
+    }
+
+    public void setAcBook(AccountingBook acBook) {
+        this.acBook = acBook;
+    }
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 11 * hash + Objects.hashCode(this.accountName);
+        int hash = 7;
+        hash = 13 * hash + Objects.hashCode(this.accountId);
         return hash;
     }
 
@@ -121,8 +124,8 @@ public class Account implements Serializable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Account other = (Account) obj;
-        if (!Objects.equals(this.accountName, other.accountName)) {
+        final BookAccount other = (BookAccount) obj;
+        if (!Objects.equals(this.accountId, other.accountId)) {
             return false;
         }
         return true;
@@ -130,6 +133,6 @@ public class Account implements Serializable {
 
     @Override
     public String toString() {
-        return "Account{" + "accountName=" + accountName + '}';
+        return "Account{" + "accountId=" + accountId + '}';
     }
 }

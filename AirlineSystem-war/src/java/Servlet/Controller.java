@@ -8,7 +8,6 @@ package Servlet;
 import APS.Session.DemandForecastSessionBeanLocal;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
 import javax.annotation.Resource;
 import javax.ejb.EJB;
@@ -65,20 +64,33 @@ public class Controller extends HttpServlet {
 
             //Get the relevant information from the request sent
             int year = (int) request.getSession().getAttribute("YEAR");
-            long id = (long) request.getSession().getAttribute("ID");
+            Long id = (Long) request.getSession().getAttribute("ID");
             String origin = (String) request.getSession().getAttribute("ORIGIN");
-            String dest = (String) request.getSession().getAttribute("DEST");
-            double[] data = (double[]) request.getSession().getAttribute("DATA");
-            System.out.println(year + ", " + id + ", " + origin + ", " + dest);
+            String dest = (String) request.getSession().getAttribute("DEST");    
             response.setHeader("Content-Disposition", "attachment; filename=\"" + origin + "-" + dest + " " + year + " Demand Forcast.pdf\"");
             ServletOutputStream outputStream = response.getOutputStream();
+
+//            //Create a temporary table for the printing of the graph
+//            String tempTableName = "TEMPTTT";
+//            String query = "CREATE TEMPORARY TABLE " + tempTableName + " (MONTH int NOT NULL, "
+//                    + "DEMAND double, PRIMARY KEY (MONTH))";
+//            Class.forName("com.mysql.jdbc.Driver").newInstance();
+//            ResultSet rs = null;
+//            Statement stmt = null;
+//            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3307/AirlinesDB", "root", "password");
+//            stmt = connection.createStatement();
+//            stmt.executeUpdate(query);
+//            for (int i = 1; i <= 36; i++) {
+//                query = "INSERT INTO " + tempTableName + " VALUES (" + i + ", " + data[i - 1] + ")";
+//                stmt.executeUpdate(query);
+//            }
 
             //Set up the parameters
             HashMap parameters = new HashMap();
             parameters.put("IMAGEPATH", "http://localhost:8080/AirlineSystem-war/JasperReports/flower1.png");
-            parameters.put("YEAR", year);
-            parameters.put("ID", id);
-
+//            parameters.put("YEAR", year);
+            parameters.put("FORECASTID", 592337L);
+            System.out.println(reportStream + ", " + outputStream + ", " + airlineSystemDataSource.getConnection());
             //Generate the report
             JasperRunManager.runReportToPdfStream(reportStream, outputStream, parameters, airlineSystemDataSource.getConnection());
 

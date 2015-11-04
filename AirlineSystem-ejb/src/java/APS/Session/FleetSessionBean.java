@@ -3,7 +3,6 @@ package APS.Session;
 import javax.ejb.Stateless;
 import APS.Entity.AircraftType;
 import APS.Entity.Aircraft;
-import APS.Entity.Schedule;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;

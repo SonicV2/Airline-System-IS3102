@@ -22,7 +22,7 @@ import javax.faces.event.ActionEvent;
  *
  * @author Yanlong
  */
-@Named(value = "routeManageBean")
+@Named(value = "routeManagedBean")
 @ManagedBean
 @SessionScoped
 

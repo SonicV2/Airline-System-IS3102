@@ -8,38 +8,42 @@ package Administration.Entity;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 /**
  *
- * @author Family
+ * @author Yanlong
  */
 @Entity
 public class Posting implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    
+
     @Temporal(TemporalType.TIMESTAMP)
     private Date postingDate;
     private String memo;
-    
+
     @OneToMany(mappedBy = "posting")
-    private List<Entry> entries;
-    
-    public void createPosting(Date postingDate, String memo){
+    private List<BookEntry> entries;
+
+    @ManyToOne
+    private AccountingBook acBook = new AccountingBook();
+
+    public void createPosting(Date postingDate, String memo) {
         this.postingDate = postingDate;
         this.memo = memo;
     }
-    
+
     public Long getId() {
         return id;
     }
@@ -64,45 +68,22 @@ public class Posting implements Serializable {
         this.memo = memo;
     }
 
-    public List<Entry> getEntries() {
+    public List<BookEntry> getEntries() {
         return entries;
     }
 
-    public void setEntries(List<Entry> entries) {
+    public void setEntries(List<BookEntry> entries) {
         this.entries = entries;
     }
-    
-    
-    /**
-     * Returns true if the posting is balanced.  The sum of the credits equals
-     * the sum of the debits.
-     *
-     * @return True or false
-     */
-//    public boolean isBalanced() {
-//        int balance = 0;
-//
-//        for( Entry e : entries ) {
-//            balance += e.getAmount();
-//        }
-//
-//        return balance == 0;
-//    }
 
-//    protected Posting addEntry(String account, int amount) throws NonExistantAccountException {
-//        Entry e = new Entry();
-//        Account a = ledger.getAccount(account);
-//        if (a != null) {
-//            e.setAccount(a);
-//            e.setAmount(amount);
-//        } else {
-//            throw new NonExistantAccountException(account);
-//        }
-//        entries.add(e);
-//        
-//        return this;
-//    }
-    
+    public AccountingBook getAcBook() {
+        return acBook;
+    }
+
+    public void setAcBook(AccountingBook acBook) {
+        this.acBook = acBook;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -127,5 +108,5 @@ public class Posting implements Serializable {
     public String toString() {
         return "Admin.Entity.Posting[ id=" + id + " ]";
     }
-    
+
 }

@@ -32,7 +32,7 @@ import org.primefaces.event.RowEditEvent;
  *
  * @author Yanlong
  */
-@Named(value = "scheduleManageBean")
+@Named(value = "scheduleManagedBean")
 @ManagedBean
 @SessionScoped
 public class ScheduleManagedBean {

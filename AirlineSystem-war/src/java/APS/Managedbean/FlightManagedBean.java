@@ -11,10 +11,15 @@ import APS.Session.FlightScheduleSessionBeanLocal;
 import APS.Session.FlightSessionBeanLocal;
 import APS.Session.ScheduleSessionBeanLocal;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
+import java.util.UUID;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
@@ -36,7 +41,7 @@ import org.primefaces.event.RowEditEvent;
  *
  * @author Yanlong
  */
-@Named(value = "flightManageBean")
+@Named(value = "flightManagedBean")
 @ManagedBean
 @SessionScoped
 public class FlightManagedBean {
@@ -106,7 +111,7 @@ public class FlightManagedBean {
             FacesContext.getCurrentInstance().addMessage(null, message);
             return;
         }
-        
+
         if (routeId == null) {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please enter Route ID!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
@@ -486,9 +491,11 @@ public class FlightManagedBean {
     }
 
     public String printForecast(Long selectedId) {
+        System.out.println(selectedId);
         Forecast forecast = demandForecastSessionBean.getForecast(selectedId);
-
+        
         FacesContext context = FacesContext.getCurrentInstance();
+
         try {
             HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
             HttpServletResponse response = (HttpServletResponse) context.getExternalContext().getResponse();
@@ -496,10 +503,9 @@ public class FlightManagedBean {
 
             //Set the required attributes of the report
             session.setAttribute("YEAR", forecast.getForecastYear());
-            session.setAttribute("ID", selectedId);
+            session.setAttribute("ID", forecast.getForecastId());
             session.setAttribute("ORIGIN", forecast.getRoute().getOriginIATA());
             session.setAttribute("DEST", forecast.getRoute().getDestinationIATA());
-            request.setAttribute("DATA", forecast.getRawData());
 
             request.setAttribute("type", "demand"); //Set to type in order to differentiate from other report generation
             RequestDispatcher dispatcher = request.getRequestDispatcher("/Controller");
@@ -781,6 +787,5 @@ public class FlightManagedBean {
     public void setSchedule(List<Schedule> schedule) {
         this.schedule = schedule;
     }
-    
-    
+
 }

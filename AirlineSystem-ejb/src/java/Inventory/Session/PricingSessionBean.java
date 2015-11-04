@@ -25,7 +25,7 @@ import APS.Entity.Route;
  * @author YiQuan
  */
 @Stateless
-public class PricingSessionBean implements PricingSessionBeanLocal {
+public class PricingSessionBean implements PricingSessionBeanLocal, PricingSessionBeanRemote {
 
     @PersistenceContext(unitName = "AirlineSystem-ejbPU")
     private EntityManager em;
@@ -35,7 +35,8 @@ public class PricingSessionBean implements PricingSessionBeanLocal {
     // Currently it is dummy generating availability
   
     public int[] generateAvailability(String flightNo, int economy, int business, int firstClass) {
-        if ( calTurnOut(flightNo,"Business").equals("Not Enough Historic Data")){
+        if ( calTurnOut(flightNo,"Business").equals("Not Enough Historic Data")
+                || calTurnOut(flightNo,"First Class").equals("Not Enough Historic Data")){
         int[] seats = new int[5];
         seats[0] = (economy / 3) + 5;
         seats[1] = (economy / 3) + 5;
@@ -80,7 +81,8 @@ public class PricingSessionBean implements PricingSessionBeanLocal {
                 turnOut++;
         }
         Double result = turnOut*100.0/size;
-        return String.format("%1$,.2f", result);
+        String result1 = String.format("%1$,.2f", result);
+        return result1;
 
     }
 
@@ -142,7 +144,7 @@ public class PricingSessionBean implements PricingSessionBeanLocal {
     }
 
     // Get the price of a ticket of a specific flight and service type
-    public String getClassCode(Schedule s, String serviceClass, int noPpl) {
+    public String getClassCode(Schedule s, String serviceClass, int noPpl, boolean travelagent) {
         int pricePercent = 100;
         SeatAvailability sa = s.getSeatAvailability();
         Date current = new Date();
@@ -196,9 +198,10 @@ public class PricingSessionBean implements PricingSessionBeanLocal {
             }
             
             
-            Query q = em.createQuery("SELECT o FROM BookingClass o WHERE o.serviceClass = :serviceClass AND o.season =:season");
+            Query q = em.createQuery("SELECT o FROM BookingClass o WHERE o.serviceClass = :serviceClass AND o.season =:season AND o.travelagent =:travelagent");
             q.setParameter("serviceClass", serviceClass);
             q.setParameter("season", currentSeason);
+            q.setParameter("travelagent", travelagent);
             List<BookingClass> classList = q.getResultList();
             int size = classList.size();
             List<BookingClass> updatedList = new ArrayList();
