@@ -44,9 +44,27 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
         <title>Display One Stop Flight For Inbound Return Journey</title>
     </h:head>
-    
+            <style>
+         .loader {
+	position: fixed;
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	height: 100%;
+	z-index: 1000;
+        opacity: 0.8;
+	background: url(#{resource['images/loader.gif']}) 50% 50% no-repeat rgb(249,249,249);
+}
+    </style>
+    <script>
+        function showLoader(){
+    $(".loader").show();
+}
+
+    </script>
     
     <h:body>
+          <div class="loader" style="display:none"></div>
         <ui:fragment rendered ="#{customerManagedBean.isCustomerLoggedOn}">
             <ui:include src="CustomerDashboardHeader.xhtml"/>
         </ui:fragment>
@@ -135,19 +153,22 @@
                                 </div>
                                 <div class="clearfix"></div>
                                 <div class="flight-list-footer">
-                                    <div class="col-md-6 col-sm-6 col-xs-6 sm-invisible">
-                                        <span><i class="fa fa-plane"></i> #{mARSManagedBean.serviceType}</span>
-                                        <span class="refund"><i class="fa fa-clock-o"></i> Total Travel Time: #{flightOptions.duration}</span>
-
+                                    <div class="col-md-7 col-sm-7 col-xs-7 sm-invisible">
+                                        <span><i class="fa fa-plane"></i> #{mARSManagedBean.serviceType}
+                                        
+                                        </span>
+                                        <span><i class="fa fa-clock-o"></i> Total Time: #{flightOptions.duration}</span>
+                                        <span><i class="fa fa-suitcase"></i> #{mARSManagedBean.weightAllowed} kg</span>
+                                                <span><i class="fa fa-usd"></i> #{mARSManagedBean.refundStatus} </span>
                                     </div>
-                                    <div class="col-md-6 col-sm-6 col-xs-12 clear-padding">
+                                    <div class="col-md-5 col-sm-5 col-xs-5 clear-padding">
                                         <div class="pull-right">
                                             <span>$#{flightOptions.price}/Adult</span>
                                             <ui:fragment rendered="#{mARSManagedBean.children > 0}">
                                                 <span>, $#{flightOptions.price * 0.75}/Child</span>
                                             </ui:fragment>
 
-                                            <a jsf:action="#{mARSManagedBean.bookOneStopReturn(flightOptions)}">BOOK</a>
+                                            <a jsf:onclick="showLoader();" jsf:action="#{mARSManagedBean.bookOneStopReturn(flightOptions)}">BOOK</a>
                                         </div>
                                     </div>
                                 </div>

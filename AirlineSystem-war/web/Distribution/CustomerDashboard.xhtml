@@ -58,20 +58,12 @@ and open the template in the editor.
 <!--                <div class="banner-bottom-grids">-->
                         <div class="customer-grid">
                             <div class="customer-left-grid">
-                                <div class="c-left-grids">
-                                    <div class="c-left">
-                                        <span class="glyphicon glyphicon-print" aria-hidden="true"></span>
-                                    </div>
-                                    <div class="c-right">
-                                        <a href="#">Print E-Ticket</a>
-                                    </div>
-                                    <div class="clearfix"> </div>
-                                </div>
+                                
                                 
                                 <h:form>
                                     <div class="c-left-grids">
                                         <div class="c-left">
-                                            <span class="glyphicon glyphicon-lock" aria-hidden="true"></span>
+                                            <span class="glyphicon glyphicon-file" aria-hidden="true"></span>
                                         </div>
                                         <div class="c-right">
                                             <a jsf:action="#{customerManagedBean.displayCustomerPNRs()}">Manage Bookings</a>
@@ -81,14 +73,14 @@ and open the template in the editor.
                                 
                                 <div class="c-left-grids">
                                     <div class="c-left">
-                                        <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
+                                        <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
                                     </div>
                                     <div class="c-right">
                                         <a jsf:action="#{customerManagedBean.updateProfile()}">Update Profile</a>
                                     </div>
                                     <div class="clearfix"> </div>
                                 </div>
-                                    </h:form>
+                                  
                                
                                 <div class="c-left-grids">
                                     <div class="c-left">
@@ -100,6 +92,18 @@ and open the template in the editor.
                                     </div>
                                     <div class="clearfix"> </div>
                                 </div>
+                                
+                                <div class="c-left-grids">
+                                    <div class="c-left">
+                                        <span class="glyphicon glyphicon-gift" aria-hidden="true"></span>
+                                      
+                                    </div>
+                                     <div class="c-right">
+                                         <a jsf:action="#{customerManagedBean.showDiscountTypes()}">Redeem Mileage Points</a>
+                                        </div>
+                                    <div class="clearfix"> </div>
+                                </div>
+                                      </h:form>
                             </div>
                             
 <!--                            <div class="customer-left-grid">-->

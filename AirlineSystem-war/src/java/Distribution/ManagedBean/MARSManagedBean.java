@@ -10,6 +10,8 @@ import APS.Entity.Route;
 import APS.Entity.Schedule;
 import APS.Session.FlightSessionBeanLocal;
 import CI.Session.EmailSessionBeanLocal;
+import CRM.Entity.DiscountCode;
+import CRM.Session.DiscountSessionBeanLocal;
 import Distribution.Entity.Customer;
 import Distribution.Entity.FlightOptions;
 import Distribution.Entity.PNR;
@@ -33,6 +35,7 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import org.primefaces.event.SelectEvent;
 
 /**
  *
@@ -60,6 +63,9 @@ public class MARSManagedBean {
 
     @EJB
     private EmailSessionBeanLocal emailSessionBean;
+
+    @EJB
+    private DiscountSessionBeanLocal discountSessionBean;
 
     @ManagedProperty(value = "#{customerManagedBean}")
     private CustomerManagedBean customerManagedBean;
@@ -190,6 +196,10 @@ public class MARSManagedBean {
     private String body;
 
     private PNRDisplay pnrDisplayList;
+    private DiscountCode discountCode;
+    private boolean discountCodeApplied;
+    private String refundStatus;
+    private int weightAllowed;
 
     @PostConstruct
     public void retrieve() {
@@ -244,6 +254,7 @@ public class MARSManagedBean {
         csv = null;
         setPnrId(null);
         systemDate = new Date();
+        discountCode = null;
     }
 
     public int convertToHours(double duration) {
@@ -269,7 +280,7 @@ public class MARSManagedBean {
     //helps users to view other departure flights within the week
     public String viewOtherDepartureFlights(Date date) {
         if (oneWayFlight) {
-            
+
             setOneWayDepartureDate(date);
             return displayDepartureFlights(true);
         } else {
@@ -287,9 +298,30 @@ public class MARSManagedBean {
         return displayReturnFlights();
 
     }
+    
+    public void setClassRules(){
+        if (serviceType.equals("Economy Saver") || serviceType.equals("Economy Basic")){
+            refundStatus = "Not refundable";
+            weightAllowed = 15;
+        }
+        else if (serviceType.equals("Economy Premium")){
+            refundStatus = "Refundable";
+            weightAllowed = 15;
+        }
+        else if (serviceType.equals("Business")){
+            refundStatus = "Refundable";
+            weightAllowed = 30;
+        }
+        else if (serviceType.equals("First Class")){
+            refundStatus = "Refundable";
+            weightAllowed = 45;
+        }
+    }
 
     public String displayDepartureFlights(Boolean oneWay) {
-
+        
+        discountCodeApplied = false;
+        discountCode = null;
         oneWayFlight = oneWay;
         /*Convert the chosen origin and destination cities into IATAs*/
         List<Flight> allFlights = new ArrayList();
@@ -363,6 +395,7 @@ public class MARSManagedBean {
             selectedDatePrices.clear();
             directFlightSchedules = new ArrayList();
             setDirectFlightDuration("");
+            setClassRules();
 
             //Check whether there is direct flight
             if (distributionSessionBean.existsDirectFlight(originIATA, destinationIATA)) {
@@ -382,7 +415,7 @@ public class MARSManagedBean {
                 retrieveMinWeekPricesForDirect(originIATA, destinationIATA, departureDate, serviceType, adults, children);
                 setPriceForDirect(selectedDatePrices.get(0));
                 System.out.println("displayingggggg....");
-                return "DisplayDepartureDirectFlightReturn";
+                return "DisplayDepartureDirectFlightReturn?faces-redirect=true";
 
             } else { //Retrieve one stop flights
                 System.out.println("managedbean::::one stop flights...");
@@ -417,11 +450,9 @@ public class MARSManagedBean {
                         oneStopFlightLayover.add(distributionSessionBean.getLayoverTime(flightOption.get(0), flightOption.get(1)));
                         selectedDatePrices.add(priceForOne);
                         priceForOne = 0;
-                        
+
                     }
                 }
-                
-                
 
                 List<String> flightNosWithAdjustedEndDates = new ArrayList();
 
@@ -439,7 +470,7 @@ public class MARSManagedBean {
                 System.out.println("The size of one stop layover!!!!!" + oneStopFlightLayover.size());
                 System.out.println("The size of one stop flight duration!!!!!" + oneStopFlightDuration.size());
                 System.out.println("The size of selectedDates prices!!!!!" + selectedDatePrices.size());
-                
+
                 for (int a = 0; a < oneStopFlightSchedules.size(); a++) {
                     FlightOptions newFlightOptions = new FlightOptions();
                     int b = a;
@@ -562,11 +593,10 @@ public class MARSManagedBean {
                 if (i % 2 == 1) {
                     oneStopFlightDuration.add(distributionSessionBean.getTotalDurationForOneStop(flightOption.get(0), flightOption.get(1)));
                     oneStopFlightLayover.add(distributionSessionBean.getLayoverTime(flightOption.get(0), flightOption.get(1)));
-                     selectedDatePrices.add(priceForOne);
-                     priceForOne =0;
+                    selectedDatePrices.add(priceForOne);
+                    priceForOne = 0;
                 }
             }
-           
 
             List<String> flightNosWithAdjustedEndDates = new ArrayList();
 
@@ -603,6 +633,8 @@ public class MARSManagedBean {
 
         for (i = -3; i <= 3; i++) {
             Date eachDate = distributionSessionBean.addDaysToDate(date, i);
+            if (eachDate.compareTo(new Date())<0)
+                continue;
             weekDates.add(eachDate);
             schedulesForEachDate = distributionSessionBean.retrieveDirectFlightsForDate(originIATA, destinationIATA, eachDate, serviceType, adults, children);
             if (schedulesForEachDate.size() > 0) {
@@ -636,6 +668,8 @@ public class MARSManagedBean {
 
         for (i = -3; i <= 3; i++) {
             Date eachDate = distributionSessionBean.addDaysToDate(date, i);
+            if (eachDate.compareTo(new Date())<0)
+                continue;
             weekDates.add(eachDate);
             legOneSchedules.clear();
             legTwoSchedules.clear();
@@ -655,8 +689,9 @@ public class MARSManagedBean {
                     priceForEachFlightOption += priceForOne;
 
                     if (k % 2 == 1) {
-                        if (priceForEachFlightOption < minPrice) 
+                        if (priceForEachFlightOption < minPrice) {
                             minPrice = priceForEachFlightOption;
+                        }
                         priceForEachFlightOption = 0.0;
                     }
                 }
@@ -751,7 +786,7 @@ public class MARSManagedBean {
             priceForEachSchedule = pm.getPrice(pm.getClassCode(eachSelectedSchedule, serviceType, (adults + children), false), eachSelectedSchedule);
             totalSelectedPrice += (priceForEachSchedule * adults) + (priceForEachSchedule * 0.75 * children);
         }
-        
+
         adultPrice = priceForEachSchedule;
         childPrice = priceForEachSchedule;
         Passenger passenger;
@@ -809,7 +844,12 @@ public class MARSManagedBean {
         }
 
     }
-
+    public void timeframeEndChanged(SelectEvent event){
+        setDepartureDate((Date)event.getObject());
+        System.out.println(":::managedbean departure date:::" +departureDate);
+    }
+            
+    
     public String payment() {
 
         for (int i = 0; i < passengerList.size(); i++) {
@@ -854,6 +894,7 @@ public class MARSManagedBean {
             return null;
 
         }
+        
 
         if (csv.length() != 3) {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Invalid csv!", "");
@@ -892,7 +933,7 @@ public class MARSManagedBean {
                 bookingList.add(eachBooking);
             }
         }
-        pnr = passengerBookingSessionBean.createPNR((adults + children), getPrimaryEmail(), getPrimaryContactNo(), "Booked", totalPriceWinsurance, new Date(), new Date(),"MerlionAirlines");
+        pnr = passengerBookingSessionBean.createPNR((adults + children), getPrimaryEmail(), getPrimaryContactNo(), "Booked", totalPriceWinsurance, new Date(), new Date(), "MerlionAirlines");
         if (passengerBookingSessionBean.isPassengerAFrequentFlyer(Long.parseLong(passengerList.get(0).getCustomerId()))) {
             primaryCustomer = passengerBookingSessionBean.getCustomerByCustomerId(Long.parseLong(passengerList.get(0).getCustomerId()));
         } else {
@@ -913,6 +954,12 @@ public class MARSManagedBean {
 
         message = new FacesMessage(FacesMessage.SEVERITY_INFO, "A cofirmation email has been sent to the primary email. Please check.", "");
         FacesContext.getCurrentInstance().addMessage(null, message);
+        
+        if (discountCode!=null){
+             discountSessionBean.markCodeAsClaimed(discountCode);
+             discountCode = null;
+        }
+       
 
         return "Confirmation";
     }
@@ -934,9 +981,11 @@ public class MARSManagedBean {
                     + "\nArrival Date: " + formatter.format(selectedSchedules.get(i).getEndDate()) + "\n\n";
             tempBody += flight;
         }
+        
+        
 
         setBody("Thank you for using Merlion Airlines. \n\nYour PNR Id: " + pnr.getPnrID() + "\nDate of Booking: " + formatter.format(pnr.getDateOfBooking())
-                + "\nNumber of Travellers: " + pnr.getNoOfTravellers() + "\nTotal Price Paid: " + pnr.getTotalPrice()
+                + "\nNumber of Travellers: " + pnr.getNoOfTravellers() + "\nTotal Baggage Allowance: " + (weightAllowed*pnr.getNoOfTravellers()) + "kgs\nBooking Refund Status: " + refundStatus + "\nTotal Price Paid: " + pnr.getTotalPrice()
                 + "\n\n" + tempBody + "\n\nYou can always view the details of your booking at our website.");
 
         emailSessionBean.sendEmail(email, getSubject(), getBody());
@@ -946,7 +995,7 @@ public class MARSManagedBean {
     public String searchPNR() {
 
         searchedPNR = passengerBookingSessionBean.getPNR(pnrId);
-        if (searchedPNR == null || !primaryEmail.equals(searchedPNR.getEmail())) {
+        if (searchedPNR == null || !primaryEmail.equals(searchedPNR.getEmail()) || searchedPNR.getPnrStatus().equalsIgnoreCase("Flown")) {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Booking record is not found!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
             return null;
@@ -966,6 +1015,7 @@ public class MARSManagedBean {
 
         eachPNRDisplay.setNoOfTravellers(noOfTravellers);
         eachPNRDisplay.setBookingDate(searchedPNR.getDateOfBooking());
+        eachPNRDisplay.setRefundable(distributionSessionBean.isPNRRefundable(searchedPNR));
 
         for (Booking eachBooking : searchedPNR.getBookings()) {
             if (!addedNames.contains(eachBooking.getTravellerFristName() + " " + eachBooking.getTravellerLastName())) {
@@ -999,6 +1049,8 @@ public class MARSManagedBean {
         }
 
         setPnrDisplayList(eachPNRDisplay);
+        setPrimaryEmail(null);
+        setPnrId(null);
 
         return "DisplayPNR";
     }
@@ -1036,6 +1088,30 @@ public class MARSManagedBean {
             }
         }
         return true;
+    }
+
+    public String redeemDiscountCode(String code) {
+        //Accept the entered code as argument
+        if (code.length()==0) {
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please enter a discount code!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        }
+        else if (discountSessionBean.discountCodeValid(code) == false) {
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Discount Code is Invalid!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        }
+        else if (discountCodeApplied ==true){
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "A Discount Code has already been applied!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        }
+        else {
+            discountCode = discountSessionBean.getDiscountCodeFromCode(code);
+            totalSelectedPrice = totalSelectedPrice - (discountCode.getDiscountType().getDiscount()/100*totalSelectedPrice);
+            discountCodeApplied = true;
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Discount Code Applied!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        }
+        return null;
     }
 
     public String getFlightNo() {
@@ -2066,5 +2142,30 @@ public class MARSManagedBean {
     public void setPnrDisplayList(PNRDisplay pnrDisplayList) {
         this.pnrDisplayList = pnrDisplayList;
     }
+
+    public DiscountCode getDiscountCode() {
+        return discountCode;
+    }
+
+    public void setDiscountCode(DiscountCode discountCode) {
+        this.discountCode = discountCode;
+    }
+
+    public String getRefundStatus() {
+        return refundStatus;
+    }
+
+    public void setRefundStatus(String refundStatus) {
+        this.refundStatus = refundStatus;
+    }
+
+    public int getWeightAllowed() {
+        return weightAllowed;
+    }
+
+    public void setWeightAllowed(int weightAllowed) {
+        this.weightAllowed = weightAllowed;
+    }
+    
 
 }

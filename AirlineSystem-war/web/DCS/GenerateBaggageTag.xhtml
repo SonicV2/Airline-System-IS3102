@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Baggage Tag Generation</title>
+    </h:head>
+    <h:body>
+        <h:form>
+            <h:commandButton class="btn btn-outline btn-success" value="Generate Baggage Tag" actionListener="#{baggageManagedBean.showBaggageTag}" />
+            <h:commandButton class="btn btn-outline btn-success" value="Print Baggage Tag" />
+
+            <p:dataGrid var="tag" value="#{baggageManagedBean.baggageTags}" columns="3" layout="grid"
+                        rows="12" paginator="true" id="tag">
+
+                <f:facet name="header">
+                    Passenger Baggage Tag Information
+                </f:facet>
+
+                <p:panel header="#{tag.baggageTagSeqNumber}" style="text-align:center">
+                    <h:panelGrid columns="1" style="width:100%">
+                        
+
+                        <h:outputText value="Arrival : #{tag.arrivalCity}" />
+                        <h:outputText value="Bag Status : #{tag.bagStatus}" />
+                        <h:outputText value="departure date : #{tag.departureDate}" />
+                        <h:outputText value="flight Number : #{tag.flightNumber}" />
+                        <h:outputText value="service Class : #{tag.serviceClass}" />
+                      
+                       
+                    </h:panelGrid>
+                </p:panel>
+
+            </p:dataGrid>
+
+
+            <h:commandButton class="btn btn-outline btn-success" value="Proceed" action="ShowBoardingPass.xhtml"/>
+        </h:form>
+    </h:body>
+</html>
+

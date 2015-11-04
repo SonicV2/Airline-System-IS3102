@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <h:head>
+        <p:growl id="growl" sticky="true" showDetail="true"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <h:outputStylesheet library ="css"  name="bootstrap.css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
+        <h:outputStylesheet library="css" name="admindb.css" />
+        <h:outputStylesheet library="css" name="morrisjs/morris.css" />
+        <title>Display Flight Prices</title>
+    </h:head>
+         <!--            To add the same header on all dashboard pages  
+-->        <ui:include src="/CI/dashboardHeader.xhtml"/><!--
+            To add the same sidebar on all dashboard pages -->  
+        <ui:include src="/CI/dashboardSidebar.xhtml"/>
+        <div id="page-wrapper">
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2 class="page-header">Current Prices</h2>
+                </div>
+
+                <div class="col-lg-12">
+
+                    <p:dataTable var="price" value="#{priceManageBean.spList}" paginator="true" rows="10">
+
+
+                        <p:column headerText="ServiceType">
+                            <h:outputText value="#{price.serviceType}" />
+                        </p:column>
+                        <p:column headerText="Price">
+                            <h:outputText value="#{price.price}" />
+                        </p:column>
+                        <p:column headerText="Amount Available">
+                            <h:outputText value="#{price.avail}" />
+                        </p:column>
+                        <p:column headerText ="Book" style="width:100px">
+                            <h:form>           
+                                <h:commandLink value= "Book" action="#{priceManageBean.makeBooking(price.price, price.serviceType,price.avail)}">
+                                </h:commandLink>
+                            </h:form>
+                        </p:column>
+
+
+
+
+                    </p:dataTable>
+                    <br></br>
+            <br></br>
+                </div>
+            </div>
+        </div>
+
+
+
+
+</html>
+

@@ -7,18 +7,57 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 
     <h:head>
+        <p:growl id="growl" sticky="true" showDetail="true"/>
 
-        <title>Search Team</title>
+        <title>Add Baggage</title>
     </h:head>
 
     <h:body>
 
-        <h:form id="form">
+        <h:form >
+            <div>
+                <h:commandButton disabled="true" value="Flight Number: #{searchBookingManagedBean.checkinSchedule.flight.flightNo}"/>
+                &nbsp; &nbsp;
+                <h:commandButton disabled="true" value="Flight Date: #{searchBookingManagedBean.checkinSchedule.startDate}"/>
+                &nbsp; &nbsp;
+                <h:commandButton disabled="true" value="Departure City: #{searchBookingManagedBean.checkinSchedule.flight.route.originCity}"/>
+                &nbsp; &nbsp;
+                <h:commandButton disabled="true" value="Departure City: #{searchBookingManagedBean.checkinSchedule.flight.route.destinationCity}"/>
+                &nbsp; &nbsp;
+                <h:commandButton disabled="true" value="Service Class: #{searchBookingManagedBean.serviceClass}"/>
+                &nbsp; &nbsp;
+                <h:commandButton disabled="true" value="Boarding Time: #{searchBookingManagedBean.boardingTime}"/>
+                &nbsp; &nbsp;
+                <h:commandButton disabled="true" value="Total Weight Allowed: #{searchBookingManagedBean.totalWeightAllowed} KG"/>
+
+            </div>
 
 
-        </h:form>   
+            <p:dataList value="#{baggageManagedBean.allBaggage}" var="bag" type="ordered">
+                <f:facet name="header">
+                    Added Baggage
+                    ( #{baggageManagedBean.totalweight} KG)
+
+                </f:facet> 
+
+                <h:outputLabel value="BaggageWeight"/>
+                #{bag.baggageWeight}
 
 
+            </p:dataList>
+
+            <br /> <br />
+            <h:outputLabel value="Baggage Weight"/>
+            <h:inputText value="#{baggageManagedBean.addBagWeight}" />
+
+            <br />
+            <h:commandButton value="Add Baggage" actionListener="#{baggageManagedBean.addBaggage}"  />
+            <h:commandButton value="update" action="AddBaggage.xhtml"/>
+            
+            <h:commandButton value="Pay extra weight" action="PayExtraWeight.xhtml" actionListener="#{baggageManagedBean.calculateExtra}"  />
+            
+            <h:commandButton value="Proceed" action="GenerateBaggageTag.xhtml"/>
+        </h:form>
     </h:body>
 </html>
 

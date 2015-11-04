@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Boarding Pass Generation</title>
+    </h:head>
+    <h:body>
+        <h:form>
+            <h:commandButton class="btn btn-outline btn-success" value="Generate Boarding Pass" actionListener="#{baggageManagedBean.showBoardingPass}" />
+            <h:commandButton class="btn btn-outline btn-success" value="Print Boarding Pass" />
+            
+            <h:outputLabel value="Sequence Number :" /> #{baggageManagedBean.boardingpass.seqNumber}
+            <br/>
+            
+            <h:outputLabel value="Booking ID :" /> #{baggageManagedBean.boardingpass.bookingID}
+            <br/>
+            
+            <h:outputLabel value="Flight Number :" /> #{baggageManagedBean.boardingpass.flightNumber}
+            <br/>
+            
+            <h:outputLabel value="Arrival City :" /> #{baggageManagedBean.boardingpass.arrivalCity}
+            <br/>
+            
+            <h:outputLabel value="Departure City :" /> #{baggageManagedBean.boardingpass.departCity}
+            
+            <br/>
+            <h:outputLabel value="Boarding Time :" /> #{baggageManagedBean.boardingpass.boardingTime}
+            
+            <br/>
+            <h:outputLabel value="Departure Time :" /> #{baggageManagedBean.boardingpass.departTime}
+            
+            <br/>
+            <h:outputLabel value="Class Type :" /> #{baggageManagedBean.boardingpass.classtype}
+               
+            <br/>
+            <h:outputLabel value="First Name :" /> #{baggageManagedBean.boardingpass.firstname}
+            <br/>
+            <h:outputLabel value="Last Name : " /> #{baggageManagedBean.boardingpass.lastname}
+            <br/>
+            <h:outputLabel value="Seat Number : " /> #{baggageManagedBean.boardingpass.seat}
+            <br/>
+            <h:outputLabel value="Gate: " /> #{baggageManagedBean.boardingpass.gate}
+
+            <h:commandButton class="btn btn-outline btn-success" value="Proceed" />
+        </h:form>
+    </h:body>
+</html>
+

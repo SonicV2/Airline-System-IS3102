@@ -5,6 +5,7 @@
  */
 package Distribution.Entity;
 
+import DCS.Entity.BaggageTag;
 import Inventory.Entity.Booking;
 import java.io.Serializable;
 import javax.persistence.CascadeType;
@@ -13,6 +14,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 /**
  *
@@ -25,12 +27,24 @@ public class Baggage implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private double baggageWeight;
+    private double extraWeight;
+    private String baggageStatus; // backup attribute
+    
     @ManyToOne(cascade = {CascadeType.PERSIST})
     private Booking booking = new Booking();
     
-    public void createBaggage(double baggageWeight, Booking booking){
-        this.setBaggageWeight(baggageWeight);
-        this.setBooking(booking);
+    
+    @OneToOne(cascade={CascadeType.PERSIST})
+    private BaggageTag baggageTag = new BaggageTag();
+    
+    
+    public Baggage(){}
+    
+    public void createBaggage(double baggageWeight){
+        setBaggageWeight(baggageWeight);
+        //setBooking(booking);
+        this.extraWeight = 0.0;
+        this.baggageStatus="N.A";
     }
 
     public Long getId() {
@@ -58,30 +72,48 @@ public class Baggage implements Serializable {
     }
 
     
-    
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
+    /**
+     * @return the baggageTag
+     */
+    public BaggageTag getBaggageTag() {
+        return baggageTag;
     }
 
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Baggage)) {
-            return false;
-        }
-        Baggage other = (Baggage) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+    /**
+     * @param baggageTag the baggageTag to set
+     */
+    public void setBaggageTag(BaggageTag baggageTag) {
+        this.baggageTag = baggageTag;
     }
 
-    @Override
-    public String toString() {
-        return "Distribution.Entity.Baggage[ id=" + id + " ]";
+    /**
+     * @return the extraWeight
+     */
+    public double getExtraWeight() {
+        return extraWeight;
+    }
+
+    /**
+     * @param extraWeight the extraWeight to set
+     */
+    public void setExtraWeight(double extraWeight) {
+        this.extraWeight = extraWeight;
+    }
+
+    /**
+     * @return the baggageStatus
+     */
+    public String getBaggageStatus() {
+        return baggageStatus;
+    }
+
+    /**
+     * @param baggageStatus the baggageStatus to set
+     */
+    public void setBaggageStatus(String baggageStatus) {
+        this.baggageStatus = baggageStatus;
     }
     
 }
+
+

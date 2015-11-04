@@ -52,8 +52,39 @@ and open the template in the editor.
         .ui-selectonemenu .ui-selectonemenu-trigger {
             width: 23px;
         }
+        
+        .loader {
+	position: fixed;
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	height: 100%;
+	z-index: 1000;
+        opacity: 0.8;
+	background: url(#{resource['images/loader.gif']}) 50% 50% no-repeat rgb(249,249,249);
+}
     </style>
+
+<script type="text/javascript">
+//$(window).load(function() {
+//	$(".loader").fadeOut("slow");
+//})
+
+$(".search-btn").click(function(){
+    console.log("TEST");
+    $(".loader").show("slow");
+//    $(".loader").fadeOut("slow");
+});
+
+function showLoader(){
+    $(".loader").show();
+}
+
+
+</script>
     <h:body>
+        <div class="loader" style="display:none">
+        </div>
         <!--this is the common header of all the mARS pages-->
         <ui:fragment rendered ="#{customerManagedBean.isCustomerLoggedOn}">
             <ui:include src="CustomerDashboardHeader.xhtml"/>
@@ -156,14 +187,23 @@ and open the template in the editor.
                                                                         <div class="book_date">
 
                                                                             <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
-                                                                            <p:calendar id="button" value="#{mARSManagedBean.departureDate}" navigator="true" pattern="yyyy-MMM-dd" mindate="#{mARSManagedBean.systemDate}" onchange="#{mARSManagedBean.setDepartureDate(departureDate)}"/>
+                                                                            <p:calendar id="frmD" value="#{mARSManagedBean.departureDate}" navigator="true" pattern="yyyy-MMM-dd" mindate="#{mARSManagedBean.systemDate}" >
+<!--                                                                                <p:ajax event="dateSelect" update="toD"/>
+                                                                                <p:ajax event="change" update="toD"/>-->
+<!--                                                                                <f:ajax event="change" execute="@this" render="toD"/>-->
+                                                                            </p:calendar>
                                                                         </div>		
                                                                     </li>
                                                                     <li class="span1_of_1 left">
                                                                         <h5>Return</h5>
                                                                         <div class="book_date">
                                                                             <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
-                                                                            <p:calendar id="restricted" value="#{mARSManagedBean.returnDate}" navigator="true" pattern="yyyy-MMM-dd" mindate="#{mARSManagedBean.departureDate}"/>
+<!--                                                                            <h:outputText value="#{mARSManagedBean.departureDate}" id="tooD"/>-->
+
+                                                                            <p:calendar id="tooD" value="#{mARSManagedBean.returnDate}" navigator="true" pattern="yyyy-MMM-dd" mindate="#{mARSManagedBean.departureDate}"/>
+<!--                                                                            <p:ajax event="dateSelect" update="frmD"></p:ajax>
+                                                                            <p:ajax event="change" update="frmD"/>
+                                                                            </p:calendar>-->
                                                                         </div>					
                                                                     </li>
                                                                     <li class="span1_of_1 left adult"> 
@@ -211,7 +251,7 @@ and open the template in the editor.
                                                                 <ul>	
                                                                     <li class="span1_of_3">
                                                                         <div class="date_btn">
-                                                                            <h:commandButton class="btn btn-outline btn-success" value="Search"  action="#{mARSManagedBean.displayDepartureFlights(false)}"/>
+                                                                            <h:commandButton class="btn btn-outline btn-success" value="Search"  onclick="showLoader();" action="#{mARSManagedBean.displayDepartureFlights(false)}"/>
                                                                         </div>
                                                                     </li>
                                                                     <div class="clearfix"></div>
@@ -233,7 +273,7 @@ and open the template in the editor.
                                     <div class="facts">
                                         <div class="booking-form">
 
-                                            <h:form>
+                                            <h:form id="booking">
                                                 <!-- /End-date-piker -->
                                                 <div class="online_reservation">
                                                     <div class="b_room">
@@ -325,7 +365,7 @@ and open the template in the editor.
                                                                 <ul>	
                                                                     <li class="span1_of_3">
                                                                         <div class="date_btn">
-                                                                            <h:commandButton class="btn btn-outline btn-success" value="Search" action="#{mARSManagedBean.displayDepartureFlights(true)}"/>
+                                                                            <h:commandButton class="btn btn-outline btn-success search-btn" id="search-btn" value="Search" action="#{mARSManagedBean.displayDepartureFlights(true)}"  onclick="showLoader();"/>
                                                                         </div>
                                                                     </li>
                                                                     <div class="clearfix"></div>
