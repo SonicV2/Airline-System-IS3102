@@ -1,0 +1,85 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <p:growl id="growl" sticky="true" showDetail="false"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <h:outputStylesheet library ="css"  name="bootstrap.css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
+        <h:outputStylesheet library="css" name="admindb.css" />
+        <h:outputStylesheet library="css" name="morrisjs/morris.css" />
+        <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js" />-->
+        <title>Send Discount Code</title>
+
+    </h:head>
+    <h:body>
+
+        <!--    To add the same header on all dashboard pages  -->
+        <!--        <ui:include src="DashboardHeader.xhtml"/>-->
+        <!--    To add the same sidebar on all dashboard pages  -->
+        <ui:include src="/CI/DashboardSidebar.xhtml"/>
+        <div id="page-wrapper">
+
+            <h:form>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h2 class="page-header"> Send Discount Codes to Customers</h2>
+                    </div>
+                    <div class="col-lg-10">
+                        <div class="form-group">
+                            <h:outputLabel class="col-md-4 control-label" value="From Percentile: " />
+                            <p:inputText required="true" value="#{discountManagedBean.from}"  />
+                            <br/>
+
+                        </div>
+
+                        <div class="form-group">
+                            <h:outputLabel class="col-md-4 control-label" value="To Percentile: " />
+                            <p:inputText required="true"  value="#{discountManagedBean.to}" />
+                            <br/>
+
+                        </div>  
+
+                        <div class="form-group">
+                            <h:outputLabel class="col-md-4 control-label" value="Recency/Frequency/Monetary" />
+                            <h:selectOneMenu class="form-control" id="serviceClass" value="#{discountManagedBean.analysisType}" style="width:150px">
+                                <f:selectItem itemLabel="Select One" itemValue="" />
+                                <f:selectItem itemLabel="Recency" itemValue="Recency" />
+                                <f:selectItem itemLabel="Frequency" itemValue="Frequency" />
+                                <f:selectItem itemLabel="Monetary Value" itemValue="Monetary Value" />
+                                <f:selectItem itemLabel="Customer Lifetime Value" itemValue="Customer Lifetime Value" />
+                            </h:selectOneMenu>
+                            <br/>
+
+                        </div>
+
+
+
+                        <div class="form-group">
+                            <h:outputLabel class="col-md-4 control-label" value="Discount Percentage" />
+                            <h:selectOneMenu class="form-control" id="discountType" value="#{discountManagedBean.selectedDiscountType}" style="width:150px">
+                                <f:selectItem itemLabel="Select One" itemValue="#{discountManagedBean.selectedDiscountType}" />
+                                <f:selectItems value="#{discountManagedBean.discountTypes}" var="discountType" itemLabel="#{discountType.discount}%" itemValue="#{discountType}" />
+
+                            </h:selectOneMenu>
+                        </div>
+
+                        <div class="text-center">
+                            <h:commandButton class="btn btn-outline btn-success" value="Send Discount Codes" action="#{discountManagedBean.sendDiscountCodesToTopCustomers()}"/>
+                            <br></br>
+                            <br></br>
+                        </div> 
+                    </div>
+                </div>
+            </h:form>
+        </div>
+
+
+    </h:body>
+</html>
