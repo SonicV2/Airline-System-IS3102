@@ -4,28 +4,53 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:pe="http://primefaces.org/ui/extensions">
-    
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <h:head>
+        <p:growl id="growl" sticky="true" showDetail="true"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <h:outputStylesheet library ="css"  name="bootstrap.css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
+        <h:outputStylesheet library="css" name="admindb.css" />
+        <h:outputStylesheet library="css" name="morrisjs/morris.css" />
         <title>Maintenance Timeline</title>
-        
+
     </h:head>
     <h:body>
-        <h:form>
-            <h:commandButton value="Generate Team" actionListener="#{maintainScheduleManagedBean.generateTeam}"/>
-            <h:commandButton value="Assign Ground Crews" actionListener="#{maintainScheduleManagedBean.assignCrew}"/>
-            <h:commandButton value="Assign Schedule" actionListener="#{maintainScheduleManagedBean.assignTeam}"/>
-        </h:form>
-        <pe:timeline id="timeline" value="#{maintainScheduleManagedBean.model}" varGroup="group"
-                     eventMargin="10" eventMarginAxis="0"  
+        <!--            To add the same header on all dashboard pages -->  
+                <ui:include src="/CI/DashboardHeader.xhtml"/>
+        <!-- To add the same sidebar on all dashboard pages -->  
+        <ui:include src="/CI/DashboardSidebar.xhtml"/>
+        <div id="page-wrapper">
 
-                     showNavigation="true" showButtonNew="true"  
-                     axisOnTop="true" stackEvents="false" >
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2 class="page-header">Maintenance Scheduling Management</h2>
+                </div>
+            </div>
+            <h:form>
+                <div class="form-group">
+                <h:commandButton class="btn btn-outline btn-success" value="Generate Team" actionListener="#{maintainScheduleManagedBean.generateTeam}"/>: Explanation
+                </div>
+                <div class="form-group">
+                <h:commandButton class="btn btn-outline btn-success" value="Assign Ground Crews" actionListener="#{maintainScheduleManagedBean.assignCrew}"/>: Explanation
+                </div>
+                <div class="form-group">
+                <h:commandButton class="btn btn-outline btn-success" value="Assign Schedule" actionListener="#{maintainScheduleManagedBean.assignTeam}"/>: Explanation
+                </div>
+            </h:form>
+            <pe:timeline id="timeline" value="#{maintainScheduleManagedBean.model}" varGroup="group"
+                         eventMargin="10" eventMarginAxis="0"  
+
+                         showNavigation="true" showButtonNew="true"  
+                         axisOnTop="true" stackEvents="false" >
 
 
-        </pe:timeline>
+            </pe:timeline>
 
-
+        </div>
     </h:body>
 </html>
 

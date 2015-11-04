@@ -64,10 +64,10 @@
                 <!--                this is for employee management, create, delete, update, view-->
                 <ui:fragment rendered="#{loginManagedBean.accessRightIDs.contains(1)}">
                     <li>
-                        <a href="#"><i class="fa fa-plus fa-fw"></i> Add an employee<span class="fa arrow"></span></a>
+                        <a href="#"><i class="fa fa-plus fa-fw"></i> Add Employee<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
-                                <a href="#{request.contextPath}/CI/EmployeeManagement.xhtml"> Add an employee</a>
+                                <a href="#{request.contextPath}/CI/EmployeeManagement.xhtml"> Add Employee</a>
                             </li>
                             <li>
                                 <a href="#{request.contextPath}/FOS/CreateCabinCrew.xhtml"> Add Cabin Crew</a>
@@ -176,7 +176,7 @@
                         <a href="#{request.contextPath}/FOS/CrewPairingA380.xhtml"><i class="fa fa-clock-o"></i> Crew Scheduling For A380</a>
                     </li>
                     <li>
-                        <a href="#{request.contextPath}/FOS/ViewLeaveCrew.xhtml"><i class="fa fa-clock-o"></i> View Leave Submit Crews</a>
+                        <a href="#{request.contextPath}/FOS/ViewLeaveCrew.xhtml"><i class="fa fa-gear"></i> Crew on Leave Management</a>
                     </li>
                 </ui:fragment>
 
@@ -381,6 +381,18 @@
                         </li>
                        
                 </ui:fragment>
+                
+                
+                 <!-- this is for Maintenance Scheduling Management-->
+                <ui:fragment rendered="#{loginManagedBean.accessRightIDs.contains(32)}">
+                        <li>
+                            <a href="#{request.contextPath}/FOS/FlightMaintenanceTimeline.xhtml"><i class="fa fa-search"></i>Maintenance Scheduling</a>
+                        </li>  
+                        <li>
+                            <a href="#{request.contextPath}/FOS/FlightMaintenanceTimeline.xhtml"><i class="fa fa-search"></i>Maintenance Scheduling</a>
+                        </li>  
+                </ui:fragment>
+                
                 
                 
                  <h:form>
