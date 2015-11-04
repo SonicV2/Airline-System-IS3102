@@ -12,7 +12,7 @@ import javax.faces.bean.SessionScoped;
  */
 @ManagedBean
 @SessionScoped
-public class seatManagedBean {
+public class SeatManagedBean {
 
     private ArrayList<String> A330seatArrange = new ArrayList<String>();
     private ArrayList<String> B777_200seatArrange = new ArrayList<String>();
@@ -410,7 +410,7 @@ public class seatManagedBean {
     
     
 //-------------------------------------------------------------------------------------------------------    
-    public seatManagedBean() {
+    public SeatManagedBean() {
     }
 
     public ArrayList<String> getA330seatArrange() {
