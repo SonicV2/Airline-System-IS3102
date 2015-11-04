@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <p:growl id="growl" sticky="true" showDetail="true"/>
+        <title>Search Booking </title>
+    </h:head>
+    <h:body>
+        <h:form>
+            <h:outputLabel value="Flight Number: " />
+            <h:outputText class="form-control" value="#{searchBookingManagedBean.reqBooking.flightNo}" />
+            <br /> <br />
+                      
+            <h:outputLabel value="PNR Number: " />
+            <h:outputText class="form-control" value="#{searchBookingManagedBean.reqBooking.pnr.pnrID}" />
+            <br /> <br />
+            
+            <h:outputLabel value="Passport Number: " />
+            <h:outputText  class="form-control" value="#{searchBookingManagedBean.reqBooking.passportNumber}" />
+            <br /><br />
+            
+             <h:outputLabel value="Title: " />
+            <h:outputText class="form-control" value="#{searchBookingManagedBean.reqBooking.travellerTitle}" />
+            <br /> <br />
+            
+            <h:outputLabel value="First Name: " />
+            <h:outputText class="form-control" value="#{searchBookingManagedBean.reqBooking.travellerFristName}" />
+            <br /> <br />
+                     
+            <h:outputLabel value="Last Name: " />
+            <h:outputText class="form-control" value="#{searchBookingManagedBean.reqBooking.travellerLastName}" />
+            <br /> <br />
+            
+            <h:outputLabel value="Nationality: " />
+            <h:outputText class="form-control" value="#{searchBookingManagedBean.reqBooking.nationality}" />
+            <br /> <br />
+            
+            <h:outputLabel value="Class Code: " />
+            <h:outputText class="form-control" value="#{searchBookingManagedBean.reqBooking.classCode}" />
+            <br /> <br />
+            
+            <h:outputLabel value="Food Selection: " />
+            <h:outputText class="form-control" value="#{searchBookingManagedBean.reqBooking.foodSelection}" />
+            <br /> <br />
+                                 
+        </h:form>
+        
+        <h:form>
+            
+            <h:commandButton  value="Proceed" action="#{searchBookingManagedBean.retrieveFlightType()}" />
+        
+        </h:form>
+
+
+    </h:body>
+</html>
+

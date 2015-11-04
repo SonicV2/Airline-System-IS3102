@@ -9,9 +9,9 @@
     </h:head>
     <h:body>
         <h:form>
-            <h:commandButton class="btn btn-outline btn-success" value="Generate Boarding Pass" actionListener="#{baggageManagedBean.showBoardingPass}" />
+
             <h:commandButton class="btn btn-outline btn-success" value="Print Boarding Pass" />
-            
+            <br/>
             <h:outputLabel value="Sequence Number :" /> #{baggageManagedBean.boardingpass.seqNumber}
             <br/>
             
@@ -43,7 +43,7 @@
             <h:outputLabel value="Seat Number : " /> #{baggageManagedBean.boardingpass.seat}
             <br/>
             <h:outputLabel value="Gate: " /> #{baggageManagedBean.boardingpass.gate}
-
+            <br/>
             <h:commandButton class="btn btn-outline btn-success" value="Proceed" />
         </h:form>
     </h:body>
