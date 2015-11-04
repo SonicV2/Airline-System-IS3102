@@ -8,11 +8,11 @@
             <web-module-libraries/>
             <web-module-additional-libraries>
                 <library>
-                    <file>${reference.AirlineSystem-ejb.dist-ear}</file>
+                    <file>${reference.AirlineSystem-war.dist-ear}</file>
                     <path-in-war>/</path-in-war>
                 </library>
                 <library>
-                    <file>${reference.AirlineSystem-war.dist-ear}</file>
+                    <file>${reference.AirlineSystem-ejb.dist-ear}</file>
                     <path-in-war>/</path-in-war>
                 </library>
             </web-module-additional-libraries>
