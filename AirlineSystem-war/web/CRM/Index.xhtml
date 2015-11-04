@@ -22,41 +22,48 @@
         <h:form class="form col-md-10 center-block">
 
 
-            <div class="text-center">
+            <div >
+                Recency Score is calculated on how many days since the customer last flown with Merlion Airlines compared to the current date.
                 <h:commandButton class="btn btn-outline btn-success" value="Get Recency Analytics" action="#{cRMAnalyticsManagedBean.calRecencyMMM}"/>
                 <br></br>
                 <br></br>
             </div>
-            <div class="text-center">
+            <div >
+                Frequency Score is the amount of times the customer flew with Merlion Airlines in the last year.
                 <h:commandButton class="btn btn-outline btn-success" value="Get Frequency Analytics" action="#{cRMAnalyticsManagedBean.calFrequencyMMM}"/>
                 <br></br>
                 <br></br>
             </div>
-            <div class="text-center">
+            <div>
+                Monetary Score is  the amount the customer spent with Merlion Airlines in the last year.
                 <h:commandButton class="btn btn-outline btn-success" value="Get Monetary Analytics" action="#{cRMAnalyticsManagedBean.calMonetaryMMM}"/>
                 <br></br>
                 <br></br>
             </div>
-            <div class="text-center">
+            <div >
+                Customer Lifetime Value is a prediction of how valuable a customer is to Merlion Airlines.
                 <h:commandButton class="btn btn-outline btn-success" value="Get Customer Lifetime Value Analytics" action="#{cRMAnalyticsManagedBean.calCLVMMM}"/>
                 <br></br>
                 <br></br>
             </div>
-            <div class="form-group">
+            <br/>
+            <br/>
+            Retrieve a customer list of a particular score: 
+            <div >
                 <h:outputLabel class="col-md-4 control-label" value="From Percentile: " />
                 <p:inputText value="#{cRMAnalyticsManagedBean.from}"  />
                 <br/>
 
             </div>
 
-            <div class="form-group">
+            <div >
                 <h:outputLabel class="col-md-4 control-label" value="To Percentile: " />
                 <p:inputText value="#{cRMAnalyticsManagedBean.to}" />
                 <br/>
 
             </div>  
 
-            <div class="form-group">
+            <div>
                 <h:outputLabel class="col-md-4 control-label" value="Recency/Frequency/Monetary" />
                 <h:selectOneMenu class="form-control" id="serviceClass" value="#{cRMAnalyticsManagedBean.type}" style="width:150px">
                     <f:selectItem itemLabel="Select One" itemValue="" />
@@ -69,12 +76,15 @@
 
             </div> 
 
-            <div class="text-center">
+            <div>
                 <h:commandButton class="btn btn-outline btn-success" value="Get Customer List" action="#{cRMAnalyticsManagedBean.retrieveCustomerList}"/>
                 <br></br>
                 <br></br>
             </div>
-            <div class="text-center">
+            <br/>
+            <br/>
+            Lost customers are customers who flew with Merlion Airlines in the previous year but no this year.
+            <div>
                 <h:commandButton class="btn btn-outline btn-success" value="Get Lost Customers" action="#{cRMAnalyticsManagedBean.retrieveLostCustomers}"/>
                 <br></br>
                 <br></br>

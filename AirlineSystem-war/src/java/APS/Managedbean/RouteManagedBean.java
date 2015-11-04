@@ -27,10 +27,10 @@ import javax.faces.event.ActionEvent;
 @SessionScoped
 
 public class RouteManagedBean {
+
     @EJB
     private RouteSessionBeanLocal routeSessionBean;
-    
-    
+
     Long routeId;
     String originCountry;
     String originCity;
@@ -38,113 +38,99 @@ public class RouteManagedBean {
     String destinationCountry;
     String destinationCity;
     String destinationIATA;
-    
+
     String name;
     String city;
     String country;
     String IATA;
     String searchCountry;
     String searchCity;
-    
+
     FacesMessage message = null;
-    
+
     private List<Location> locations;
     private List<Route> routes;
     private Route selectedRoute;
 
     List<Location> searchedLocations;
 
-    
     public RouteManagedBean() {
     }
-    
+
     @PostConstruct
-    public void retrieve(){
-        
+    public void retrieve() {
+
         setLocations(routeSessionBean.retrieveLocations());
         setRoutes(routeSessionBean.retrieveRoutes());
-        
-    }
-    
-    public void searchByCountry(ActionEvent event) {
-        
-        setSearchedLocations(routeSessionBean.searchLocationsByCountry(searchCountry));
-
-    }
-    
-    public void searchByCity(ActionEvent event) {
-        
-        setSearchedLocations(routeSessionBean.searchLocationsByCity(searchCity));
 
     }
 
-    
     /*This is for admin to create new route*/
-    public void addRoute(ActionEvent event){
+    public void addRoute(ActionEvent event) {
         if (routeSessionBean.findLocation(originIATA) == null || routeSessionBean.findLocation(destinationIATA) == null) {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "No such IATA!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
             return;
         }
-        
+
         if ((!originIATA.equals("SIN") && !originIATA.equals("NRT") && !originIATA.equals("FRA")) && (!destinationIATA.equals("SIN") && !destinationIATA.equals("NRT") && !destinationIATA.equals("FRA"))) {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Route is not valid! It must involve a hub!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
             return;
         }
-        
-        if (originIATA.equals(destinationIATA)){
+
+        if (originIATA.equals(destinationIATA)) {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Route is not valid!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
             return;
         }
-        
+
         List<Route> allroutes = routeSessionBean.retrieveRoutes();
         int size = allroutes.size();
 
-        for (int i=0; i<size; i++) {
-            if (allroutes.get(i).getDestinationIATA().equals(destinationIATA) && allroutes.get(i).getOriginIATA().equals(originIATA)){
+        for (int i = 0; i < size; i++) {
+            if (allroutes.get(i).getDestinationIATA().equals(destinationIATA) && allroutes.get(i).getOriginIATA().equals(originIATA)) {
                 message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Route already exists!", "");
                 FacesContext.getCurrentInstance().addMessage(null, message);
                 return;
             }
-                
+
         }
-        
+
         routeSessionBean.addRoute(originIATA, destinationIATA);
         message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Route Added Successfully!", "");
         FacesContext.getCurrentInstance().addMessage(null, message);
         setRoutes(routeSessionBean.retrieveRoutes());
         clear();
     }
-    
+
     /*clear input after submit*/
     public void clear() {
         setOriginIATA("");
         setDestinationIATA("");
     }
 
-    public String removeRoute(Long routeId){
-        
+    public String removeRoute(Long routeId) {
+
         selectedRoute = routeSessionBean.getRoute(routeId);
-        
-        if (!selectedRoute.getFlights().isEmpty()){
+
+        if (!selectedRoute.getFlights().isEmpty()) {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Route cannot be deleted!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
             return null;
         }
-        
+
         routes.remove(selectedRoute);
         routeSessionBean.deleteRoute(selectedRoute.getRouteId());
         message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Route Removed", "");
         FacesContext.getCurrentInstance().addMessage(null, message);
         selectedRoute = null;
         setRoutes(routeSessionBean.retrieveRoutes());
-        
+
         return "RemoveRoute";
-        
+
     }
-    
+
     public String getSearchCountry() {
         return searchCountry;
     }
@@ -152,7 +138,7 @@ public class RouteManagedBean {
     public void setSearchCountry(String searchCountry) {
         this.searchCountry = searchCountry;
     }
-    
+
     public String getSearchCity() {
         return searchCity;
     }
@@ -160,11 +146,11 @@ public class RouteManagedBean {
     public void setSearchCity(String searchCity) {
         this.searchCity = searchCity;
     }
-    
-    public List<Route> getRoutes(){
-         return routes;
-     }
-     
+
+    public List<Route> getRoutes() {
+        return routes;
+    }
+
     public void setRoutes(List<Route> routes) {
         this.routes = routes;
     }
@@ -172,11 +158,11 @@ public class RouteManagedBean {
     public Route getSelectedRoute() {
         return selectedRoute;
     }
- 
+
     public void setSelectedRoute(Route selectedRoute) {
         this.selectedRoute = selectedRoute;
     }
-    
+
     public Long getRouteId() {
         return routeId;
     }
@@ -185,22 +171,22 @@ public class RouteManagedBean {
         this.routeId = routeId;
     }
 
-    public List<Location> getLocations(){
-         return locations;
-     }
-     
+    public List<Location> getLocations() {
+        return locations;
+    }
+
     public void setLocations(List<Location> locations) {
         this.locations = locations;
     }
-    
-    public List<Location> getSearchedLocations(){
-         return searchedLocations;
-     }
-     
+
+    public List<Location> getSearchedLocations() {
+        return searchedLocations;
+    }
+
     public void setSearchedLocations(List<Location> searchedLocations) {
         this.searchedLocations = searchedLocations;
     }
-    
+
     public String getName() {
         return name;
     }
@@ -212,55 +198,53 @@ public class RouteManagedBean {
     public String getCity() {
         return city;
     }
+
     public String getOriginCountry() {
         return originCountry;
     }
-    
-    public void setOriginCountry(String originCountry){
+
+    public void setOriginCountry(String originCountry) {
         this.originCountry = originCountry;
     }
-    
+
     public String getDestinationCountry() {
         return destinationCountry;
     }
-    
-    public void setDestinationCountry(String destinationCountry){
+
+    public void setDestinationCountry(String destinationCountry) {
         this.destinationCountry = destinationCountry;
     }
-    
+
     public String getOriginCity() {
         return originCity;
     }
-    
-    public void setOriginCity(String originCity){
+
+    public void setOriginCity(String originCity) {
         this.originCity = originCity;
     }
-    
+
     public String getDestinationCity() {
         return destinationCity;
     }
-    
-    public void setDestinationCity(String destinationCity){
+
+    public void setDestinationCity(String destinationCity) {
         this.destinationCity = destinationCity;
     }
-    
+
     public String getOriginIATA() {
         return originIATA;
     }
-    
-    public void setOriginIATA(String originIATA){
+
+    public void setOriginIATA(String originIATA) {
         this.originIATA = originIATA;
     }
-    
+
     public String getDestinationIATA() {
         return destinationIATA;
     }
-    
-    public void setDestinationIATA(String destinationIATA){
+
+    public void setDestinationIATA(String destinationIATA) {
         this.destinationIATA = destinationIATA;
     }
-    
-    
-    
-  
+
 }

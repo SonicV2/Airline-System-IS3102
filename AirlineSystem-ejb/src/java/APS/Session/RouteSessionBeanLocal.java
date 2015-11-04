@@ -16,16 +16,16 @@ import javax.ejb.Local;
  */
 @Local
 public interface RouteSessionBeanLocal {
+    
     public void addRoute(String origin, String destination);
-    public Location findLocation(String location);
-
-    public Route getRoute(Long id);
-
     public void deleteRoute(Long id);
-    public List<Location> retrieveLocations();
+    public Route getRoute(Long id);
     public List<Route> retrieveRoutes();
+    public Location findLocation(String location);
     public Location getLocation(String country1);
-    public List<Location> searchLocationsByCountry(String searchCountry);
+    public List<Location> retrieveLocations();
     public List<Location> searchLocationsByCity(String searchCity);
+    public List<Location> searchLocationsByCountry(String searchCountry);
+    public Double haversineDist(Double lat1, Double long1, Double lat2, Double long2);
     
 }

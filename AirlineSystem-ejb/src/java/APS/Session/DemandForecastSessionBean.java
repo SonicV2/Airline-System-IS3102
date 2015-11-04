@@ -7,9 +7,11 @@ package APS.Session;
 
 import APS.Entity.Flight;
 import APS.Entity.Forecast;
+import APS.Entity.ForecastEntry;
 import APS.Entity.Route;
 import APS.Entity.Schedule;
 import Inventory.Entity.SeatAvailability;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -39,6 +41,9 @@ public class DemandForecastSessionBean implements DemandForecastSessionBeanLocal
     private SeatAvailability sa;
     private List<Schedule> schedules;
     private Forecast dForecast;
+    private List<Forecast> forecasts;
+    private ForecastEntry forecastEntry;
+    private List<ForecastEntry> forecastEntries;
     private int[] demand;
     //Create comparator for sorting of Schedules according to starting time
     private Comparator<Schedule> comparator = new Comparator<Schedule>() {
@@ -58,8 +63,14 @@ public class DemandForecastSessionBean implements DemandForecastSessionBeanLocal
         route = getRoute(routeId);
         flights = route.getFlights();
         schedule = new Schedule();
+        schedules = new ArrayList<Schedule>();
         sa = new SeatAvailability();
-        dForecast = new Forecast();
+        forecastEntries = new ArrayList<ForecastEntry>();
+        if (isUpdate) {
+            dForecast = hasForecast(year, routeId);
+            forecastEntries = dForecast.getForecastEntry();
+        }
+        dForecast.createForecastReport(year);
         demand = new int[24]; //Historical demand for the past 24 full months
         double[] result = new double[36];
         TimeZone tz = TimeZone.getTimeZone("GMT+8:00"); //Set Timezone to Singapore
@@ -89,39 +100,134 @@ public class DemandForecastSessionBean implements DemandForecastSessionBeanLocal
         schedules = removeScheduleBefore(schedules, tmp.getTime());
 
         int counter = 0;
-        int totalBooked = 0;
         //Add the daily demand to demand arraylist
         for (int i = 0; i < 24; i++) {
+            int totalBooked = 0;
             schedule = schedules.get(0); //Save current Schedule
             counter = findLastScheduleOfMonth(schedules, schedule.getStartDate());
+            forecastEntry = new ForecastEntry();
             //Add the demand for all schedules of a month
             for (int j = 0; j <= counter; j++) {
                 sa = schedules.get(j).getSeatAvailability();
                 totalBooked += sa.getBusinessBooked() + sa.getEconomyBasicBooked() + sa.getEconomyPremiumBooked() + sa.getEconomySaverBooked() + sa.getFirstClassBooked();
             }
             demand[i] = totalBooked;
+            if (isUpdate) {
+                forecastEntries.get(i).createEntry(schedule.getStartDate(), 0.0, Double.valueOf(totalBooked));
+            } else {
+                forecastEntry.createEntry(schedule.getStartDate(), 0.0, Double.valueOf(totalBooked));
+                forecastEntries.add(forecastEntry);
+            }
             totalBooked = 0;
             schedules = removeScheduleBeforeIndex(schedules, counter);
         }
 
         result = forecast(demand, period, 12);
-        dForecast.createForecastReport(year, result);
-        dForecast.setRoute(route);
+        tmp.set(Calendar.YEAR, year);
+        tmp.set(Calendar.DAY_OF_MONTH, 1);
+
+        //Create the forecast entries
+        for (int i = 0; i < 36; i++) {
+            forecastEntry = new ForecastEntry();
+
+            if (i > 23) {
+                tmp.set(Calendar.MONTH, i - 24);
+                if (isUpdate) {
+                    forecastEntry = forecastEntries.get(i);
+                    forecastEntry.createEntry(tmp.getTime(), result[i], 0.0);
+                } else {
+                    forecastEntry.createEntry(tmp.getTime(), result[i], 0.0);
+                    forecastEntries.add(forecastEntry);
+                }
+            } else {
+                forecastEntry = forecastEntries.get(i);
+                forecastEntry.setForecastValue(result[i]);
+            }
+            forecastEntry.setForecast(dForecast);
+            if (isUpdate) {
+                em.merge(forecastEntry);
+            } else {
+                em.persist(forecastEntry);
+            }
+        }
+
+        dForecast.setForecastEntry(forecastEntries);
 
         if (isUpdate) {
             em.merge(dForecast);
+            em.flush();
         } else {
+            dForecast.setRoute(route);
             em.persist(dForecast);
         }
     }
 
+//    @Override
+//    public void deleteForecastEntries(Long forecastId) {
+//        dForecast = getForecast(forecastId);
+//        forecastEntries = dForecast.getForecastEntry();
+//        System.out.println(forecastEntries.size());
+//        dForecast.setForecastEntry(null);
+//
+//        for (int i = 0; i < forecastEntries.size(); i++) {
+//            forecastEntries.get(i).setForecast(null);
+//            System.out.println(forecastEntries.get(i));
+//            em.remove(forecastEntries.get(i));
+//        }
+//        em.flush();
+//    }
     @Override
-    public Forecast getForecast(int year, long routeId) {
+    public Forecast getForecast(Long forecastId) {
         dForecast = new Forecast();
         try {
 
-            Query q = em.createQuery("SELECT a FROM Forecast " + "AS a WHERE a.year=:year AND a.routeId=:routeId");
-            q.setParameter("year", year);
+            Query q = em.createQuery("SELECT a FROM Forecast " + "AS a WHERE a.forecastId=:forecastId");
+            q.setParameter("forecastId", forecastId);
+
+            List results = q.getResultList();
+            if (!results.isEmpty()) {
+                dForecast = (Forecast) results.get(0);
+
+            } else {
+                dForecast = null;
+            }
+
+        } catch (EntityNotFoundException enfe) {
+            System.out.println("\nEntity not found error" + "enfe.getMessage()");
+        }
+        return dForecast;
+    }
+
+    //Get all the existing schedules
+    @Override
+    public List<Forecast> getForecasts() {
+        forecasts = new ArrayList<Forecast>();
+        try {
+
+            Query q = em.createQuery("SELECT a FROM Forecast a");
+
+            List<Forecast> results = q.getResultList();
+            if (!results.isEmpty()) {
+                forecasts = results;
+
+            } else {
+                forecasts = null;
+                System.out.println("No Forecasts Added!");
+            }
+
+        } catch (EntityNotFoundException enfe) {
+            System.out.println("\nEntity not found error" + "enfe.getMessage()");
+        }
+        return forecasts;
+    }
+
+    @Override
+    public Forecast hasForecast(int forecastYear, Long routeId) {
+        dForecast = new Forecast();
+        try {
+
+            Query q = em.createQuery("SELECT a FROM Forecast " + "AS a WHERE a.forecastYear=:forecastYear AND a.route.routeId=:routeId");
+            q.setParameter("forecastYear", forecastYear);
             q.setParameter("routeId", routeId);
 
             List results = q.getResultList();
@@ -138,16 +244,21 @@ public class DemandForecastSessionBean implements DemandForecastSessionBeanLocal
         return dForecast;
     }
 
-    //Get the Valid Year
+    //Get the whether the 
     @Override
-    public boolean isValidYear() {
-        schedules = getSchedules();
+    public boolean isValidYear(Long routeId) {
+        route = getRoute(routeId);
+        flights = route.getFlights();
+        schedules = new ArrayList<Schedule>();
+        for (int i = 0; i < flights.size(); i++) {
+            schedules.addAll(flights.get(i).getSchedule());
+        }
+
         Collections.sort(schedules, comparator);//Sort the schedules from database
         TimeZone tz = TimeZone.getTimeZone("GMT+8:00"); //Set Timezone to Singapore
         Calendar tmp = Calendar.getInstance(tz);
         Date currTime = tmp.getTime();
-        System.out.println(currTime);
-        tmp.setTime(schedules.get(0).getStartDate()); //Set time to the earliest schedule in the whole database
+        tmp.setTime(schedules.get(0).getStartDate()); //Set time to the earliest schedule for the route
         tmp.add(Calendar.MONTH, 25);
         if (currTime.after(tmp.getTime())) {
             return true;
@@ -259,22 +370,40 @@ public class DemandForecastSessionBean implements DemandForecastSessionBeanLocal
         return result;
     }
 
+    @Override
+    public void testForecast() {
+        int[] data = {42, 24, 32, 37, 46, 29, 37, 43, 49, 31, 38, 40, 51, 32, 41, 44, 56, 34, 42, 46, 60, 35, 44, 48};
+        double[] result = forecast(data, 4, 12);
+        //Print Array
+        System.out.println("result:(");
+        for (int i = 0; i < result.length; i++) {
+            System.out.print(result[i] + ", ");
+        }
+        System.out.println(")");
+    }
+
     //Takes in the relevant inputs and forecasts the demand
     private double[] forecast(int[] histData, int period, int numForecasted) {
 
-        double[] optimizedParams = optimizeParam(histData, period, 0.1, 0.0, 0.0, 0.0);
+        double[] optimizedParams = new double[3];
+        optimizedParams = optimizeParam(histData, period, 0.1d, 0.0d, 0.0d, 0.0d);
         //Call method again with different inputs to get 2 decimal point forecast parameters
-        optimizedParams = optimizeParam(histData, period, 0.01, optimizedParams[0], optimizedParams[1], optimizedParams[2]);
-        double alpha = optimizedParams[0];
-        double beta = optimizedParams[1];
-        double gamma = optimizedParams[2];
+        optimizedParams = optimizeParam(histData, period, 0.01d, optimizedParams[0], optimizedParams[1], optimizedParams[2]);
+        DecimalFormat df = new DecimalFormat("0.##");
+        double alpha = Double.valueOf(df.format(optimizedParams[0]));
+        double beta = Double.valueOf(df.format(optimizedParams[1]));
+        double gamma = Double.valueOf(df.format(optimizedParams[2]));
 
+        System.out.println("Params:" + alpha + "," + beta + "," + gamma);
         return holtWintersForecast(histData, alpha, beta, gamma, period, numForecasted);
     }
 
     //Using the holt winters triple exponential smoothing, this method returns a double array of forecasted values
     private double[] holtWintersForecast(int[] histData, double alpha,
             double beta, double gamma, int period, int numForecasted) {
+
+        //Set Decimal Format to 2dp
+        DecimalFormat df = new DecimalFormat("0.##");
 
         // Initialize the function arrays
         double[] Lt = new double[histData.length];
@@ -300,19 +429,19 @@ public class DemandForecastSessionBean implements DemandForecastSessionBeanLocal
             Lt[i] = alpha * (histData[i] / St[i - period]) + (1.0 - alpha) * (Lt[i - 1] + Bt[i - 1]);
 
             //Calculate trend smoothing, Bt
-            Bt[i] = beta * (Lt[i] - Lt[i - 1]) + (1 - beta) * Bt[i - 1];
+            Bt[i] = beta * (Lt[i] - Lt[i - 1]) + (1.0 - beta) * Bt[i - 1];
 
             //Calculate seasonal smoothing, St
             St[i] = gamma * histData[i] / Lt[i] + (1.0 - gamma) * St[i - period];
 
             //Calculate forecast
-            Ft[i] = (Lt[i] + Bt[i]) * St[i - period];
+            Ft[i] = Double.valueOf(df.format(Lt[i] + Bt[i] * St[i - period]));
         }
 
         //Forecast requested future values
         for (int i = 1; i <= numForecasted; i++) {
             int h = (int) Math.floor((i - 1) % period + 1);
-            Ft[histData.length - 1 + i] = (Lt[histData.length - 1] + i * Bt[histData.length - 1]) * St[histData.length - 1 - period + h];
+            Ft[histData.length - 1 + i] = Double.valueOf(df.format((Lt[histData.length - 1] + i * Bt[histData.length - 1]) * St[histData.length - 1 - period + h]));
         }
 
         return Ft;
@@ -365,7 +494,7 @@ public class DemandForecastSessionBean implements DemandForecastSessionBeanLocal
 
         double currModel[] = new double[histData.length];
         double currSSE = 0.0;
-        double[] result = new double[3];
+        double[] result = {baseA, baseB, baseC}; //Set the result as the initial value first
         //Set the minSSE to the first SSE at alpha = baseNumber, beta = baseNumber, gamma = baseNumber
         double minSSE = calcSSE(histData, holtWintersForecast(histData, baseA, baseB, baseC, period, 0));
 
@@ -383,6 +512,7 @@ public class DemandForecastSessionBean implements DemandForecastSessionBeanLocal
                 }
             }
         }
+
         return result;
     }
 
