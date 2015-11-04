@@ -55,10 +55,46 @@ public class SearchBookingManagedBean implements Serializable {
     private String boardingTime;
     private String aircraftType;
     private String totalWeightAllowed;
+    
+    private boolean online=false;
 
     public SearchBookingManagedBean() {
     }
 
+   public void getBookingOnline(ActionEvent event) {
+        FacesMessage message = null;
+        List<Booking> b = passengerNameRecordSessionBean.getBooking(pnrNumber, passportNumber);
+
+        if (b.isEmpty()) {
+            message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid PNR Number / Invalid Passport Number!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            setPnrNumber("");
+            setPassportNumber("");
+        } else {
+            restSchedules = new ArrayList<Schedule>();
+            setReqBooking(b.get(0));
+            setCheckinSchedule(passengerNameRecordSessionBean.getCheckinSchedule(pnrNumber, passportNumber));
+            calBoardingTime();
+            
+            checkInRecordSessionBean.addBooking(reqBooking);
+            boardingPassSessionBean.addBooking(reqBooking);
+            
+            this.online=true;
+            if (b.size() > 1) {
+                for (int i = 1; i < b.size(); i++) {
+                    restSchedules.add(b.get(i).getSeatAvail().getSchedule());
+                }
+            }
+        }
+    }
+    
+    
+    
+    
+    
+    
+    
+    
     public void getBooking(ActionEvent event) {
         FacesMessage message = null;
         List<Booking> b = passengerNameRecordSessionBean.getBooking(pnrNumber, passportNumber);
@@ -247,5 +283,15 @@ public class SearchBookingManagedBean implements Serializable {
     public void setTotalWeightAllowed(String totalWeightAllowed) {
         this.totalWeightAllowed = totalWeightAllowed;
     }
+
+    public boolean isOnline() {
+        return online;
+    }
+
+    public void setOnline(boolean online) {
+        this.online = online;
+    }
+    
+    
 
 }

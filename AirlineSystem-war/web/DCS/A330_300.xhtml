@@ -40,8 +40,8 @@
             
             <div>
             <p:inputText id="seat" value="#{seatManagedBean.choose}" />    
-            <h:commandButton value="Choose" actionListener="#{seatManagedBean.chooseSeatA330()}" action="AddBaggage.xhtml" />
-
+            <h:commandButton value="Choose" actionListener="#{baggageManagedBean.showBoardingPass}" action="#{seatManagedBean.chooseSeatA330()}" />
+            
             <p:dataGrid var="seat" value="#{seatManagedBean.a330seatArrange}" columns="10" layout="grid"
                         rows="440" id="seats" style="width:300px;height:100%; padding:0px;">
                 <p:panel style=" padding:0px;margin:0px; border-style: none " >

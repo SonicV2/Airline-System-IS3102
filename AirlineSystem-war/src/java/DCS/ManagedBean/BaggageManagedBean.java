@@ -73,10 +73,11 @@ public class BaggageManagedBean implements Serializable {
 
     @PostConstruct
     public void init() {
+        
         retrieveAllBaggages();
         totalweight=baggageSessionBean.retrieveTotalBaggageWeights(searchBookingManagedBean.getReqBooking());
     }
-    
+       
     
    public void showBaggageTag(ActionEvent event){
        Booking booking= searchBookingManagedBean.getReqBooking();

@@ -178,11 +178,12 @@ public class SeatManagedBean {
 
     }
 
-    public void chooseSeatA330() {
+    public String chooseSeatA330() {
 
         if (getOccupied().contains(getChoose().toUpperCase())) {
             message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "seat has already been choosen!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
+            return null;
 
         }  // make sure you cannot choose seat that is already booked
 
@@ -195,6 +196,12 @@ public class SeatManagedBean {
                 seatSessionBean.inputChosenE(schedule, choose.toUpperCase());
                 checkInRecordSessionBean.addSeat(booking, choose.toUpperCase());
                 boardingPassSessionBean.addSeat(booking, choose.toUpperCase());
+                
+                if(!searchBookingManagedBean.isOnline()){
+                    return "AddBaggage.xhtml";
+                }else{
+                    return "ShowBoardingPass.xhtml";
+                }
 
             } else if (getClasstype().equals("Business") && Integer.parseInt(getChoose().substring(1)) < 9) {
                 getA330seatArrange().set(getA330seatArrange().indexOf("\uD83D\uDCBA" + getChoose().toUpperCase()), "\n" + "\u26D4" + "\n" + getChoose().toUpperCase());
@@ -204,14 +211,22 @@ public class SeatManagedBean {
                 seatSessionBean.inputChosenB(schedule, choose.toUpperCase());
                 checkInRecordSessionBean.addSeat(booking, choose.toUpperCase());
                 boardingPassSessionBean.addSeat(booking, choose.toUpperCase());
+                
+                if(!searchBookingManagedBean.isOnline()){
+                    return "AddBaggage.xhtml";
+                }else{
+                    return "ShowBoardingPass.xhtml";
+                }
             } else {
                 message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "please choose the correct class", "");
                 FacesContext.getCurrentInstance().addMessage(null, message);
+                return null;
             }
 
         } else {
-
+                return null;
         }
+        
     }
 
     //----------------------------------------------------------------------------------------------------   
@@ -289,12 +304,12 @@ public class SeatManagedBean {
         }
     }
 
-    public void chooseSeatB777_200() {
+    public String chooseSeatB777_200() {
 
         if (getOccupied().contains(getChoose().toUpperCase())) {
             message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "seat has already been choosen!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
-
+            return null;
         }  // make sure you cannot choose seat that is already booked
 
         if (getB777_200seatArrange().contains("\uD83D\uDCBA" + getChoose().toUpperCase())) {
@@ -306,6 +321,8 @@ public class SeatManagedBean {
                 seatSessionBean.inputChosenE(schedule, choose.toUpperCase());
                 checkInRecordSessionBean.addSeat(booking, choose.toUpperCase());
                 boardingPassSessionBean.addSeat(booking, choose.toUpperCase());
+                
+                return "AddBaggage.xhtml";
             } else if (getClasstype().equals("Business") && Integer.parseInt(getChoose().substring(1)) < 11) {
                 getB777_200seatArrange().set(getB777_200seatArrange().indexOf("\uD83D\uDCBA" + getChoose().toUpperCase()), "\n" + "\u26D4" + "\n" + getChoose().toUpperCase());
 
@@ -314,14 +331,15 @@ public class SeatManagedBean {
                 seatSessionBean.inputChosenB(schedule, choose.toUpperCase());
                 checkInRecordSessionBean.addSeat(booking, choose.toUpperCase());
                 boardingPassSessionBean.addSeat(booking, choose.toUpperCase());
+                return "AddBaggage.xhtml";
             } else {
                 message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "please choose the correct class", "");
                 FacesContext.getCurrentInstance().addMessage(null, message);
-
+                return null;
             }
 
         } else {
-
+                return null;
         }
 
     }
@@ -401,11 +419,11 @@ public class SeatManagedBean {
         }
     }
 
-    public void chooseSeatB777_200ER() {
+    public String chooseSeatB777_200ER() {
         if (getOccupied().contains(getChoose().toUpperCase())) {
             message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "seat has already been choosen!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
-
+            return null;
         }  // make sure you cannot choose seat that is already booked
 
         if (getB777_200ERseatArrange().contains("\uD83D\uDCBA" + getChoose().toUpperCase())) {
@@ -416,6 +434,7 @@ public class SeatManagedBean {
                 seatSessionBean.inputChosenE(schedule, choose.toUpperCase());
                 checkInRecordSessionBean.addSeat(booking, choose.toUpperCase());
                 boardingPassSessionBean.addSeat(booking, choose.toUpperCase());
+                return "AddBaggage.xhtml";
                 
             } else if (getClasstype().equals("Business") && Integer.parseInt(getChoose().substring(1)) < 9) {
                 getB777_200ERseatArrange().set(getB777_200ERseatArrange().indexOf("\uD83D\uDCBA" + getChoose().toUpperCase()), "\n" + "\u26D4" + "\n" + getChoose().toUpperCase());
@@ -425,14 +444,15 @@ public class SeatManagedBean {
                 seatSessionBean.inputChosenB(schedule, choose.toUpperCase());
                 checkInRecordSessionBean.addSeat(booking, choose.toUpperCase());
                 boardingPassSessionBean.addSeat(booking, choose.toUpperCase());
-                
+                return "AddBaggage.xhtml";
             } else {
                 message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "please choose the correct class", "");
                 FacesContext.getCurrentInstance().addMessage(null, message);
+                return null;
             }
 
         } else {
-
+                return null;
         }
 
     }
@@ -532,12 +552,12 @@ public class SeatManagedBean {
         }
     }
 
-    public void chooseSeatB777_300() {
+    public String chooseSeatB777_300() {
 
         if (getOccupied().contains(getChoose().toUpperCase())) {
             message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "seat has already been choosen!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
-
+            return null;
         }  // make sure you cannot choose seat that is already booked
 
         if (getB777_300seatArrange().contains("\uD83D\uDCBA" + getChoose().toUpperCase())) {
@@ -548,6 +568,7 @@ public class SeatManagedBean {
                 seatSessionBean.inputChosenE(schedule, choose.toUpperCase());
                 checkInRecordSessionBean.addSeat(booking, choose.toUpperCase());
                 boardingPassSessionBean.addSeat(booking, choose.toUpperCase());
+                return "AddBaggage.xhtml";
                 
             } else if (getClasstype().equals("Business") && Integer.parseInt(getChoose().substring(1)) > 2 && Integer.parseInt(getChoose().substring(1)) < 12) {
                 getB777_300seatArrange().set(getB777_300seatArrange().indexOf("\uD83D\uDCBA" + getChoose().toUpperCase()), "\n" + "\u26D4" + "\n" + getChoose().toUpperCase());
@@ -556,6 +577,7 @@ public class SeatManagedBean {
                 seatSessionBean.inputChosenB(schedule, choose.toUpperCase());
                 checkInRecordSessionBean.addSeat(booking, choose.toUpperCase());
                 boardingPassSessionBean.addSeat(booking, choose.toUpperCase());
+                return "AddBaggage.xhtml";
                 
             } else if (getClasstype().equals("First Class") && Integer.parseInt(getChoose().substring(1)) < 3) {
                 getB777_300seatArrange().set(getB777_300seatArrange().indexOf("\uD83D\uDCBA" + getChoose().toUpperCase()), "\n" + "\u26D4" + "\n" + getChoose().toUpperCase());
@@ -565,15 +587,16 @@ public class SeatManagedBean {
                 seatSessionBean.inputChosenF(schedule, choose.toUpperCase());
                 checkInRecordSessionBean.addSeat(booking, choose.toUpperCase());
                 boardingPassSessionBean.addSeat(booking, choose.toUpperCase());
+                return "AddBaggage.xhtml";
                 
             } else {
                 message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "please choose the correct class", "");
                 FacesContext.getCurrentInstance().addMessage(null, message);
-
+                return null;
             }
 
         } else {
-
+            return null;
         }
 
     }
@@ -647,11 +670,11 @@ public class SeatManagedBean {
         }
     }
 
-    public void chooseSeatB777_300ER() {
+    public String chooseSeatB777_300ER() {
         if (getOccupied().contains(getChoose().toUpperCase())) {
             message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "seat has already been choosen!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
-
+            return null;
         }  // make sure you cannot choose seat that is already booked
 
         if (getB777_300ERseatArrange().contains("\uD83D\uDCBA" + getChoose().toUpperCase())) {
@@ -662,7 +685,7 @@ public class SeatManagedBean {
                 seatSessionBean.inputChosenE(schedule, choose.toUpperCase());
                 checkInRecordSessionBean.addSeat(booking, choose.toUpperCase());
                 boardingPassSessionBean.addSeat(booking, choose.toUpperCase());
-                
+                return "AddBaggage.xhtml";
             } else if (getClasstype().equals("Business") && Integer.parseInt(getChoose().substring(1)) > 1 && Integer.parseInt(getChoose().substring(1)) < 10) {
                 getB777_300ERseatArrange().set(getB777_300ERseatArrange().indexOf("\uD83D\uDCBA" + getChoose().toUpperCase()), "\n" + "\u26D4" + "\n" + getChoose().toUpperCase());
 
@@ -671,7 +694,7 @@ public class SeatManagedBean {
                 seatSessionBean.inputChosenB(schedule, choose.toUpperCase());
                 checkInRecordSessionBean.addSeat(booking, choose.toUpperCase());
                 boardingPassSessionBean.addSeat(booking, choose.toUpperCase());
-                
+                return "AddBaggage.xhtml";
             } else if (getClasstype().equals("First Class") && Integer.parseInt(getChoose().substring(1)) < 2) {
                 getB777_300ERseatArrange().set(getB777_300ERseatArrange().indexOf("\uD83D\uDCBA" + getChoose().toUpperCase()), "\n" + "\u26D4" + "\n" + getChoose().toUpperCase());
 
@@ -679,15 +702,15 @@ public class SeatManagedBean {
                 seatSessionBean.inputChosenF(schedule, choose.toUpperCase());
                 checkInRecordSessionBean.addSeat(booking, choose.toUpperCase());
                 boardingPassSessionBean.addSeat(booking, choose.toUpperCase());
-                
+                return "AddBaggage.xhtml";
             } else {
                 message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "please choose the correct class", "");
                 FacesContext.getCurrentInstance().addMessage(null, message);
-
+                return "AddBaggage.xhtml";
             }
 
         } else {
-
+            return null;
         }
 
     }
