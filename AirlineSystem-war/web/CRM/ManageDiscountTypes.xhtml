@@ -1,16 +1,135 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-        <title>TODO supply a title</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    </head>
-    <body>
-        <div>TODO write content</div>
-    </body>
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <p:growl id="growl" sticky="true" showDetail="false"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <h:outputStylesheet library ="css"  name="bootstrap.css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
+        <h:outputStylesheet library="css" name="admindb.css" />
+        <h:outputStylesheet library="css" name="morrisjs/morris.css" />
+        <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js" />-->
+        <title>Manage Discount Code</title>
+
+        
+    </h:head>
+
+    <style>
+        .ui-state-highlight .ui-icon {
+        }
+        .ui-state-active .ui-icon {
+        }
+    </style>
+
+
+
+    <h:body>
+        <!--    To add the same header on all dashboard pages  -->
+<!--        <ui:include src="DashboardHeader.xhtml"/>-->
+        <!--    To add the same sidebar on all dashboard pages  -->
+        <ui:include src="/CI/DashboardSidebar.xhtml"/>
+        <div id="page-wrapper">
+
+
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2 class="page-header"> Manage Discount Types</h2>
+                </div>
+                <div class="col-lg-12">
+                    <h:form id="roleForm"> 
+                        <p:growl id="msgs" showDetail="true"/>
+                        <!--<div class="table-responsive">-->
+                        <p:dataTable id="discount-type" var="discount" value="#{discountManagedBean.discountTypeDisplays}" editable="true" style="margin-bottom:20px">
+                            <f:facet name="header">
+                                Existing Discount Types
+                            </f:facet>
+
+                            <p:column headerText="Discount ID" >
+                                <h:outputText value="#{discount.discountType.id}" />
+                            </p:column>
+                            
+                            <p:column headerText="Discount Description" >
+                                <h:outputText value="#{discount.discountType.description} " />
+                            </p:column>
+                            
+                            <p:column headerText="Discount Amount" >
+                                <h:outputText value="#{discount.discountType.discount} %" />
+                            </p:column>
+
+                            <p:column headerText="Mileage Points Required" >
+                                <h:outputText value="#{discount.discountType.mileagePointsToRedeem} " />
+                            </p:column>
+                            
+                            <p:column headerText="Number of Claimed Codes" >
+                                <h:outputText value="#{discount.noOfClaimedCodes} " />
+                            </p:column>
+                            <p:column headerText="Number of Unclaimed Codes" >
+                                <h:outputText value="#{discount.noOfUnclaimedCodes} " />
+                            </p:column>
+                            
+                            <p:column headerText="Delete" style="width:80px" >
+
+                                <h:commandLink onclick="if (!confirm('Do you really want to delete this discount type?')) {
+                                            return false;
+                                        }
+                                        ;
+                                        return true;
+                                               " action="#{discountManagedBean.deleteDiscountType(discount.discountType)}"><i class="fa fa-trash-o"></i> </h:commandLink>
+                            </p:column>
+                            
+                        </p:dataTable>   
+                    </h:form>
+                </div>
+
+                <br></br>
+                <div class="col-md-10">
+
+                    <h:form id="accessForm">
+                        <div class="form-group">
+                            <label class="control-label col-md-5">New Discount Description:   </label>
+
+                            <p:inputText id="discountDesc" required="true" requiredMessage="Please fill in Discount Description!" class="form-inline" value="#{discountManagedBean.description}"  />
+                            
+                        </div>
+                        
+                        
+                        <div class="form-group">
+                            <label class="control-label col-md-5">Discount Percentage:   </label>
+
+                            <p:inputText id="discountPer" required="true" requiredMessage="Please fill in Discount Percentage!" class="form-inline" value="#{discountManagedBean.discount}"  />
+                            
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="control-label col-md-5">Number of Mileage Points Required:  </label>
+
+                            <p:inputText id="mileagePoints" required="true" requiredMessage="Please fill in Mileage Points Required!" class="form-inline" value="#{discountManagedBean.noOfMileagePointsToRedeem}"  />
+                            
+                        </div>
+                        
+                       
+
+                        <br></br>
+                        
+
+                        <br></br>
+                        <div class="text-center">
+                            <h:commandButton class="btn btn-outline btn-success" value="Create Discount" action="#{discountManagedBean.addDiscountType()}"/>
+                        </div>
+                        <br></br>
+                        <br></br>
+
+                    </h:form>
+                </div>
+            </div>
+        </div>
+
+    </h:body>
 </html>
