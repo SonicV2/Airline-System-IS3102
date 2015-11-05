@@ -8,7 +8,7 @@
         <title>Display Fall Out Rates</title>
     </h:head>
     <h:body>
-        <p:dataTable var="fallOut" value="#{turnOutManageBean.fList}" paginator="true" rows="10">
+        <p:dataTable var="fallOut" value="#{turnOutManagedBean.fList}" paginator="true" rows="10">
             <p:column headerText="ServiceType">
                 <h:outputText value="#{fallOut.serviceClass}" />
             </p:column>

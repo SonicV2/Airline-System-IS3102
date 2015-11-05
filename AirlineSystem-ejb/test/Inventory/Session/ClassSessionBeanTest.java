@@ -65,8 +65,7 @@ public class ClassSessionBeanTest {
      */
     @Test
     public void testFindClass() throws Exception {
-        BookingClass result = cm.findClass("A11"); 
-        assertNotNull( result);
+        assertNotNull(cm.findClass("A11"));
     }
 
     /**

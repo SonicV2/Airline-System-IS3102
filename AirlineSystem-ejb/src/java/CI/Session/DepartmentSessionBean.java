@@ -20,7 +20,7 @@ import javax.persistence.Query;
  * @author HOULIANG
  */
 @Stateless
-public class DepartmentSessionBean implements DepartmentSessionBeanLocal, DepartmentSessionBeanRemote{
+public class DepartmentSessionBean implements DepartmentSessionBeanLocal, DepartmentSessionBeanRemote {
 
     @PersistenceContext(unitName = "AirlineSystem-ejbPU")
     private EntityManager em;
@@ -33,16 +33,15 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal, Depart
         em.persist(department);
         return "Department Added";
     }
-    
-    
-    
+
     @Override
-    public String updateOrgUnit(OrganizationUnit oldOUnit, OrganizationUnit newOUnit){
-        if(
-           em.find(OrganizationUnit.class, oldOUnit.getDepartmentID()) == null){
-           throw new IllegalArgumentException("Unknown Organization id");
+    public String updateOrgUnit(OrganizationUnit oldOUnit, OrganizationUnit newOUnit) {
+
+        if (em.find(OrganizationUnit.class, oldOUnit.getDepartmentID()) == null) {
+            System.out.println("Exception Thrown!!!!");
+            throw new IllegalArgumentException("Unknown Organization id");
         }
-        
+
         newOUnit.setDepartmentName(newOUnit.getDepartmentName().toUpperCase());
         newOUnit.setLocation(newOUnit.getLocation().toUpperCase());
 
@@ -50,47 +49,47 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal, Depart
         System.out.println("merged organization unit");
         return "Updated successfully";
     }
-    
+
     @Override
-    public String deleteOrgUnit(String OUName){
+    public String deleteOrgUnit(String OUName) {
         //String msg;
         OrganizationUnit orgUnit = new OrganizationUnit();
         orgUnit = getDepartment(OUName);
         List<Employee> employees = orgUnit.getEmployee();
-        
-        for (Employee e: employees){
+
+        for (Employee e : employees) {
             OrganizationUnit eOrgUnit = e.getOrganizationUnit(); //get a list of organization unit that the employee has
-            if (orgUnit == eOrgUnit){
+            if (orgUnit == eOrgUnit) {
                 return "Cannot Delete!";
             }
         }
-        
+
         em.remove(orgUnit);
         em.flush();
-        return "Delete successful!";    
+        return "Delete successful!";
     }
-    
+
     @Override
-    public OrganizationUnit getDepartmentUseID(Long deptID){
+    public OrganizationUnit getDepartmentUseID(Long deptID) {
         Query q = em.createQuery("SELECT a FROM OrganizationUnit a WHERE a.departmentID =:deptID");
         q.setParameter("deptID", deptID);
         List<OrganizationUnit> results = q.getResultList();
 
         return results.get(0);
     }
-    
+
     @Override
     public List<String> retrive() {
         ArrayList<String> list = new ArrayList();
         try {
-            
+
             System.out.println("Look Look Here retrive");
             Query q = em.createQuery("SELECT a FROM OrganizationUnit a");
 
             List<OrganizationUnit> results = q.getResultList();
             if (!results.isEmpty()) {
                 for (OrganizationUnit org : results) {
-                    list.add(org.getDepartmentName() + "(" +org.getLocation() + ")");
+                    list.add(org.getDepartmentName() + "(" + org.getLocation() + ")");
                 }
 
             } else {
@@ -102,117 +101,112 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal, Depart
         }
         return list;
     }
-    
-
 
     @Override
-    public List<OrganizationUnit> retrieveAllDepts(){
-        
+    public List<OrganizationUnit> retrieveAllDepts() {
+
         List<OrganizationUnit> allDepts = new ArrayList<OrganizationUnit>();
-        
-        try{
+
+        try {
             Query q = em.createQuery("SELECT a from OrganizationUnit a");
-            
+
             List<OrganizationUnit> results = q.getResultList();
-            if (!results.isEmpty()){
-                
+            if (!results.isEmpty()) {
+
                 allDepts = results;
-                
-            }else
-            {
+
+            } else {
                 allDepts = null;
                 System.out.println("no dept!");
             }
-        }catch (EntityNotFoundException enfe) {
+        } catch (EntityNotFoundException enfe) {
             System.out.println("\nEntity not found error" + "enfe.getMessage()");
         }
-       
+
         return allDepts;
     }
-    
-    public Employee searchStaff(String id){
+
+    public Employee searchStaff(String id) {
         Employee employee = em.find(Employee.class, id);
         return employee;
     }
-    
-    public void editGender(Employee edited){
+
+    public void editGender(Employee edited) {
         em.merge(edited);
     }
 
     // Return employee department name
     @Override
-    public String searchEmployee(String staffID){   
+    public String searchEmployee(String staffID) {
         Employee employee = getEmployeeUseID(staffID);
-        if(employee == null){
+        if (employee == null) {
             return "User Not Exist!";
-        }else{
-            String dept = employee.getOrganizationUnit().getDepartmentName() + "(" +employee.getOrganizationUnit().getLocation() + ")";
-            System.out.println("Session Bean Dept: "+ dept);
+        } else {
+            String dept = employee.getOrganizationUnit().getDepartmentName() + "(" + employee.getOrganizationUnit().getLocation() + ")";
+            System.out.println("Session Bean Dept: " + dept);
             return dept;
         }
     }
-        
+
     @Override
-    public String changeDepartment(String staffID,String deptNameCom,String deptNameOldCom){
+    public String changeDepartment(String staffID, String deptNameCom, String deptNameOldCom) {
         String deptName = deptNameCom.substring(0, deptNameCom.indexOf("("));
         String deptNameOld = deptNameOldCom.substring(0, deptNameOldCom.indexOf("("));
-        
+
         Employee employee = getEmployeeUseID(staffID);
-        OrganizationUnit ouOld =getDepartment(deptNameOld);
+        OrganizationUnit ouOld = getDepartment(deptNameOld);
         OrganizationUnit ouNew = getDepartment(deptName);
-        
+
         List<Employee> employees = ouOld.getEmployee();
         employees.remove(employee);
         ouOld.setEmployee(employees);
-        
+
         List<Employee> employeesNew = ouNew.getEmployee();
         employeesNew.add(employee);
         ouNew.setEmployee(employeesNew);
-        
+
         employee.setOrganizationUnit(ouNew);
         em.merge(employee);
-        
+
         return "Successful!";
-        
+
     }
-    
+
     @Override
-    public String adminChangeDepartment(String staffID,String deptNameCom,String deptNameOldCom){
+    public String adminChangeDepartment(String staffID, String deptNameCom, String deptNameOldCom) {
         String deptName = deptNameCom;
         String deptNameOld = deptNameOldCom;
-        
+
         Employee employee = getEmployeeUseID(staffID);
-        OrganizationUnit ouOld =getDepartment(deptNameOld);
+        OrganizationUnit ouOld = getDepartment(deptNameOld);
         OrganizationUnit ouNew = getDepartment(deptName);
-        
+
         List<Employee> employees = ouOld.getEmployee();
         employees.remove(employee);
         ouOld.setEmployee(employees);
-        
+
         List<Employee> employeesNew = ouNew.getEmployee();
         employeesNew.add(employee);
         ouNew.setEmployee(employeesNew);
-        
+
         employee.setOrganizationUnit(ouNew);
         em.merge(employee);
-        
-        return "Successful!";
-        
-    }
-    
 
-    
+        return "Successful!";
+
+    }
+
     @Override
-    public OrganizationUnit getDepartment(String deptName){
+    public OrganizationUnit getDepartment(String deptName) {
         Query q = em.createQuery("SELECT a FROM OrganizationUnit a WHERE a.departmentName =:deptName");
         q.setParameter("deptName", deptName);
-        
-         List<OrganizationUnit> results = q.getResultList();
-         
-         return results.get(0);
-         
+
+        List<OrganizationUnit> results = q.getResultList();
+
+        return results.get(0);
+
     }
-    
+
     public Employee getEmployeeUseID(String employeeID) {
         Employee employee = new Employee();
         try {

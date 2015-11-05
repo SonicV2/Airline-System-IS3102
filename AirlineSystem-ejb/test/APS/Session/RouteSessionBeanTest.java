@@ -43,7 +43,7 @@ public class RouteSessionBeanTest {
     @Test
     public void testDeleteRoute() throws Exception {
         System.out.println("deleteRoute");
-        Long routeId = Long.valueOf("859");
+        Long routeId = Long.valueOf("2102");
         String result = rm.deleteRoute(routeId);
         assertEquals("Route Deleted",result);
     }
@@ -66,7 +66,7 @@ public class RouteSessionBeanTest {
     @Test
     public void testFindLocation() throws Exception {
         System.out.println("getLocation");
-        String country1 = "SIN";
+        String country1 = "China";
         assertNotNull(rm.getLocation(country1));
     }
 

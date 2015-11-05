@@ -43,18 +43,18 @@ public class FlightSessionBeanTest {
     /**
      * Test of addFlight method, of class FlightSessionBean.
      */
-//    @Test
-//    public void testAddFlight() throws Exception {
-//        System.out.println("addFlight");
-//        String flightNo = "MA999";
-//        String flightDays = "1000000";
-//        Double basicFare = 500.0;
-//        Date startDateTime = new Date();
-//        Long routeId = Long.valueOf("859");
-//        boolean pastFlight = false;
-//        String result = fm.addFlight(flightNo, flightDays, basicFare, startDateTime, routeId, pastFlight);
-//        assertEquals("Flight Added",result);
-//    }
+    @Test
+    public void testAddFlight() throws Exception {
+        System.out.println("addFlight");
+        String flightNo = "MA999";
+        String flightDays = "1000000";
+        Double basicFare = 500.0;
+        Date startDateTime = new Date();
+        Long routeId = Long.valueOf("852");
+        boolean pastFlight = false;
+        String result = fm.addFlight(flightNo, flightDays, basicFare, startDateTime, routeId, pastFlight);
+        assertEquals("Flight Added",result);
+    }
 
     /**
      * Test of deleteFlight method, of class FlightSessionBean.

@@ -24,7 +24,7 @@
 
         function drawRegionsMap() {
 
-        #{seasonManageBean.geoArray}
+        #{seasonManagedBean.geoArray}
 
             var data = google.visualization.arrayToDataTable(results);
 
@@ -32,10 +32,10 @@
 
             var options = {};
             var options = {
-           colorAxis: {
-            values: [-100, 0, 100],
-            colors: ['blue', 'white', 'red']
-        }
+                colorAxis: {
+                    values: [-10, 0, 10],
+                    colors: ['blue', 'white', 'red']
+                }
             };
 
             var chart = new google.visualization.GeoChart(document.getElementById('regions_div'));
@@ -63,7 +63,7 @@
             <h:form>
                 <div class="form-group">
                     <h:outputLabel class="col-md-4 control-label" value="Seasonality" />
-                    <h:selectOneMenu class="form-control"  value="#{seasonManageBean.month}" converter="javax.faces.Integer" style="width:150px">
+                    <h:selectOneMenu class="form-control"  value="#{seasonManagedBean.month}" converter="javax.faces.Integer" style="width:150px">
                         <f:selectItem itemLabel="January" itemValue= "0" />
                         <f:selectItem itemLabel="Febuary" itemValue= "1" />
                         <f:selectItem itemLabel="March" itemValue= "2" />
@@ -83,13 +83,13 @@
 
                 <div class="form-group">
                     <h:outputLabel class="col-md-4 control-label" value="Enter Year: " />
-                    <p:inputText value="#{seasonManageBean.year}"  />
+                    <p:inputText value="#{seasonManagedBean.year}"  />
                     <br/>
 
                 </div>
 
                 <div class="text-center">
-                    <h:commandButton class="btn btn-outline btn-success" value="Get Geo Map" action="#{seasonManageBean.refresh}"/>
+                    <h:commandButton class="btn btn-outline btn-success" value="Get Geo Map" action="#{seasonManagedBean.refresh}"/>
                     <br></br>
                 </div>
 
@@ -104,13 +104,13 @@
                     <h:form id="iform">
                         <p:growl id="msgs" showDetail="true"/>
 
-                        <p:dataTable id="fareClasses" var="season" value="#{seasonManageBean.sList}" editable="true" style="margin-bottom:20px">
+                        <p:dataTable id="fareClasses" var="season" value="#{seasonManagedBean.sList}" editable="true" style="margin-bottom:20px">
                             <f:facet name="header">
                                 Seasons
                             </f:facet>
 
-                            <p:ajax event="rowEdit" listener="#{seasonManageBean.onRowEdit}" update=":iform:msgs" />
-                            <p:ajax event="rowEditCancel" listener="#{seasonManageBean.onRowCancel}" update=":iform:msgs" />
+                            <p:ajax event="rowEdit" listener="#{seasonManagedBean.onRowEdit}" update=":iform:msgs" />
+                            <p:ajax event="rowEditCancel" listener="#{seasonManagedBean.onRowCancel}" update=":iform:msgs" />
 
                             <p:column filterBy="#{season.id}" filterMatchMode="contains" headerText="Season Id" style="width:60px">
                                 <h:outputText value="#{season.id}" />
@@ -179,7 +179,7 @@
                                             return false;
                                         }
                                         ;
-                                        return true;" action="#{seasonManageBean.deleteSeason(season)}"><i class="fa fa-trash-o"></i> </h:commandLink>
+                                        return true;" action="#{seasonManagedBean.deleteSeason(season)}"><i class="fa fa-trash-o"></i> </h:commandLink>
                             </p:column>
 
 

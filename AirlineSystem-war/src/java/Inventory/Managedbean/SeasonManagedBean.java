@@ -30,7 +30,7 @@ import org.primefaces.event.RowEditEvent;
 @Named(value = "seasonManageBean")
 @ManagedBean
 @SessionScoped
-public class SeasonManageBean {
+public class SeasonManagedBean {
 
     /**
      * Creates a new instance of seasonManageBean
@@ -103,13 +103,8 @@ public class SeasonManageBean {
             Season season = sList.get(i);
             Date startDate = season.getStart();
             Date endDate = season.getEnd();
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(startDate);
-            int from = cal.get(Calendar.MONTH);
-            cal.setTime(endDate);
-            int end = cal.get(Calendar.MONTH);
-            int seasonYear = cal.get(Calendar.YEAR);           
-            if(from<=month && month<=end && year==seasonYear){
+            Date now = new Date();
+            if(now.after(startDate) && now.before(endDate)){
             String countryGeo =season.getLocation().getCountry();
             if (hm.get(countryGeo) != null) {
                 int count=0; 
@@ -123,7 +118,7 @@ public class SeasonManageBean {
                 hm.put(countryGeo, score);
 
             } else {
-                hm.put(countryGeo, 0);
+                hm.put(countryGeo, 1);
                 countries.add(countryGeo);
             }
             }

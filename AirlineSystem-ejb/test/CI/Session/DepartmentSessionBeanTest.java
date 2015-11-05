@@ -5,12 +5,10 @@
  */
 package CI.Session;
 
-import CI.Entity.Employee;
 import CI.Entity.OrganizationUnit;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.ejb.embeddable.EJBContainer;
+import javax.ejb.EJBException;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -81,10 +79,15 @@ public class DepartmentSessionBeanTest {
     public void testUpdateOrgUnitException() throws Exception {
         System.out.println("updateOrgUnit");
         OrganizationUnit ou1 = new OrganizationUnit();
+        ou1.setDepartmentID(Long.valueOf("111"));
+        try{
+        dm.updateOrgUnit(ou1, ou1);
+        }
+        catch(EJBException ex){
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("Unknown Organization id");
-        dm.updateOrgUnit(ou1, ou1);
-       
+        throw ex.getCausedByException();
+        }
     }
     
     
@@ -100,7 +103,8 @@ public class DepartmentSessionBeanTest {
         assertEquals("Cannot Delete!",result);
         
         dept= "testDepartment";
-        assertEquals("Delete Successful!",result);
+        result = dm.deleteOrgUnit(dept);
+        assertEquals("Delete successful!",result);
         
     }
 
@@ -151,8 +155,8 @@ public class DepartmentSessionBeanTest {
     public void testChangeDepartment() throws Exception {
         System.out.println("changeDepartment");
         String staffID = "S0001";
-        String deptNameCom = "IT";
-        String deptNameOldCom = "FINANCE"; 
+        String deptNameCom = "FINANCE(";
+        String deptNameOldCom = "IT("; 
         String expResult = "Successful!";
         String result = dm.changeDepartment(staffID, deptNameCom, deptNameOldCom);
         assertEquals(expResult, result);

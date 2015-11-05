@@ -21,7 +21,7 @@ import java.util.List;
 @Named(value = "turnOutManageBean")
 @ManagedBean
 @SessionScoped
-public class TurnOutManageBean {
+public class TurnOutManagedBean {
 
     /**
      * Creates a new instance of seasonManageBean

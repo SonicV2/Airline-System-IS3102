@@ -55,9 +55,10 @@ public class FlightSessionBean implements FlightSessionBeanLocal, FlightSessionB
         flight.createFlight(flightNo, flightDays, basicFare, tmp.getTime());
         flight.setRoute(route);
         route.getFlights().add(flight);
+        String id = "Airbus A380-800";
+        aircraftType = em.find(AircraftType.class, id);
         flight.setAircraftType(aircraftType);
         flight.setSchedule(schedules);
-        
          if (pastFlight) {
             em.merge(flight);
             em.flush();

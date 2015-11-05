@@ -23,7 +23,7 @@ import org.primefaces.event.RowEditEvent;
 @Named(value = "classManageBean")
 @ManagedBean
 @SessionScoped
-public class ClassManageBean {
+public class ClassManagedBean {
     
     @EJB
     private ClassSessionBeanLocal cm;
