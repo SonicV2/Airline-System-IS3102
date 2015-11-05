@@ -199,14 +199,13 @@ public class CRMAnalyticsManagedBean implements Serializable {
         body += "Dear " + name + ",\n\n" + emailBody;
         body += "\n\nWe look forward to seeing you on board soon!";
      
-
         emailSessionBean.sendEmail(email, emailTitle, body);
     }
     
     public String sendMarketingEmail(){
         int size = csList.size();
         description= "You are sending a mass marketing email to customers from " + from+ " percentile" 
-                +"to the " + to + " percentile of "+ type + "score. There exist " + size + " customers";
+                +" to the " + to + " percentile of "+ type + " score. There exist " + size + " customers.";
         return "SendMarketingEmail";
     }
     
