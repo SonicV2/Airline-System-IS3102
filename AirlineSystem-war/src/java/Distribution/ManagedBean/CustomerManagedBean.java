@@ -229,6 +229,7 @@ public class CustomerManagedBean {
                     PNRDisplay eachPNRDisplay = new PNRDisplay();
 
                     eachPNRDisplay.setId(eachCustomerPNR.getPnrID());
+                    eachPNRDisplay.setRefundable(distributionSessionBean.isPNRRefundable(eachCustomerPNR));
                     int noOfTravellers = eachCustomerPNR.getNoOfTravellers();
 
                     eachPNRDisplay.setNoOfTravellers(noOfTravellers);

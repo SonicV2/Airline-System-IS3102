@@ -984,6 +984,7 @@ public class MARSManagedBean {
 
         eachPNRDisplay.setNoOfTravellers(noOfTravellers);
         eachPNRDisplay.setBookingDate(searchedPNR.getDateOfBooking());
+        eachPNRDisplay.setRefundable(distributionSessionBean.isPNRRefundable(searchedPNR));
 
         for (Booking eachBooking : searchedPNR.getBookings()) {
             if (!addedNames.contains(eachBooking.getTravellerFristName() + " " + eachBooking.getTravellerLastName())) {
