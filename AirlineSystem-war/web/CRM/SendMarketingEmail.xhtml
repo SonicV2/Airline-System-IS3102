@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Send Marketing Email</title>
+    </h:head>
+    <h:body>
+         <br/>
+        Description:
+        <h:outputLabel class="col-md-4 control-label" value="#{cRMAnalyticsManagedBean.description}" />
+        <br/>
+        <br/>
+        <h:form>
+            <p:inputText placeholder="Email Title" value="#{cRMAnalyticsManagedBean.emailTitle}"  />
+            <br/>
+            <br/>
+            Type Your Marketing Email Body Here
+            <br/>
+            <br/>
+            <p:inputTextarea value="#{cRMAnalyticsManagedBean.emailBody}" rows="20" cols="70" counter="display" maxlength="1000" counterTemplate="{0} characters remaining." autoResize="false" />
+            <h:outputText id="display" />           
+        <br/>
+        <h:commandButton class="btn btn-primary btn-lg btn-block" value="Send Email" 
+                         actionListener="#{cRMAnalyticsManagedBean.sendtoCustomerList1}" />
+        </h:form>
+    </h:body>
+</html>
+

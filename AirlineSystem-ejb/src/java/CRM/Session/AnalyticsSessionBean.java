@@ -35,7 +35,7 @@ public class AnalyticsSessionBean implements AnalyticsSessionBeanLocal {
     public void createPsuedoCustomers() {
         String firstName = "Customer";
         String hpNumber = "999";
-        String email = "yuqing_w@u.nus.edu";
+        String email = "yiquanster@gmail.com";
         String homenumber = "995";
         String password = "password";
         String address = "Com 1 NUS SOC";
