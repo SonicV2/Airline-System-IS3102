@@ -5,7 +5,11 @@
  */
 package DCS.Session;
 
+import APS.Entity.Flight;
 import DCS.Entity.BaggageTag;
+import Distribution.Entity.Baggage;
+import Inventory.Entity.Booking;
+import Inventory.Entity.BookingClass;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -23,6 +27,93 @@ public class BaggageSessionBean implements BaggageSessionBeanLocal {
     private EntityManager em;
 
     private static int tagNumber = 12345;
+
+    @Override
+    public String addBaggage(Booking booking, Double baggageWeight, Double totalAllowedWeights) {
+
+        double weights = retrieveTotalBaggageWeights(booking);
+
+        if ((weights + baggageWeight) > totalAllowedWeights) {
+            return "excess";
+        }
+
+        List<Baggage> baggages = booking.getBaggages();
+
+        if (baggages.isEmpty()) {
+            Baggage baggage = new Baggage();
+            baggage.createBaggage(baggageWeight, booking);
+            baggages.add(baggage);
+            baggage.setBooking(booking);
+            em.persist(baggages);
+
+            BaggageTag bagTag = new BaggageTag();
+            String arrivalCity = findArrivalCityIATA(booking);
+            generateTagNumber();
+            bagTag.create(tagNumber + "", booking.getFlightNo(), booking.getFlightDate(), arrivalCity, booking.getServiceType());
+            baggage.setBaggageTag(bagTag);
+            em.persist(baggage);
+            return "good";
+        } else {
+            Baggage baggage = new Baggage();
+            baggage.createBaggage(baggageWeight, booking);
+            baggages.add(baggage);
+            baggage.setBooking(booking);
+            em.persist(baggages);
+
+            BaggageTag bagTag = new BaggageTag();
+            String arrivalCity = findArrivalCityIATA(booking);
+            generateTagNumber();
+            bagTag.create(tagNumber + "", booking.getFlightNo(), booking.getFlightDate(), arrivalCity, booking.getServiceType());
+            baggage.setBaggageTag(bagTag);
+            em.persist(baggage);
+            return "good";
+
+        }
+
+    }
+
+    @Override
+    public List<Baggage> retrieveAllBaggages(Booking booking) {
+        List<Baggage> baggages = booking.getBaggages();
+        return baggages;
+    }
+
+    @Override
+    public double retrieveTotalBaggageWeights(Booking booking) {
+        double totalWeights = 0.0;
+        List<Baggage> baggages = booking.getBaggages();
+        if (baggages.isEmpty()) {
+            return totalWeights;
+        }
+
+        for (Baggage b : baggages) {
+            totalWeights += b.getBaggageWeight();
+        }
+        return totalWeights;
+    }
+
+    public String findArrivalCityIATA(Booking booking) {
+
+        String flightNo = booking.getFlightNo();
+        Flight flight = getFlightByFlightNo(flightNo);
+
+        return (flight.getRoute().getDestinationIATA());
+
+    }
+
+    public Flight getFlightByFlightNo(String flightNo) {
+
+        Query q = em.createQuery("SELECT f FROM Flight f");
+
+        List<Flight> flights = q.getResultList();
+
+        for (Flight f : flights) {
+            if (f.getFlightNo().equals(flightNo)) {
+                return f;
+            }
+        }
+        return null;
+    }
 
     public int calcualtePenalty(String departure, String destination, int allowed, int totalWeight) {
         int exceed = totalWeight - allowed;
@@ -139,9 +230,46 @@ public class BaggageSessionBean implements BaggageSessionBeanLocal {
     public String generateTagNumber() {
         String leadDigits = "8518";
         tagNumber += 1;
+//        String sNumber = leadDigits + tagNumber + "";
+//        if (seqNumberCheck(sNumber)) {
+//            
+//        }else{
+//        
+//            tagNumber+=1;
+//            
+//        }
         return (leadDigits + tagNumber + "");
     }
 
-    
+    public boolean seqNumberCheck(String sNumber) {
+        Query q = em.createQuery("SELECT b FROM BaggageTag b");
+        List<BaggageTag> tags = q.getResultList();
 
+        for (BaggageTag b : tags) {
+            if (b.getBaggageTagSeqNumber().equals(sNumber)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public int retrieveNumberOfBaggageAllowed(String classcode) {
+
+        System.out.println("DFFFFFFFF: " + classcode);
+
+        Query q = em.createQuery("SELECT b FROM BookingClass b");
+
+        List<BookingClass> classes = q.getResultList();
+        for (BookingClass b : classes) {
+            if (b.getClasscode().equals(classcode)) {
+                System.out.println("DFFFFFFFF: " + b.getBaggage());
+                return b.getBaggage();
+
+            }
+        }
+        return 0;
+    }
 }
+
+

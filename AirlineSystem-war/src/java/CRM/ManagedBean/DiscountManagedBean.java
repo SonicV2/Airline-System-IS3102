@@ -62,7 +62,8 @@ public class DiscountManagedBean {
         analysisTypeList.add("Frequency");
         analysisTypeList.add("Monetary Value");
         analysisTypeList.add("Customer Lifetime Value");
-
+        analysisType = "";
+        selectedDiscountType = null;
     }
 
     public String manageDiscountTypes() {
@@ -70,7 +71,9 @@ public class DiscountManagedBean {
         discount = 0.0;
         noOfMileagePointsToRedeem = 0.0;
         description = "";
-        if (!discountTypes.isEmpty()) {
+        
+        
+        if (discountTypes != null) {
             DiscountTypeDisplay eachDiscountTypeDisplay;
             for (DiscountType eachDiscountType : discountTypes) {
                 eachDiscountTypeDisplay = new DiscountTypeDisplay();
@@ -98,15 +101,16 @@ public class DiscountManagedBean {
 
     }
 
-    public String deleteDiscountType() {
-          //MAKE SURE selectedDiscountType IS SET BEFORE   
-
+    public String deleteDiscountType(DiscountType userSelectedDiscountType) {
+        setSelectedDiscountType(userSelectedDiscountType);
         if (discountSessionBean.discountTypeHasUnclaimedCodes(selectedDiscountType)) {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Discount Type cannot be deleted as it has unclaimed codes!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
             return null;
         } else {
+            System.out.println("Before");
             discountSessionBean.deleteDiscountType(selectedDiscountType);
+            System.out.println("After");
             discountTypes = discountSessionBean.retrieveAllDiscountTypes();
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Discount Type deleted!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
@@ -115,12 +119,21 @@ public class DiscountManagedBean {
 
     }
 
-    private String sendDiscountCodesToTopCustomers() {
+    public String sendDiscountCodesToTopCustomers() {
         //Set analysisType,selectedpercentile & selectedDiscountType, from, to
         if (from > to || from < 0 || from > 100 || to < 0 || to > 100) {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Entered range is incorrect", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
-        } else {
+        } 
+        else if (analysisType ==null || analysisType.equals("")){
+             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please select the analysis type!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        }
+        else if (selectedDiscountType==null){
+             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please select the discount amount!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        }
+        else{
             List<CustomerScore> customers = new ArrayList();
             if (analysisType.equals("Recency")) {
                 customers = analyticsSessionBean.getRecency(from, to);

@@ -17,4 +17,7 @@ import javax.ejb.Local;
 public interface SeatSessionBeanLocal {
 
     public List<String> retrieveOccupiedSeats(Schedule schedule);
+    public void inputChosenE(Schedule schedule,String seat);
+    public void inputChosenB(Schedule schedule,String seat);
+    public void inputChosenF(Schedule schedule,String seat);
 }

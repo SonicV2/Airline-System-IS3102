@@ -12,6 +12,7 @@
         <div>Select Seat A330-300</div>
 
         <h:form>
+             <p:growl id="growl" sticky="true" showDetail="true"/>
             <div>
             <h:commandButton disabled="true" value="Flight Number: #{searchBookingManagedBean.checkinSchedule.flight.flightNo}"/>
             &nbsp; &nbsp;
@@ -24,6 +25,17 @@
             <h:commandButton disabled="true" value="Service Class: #{searchBookingManagedBean.serviceClass}"/>
             &nbsp; &nbsp;
             <h:commandButton disabled="true" value="Boarding Time: #{searchBookingManagedBean.boardingTime}"/>
+            
+             &nbsp; &nbsp;
+             <h:commandButton disabled="true" value="Available First Class Seat: #{seatManagedBean.favail}"/>
+             &nbsp; &nbsp;
+             <h:commandButton disabled="true" value="Available Business Class Seat: #{seatManagedBean.bavail}"/>
+              &nbsp; &nbsp;
+             <h:commandButton disabled="true" value="Available Economy Class Seat: #{seatManagedBean.eavail}"/>
+            
+            
+            
+            
             </div>
             
             <div>

@@ -922,7 +922,7 @@ public class TravelAgencyManagedBean {
 
         }
 
-        return "TravelAgencyDashboard";
+        return "TravelAgencySearchFlights";
 
     }
 
@@ -955,7 +955,7 @@ public class TravelAgencyManagedBean {
         currentCredit = travelAgency.getCurrentCredit();
         id = travelAgency.getId();
 
-        return "TravelAgencyUpdateProfile?faces-redirect=true";
+        return "TravelAgencyUpdateProfile";
     }
 
     public String persistUpdatedProfile() {
@@ -1092,7 +1092,7 @@ public class TravelAgencyManagedBean {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "PNR has been confirmed!", "");
         FacesContext.getCurrentInstance().addMessage(null, message);
 
-        return "TravelAgencyViewPNRs?faces-redirect=true";
+        return "TravelAgencyViewPNRs";
     }
 
     public String cancelPNR(PNR pnr) {

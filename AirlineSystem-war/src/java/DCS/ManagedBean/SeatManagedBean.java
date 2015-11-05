@@ -1,15 +1,18 @@
 package DCS.ManagedBean;
 
+import APS.Entity.Schedule;
 import CI.Managedbean.LoginManagedBean;
 import DCS.Session.SeatSessionBeanLocal;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
 
 /**
@@ -20,6 +23,7 @@ import javax.inject.Named;
 @ManagedBean
 @RequestScoped
 public class SeatManagedBean {
+
     @EJB
     private SeatSessionBeanLocal seatSessionBean;
 
@@ -36,34 +40,56 @@ public class SeatManagedBean {
     private List<String> occupied;
     private String classtype;
     private String aircraftType;
+    FacesMessage message = null;
 
+    private Schedule schedule = new Schedule(); // get the current schedule
+    
+    private int Favail; // number of firstclass available for booking
+    private int Bavail;
+    private int Eavail;
+    
     @PostConstruct
     public void init() {
-        //simulate get from database
+
+                
+        schedule = searchBookingManagedBean.getCheckinSchedule();
         setOccupied(seatSessionBean.retrieveOccupiedSeats(searchBookingManagedBean.getCheckinSchedule()));
-        
-        if(occupied.isEmpty()){
+        if (occupied.isEmpty()) {
             occupied.add(" ");
         }
-        
+
         setClasstype(getSearchBookingManagedBean().getServiceClass());
 
         setAircraftType(getSearchBookingManagedBean().getAircraftType());
 
         if (getAircraftType().equals("Airbus A330-300")) {
             addSeatA330();
+            Favail=0;
+            Bavail=30-schedule.getSelectedSeatsB().size();
+            Eavail=255-schedule.getSelectedSeatsE().size();
         } else if (getAircraftType().equals("Boeing 777-200")) {
             addSeatB777_200();
+             Favail=0;
+            Bavail=38-schedule.getSelectedSeatsB().size();
+            Eavail=228-schedule.getSelectedSeatsE().size();
         } else if (getAircraftType().equals("Boeing 777-200ER")) {
             addSeatB777_200ER();
+            Favail=0;
+            Bavail=30-schedule.getSelectedSeatsB().size();
+            Eavail=255-schedule.getSelectedSeatsE().size();
         } else if (getAircraftType().equals("Boeing 777-300")) {
             addSeatB777_300();
+            Favail=8-schedule.getSelectedSeatsF().size();
+            Bavail=50-schedule.getSelectedSeatsB().size();
+            Eavail=226-schedule.getSelectedSeatsE().size();
         } else if (getAircraftType().equals("Boeing 777-300ER")) {
             addSeatB777_300ER();
+             Favail=4-schedule.getSelectedSeatsF().size();
+            Bavail=48-schedule.getSelectedSeatsB().size();
+            Eavail=232-schedule.getSelectedSeatsE().size();
         }
 
     }
-   
 
     public void addSeatA330() {
         for (int i = 1; i < 9; i++) {  // 30 business seats
@@ -144,7 +170,9 @@ public class SeatManagedBean {
     public void chooseSeatA330() {
 
         if (getOccupied().contains(getChoose().toUpperCase())) {
-            System.out.println("++++++++++++++++++++ seat has already been choosen! ");
+            message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "seat has already been choosen!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+
         }  // make sure you cannot choose seat that is already booked
 
         if (getA330seatArrange().contains("\uD83D\uDCBA" + getChoose().toUpperCase())) {
@@ -153,15 +181,18 @@ public class SeatManagedBean {
 
                 getOccupied().add(getChoose().toUpperCase());
 
-                System.out.println("----------" + getOccupied());
+                seatSessionBean.inputChosenE(schedule, choose.toUpperCase());
+
             } else if (getClasstype().equals("Business") && Integer.parseInt(getChoose().substring(1)) < 9) {
                 getA330seatArrange().set(getA330seatArrange().indexOf("\uD83D\uDCBA" + getChoose().toUpperCase()), "\n" + "\u26D4" + "\n" + getChoose().toUpperCase());
 
                 getOccupied().add(getChoose().toUpperCase());
 
-                System.out.println("----------" + getOccupied());
+                seatSessionBean.inputChosenB(schedule, choose.toUpperCase());
+
             } else {
-                System.out.println("*********  please choose the correct class");
+                message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "please choose the correct class", "");
+                FacesContext.getCurrentInstance().addMessage(null, message);
             }
 
         } else {
@@ -247,7 +278,9 @@ public class SeatManagedBean {
     public void chooseSeatB777_200() {
 
         if (getOccupied().contains(getChoose().toUpperCase())) {
-            System.out.println("++++++++++++++++++++ seat has already been choosen! ");
+            message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "seat has already been choosen!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+
         }  // make sure you cannot choose seat that is already booked
 
         if (getB777_200seatArrange().contains("\uD83D\uDCBA" + getChoose().toUpperCase())) {
@@ -256,15 +289,19 @@ public class SeatManagedBean {
 
                 getOccupied().add(getChoose().toUpperCase());
 
-                System.out.println("----------" + getOccupied());
+                seatSessionBean.inputChosenE(schedule, choose.toUpperCase());
+
             } else if (getClasstype().equals("Business") && Integer.parseInt(getChoose().substring(1)) < 11) {
                 getB777_200seatArrange().set(getB777_200seatArrange().indexOf("\uD83D\uDCBA" + getChoose().toUpperCase()), "\n" + "\u26D4" + "\n" + getChoose().toUpperCase());
 
                 getOccupied().add(getChoose().toUpperCase());
 
-                System.out.println("----------" + getOccupied());
+                seatSessionBean.inputChosenB(schedule, choose.toUpperCase());
+
             } else {
-                System.out.println("*********  please choose the correct class");
+                message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "please choose the correct class", "");
+                FacesContext.getCurrentInstance().addMessage(null, message);
+
             }
 
         } else {
@@ -350,7 +387,9 @@ public class SeatManagedBean {
 
     public void chooseSeatB777_200ER() {
         if (getOccupied().contains(getChoose().toUpperCase())) {
-            System.out.println("++++++++++++++++++++ seat has already been choosen! ");
+            message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "seat has already been choosen!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+
         }  // make sure you cannot choose seat that is already booked
 
         if (getB777_200ERseatArrange().contains("\uD83D\uDCBA" + getChoose().toUpperCase())) {
@@ -358,16 +397,18 @@ public class SeatManagedBean {
                 getB777_200ERseatArrange().set(getB777_200ERseatArrange().indexOf("\uD83D\uDCBA" + getChoose().toUpperCase()), "\n" + "\u26D4" + "\n" + getChoose().toUpperCase());
 
                 getOccupied().add(getChoose().toUpperCase());
+                seatSessionBean.inputChosenE(schedule, choose.toUpperCase());
 
-                System.out.println("----------" + getOccupied());
             } else if (getClasstype().equals("Business") && Integer.parseInt(getChoose().substring(1)) < 9) {
                 getB777_200ERseatArrange().set(getB777_200ERseatArrange().indexOf("\uD83D\uDCBA" + getChoose().toUpperCase()), "\n" + "\u26D4" + "\n" + getChoose().toUpperCase());
 
                 getOccupied().add(getChoose().toUpperCase());
 
-                System.out.println("----------" + getOccupied());
+                seatSessionBean.inputChosenB(schedule, choose.toUpperCase());
+
             } else {
-                System.out.println("*********  please choose the correct class");
+                message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "please choose the correct class", "");
+                FacesContext.getCurrentInstance().addMessage(null, message);
             }
 
         } else {
@@ -474,7 +515,9 @@ public class SeatManagedBean {
     public void chooseSeatB777_300() {
 
         if (getOccupied().contains(getChoose().toUpperCase())) {
-            System.out.println("++++++++++++++++++++ seat has already been choosen! ");
+            message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "seat has already been choosen!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+
         }  // make sure you cannot choose seat that is already booked
 
         if (getB777_300seatArrange().contains("\uD83D\uDCBA" + getChoose().toUpperCase())) {
@@ -482,22 +525,25 @@ public class SeatManagedBean {
                 getB777_300seatArrange().set(getB777_300seatArrange().indexOf("\uD83D\uDCBA" + getChoose().toUpperCase()), "\n" + "\u26D4" + "\n" + getChoose().toUpperCase());
 
                 getOccupied().add(getChoose().toUpperCase());
+                seatSessionBean.inputChosenE(schedule, choose.toUpperCase());
 
-                System.out.println("----------" + getOccupied());
             } else if (getClasstype().equals("Business") && Integer.parseInt(getChoose().substring(1)) > 2 && Integer.parseInt(getChoose().substring(1)) < 12) {
                 getB777_300seatArrange().set(getB777_300seatArrange().indexOf("\uD83D\uDCBA" + getChoose().toUpperCase()), "\n" + "\u26D4" + "\n" + getChoose().toUpperCase());
 
                 getOccupied().add(getChoose().toUpperCase());
+                seatSessionBean.inputChosenB(schedule, choose.toUpperCase());
 
-                System.out.println("----------" + getOccupied());
             } else if (getClasstype().equals("First Class") && Integer.parseInt(getChoose().substring(1)) < 3) {
                 getB777_300seatArrange().set(getB777_300seatArrange().indexOf("\uD83D\uDCBA" + getChoose().toUpperCase()), "\n" + "\u26D4" + "\n" + getChoose().toUpperCase());
 
                 getOccupied().add(getChoose().toUpperCase());
 
-                System.out.println("----------" + getOccupied());
+                seatSessionBean.inputChosenF(schedule, choose.toUpperCase());
+
             } else {
-                System.out.println("*********  please choose the correct class");
+                message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "please choose the correct class", "");
+                FacesContext.getCurrentInstance().addMessage(null, message);
+
             }
 
         } else {
@@ -577,7 +623,9 @@ public class SeatManagedBean {
 
     public void chooseSeatB777_300ER() {
         if (getOccupied().contains(getChoose().toUpperCase())) {
-            System.out.println("++++++++++++++++++++ seat has already been choosen! ");
+            message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "seat has already been choosen!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+
         }  // make sure you cannot choose seat that is already booked
 
         if (getB777_300ERseatArrange().contains("\uD83D\uDCBA" + getChoose().toUpperCase())) {
@@ -585,22 +633,25 @@ public class SeatManagedBean {
                 getB777_300ERseatArrange().set(getB777_300ERseatArrange().indexOf("\uD83D\uDCBA" + getChoose().toUpperCase()), "\n" + "\u26D4" + "\n" + getChoose().toUpperCase());
 
                 getOccupied().add(getChoose().toUpperCase());
+                seatSessionBean.inputChosenE(schedule, choose.toUpperCase());
 
-                System.out.println("----------" + getOccupied());
             } else if (getClasstype().equals("Business") && Integer.parseInt(getChoose().substring(1)) > 1 && Integer.parseInt(getChoose().substring(1)) < 10) {
                 getB777_300ERseatArrange().set(getB777_300ERseatArrange().indexOf("\uD83D\uDCBA" + getChoose().toUpperCase()), "\n" + "\u26D4" + "\n" + getChoose().toUpperCase());
 
                 getOccupied().add(getChoose().toUpperCase());
 
-                System.out.println("----------" + getOccupied());
+                seatSessionBean.inputChosenB(schedule, choose.toUpperCase());
+
             } else if (getClasstype().equals("First Class") && Integer.parseInt(getChoose().substring(1)) < 2) {
                 getB777_300ERseatArrange().set(getB777_300ERseatArrange().indexOf("\uD83D\uDCBA" + getChoose().toUpperCase()), "\n" + "\u26D4" + "\n" + getChoose().toUpperCase());
 
                 getOccupied().add(getChoose().toUpperCase());
+                seatSessionBean.inputChosenF(schedule, choose.toUpperCase());
 
-                System.out.println("----------" + getOccupied());
             } else {
-                System.out.println("*********  please choose the correct class");
+                message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "please choose the correct class", "");
+                FacesContext.getCurrentInstance().addMessage(null, message);
+
             }
 
         } else {
@@ -753,5 +804,31 @@ public class SeatManagedBean {
         this.aircraftType = aircraftType;
     }
 
-   
+    public int getFavail() {
+        return Favail;
+    }
+
+    public void setFavail(int Favail) {
+        this.Favail = Favail;
+    }
+
+    public int getBavail() {
+        return Bavail;
+    }
+
+    public void setBavail(int Bavail) {
+        this.Bavail = Bavail;
+    }
+
+    public int getEavail() {
+        return Eavail;
+    }
+
+    public void setEavail(int Eavail) {
+        this.Eavail = Eavail;
+    }
+    
+    
+    
+
 }
