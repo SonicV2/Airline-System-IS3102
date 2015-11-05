@@ -47,6 +47,11 @@ public class ProfitAndLossSessionBean implements ProfitAndLossSessionBeanLocal {
 
         List<PNR> PNRs = new ArrayList();
         PNRs = getConfirmedPNRs("Confirmed");
+        List<PNR> temp = new ArrayList();
+        temp = getConfirmedPNRs("Booked");
+        
+        for (PNR eachBookedPNR : temp)
+            PNRs.add(eachBookedPNR);
 
         if (PNRs != null && !PNRs.isEmpty()) {
             for (PNR eachPNR : PNRs) {
@@ -87,7 +92,7 @@ public class ProfitAndLossSessionBean implements ProfitAndLossSessionBeanLocal {
                 if (eachAircraft.getDatePurchased() != null) {
                     String formattedEachDate = formatter.format(eachAircraft.getDatePurchased());
                     if (formattedDate.substring(2, 8).equals(formattedEachDate.substring(2, 8))) {
-                        aircraftPurchased += eachAircraft.getAircraftType().getCost();
+                        aircraftPurchased += (eachAircraft.getAircraftType().getCost()) * 1000000;
                     }
                 }
             }
@@ -148,6 +153,139 @@ public class ProfitAndLossSessionBean implements ProfitAndLossSessionBeanLocal {
 
         return pnl;
 
+    }
+    
+    @Override
+    public ProfitAndLoss updateProfitAndLoss (ProfitAndLoss selectedPnl) {
+        
+        Date dateChosen = selectedPnl.getDateOfStatement();
+        
+         /* Calculate salesRevenue of the month*/
+        SimpleDateFormat formatter = new SimpleDateFormat("ddMMyyyy");
+        String formattedDate = formatter.format(dateChosen);
+        double salesRevenue = 0;
+
+        List<PNR> PNRs = new ArrayList();
+        PNRs = getConfirmedPNRs("Confirmed");
+        List<PNR> temp = new ArrayList();
+        temp = getConfirmedPNRs("Booked");
+        
+        for (PNR eachBookedPNR : temp)
+            PNRs.add(eachBookedPNR);
+
+        if (PNRs != null && !PNRs.isEmpty()) {
+            for (PNR eachPNR : PNRs) {
+                if (eachPNR.getDateOfConfirmation() != null) {
+                    String formattedEachDate = formatter.format(eachPNR.getDateOfConfirmation());
+                    if (formattedDate.substring(2, 8).equals(formattedEachDate.substring(2, 8))) {
+                        double purePrice = eachPNR.getTotalPrice();
+                        for (int i = 0; i < eachPNR.getBookings().size(); i++) {
+                            if (eachPNR.getBookings().get(i).isBoughtInsurance()) {
+                                purePrice -= 15.0;
+                            }
+                        }
+
+                        salesRevenue += purePrice;
+                    }
+                }
+            }
+        }
+        
+        selectedPnl.setSalesRevenue(salesRevenue);
+
+        /* Calculate commission */
+        double commission = 0;
+        List<TravelAgency> allAgencies = new ArrayList();
+        allAgencies = getAllTravelAgencies();
+
+        for (TravelAgency eachAgency : allAgencies) {
+
+            commission += (getCurrentMonthSettlement(eachAgency, dateChosen)) * 0.1;
+
+        }
+        
+        selectedPnl.setCommission(commission);
+
+        /* Calculate aircrafts purchased */
+        double aircraftPurchased = 0;
+        List<Aircraft> allAircrafts = new ArrayList();
+        allAircrafts = retrieveAircrafts();
+
+        if (allAircrafts != null && !allAircrafts.isEmpty()) {
+            for (Aircraft eachAircraft : allAircrafts) {
+                if (eachAircraft.getDatePurchased() != null) {
+                    String formattedEachDate = formatter.format(eachAircraft.getDatePurchased());
+                    if (formattedDate.substring(2, 8).equals(formattedEachDate.substring(2, 8))) {
+                        aircraftPurchased += (eachAircraft.getAircraftType().getCost()) * 1000000;
+                    }
+                }
+            }
+        }
+        
+        selectedPnl.setAircrafts(aircraftPurchased);
+
+        /* Calculate fuelCost */
+        double fuelCost = 0;
+        List<Schedule> allSchedules = new ArrayList();
+        allSchedules = getSchedules();
+
+        if (allSchedules != null && !allSchedules.isEmpty()) {
+            for (Schedule eachSchedule : allSchedules) {
+                if (eachSchedule.getStartDate() != null) {
+                    String formattedEachDate = formatter.format(eachSchedule.getStartDate());
+                    if (formattedDate.substring(2, 8).equals(formattedEachDate.substring(2, 8))) {
+                        fuelCost += (eachSchedule.getAircraft().getAircraftType().getFuelCost()) * (eachSchedule.getFlight().getRoute().getDistance());
+                    }
+                }
+            }
+        }
+        
+        selectedPnl.setFuelCosts(fuelCost);
+
+        /* Calculate employee salaries */
+        double employeeSalaries = 0;
+        List<Employee> allEmployees = new ArrayList();
+        List<CabinCrew> allCabins = new ArrayList();
+        List<Pilot> allPilots = new ArrayList();
+        List<Employee> executives = new ArrayList();
+        List<Employee> managers = new ArrayList();
+
+        allEmployees = getEmployees();
+        allCabins = getCabinCrews();
+        allPilots = getPilots();
+
+        if (allEmployees==null) {
+            employeeSalaries = 0;
+        } 
+        
+        else {
+            for (Employee eachEmployee : allEmployees) {
+
+                if (eachEmployee.getEmployeeRole().equalsIgnoreCase("Executive")) {
+                    executives.add(eachEmployee);
+                } else if (eachEmployee.getEmployeeRole().equalsIgnoreCase("Manager")) {
+                    managers.add(eachEmployee);
+                }
+
+            }
+
+            employeeSalaries = (executives.size() * 2000) + (managers.size() * 1000) + (allCabins.size() * 1000) + (allPilots.size() * 1500);
+
+        }
+        
+        selectedPnl.setEmployeeSalaries(employeeSalaries);
+        
+        double totalExpenses = commission + aircraftPurchased + fuelCost + employeeSalaries + 10000 + (salesRevenue * 0.1);
+        double totalPnL = salesRevenue - totalExpenses;
+        
+        selectedPnl.setTotalExpenses(totalExpenses);
+        selectedPnl.setTotalRevenue(salesRevenue);
+        selectedPnl.setTotalPnL(totalPnL);
+
+        em.merge(selectedPnl);
+        em.flush();
+        
+        return selectedPnl;
     }
 
     @Override

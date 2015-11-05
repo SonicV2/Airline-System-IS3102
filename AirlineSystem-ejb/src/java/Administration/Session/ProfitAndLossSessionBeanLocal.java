@@ -43,5 +43,7 @@ public interface ProfitAndLossSessionBeanLocal {
     public ProfitAndLoss createProfitAndLoss(Date dateChosen);
 
     public ProfitAndLoss getPnLbyDate(Date chosenDate);
+
+    public ProfitAndLoss updateProfitAndLoss(ProfitAndLoss selectedPnl);
     
 }

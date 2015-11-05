@@ -41,13 +41,16 @@
                                     <p>View Profit And Loss Statement</p>
 
                                     <p:outputLabel value="Enter Month and Year: " />
-                                    <p:inputText required="true" requiredMessage="Please Enter Month and Year!" class="form-control input-lg" placeholder="MM/YYYY" value="#{pnLManagedBean.selectedMonth}"  />                             
+                                    <p:inputText required="true" requiredMessage="Please Enter Month and Year!" class="form-control input-lg" placeholder="MM/YYYY" value="#{administrationManagedBean.selectedMonth}"  />                             
                                     <br/>
                                 </div> 
 
                             </div>
 
-                            <h:commandButton class="btn btn-primary btn-lg btn-block" value="View" action="#{pnLManagedBean.getStatement()}"/>
+                            <h:commandButton class="btn btn-primary btn-lg btn-block" value="View Profit And Loss Statement" action="#{administrationManagedBean.getStatement()}"/>
+                            
+                            <h:commandButton class="btn btn-primary btn-lg btn-block" value="View Operating Expenses" action="#{administrationManagedBean.getExpenses()}"/>
+                            
                         </h:form>
                     </div>
 
