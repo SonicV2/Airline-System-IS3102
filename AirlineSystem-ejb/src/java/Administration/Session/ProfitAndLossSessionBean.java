@@ -49,11 +49,13 @@ public class ProfitAndLossSessionBean implements ProfitAndLossSessionBeanLocal {
         PNRs = getConfirmedPNRs("Confirmed");
         List<PNR> temp = new ArrayList();
         temp = getConfirmedPNRs("Booked");
-        
-        for (PNR eachBookedPNR : temp)
-            PNRs.add(eachBookedPNR);
 
         if (PNRs != null && !PNRs.isEmpty()) {
+            if (temp != null && !temp.isEmpty()) {
+                for (PNR eachBookedPNR : temp) {
+                    PNRs.add(eachBookedPNR);
+                }
+            }
             for (PNR eachPNR : PNRs) {
                 if (eachPNR.getDateOfConfirmation() != null) {
                     String formattedEachDate = formatter.format(eachPNR.getDateOfConfirmation());
@@ -108,7 +110,9 @@ public class ProfitAndLossSessionBean implements ProfitAndLossSessionBeanLocal {
                 if (eachSchedule.getStartDate() != null) {
                     String formattedEachDate = formatter.format(eachSchedule.getStartDate());
                     if (formattedDate.substring(2, 8).equals(formattedEachDate.substring(2, 8))) {
+                        System.out.println("AIRCRAFT: " + eachSchedule.getAircraft());
                         fuelCost += (eachSchedule.getAircraft().getAircraftType().getFuelCost()) * (eachSchedule.getFlight().getRoute().getDistance());
+                        System.out.println("END OF FUEL COST");
                     }
                 }
             }
@@ -126,11 +130,9 @@ public class ProfitAndLossSessionBean implements ProfitAndLossSessionBeanLocal {
         allCabins = getCabinCrews();
         allPilots = getPilots();
 
-        if (allEmployees==null) {
+        if (allEmployees == null) {
             employeeSalaries = 0;
-        } 
-        
-        else {
+        } else {
             for (Employee eachEmployee : allEmployees) {
 
                 if (eachEmployee.getEmployeeRole().equalsIgnoreCase("Executive")) {
@@ -144,7 +146,7 @@ public class ProfitAndLossSessionBean implements ProfitAndLossSessionBeanLocal {
             employeeSalaries = (executives.size() * 2000) + (managers.size() * 1000) + (allCabins.size() * 1000) + (allPilots.size() * 1500);
 
         }
-        
+
         double totalExpenses = commission + aircraftPurchased + fuelCost + employeeSalaries + 10000 + (salesRevenue * 0.1);
         double totalPnL = salesRevenue - totalExpenses;
 
@@ -154,13 +156,13 @@ public class ProfitAndLossSessionBean implements ProfitAndLossSessionBeanLocal {
         return pnl;
 
     }
-    
+
     @Override
-    public ProfitAndLoss updateProfitAndLoss (ProfitAndLoss selectedPnl) {
-        
+    public ProfitAndLoss updateProfitAndLoss(ProfitAndLoss selectedPnl) {
+
         Date dateChosen = selectedPnl.getDateOfStatement();
-        
-         /* Calculate salesRevenue of the month*/
+
+        /* Calculate salesRevenue of the month*/
         SimpleDateFormat formatter = new SimpleDateFormat("ddMMyyyy");
         String formattedDate = formatter.format(dateChosen);
         double salesRevenue = 0;
@@ -169,9 +171,10 @@ public class ProfitAndLossSessionBean implements ProfitAndLossSessionBeanLocal {
         PNRs = getConfirmedPNRs("Confirmed");
         List<PNR> temp = new ArrayList();
         temp = getConfirmedPNRs("Booked");
-        
-        for (PNR eachBookedPNR : temp)
+
+        for (PNR eachBookedPNR : temp) {
             PNRs.add(eachBookedPNR);
+        }
 
         if (PNRs != null && !PNRs.isEmpty()) {
             for (PNR eachPNR : PNRs) {
@@ -190,7 +193,7 @@ public class ProfitAndLossSessionBean implements ProfitAndLossSessionBeanLocal {
                 }
             }
         }
-        
+
         selectedPnl.setSalesRevenue(salesRevenue);
 
         /* Calculate commission */
@@ -203,7 +206,7 @@ public class ProfitAndLossSessionBean implements ProfitAndLossSessionBeanLocal {
             commission += (getCurrentMonthSettlement(eachAgency, dateChosen)) * 0.1;
 
         }
-        
+
         selectedPnl.setCommission(commission);
 
         /* Calculate aircrafts purchased */
@@ -221,7 +224,7 @@ public class ProfitAndLossSessionBean implements ProfitAndLossSessionBeanLocal {
                 }
             }
         }
-        
+
         selectedPnl.setAircrafts(aircraftPurchased);
 
         /* Calculate fuelCost */
@@ -239,7 +242,7 @@ public class ProfitAndLossSessionBean implements ProfitAndLossSessionBeanLocal {
                 }
             }
         }
-        
+
         selectedPnl.setFuelCosts(fuelCost);
 
         /* Calculate employee salaries */
@@ -254,11 +257,9 @@ public class ProfitAndLossSessionBean implements ProfitAndLossSessionBeanLocal {
         allCabins = getCabinCrews();
         allPilots = getPilots();
 
-        if (allEmployees==null) {
+        if (allEmployees == null) {
             employeeSalaries = 0;
-        } 
-        
-        else {
+        } else {
             for (Employee eachEmployee : allEmployees) {
 
                 if (eachEmployee.getEmployeeRole().equalsIgnoreCase("Executive")) {
@@ -272,19 +273,19 @@ public class ProfitAndLossSessionBean implements ProfitAndLossSessionBeanLocal {
             employeeSalaries = (executives.size() * 2000) + (managers.size() * 1000) + (allCabins.size() * 1000) + (allPilots.size() * 1500);
 
         }
-        
+
         selectedPnl.setEmployeeSalaries(employeeSalaries);
-        
+
         double totalExpenses = commission + aircraftPurchased + fuelCost + employeeSalaries + 10000 + (salesRevenue * 0.1);
         double totalPnL = salesRevenue - totalExpenses;
-        
+
         selectedPnl.setTotalExpenses(totalExpenses);
         selectedPnl.setTotalRevenue(salesRevenue);
         selectedPnl.setTotalPnL(totalPnL);
 
         em.merge(selectedPnl);
         em.flush();
-        
+
         return selectedPnl;
     }
 
