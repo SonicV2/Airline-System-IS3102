@@ -49,11 +49,13 @@ public class ProfitAndLossSessionBean implements ProfitAndLossSessionBeanLocal {
         PNRs = getConfirmedPNRs("Confirmed");
         List<PNR> temp = new ArrayList();
         temp = getConfirmedPNRs("Booked");
-        
-        for (PNR eachBookedPNR : temp)
-            PNRs.add(eachBookedPNR);
 
         if (PNRs != null && !PNRs.isEmpty()) {
+            if (temp != null && !temp.isEmpty()) {
+                for (PNR eachBookedPNR : temp) {
+                    PNRs.add(eachBookedPNR);
+                }
+            }
             for (PNR eachPNR : PNRs) {
                 if (eachPNR.getDateOfConfirmation() != null) {
                     String formattedEachDate = formatter.format(eachPNR.getDateOfConfirmation());
@@ -108,7 +110,10 @@ public class ProfitAndLossSessionBean implements ProfitAndLossSessionBeanLocal {
                 if (eachSchedule.getStartDate() != null) {
                     String formattedEachDate = formatter.format(eachSchedule.getStartDate());
                     if (formattedDate.substring(2, 8).equals(formattedEachDate.substring(2, 8))) {
+                        System.out.println("Before calculation!!!!!!!!" + eachSchedule.getAircraft().getAircraftType().getFuelCost());
+                        System.out.println("Before calculation!!!!!!!!" + eachSchedule.getFlight().getRoute().getDistance());
                         fuelCost += (eachSchedule.getAircraft().getAircraftType().getFuelCost()) * (eachSchedule.getFlight().getRoute().getDistance());
+                     System.out.println("AFTER CALCULATION");
                     }
                 }
             }
@@ -169,11 +174,13 @@ public class ProfitAndLossSessionBean implements ProfitAndLossSessionBeanLocal {
         PNRs = getConfirmedPNRs("Confirmed");
         List<PNR> temp = new ArrayList();
         temp = getConfirmedPNRs("Booked");
-        
-        for (PNR eachBookedPNR : temp)
-            PNRs.add(eachBookedPNR);
 
         if (PNRs != null && !PNRs.isEmpty()) {
+            if (temp != null && !temp.isEmpty()) {
+                for (PNR eachBookedPNR : temp) {
+                    PNRs.add(eachBookedPNR);
+                }
+            }
             for (PNR eachPNR : PNRs) {
                 if (eachPNR.getDateOfConfirmation() != null) {
                     String formattedEachDate = formatter.format(eachPNR.getDateOfConfirmation());
