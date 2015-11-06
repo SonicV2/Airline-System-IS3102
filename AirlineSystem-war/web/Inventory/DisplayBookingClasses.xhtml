@@ -25,8 +25,8 @@
 
     <h:body>
 
-<!--       <ui:include src="/CI/DashboardHeader.xhtml"/>      
-        <ui:include src="/CI/DashboardSidebar.xhtml"/>-->
+       <ui:include src="/CI/DashboardHeader.xhtml"/>      
+        <ui:include src="/CI/DashboardSidebar.xhtml"/>
         
         <div id="page-wrapper">
 
@@ -108,7 +108,7 @@
                                 </p:cellEditor>
                             </p:column>
                             
-                            <p:column filterBy="#{bookingclass.season}" filterMatchMode="contains" headerText="Season">
+<!--                            <p:column filterBy="#{bookingclass.season}" filterMatchMode="contains" headerText="Season">
                                 <p:cellEditor>
                                     <f:facet name="output"><h:outputText value="#{bookingclass.season}" /></f:facet>
                                     <f:facet name="input">
@@ -120,7 +120,7 @@
                                         </p:selectOneMenu>
                                     </f:facet>
                                 </p:cellEditor>
-                            </p:column>
+                            </p:column>-->
 
                             <p:column filterBy="#{bookingclass.baggage}" filterMatchMode="contains" headerText="Baggage Class">
                                 <p:cellEditor>
@@ -153,7 +153,7 @@
                                 </p:cellEditor>
                             </p:column>
                             
-                            <p:column headerText="Cancel">
+                            <p:column headerText="Travel Agency Pricing">
                                 <p:cellEditor>
                                     <f:facet name="output"><h:outputText value="#{bookingclass.travelagent}" /></f:facet>
                                     <f:facet name="input">

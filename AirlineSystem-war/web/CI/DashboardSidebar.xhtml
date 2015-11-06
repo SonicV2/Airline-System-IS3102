@@ -364,20 +364,20 @@
                 <!-- this is for seasonality management-->
                 <ui:fragment rendered="#{loginManagedBean.accessRightIDs.contains(30)}">
                         <li>
-                            <a href="#{request.contextPath}/Inventory/CreateSeason.xhtml"><i class="fa fa-search"></i> Create Seasonality</a>
+                            <a href="#{request.contextPath}/Inventory/CreateSeason.xhtml"><i class="fa fa-plus"></i> Create Seasonality</a>
                         </li>
                        <li>
-                            <a href="#{request.contextPath}/Inventory/DisplaySeasons.xhtml"><i class="fa fa-search"></i> Display Seasonalities</a>
+                            <a href="#{request.contextPath}/Inventory/DisplaySeasons.xhtml"><i class="fa fa-eye"></i> Display Seasonalities</a>
                         </li>
                         <li>
-                            <a href="#{request.contextPath}/Inventory/ViewTurnOut.xhtml"><i class="fa fa-search"></i> View Turn Out</a>
+                            <a href="#{request.contextPath}/Inventory/ViewTurnOut.xhtml"><i class="fa fa-search"></i> View Past Turn Out</a>
                         </li>
                 </ui:fragment>
                 
                 <!-- this is for analytical CRM management-->
                 <ui:fragment rendered="#{loginManagedBean.accessRightIDs.contains(31)}">
                         <li>
-                            <a href="#{request.contextPath}/CRM/Index.xhtml"><i class="fa fa-search"></i> Analytical CRM</a>
+                            <a href="#{request.contextPath}/CRM/Index.xhtml"><i class="fa fa-line-chart"></i> Analytical CRM</a>
                         </li>
                        
                 </ui:fragment>
