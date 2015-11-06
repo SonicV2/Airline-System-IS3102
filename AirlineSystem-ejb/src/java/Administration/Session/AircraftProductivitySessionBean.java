@@ -75,7 +75,7 @@ public class AircraftProductivitySessionBean implements AircraftProductivitySess
 
     @Override
     public double calculateTotalProfit(Aircraft aircraft) {
-        
+
         double profit = 0;
 
         List<PNR> PNRs = new ArrayList();
@@ -83,11 +83,12 @@ public class AircraftProductivitySessionBean implements AircraftProductivitySess
         List<PNR> temp = new ArrayList();
         temp = getConfirmedPNRs("Booked");
 
-        for (PNR eachBookedPNR : temp) {
-            PNRs.add(eachBookedPNR);
-        }
-
         if (PNRs != null && !PNRs.isEmpty()) {
+            if (temp != null && !temp.isEmpty()) {
+                for (PNR eachBookedPNR : temp) {
+                    PNRs.add(eachBookedPNR);
+                }
+            }
             for (PNR eachPNR : PNRs) {
                 if (eachPNR.getDateOfConfirmation() != null) {
                     if (eachPNR.getBookings().get(0).getSeatAvail().getSchedule().getStartDate().before(new Date())) {
