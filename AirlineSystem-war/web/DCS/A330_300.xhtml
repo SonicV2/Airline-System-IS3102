@@ -135,7 +135,7 @@
                         </div>
 
                         <div class="col-lg-12">
-                             <br></br>
+                            <br></br>
                             <p:inputText id="seat" value="#{seatManagedBean.choose}" />    
                             <h:commandButton class="btn btn-success" value="Choose" actionListener="#{baggageManagedBean.showBoardingPass}" action="#{seatManagedBean.chooseSeatA330()}" />
                             <br></br>
@@ -158,6 +158,25 @@
                 </div>
             </div>
         </div>
+        <ui:include src="/Distribution/MerlionAirlinesFooter.xhtml"/>
+        <h:outputScript library="js" name="jquery.flexslider.js"/> 
+        <h:outputScript library="js" name="easyResponsiveTabs.js" /> 
+        <h:outputScript library="js" name="scriptMerlion.js"></h:outputScript>
+
+        <script type="text/javascript">
+            $(function () {
+                SyntaxHighlighter.all();
+            });
+            $(window).load(function () {
+                $('.flexslider').flexslider({
+                    animation: "slide",
+                    start: function (slider) {
+                        $('body').removeClass('loading');
+                    }
+                });
+            });
+        </script>
+
 
 
     </h:body>

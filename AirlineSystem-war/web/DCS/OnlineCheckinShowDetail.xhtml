@@ -60,8 +60,9 @@
                 <div class="about-info">
                     <h2>Here is your flight and traveller details</h2>
                 </div>
+                <h:form>
                 <div class="faqs-top-grids terms-grids">
-        <h:form>
+
             <h:outputLabel value="Flight Number: " />
             <h:outputText value="#{searchBookingManagedBean.reqBooking.flightNo}" />
             <br /> <br />
@@ -90,18 +91,21 @@
             <h:outputText  value="#{searchBookingManagedBean.reqBooking.foodSelection}" />
             <br /> <br />
                                  
-        </h:form>
+
         <div class="text-center">
-        <h:form>
+
             
             <h:commandButton class="btn btn-outline btn-success" value="Proceed" action="#{searchBookingManagedBean.retrieveFlightType()}" />
         
-        </h:form>
+  
         </div>
+                    <div class="clearfix"> </div>
                 </div>
+                </h:form>
+                
             </div>
         </div>
-    <ui:include src="/Distribution/MerlionAirlinesFooter.xhtml"/>
+        <ui:include src="/Distribution/MerlionAirlinesFooter.xhtml"/>
         <h:outputScript library="js" name="jquery.flexslider.js"/> 
         <h:outputScript library="js" name="easyResponsiveTabs.js" /> 
         <h:outputScript library="js" name="scriptMerlion.js"></h:outputScript>
