@@ -397,13 +397,15 @@
 
                 </ui:fragment>
                 
-                
-                
+                <!-- this is for operational CRM -->
+                <ui:fragment rendered="#{loginManagedBean.accessRightIDs.contains(34)}">
                  <h:form>
                         <li>
                             <a><h:commandLink class="commandLink" action="#{discountManagedBean.manageDiscountTypes()}"><i class="fa fa-pencil"></i> Manage Discounts</h:commandLink></a>
                         </li>
                     </h:form>
+                </ui:fragment>
+                
 
             </ul>
 
