@@ -110,7 +110,7 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
     public void addCabinCrew(String employeeID, String employeeDisplayFirstName, String employeeDisplayLastName,
             String employeeDepartment,Date employeeDOB,String employeeGender, String employeeHpNumber, 
             String employeeMailingAddress, String employeeOfficeNumber, String employeePrivateEmail,
-            String experience, List<String>language, String position){
+            String experience, List<String>language, String position, double employeeMonthlySalary){
         
          cc=new CabinCrew();
         
@@ -144,7 +144,7 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
         employeelist.add(cc);
         department.setEmployee(employeelist);
         cc.setOrganizationUnit(department);
-        
+        cc.setEmployeeMonthlySalary(employeeMonthlySalary);
         
         em.persist(cc);
         
@@ -168,7 +168,7 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
     public void addPilot(String employeeID, String employeeDisplayFirstName, String employeeDisplayLastName,
             String employeeDepartment,Date employeeDOB,String employeeGender, String employeeHpNumber, 
             String employeeMailingAddress, String employeeOfficeNumber, String employeePrivateEmail,
-            String experience, List<String>skills, String position){
+            String experience, List<String>skills, String position, double employeeMonthlySalary){
         
          pp=new Pilot();
         
@@ -189,6 +189,7 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
         pp.setEmployeeRole("Pilot");
         pp.setEmployeePassword("password");
         pp.setTeam(null);
+        pp.setEmployeeMonthlySalary(employeeMonthlySalary);
         
         String userName = generateUserName(employeeDisplayFirstName, employeeDisplayLastName);
         
@@ -225,7 +226,7 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
     public void addGroundCrew(String employeeID, String employeeDisplayFirstName, String employeeDisplayLastName,
             String employeeDepartment,Date employeeDOB,String employeeGender, String employeeHpNumber, 
             String employeeMailingAddress, String employeeOfficeNumber, String employeePrivateEmail,
-             String position, String mainCrewExp){
+             String position, String mainCrewExp, double employeeMonthlySalary){
         
          gc=new GroundCrew();
         
@@ -247,6 +248,7 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
         gc.setEmployeePassword("password");
         gc.setExperience(mainCrewExp);
         gc.setmTeam(null);
+        gc.setEmployeeMonthlySalary(employeeMonthlySalary);
       
         
         String userName = generateUserName(employeeDisplayFirstName, employeeDisplayLastName);
@@ -283,7 +285,7 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
     public void addEmployee(String userID,String employeeID, String employeeDisplayFirstName, String employeeDisplayLastName,
             String employeeRole, String employeeDepartment, Date employeeDOB,
             String employeeGender, String employeeHpNumber, String employeeMailingAddress, String employeeOfficeNumber,
-            String employeePrivateEmail) {
+            String employeePrivateEmail, double employeeMonthlySalary) {
     
         employee = new Employee();
         department= new OrganizationUnit();
@@ -295,7 +297,7 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
             
         employee.createEmployee(employeeID, employeeDisplayFirstName, employeeDisplayLastName,/* employeeRole, employeeDepartment,*/
                 employeeDOB, employeeGender, employeeHpNumber, employeeMailingAddress, employeeOfficeNumber,
-                employeePrivateEmail);
+                employeePrivateEmail, employeeMonthlySalary);
 
         
         String userName = generateUserName(employeeDisplayFirstName, employeeDisplayLastName);

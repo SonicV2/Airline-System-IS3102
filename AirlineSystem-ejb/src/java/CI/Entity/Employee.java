@@ -41,6 +41,7 @@ public class Employee implements Serializable {
 
     private boolean employeeLockOut;
     private boolean employeeAccountActivate;
+    private double employeeMonthlySalary;
 
     @OneToOne(cascade = {CascadeType.PERSIST})
     private Salt salt;
@@ -58,7 +59,7 @@ public class Employee implements Serializable {
     public void createEmployee(String employeeID, String employeeDisplayFirstName, String employeeDisplayLastName,
             /*String employeeRole, String employeeDepartment,*/ Date employeeDOB,
             String employeeGender, String employeeHpNumber, String employeeMailingAddress, String employeeOfficeNumber,
-            String employeePrivateEmail) {
+            String employeePrivateEmail, double employeeMonthlySalary) {
         this.employeeID = employeeID;
         this.employeeDisplayFirstName = employeeDisplayFirstName;
         this.employeeDisplayLastName = employeeDisplayLastName;
@@ -74,6 +75,7 @@ public class Employee implements Serializable {
         this.employeePassword = "password";
         this.employeeAccountActivate = false;
         this.employeeLockOut = false;
+        this.employeeMonthlySalary = employeeMonthlySalary;
 
     }
 
@@ -274,6 +276,20 @@ public class Employee implements Serializable {
 
     public void setRoles(List<Role> roles) {
         this.roles = roles;
+    }
+
+    /**
+     * @return the employeeMonthlySalary
+     */
+    public double getEmployeeMonthlySalary() {
+        return employeeMonthlySalary;
+    }
+
+    /**
+     * @param employeeMonthlySalary the employeeMonthlySalary to set
+     */
+    public void setEmployeeMonthlySalary(double employeeMonthlySalary) {
+        this.employeeMonthlySalary = employeeMonthlySalary;
     }
 
     

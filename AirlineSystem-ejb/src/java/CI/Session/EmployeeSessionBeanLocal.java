@@ -20,7 +20,7 @@ public interface EmployeeSessionBeanLocal {
     public void addEmployee(String userID,String employeeID,String employeeDisplayFirstName,String employeeDisplayLastName,
                             String  employeeRole,String employeeDepartment,Date employeeDOB,
                             String employeeGender,String employeeHpNumber,String employeeMailingAddress,
-                            String employeeOfficeNumber,String employeePrivateEmail);
+                            String employeeOfficeNumber,String employeePrivateEmail,double employeeMonthlySalary);
     
     public Employee getEmployee(String employeeUserName);
     public Employee getEmployeeUseID(String employeeID); //get employee by using ID
@@ -37,17 +37,17 @@ public interface EmployeeSessionBeanLocal {
     public void addCabinCrew(String employeeID, String employeeDisplayFirstName, String employeeDisplayLastName,
             String employeeDepartment,Date employeeDOB,String employeeGender, String employeeHpNumber, 
             String employeeMailingAddress, String employeeOfficeNumber, String employeePrivateEmail,
-            String experience, List<String>language, String position);
+            String experience, List<String>language, String position, double employeeMonthlySalary);
     
     public void addPilot(String employeeID, String employeeDisplayFirstName, String employeeDisplayLastName,
             String employeeDepartment,Date employeeDOB,String employeeGender, String employeeHpNumber, 
             String employeeMailingAddress, String employeeOfficeNumber, String employeePrivateEmail,
-            String experience, List<String>skills, String position);
+            String experience, List<String>skills, String position, double employeeMonthlySalary);
     
     public void addGroundCrew(String employeeID, String employeeDisplayFirstName, String employeeDisplayLastName,
             String employeeDepartment,Date employeeDOB,String employeeGender, String employeeHpNumber, 
             String employeeMailingAddress, String employeeOfficeNumber, String employeePrivateEmail,
-             String position,String mainCrewExp);
+             String position,String mainCrewExp, double employeeMonthlySalary);
     
     public List<Employee> retrieveAllEmployees();
     public Boolean lockoutEmployee(String employeeID);

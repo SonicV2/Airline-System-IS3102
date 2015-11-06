@@ -66,7 +66,7 @@
     <h:body>
 
         <!--    To add the same header on all dashboard pages  -->
-        <ui:include src="DashboardHeader.xhtml"/>
+<!--        <ui:include src="DashboardHeader.xhtml"/>-->
 
         <!--    To add the same sidebar on all dashboard pages  -->
         <ui:include src="DashboardSidebar.xhtml"/>
@@ -216,7 +216,17 @@
                                     <div class="missingfield">
                                         <h:message for="address"  />
                                     </div>
-                                </div>   
+                                </div>  
+                                
+                                <div class="form-group">
+                                    <h:outputLabel value="Monthly Salary: " class="col-md-4 control-label" />
+                                    <div class="col-md-8">
+                                        <h:inputText id="salary" required="true" requiredMessage="Please fill in monthly salary field!" class="form-control" value="#{employeeManagedBean.employeeMonthlySalary}" />
+                                    </div>
+                                    <div class="missingfield">
+                                        <h:message for="salary"  />
+                                    </div>
+                                </div>  
 
                             </div>
                         </div>

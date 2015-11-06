@@ -52,6 +52,8 @@ public class EmployeeManagedBean {
     String employeeMailingAddress;
     String employeeOfficeNumber;
     String employeeEmailAddress;
+    private double employeeMonthlySalary;
+    
     Employee employee;
 
     String employeePrivateEmail;
@@ -96,7 +98,7 @@ public class EmployeeManagedBean {
 
         employeeSessionBean.addEmployee(userID, employeeID, employeeDisplayFirstName, employeeDisplayLastName, employeeRole,
                 employeeDepartment, employeeDOB, employeeGender, employeeHpNumber,
-                employeeMailingAddress, employeeOfficeNumber, employeePrivateEmail);
+                employeeMailingAddress, employeeOfficeNumber, employeePrivateEmail, employeeMonthlySalary);
 
         employee = getEmployee(employeeID); //in order to get the employeeUserName and email which is generated after the creation of employee
         employeeUserName = employee.getEmployeeUserName();
@@ -142,6 +144,7 @@ public class EmployeeManagedBean {
         setSkills(null);
         setFirstLang("");
         setSecondLang("");
+        setEmployeeMonthlySalary(0);
 
         return "EmployeeDashBoard";
 
@@ -153,7 +156,7 @@ public class EmployeeManagedBean {
         languages.add(firstLang);
         languages.add(secondLang);
         employeeSessionBean.addCabinCrew(employeeID, employeeDisplayFirstName, employeeDisplayLastName, employeeDepartment, employeeDOB, employeeGender, employeeHpNumber,
-                employeeMailingAddress, employeeOfficeNumber, employeePrivateEmail, experience, languages, position);
+                employeeMailingAddress, employeeOfficeNumber, employeePrivateEmail, experience, languages, position, employeeMonthlySalary);
 
         employee = getEmployee(employeeID);
         employeeUserName = employee.getEmployeeUserName();
@@ -181,7 +184,7 @@ public class EmployeeManagedBean {
     public void addPilot(ActionEvent event) {
         setEmployeeRole("Pilot");
         employeeSessionBean.addPilot(employeeID, employeeDisplayFirstName, employeeDisplayLastName, employeeDepartment, employeeDOB, employeeGender, employeeHpNumber,
-                employeeMailingAddress, employeeOfficeNumber, employeePrivateEmail, experience, skills, position);
+                employeeMailingAddress, employeeOfficeNumber, employeePrivateEmail, experience, skills, position, employeeMonthlySalary);
 
         employee = getEmployee(employeeID);
         employeeUserName = employee.getEmployeeUserName();
@@ -211,7 +214,7 @@ public class EmployeeManagedBean {
       public void addGroundCrew(ActionEvent event) {
         setEmployeeRole("Ground Crew");
         employeeSessionBean.addGroundCrew(employeeID, employeeDisplayFirstName, employeeDisplayLastName, employeeDepartment, employeeDOB, employeeGender, employeeHpNumber,
-                employeeMailingAddress, employeeOfficeNumber, employeePrivateEmail,  position,mainCrewExp);
+                employeeMailingAddress, employeeOfficeNumber, employeePrivateEmail,  position,mainCrewExp, employeeMonthlySalary);
 
         employee = getEmployee(employeeID);
         employeeUserName = employee.getEmployeeUserName();
@@ -486,6 +489,20 @@ public class EmployeeManagedBean {
      */
     public void setMainCrewExp(String mainCrewExp) {
         this.mainCrewExp = mainCrewExp;
+    }
+
+    /**
+     * @return the employeeMonthlySalary
+     */
+    public double getEmployeeMonthlySalary() {
+        return employeeMonthlySalary;
+    }
+
+    /**
+     * @param employeeMonthlySalary the employeeMonthlySalary to set
+     */
+    public void setEmployeeMonthlySalary(double employeeMonthlySalary) {
+        this.employeeMonthlySalary = employeeMonthlySalary;
     }
 
 }

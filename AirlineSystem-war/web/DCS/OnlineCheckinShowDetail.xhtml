@@ -3,56 +3,126 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+
     <h:head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <!-- Custom Theme files -->
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <h:outputStylesheet library ="css"  name="bootstrap.css" />
+        <h:outputStylesheet library ="css"  name="styleMerlion.css" />
+        <h:outputStylesheet library ="css"  name="JFFormStyle.css" />
+        <h:outputStylesheet library ="css"  name="flexslider.css" />
+        <h:outputScript library="js" name="jQuery/jQuery-2.1.4.min.js" />
+        <h:outputScript library="js" name="modernizr.custom.js" /> 
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
+
+
+        <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+        <!-- //Custom Theme files -->
+
+        <!-- fonts -->
+        <link href='//fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,700,500italic,700italic,900,900italic' rel='stylesheet' type='text/css'></link>
+        <link href='//fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'></link>
+        <!-- //fonts -->	
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('#horizontalTab').easyResponsiveTabs({
+                    type: 'default', //Types: default, vertical, accordion           
+                    width: 'auto', //auto or any width like 600px
+                    fit: true   // 100% fit in a container
+                });
+            });
+        </script>
+        <!--pop-up-->
+        <h:outputScript library="js" name="menu_jquery.js" /> 
+        <!--//pop-up-->	
+        <h:outputStylesheet library ="css"  name="flightdisplay2.css" />
         <p:growl id="growl" sticky="true" showDetail="true"/>
         <title>Search Booking </title>
     </h:head>
     <h:body>
-        <h:form>
+        <ui:fragment rendered ="#{customerManagedBean.isCustomerLoggedOn}">
+            <ui:include src="/Distribution/CustomerDashboardHeader.xhtml"/>
+        </ui:fragment>
+        <ui:fragment rendered ="#{!customerManagedBean.isCustomerLoggedOn}">
+            <ui:include src="/Distribution/MerlionAirlinesHeader.xhtml"/>
+        </ui:fragment>
+
+        <div class="banner-bottom">
+            <!-- container -->
+            <div class="container">
+
+
+                <div class="about-info">
+                    <h2>Here is your flight and traveller details</h2>
+                </div>
+                <h:form>
+                <div class="faqs-top-grids terms-grids">
+
             <h:outputLabel value="Flight Number: " />
-            <h:outputText class="form-control" value="#{searchBookingManagedBean.reqBooking.flightNo}" />
+            <h:outputText value="#{searchBookingManagedBean.reqBooking.flightNo}" />
             <br /> <br />
                       
             <h:outputLabel value="PNR Number: " />
-            <h:outputText class="form-control" value="#{searchBookingManagedBean.reqBooking.pnr.pnrID}" />
+            <h:outputText value="#{searchBookingManagedBean.reqBooking.pnr.pnrID}" />
             <br /> <br />
             
             <h:outputLabel value="Passport Number: " />
-            <h:outputText  class="form-control" value="#{searchBookingManagedBean.reqBooking.passportNumber}" />
+            <h:outputText value="#{searchBookingManagedBean.reqBooking.passportNumber}" />
             <br /><br />
             
-             <h:outputLabel value="Title: " />
-            <h:outputText class="form-control" value="#{searchBookingManagedBean.reqBooking.travellerTitle}" />
+             <h:outputLabel value="Traveler: " />
+            <h:outputText  value="#{searchBookingManagedBean.reqBooking.travellerTitle} #{searchBookingManagedBean.reqBooking.travellerFristName} #{searchBookingManagedBean.reqBooking.travellerLastName} " />
             <br /> <br />
-            
-            <h:outputLabel value="First Name: " />
-            <h:outputText class="form-control" value="#{searchBookingManagedBean.reqBooking.travellerFristName}" />
-            <br /> <br />
-                     
-            <h:outputLabel value="Last Name: " />
-            <h:outputText class="form-control" value="#{searchBookingManagedBean.reqBooking.travellerLastName}" />
-            <br /> <br />
-            
+
             <h:outputLabel value="Nationality: " />
-            <h:outputText class="form-control" value="#{searchBookingManagedBean.reqBooking.nationality}" />
+            <h:outputText  value="#{searchBookingManagedBean.reqBooking.nationality}" />
             <br /> <br />
             
             <h:outputLabel value="Class Code: " />
-            <h:outputText class="form-control" value="#{searchBookingManagedBean.reqBooking.classCode}" />
+            <h:outputText  value="#{searchBookingManagedBean.reqBooking.classCode}" />
             <br /> <br />
             
             <h:outputLabel value="Food Selection: " />
-            <h:outputText class="form-control" value="#{searchBookingManagedBean.reqBooking.foodSelection}" />
+            <h:outputText  value="#{searchBookingManagedBean.reqBooking.foodSelection}" />
             <br /> <br />
                                  
-        </h:form>
-        
-        <h:form>
+
+        <div class="text-center">
+
             
-            <h:commandButton  value="Proceed" action="#{searchBookingManagedBean.retrieveFlightType()}" />
+            <h:commandButton class="btn btn-outline btn-success" value="Proceed" action="#{searchBookingManagedBean.retrieveFlightType()}" />
         
-        </h:form>
+  
+        </div>
+                    <div class="clearfix"> </div>
+                </div>
+                </h:form>
+                
+            </div>
+        </div>
+        <ui:include src="/Distribution/MerlionAirlinesFooter.xhtml"/>
+        <h:outputScript library="js" name="jquery.flexslider.js"/> 
+        <h:outputScript library="js" name="easyResponsiveTabs.js" /> 
+        <h:outputScript library="js" name="scriptMerlion.js"></h:outputScript>
+
+        <script type="text/javascript">
+            $(function () {
+                SyntaxHighlighter.all();
+            });
+            $(window).load(function () {
+                $('.flexslider').flexslider({
+                    animation: "slide",
+                    start: function (slider) {
+                        $('body').removeClass('loading');
+                    }
+                });
+            });
+        </script>
 
 
     </h:body>

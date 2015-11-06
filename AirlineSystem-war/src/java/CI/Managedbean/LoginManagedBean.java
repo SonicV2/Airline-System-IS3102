@@ -1,7 +1,9 @@
 package CI.Managedbean;
 
 import CI.Entity.AccessRight;
+import CI.Entity.CabinCrew;
 import CI.Entity.Employee;
+import CI.Entity.Pilot;
 import CI.Entity.Role;
 import CI.Session.EmployeeSessionBean;
 import javax.ejb.EJB;
@@ -13,6 +15,7 @@ import javax.inject.Named;
 import org.primefaces.context.RequestContext;
 import CI.Session.EmployeeSessionBeanLocal;
 import CI.Session.RoleSessionBeanLocal;
+import FOS.Session.ReservedCrewScheduleSessionBeanLocal;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +37,9 @@ public class LoginManagedBean {
 
     @EJB
     private RoleSessionBeanLocal roleSessionBean;
+    
+    @EJB
+    private ReservedCrewScheduleSessionBeanLocal reservedCrewSessionBean;
 
     String employeeUserName;
     String employeePassword;
@@ -48,6 +54,7 @@ public class LoginManagedBean {
     
     private FileHandler fh;
     private String userID;
+    private Boolean isReserve = false;
     
 
     public LoginManagedBean() {
@@ -140,7 +147,7 @@ public class LoginManagedBean {
                 doLogInMsg = "Invaild Employee Name!";
                 logInCheck = false;
             } else if (employee.isEmployeeLockOut()) {
-                doLogInMsg = "Accound has been locked!";
+                doLogInMsg = "Account has been locked!";
                 logInCheck = false;
                 System.out.println("look here!");
 
@@ -152,13 +159,29 @@ public class LoginManagedBean {
                     if (r.getRoleName().equals("SUPER ADMIN")) {
                         session.setAttribute("role", "SUPER ADMIN"); /*Add role --> SuperAdmin*/
 
-                    } else {
+                    } else if (r.getRoleName().equals("CABIN CREW")) {
+                        CabinCrew cabinCrew = reservedCrewSessionBean.getCabinCrew(employeeUserName);
+                        if ((cabinCrew != null) && (cabinCrew.getPosition().contains("Reserved"))){
+                            //to get if the crew is a reserved crew
+                            setIsReserve(true);
+                        }
+                    }
+                    else if (r.getRoleName().equals("PILOT")) {
+                        Pilot thisPilot = reservedCrewSessionBean.getPilot(employeeUserName);
+                        if ((thisPilot != null) && (thisPilot.getPosition().contains("Reserved"))){
+                            //to get if the crew is a reserved pilot
+                            setIsReserve(true);
+                        }
+                    }
+                    else {
                         session.setAttribute("role", "NSA");/*NSA--> Not Super Admin*/
 
                     }
                 }
 
                 roles = temp_roles;
+                
+                
 
                 doLogInMsg = getEmployee().getEmployeeDisplayLastName();
                 logInCheck = true;
@@ -267,6 +290,20 @@ public class LoginManagedBean {
      */
     public void setAccessRightsForRole(List<AccessRight> accessRightsForRole) {
         this.accessRightsForRole = accessRightsForRole;
+    }
+
+    /**
+     * @return the isReserve
+     */
+    public Boolean getIsReserve() {
+        return isReserve;
+    }
+
+    /**
+     * @param isReserve the isReserve to set
+     */
+    public void setIsReserve(Boolean isReserve) {
+        this.isReserve = isReserve;
     }
 
 }
