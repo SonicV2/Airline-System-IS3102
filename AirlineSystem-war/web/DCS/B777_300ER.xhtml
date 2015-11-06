@@ -34,7 +34,7 @@
             
             </div>
             <p:inputText id="seat" value="#{seatManagedBean.choose}" />    
-            <h:commandButton value="Choose" actionListener="#{seatManagedBean.chooseSeatB777_300ER()}" />
+            <h:commandButton value="Choose" actionListener="#{baggageManagedBean.showBoardingPass}" action="#{seatManagedBean.chooseSeatB777_300ER()}" />
 
             <p:dataGrid var="seat" value="#{seatManagedBean.b777_300ERseatArrange}" columns="10" layout="grid"
                         rows="2000" id="seats" style="width:300px;height:100%; padding:0px;">

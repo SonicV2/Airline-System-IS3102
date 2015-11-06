@@ -34,7 +34,9 @@ public class CheckInRecordSessionBean implements CheckInRecordSessionBeanLocal {
     
     @Override
     public void addSeat(Booking booking, String seat) {
+        System.out.println("add seat session bean - booking" +booking.toString());
         CheckInRecord record = findRecord(booking);
+        System.out.println("add seat session bean - record" +record.toString());
         record.setSeatNo(seat);
         booking.setSeatNumber(seat);
         em.merge(record);

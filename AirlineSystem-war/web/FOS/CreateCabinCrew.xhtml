@@ -15,6 +15,7 @@
         <h:outputStylesheet library="css" name="morrisjs/morris.css" />
 
         <title>Create Cabin Crew</title>
+        
         <style>
             .ui-inputfield {
                 margin: 0;
@@ -52,6 +53,10 @@
                 display: inline;
 
             }
+            .form-control{
+                display: inline;
+            }
+
         </style>
 
         <!--Add new employee to the database-->
@@ -162,11 +167,13 @@
 
                                 <div class="form-group">
                                     <p:outputLabel for="department" value="Department: " class="col-md-4 control-label" />
-                                    <h:selectOneMenu required="true" id="department" styleClass="dropdown-menu select"  value="#{employeeManagedBean.employeeDepartment}" >
+                                    <div class="col-md-6"> 
+                                    <h:selectOneMenu class="form-control" required="true" id="department"  value="#{employeeManagedBean.employeeDepartment}" style="margin-top: 5px;">
 
                                         <f:selectItem itemLabel="Select department" itemValue="" noSelectionOption="true" />
                                         <f:selectItems value="#{departmentManagedBean.CCdepartments}" />
                                     </h:selectOneMenu>
+                                    </div>
                                 </div>
 
                                 <div class="form-group">
@@ -201,7 +208,8 @@
 
                                 <div class="form-group">
                                     <p:outputLabel for="p" value="Position: " class="col-md-4 control-label" />
-                                    <h:selectOneMenu  id="p" styleClass="dropdown-menu select" value="#{employeeManagedBean.position}"  >
+                                    <div class='col-md-6'>
+                                    <h:selectOneMenu  id="p" class='form-control' value="#{employeeManagedBean.position}" style="margin-top: 5px;"  >
 
                                         <f:selectItem itemLabel="Select Position" itemValue="" noSelectionOption="true" />
                                         <f:selectItem itemLabel="Lead Flight Stewardess" itemValue="Lead Flight Stewardess"  />
@@ -210,6 +218,7 @@
                                         <f:selectItem itemLabel="Flight Steward" itemValue="Flight Steward"  />
                                         <f:selectItem itemLabel="Reserved Flight Steward" itemValue="Reserved Flight Steward"  />
                                     </h:selectOneMenu>
+                                    </div>
 
 
                                 </div>
@@ -226,7 +235,8 @@
 
                                 <div class="form-group">
                                     <p:outputLabel for="firstLang" value="First Language: " class="col-md-4 control-label" />
-                                    <h:selectOneMenu required="true" id="firstLang" styleClass="dropdown-menu select"  value="#{employeeManagedBean.firstLang}" >
+                                    <div class='col-md-6'>
+                                    <h:selectOneMenu class='form-control' required="true" id="firstLang"  value="#{employeeManagedBean.firstLang}" style="margin-top: 5px;" >
 
                                         <f:selectItem itemLabel="Select First Languages" itemValue="" noSelectionOption="true" />
                                         <f:selectItem itemLabel="English" itemValue="English" />
@@ -238,12 +248,14 @@
                                         <f:selectItem itemLabel="German" itemValue="German" />
                                         
                                     </h:selectOneMenu>
+                                    </div>
                                 </div>  
 
 
                                 <div class="form-group">
                                     <p:outputLabel for="secondLang" value="Second Language: " class="col-md-4 control-label" />
-                                    <h:selectOneMenu required="true" id="secondLang" styleClass="dropdown-menu select"  value="#{employeeManagedBean.secondLang}" >
+                                    <div class='col-md-6'>
+                                    <h:selectOneMenu class="form-control" required="true" id="secondLang"  value="#{employeeManagedBean.secondLang}" style="margin-top: 5px;">
 
 
                                         <f:selectItem itemLabel="Select Second Languages" itemValue="" noSelectionOption="true" />
@@ -257,6 +269,17 @@
                                         <f:selectItem itemLabel="German" itemValue="German" />
 
                                     </h:selectOneMenu>
+                                    </div>
+                                </div>  
+                                
+                                <div class="form-group">
+                                    <h:outputLabel value="Monthly Salary: " class="col-md-4 control-label" />
+                                    <div class="col-md-8">
+                                        <h:inputText id="salary" required="true" requiredMessage="Please fill in monthly salary field!" class="form-control" value="#{employeeManagedBean.employeeMonthlySalary}" />
+                                    </div>
+                                    <div class="missingfield">
+                                        <h:message for="salary"  />
+                                    </div>
                                 </div>  
 
 

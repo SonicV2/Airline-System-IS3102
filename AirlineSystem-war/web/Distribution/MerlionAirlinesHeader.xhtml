@@ -51,7 +51,7 @@ and open the template in the editor.
                         <ui:fragment rendered="#{request.requestURI ne '/AirlineSystem-war/Distribution/ViewPNR.xhtml'}">
                         <li><a href="#{request.contextPath}/Distribution/ViewPNR.xhtml">Manage My Flight</a></li>
                         </ui:fragment>
-                        <li><a href="holidays.html">Check-in</a></li>
+                        <li><a href="#{request.contextPath}/DCS/OnlineCheckin.xhtml">Check-in</a></li>
                        
                     </ul>
                     <div class="clearfix"> </div>

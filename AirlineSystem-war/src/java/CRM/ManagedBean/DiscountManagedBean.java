@@ -83,7 +83,7 @@ public class DiscountManagedBean {
                 discountTypeDisplays.add(eachDiscountTypeDisplay);
             }
         }
-        return "ManageDiscountTypes";
+        return "/CRM/ManageDiscountTypes";
     }
 
     public String addDiscountType() {

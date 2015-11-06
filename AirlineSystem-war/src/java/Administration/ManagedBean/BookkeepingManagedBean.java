@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Administration.Managedbean;
+package Administration.ManagedBean;
 
 import Administration.Entity.BookAccount;
 import Administration.Entity.BookAccount.Type;
