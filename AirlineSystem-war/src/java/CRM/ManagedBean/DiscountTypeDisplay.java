@@ -6,6 +6,7 @@
 package CRM.ManagedBean;
 
 import CRM.Entity.DiscountType;
+import static CRM.Entity.DiscountType_.expiryDate;
 import java.util.Date;
 
 /**
@@ -17,6 +18,7 @@ public class DiscountTypeDisplay {
     private DiscountType discountType;
     private int noOfClaimedCodes;
     private int  noOfUnclaimedCodes;
+    private String expiryDate;
 
 
     public DiscountType getDiscountType() {
@@ -41,6 +43,14 @@ public class DiscountTypeDisplay {
 
     public void setNoOfUnclaimedCodes(int noOfUnclaimedCodes) {
         this.noOfUnclaimedCodes = noOfUnclaimedCodes;
+    }
+
+    public String getExpiryDate() {
+        return expiryDate;
+    }
+
+    public void setExpiryDate(String expiryDate) {
+        this.expiryDate = expiryDate;
     }
     
     

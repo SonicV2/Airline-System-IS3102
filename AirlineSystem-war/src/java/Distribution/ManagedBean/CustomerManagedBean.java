@@ -48,7 +48,7 @@ public class CustomerManagedBean {
 
     @EJB
     private EmailSessionBeanLocal emailSessionBean;
-    
+
     @EJB
     private DiscountSessionBeanLocal discountSessionBean;
 
@@ -93,7 +93,7 @@ public class CustomerManagedBean {
         isCustomerLoggedOn = false;
         discountTypes = new ArrayList();
         discountTypes = discountSessionBean.retrieveAllMileageDiscountTypes();
-        
+
         //pnrDisplayList = new ArrayList();
     }
 
@@ -190,6 +190,14 @@ public class CustomerManagedBean {
                 FacesContext.getCurrentInstance().addMessage(null, message);
 
                 loggedIn = true;
+                int currentMileage = customer.getMileagePoints();
+                List<DiscountType> discountTypesCustomerCanAfford = new ArrayList();
+                for (DiscountType eachDiscountType : discountTypes) {
+                    if (eachDiscountType.getMileagePointsToRedeem() <= currentMileage) {
+                        discountTypesCustomerCanAfford.add(eachDiscountType);
+                    }
+                }
+                setDiscountTypes(discountTypesCustomerCanAfford);
                 return true;
                 //means the password and email match
 //                  redirect();
@@ -311,7 +319,7 @@ public class CustomerManagedBean {
 
         return "UpdateProfile";
     }
-    
+
     public String changePassword() {
         if (!customerSessionBean.isSameHash(customerEmail, customerPassword)) {
             setFeedbackMessage("Incorrect old password!");
@@ -325,38 +333,38 @@ public class CustomerManagedBean {
             FacesContext.getCurrentInstance().addMessage(null, message);
             return "ChangePassword";
         } else {
-            
+
             customer.setPassword(customerSessionBean.newPassword(customerEmail, customerNewPassword));
             customerSessionBean.updateCustomerProfile(customer);
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Your password has been updated!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
-            
+
         }
-        
+
         return "CustomerDashboard";
-        
+
     }
 
     public String persistUpdatedProfile() {
 
-            customer.setTitle(title);
-            customer.setFirstName(customerFirstName);
-            customer.setLastName(customerLastName);
-            customer.setPassportNumber(passportNumber);
-            customer.setGender(customerGender);
-            customer.setNationality(nationality);
-            customer.setCustomerDOB(customerDOB);
-            customer.setHpNumber(customerHpNumber);
-            customer.setHomeNumber(customerHomeNumber);
-            customer.setEmail(customerEmail);
-            customer.setAddress(customerAddress);
+        customer.setTitle(title);
+        customer.setFirstName(customerFirstName);
+        customer.setLastName(customerLastName);
+        customer.setPassportNumber(passportNumber);
+        customer.setGender(customerGender);
+        customer.setNationality(nationality);
+        customer.setCustomerDOB(customerDOB);
+        customer.setHpNumber(customerHpNumber);
+        customer.setHomeNumber(customerHomeNumber);
+        customer.setEmail(customerEmail);
+        customer.setAddress(customerAddress);
 
-            customerSessionBean.updateCustomerProfile(customer);
+        customerSessionBean.updateCustomerProfile(customer);
 
-            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Your profile has been updated!", "");
-            FacesContext.getCurrentInstance().addMessage(null, message);
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Your profile has been updated!", "");
+        FacesContext.getCurrentInstance().addMessage(null, message);
 
-            return "CustomerDashboard";
+        return "CustomerDashboard";
     }
 
     public void validateUser(ActionEvent event) {
@@ -391,45 +399,43 @@ public class CustomerManagedBean {
         RequestContext.getCurrentInstance().update("growll");
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
-    
-    public String showDiscountTypes(){
-        if (discountTypes ==null|| discountTypes.isEmpty()){
+
+    public String showDiscountTypes() {
+        if (discountTypes == null || discountTypes.isEmpty()) {
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "There are no redemptions available at the moment. Please try later!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
             return null;
         }
+
         return "CustomerDiscountTypes";
     }
-    
-    public String redeemDiscountTypes(){
+
+    public String redeemDiscountTypes() {
         //SET selectedDiscountType
-        
-        if (customer.getMileagePoints()<selectedDiscountType.getMileagePointsToRedeem()){
+
+        if (customer.getMileagePoints() < selectedDiscountType.getMileagePointsToRedeem()) {
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "You do not have enough mileage points!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
-        }
-        else{
-            customer.setMileagePoints(customer.getMileagePoints()-(int)selectedDiscountType.getMileagePointsToRedeem());
+        } else {
+            customer.setMileagePoints(customer.getMileagePoints() - (int) selectedDiscountType.getMileagePointsToRedeem());
             customerSessionBean.updateCustomerProfile(customer);
             String code = discountSessionBean.addDiscountCode(selectedDiscountType);
             sendCodeToCustomer(code);
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Discount code has been redeemed. Please check your email!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
-        }      
+        }
         return null;
     }
-    
-     public void sendCodeToCustomer(String code) {
-        
+
+    public void sendCodeToCustomer(String code) {
+
         String body = "";
         body += "Dear " + customer.getFirstName() + ",\n\nYou have successfully redeemed a " + selectedDiscountType.getDiscount() + "% discount voucher which can be redeemed on your next booking at Merlion Airlines websiste.";
         body += " You have a balanace of " + customer.getMileagePoints() + " mileage points left.";
-        body += "\n\nYour discount voucher code is "+ code + ".";
+        body += "\n\nYour discount voucher code is " + code + ".";
         body += "\n\nWe look forward to seeing you on board soon!";
         emailSessionBean.sendEmail(customer.getEmail(), "Merlion Airlines Promotionanl Code", body);
     }
-    
-    
 
     /**
      * @return the customerSessionBean
