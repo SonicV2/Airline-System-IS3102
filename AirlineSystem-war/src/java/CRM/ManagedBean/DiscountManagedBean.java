@@ -10,7 +10,9 @@ import CRM.Entity.DiscountType;
 import CRM.Session.AnalyticsSessionBeanLocal;
 import CRM.Session.CustomerScore;
 import CRM.Session.DiscountSessionBeanLocal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -36,40 +38,47 @@ public class DiscountManagedBean {
      
      @EJB
     private EmailSessionBeanLocal emailSessionBean;
-     
-     private List<DiscountType> discountTypes;
-     private DiscountType selectedDiscountType;
-     private List<DiscountTypeDisplay> discountTypeDisplays;
-     private String description;
-     private double discount;
-     private double noOfMileagePointsToRedeem;
-     FacesMessage message = null;
-     private List<Integer> percentileList;
-     private int selectedPercentile;
-     private List<String> analysisTypeList;
-     private String analysisType;
+
+    private List<DiscountType> discountTypes;
+    private DiscountType selectedDiscountType;
+    private List<DiscountTypeDisplay> discountTypeDisplays;
+    private String description;
+    private double discount;
+    private double noOfMileagePointsToRedeem;
+    FacesMessage message = null;
+    private List<Integer> percentileList;
+    private int selectedPercentile;
+    private List<String> analysisTypeList;
+    private String analysisType;
+    private int from;
+    private int to;
+    private String type;
+    private Date expiryDate;
+    private Date currentDate;
     
-     @PostConstruct
-     public void init(){
-         discountTypes = new ArrayList();
-         discountTypeDisplays = new ArrayList();
-         discountTypes = discountSessionBean.retrieveAllDiscountTypes();
-         percentileList = new ArrayList();
-         for (int i=10;i<=100;i = i+10){
-             percentileList.add(i);
-         }
-         analysisTypeList = new ArrayList();
-         analysisTypeList.add("Recency");
-         analysisTypeList.add("Frequency");
-         analysisTypeList.add("Monetary Value");
-         
-     }
-     
-     public String manageDiscountTypes(){
-         discountTypeDisplays.clear();
-         discount = 0.0;
-         noOfMileagePointsToRedeem = 0.0;
-         description = "";
+    @PostConstruct
+    public void init() {
+        discountTypes = new ArrayList();
+        discountTypeDisplays = new ArrayList();
+        discountTypes = discountSessionBean.retrieveAllDiscountTypes();
+        analysisTypeList = new ArrayList();
+        analysisTypeList.add("Recency");
+        analysisTypeList.add("Frequency");
+        analysisTypeList.add("Monetary Value");
+        analysisTypeList.add("Customer Lifetime Value");
+        analysisType = "";
+        selectedDiscountType = null;
+        currentDate = new Date();
+    }
+
+    public String manageDiscountTypes() {
+        discountTypeDisplays.clear();
+        discount = 0.0;
+        noOfMileagePointsToRedeem = 0.0;
+        description = "";
+        type = "";
+        expiryDate = null;
+        
          if (!discountTypes.isEmpty()){
              DiscountTypeDisplay eachDiscountTypeDisplay;
              for (DiscountType eachDiscountType : discountTypes){
@@ -83,51 +92,67 @@ public class DiscountManagedBean {
          return "ManageDiscountTypes";
      }
      
-     public String addDiscountType(){
-         if (discountSessionBean.discountTypeExists(discount)){
-             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Similar Discount Type already exists!", "");
-                FacesContext.getCurrentInstance().addMessage(null, message);
-                return null;
-         }
-         else{
-                discountSessionBean.addDiscountType(description, noOfMileagePointsToRedeem, discount);
-                discountTypes = discountSessionBean.retrieveAllDiscountTypes();
-                message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Discount Type added!", "");
-                FacesContext.getCurrentInstance().addMessage(null, message);
-                return manageDiscountTypes();
-         }
-         
-     }
-     
-        public String deleteDiscountType(){
-            
-         //MAKE SURE selectedDiscountType IS SET BEFORE   
-         if (discountSessionBean.discountTypeHasUnclaimedCodes(selectedDiscountType)){
-             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Discount Type cannot be deleted as it has unclaimed codes!", "");
-                FacesContext.getCurrentInstance().addMessage(null, message);
-                return null;
-         }
-         else{
-                discountSessionBean.deleteDiscountType(selectedDiscountType);
-                discountTypes = discountSessionBean.retrieveAllDiscountTypes();
-                message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Discount Type deleted!", "");
-                FacesContext.getCurrentInstance().addMessage(null, message);
-                return manageDiscountTypes();
-         }
-         
-     }
-        
-        private String sendDiscountCodesToTopCustomers(){
-            //Set analysisType,selectedpercentile & selectedDiscountType
-            
+
+
+    public String addDiscountType() {
+        if (discountSessionBean.discountTypeExists(discount, type)) {
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Similar Discount Type already exists!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return null;
+        } else {
+            if (type.equals("Mileage"))
+                expiryDate = null;
+            discountSessionBean.addDiscountType(description, noOfMileagePointsToRedeem, discount, type, expiryDate);
+            discountTypes = discountSessionBean.retrieveAllDiscountTypes();
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Discount Type added!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return manageDiscountTypes();
+        }
+
+    }
+
+    public String deleteDiscountType(DiscountType userSelectedDiscountType) {
+        setSelectedDiscountType(userSelectedDiscountType);
+        if (discountSessionBean.discountTypeHasUnclaimedCodes(selectedDiscountType)) {
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Discount Type cannot be deleted as it has unclaimed codes!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return null;
+        } else {
+            discountSessionBean.deleteDiscountType(selectedDiscountType);
+            discountTypes = discountSessionBean.retrieveAllDiscountTypes();
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Discount Type deleted!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return manageDiscountTypes();
+        }
+
+    }
+
+  
+
+    public String sendDiscountCodesToTopCustomers() {
+        //Set analysisType,selectedpercentile & selectedDiscountType, from, to
+        if (from > to || from < 0 || from > 100 || to < 0 || to > 100) {
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Entered range is incorrect", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        } 
+        else if (analysisType ==null || analysisType.equals("")){
+             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please select the analysis type!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        }
+        else if (selectedDiscountType==null){
+             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please select the discount amount!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        }
+        else{
+
             List<CustomerScore> customers = new ArrayList();
             int from = 100-selectedPercentile;
             if (analysisType.equals("Recency"))
-                    customers = analyticsSessionBean.getRecency(from, 100);
+                    customers = analyticsSessionBean.getRecency(from, to);
             else if (analysisType.equals("Frequency"))
-                    customers = analyticsSessionBean.getFrequency(from, 100);
+                    customers = analyticsSessionBean.getFrequency(from, to);
             else if (analysisType.equals("Monetary Value"))
-                    customers = analyticsSessionBean.getMonetary(from, 100);
+                    customers = analyticsSessionBean.getMonetary(from, to);
               
             if (customers ==null || customers.isEmpty()){
                 message = new FacesMessage(FacesMessage.SEVERITY_INFO, "No Customers found!", "");
@@ -136,19 +161,30 @@ public class DiscountManagedBean {
             else{
                 for (CustomerScore eachCustomerScore: customers){
                     String code = discountSessionBean.addDiscountCode(selectedDiscountType);
-                    sendEmail (eachCustomerScore.getEmail(), eachCustomerScore.getName(),selectedDiscountType, code);     
+                    sendEmailToTopCustomers (eachCustomerScore.getEmail(), eachCustomerScore.getName(),selectedDiscountType, code);     
                 }
                 message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Discount codes sent!", "");
                 FacesContext.getCurrentInstance().addMessage(null, message);
             } 
             return null;
         }
-        
-        public void sendEmail(String email, String name, DiscountType selectedDiscountType, String code) {
+        return null;
+    }
+
+    public void sendEmailToTopCustomers(String email, String name, DiscountType selectedDiscountType, String code) {
+
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+
+
         
         String body = "";
         body += "Dear " + name + ",\n\nCongratulations! As part of our ongoing promotional campaign at Merlion Airlines, we are pleased to announced that you have been awarded a " + selectedDiscountType.getDiscount() + "% discount voucher which can be redeemed on your next booking at Merlion Airlines websiste.";
+        body += "\n\nYour discount voucher code is " + code + ".";
+        if (selectedDiscountType.getType().equals("Promotion"))
+            body+= "\n\nYour code will be valid till " + formatter.format(selectedDiscountType.getExpiryDate());
+        body += "\n\nYour discount voucher code is " + code + ".";
         body += "\n\nYour discount voucher code is "+ code + ".";
+
         body += "\n\nWe look forward to seeing you on board soon!";
      
 
@@ -234,6 +270,48 @@ public class DiscountManagedBean {
     public void setAnalysisType(String analysisType) {
         this.analysisType = analysisType;
     }
+
+    public int getFrom() {
+        return from;
+    }
+
+    public void setFrom(int from) {
+        this.from = from;
+    }
+
+    public int getTo() {
+        return to;
+    }
+
+    public void setTo(int to) {
+        this.to = to;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public Date getExpiryDate() {
+        return expiryDate;
+    }
+
+    public void setExpiryDate(Date expiryDate) {
+        this.expiryDate = expiryDate;
+    }
+
+    public Date getCurrentDate() {
+        return currentDate;
+    }
+
+    public void setCurrentDate(Date currentDate) {
+        this.currentDate = currentDate;
+    }
+
     
-        
+  
+
 }

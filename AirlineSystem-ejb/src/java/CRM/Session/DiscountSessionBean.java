@@ -8,6 +8,7 @@ package CRM.Session;
 import CRM.Entity.DiscountCode;
 import CRM.Entity.DiscountType;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -95,13 +96,13 @@ public class DiscountSessionBean implements DiscountSessionBeanLocal {
     }
     
     @Override
-    public boolean discountTypeExists(double discount){
+    public boolean discountTypeExists(double discount, String type){
         List<DiscountType> allDiscountTypes =  new ArrayList();
         if (allDiscountTypes == null || allDiscountTypes.isEmpty())
             return false;
         else{
             for (DiscountType eachDiscountType : allDiscountTypes){
-                if (eachDiscountType.getDiscount()==discount)
+                if (eachDiscountType.getDiscount()==discount && eachDiscountType.getType().equalsIgnoreCase(type))
                     return true;
             }
             return false;
@@ -109,12 +110,14 @@ public class DiscountSessionBean implements DiscountSessionBeanLocal {
     }
     
     @Override
-    public void addDiscountType (String description, double mileagePointsToRedeem, double discount){
+    public void addDiscountType (String description, double mileagePointsToRedeem, double discount, String type, Date expiryDate){
         DiscountType discountType = new DiscountType();
         discountType.setDescription(description);
         discountType.setDiscount(discount);
         discountType.setMileagePointsToRedeem(mileagePointsToRedeem);
         discountType.setNoOfCodesUnredeemed(0);
+        discountType.setExpiryDate(expiryDate);
+        discountType.setType(type);
         em.persist(discountType);
     }
     
@@ -210,5 +213,58 @@ public class DiscountSessionBean implements DiscountSessionBeanLocal {
           em.flush();
       }
      
+          @Override
+    public List<DiscountType> retrieveAllMileageDiscountTypes() {
+        List<DiscountType> discountTypes = new ArrayList();
+        try {
+
+            Query q = em.createQuery("SELECT a FROM DiscountType a");
+
+            List<DiscountType> results = q.getResultList();
+            if (!results.isEmpty()) {
+                discountTypes = results;
+
+            } else {
+                discountTypes = null;
+                System.out.println("No discountTypes Available!");
+            }
+
+        } catch (EntityNotFoundException enfe) {
+            System.out.println("\nEntity not found error" + "enfe.getMessage()");
+        }
+        List<DiscountType> mileageDiscountTypes = new ArrayList();
+        for (DiscountType eachDiscountType : discountTypes){
+            if (eachDiscountType.getType().equalsIgnoreCase("Mileage"))
+                mileageDiscountTypes.add(eachDiscountType);
+        }
+        return mileageDiscountTypes;
+    }
+    
+      @Override
+    public List<DiscountType> retrieveAllPromotionDiscountTypes() {
+        List<DiscountType> discountTypes = new ArrayList();
+        try {
+
+            Query q = em.createQuery("SELECT a FROM DiscountType a");
+
+            List<DiscountType> results = q.getResultList();
+            if (!results.isEmpty()) {
+                discountTypes = results;
+
+            } else {
+                discountTypes = null;
+                System.out.println("No discountTypes Available!");
+            }
+
+        } catch (EntityNotFoundException enfe) {
+            System.out.println("\nEntity not found error" + "enfe.getMessage()");
+        }
+        List<DiscountType> mileageDiscountTypes = new ArrayList();
+        for (DiscountType eachDiscountType : discountTypes){
+            if (eachDiscountType.getType().equalsIgnoreCase("Promotion"))
+                mileageDiscountTypes.add(eachDiscountType);
+        }
+        return mileageDiscountTypes;
+    }
      
 }

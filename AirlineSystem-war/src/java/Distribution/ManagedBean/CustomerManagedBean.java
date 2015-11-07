@@ -92,7 +92,7 @@ public class CustomerManagedBean {
         customer = null;
         isCustomerLoggedOn = false;
         discountTypes = new ArrayList();
-        discountTypes = discountSessionBean.retrieveAllDiscountTypes();
+        discountTypes = discountSessionBean.retrieveAllMileageDiscountTypes();
         
         //pnrDisplayList = new ArrayList();
     }
