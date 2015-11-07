@@ -6,6 +6,7 @@
 package CRM.ManagedBean;
 
 import CRM.Entity.DiscountType;
+import java.util.Date;
 
 /**
  *
@@ -16,6 +17,7 @@ public class DiscountTypeDisplay {
     private DiscountType discountType;
     private int noOfClaimedCodes;
     private int  noOfUnclaimedCodes;
+
 
     public DiscountType getDiscountType() {
         return discountType;
@@ -40,7 +42,6 @@ public class DiscountTypeDisplay {
     public void setNoOfUnclaimedCodes(int noOfUnclaimedCodes) {
         this.noOfUnclaimedCodes = noOfUnclaimedCodes;
     }
-    
     
     
 }

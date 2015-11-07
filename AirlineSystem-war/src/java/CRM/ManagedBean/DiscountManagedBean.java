@@ -10,7 +10,9 @@ import CRM.Entity.DiscountType;
 import CRM.Session.AnalyticsSessionBeanLocal;
 import CRM.Session.CustomerScore;
 import CRM.Session.DiscountSessionBeanLocal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -51,7 +53,10 @@ public class DiscountManagedBean {
     private String analysisType;
     private int from;
     private int to;
-
+    private String type;
+    private Date expiryDate;
+    private Date currentDate;
+    
     @PostConstruct
     public void init() {
         discountTypes = new ArrayList();
@@ -64,6 +69,7 @@ public class DiscountManagedBean {
         analysisTypeList.add("Customer Lifetime Value");
         analysisType = "";
         selectedDiscountType = null;
+        currentDate = new Date();
     }
 
     public String manageDiscountTypes() {
@@ -71,6 +77,8 @@ public class DiscountManagedBean {
         discount = 0.0;
         noOfMileagePointsToRedeem = 0.0;
         description = "";
+        type = "";
+        expiryDate = null;
         
         
         if (discountTypes != null) {
@@ -87,12 +95,14 @@ public class DiscountManagedBean {
     }
 
     public String addDiscountType() {
-        if (discountSessionBean.discountTypeExists(discount)) {
+        if (discountSessionBean.discountTypeExists(discount, type)) {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Similar Discount Type already exists!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
             return null;
         } else {
-            discountSessionBean.addDiscountType(description, noOfMileagePointsToRedeem, discount);
+            if (type.equals("Mileage"))
+                expiryDate = null;
+            discountSessionBean.addDiscountType(description, noOfMileagePointsToRedeem, discount, type, expiryDate);
             discountTypes = discountSessionBean.retrieveAllDiscountTypes();
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Discount Type added!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
@@ -108,9 +118,7 @@ public class DiscountManagedBean {
             FacesContext.getCurrentInstance().addMessage(null, message);
             return null;
         } else {
-            System.out.println("Before");
             discountSessionBean.deleteDiscountType(selectedDiscountType);
-            System.out.println("After");
             discountTypes = discountSessionBean.retrieveAllDiscountTypes();
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Discount Type deleted!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
@@ -162,9 +170,13 @@ public class DiscountManagedBean {
 
     public void sendEmailToTopCustomers(String email, String name, DiscountType selectedDiscountType, String code) {
 
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+        
         String body = "";
         body += "Dear " + name + ",\n\nCongratulations! As part of our ongoing promotional campaign at Merlion Airlines, we are pleased to announced that you have been awarded a " + selectedDiscountType.getDiscount() + "% discount voucher which can be redeemed on your next booking at Merlion Airlines websiste.";
         body += "\n\nYour discount voucher code is " + code + ".";
+        if (selectedDiscountType.getType().equals("Promotion"))
+            body+= "\n\nYour code will be valid till " + formatter.format(selectedDiscountType.getExpiryDate());
         body += "\n\nWe look forward to seeing you on board soon!";
         emailSessionBean.sendEmail(email, "Merlion Airlines Promotionanl Code", body);
     }
@@ -264,5 +276,30 @@ public class DiscountManagedBean {
     public void setTo(int to) {
         this.to = to;
     }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public Date getExpiryDate() {
+        return expiryDate;
+    }
+
+    public void setExpiryDate(Date expiryDate) {
+        this.expiryDate = expiryDate;
+    }
+
+    public Date getCurrentDate() {
+        return currentDate;
+    }
+
+    public void setCurrentDate(Date currentDate) {
+        this.currentDate = currentDate;
+    }
+    
 
 }

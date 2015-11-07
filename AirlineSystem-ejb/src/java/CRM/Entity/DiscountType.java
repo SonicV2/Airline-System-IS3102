@@ -7,6 +7,7 @@ package CRM.Entity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -14,6 +15,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  *
@@ -29,6 +32,9 @@ public class DiscountType implements Serializable {
     private double mileagePointsToRedeem;
     private double discount;
     private int noOfCodesUnredeemed;
+    private String type;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date expiryDate;
     @OneToMany (cascade = {CascadeType.REMOVE}, mappedBy = "discountType")
     private List<DiscountCode> discountCodes = new ArrayList();
 
@@ -105,6 +111,22 @@ public class DiscountType implements Serializable {
     @Override
     public String toString() {
         return "CRM.Entity.DiscountType[ id=" + id + " ]";
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public Date getExpiryDate() {
+        return expiryDate;
+    }
+
+    public void setExpiryDate(Date expiryDate) {
+        this.expiryDate = expiryDate;
     }
     
 }

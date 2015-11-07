@@ -7,6 +7,7 @@ package CRM.Session;
 
 import CRM.Entity.DiscountCode;
 import CRM.Entity.DiscountType;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -17,12 +18,12 @@ import javax.ejb.Local;
 @Local
 public interface DiscountSessionBeanLocal {
     
-    public boolean discountTypeExists(double discount);
+    public boolean discountTypeExists(double discount, String type);
     public String generateDiscountCode ();
     public List<DiscountType> retrieveAllDiscountTypes ();
     public List<DiscountCode> retrieveAllDiscountCodes();
     public boolean discountCodeValid (String code);
-    public void addDiscountType (String description, double mileagePointsToRedeem, double discount);
+    public void addDiscountType (String description, double mileagePointsToRedeem, double discount, String type, Date expiryDate);
     public boolean discountTypeHasUnclaimedCodes (DiscountType discountType);
     public void deleteDiscountType (DiscountType discountType);
     public int claimedCodesForDiscountType (DiscountType discountType);
@@ -30,5 +31,7 @@ public interface DiscountSessionBeanLocal {
     public String addDiscountCode(DiscountType discountType);
     public DiscountCode getDiscountCodeFromCode (String code);
     public void markCodeAsClaimed (DiscountCode discountCode);
+    public List<DiscountType> retrieveAllMileageDiscountTypes();
+    public List<DiscountType> retrieveAllPromotionDiscountTypes();
     
 }
