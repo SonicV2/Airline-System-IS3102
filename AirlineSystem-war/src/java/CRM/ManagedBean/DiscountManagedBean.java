@@ -94,7 +94,7 @@ public class DiscountManagedBean {
      
 
 
-    public String addDiscountType() {
+    public String addDiscountType(String type) {
         if (discountSessionBean.discountTypeExists(discount, type)) {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Similar Discount Type already exists!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
@@ -102,6 +102,8 @@ public class DiscountManagedBean {
         } else {
             if (type.equals("Mileage"))
                 expiryDate = null;
+            if (type.equals("Promotion"))
+                noOfMileagePointsToRedeem = 0.0;
             discountSessionBean.addDiscountType(description, noOfMileagePointsToRedeem, discount, type, expiryDate);
             discountTypes = discountSessionBean.retrieveAllDiscountTypes();
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Discount Type added!", "");
