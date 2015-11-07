@@ -78,35 +78,101 @@ public class DataLoadSessionBean {
     }
 
     public void addDiscountTypes() {
+        Date date1 = new Date(), date2 = new Date(), date3 = new Date(), date4 = new Date();
+        try {
+            date1 = new SimpleDateFormat("yyyy-MM-dd").parse("2016-02-01");
+            date2 = new SimpleDateFormat("yyyy-MM-dd").parse("2016-01-01");
+            date3 = new SimpleDateFormat("yyyy-MM-dd").parse("2016-03-20");
+            date4 = new SimpleDateFormat("yyyy-MM-dd").parse("2016-07-10");
+      
+
+        } catch (ParseException ex) {
+            System.out.println("Error initializing date");
+        }
         DiscountType discountType1 = new DiscountType();
-        discountType1.setDescription("Get 10& off on your next booking");
+        discountType1.setDescription("Post new year 10% discount");
         discountType1.setDiscount(10);
-        discountType1.setMileagePointsToRedeem(200);
+        discountType1.setMileagePointsToRedeem(0.0);
         discountType1.setNoOfCodesUnredeemed(0);
+        discountType1.setType("Promotion");
+        discountType1.setExpiryDate(date1);
         em.persist(discountType1);
 
         DiscountType discountType2 = new DiscountType();
-        discountType2.setDescription("Get 20& off on your next booking");
+        discountType2.setDescription("New year special 20% discount");
         discountType2.setDiscount(20);
-        discountType2.setMileagePointsToRedeem(350);
+        discountType2.setMileagePointsToRedeem(0.0);
         discountType2.setNoOfCodesUnredeemed(0);
+        discountType2.setType("Promotion");
+        discountType2.setExpiryDate(date2);
         em.persist(discountType2);
 
         DiscountType discountType3 = new DiscountType();
-        discountType3.setDescription("Get 30& off on your next booking");
+        discountType3.setDescription("First Anniversary 30% discount");
         discountType3.setDiscount(30);
-        discountType3.setMileagePointsToRedeem(500);
+        discountType3.setMileagePointsToRedeem(0.0);
         discountType3.setNoOfCodesUnredeemed(0);
+        discountType3.setType("Promotion");
+        discountType3.setExpiryDate(date3);
         em.persist(discountType3);
 
         DiscountType discountType4 = new DiscountType();
-        discountType4.setDescription("Get 50& off on your next booking");
+        discountType4.setDescription("Summer holidays 50% discount");
         discountType4.setDiscount(50);
-        discountType4.setMileagePointsToRedeem(650);
+        discountType4.setMileagePointsToRedeem(0.0);
         discountType4.setNoOfCodesUnredeemed(0);
+        discountType4.setType("Promotion");
+        discountType4.setExpiryDate(date4);
         em.persist(discountType4);
 
+        
+        DiscountType discountType5 = new DiscountType();
+        discountType5.setDescription("10% discount on next booking for 1000 miles");
+        discountType5.setDiscount(10);
+        discountType5.setMileagePointsToRedeem(1000.0);
+        discountType5.setNoOfCodesUnredeemed(0);
+        discountType5.setType("Mileage");
+        discountType5.setExpiryDate(null);
+        em.persist(discountType5);
+        
+        DiscountType discountType6 = new DiscountType();
+        discountType6.setDescription("20% discount on next booking for 2000 miles");
+        discountType6.setDiscount(20);
+        discountType6.setMileagePointsToRedeem(2000.0);
+        discountType6.setNoOfCodesUnredeemed(0);
+        discountType6.setType("Mileage");
+        discountType6.setExpiryDate(null);
+        em.persist(discountType6);
+        
+        DiscountType discountType7 = new DiscountType();
+        discountType7.setDescription("30% discount on next booking for 3000 miles");
+        discountType7.setDiscount(30);
+        discountType7.setMileagePointsToRedeem(3000.0);
+        discountType7.setNoOfCodesUnredeemed(0);
+        discountType7.setType("Mileage");
+        discountType7.setExpiryDate(null);
+        em.persist(discountType7);
+        
+        DiscountType discountType8 = new DiscountType();
+        discountType8.setDescription("75% discount on next booking for 10000 miles");
+        discountType8.setDiscount(75);
+        discountType8.setMileagePointsToRedeem(10000);
+        discountType8.setNoOfCodesUnredeemed(0);
+        discountType8.setType("Mileage");
+        discountType8.setExpiryDate(null);
+        em.persist(discountType8);
+
         discountSessionBean.addDiscountCode(discountType4);
+        discountSessionBean.addDiscountCode(discountType4);
+        discountSessionBean.addDiscountCode(discountType4);
+        discountSessionBean.addDiscountCode(discountType4);
+        discountSessionBean.addDiscountCode(discountType1);
+        discountSessionBean.addDiscountCode(discountType1);
+        discountSessionBean.addDiscountCode(discountType1);
+        discountSessionBean.addDiscountCode(discountType1);
+        discountSessionBean.addDiscountCode(discountType1);
+        discountSessionBean.addDiscountCode(discountType1);
+        
     }
 
     public void addFlights() {
