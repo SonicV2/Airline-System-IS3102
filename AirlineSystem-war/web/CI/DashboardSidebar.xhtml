@@ -406,6 +406,21 @@
                     </h:form>
                 </ui:fragment>
                 
+                <!-- this is for profit and loss reporting, finance manager-->
+                <ui:fragment rendered="#{loginManagedBean.accessRightIDs.contains(40)}">
+                        <li>
+                            <a href="#{request.contextPath}/Administration/RequestPnLStatement.xhtml"><i class="fa fa-file-excel-o"></i> Profit and Lost Reporting</a>
+                        </li>  
+
+                </ui:fragment>
+                <!-- this is for Aircraft Reporting, finance and operations manager-->
+                <ui:fragment rendered="#{loginManagedBean.accessRightIDs.contains(41)}">
+                        <li>
+                            <a href="#{request.contextPath}/Administration/GenerateFleetAssetReport.xhtml"><i class="fa fa-file-excel-o"></i> Aircraft Reporting</a>
+                        </li>  
+
+                </ui:fragment>
+                
 
             </ul>
 
