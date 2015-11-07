@@ -6,45 +6,71 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:f="http://java.sun.com/jsf/core">
     <h:head>
+
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <h:outputStylesheet library ="css"  name="bootstrap.css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
+        <h:outputStylesheet library="css" name="admindb.css" />
+        <h:outputStylesheet library="css" name="morrisjs/morris.css" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <title>View Customer List</title>
     </h:head>
     <h:body>
-         <br/>
-        Description:
-        <h:outputLabel class="col-md-4 control-label" value="#{cRMAnalyticsManagedBean.description}" />
-        <br/>
-        <br/>
-        <h:form id="form">
-            <p:growl id="msgs" showDetail="true"/>
+        <ui:include src="/CI/DashboardHeader.xhtml"/>
+        <!--    To add the same sidebar on all dashboard pages  -->
+        <ui:include src="/CI/DashboardSidebar.xhtml"/>
+        <div id="page-wrapper">
 
-            <p:dataTable id="schedules" var="customer" value="#{cRMAnalyticsManagedBean.csList}" editable="true" style="margin-bottom:20px" paginator="true" rows="10" widgetVar="csTable">
-                <f:facet name="header">
-                    <p:outputPanel>
-                        <h:outputText value="Search all fields:" />
-                        <p:inputText id="globalFilter" onkeyup="PF('csTable').filter()" style="width:150px" placeholder="Enter keyword"/>
-                    </p:outputPanel>
-                </f:facet>
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2 class="page-header"> Customers List</h2>
+                </div>
 
-                <p:column filterBy="#{customer.id}" headerText="Customer ID" filterMatchMode="contains" style="width:10%">
-                    <h:outputText value="#{customer.id}" />
-                </p:column>
-                
-                <p:column filterBy="#{customer.name}" headerText="Customer Name" filterMatchMode="contains" style="width:10%">
-                    <h:outputText value="#{customer.name}" />
-                </p:column>
-                
-                <p:column filterBy="#{customer.email}" headerText="Customer Email" filterMatchMode="contains" style="width:10%">
-                    <h:outputText value="#{customer.email}" />
-                </p:column>
-                
+                <p>#{cRMAnalyticsManagedBean.description} </p>
 
-                <p:column headerText="Customer Score" filterBy="#{customer.score}" filterMatchMode="contains" style="width:10%">              
-                    <h:outputText value="#{customer.score}" />    
-                </p:column>               
+                <h:form id="form">
+                    <p:growl id="msgs" showDetail="true"/>
+
+                    <p:dataTable id="schedules" var="customer" value="#{cRMAnalyticsManagedBean.csList}" editable="true" style="margin-bottom:20px" paginator="true" rows="10" widgetVar="csTable">
+                        <f:facet name="header">
+                            <p:outputPanel>
+                                <h:outputText value="Search all fields:" />
+                                <p:inputText id="globalFilter" onkeyup="PF('csTable').filter()" style="width:150px" placeholder="Enter keyword"/>
+                            </p:outputPanel>
+                        </f:facet>
+
+                        <p:column filterBy="#{customer.id}" headerText="Customer ID" filterMatchMode="contains" style="width:10%">
+                            <h:outputText value="#{customer.id}" />
+                        </p:column>
+
+                        <p:column filterBy="#{customer.name}" headerText="Customer Name" filterMatchMode="contains" style="width:10%">
+                            <h:outputText value="#{customer.name}" />
+                        </p:column>
+
+                        <p:column filterBy="#{customer.email}" headerText="Customer Email" filterMatchMode="contains" style="width:10%">
+                            <h:outputText value="#{customer.email}" />
+                        </p:column>
 
 
-            </p:dataTable>
-        </h:form>
+                        <p:column headerText="Customer Score" filterBy="#{customer.score}" filterMatchMode="contains" style="width:10%">              
+                            <h:outputText value="#{customer.score}" />    
+                        </p:column>               
+
+
+                    </p:dataTable>
+                    <br/>
+                    <div class="text-center">
+                    <h:commandButton class="btn btn-info" value="Send Marketing Email" 
+                                     action="#{cRMAnalyticsManagedBean.sendMarketingEmail}" />
+                    </div>
+                </h:form>
+
+                <br/>
+            </div>
+        </div>
+
     </h:body>
 </html>
 

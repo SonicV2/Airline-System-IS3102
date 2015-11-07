@@ -24,7 +24,7 @@
 
         function drawRegionsMap() {
 
-        #{seasonManageBean.geoArray}
+        #{seasonManagedBean.geoArray}
 
             var data = google.visualization.arrayToDataTable(results);
 
@@ -32,10 +32,10 @@
 
             var options = {};
             var options = {
-           colorAxis: {
-            values: [-100, 0, 100],
-            colors: ['blue', 'white', 'red']
-        }
+                colorAxis: {
+                    values: [-10, 0, 10],
+                    colors: ['blue', 'white', 'red']
+                }
             };
 
             var chart = new google.visualization.GeoChart(document.getElementById('regions_div'));
@@ -51,19 +51,19 @@
 
     <h:body>
 
-        <!--       <ui:include src="/CI/DashboardHeader.xhtml"/>      
-                <ui:include src="/CI/DashboardSidebar.xhtml"/>-->
-
-        <div id="regions_div" style="width: 1200px; height: 900px;"></div>
-
-
-
+        <ui:include src="/CI/DashboardHeader.xhtml"/>      
+        <ui:include src="/CI/DashboardSidebar.xhtml"/>
         <div id="page-wrapper">
+            <div id="regions_div" style="width: 900px; height: 600px;"></div>
+
+
+
+
 
             <h:form>
                 <div class="form-group">
                     <h:outputLabel class="col-md-4 control-label" value="Seasonality" />
-                    <h:selectOneMenu class="form-control"  value="#{seasonManageBean.month}" converter="javax.faces.Integer" style="width:150px">
+                    <h:selectOneMenu class="form-control"  value="#{seasonManagedBean.month}" converter="javax.faces.Integer" style="width:150px">
                         <f:selectItem itemLabel="January" itemValue= "0" />
                         <f:selectItem itemLabel="Febuary" itemValue= "1" />
                         <f:selectItem itemLabel="March" itemValue= "2" />
@@ -83,13 +83,13 @@
 
                 <div class="form-group">
                     <h:outputLabel class="col-md-4 control-label" value="Enter Year: " />
-                    <p:inputText value="#{seasonManageBean.year}"  />
+                    <p:inputText value="#{seasonManagedBean.year}"  />
                     <br/>
 
                 </div>
 
                 <div class="text-center">
-                    <h:commandButton class="btn btn-outline btn-success" value="Get Geo Map" action="#{seasonManageBean.refresh}"/>
+                    <h:commandButton class="btn btn-outline btn-success" value="Get Geo Map" action="#{seasonManagedBean.refresh}"/>
                     <br></br>
                 </div>
 
@@ -104,23 +104,23 @@
                     <h:form id="iform">
                         <p:growl id="msgs" showDetail="true"/>
 
-                        <p:dataTable id="fareClasses" var="season" value="#{seasonManageBean.sList}" editable="true" style="margin-bottom:20px">
+                        <p:dataTable id="fareClasses" var="season" value="#{seasonManagedBean.sList}" editable="true" style="margin-bottom:20px">
                             <f:facet name="header">
                                 Seasons
                             </f:facet>
 
-                            <p:ajax event="rowEdit" listener="#{seasonManageBean.onRowEdit}" update=":iform:msgs" />
-                            <p:ajax event="rowEditCancel" listener="#{seasonManageBean.onRowCancel}" update=":iform:msgs" />
+                            <p:ajax event="rowEdit" listener="#{seasonManagedBean.onRowEdit}" update=":iform:msgs" />
+                            <p:ajax event="rowEditCancel" listener="#{seasonManagedBean.onRowCancel}" update=":iform:msgs" />
 
-                            <p:column filterBy="#{season.id}" filterMatchMode="contains" headerText="Season Id" style="width:60px">
+                            <p:column filterBy="#{season.id}" filterMatchMode="contains" headerText="Season Id" >
                                 <h:outputText value="#{season.id}" />
                             </p:column>
 
-                            <p:column filterBy="#{season.location.city}" filterMatchMode="contains" headerText="Season City" style="width:60px">
+                            <p:column filterBy="#{season.location.city}" filterMatchMode="contains" headerText="Season City" >
                                 <h:outputText value="#{season.location.city}" />
                             </p:column>
 
-                            <p:column filterBy="#{season.location.country}" filterMatchMode="contains" headerText="Season Country" style="width:60px">
+                            <p:column filterBy="#{season.location.country}" filterMatchMode="contains" headerText="Season Country" >
                                 <h:outputText value="#{season.location.country}" />
                             </p:column>
 
@@ -128,7 +128,7 @@
                                 <p:cellEditor>
                                     <f:facet name="output"><h:outputText value="#{season.demand}" /></f:facet>
                                     <f:facet name="input">
-                                        <p:selectOneMenu  value="#{season.demand}" style="width:150px">
+                                        <p:selectOneMenu  value="#{season.demand}">
                                             <f:selectItem itemLabel="Select One" itemValue="" />
                                             <f:selectItem itemLabel="High" itemValue="High" />
                                             <f:selectItem itemLabel="Low" itemValue="Low" />                                 
@@ -157,14 +157,14 @@
 
                             <p:column headerText="Season Start Date"  style="width:10%">
                                 <p:cellEditor>
-                                    <f:facet name="output"><h:outputText value="#{season.start}" /></f:facet>
+                                    <f:facet name="output"><h:outputText value="#{season.start}" ><f:convertDateTime pattern ="EEE, MMM d, yyyy"/></h:outputText></f:facet>
                                     <f:facet name="input"><p:calendar id="startDate" value="#{season.start}" pattern="MM/dd/yyyy"/></f:facet>
                                 </p:cellEditor>
                             </p:column>
 
                             <p:column headerText="Season End Date"  style="width:10%">
                                 <p:cellEditor>
-                                    <f:facet name="output"><h:outputText value="#{season.end}" /></f:facet>
+                                    <f:facet name="output"><h:outputText value="#{season.end}" ><f:convertDateTime pattern ="EEE, MMM d, yyyy"/></h:outputText></f:facet>
                                     <f:facet name="input"><p:calendar id="endDate" value="#{season.end}" pattern="MM/dd/yyyy"/></f:facet>
                                 </p:cellEditor>
                             </p:column>
@@ -179,7 +179,7 @@
                                             return false;
                                         }
                                         ;
-                                        return true;" action="#{seasonManageBean.deleteSeason(season)}"><i class="fa fa-trash-o"></i> </h:commandLink>
+                                        return true;" action="#{seasonManagedBean.deleteSeason(season)}"><i class="fa fa-trash-o"></i> </h:commandLink>
                             </p:column>
 
 

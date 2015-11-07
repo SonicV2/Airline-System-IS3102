@@ -5,6 +5,7 @@
  */
 package CRM.ManagedBean;
 
+import CRM.Entity.DiscountType;
 import CRM.Session.AnalyticsSessionBeanLocal;
 import java.io.Serializable;
 import javax.ejb.EJB;
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.HashMap;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import CI.Session.EmailSessionBeanLocal;
 
 /**
  *
@@ -42,7 +44,11 @@ public class CRMAnalyticsManagedBean implements Serializable {
     private List<Customer> customerList;
     private String retentionRate;
     private String description = "HiHi";
-
+    
+    @EJB
+    private EmailSessionBeanLocal emailSessionBean;
+    private String emailBody;
+    private String emailTitle;
     /**
      * Creates a new instance of CRMAnalyticsManagedBean
      */
@@ -82,7 +88,7 @@ public class CRMAnalyticsManagedBean implements Serializable {
             double retention = am.getRetentionRate();
             csList = am.getCLV(from, to, retention);
         }
-        return "ViewListResults";
+        return "ViewListResults?faces-redirect=true";
     }
 
     public String getHistogramArray() {
@@ -188,6 +194,54 @@ public class CRMAnalyticsManagedBean implements Serializable {
         calculateMode();
         return "CLVAnalyticsResults";
     }
+    
+    public void sendEmail(String email, String name) {
+        
+        String body = "";
+        body += "Dear " + name + ",\n\n" + emailBody;
+        body += "\n\nWe look forward to seeing you on board soon!";
+        System.out.println("Look here Email");
+        System.out.println(email);
+        System.out.println("Look here Email Title");
+        System.out.println(emailTitle);
+        System.out.println("Look here Email Body");
+        System.out.println(body);
+        emailSessionBean.sendEmail(email, emailTitle, body);
+    }
+    
+    public String sendMarketingEmail(){
+        int size = csList.size();
+        description= "You are sending a mass marketing email to customers from " + from+ " percentile" 
+                +" to the " + to + " percentile of "+ type + " score. There exist " + size + " customers.";
+        return "SendMarketingEmail";
+    }
+    
+    public void sendtoCustomerList1(){
+        int size = csList.size();
+        for(int i=0; i<size; i++){
+            String email = csList.get(i).getEmail();
+            String name = csList.get(i).getName();
+            sendEmail(email,name);
+        }
+    }
+
+    public String getEmailBody() {
+        return emailBody;
+    }
+
+    public void setEmailBody(String emailBody) {
+        this.emailBody = emailBody;
+    }
+
+    public String getEmailTitle() {
+        return emailTitle;
+    }
+
+    public void setEmailTitle(String emailTitle) {
+        this.emailTitle = emailTitle;
+    }
+    
+    
 
     public String getRetentionRate() {
         return retentionRate;

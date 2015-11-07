@@ -30,14 +30,13 @@ import javax.inject.Named;
 @ManagedBean
 @SessionScoped
 public class DiscountManagedBean {
-
-    @EJB
+     @EJB
     private DiscountSessionBeanLocal discountSessionBean;
-
-    @EJB
+    
+     @EJB
     private AnalyticsSessionBeanLocal analyticsSessionBean;
-
-    @EJB
+     
+     @EJB
     private EmailSessionBeanLocal emailSessionBean;
 
     private List<DiscountType> discountTypes;
@@ -80,19 +79,20 @@ public class DiscountManagedBean {
         type = "";
         expiryDate = null;
         
-        
-        if (discountTypes != null) {
-            DiscountTypeDisplay eachDiscountTypeDisplay;
-            for (DiscountType eachDiscountType : discountTypes) {
-                eachDiscountTypeDisplay = new DiscountTypeDisplay();
-                eachDiscountTypeDisplay.setDiscountType(eachDiscountType);
-                eachDiscountTypeDisplay.setNoOfClaimedCodes(discountSessionBean.claimedCodesForDiscountType(eachDiscountType));
-                eachDiscountTypeDisplay.setNoOfUnclaimedCodes(discountSessionBean.unclaimedCodesForDiscountType(eachDiscountType));
-                discountTypeDisplays.add(eachDiscountTypeDisplay);
-            }
-        }
-        return "/CRM/ManageDiscountTypes";
-    }
+         if (!discountTypes.isEmpty()){
+             DiscountTypeDisplay eachDiscountTypeDisplay;
+             for (DiscountType eachDiscountType : discountTypes){
+                 eachDiscountTypeDisplay = new DiscountTypeDisplay();
+                 eachDiscountTypeDisplay.setDiscountType(eachDiscountType);
+                 eachDiscountTypeDisplay.setNoOfClaimedCodes(discountSessionBean.claimedCodesForDiscountType(eachDiscountType));
+                 eachDiscountTypeDisplay.setNoOfUnclaimedCodes(discountSessionBean.unclaimedCodesForDiscountType(eachDiscountType));
+                 discountTypeDisplays.add(eachDiscountTypeDisplay);
+             }
+         }
+         return "ManageDiscountTypes";
+     }
+     
+
 
     public String addDiscountType() {
         if (discountSessionBean.discountTypeExists(discount, type)) {
@@ -127,6 +127,8 @@ public class DiscountManagedBean {
 
     }
 
+  
+
     public String sendDiscountCodesToTopCustomers() {
         //Set analysisType,selectedpercentile & selectedDiscountType, from, to
         if (from > to || from < 0 || from > 100 || to < 0 || to > 100) {
@@ -142,28 +144,29 @@ public class DiscountManagedBean {
             FacesContext.getCurrentInstance().addMessage(null, message);
         }
         else{
-            List<CustomerScore> customers = new ArrayList();
-            if (analysisType.equals("Recency")) {
-                customers = analyticsSessionBean.getRecency(from, to);
-            } else if (analysisType.equals("Frequency")) {
-                customers = analyticsSessionBean.getFrequency(from, to);
-            } else if (analysisType.equals("Monetary Value")) {
-                customers = analyticsSessionBean.getMonetary(from, to);
-            } else if (analysisType.equals("Customer Lifetime Value")) {
-                customers = analyticsSessionBean.getCLV(from, to, analyticsSessionBean.getRetentionRate());
-            }
 
-            if (customers == null || customers.isEmpty()) {
+            List<CustomerScore> customers = new ArrayList();
+            int from = 100-selectedPercentile;
+            if (analysisType.equals("Recency"))
+                    customers = analyticsSessionBean.getRecency(from, to);
+            else if (analysisType.equals("Frequency"))
+                    customers = analyticsSessionBean.getFrequency(from, to);
+            else if (analysisType.equals("Monetary Value"))
+                    customers = analyticsSessionBean.getMonetary(from, to);
+              
+            if (customers ==null || customers.isEmpty()){
                 message = new FacesMessage(FacesMessage.SEVERITY_INFO, "No Customers found!", "");
                 FacesContext.getCurrentInstance().addMessage(null, message);
-            } else {
-                for (CustomerScore eachCustomerScore : customers) {
+            }
+            else{
+                for (CustomerScore eachCustomerScore: customers){
                     String code = discountSessionBean.addDiscountCode(selectedDiscountType);
-                    sendEmailToTopCustomers(eachCustomerScore.getEmail(), eachCustomerScore.getName(), selectedDiscountType, code);
+                    sendEmailToTopCustomers (eachCustomerScore.getEmail(), eachCustomerScore.getName(),selectedDiscountType, code);     
                 }
                 message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Discount codes sent!", "");
                 FacesContext.getCurrentInstance().addMessage(null, message);
-            }
+            } 
+            return null;
         }
         return null;
     }
@@ -171,13 +174,20 @@ public class DiscountManagedBean {
     public void sendEmailToTopCustomers(String email, String name, DiscountType selectedDiscountType, String code) {
 
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+
+
         
         String body = "";
         body += "Dear " + name + ",\n\nCongratulations! As part of our ongoing promotional campaign at Merlion Airlines, we are pleased to announced that you have been awarded a " + selectedDiscountType.getDiscount() + "% discount voucher which can be redeemed on your next booking at Merlion Airlines websiste.";
         body += "\n\nYour discount voucher code is " + code + ".";
         if (selectedDiscountType.getType().equals("Promotion"))
             body+= "\n\nYour code will be valid till " + formatter.format(selectedDiscountType.getExpiryDate());
+        body += "\n\nYour discount voucher code is " + code + ".";
+        body += "\n\nYour discount voucher code is "+ code + ".";
+
         body += "\n\nWe look forward to seeing you on board soon!";
+     
+
         emailSessionBean.sendEmail(email, "Merlion Airlines Promotionanl Code", body);
     }
 
@@ -300,6 +310,8 @@ public class DiscountManagedBean {
     public void setCurrentDate(Date currentDate) {
         this.currentDate = currentDate;
     }
+
     
+  
 
 }
