@@ -275,7 +275,7 @@ public class TravelAgencyManagedBean {
         return min;
     }
 
-    public void setOneWayVariables() {
+    public void setOneWayVariables() { 
         setAdults(oneWayAdult);
         setChildren(oneWayChildren);
         setOriginCity(oneWayOriginCity);
