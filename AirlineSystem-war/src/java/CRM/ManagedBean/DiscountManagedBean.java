@@ -150,9 +150,39 @@ public class DiscountManagedBean {
     }
 
     public String deleteDiscountType(DiscountType userSelectedDiscountType) {
+        Date currentDate = new Date();
         DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         setSelectedDiscountType(userSelectedDiscountType);
-        if (discountSessionBean.discountTypeHasUnclaimedCodes(selectedDiscountType)) {
+        if (discountSessionBean.discountTypeHasUnclaimedCodes(selectedDiscountType) && selectedDiscountType.getType().equals("Promotion") && currentDate.compareTo(selectedDiscountType.getExpiryDate())>0){
+            discountSessionBean.deleteCodesOfType(selectedDiscountType);
+            discountSessionBean.deleteDiscountType(selectedDiscountType);
+            discountTypes = discountSessionBean.retrieveAllDiscountTypes();
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Discount Type deleted!", "");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+            discountTypeDisplays.clear();
+            discount = 0.0;
+            noOfMileagePointsToRedeem = 0.0;
+            description = "";
+            type = "";
+            expiryDate = null;
+
+            if (!discountTypes.isEmpty()) {
+                DiscountTypeDisplay eachDiscountTypeDisplay;
+                for (DiscountType eachDiscountType : discountTypes) {
+                    eachDiscountTypeDisplay = new DiscountTypeDisplay();
+                    eachDiscountTypeDisplay.setDiscountType(eachDiscountType);
+                    eachDiscountTypeDisplay.setNoOfClaimedCodes(discountSessionBean.claimedCodesForDiscountType(eachDiscountType));
+                    eachDiscountTypeDisplay.setNoOfUnclaimedCodes(discountSessionBean.unclaimedCodesForDiscountType(eachDiscountType));
+                    if (eachDiscountType.getExpiryDate() != null) {
+                        eachDiscountTypeDisplay.setExpiryDate(df.format(eachDiscountType.getExpiryDate()));
+                    }
+                    discountTypeDisplays.add(eachDiscountTypeDisplay);
+                }
+            }
+
+            return null;
+        }
+        else if (discountSessionBean.discountTypeHasUnclaimedCodes(selectedDiscountType)) {
             FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Discount Type cannot be deleted as it has unclaimed codes!", "");
             FacesContext.getCurrentInstance().addMessage(null, msg);
             return null;
