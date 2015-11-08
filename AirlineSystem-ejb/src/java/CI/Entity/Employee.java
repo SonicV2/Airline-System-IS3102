@@ -56,6 +56,9 @@ public class Employee implements Serializable {
     @ManyToMany(cascade = {CascadeType.PERSIST})
     private List<Role> roles= new ArrayList<Role>(); 
     
+    @OneToMany(cascade = {CascadeType.PERSIST})
+    private List<EmployeeCalendar> calendars = new ArrayList<EmployeeCalendar>();
+    
     public void createEmployee(String employeeID, String employeeDisplayFirstName, String employeeDisplayLastName,
             /*String employeeRole, String employeeDepartment,*/ Date employeeDOB,
             String employeeGender, String employeeHpNumber, String employeeMailingAddress, String employeeOfficeNumber,
@@ -292,7 +295,20 @@ public class Employee implements Serializable {
         this.employeeMonthlySalary = employeeMonthlySalary;
     }
 
-    
+        /**
+     * @return the calendars
+     */
+    public List<EmployeeCalendar> getCalendars() {
+        return calendars;
+    }
+
+    /**
+     * @param calendars the calendars to set
+     */
+    public void setCalendars(List<EmployeeCalendar> calendars) {
+        this.calendars = calendars;
+    }
+
     
 
 }

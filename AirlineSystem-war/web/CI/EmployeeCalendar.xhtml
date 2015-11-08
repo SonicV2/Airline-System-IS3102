@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Employee Calendar</title>
+    </h:head>
+    <h:body>
+        <h:form>
+            <p:growl id="messages" showDetail="true" />
+
+            <h:panelGrid columnClasses="value">
+                <h3 style="margin-top: 0">Manage Your Schedule</h3>
+                <p:schedule id="schedule" value="#{employeeCalendarManagedBean.eventModel}" widgetVar="myschedule" timeZone="GMT+8">
+
+                    <p:ajax event="dateSelect" listener="#{employeeCalendarManagedBean.onDateSelect}" update="eventDetails" oncomplete="PF('eventDialog').show();" />
+                    <p:ajax event="eventSelect" listener="#{employeeCalendarManagedBean.onEventSelect}" update="eventDetails" oncomplete="PF('eventDialog').show();" />
+                    <p:ajax event="eventMove" listener="#{employeeCalendarManagedBean.onEventMove}" update="messages" />
+                    <p:ajax event="eventResize" listener="#{employeeCalendarManagedBean.onEventResize}" update="messages" />
+
+                </p:schedule>
+
+
+            </h:panelGrid>
+
+            <p:dialog widgetVar="eventDialog" header="Event Details" showEffect="clip" hideEffect="clip">
+                <h:panelGrid id="eventDetails" columns="2">
+                    <p:outputLabel for="title" value="Titles:" />
+                    <p:inputText id="title" value="#{employeeCalendarManagedBean.event.title}" required="true" />
+
+                    <p:outputLabel for="from" value="From:" />
+                    <p:calendar id="from" value="#{employeeCalendarManagedBean.event.startDate}" timeZone="GMT+8" pattern="dd/MM/yyyy HH:mm"/>
+
+                    <p:outputLabel for="to" value="To:" />
+                    <p:calendar id="to" value="#{employeeCalendarManagedBean.event.endDate}" timeZone="GMT+8" pattern="dd/MM/yyyy HH:mm"/>
+
+                   
+
+                    <p:commandButton  value="Delete" actionListener="#{employeeCalendarManagedBean.deleteCalendar}"  oncomplete="PF('myschedule').update();PF('eventDialog').hide();" />
+                    <p:commandButton id="addButton" value="Save" actionListener="#{employeeCalendarManagedBean.addEvent}" oncomplete="PF('myschedule').update();PF('eventDialog').hide();" />
+                </h:panelGrid>
+            </p:dialog>    
+        </h:form>
+
+        <script type="text/javascript">
+            PrimeFaces.locales['tr'] = {
+                month: 'Month',
+                week: 'Week',
+                day: 'Day'
+                
+            };
+        </script>
+        
+    </h:body>
+</html>
+

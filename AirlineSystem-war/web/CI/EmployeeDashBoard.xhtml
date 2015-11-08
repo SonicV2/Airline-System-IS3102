@@ -27,86 +27,68 @@
     <h:body>
 
 
-<!--    To add the same header on all dashboard pages  -->
+        <!--    To add the same header on all dashboard pages  -->
         <ui:include src="DashboardHeader.xhtml"/>
-<!--    To add the same sidebar on all dashboard pages  -->
+        <!--    To add the same sidebar on all dashboard pages  -->
         <ui:include src="DashboardSidebar.xhtml"/>
-        
+
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">Dashboard</h1>
                     <h2 class="page-header"> Welcome to dashboard, #{loginManagedBean.employeeUserName}!</h2>
-                    <h:form>
-                    <h:commandButton value="Reserved Timetable" action="/FOS/ViewReservedTimetable"/>
-                    <h:commandButton value="Reserved Sign In" action="/FOS/ReservedCrewSignIn"/>
-                    <h:commandButton value="Check Out" action="/FOS/ReservedCrewCheckOut"/>
-                    
-                    <h:commandButton value="Pilot Leave Submitt" action="/FOS/PilotLeaveSubmit"/>
-                    <h:commandButton value="Pilot Timetable" action="/FOS/ViewPilotTimetable"/>
-                    <h:commandButton value="Reserved Pilot Timetable" action="/FOS/ViewReservedPilotTimetable"/>
-                    
-                    <h:commandButton value="Ground Crew Checklists" actionListener="#{maintainChecklistManagedBean.getCrewAvailChecklist}" action="/FOS/DisplayCrewAvailChecklists"/>
-                    <h:commandButton value="Ground Crew Timetable"  action="/FOS/GroundCrewTimetable"/>
-                    
-                    </h:form>
-                </div>
 
-            </div>
-            
-            <br></br>
-        
-            <div class="row">
-                <div class="col-lg-3 col-md-6">
-                    <div class="panel panel-primary">
-                        <div class="panel-heading">
-                            <div class="row">
-                                <div class="col-xs-3">
-                                    <i class="fa fa-comments fa-5x"></i>
-                                </div>
-                                <div class="col-xs-9 text-right">
-                                    <div class="huge">26</div>
-                                    <div>New Comments!</div>
-                                </div>
-                            </div>
-                        </div>
-                        <a href="#">
-                            <div class="panel-footer">
-                                <span class="pull-left">View Details</span>
-                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                <div class="clearfix"></div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="panel panel-green">
-                        <div class="panel-heading">
-                            <div class="row">
-                                <div class="col-xs-3">
-                                    <i class="fa fa-tasks fa-5x"></i>
-                                </div>
-                                <div class="col-xs-9 text-right">
-                                    <div class="huge">12</div>
-                                    <div>New Tasks!</div>
-                                </div>
-                            </div>
-                        </div>
-                        <a href="#">
-                            <div class="panel-footer">
-                                <span class="pull-left">View Details</span>
-                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                <div class="clearfix"></div>
-                            </div>
-                        </a>
-                    </div>
+                    <h:form>
+                        <p:growl id="messages" showDetail="true" />
+
+                        <h:panelGrid columnClasses="value">
+                            <h5 style="margin-top: 0">Manage Your Schedule</h5>
+                            <p:schedule id="schedule" value="#{employeeCalendarManagedBean.eventModel}" widgetVar="myschedule" timeZone="GMT+8" locale="tr">
+
+                                <p:ajax event="dateSelect" listener="#{employeeCalendarManagedBean.onDateSelect}" update="eventDetails" oncomplete="PF('eventDialog').show();" />
+                                <p:ajax event="eventSelect" listener="#{employeeCalendarManagedBean.onEventSelect}" update="eventDetails" oncomplete="PF('eventDialog').show();" />
+                                <p:ajax event="eventMove" listener="#{employeeCalendarManagedBean.onEventMove}" update="messages" />
+                                <p:ajax event="eventResize" listener="#{employeeCalendarManagedBean.onEventResize}" update="messages" />
+
+                            </p:schedule>
+
+
+                        </h:panelGrid>
+
+                        <p:dialog widgetVar="eventDialog" header="Event Details" showEffect="clip" hideEffect="clip">
+                            <h:panelGrid id="eventDetails" columns="2">
+                                <p:outputLabel for="title" value="Titles:" />
+                                <p:inputText id="title" value="#{employeeCalendarManagedBean.event.title}" required="true" />
+
+                                <p:outputLabel for="from" value="From:" />
+                                <p:calendar id="from" value="#{employeeCalendarManagedBean.event.startDate}" timeZone="GMT+8" pattern="dd/MM/yyyy HH:mm"/>
+
+                                <p:outputLabel for="to" value="To:" />
+                                <p:calendar id="to" value="#{employeeCalendarManagedBean.event.endDate}" timeZone="GMT+8" pattern="dd/MM/yyyy HH:mm"/>
+
+
+
+                                <p:commandButton  value="Delete" actionListener="#{employeeCalendarManagedBean.deleteCalendar}"  oncomplete="PF('myschedule').update();PF('eventDialog').hide();" />
+                                <p:commandButton id="addButton" value="Save" actionListener="#{employeeCalendarManagedBean.addEvent}" oncomplete="PF('myschedule').update();PF('eventDialog').hide();" />
+                            </h:panelGrid>
+                        </p:dialog>    
+                    </h:form>
+
+                    <script type="text/javascript">
+                        PrimeFaces.locales['tr'] = {
+                            month: 'Month',
+                            week: 'Week',
+                            day: 'Day'
+
+                        };
+                    </script>
                 </div>
             </div>
-        
-            
-            
+
+
         </div>
-    
+
+
+
 
     </h:body>
 
