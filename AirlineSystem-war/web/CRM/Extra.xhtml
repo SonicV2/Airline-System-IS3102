@@ -11,10 +11,11 @@
     </h:head>
     <h:body>
         <h:form>
-            <p:inputText placeholder="Flight No" value="#{flightDataManagedBean.flightNo}"  />
-        <br/>
-        <h:commandButton class="btn btn-primary btn-lg btn-block" value="Submit" 
-                         actionListener="#{flightDataManagedBean.createData}" />
+        <h:commandButton class="btn btn-primary btn-lg btn-block" value="Create 1000 Fake Customers" 
+                         actionListener="#{cRMHistoricManagedBean.createCustomers()}" />
+        <h:commandButton class="btn btn-primary btn-lg btn-block" value="Link 1000 Fake Customers" 
+                         actionListener="#{cRMHistoricManagedBean.linkCustomertoBooking()}" />
         </h:form>
     </h:body>
 </html>
+

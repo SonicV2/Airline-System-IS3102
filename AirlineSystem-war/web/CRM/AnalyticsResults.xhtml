@@ -23,20 +23,15 @@
                 var size =#{cRMAnalyticsManagedBean.csList.size()};
 
 
-
-
             #{cRMAnalyticsManagedBean.histogramArray}
 
 
-
                 var dataDraw = google.visualization.arrayToDataTable(results);
-
                 var options = {
                     title: 'Customer Scores',
                     legend: {position: 'none'},
                     histogram: {lastBucketPercentile: 5}
                 };
-
                 var chart = new google.visualization.Histogram(document.getElementById('chart_div'));
                 chart.draw(dataDraw, options);
             }
@@ -52,35 +47,30 @@
                 <div class="col-lg-12">
                     <h2 class="page-header">#{cRMAnalyticsManagedBean.type} Analytics Results </h2>
                 </div>
+
                 <h:outputLabel class="col-md-4 control-label" value="#{cRMAnalyticsManagedBean.type}" />
 
                 <div id="chart_div" style="width: 900px; height: 500px;"></div>
 
                 <br/>
-                <div class="col-lg-10">
-                    Description:
-                    <p>#{cRMAnalyticsManagedBean.description}</p>
-                    <br/>
-                    The average retention rate is the percentage of customers that flew with Merlion Airlines in the current year and previous year out of those that flew in the previous year.
-                    <br/>
-                    <br/>
-                    <h:outputLabel class="col-md-4 control-label" value="Average Retention Rate" />
-                    <h:outputLabel class="col-md-4 control-label" value="#{cRMAnalyticsManagedBean.retentionRate}" />
-                    <br/>
-                    <br/>
-                    <h:outputLabel class="col-md-4 control-label" value="Mean" />
-                    <h:outputLabel class="col-md-4 control-label" value="#{cRMAnalyticsManagedBean.mean}" />
-                    <br/>
-                    <br/>
-                    <h:outputLabel class="col-md-4 control-label" value="Median" />
-                    <h:outputLabel class="col-md-4 control-label" value="#{cRMAnalyticsManagedBean.median}" />
-                    <br/>
-                    <br/>
-                    <h:outputLabel class="col-md-4 control-label" value="Mode" />
-                    <h:outputLabel class="col-md-4 control-label" value="#{cRMAnalyticsManagedBean.mode}" />
-                </div>
+                <div class="col-lg-12">
+                Description:
+                <p>#{cRMAnalyticsManagedBean.description} </p>
+                <br/>
+                <br/>
+                <br/>
+                <h:outputLabel class="col-md-4 control-label" value="Mean" />
+                <h:outputLabel class="col-md-4 control-label" value="#{cRMAnalyticsManagedBean.mean}" />
+                <br/>
+                <br/>
+                <h:outputLabel class="col-md-4 control-label" value="Median" />
+                <h:outputLabel class="col-md-4 control-label" value="#{cRMAnalyticsManagedBean.median}" />
+                <br/>
+                <br/>
+                <h:outputLabel class="col-md-4 control-label" value="Mode" />
+                <h:outputLabel class="col-md-4 control-label" value="#{cRMAnalyticsManagedBean.mode}" />
+            </div>
             </div>
         </div>
     </h:body>
 </html>
-

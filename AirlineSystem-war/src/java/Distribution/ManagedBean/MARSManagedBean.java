@@ -11,6 +11,7 @@ import APS.Entity.Schedule;
 import APS.Session.FlightSessionBeanLocal;
 import CI.Session.EmailSessionBeanLocal;
 import CRM.Entity.DiscountCode;
+import CRM.Entity.DiscountType;
 import CRM.Session.DiscountSessionBeanLocal;
 import Distribution.Entity.Customer;
 import Distribution.Entity.FlightOptions;
@@ -69,7 +70,6 @@ public class MARSManagedBean {
 
     @ManagedProperty(value = "#{customerManagedBean}")
     private CustomerManagedBean customerManagedBean;
-
 
     private String flightNo;
     private Double flightDuration;
@@ -198,8 +198,13 @@ public class MARSManagedBean {
     private PNRDisplay pnrDisplayList;
     private DiscountCode discountCode;
     private boolean discountCodeApplied;
+    private boolean discountTypeApplied;
     private String refundStatus;
     private int weightAllowed;
+    private DiscountType selectedDiscountType;
+    private int mileagePoints;
+    private double oldFinalPrice;
+    private double discountPercentage;
 
     @PostConstruct
     public void retrieve() {
@@ -298,29 +303,27 @@ public class MARSManagedBean {
         return displayReturnFlights();
 
     }
-    
-    public void setClassRules(){
-        if (serviceType.equals("Economy Saver") || serviceType.equals("Economy Basic")){
+
+    public void setClassRules() {
+        if (serviceType.equals("Economy Saver") || serviceType.equals("Economy Basic")) {
             refundStatus = "Not refundable";
             weightAllowed = 15;
-        }
-        else if (serviceType.equals("Economy Premium")){
+        } else if (serviceType.equals("Economy Premium")) {
             refundStatus = "Refundable";
             weightAllowed = 15;
-        }
-        else if (serviceType.equals("Business")){
+        } else if (serviceType.equals("Business")) {
             refundStatus = "Refundable";
             weightAllowed = 30;
-        }
-        else if (serviceType.equals("First Class")){
+        } else if (serviceType.equals("First Class")) {
             refundStatus = "Refundable";
             weightAllowed = 45;
         }
     }
 
     public String displayDepartureFlights(Boolean oneWay) {
-        
-        discountCodeApplied = false;
+
+        setDiscountCodeApplied(false);
+        discountTypeApplied = false;
         discountCode = null;
         oneWayFlight = oneWay;
         /*Convert the chosen origin and destination cities into IATAs*/
@@ -407,7 +410,7 @@ public class MARSManagedBean {
                     eachSchedule.setEndDate(distributionSessionBean.convertTimeZone(eachSchedule.getEndDate(), distributionSessionBean.getSingaporeTimeZone(), distributionSessionBean.getTimeZoneFromIata(eachSchedule.getFlight().getRoute().getDestinationIATA())));
 
                     double priceForOne = pm.getPrice(pm.getClassCode(eachSchedule, serviceType, adults + children, false), eachSchedule);
-            
+
                     selectedDatePrices.add(priceForOne);
 
                 }
@@ -633,8 +636,9 @@ public class MARSManagedBean {
 
         for (i = -3; i <= 3; i++) {
             Date eachDate = distributionSessionBean.addDaysToDate(date, i);
-            if (eachDate.compareTo(new Date())<0)
+            if (eachDate.compareTo(new Date()) < 0) {
                 continue;
+            }
             weekDates.add(eachDate);
             schedulesForEachDate = distributionSessionBean.retrieveDirectFlightsForDate(originIATA, destinationIATA, eachDate, serviceType, adults, children);
             if (schedulesForEachDate.size() > 0) {
@@ -668,8 +672,9 @@ public class MARSManagedBean {
 
         for (i = -3; i <= 3; i++) {
             Date eachDate = distributionSessionBean.addDaysToDate(date, i);
-            if (eachDate.compareTo(new Date())<0)
+            if (eachDate.compareTo(new Date()) < 0) {
                 continue;
+            }
             weekDates.add(eachDate);
             legOneSchedules.clear();
             legTwoSchedules.clear();
@@ -836,7 +841,7 @@ public class MARSManagedBean {
             primaryContactNo = loggedInCustomer.getHpNumber();
             primaryEmail = loggedInCustomer.getEmail();
 
-            return "Booking";
+            return "Summary";
 
             //return "CustomerDashboard";
         } else {
@@ -844,12 +849,12 @@ public class MARSManagedBean {
         }
 
     }
-    public void timeframeEndChanged(SelectEvent event){
-        setDepartureDate((Date)event.getObject());
-        System.out.println(":::managedbean departure date:::" +departureDate);
+
+    public void timeframeEndChanged(SelectEvent event) {
+        setDepartureDate((Date) event.getObject());
+        System.out.println(":::managedbean departure date:::" + departureDate);
     }
-            
-    
+
     public String payment() {
 
         for (int i = 0; i < passengerList.size(); i++) {
@@ -894,7 +899,6 @@ public class MARSManagedBean {
             return null;
 
         }
-        
 
         if (csv.length() != 3) {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Invalid csv!", "");
@@ -954,12 +958,15 @@ public class MARSManagedBean {
 
         message = new FacesMessage(FacesMessage.SEVERITY_INFO, "A cofirmation email has been sent to the primary email. Please check.", "");
         FacesContext.getCurrentInstance().addMessage(null, message);
-        
-        if (discountCode!=null){
-             discountSessionBean.markCodeAsClaimed(discountCode);
-             discountCode = null;
+
+        if (discountCode != null) {
+            discountSessionBean.markCodeAsClaimed(discountCode);
+            discountCode = null;
         }
-       
+        if (discountTypeApplied){
+            customerManagedBean.getCustomer().setMileagePoints(customerManagedBean.getCustomer().getMileagePoints()-(int)selectedDiscountType.getMileagePointsToRedeem());
+            customerSessionBean.updateCustomerProfile(customerManagedBean.getCustomer());
+        }
 
         return "Confirmation";
     }
@@ -981,11 +988,9 @@ public class MARSManagedBean {
                     + "\nArrival Date: " + formatter.format(selectedSchedules.get(i).getEndDate()) + "\n\n";
             tempBody += flight;
         }
-        
-        
 
         setBody("Thank you for using Merlion Airlines. \n\nYour PNR Id: " + pnr.getPnrID() + "\nDate of Booking: " + formatter.format(pnr.getDateOfBooking())
-                + "\nNumber of Travellers: " + pnr.getNoOfTravellers() + "\nTotal Baggage Allowance: " + (weightAllowed*pnr.getNoOfTravellers()) + "kgs\nBooking Refund Status: " + refundStatus + "\nTotal Price Paid: " + pnr.getTotalPrice()
+                + "\nNumber of Travellers: " + pnr.getNoOfTravellers() + "\nTotal Baggage Allowance: " + (weightAllowed * pnr.getNoOfTravellers()) + "kgs\nBooking Refund Status: " + refundStatus + "\nTotal Price Paid: " + pnr.getTotalPrice()
                 + "\n\n" + tempBody + "\n\nYou can always view the details of your booking at our website.");
 
         emailSessionBean.sendEmail(email, getSubject(), getBody());
@@ -1091,26 +1096,46 @@ public class MARSManagedBean {
     }
 
     public String redeemDiscountCode(String code) {
+        setOldFinalPrice(totalSelectedPrice);
         //Accept the entered code as argument
-        if (code.length()==0) {
+        if (code.length() == 0) {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please enter a discount code!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
-        }
-        else if (discountSessionBean.discountCodeValid(code) == false) {
+        } else if (discountSessionBean.discountCodeValid(code) == false) {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Discount Code is Invalid!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
-        }
-        else if (discountCodeApplied ==true){
+        } else if (isDiscountCodeApplied() == true) {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "A Discount Code has already been applied!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
-        }
-        else {
+        } else {
             discountCode = discountSessionBean.getDiscountCodeFromCode(code);
-            totalSelectedPrice = totalSelectedPrice - (discountCode.getDiscountType().getDiscount()/100*totalSelectedPrice);
-            discountCodeApplied = true;
+            Date currentDate = new Date();
+            if (discountCode.getDiscountType().getType().equals("Promotion") && discountCode.getDiscountType().getExpiryDate()!=null) {
+                if (currentDate.compareTo(discountCode.getDiscountType().getExpiryDate()) > 0) {
+                    message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Discount code has already expired!", "");
+                    FacesContext.getCurrentInstance().addMessage(null, message);
+                    return null;
+                }
+            }
+            setDiscountPercentage(discountCode.getDiscountType().getDiscount());
+            totalSelectedPrice = totalSelectedPrice - (discountCode.getDiscountType().getDiscount() / 100 * totalSelectedPrice);
+            setDiscountCodeApplied(true);
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Discount Code Applied!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
         }
+        return null;
+    }
+    
+     public String redeemDiscountType() {
+            setDiscountCodeApplied(true);
+            discountTypeApplied = true;
+            setOldFinalPrice(totalSelectedPrice);
+            setDiscountPercentage(selectedDiscountType.getDiscount());
+            
+            totalSelectedPrice = totalSelectedPrice - (selectedDiscountType.getDiscount() / 100 * totalSelectedPrice);
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Discount Redeemed Successfully!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        
         return null;
     }
 
@@ -1172,6 +1197,14 @@ public class MARSManagedBean {
 
     public void setFlightDuration(Double flightDuration) {
         this.flightDuration = flightDuration;
+    }
+
+    public DiscountType getSelectedDiscountType() {
+        return selectedDiscountType;
+    }
+
+    public void setSelectedDiscountType(DiscountType selectedDiscountType) {
+        this.selectedDiscountType = selectedDiscountType;
     }
 
     public void setRouteId(Long routeId) {
@@ -1350,6 +1383,14 @@ public class MARSManagedBean {
         return tempDepartureDate;
     }
 
+    public double getDiscountPercentage() {
+        return discountPercentage;
+    }
+
+    public void setDiscountPercentage(double discountPercentage) {
+        this.discountPercentage = discountPercentage;
+    }
+
     public void setTempDepartureDate(Date tempDepartureDate) {
         this.tempDepartureDate = tempDepartureDate;
     }
@@ -1377,6 +1418,7 @@ public class MARSManagedBean {
     public void setMinPricesForWeekOneStopFlight(List<Double> minPricesForWeekOneStopFlight) {
         this.minPricesForWeekOneStopFlight = minPricesForWeekOneStopFlight;
     }
+    
 
     public List<Double> getSelectedDatePrices() {
         return selectedDatePrices;
@@ -1400,6 +1442,14 @@ public class MARSManagedBean {
 
     public void setFlightOptionsList(List<FlightOptions> flightOptionsList) {
         this.flightOptionsList = flightOptionsList;
+    }
+
+    public double getOldFinalPrice() {
+        return oldFinalPrice;
+    }
+
+    public void setOldFinalPrice(double oldFinalPrice) {
+        this.oldFinalPrice = oldFinalPrice;
     }
 
     public Schedule getLegOne() {
@@ -1489,6 +1539,14 @@ public class MARSManagedBean {
      */
     public Schedule getSelectedReturnSchedule() {
         return selectedReturnSchedule;
+    }
+
+    public int getMileagePoints() {
+        return mileagePoints;
+    }
+
+    public void setMileagePoints(int mileagePoints) {
+        this.mileagePoints = mileagePoints;
     }
 
     /**
@@ -1608,6 +1666,14 @@ public class MARSManagedBean {
      */
     public void setNationality(String nationality) {
         this.nationality = nationality;
+    }
+
+    public boolean isDiscountTypeApplied() {
+        return discountTypeApplied;
+    }
+
+    public void setDiscountTypeApplied(boolean discountTypeApplied) {
+        this.discountTypeApplied = discountTypeApplied;
     }
 
     /**
@@ -2166,6 +2232,19 @@ public class MARSManagedBean {
     public void setWeightAllowed(int weightAllowed) {
         this.weightAllowed = weightAllowed;
     }
-    
+
+    /**
+     * @return the discountCodeApplied
+     */
+    public boolean isDiscountCodeApplied() {
+        return discountCodeApplied;
+    }
+
+    /**
+     * @param discountCodeApplied the discountCodeApplied to set
+     */
+    public void setDiscountCodeApplied(boolean discountCodeApplied) {
+        this.discountCodeApplied = discountCodeApplied;
+    }
 
 }

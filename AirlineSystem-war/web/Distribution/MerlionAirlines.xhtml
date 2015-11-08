@@ -71,7 +71,6 @@ and open the template in the editor.
 //})
 
 $(".search-btn").click(function(){
-    console.log("TEST");
     $(".loader").show("slow");
 //    $(".loader").fadeOut("slow");
 });
@@ -160,7 +159,7 @@ function showLoader(){
                                                                         <div class="book_date">
                                                                             <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
 
-                                                                            <p:selectOneMenu value="#{mARSManagedBean.originCity}" editable="true" style="width:200px">
+                                                                            <p:selectOneMenu value="#{mARSManagedBean.originCity}" editable="true" style="width:100%">
                                                                                 <f:selectItem itemLabel="Select Origin City" itemValue="" />
                                                                                 <f:selectItems value="#{mARSManagedBean.origins}"/>
                                                                             </p:selectOneMenu>
@@ -171,7 +170,7 @@ function showLoader(){
                                                                         <h5>Flying to</h5>
                                                                         <div class="book_date">
                                                                             <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
-                                                                            <p:selectOneMenu value="#{mARSManagedBean.destinationCity}" editable="true">
+                                                                            <p:selectOneMenu value="#{mARSManagedBean.destinationCity}" editable="true" style="width:100%">
                                                                                 <f:selectItem itemLabel="Select Destination City" itemValue="" />
                                                                                 <f:selectItems value="#{mARSManagedBean.destinations}"/>
                                                                             </p:selectOneMenu>

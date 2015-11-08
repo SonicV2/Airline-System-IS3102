@@ -6,7 +6,7 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
-        <p:growl id="growl" sticky="true" showDetail="false"/>
+        <!--        <p:growl id="growl" sticky="true" showDetail="false"/>-->
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -17,7 +17,7 @@
         <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js" />-->
         <title>Manage Discount Code</title>
 
-        
+
     </h:head>
 
     <style>
@@ -31,7 +31,7 @@
 
     <h:body>
         <!--    To add the same header on all dashboard pages  -->
-<!--        <ui:include src="DashboardHeader.xhtml"/>-->
+        <!--        <ui:include src="DashboardHeader.xhtml"/>-->
         <!--    To add the same sidebar on all dashboard pages  -->
         <ui:include src="/CI/DashboardSidebar.xhtml"/>
         <div id="page-wrapper">
@@ -42,9 +42,10 @@
                 <div class="col-lg-12">
                     <h2 class="page-header"> Manage Discount Types</h2>
                 </div>
-                <div class="col-lg-12">
-                    <h:form id="roleForm"> 
-                        <p:growl id="msgs" showDetail="true"/>
+                <h:form>
+                    <p:growl id="growl" sticky="true" showDetail="false"/>
+                    <div class="col-lg-12">
+                        <!--                    <h:form id="roleForm"> -->
                         <!--<div class="table-responsive">-->
                         <p:dataTable id="discount-type" var="discount" value="#{discountManagedBean.discountTypeDisplays}" editable="true" style="margin-bottom:20px">
                             <f:facet name="header">
@@ -54,26 +55,47 @@
                             <p:column headerText="Discount ID" >
                                 <h:outputText value="#{discount.discountType.id}" />
                             </p:column>
-                            
+
                             <p:column headerText="Discount Description" >
                                 <h:outputText value="#{discount.discountType.description} " />
                             </p:column>
-                            
+
                             <p:column headerText="Discount Amount" >
                                 <h:outputText value="#{discount.discountType.discount} %" />
                             </p:column>
 
                             <p:column headerText="Mileage Points Required" >
-                                <h:outputText value="#{discount.discountType.mileagePointsToRedeem} " />
+                                <ui:fragment rendered="#{discount.discountType.mileagePointsToRedeem eq 0}">
+                                    <h:outputText value="N.A"  />
+                                </ui:fragment>
+                                <ui:fragment rendered="#{discount.discountType.mileagePointsToRedeem ne 0}">
+                                    <h:outputText value="#{discount.discountType.mileagePointsToRedeem} "  />
+                                </ui:fragment>
                             </p:column>
-                            
+
                             <p:column headerText="Number of Claimed Codes" >
                                 <h:outputText value="#{discount.noOfClaimedCodes} " />
                             </p:column>
                             <p:column headerText="Number of Unclaimed Codes" >
                                 <h:outputText value="#{discount.noOfUnclaimedCodes} " />
                             </p:column>
-                            
+                            <p:column headerText="Type" >
+                                <h:outputText value="#{discount.discountType.type} " />
+                            </p:column>
+                            <p:column headerText="Expiry Date" >
+                                <ui:fragment rendered="#{discount.discountType.expiryDate eq null}">
+                                    <h:outputText value="N.A"  />
+                                </ui:fragment>
+
+                                <ui:fragment rendered="#{discount.discountType.expiryDate ne null}">
+                                    <h:outputText value="#{discount.expiryDate} ">
+                                        
+                                    </h:outputText>
+                                </ui:fragment>
+
+
+                            </p:column>
+
                             <p:column headerText="Delete" style="width:80px" >
 
                                 <h:commandLink onclick="if (!confirm('Do you really want to delete this discount type?')) {
@@ -83,54 +105,96 @@
                                         return true;
                                                " action="#{discountManagedBean.deleteDiscountType(discount.discountType)}"><i class="fa fa-trash-o"></i> </h:commandLink>
                             </p:column>
-                            
+
                         </p:dataTable>   
-                    </h:form>
-                </div>
 
+                    </div>
+                </h:form>
                 <br></br>
-                <div class="col-md-10">
+                <h:form id="adding">
+                    <p:growl id="growl1" sticky="true" showDetail="false"/>
+                    <div class="col-md-12">
+                        <h3>Create Promotional Discount Type</h3>
 
-                    <h:form id="accessForm">
+
+
+
+                        <div class="form-group">
+                            <label class="control-label col-md-5">New Discount Description:   </label>
+
+                            <p:inputText id="discountDesc1" required="true" requiredMessage="Please fill in Discount Description!" class="form-inline" value="#{discountManagedBean.description}"  />
+
+                        </div>
+
+
+                        <div class="form-group">
+                            <label class="control-label col-md-5">Discount Percentage:   </label>
+                            <p:inputText id="discountPer1" required="true" requiredMessage="Please fill in Discount Percentage!" class="form-inline" value="#{discountManagedBean.discount}"  />           
+                        </div>
+
+
+                        <div class="form-group">
+                            <label class="control-label col-md-5">Expiry Date  </label>
+                            <p:calendar id="frmD1" required="true" requiredMessage="Please fill in Expiry Date!" value="#{discountManagedBean.expiryDate}" navigator="true" pattern="yyyy-MMM-dd"  >
+                            </p:calendar>
+                        </div>
+
+                        <br></br>
+
+
+                        <br></br>
+                        <div class="text-center">
+                            <h:commandButton class="btn btn-outline btn-success" value="Create Discount" action="#{discountManagedBean.addDiscountType('Promotion')}"/>
+                        </div>
+                        <br></br>
+                        <br></br>
+                    </div>
+                </h:form>
+                <h:form id="accessForm">
+                    <p:growl id="growl2" sticky="true" showDetail="false"/>
+                    <div class="col-md-12">
+
+                        <h3>Create Mileage Discount Type</h3>
+
+
                         <div class="form-group">
                             <label class="control-label col-md-5">New Discount Description:   </label>
 
                             <p:inputText id="discountDesc" required="true" requiredMessage="Please fill in Discount Description!" class="form-inline" value="#{discountManagedBean.description}"  />
-                            
+
                         </div>
-                        
-                        
+
+
                         <div class="form-group">
                             <label class="control-label col-md-5">Discount Percentage:   </label>
-
-                            <p:inputText id="discountPer" required="true" requiredMessage="Please fill in Discount Percentage!" class="form-inline" value="#{discountManagedBean.discount}"  />
-                            
+                            <p:inputText id="discountPer" required="true" requiredMessage="Please fill in Discount Percentage!" class="form-inline" value="#{discountManagedBean.discount}"  />           
                         </div>
-                        
+
                         <div class="form-group">
                             <label class="control-label col-md-5">Number of Mileage Points Required:  </label>
-
                             <p:inputText id="mileagePoints" required="true" requiredMessage="Please fill in Mileage Points Required!" class="form-inline" value="#{discountManagedBean.noOfMileagePointsToRedeem}"  />
-                            
+
                         </div>
-                        
-                       
 
-                        <br></br>
-                        
+                    </div>
+                    <div class="text-center">
+                        <h:commandButton class="btn btn-outline btn-success" value="Create Discount" action="#{discountManagedBean.addDiscountType('Mileage')}"/>
+                    </div>
+                </h:form>
 
-                        <br></br>
-                        <div class="text-center">
-                            <h:commandButton class="btn btn-outline btn-success" value="Create Discount" action="#{discountManagedBean.addDiscountType()}"/>
-                        </div>
-                        <br></br>
-                        <br></br>
+                <br></br>
 
-                    </h:form>
-                </div>
+
+                <br></br>
+
+                <br></br>
+                <br></br>
+
+
             </div>
+
         </div>
+
 
     </h:body>
 </html>
-

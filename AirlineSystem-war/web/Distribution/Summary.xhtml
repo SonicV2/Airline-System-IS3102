@@ -107,7 +107,7 @@
                                     <div class="col-md-8 col-sm-8 col-xs-8 sm-invisible">
                                         <span><i class="fa fa-plane"></i>#{mARSManagedBean.serviceType}</span>
                                         <span><i class="fa fa-suitcase"></i> #{mARSManagedBean.weightAllowed * (mARSManagedBean.adults + mARSManagedBean.children)} kg</span>
-                                                <span><i class="fa fa-usd"></i> #{mARSManagedBean.refundStatus} </span>
+                                        <span><i class="fa fa-usd"></i> #{mARSManagedBean.refundStatus} </span>
                                         <!--                                        <span class="refund"><i class="fa fa-undo"></i> Refundable</span>-->
 
                                     </div>
@@ -165,77 +165,174 @@
                             </div>
                         </ui:fragment>
 
+                        <h:form id="customer">
+                            <ui:fragment rendered="#{customerManagedBean.loggedIn and !mARSManagedBean.discountCodeApplied}">
 
-                        <ui:fragment rendered="#{customerManagedBean.loggedIn}">
-                            <div class='col-md-10'>
-                                <h:form id="customer">
 
+
+                                <br/>
+                                <br/>
+
+                                <div class="col-md-12 col-sm-12 booking-sidebar">
+
+                                    <div class="sidebar-item">
+                                        <h4><i class="fa fa-bookmark"></i>Redeem Discount</h4>
+                                        <div class="sidebar-body">
+                                            You currently have #{customerManagedBean.customer.mileagePoints} Merlion Airlines Flyer Points.
+                                            <br></br>
+
+
+                                            <h:form>
+                                                <p:dataTable id="discount-type" var="discount" value="#{customerManagedBean.discountTypes}" selection="#{mARSManagedBean.selectedDiscountType}" rowKey="#{discount}" style="margin-bottom:20px">
+                                                    <f:facet name="header">
+                                                        Existing Discount Types
+                                                    </f:facet>
+                                                    <p:column selectionMode="single" style="width:30px;text-align:center"/>
+                                                    <p:column headerText="Discount Description" >
+                                                        <h:outputText value="#{discount.description} " />
+                                                    </p:column>
+
+                                                    <p:column headerText="Discount Percentage" >
+                                                        <h:outputText value="#{discount.discount} %" />
+                                                    </p:column>
+
+                                                    <p:column headerText="Mileage Points Required" >
+                                                        <h:outputText value="#{discount.mileagePointsToRedeem} " />
+                                                    </p:column>
+
+                                                </p:dataTable>  
+                                                <div class="text-center">
+                                                    <h:commandButton class="btn btn-outline btn-success" value="Redeem" action="#{mARSManagedBean.redeemDiscountType()}"/>
+                                                    <br></br>
+                                                    <br></br>
+                                                </div>
+                                            </h:form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ui:fragment>
+                        </h:form>
+                        <h:form id="proceedbooking">
+                            <ui:fragment rendered="#{customerManagedBean.loggedIn}">
+                                <div class="col-lg-12">
                                     <div class="form-group text-center">
+                                        <br></br>
+                                        <br></br>
                                         <br></br>
                                         <h:commandButton class="btn btn-outline btn-success" value="Proceed to Booking"  action="Booking"/>
                                     </div>
-                                </h:form>
-                            </div>
-                        </ui:fragment>
+                                </div>
+                            </ui:fragment>
+                        </h:form>
+
+
 
 
 
                     </div>
+                    <ui:fragment rendered="#{mARSManagedBean.discountCodeApplied or mARSManagedBean.discountTypeApplied}">
 
-                    <div class="col-md-4 col-sm-4 booking-sidebar">
-                        <div class="flight-list-v2">
-                        <div class="sidebar-item">
-                            <h4><i class="fa fa-bookmark"></i>Fare Details</h4>
-                            <div class="sidebar-body">
-                                <table class="table">
-                                    <tbody>
-                                        <tr>
-                                            <td>Total Base Fare (#{mARSManagedBean.adults} X Adult &amp; #{mARSManagedBean.children} X Child)</td>
-                                            <td>#{0.85* (mARSManagedBean.totalSelectedPrice)}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Airport / Government Taxes</td>
-                                            <td>#{0.05* (mARSManagedBean.totalSelectedPrice)}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Carrier Surcharges</td>
-                                            <td>#{0.10* (mARSManagedBean.totalSelectedPrice)}</td>
-                                        </tr>
-
-                                        <tr>
-                                            <td><b>You Pay (SGD)</b></td>
-                                            <td class="total">#{mARSManagedBean.totalSelectedPrice}</td>
-                                        </tr>
-                                    </tbody></table>
+                        <div class="col-md-4 col-sm-4 booking-sidebar">
+                            <div class="flight-list-v2">
+                                <div class="sidebar-item">
+                                    <h4><i class="fa fa-bookmark"></i>Fare Details</h4>
+                                    <div class="sidebar-body">
+                                        <table class="table">
+                                            <tbody>
+                                                <tr>
+                                                    <td>Total Base Fare (#{mARSManagedBean.adults} X Adult &amp; #{mARSManagedBean.children} X Child)</td>
+                                                    <td><h:outputText value="#{0.85* (mARSManagedBean.oldFinalPrice)}">
+                                                            <f:convertNumber pattern="#0.00" /></h:outputText>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Airport / Government Taxes</td>
+                                                    <td><h:outputText value="#{0.05* (mARSManagedBean.oldFinalPrice)}">
+                                                            <f:convertNumber pattern="#0.00" /></h:outputText></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Carrier Surcharges</td>
+                                                    <td><h:outputText value="#{0.10* (mARSManagedBean.oldFinalPrice)}"><f:convertNumber pattern="#0.00" /></h:outputText></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Price Before Discount</td>
+                                                    <td><h:outputText value="#{mARSManagedBean.oldFinalPrice}"><f:convertNumber pattern="#0.00" /></h:outputText></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Discount (#{mARSManagedBean.discountPercentage}%)</td>
+                                                    <td><h:outputText value="#{(mARSManagedBean.discountPercentage/100) * (mARSManagedBean.oldFinalPrice)}"><f:convertNumber pattern="#0.00" /></h:outputText></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><b>You Pay (SGD)</b></td>
+                                                    <td class="total"><h:outputText value="#{mARSManagedBean.totalSelectedPrice}"><f:convertNumber pattern="#0.00" /></h:outputText></td>
+                                                </tr>
+                                            </tbody></table>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        </div>
-                    </div>
-                    
-                    <h:form>
-                        <p:growl id="growll" sticky="true" showDetail="true"/>
-                    <div class="col-md-4 col-sm-4 booking-sidebar">
-                        <div class="flight-list-v2">
-                        <div class="sidebar-item">
-                            <h4><i class="fa fa-bookmark"></i>Apply Discount Code</h4>
-                            <div class="sidebar-body">
-                                <table class="table">
-                                    <tbody><tr>
-                                            <td>Discount Code: </td>
-                                            <td><h:inputText id="discount-code" required="true" requiredMessage="Please fill in discount code field!" value="#{code}" /></td>
-                                        </tr>
-                                        
+                    </ui:fragment>
 
-                                        <tr>
-                                            <td></td>
-                                            <td><h:commandButton class="btn btn-outline btn-success" value="Apply"  action="#{mARSManagedBean.redeemDiscountCode(code)}"/></td>
-                                        </tr>
-                                    </tbody></table>
+                    <ui:fragment rendered="#{!mARSManagedBean.discountCodeApplied and !mARSManagedBean.discountTypeApplied}">
+                        <div class="col-md-4 col-sm-4 booking-sidebar">
+                            <div class="flight-list-v2">
+                                <div class="sidebar-item">
+                                    <h4><i class="fa fa-bookmark"></i>Fare Details</h4>
+                                    <div class="sidebar-body">
+                                        <table class="table">
+                                            <tbody>
+                                                <tr>
+                                                    <td>Total Base Fare (#{mARSManagedBean.adults} X Adult &amp; #{mARSManagedBean.children} X Child)</td>
+                                                    <td><h:outputText value="#{0.85* (mARSManagedBean.totalSelectedPrice)}">
+                                                            <f:convertNumber pattern="#0.00" /></h:outputText>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Airport / Government Taxes</td>
+                                                    <td><h:outputText value="#{0.05* (mARSManagedBean.totalSelectedPrice)}">
+                                                            <f:convertNumber pattern="#0.00" /></h:outputText></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Carrier Surcharges</td>
+                                                    <td><h:outputText value="#{0.10* (mARSManagedBean.totalSelectedPrice)}"><f:convertNumber pattern="#0.00" /></h:outputText></td>
+                                                </tr>
+                                                
+                                                <tr>
+                                                    <td><b>You Pay (SGD)</b></td>
+                                                    <td class="total"><h:outputText value="#{mARSManagedBean.totalSelectedPrice}"><f:convertNumber pattern="#0.00" /></h:outputText></td>
+                                                </tr>
+                                            </tbody></table>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        </div>
-                    </div>
-                    </h:form>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{!mARSManagedBean.discountCodeApplied}">
+                        <h:form>
+                            <p:growl id="growll" sticky="true" showDetail="true"/>
+                            <div class="col-md-4 col-sm-4 booking-sidebar">
+                                <div class="flight-list-v2">
+                                    <div class="sidebar-item">
+                                        <h4><i class="fa fa-bookmark"></i>Apply Discount Code</h4>
+                                        <div class="sidebar-body">
+                                            <table class="table">
+                                                <tbody><tr>
+                                                        <td>Discount Code: </td>
+                                                        <td><h:inputText id="discount-code" required="true" requiredMessage="Please fill in discount code field!" value="#{code}" /></td>
+                                                    </tr>
+
+
+                                                    <tr>
+                                                        <td></td>
+                                                        <td><h:commandButton class="btn btn-outline btn-success" value="Apply"  action="#{mARSManagedBean.redeemDiscountCode(code)}"/></td>
+                                                    </tr>
+                                                </tbody></table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </h:form>
+                    </ui:fragment>
 
 
                     <div class="clearfix"> </div>

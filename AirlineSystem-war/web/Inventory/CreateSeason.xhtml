@@ -15,7 +15,7 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
         <h:outputStylesheet library="css" name="admindb.css" />
         <h:outputStylesheet library="css" name="morrisjs/morris.css" />
-        <title>Create a Booking Class</title>
+        <title>Create a Season</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     </h:head>
     <style>
@@ -26,18 +26,18 @@
 
     <body>
 
+
         <ui:include src="/CI/DashboardHeader.xhtml"/>  
         <ui:include src="/CI/DashboardSidebar.xhtml"/>
 
-
         <div id="page-wrapper">
-            <div class="col-lg-12">
-                <div class ="row">
+            <div class="row">
+                <div class="col-lg-12">
                     <h2 class="page-header">Create a Seasonality Demand</h2>
 
 
                     <h:form>
-                        <p:dataTable var="location" value="#{routeManageBean.locations}" widgetVar="locationsTable" paginator="true" rows="10">
+                        <p:dataTable var="location" value="#{routeManagedBean.locations}" widgetVar="locationsTable" paginator="true" rows="10">
 
                             <f:facet name="header">
                                 <p:outputPanel>
@@ -61,7 +61,7 @@
                         </p:dataTable>
                     </h:form>
 
-
+                    <br/>
 
                     <h:form class="form col-md-10 center-block">
                         <div class="form-group">
@@ -118,7 +118,6 @@
                             <br></br>
                             <br></br>
                         </div>
-
                     </h:form>
                 </div>
             </div>

@@ -41,8 +41,26 @@
         <h:outputStylesheet library ="css"  name="flightdisplay2.css" />
         <title>Confirmation</title>
     </h:head>
+    <style>
+        .booking-sidebar .sidebar-body .table{
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+            -ms-word-break: break-all;
+            /* This is the dangerous one in WebKit, as it breaks things wherever */
+            word-break: break-all;
+            /* Instead use this non-standard one: */
+            word-break: break-word;
+
+            /* Adds a hyphen where the word breaks, if supported (No Blink) */
+            -ms-hyphens: auto;
+            -moz-hyphens: auto;
+            -webkit-hyphens: auto;
+            hyphens: auto;
+
+        }
+    </style>
     <h:body>
-         <ui:fragment rendered ="#{customerManagedBean.isCustomerLoggedOn}">
+        <ui:fragment rendered ="#{customerManagedBean.isCustomerLoggedOn}">
             <ui:include src="CustomerDashboardHeader.xhtml"/>
         </ui:fragment>
         <ui:fragment rendered ="#{!customerManagedBean.isCustomerLoggedOn}">
@@ -53,8 +71,8 @@
             <div class="container">
                 <div class="faqs-top-grids">
                     <div class="about-info">
-                    <h3>Thank you for booking your tickets with us! We have emailed you the following flight details:</h3>
-                </div>
+                        <h3>Thank you for booking your tickets with us! We have emailed you the following flight details:</h3>
+                    </div>
                     <div class="blog-grids">
                         <div class="col-md-8 col-sm-8">
                             <ui:repeat value='#{mARSManagedBean.selectedSchedules}' var='schedules'>
@@ -106,8 +124,8 @@
                                     <div class="flight-list-footer">
                                         <div class="col-md-8 col-sm-8 col-xs-8 sm-invisible">
                                             <span><i class="fa fa-plane"></i>#{mARSManagedBean.serviceType}</span>
-                                              <span><i class="fa fa-suitcase"></i> #{mARSManagedBean.weightAllowed * (mARSManagedBean.adults + mARSManagedBean.children)} kg</span>
-                                                <span><i class="fa fa-usd"></i> #{mARSManagedBean.refundStatus} </span>
+                                            <span><i class="fa fa-suitcase"></i> #{mARSManagedBean.weightAllowed * (mARSManagedBean.adults + mARSManagedBean.children)} kg</span>
+                                            <span><i class="fa fa-usd"></i> #{mARSManagedBean.refundStatus} </span>
                                         </div>
                                     </div>
                                 </div>
@@ -115,67 +133,136 @@
                         </div>
 
 
-                
-             
-                        <div class="col-md-8 col-sm-8 booking-sidebar">
+
+                        <ui:fragment rendered="#{mARSManagedBean.discountCodeApplied or mARSManagedBean.discountTypeApplied}">
+                            <div class="col-md-8 col-sm-8 booking-sidebar">
                                 <div class="flight-list-v2">
-                            <div class="sidebar-item">
-                                <h4><i class="fa fa-bookmark"></i>Booking Details</h4>
-                                <div class="sidebar-body">
-                                    <table class="table">
-                                        <tbody><tr>
+                                    <div class="sidebar-item">
+                                        <h4><i class="fa fa-bookmark"></i>Booking Details</h4>
+                                        <div class="sidebar-body">
+                                            <table class="table">
+                                                <tbody><tr>
 
-                                                <td>PNR ID</td>
-                                                <td>#{mARSManagedBean.pnr.pnrID}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Email </td>
-                                                <td>#{mARSManagedBean.pnr.email}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Contact Number </td>
-                                                <td>#{mARSManagedBean.pnr.contactNo}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Number of Travellers</td>
-                                                <td>#{mARSManagedBean.pnr.noOfTravellers}</td>
-                                            </tr>
-                                            <tr>
-                                            <td>Total Base Fare (#{mARSManagedBean.adults} X Adult &amp; #{mARSManagedBean.children} X Child)</td>
-                                            <td>#{0.85* (mARSManagedBean.totalSelectedPrice)}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Airport / Government Taxes</td>
-                                            <td>#{0.05* (mARSManagedBean.totalSelectedPrice)}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Carrier Surcharges</td>
-                                            <td>#{0.10* (mARSManagedBean.totalSelectedPrice)}</td>
-                                        </tr>
-                                            <ui:fragment rendered="#{mARSManagedBean.boughtInsurance}">
-                                         <tr>
-                                            <td>Insurance</td>
-                                            <td>#{(mARSManagedBean.totalPriceWinsurance) - (mARSManagedBean.totalSelectedPrice)}</td>
-                                        </tr>
-                                            </ui:fragment>
+                                                        <td>PNR ID</td>
+                                                        <td>#{mARSManagedBean.pnr.pnrID}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Email </td>
+                                                        <td id="emailbar" style="word-wrap: break-word">#{mARSManagedBean.pnr.email}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Contact Number </td>
+                                                        <td>#{mARSManagedBean.pnr.contactNo}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Number of Travellers</td>
+                                                        <td>#{mARSManagedBean.pnr.noOfTravellers}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Total Base Fare (#{mARSManagedBean.adults} X Adult &amp; #{mARSManagedBean.children} X Child)</td>
+                                                        <td><h:outputText value="#{0.85* (mARSManagedBean.oldFinalPrice)}">
+                                                                <f:convertNumber pattern="#0.00" /></h:outputText>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Airport / Government Taxes</td>
+                                                        <td><h:outputText value="#{0.05* (mARSManagedBean.oldFinalPrice)}">
+                                                                <f:convertNumber pattern="#0.00" /></h:outputText></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Carrier Surcharges</td>
+                                                        <td><h:outputText value="#{0.10* (mARSManagedBean.oldFinalPrice)}"><f:convertNumber pattern="#0.00" /></h:outputText></td>
+                                                    </tr>
 
-                          
+                                                    <tr>
+                                                        <td>Price Before Discount</td>
+                                                        <td><h:outputText value="#{mARSManagedBean.oldFinalPrice}"><f:convertNumber pattern="#0.00" /></h:outputText></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Discount (#{mARSManagedBean.discountPercentage}%)</td>
+                                                        <td><h:outputText value="#{(mARSManagedBean.discountPercentage/100) * (mARSManagedBean.oldFinalPrice)}"><f:convertNumber pattern="#0.00" /></h:outputText></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Insurance</td>
+                                                        <td>#{(mARSManagedBean.totalPriceWinsurance) - (mARSManagedBean.totalSelectedPrice)}</td>
+                                                    </tr>
+                                                    <!--                                                    </ui:fragment>-->
 
-                                            <tr>
-                                                <td><b>Total Price (SGD)</b></td>
-                                                <td class="total">$#{mARSManagedBean.totalPriceWinsurance}</td>
-                                            </tr>
-                                        </tbody></table>
+                                                    <tr>
+                                                        <td><b>Total Price (SGD)</b></td>
+                                                        <td class="total">$#{mARSManagedBean.totalPriceWinsurance}</td>
+                                                    </tr>
+                                                </tbody></table>
+                                        </div>
+                                    </div>
                                 </div>
+
+
+                                <div class="clearfix"> </div>
+
+
                             </div>
-                        </div>
+                        </ui:fragment>
 
 
-                        <div class="clearfix"> </div>
+
+                        <ui:fragment rendered="#{!mARSManagedBean.discountCodeApplied and !mARSManagedBean.discountTypeApplied}">
+                            <div class="col-md-8 col-sm-8 booking-sidebar">
+                                <div class="flight-list-v2">
+                                    <div class="sidebar-item">
+                                        <h4><i class="fa fa-bookmark"></i>Booking Details</h4>
+                                        <div class="sidebar-body">
+                                            <table class="table">
+                                                <tbody><tr>
+
+                                                        <td>PNR ID</td>
+                                                        <td>#{mARSManagedBean.pnr.pnrID}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Email </td>
+                                                        <td>#{mARSManagedBean.pnr.email}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Contact Number </td>
+                                                        <td>#{mARSManagedBean.pnr.contactNo}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Number of Travellers</td>
+                                                        <td>#{mARSManagedBean.pnr.noOfTravellers}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Total Base Fare (#{mARSManagedBean.adults} X Adult &amp; #{mARSManagedBean.children} X Child)</td>
+                                                        <td>#{0.85* (mARSManagedBean.totalSelectedPrice)}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Airport / Government Taxes</td>
+                                                        <td>#{0.05* (mARSManagedBean.totalSelectedPrice)}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Carrier Surcharges</td>
+                                                        <td>#{0.10* (mARSManagedBean.totalSelectedPrice)}</td>
+                                                    </tr>
+            <!--                                            <ui:fragment rendered="#{mARSManagedBean.boughtInsurance}">-->
+                                                    <tr>
+                                                        <td>Insurance</td>
+                                                        <td>#{(mARSManagedBean.totalPriceWinsurance) - (mARSManagedBean.totalSelectedPrice)}</td>
+                                                    </tr>
+                                                    <!--                                            </ui:fragment>-->
 
 
-                        </div>
-                        
+
+                                                    <tr>
+                                                        <td><b>Total Price (SGD)</b></td>
+                                                        <td class="total">$#{mARSManagedBean.totalPriceWinsurance}</td>
+                                                    </tr>
+                                                </tbody></table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="clearfix"> </div>
+                            </div>
+                        </ui:fragment>
+
                         <div class="clearfix"> </div>
 
                     </div>

@@ -374,7 +374,7 @@ public class FlightManagedBean {
         cal.set(2015, 10, 2, 20, 36);
         flightSessionBean.addFlight("MA186", "1101010", 733.33, cal.getTime(), 1441L, false);
         flightScheduleSessionBean.scheduleFlights("MA186");
-
+        
         flightScheduleSessionBean.rotateAircrafts(); //Rotate flights and assign aircraft to schedule
 
         message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Test Flights Generated", "");
