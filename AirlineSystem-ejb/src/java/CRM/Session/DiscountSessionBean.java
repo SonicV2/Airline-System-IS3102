@@ -214,6 +214,22 @@ public class DiscountSessionBean implements DiscountSessionBeanLocal {
             return null;
         }
     }
+    
+    @Override
+    public String addExpiredDiscountCode(DiscountType discountType) {
+        DiscountCode discountCode = new DiscountCode();
+        String codeGenerated = "AX050";
+        discountCode.setCodeNumber(codeGenerated);
+        discountCode.setClaimed(false);
+        List<DiscountCode> currentCodes = discountType.getDiscountCodes();
+        currentCodes.add(discountCode);
+        discountType.setDiscountCodes(currentCodes);
+        discountCode.setDiscountType(discountType);
+        em.persist(discountCode);
+        em.merge(discountType);
+        em.flush();
+        return codeGenerated;
+    }
 
     @Override
     public void markCodeAsClaimed(DiscountCode discountCode) {
@@ -277,5 +293,58 @@ public class DiscountSessionBean implements DiscountSessionBeanLocal {
         }
         return mileageDiscountTypes;
     }
+
+    
+    @Override
+    public void deleteCodesOfType(DiscountType discountType){
+        List<DiscountCode> discountCodes = new ArrayList();
+        discountCodes = discountType.getDiscountCodes();
+        if (discountCodes!=null && discountCodes.size()>0){
+            for (DiscountCode eachCode : discountCodes){
+                DiscountCode codeToBeDeleted = em.merge(eachCode);
+                em.remove(codeToBeDeleted);
+               
+            }
+            em.flush();
+        }
+    }
+
+    
+    public List<String> sendDiscountCodes (DiscountType discountType, int no){
+        List<String> codes = new ArrayList();
+        for(int i =0; i<no; i++){
+            codes.add(addDiscountCode(discountType));
+        }
+        return codes;
+    }
+    
+    public List<DiscountType> retrieveValidDiscounts() {
+        List<DiscountType> discountTypes = new ArrayList();
+        try {
+            Date date = new Date();
+            Query q = em.createQuery("SELECT a FROM DiscountType a WHERE a.expiryDate>:date");
+            q.setParameter("date", date);
+            List<DiscountType> results = q.getResultList();
+            if (!results.isEmpty()) {
+                discountTypes = results;
+
+            } else {
+                discountTypes = null;
+                System.out.println("No discountTypes Available!");
+            }
+
+        } catch (EntityNotFoundException enfe) {
+            System.out.println("\nEntity not found error" + "enfe.getMessage()");
+        }
+        List<DiscountType> mileageDiscountTypes = new ArrayList();
+        for (DiscountType eachDiscountType : discountTypes) {
+            if (eachDiscountType.getType().equalsIgnoreCase("Promotion")) {
+                mileageDiscountTypes.add(eachDiscountType);
+            }
+        }
+        return mileageDiscountTypes;
+    }
+    
+
 
 }
