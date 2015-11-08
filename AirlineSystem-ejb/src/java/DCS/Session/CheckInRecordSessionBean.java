@@ -5,6 +5,7 @@
  */
 package DCS.Session;
 
+import DCS.Entity.BoardingPass;
 import DCS.Entity.CheckInRecord;
 import Inventory.Entity.Booking;
 import java.util.Date;
@@ -26,6 +27,9 @@ public class CheckInRecordSessionBean implements CheckInRecordSessionBeanLocal {
     
     @Override
     public void addBooking(Booking booking) {
+        if(existBooking(booking)){
+            return;
+        }
         CheckInRecord record = new CheckInRecord();
         record.create();
         record.setBookingID(booking.getId());
@@ -33,16 +37,22 @@ public class CheckInRecordSessionBean implements CheckInRecordSessionBeanLocal {
     }
     
     @Override
-    public void addSeat(Booking booking, String seat) {
-        System.out.println("add seat session bean - booking" +booking.toString());
+    public void addSeat(Booking booking, String seat,int upgrade, double upgradeCosts) {
         CheckInRecord record = findRecord(booking);
-        System.out.println("add seat session bean - record" +record.toString());
         record.setSeatNo(seat);
         booking.setSeatNumber(seat);
+        
+        if(upgrade==1){
+            booking.setField("upgrade");
+        }else if(upgrade == 2){
+            booking.setField("paid upgrade"+upgradeCosts+"");
+        }
+        
         em.merge(record);
         em.merge(booking);
         
     }
+    
 @Override
     public void addStatus(Booking booking, String status) {
         CheckInRecord record = findRecord(booking);
@@ -76,19 +86,38 @@ public class CheckInRecordSessionBean implements CheckInRecordSessionBeanLocal {
     }
 @Override
     public CheckInRecord findRecord(Booking booking) {
+        
+       
         Query q = em.createQuery("SELECT c FROM CheckInRecord c");
         List<CheckInRecord> records = q.getResultList();
 
         for (CheckInRecord b : records) {
             if ((b.getBookingID() + "").equals(booking.getId().toString())) {
+                 System.out.println("FInd Recored: "+ booking.getId());
                 return b;
-            } else {
-                return null;
-            }
+            } 
         }
         return null;
     }
 
+    
+    public boolean existBooking(Booking booking) {
+        Query q = em.createQuery("SELECT c FROM CheckInRecord c");
+        List<CheckInRecord> records = q.getResultList();
+        if (records.isEmpty()) {
+            return false;
+        } else {
+            for (CheckInRecord c : records) {
+                if ((c.getBookingID() +"").equals(booking.getId().toString())) {
+                    return true;
+                }
+            }
+            return false;
+
+        }
+
+    }
+    
     public void persist(Object object) {
         em.persist(object);
     }

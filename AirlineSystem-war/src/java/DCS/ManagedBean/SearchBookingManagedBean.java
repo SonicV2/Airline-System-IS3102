@@ -32,6 +32,7 @@ import javax.faces.event.ActionEvent;
 @SessionScoped
 @ManagedBean
 public class SearchBookingManagedBean implements Serializable {
+
     @EJB
     private BoardingPassSessionBeanLocal boardingPassSessionBean;
     @EJB
@@ -42,9 +43,6 @@ public class SearchBookingManagedBean implements Serializable {
 
     @EJB
     private PassengerNameRecordSessionBeanLocal passengerNameRecordSessionBean;
-    
-    
-    
 
     private String pnrNumber;
     private String passportNumber;
@@ -55,13 +53,13 @@ public class SearchBookingManagedBean implements Serializable {
     private String boardingTime;
     private String aircraftType;
     private String totalWeightAllowed;
-    
-    private boolean online=false;
+
+    private boolean online = false;
 
     public SearchBookingManagedBean() {
     }
 
-   public void getBookingOnline(ActionEvent event) {
+    public void getBookingOnline(ActionEvent event) {
         FacesMessage message = null;
         List<Booking> b = passengerNameRecordSessionBean.getBooking(pnrNumber, passportNumber);
 
@@ -75,11 +73,11 @@ public class SearchBookingManagedBean implements Serializable {
             setReqBooking(b.get(0));
             setCheckinSchedule(passengerNameRecordSessionBean.getCheckinSchedule(pnrNumber, passportNumber));
             calBoardingTime();
-            
+
             checkInRecordSessionBean.addBooking(reqBooking);
             boardingPassSessionBean.addBooking(reqBooking);
-            
-            this.online=true;
+
+            this.online = true;
             if (b.size() > 1) {
                 for (int i = 1; i < b.size(); i++) {
                     restSchedules.add(b.get(i).getSeatAvail().getSchedule());
@@ -87,14 +85,7 @@ public class SearchBookingManagedBean implements Serializable {
             }
         }
     }
-    
-    
-    
-    
-    
-    
-    
-    
+
     public void getBooking(ActionEvent event) {
         FacesMessage message = null;
         List<Booking> b = passengerNameRecordSessionBean.getBooking(pnrNumber, passportNumber);
@@ -109,7 +100,7 @@ public class SearchBookingManagedBean implements Serializable {
             setReqBooking(b.get(0));
             setCheckinSchedule(passengerNameRecordSessionBean.getCheckinSchedule(pnrNumber, passportNumber));
             calBoardingTime();
-            
+
             checkInRecordSessionBean.addBooking(reqBooking);
             boardingPassSessionBean.addBooking(reqBooking);
             if (b.size() > 1) {
@@ -119,30 +110,96 @@ public class SearchBookingManagedBean implements Serializable {
             }
         }
     }
-    
-
 
     public String retrieveFlightType() {
         retrieveClass();
         retrieveNumberofBaggageAllowed();
         aircraftType = checkinSchedule.getFlight().getAircraftType().getId();
-
+         FacesMessage message = null;
+         
+        if(reqBooking.getBookingStatus().equals("checkin")){
+             message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "This passenger has already checked in", "");
+             FacesContext.getCurrentInstance().addMessage(null, message);
+             return "SearchBooking.xhtml";
+        }else{
+        
+        
         if (checkinSchedule.getFlight().getAircraftType().getId().equals("Airbus A330-300")) {
+            setPnrNumber("");
+            setPassportNumber("");
             return "A330_300.xhtml";
         } else if (checkinSchedule.getFlight().getAircraftType().getId().equals("Airbus A380-800")) {
+            setPnrNumber("");
+            setPassportNumber("");
             return "A380_800.xhtml";
         } else if (checkinSchedule.getFlight().getAircraftType().getId().equals("Boeing 777-200")) {
+            setPnrNumber("");
+            setPassportNumber("");
             return "B777_200.xhtml";
         } else if (checkinSchedule.getFlight().getAircraftType().getId().equals("Boeing 777-200ER")) {
+            setPnrNumber("");
+            setPassportNumber("");
             return "B777_200ER.xhtml";
         } else if (checkinSchedule.getFlight().getAircraftType().getId().equals("Boeing 777-300")) {
+            setPnrNumber("");
+            setPassportNumber("");
             return "B777_300.xhtml";
         } else if (checkinSchedule.getFlight().getAircraftType().getId().equals("Boeing 777-300ER")) {
+            setPnrNumber("");
+            setPassportNumber("");
             return "B777_300ER.xhtml";
         } else {
+            setPnrNumber("");
+            setPassportNumber("");
             return "/Login.xhtml";
         }
 
+    }
+    }
+    
+    
+    public String retrieveFlightTypeOnline() {
+        retrieveClass();
+        retrieveNumberofBaggageAllowed();
+        aircraftType = checkinSchedule.getFlight().getAircraftType().getId();
+        FacesMessage message = null;
+         
+        if(reqBooking.getBookingStatus().equals("checkin")){
+             message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "This passenger has already checked in", "");
+             FacesContext.getCurrentInstance().addMessage(null, message);
+             return "/Distribution/MerlionAirlines.xhtml";
+        }else{
+       
+        if (checkinSchedule.getFlight().getAircraftType().getId().equals("Airbus A330-300")) {
+            setPnrNumber("");
+            setPassportNumber("");
+            return "A330_300O.xhtml";
+        } else if (checkinSchedule.getFlight().getAircraftType().getId().equals("Airbus A380-800")) {
+            setPnrNumber("");
+            setPassportNumber("");
+            return "A380_800O.xhtml";
+        } else if (checkinSchedule.getFlight().getAircraftType().getId().equals("Boeing 777-200")) {
+            setPnrNumber("");
+            setPassportNumber("");
+            return "B777_200O.xhtml";
+        } else if (checkinSchedule.getFlight().getAircraftType().getId().equals("Boeing 777-200ER")) {
+            setPnrNumber("");
+            setPassportNumber("");
+            return "B777_200ERO.xhtml";
+        } else if (checkinSchedule.getFlight().getAircraftType().getId().equals("Boeing 777-300")) {
+            setPnrNumber("");
+            setPassportNumber("");
+            return "B777_300O.xhtml";
+        } else if (checkinSchedule.getFlight().getAircraftType().getId().equals("Boeing 777-300ER")) {
+            setPnrNumber("");
+            setPassportNumber("");
+            return "B777_300ERO.xhtml";
+        } else {
+            setPnrNumber("");
+            setPassportNumber("");
+            return "/Login.xhtml";
+        }
+        }
     }
 
     public void calBoardingTime() {
@@ -162,6 +219,12 @@ public class SearchBookingManagedBean implements Serializable {
 
     public void retrieveClass() {
         setServiceClass(passengerNameRecordSessionBean.retrieveClass(reqBooking.getClassCode()));
+    }
+    
+    public void addMiles(ActionEvent event){
+        passengerNameRecordSessionBean.addMiles(reqBooking);
+         setCheckinSchedule(null);
+         setRestSchedules(null);
     }
 
     /**
@@ -291,7 +354,5 @@ public class SearchBookingManagedBean implements Serializable {
     public void setOnline(boolean online) {
         this.online = online;
     }
-    
-    
 
 }

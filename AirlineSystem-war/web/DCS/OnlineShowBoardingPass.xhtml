@@ -42,7 +42,7 @@
         <!--//pop-up-->	
         <h:outputStylesheet library ="css"  name="flightdisplay2.css" />
         <p:growl id="growl" sticky="true" showDetail="true"/>
-        <title>Search Booking </title>
+        <title>Boarding Pass Generation</title>
     </h:head>
     <h:body>
         <ui:fragment rendered ="#{customerManagedBean.isCustomerLoggedOn}">
@@ -58,51 +58,74 @@
 
 
                 <div class="about-info">
-                    <h2>Here is your flight and traveller details</h2>
+                    <h2>Here's your boarding pass: </h2>
                 </div>
-                <h:form>
                 <div class="faqs-top-grids terms-grids">
+                    <div class="flight-list-v2">
 
-            <h:outputLabel value="Flight Number: " />
-            <h:outputText value="#{searchBookingManagedBean.reqBooking.flightNo}" />
-            <br /> <br />
-                      
-            <h:outputLabel value="PNR Number: " />
-            <h:outputText value="#{searchBookingManagedBean.reqBooking.pnr.pnrID}" />
-            <br /> <br />
-            
-            <h:outputLabel value="Passport Number: " />
-            <h:outputText value="#{searchBookingManagedBean.reqBooking.passportNumber}" />
-            <br /><br />
-            
-             <h:outputLabel value="Traveler: " />
-            <h:outputText  value="#{searchBookingManagedBean.reqBooking.travellerTitle} #{searchBookingManagedBean.reqBooking.travellerFristName} #{searchBookingManagedBean.reqBooking.travellerLastName} " />
-            <br /> <br />
+                        <div class="flight-list-main">	
+                            <div class="col-md-2 col-sm-2 text-center airline">
+                                <br></br>
+                                <h4 style='color:#26c6da;'>Merlion Airlines</h4>
 
-            <h:outputLabel value="Nationality: " />
-            <h:outputText  value="#{searchBookingManagedBean.reqBooking.nationality}" />
-            <br /> <br />
-            
-            <h:outputLabel value="Class Code: " />
-            <h:outputText  value="#{searchBookingManagedBean.reqBooking.classCode}" />
-            <br /> <br />
-            
-            <h:outputLabel value="Food Selection: " />
-            <h:outputText  value="#{searchBookingManagedBean.reqBooking.foodSelection}" />
-            <br /> <br />
-                                 
+                                <h5>#{baggageManagedBean.boardingpass.flightNumber}</h5>
+                            </div>
+                            <div class="col-md-3 col-sm-3 departure">
 
-        <div class="text-center">
+                                <h3><i class="fa fa-plane"></i> From : #{baggageManagedBean.boardingpass.departCity} </h3>
+                                <h3><i class="fa fa-plane"></i> To : #{baggageManagedBean.boardingpass.arrivalCity} </h3>
+                                <br></br>
 
-            
-            <h:commandButton class="btn btn-outline btn-success" value="Proceed" action="#{searchBookingManagedBean.retrieveFlightTypeOnline()}" />
-        
-  
-        </div>
-                    <div class="clearfix"> </div>
+                            </div>
+
+
+                            <div class="col-md-4 col-sm-4 stop-duration">
+                                <div class="duration text-center">
+                                    <h5><i class="fa fa-clock-o"></i> Departure Time: <h:outputText value="#{baggageManagedBean.boardingpass.departTime}">
+                                            <f:convertDateTime pattern ="hh:mm a"/>
+                                        </h:outputText></h5>
+                                    <h5><i class="fa fa-calendar-check-o"></i> Departure Date: <h:outputText value="#{baggageManagedBean.boardingpass.departTime}">
+                                            <f:convertDateTime pattern ="EEE, MMM d, yyyy"/>
+                                        </h:outputText></h5>
+                                    <h5><i class="fa fa-clock-o"></i> Boarding Time: <h:outputText value="#{baggageManagedBean.boardingpass.departTime}">
+                                            <f:convertDateTime pattern ="hh:mm a"/>
+                                        </h:outputText></h5>
+
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-3 destination">
+                                <h3><i class="fa fa-user"></i> #{baggageManagedBean.boardingpass.firstname} #{baggageManagedBean.boardingpass.lastname}</h3>
+                                <br></br>
+                                <h4><i class="fa fa-fighter-jet"></i> 
+                                    Seat Number: #{baggageManagedBean.boardingpass.seat}
+                                </h4>
+                                <h5 class="bold"><i class="fa fa-external-link-square"></i> 
+                                    Gate Number: #{baggageManagedBean.boardingpass.gate}
+                                </h5>
+
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="flight-list-footer">
+                            <div class="col-md-6 col-sm-6 col-xs-6 sm-invisible">
+                                <span><i class="fa fa-plane"></i> #{baggageManagedBean.boardingpass.classtype}</span>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <div class="text-center">
+                        <br></br>
+                        <br></br>
+                        <h:form>
+
+                            <h:commandButton class="btn btn-outline btn-success" value="Print Boarding Pass" actionListener="#{searchBookingManagedBean.addMiles}" action="SearchBooking"/>
+                            <br/>
+
+                        </h:form>
+                    </div>
                 </div>
-                </h:form>
-                
             </div>
         </div>
         <ui:include src="/Distribution/MerlionAirlinesFooter.xhtml"/>
@@ -123,7 +146,6 @@
                 });
             });
         </script>
-
 
     </h:body>
 </html>

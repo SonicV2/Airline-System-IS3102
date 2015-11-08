@@ -27,8 +27,7 @@ public class BaggageSessionBean implements BaggageSessionBeanLocal {
     private EntityManager em;
 
     private static int tagNumber = 12345;
-    
-    
+
     @Override
     public void addExtraBaggage(Booking booking, double baggageWeight, double extra) {
         List<Baggage> baggages = booking.getBaggages();
@@ -41,16 +40,16 @@ public class BaggageSessionBean implements BaggageSessionBeanLocal {
             booking.setBaggages(baggages);
 
             baggage.setBooking(booking);
-            baggage.setBaggageStatus(extra+"");
+            baggage.setBaggageStatus(extra + "");
 
             //em.merge(booking);
             BaggageTag bagTag = new BaggageTag();
             String arrivalCity = findArrivalCityIATA(booking);
-            generateTagNumber();
 
-            bagTag.create(tagNumber + "", booking.getFlightNo(), booking.getFlightDate(), arrivalCity, booking.getServiceType());
+            bagTag.create(generateTagNumber(), booking.getFlightNo(), booking.getFlightDate(), arrivalCity, booking.getServiceType());
             baggage.setBaggageTag(bagTag);
             baggage.setBaggageStatus("Confrimed(Overweight)");
+            bagTag.setBagStatus("Confrimed(Overweight)");
             em.merge(baggage);
         } else {
             Baggage baggage = new Baggage();
@@ -60,15 +59,15 @@ public class BaggageSessionBean implements BaggageSessionBeanLocal {
             booking.setBaggages(baggages);
 
             baggage.setBooking(booking);
-            baggage.setBaggageStatus(extra+"");
-            
+            baggage.setBaggageStatus(extra + "");
+
             BaggageTag bagTag = new BaggageTag();
             String arrivalCity = findArrivalCityIATA(booking);
-            generateTagNumber();
 
-            bagTag.create(tagNumber + "", booking.getFlightNo(), booking.getFlightDate(), arrivalCity, booking.getServiceType());
+            bagTag.create(generateTagNumber(), booking.getFlightNo(), booking.getFlightDate(), arrivalCity, booking.getServiceType());
             baggage.setBaggageTag(bagTag);
-             baggage.setBaggageStatus("Confrimed(Overweight)");
+            baggage.setBaggageStatus("Confrimed(Overweight)");
+            bagTag.setBagStatus("Confrimed(Overweight)");
             em.merge(baggage);
             em.flush();
 
@@ -99,11 +98,11 @@ public class BaggageSessionBean implements BaggageSessionBeanLocal {
             //em.merge(booking);
             BaggageTag bagTag = new BaggageTag();
             String arrivalCity = findArrivalCityIATA(booking);
-            generateTagNumber();
 
-            bagTag.create(tagNumber + "", booking.getFlightNo(), booking.getFlightDate(), arrivalCity, booking.getServiceType());
+            bagTag.create(generateTagNumber(), booking.getFlightNo(), booking.getFlightDate(), arrivalCity, booking.getServiceType());
             baggage.setBaggageTag(bagTag);
             baggage.setBaggageStatus("Confrimed");
+            bagTag.setBagStatus("Confirmed");
             em.merge(baggage);
             return "good";
         } else {
@@ -117,11 +116,11 @@ public class BaggageSessionBean implements BaggageSessionBeanLocal {
 
             BaggageTag bagTag = new BaggageTag();
             String arrivalCity = findArrivalCityIATA(booking);
-            generateTagNumber();
 
-            bagTag.create(tagNumber + "", booking.getFlightNo(), booking.getFlightDate(), arrivalCity, booking.getServiceType());
+            bagTag.create(generateTagNumber(), booking.getFlightNo(), booking.getFlightDate(), arrivalCity, booking.getServiceType());
             baggage.setBaggageTag(bagTag);
             baggage.setBaggageStatus("Confrimed");
+            bagTag.setBagStatus("Confirmed");
             em.merge(baggage);
             em.flush();
             return "good";
@@ -295,41 +294,33 @@ public class BaggageSessionBean implements BaggageSessionBeanLocal {
 
     public String generateTagNumber() {
         String leadDigits = "8518";
-        tagNumber += 1;
-//        String sNumber = leadDigits + tagNumber + "";
-//        if (seqNumberCheck(sNumber)) {
-//            
-//        }else{
-//        
-//            tagNumber+=1;
-//            
-//        }
-        return (leadDigits + tagNumber + "");
+        //tagNumber += 1;
+        String number = createRandomNumber(6);
+        return (leadDigits + number);
     }
 
-    public boolean seqNumberCheck(String sNumber) {
-        Query q = em.createQuery("SELECT b FROM BaggageTag b");
-        List<BaggageTag> tags = q.getResultList();
+    public String createRandomNumber(long len) {
 
-        for (BaggageTag b : tags) {
-            if (b.getBaggageTagSeqNumber().equals(sNumber)) {
-                return false;
-            }
-        }
-        return true;
+        long tLen = (long) Math.pow(10, len - 1) * 9;
+
+        long number = (long) (Math.random() * tLen) + (long) Math.pow(10, len - 1) * 1;
+
+        String tVal = number + "";
+
+        return tVal;
     }
+
+   
 
     @Override
     public int retrieveNumberOfBaggageAllowed(String classcode) {
-
-        System.out.println("DFFFFFFFF: " + classcode);
 
         Query q = em.createQuery("SELECT b FROM BookingClass b");
 
         List<BookingClass> classes = q.getResultList();
         for (BookingClass b : classes) {
             if (b.getClasscode().equals(classcode)) {
-                System.out.println("DFFFFFFFF: " + b.getBaggage());
+
                 return b.getBaggage();
 
             }

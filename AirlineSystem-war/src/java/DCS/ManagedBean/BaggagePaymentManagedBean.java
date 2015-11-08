@@ -45,6 +45,7 @@ public class BaggagePaymentManagedBean implements Serializable {
     private Booking booking;
     private List<Baggage> baggages;
 
+    private double totalCosts; // baggage + upgrade if necessary
 
     public String makePayment() {
         paymentDate = new Date();
@@ -137,6 +138,20 @@ public class BaggagePaymentManagedBean implements Serializable {
      */
     public void setTemp(double temp) {
         this.temp = temp;
+    }
+
+    /**
+     * @return the totalCosts
+     */
+    public double getTotalCosts() {
+        return totalCosts;
+    }
+
+    /**
+     * @param totalCosts the totalCosts to set
+     */
+    public void setTotalCosts(double totalCosts) {
+        this.totalCosts = totalCosts;
     }
     
 

@@ -66,6 +66,7 @@ public class SeatSessionBean implements SeatSessionBeanLocal {
         return results;
     }
     
+    
     @Override
     public void inputChosenE(Schedule schedule,String seat){
         List<String> seats=schedule.getSelectedSeatsE();
@@ -90,9 +91,8 @@ public class SeatSessionBean implements SeatSessionBeanLocal {
         }else{
             seats.add(seat);
             
-
             schedule.setSelectedSeatsB(seats);
-            em.persist(schedule);
+            em.merge(schedule);
         }
     }
     @Override
@@ -105,7 +105,7 @@ public class SeatSessionBean implements SeatSessionBeanLocal {
             seats.add(seat);
 
             schedule.setSelectedSeatsF(seats);
-            em.persist(schedule);
+            em.merge(schedule);
         }
     }
 
