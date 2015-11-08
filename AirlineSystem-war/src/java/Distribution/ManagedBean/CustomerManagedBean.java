@@ -116,7 +116,7 @@ public class CustomerManagedBean {
             FacesContext.getCurrentInstance().addMessage(null, message);
             return "MerlionAirlinesSignUp";
         } else {
-            setFeedbackMessage(customerSessionBean.addCustomer(customerFirstName, customerLastName, customerHpNumber, customerHpNumber, customerEmail, customerPassword, customerAddress, customerGender, customerDOB, title, nationality, passportNumber));
+            setFeedbackMessage(customerSessionBean.addCustomer(customerFirstName, customerLastName, customerHpNumber, customerHomeNumber, customerEmail, customerPassword, customerAddress, customerGender, customerDOB, title, nationality, passportNumber));
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, feedbackMessage, "");
             FacesContext.getCurrentInstance().addMessage(null, message);
             clearAll();
