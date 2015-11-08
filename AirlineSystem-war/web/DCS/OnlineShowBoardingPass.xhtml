@@ -1,0 +1,152 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+
+    <h:head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <!-- Custom Theme files -->
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <h:outputStylesheet library ="css"  name="bootstrap.css" />
+        <h:outputStylesheet library ="css"  name="styleMerlion.css" />
+        <h:outputStylesheet library ="css"  name="JFFormStyle.css" />
+        <h:outputStylesheet library ="css"  name="flexslider.css" />
+        <h:outputScript library="js" name="jQuery/jQuery-2.1.4.min.js" />
+        <h:outputScript library="js" name="modernizr.custom.js" /> 
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
+
+
+        <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+        <!-- //Custom Theme files -->
+
+        <!-- fonts -->
+        <link href='//fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,700,500italic,700italic,900,900italic' rel='stylesheet' type='text/css'></link>
+        <link href='//fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'></link>
+        <!-- //fonts -->	
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('#horizontalTab').easyResponsiveTabs({
+                    type: 'default', //Types: default, vertical, accordion           
+                    width: 'auto', //auto or any width like 600px
+                    fit: true   // 100% fit in a container
+                });
+            });
+        </script>
+        <!--pop-up-->
+        <h:outputScript library="js" name="menu_jquery.js" /> 
+        <!--//pop-up-->	
+        <h:outputStylesheet library ="css"  name="flightdisplay2.css" />
+        <p:growl id="growl" sticky="true" showDetail="true"/>
+        <title>Boarding Pass Generation</title>
+    </h:head>
+    <h:body>
+        <ui:fragment rendered ="#{customerManagedBean.isCustomerLoggedOn}">
+            <ui:include src="/Distribution/CustomerDashboardHeader.xhtml"/>
+        </ui:fragment>
+        <ui:fragment rendered ="#{!customerManagedBean.isCustomerLoggedOn}">
+            <ui:include src="/Distribution/MerlionAirlinesHeader.xhtml"/>
+        </ui:fragment>
+
+        <div class="banner-bottom">
+            <!-- container -->
+            <div class="container">
+
+
+                <div class="about-info">
+                    <h2>Here's your boarding pass: </h2>
+                </div>
+                <div class="faqs-top-grids terms-grids">
+                    <div class="flight-list-v2">
+
+                        <div class="flight-list-main">	
+                            <div class="col-md-2 col-sm-2 text-center airline">
+                                <br></br>
+                                <h4 style='color:#26c6da;'>Merlion Airlines</h4>
+
+                                <h5>#{baggageManagedBean.boardingpass.flightNumber}</h5>
+                            </div>
+                            <div class="col-md-3 col-sm-3 departure">
+
+                                <h3><i class="fa fa-plane"></i> From : #{baggageManagedBean.boardingpass.departCity} </h3>
+                                <h3><i class="fa fa-plane"></i> To : #{baggageManagedBean.boardingpass.arrivalCity} </h3>
+                                <br></br>
+
+                            </div>
+
+
+                            <div class="col-md-4 col-sm-4 stop-duration">
+                                <div class="duration text-center">
+                                    <h5><i class="fa fa-clock-o"></i> Departure Time: <h:outputText value="#{baggageManagedBean.boardingpass.departTime}">
+                                            <f:convertDateTime pattern ="hh:mm a"/>
+                                        </h:outputText></h5>
+                                    <h5><i class="fa fa-calendar-check-o"></i> Departure Date: <h:outputText value="#{baggageManagedBean.boardingpass.departTime}">
+                                            <f:convertDateTime pattern ="EEE, MMM d, yyyy"/>
+                                        </h:outputText></h5>
+                                    <h5><i class="fa fa-clock-o"></i> Boarding Time: <h:outputText value="#{baggageManagedBean.boardingpass.departTime}">
+                                            <f:convertDateTime pattern ="hh:mm a"/>
+                                        </h:outputText></h5>
+
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-3 destination">
+                                <h3><i class="fa fa-user"></i> #{baggageManagedBean.boardingpass.firstname} #{baggageManagedBean.boardingpass.lastname}</h3>
+                                <br></br>
+                                <h4><i class="fa fa-fighter-jet"></i> 
+                                    Seat Number: #{baggageManagedBean.boardingpass.seat}
+                                </h4>
+                                <h5 class="bold"><i class="fa fa-external-link-square"></i> 
+                                    Gate Number: #{baggageManagedBean.boardingpass.gate}
+                                </h5>
+
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="flight-list-footer">
+                            <div class="col-md-6 col-sm-6 col-xs-6 sm-invisible">
+                                <span><i class="fa fa-plane"></i> #{baggageManagedBean.boardingpass.classtype}</span>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <div class="text-center">
+                        <br></br>
+                        <br></br>
+                        <h:form>
+
+                            <h:commandButton class="btn btn-outline btn-success" value="Print Boarding Pass" actionListener="#{searchBookingManagedBean.addMiles}" action="SearchBooking"/>
+                            <br/>
+
+                        </h:form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <ui:include src="/Distribution/MerlionAirlinesFooter.xhtml"/>
+        <h:outputScript library="js" name="jquery.flexslider.js"/> 
+        <h:outputScript library="js" name="easyResponsiveTabs.js" /> 
+        <h:outputScript library="js" name="scriptMerlion.js"></h:outputScript>
+
+        <script type="text/javascript">
+            $(function () {
+                SyntaxHighlighter.all();
+            });
+            $(window).load(function () {
+                $('.flexslider').flexslider({
+                    animation: "slide",
+                    start: function (slider) {
+                        $('body').removeClass('loading');
+                    }
+                });
+            });
+        </script>
+
+    </h:body>
+</html>
+

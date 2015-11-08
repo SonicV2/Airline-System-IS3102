@@ -1,12 +1,18 @@
 package DCS.ManagedBean;
 
 import APS.Entity.Schedule;
-import CI.Managedbean.LoginManagedBean;
+import DCS.Session.BaggageSessionBeanLocal;
 import DCS.Session.BoardingPassSessionBeanLocal;
 import DCS.Session.CheckInRecordSessionBeanLocal;
+import DCS.Session.PassengerNameRecordSessionBeanLocal;
 import DCS.Session.SeatSessionBeanLocal;
+import Distribution.ManagedBean.MARSManagedBean;
+import Distribution.Session.DistributionSessionBeanLocal;
 import Inventory.Entity.Booking;
+import Inventory.Session.PricingSessionBeanLocal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -16,6 +22,7 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 
 /**
@@ -26,6 +33,18 @@ import javax.inject.Named;
 @ManagedBean
 @RequestScoped
 public class SeatManagedBean {
+
+    @EJB
+    private DistributionSessionBeanLocal distributionSessionBean;
+
+    @EJB
+    private PricingSessionBeanLocal pricingSessionBean;
+
+    @EJB
+    private PassengerNameRecordSessionBeanLocal passengerNameRecordSessionBean;
+    @EJB
+    private BaggageSessionBeanLocal baggageSessionBean;
+
     @EJB
     private BoardingPassSessionBeanLocal boardingPassSessionBean;
     @EJB
@@ -33,12 +52,16 @@ public class SeatManagedBean {
 
     @EJB
     private SeatSessionBeanLocal seatSessionBean;
-    
-    
 
     @ManagedProperty(value = "#{searchBookingManagedBean}")
     private SearchBookingManagedBean searchBookingManagedBean;
-    
+
+    @ManagedProperty(value = "#{baggageManagedBean}")
+    private BaggageManagedBean baggageManagedBean;
+
+    @ManagedProperty(value = "#{mARSManagedBean}")
+    private MARSManagedBean mARSManagedBean;
+
     private Booking booking;
 
     private List<String> A330seatArrange = new ArrayList<String>();
@@ -54,15 +77,42 @@ public class SeatManagedBean {
     FacesMessage message = null;
 
     private Schedule schedule = new Schedule(); // get the current schedule
-    
+
     private int Favail; // number of firstclass available for booking
     private int Bavail;
     private int Eavail;
-    
+
+    private int Fbooked;
+    private int Bbooked;
+    private int Ebooked;
+
+    private int upgrade;  //default=0 upgrade=1 paid upgrade = 2
+
+    private String selectedPaidUpgradeClass = "Economy Class";
+    private List<String> bookingClassLists;
+
+    private String totalWeightAllowed;
+
+    private double upgradeCosts;
+
+    private String upgradeCostsDB;
+
+    private List<Schedule> nextAvailSchedules = new ArrayList<Schedule>();
+    ;
+
+    private List<Schedule> flightSchedules; // get available schedules from MARS
+
+    private String selectedSchedule; // change flight schedule
+
     @PostConstruct
     public void init() {
+        bookingClassLists = new ArrayList<String>();
+        bookingClassLists.add("Economy Class");
+        bookingClassLists.add("Business Class");
+        bookingClassLists.add("First Class");
 
-        booking=searchBookingManagedBean.getReqBooking();
+        upgrade = 0;
+        booking = searchBookingManagedBean.getReqBooking();
         schedule = searchBookingManagedBean.getCheckinSchedule();
         setOccupied(seatSessionBean.retrieveOccupiedSeats(searchBookingManagedBean.getCheckinSchedule()));
         if (occupied.isEmpty()) {
@@ -75,31 +125,328 @@ public class SeatManagedBean {
 
         if (getAircraftType().equals("Airbus A330-300")) {
             addSeatA330();
-            Favail=0;
-            Bavail=30-schedule.getSelectedSeatsB().size();
-            Eavail=255-schedule.getSelectedSeatsE().size();
+            Favail = 0;
+            Bavail = 30 - schedule.getSelectedSeatsB().size();
+            Eavail = 255 - schedule.getSelectedSeatsE().size();
         } else if (getAircraftType().equals("Boeing 777-200")) {
             addSeatB777_200();
-             Favail=0;
-            Bavail=38-schedule.getSelectedSeatsB().size();
-            Eavail=228-schedule.getSelectedSeatsE().size();
+            Favail = 0;
+            Bavail = 38 - schedule.getSelectedSeatsB().size();
+            Eavail = 228 - schedule.getSelectedSeatsE().size();
         } else if (getAircraftType().equals("Boeing 777-200ER")) {
             addSeatB777_200ER();
-            Favail=0;
-            Bavail=30-schedule.getSelectedSeatsB().size();
-            Eavail=255-schedule.getSelectedSeatsE().size();
+            Favail = 0;
+            Bavail = 30 - schedule.getSelectedSeatsB().size();
+            Eavail = 255 - schedule.getSelectedSeatsE().size();
         } else if (getAircraftType().equals("Boeing 777-300")) {
             addSeatB777_300();
-            Favail=8-schedule.getSelectedSeatsF().size();
-            Bavail=50-schedule.getSelectedSeatsB().size();
-            Eavail=226-schedule.getSelectedSeatsE().size();
+            Favail = 8 - schedule.getSelectedSeatsF().size();
+            Bavail = 50 - schedule.getSelectedSeatsB().size();
+            Eavail = 226 - schedule.getSelectedSeatsE().size();
         } else if (getAircraftType().equals("Boeing 777-300ER")) {
             addSeatB777_300ER();
-             Favail=4-schedule.getSelectedSeatsF().size();
-            Bavail=48-schedule.getSelectedSeatsB().size();
-            Eavail=232-schedule.getSelectedSeatsE().size();
+            Favail = 4 - schedule.getSelectedSeatsF().size();
+            Bavail = 48 - schedule.getSelectedSeatsB().size();
+            Eavail = 232 - schedule.getSelectedSeatsE().size();
         }
 
+        retriveBookedF();
+        changeFlight1();
+
+    }
+
+    public void retriveBookedF() {
+        Fbooked = booking.getSeatAvail().getFirstClassBooked();
+        Bbooked = booking.getSeatAvail().getBusinessBooked();
+        Ebooked = booking.getSeatAvail().getEconomyBasicBooked() + booking.getSeatAvail().getEconomyPremiumBooked()
+                + booking.getSeatAvail().getEconomySaverBooked();
+    }
+
+    public void upgradeClass(ActionEvent event) {   //free upgrade
+        if (getAircraftType().equals("Airbus A330-300")) {
+            if (Eavail == 0) {
+                if (Bavail != 0 && Bbooked < 30) {
+                    setClasstype("Business");
+                    upgrade = 1;
+                } else if (Favail != 0) {
+                    setClasstype("First Class");
+                    upgrade = 1;
+                }
+            } else {
+                message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Not eligible for free upgrade! ", "");
+                FacesContext.getCurrentInstance().addMessage(null, message);
+            }
+
+        } else if (getAircraftType().equals("Boeing 777-200")) {
+            if (Eavail == 0) {
+                if (Bavail != 0 && Bbooked < 38) {
+                    setClasstype("Business");
+                    upgrade = 1;
+                } else if (Favail != 0) {
+                    setClasstype("First Class");
+                    upgrade = 1;
+                }
+            } else {
+                message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Not eligible for free upgrade! ", "");
+                FacesContext.getCurrentInstance().addMessage(null, message);
+            }
+        } else if (getAircraftType().equals("Boeing 777-200ER")) {
+            if (Eavail == 0) {
+                if (Bavail != 0 && Bbooked < 30) {
+                    setClasstype("Business");
+                    upgrade = 1;
+                } else if (Favail != 0) {
+                    setClasstype("First Class");
+                    upgrade = 1;
+                }
+            } else {
+                message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Not eligible for free upgrade! ", "");
+                FacesContext.getCurrentInstance().addMessage(null, message);
+            }
+        } else if (getAircraftType().equals("Boeing 777-300")) {
+            if (Eavail == 0) {
+                if (Bavail != 0 && Bbooked < 50) {
+                    setClasstype("Business");
+                    upgrade = 1;
+                } else if (Favail != 0 && Fbooked < 8) {
+                    setClasstype("First Class");
+                    upgrade = 1;
+                }
+            } else {
+                message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Not eligible for free upgrade! ", "");
+                FacesContext.getCurrentInstance().addMessage(null, message);
+            }
+        } else if (getAircraftType().equals("Boeing 777-300ER")) {
+            if (Eavail == 0) {
+                if (Bavail != 0 && Bbooked < 48) {
+                    setClasstype("Business");
+                    upgrade = 1;
+                } else if (Favail != 0 && Fbooked < 4) {
+                    setClasstype("First Class");
+                    upgrade = 1;
+                }
+            } else {
+                message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Not eligible for free upgrade! ", "");
+                FacesContext.getCurrentInstance().addMessage(null, message);
+            }
+        }
+
+    }
+
+    public void paidUpgradeClass(ActionEvent event) {
+        if (getAircraftType().equals("Airbus A330-300")) {
+
+            if (selectedPaidUpgradeClass.contains("Economy")) {
+                message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Sorry, the selected class is not available for upgrade!", "");
+                return;
+            }
+            if (Bavail != 0 && Bbooked < 30 && selectedPaidUpgradeClass.contains("Business")) {
+                setClasstype("Business");
+                retrieveNumberofBaggageAllowed("D11");
+                passengerNameRecordSessionBean.changeClass(booking, "D11");
+                passengerNameRecordSessionBean.changeServiceClass(booking, "Business");
+
+                double price = pricingSessionBean.getPrice(pricingSessionBean.getClassCode(booking.getSeatAvail().getSchedule(), "Business", 1, false), booking.getSeatAvail().getSchedule());
+                upgradeCosts = price - booking.getPrice(); // need to replace dummy 900
+
+                upgrade = 2;
+                message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Additional Cost: " + upgradeCosts, "");
+            } else {
+                message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Sorry, the selected class is not available for upgrade!", "");
+
+            }
+            FacesContext.getCurrentInstance().addMessage(null, message);
+
+        } else if (getAircraftType().equals("Boeing 777-200")) {
+
+            if (Bavail != 0 && Bbooked < 38 && selectedPaidUpgradeClass.contains("Business")) {
+                setClasstype("Business");
+                retrieveNumberofBaggageAllowed("D11");
+                passengerNameRecordSessionBean.changeClass(booking, "D11");
+                passengerNameRecordSessionBean.changeServiceClass(booking, "Business");
+
+                double price = pricingSessionBean.getPrice(pricingSessionBean.getClassCode(booking.getSeatAvail().getSchedule(), "Business", 1, false), booking.getSeatAvail().getSchedule());
+                upgradeCosts = price - booking.getPrice();
+
+                upgrade = 2;
+
+                message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Additional Cost: " + upgradeCosts, "");
+            } else {
+                message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Sorry, the selected class is available for upgrade!", "");
+
+            }
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        } else if (getAircraftType().equals("Boeing 777-200ER")) {
+
+            if (Bavail != 0 && Bbooked < 30 && selectedPaidUpgradeClass.contains("Business")) {
+                setClasstype("Business");
+                retrieveNumberofBaggageAllowed("D11");
+                passengerNameRecordSessionBean.changeClass(booking, "D11");
+                passengerNameRecordSessionBean.changeServiceClass(booking, "Business");
+                double price = pricingSessionBean.getPrice(pricingSessionBean.getClassCode(booking.getSeatAvail().getSchedule(), "Business", 1, false), booking.getSeatAvail().getSchedule());
+                upgradeCosts = price - booking.getPrice();
+
+                upgrade = 2;
+
+                message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Additional Cost: " + upgradeCosts, "");
+            } else {
+                message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Sorry, the selected class is available for upgrade!", "");
+
+            }
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        } else if (getAircraftType().equals("Boeing 777-300")) {
+
+            if (Bavail != 0 && Bbooked < 50 && selectedPaidUpgradeClass.contains("Business")) {
+                setClasstype("Business");
+                retrieveNumberofBaggageAllowed("D11");
+                passengerNameRecordSessionBean.changeClass(booking, "D11");
+                passengerNameRecordSessionBean.changeServiceClass(booking, "Business");
+                double price = pricingSessionBean.getPrice(pricingSessionBean.getClassCode(booking.getSeatAvail().getSchedule(), "Business", 1, false), booking.getSeatAvail().getSchedule());
+                upgradeCosts = price - booking.getPrice();
+
+                upgrade = 2;
+
+                message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Additional Cost: " + upgradeCosts, "");
+            } else if (Favail != 0 && Fbooked < 8 && selectedPaidUpgradeClass.contains("First")) {
+                setClasstype("First Class");
+                retrieveNumberofBaggageAllowed("E11");
+                passengerNameRecordSessionBean.changeClass(booking, "E11");
+                passengerNameRecordSessionBean.changeServiceClass(booking, "First Class");
+                double price = pricingSessionBean.getPrice(pricingSessionBean.getClassCode(booking.getSeatAvail().getSchedule(), "First Class", 1, false), booking.getSeatAvail().getSchedule());
+                upgradeCosts = price - booking.getPrice();
+
+                upgrade = 2;
+
+                message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Additional Cost: " + upgradeCosts, "");
+            } else {
+                message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Sorry, the selected class is available for upgrade!", "");
+
+            }
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        } else if (getAircraftType().equals("Boeing 777-300ER")) {
+
+            if (Bavail != 0 && Bbooked < 48 && selectedPaidUpgradeClass.contains("Business")) {
+                setClasstype("Business");
+                retrieveNumberofBaggageAllowed("D11");
+                passengerNameRecordSessionBean.changeClass(booking, "D11");
+                passengerNameRecordSessionBean.changeServiceClass(booking, "Business");
+                double price = pricingSessionBean.getPrice(pricingSessionBean.getClassCode(booking.getSeatAvail().getSchedule(), "Business", 1, false), booking.getSeatAvail().getSchedule());
+                upgradeCosts = price - booking.getPrice();
+
+                upgrade = 2;
+
+                message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Additional Cost: " + upgradeCosts, "");
+            } else if (Favail != 0 && Fbooked < 4 && selectedPaidUpgradeClass.contains("First")) {
+                setClasstype("First Class");
+                retrieveNumberofBaggageAllowed("E11");
+                passengerNameRecordSessionBean.changeClass(booking, "E11");
+                passengerNameRecordSessionBean.changeServiceClass(booking, "First Class");
+                double price = pricingSessionBean.getPrice(pricingSessionBean.getClassCode(booking.getSeatAvail().getSchedule(), "First Class", 1, false), booking.getSeatAvail().getSchedule());
+                upgradeCosts = price - booking.getPrice();
+
+                upgrade = 2;
+
+                message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Additional Cost: " + upgradeCosts, "");
+            } else {
+                message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Sorry, the selected class is available for upgrade!", "");
+
+            }
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        }
+
+    }
+
+    public void changeFlight(ActionEvent event) {
+        Date date = new Date();
+        Date tmr = new Date(date.getTime() + 1000 * 60 * 60 * 24);
+
+        if (getAircraftType().equals("Airbus A330-300")) {
+//            if (Eavail == 0 && Bbooked == 30) {
+            flightSchedules = distributionSessionBean.retrieveDirectFlightsForDate(booking.getSeatAvail().getSchedule().getFlight().getRoute().getOriginIATA(), booking.getSeatAvail().getSchedule().getFlight().getRoute().getDestinationIATA(), date, booking.getServiceType(), 1, 0);
+            List<Schedule> temps = distributionSessionBean.retrieveDirectFlightsForDate(booking.getSeatAvail().getSchedule().getFlight().getRoute().getOriginIATA(), booking.getSeatAvail().getSchedule().getFlight().getRoute().getDestinationIATA(), tmr, booking.getServiceType(), 1, 0);
+            for (Schedule s : temps) {
+                flightSchedules.add(s);
+            }
+
+            for (Schedule s : flightSchedules) {
+
+                String formattedDate1 = new SimpleDateFormat("HH:mm dd/MM/yyyy").format(s.getStartDate());
+                String formattedDate2 = new SimpleDateFormat("HH:mm dd/MM/yyyy").format(date);
+
+                if (checkTime(formattedDate1, formattedDate2) < 0) {
+                    nextAvailSchedules.add(s);
+                }
+            }
+
+//            } else {
+//                message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Not eligible for free change flight! Please select seat from economy class", "");
+//                FacesContext.getCurrentInstance().addMessage(null, message);
+//            }
+        } else if (getAircraftType().equals("Boeing 777-200")) {
+            if (Eavail == 0) {
+                if (Bavail != 0 && Bbooked < 38) {
+                    setClasstype("Business");
+                    upgrade = 1;
+                } else if (Favail != 0) {
+                    setClasstype("First Class");
+                    upgrade = 1;
+                }
+            } else {
+                message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Not eligible for free upgrade! Please select seat from economy class", "");
+                FacesContext.getCurrentInstance().addMessage(null, message);
+            }
+        } else if (getAircraftType().equals("Boeing 777-200ER")) {
+            if (Eavail == 0) {
+                if (Bavail != 0 && Bbooked < 30) {
+                    setClasstype("Business");
+                    upgrade = 1;
+                } else if (Favail != 0) {
+                    setClasstype("First Class");
+                    upgrade = 1;
+                }
+            } else {
+                message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Not eligible for free upgrade! Please select seat from economy class", "");
+                FacesContext.getCurrentInstance().addMessage(null, message);
+            }
+        } else if (getAircraftType().equals("Boeing 777-300")) {
+            if (Eavail == 0) {
+                if (Bavail != 0 && Bbooked < 50) {
+                    setClasstype("Business");
+                    upgrade = 1;
+                } else if (Favail != 0 && Fbooked < 8) {
+                    setClasstype("First Class");
+                    upgrade = 1;
+                }
+            } else {
+                message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Not eligible for free upgrade! Please select seat from economy class", "");
+                FacesContext.getCurrentInstance().addMessage(null, message);
+            }
+        } else if (getAircraftType().equals("Boeing 777-300ER")) {
+            if (Eavail == 0) {
+                if (Bavail != 0 && Bbooked < 48) {
+                    setClasstype("Business");
+                    upgrade = 1;
+                } else if (Favail != 0 && Fbooked < 4) {
+                    setClasstype("First Class");
+                    upgrade = 1;
+                }
+            } else {
+                message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Not eligible for free upgrade! Please select seat from economy class", "");
+                FacesContext.getCurrentInstance().addMessage(null, message);
+            }
+        }
+
+    }
+
+    public void changeExistBooking(ActionEvent event) {
+
+        passengerNameRecordSessionBean.changeExistBooking(booking, selectedSchedule);
+
+    }
+
+    public void retrieveNumberofBaggageAllowed(String classcode) {
+        int i = baggageSessionBean.retrieveNumberOfBaggageAllowed(classcode);
+        setTotalWeightAllowed((i * 15) + "");
     }
 
     public void addSeatA330() {
@@ -188,34 +535,35 @@ public class SeatManagedBean {
         }  // make sure you cannot choose seat that is already booked
 
         if (getA330seatArrange().contains("\uD83D\uDCBA" + getChoose().toUpperCase())) {
-            if (getClasstype().contains("Economy") && Integer.parseInt(getChoose().substring(1)) > 8) {
+            if (getClasstype().contains("Economy") && Integer.parseInt(getChoose().substring(1)) > 8 && Integer.parseInt(getChoose().substring(1)) < 41) {
                 getA330seatArrange().set(getA330seatArrange().indexOf("\uD83D\uDCBA" + getChoose().toUpperCase()), "\n" + "\u26D4" + "\n" + getChoose().toUpperCase());
 
                 getOccupied().add(getChoose().toUpperCase());
 
                 seatSessionBean.inputChosenE(schedule, choose.toUpperCase());
-                checkInRecordSessionBean.addSeat(booking, choose.toUpperCase());
+                checkInRecordSessionBean.addSeat(booking, choose.toUpperCase(), upgrade, upgradeCosts);
                 boardingPassSessionBean.addSeat(booking, choose.toUpperCase());
-                
-                if(!searchBookingManagedBean.isOnline()){
+
+                if (!searchBookingManagedBean.isOnline()) {
                     return "AddBaggage.xhtml";
-                }else{
-                    return "ShowBoardingPass.xhtml";
+                } else {
+                    return "OnlineShowBoardingPass.xhtml";
                 }
 
-            } else if (getClasstype().equals("Business") && Integer.parseInt(getChoose().substring(1)) < 9) {
+            } else if (getClasstype().equals("Business") && Integer.parseInt(getChoose().substring(1)) < 9 && Integer.parseInt(getChoose().substring(1)) > 0) {
                 getA330seatArrange().set(getA330seatArrange().indexOf("\uD83D\uDCBA" + getChoose().toUpperCase()), "\n" + "\u26D4" + "\n" + getChoose().toUpperCase());
 
                 getOccupied().add(getChoose().toUpperCase());
 
                 seatSessionBean.inputChosenB(schedule, choose.toUpperCase());
-                checkInRecordSessionBean.addSeat(booking, choose.toUpperCase());
+                checkInRecordSessionBean.addSeat(booking, choose.toUpperCase(), upgrade, upgradeCosts);
                 boardingPassSessionBean.addSeat(booking, choose.toUpperCase());
-                
-                if(!searchBookingManagedBean.isOnline()){
+
+                if (!searchBookingManagedBean.isOnline()) {
+
                     return "AddBaggage.xhtml";
-                }else{
-                    return "ShowBoardingPass.xhtml";
+                } else {
+                    return "OnlineShowBoardingPass.xhtml";
                 }
             } else {
                 message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "please choose the correct class", "");
@@ -224,9 +572,9 @@ public class SeatManagedBean {
             }
 
         } else {
-                return null;
+            return null;
         }
-        
+
     }
 
     //----------------------------------------------------------------------------------------------------   
@@ -319,19 +667,28 @@ public class SeatManagedBean {
                 getOccupied().add(getChoose().toUpperCase());
 
                 seatSessionBean.inputChosenE(schedule, choose.toUpperCase());
-                checkInRecordSessionBean.addSeat(booking, choose.toUpperCase());
+                checkInRecordSessionBean.addSeat(booking, choose.toUpperCase(), upgrade, upgradeCosts);
                 boardingPassSessionBean.addSeat(booking, choose.toUpperCase());
-                
-                return "AddBaggage.xhtml";
+
+                if (!searchBookingManagedBean.isOnline()) {
+                    return "AddBaggage.xhtml";
+                } else {
+                    return "OnlineShowBoardingPass.xhtml";
+                }
             } else if (getClasstype().equals("Business") && Integer.parseInt(getChoose().substring(1)) < 11) {
                 getB777_200seatArrange().set(getB777_200seatArrange().indexOf("\uD83D\uDCBA" + getChoose().toUpperCase()), "\n" + "\u26D4" + "\n" + getChoose().toUpperCase());
 
                 getOccupied().add(getChoose().toUpperCase());
 
                 seatSessionBean.inputChosenB(schedule, choose.toUpperCase());
-                checkInRecordSessionBean.addSeat(booking, choose.toUpperCase());
+                checkInRecordSessionBean.addSeat(booking, choose.toUpperCase(), upgrade, upgradeCosts);
                 boardingPassSessionBean.addSeat(booking, choose.toUpperCase());
-                return "AddBaggage.xhtml";
+
+                if (!searchBookingManagedBean.isOnline()) {
+                    return "AddBaggage.xhtml";
+                } else {
+                    return "OnlineShowBoardingPass.xhtml";
+                }
             } else {
                 message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "please choose the correct class", "");
                 FacesContext.getCurrentInstance().addMessage(null, message);
@@ -339,7 +696,7 @@ public class SeatManagedBean {
             }
 
         } else {
-                return null;
+            return null;
         }
 
     }
@@ -432,19 +789,29 @@ public class SeatManagedBean {
 
                 getOccupied().add(getChoose().toUpperCase());
                 seatSessionBean.inputChosenE(schedule, choose.toUpperCase());
-                checkInRecordSessionBean.addSeat(booking, choose.toUpperCase());
+                checkInRecordSessionBean.addSeat(booking, choose.toUpperCase(), upgrade, upgradeCosts);
                 boardingPassSessionBean.addSeat(booking, choose.toUpperCase());
-                return "AddBaggage.xhtml";
-                
+
+                if (!searchBookingManagedBean.isOnline()) {
+                    return "AddBaggage.xhtml";
+                } else {
+                    return "OnlineShowBoardingPass.xhtml";
+                }
+
             } else if (getClasstype().equals("Business") && Integer.parseInt(getChoose().substring(1)) < 9) {
                 getB777_200ERseatArrange().set(getB777_200ERseatArrange().indexOf("\uD83D\uDCBA" + getChoose().toUpperCase()), "\n" + "\u26D4" + "\n" + getChoose().toUpperCase());
 
                 getOccupied().add(getChoose().toUpperCase());
 
                 seatSessionBean.inputChosenB(schedule, choose.toUpperCase());
-                checkInRecordSessionBean.addSeat(booking, choose.toUpperCase());
+                checkInRecordSessionBean.addSeat(booking, choose.toUpperCase(), upgrade, upgradeCosts);
                 boardingPassSessionBean.addSeat(booking, choose.toUpperCase());
-                return "AddBaggage.xhtml";
+
+                if (!searchBookingManagedBean.isOnline()) {
+                    return "AddBaggage.xhtml";
+                } else {
+                    return "OnlineShowBoardingPass.xhtml";
+                }
             } else {
                 message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "please choose the correct class", "");
                 FacesContext.getCurrentInstance().addMessage(null, message);
@@ -452,7 +819,7 @@ public class SeatManagedBean {
             }
 
         } else {
-                return null;
+            return null;
         }
 
     }
@@ -566,29 +933,40 @@ public class SeatManagedBean {
 
                 getOccupied().add(getChoose().toUpperCase());
                 seatSessionBean.inputChosenE(schedule, choose.toUpperCase());
-                checkInRecordSessionBean.addSeat(booking, choose.toUpperCase());
+                checkInRecordSessionBean.addSeat(booking, choose.toUpperCase(), upgrade, upgradeCosts);
                 boardingPassSessionBean.addSeat(booking, choose.toUpperCase());
-                return "AddBaggage.xhtml";
-                
+
+                if (!searchBookingManagedBean.isOnline()) {
+                    return "AddBaggage.xhtml";
+                } else {
+                    return "OnlineShowBoardingPass.xhtml";
+                }
+
             } else if (getClasstype().equals("Business") && Integer.parseInt(getChoose().substring(1)) > 2 && Integer.parseInt(getChoose().substring(1)) < 12) {
                 getB777_300seatArrange().set(getB777_300seatArrange().indexOf("\uD83D\uDCBA" + getChoose().toUpperCase()), "\n" + "\u26D4" + "\n" + getChoose().toUpperCase());
 
                 getOccupied().add(getChoose().toUpperCase());
                 seatSessionBean.inputChosenB(schedule, choose.toUpperCase());
-                checkInRecordSessionBean.addSeat(booking, choose.toUpperCase());
+                checkInRecordSessionBean.addSeat(booking, choose.toUpperCase(), upgrade, upgradeCosts);
                 boardingPassSessionBean.addSeat(booking, choose.toUpperCase());
-                return "AddBaggage.xhtml";
-                
+
+                if (!searchBookingManagedBean.isOnline()) {
+                    return "AddBaggage.xhtml";
+                } else {
+                    return "OnlineShowBoardingPass.xhtml";
+                }
+
             } else if (getClasstype().equals("First Class") && Integer.parseInt(getChoose().substring(1)) < 3) {
                 getB777_300seatArrange().set(getB777_300seatArrange().indexOf("\uD83D\uDCBA" + getChoose().toUpperCase()), "\n" + "\u26D4" + "\n" + getChoose().toUpperCase());
 
                 getOccupied().add(getChoose().toUpperCase());
 
                 seatSessionBean.inputChosenF(schedule, choose.toUpperCase());
-                checkInRecordSessionBean.addSeat(booking, choose.toUpperCase());
+                checkInRecordSessionBean.addSeat(booking, choose.toUpperCase(), upgrade, upgradeCosts);
                 boardingPassSessionBean.addSeat(booking, choose.toUpperCase());
+
                 return "AddBaggage.xhtml";
-                
+
             } else {
                 message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "please choose the correct class", "");
                 FacesContext.getCurrentInstance().addMessage(null, message);
@@ -683,30 +1061,46 @@ public class SeatManagedBean {
 
                 getOccupied().add(getChoose().toUpperCase());
                 seatSessionBean.inputChosenE(schedule, choose.toUpperCase());
-                checkInRecordSessionBean.addSeat(booking, choose.toUpperCase());
+                checkInRecordSessionBean.addSeat(booking, choose.toUpperCase(), upgrade, upgradeCosts);
                 boardingPassSessionBean.addSeat(booking, choose.toUpperCase());
-                return "AddBaggage.xhtml";
+
+                if (!searchBookingManagedBean.isOnline()) {
+                    return "AddBaggage.xhtml";
+                } else {
+                    return "OnlineShowBoardingPass.xhtml";
+                }
             } else if (getClasstype().equals("Business") && Integer.parseInt(getChoose().substring(1)) > 1 && Integer.parseInt(getChoose().substring(1)) < 10) {
                 getB777_300ERseatArrange().set(getB777_300ERseatArrange().indexOf("\uD83D\uDCBA" + getChoose().toUpperCase()), "\n" + "\u26D4" + "\n" + getChoose().toUpperCase());
 
                 getOccupied().add(getChoose().toUpperCase());
 
                 seatSessionBean.inputChosenB(schedule, choose.toUpperCase());
-                checkInRecordSessionBean.addSeat(booking, choose.toUpperCase());
+                checkInRecordSessionBean.addSeat(booking, choose.toUpperCase(), upgrade, upgradeCosts);
                 boardingPassSessionBean.addSeat(booking, choose.toUpperCase());
-                return "AddBaggage.xhtml";
+
+                if (!searchBookingManagedBean.isOnline()) {
+                    return "AddBaggage.xhtml";
+                } else {
+                    return "OnlineShowBoardingPass.xhtml";
+                }
             } else if (getClasstype().equals("First Class") && Integer.parseInt(getChoose().substring(1)) < 2) {
                 getB777_300ERseatArrange().set(getB777_300ERseatArrange().indexOf("\uD83D\uDCBA" + getChoose().toUpperCase()), "\n" + "\u26D4" + "\n" + getChoose().toUpperCase());
 
                 getOccupied().add(getChoose().toUpperCase());
                 seatSessionBean.inputChosenF(schedule, choose.toUpperCase());
-                checkInRecordSessionBean.addSeat(booking, choose.toUpperCase());
+                checkInRecordSessionBean.addSeat(booking, choose.toUpperCase(), upgrade, upgradeCosts);
                 boardingPassSessionBean.addSeat(booking, choose.toUpperCase());
-                return "AddBaggage.xhtml";
+
+                if (!searchBookingManagedBean.isOnline()) {
+                    return "AddBaggage.xhtml";
+                } else {
+                    return "OnlineShowBoardingPass.xhtml";
+                }
             } else {
                 message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "please choose the correct class", "");
                 FacesContext.getCurrentInstance().addMessage(null, message);
-                return "AddBaggage.xhtml";
+
+                return null;
             }
 
         } else {
@@ -716,6 +1110,25 @@ public class SeatManagedBean {
     }
 
 //-------------------------------------------------------------------------------------------------------    
+    public long checkTime(String time1, String time2) {
+        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm dd/MM/yyyy");
+        Date date1;
+        Date date2;
+        try {
+            date1 = formatter.parse(time1);
+            date2 = formatter.parse(time2);
+            long diff = (date2.getTime() - date1.getTime());
+            long diffMinutes = diff / (60 * 1000) % 60;
+            long diffHours = diff / (60 * 60 * 1000) % 24;
+            long diffDays = diff / (24 * 60 * 60 * 1000);
+            long result = diffDays * 24 * 60 + diffHours * 60 + diffMinutes;
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -1;
+        }
+    }
+
     public SeatManagedBean() {
     }
 
@@ -882,8 +1295,266 @@ public class SeatManagedBean {
     public void setEavail(int Eavail) {
         this.Eavail = Eavail;
     }
-    
-    
-    
+
+    public int getFbooked() {
+        return Fbooked;
+    }
+
+    public void setFbooked(int Fbooked) {
+        this.Fbooked = Fbooked;
+    }
+
+    public int getBbooked() {
+        return Bbooked;
+    }
+
+    public void setBbooked(int Bbooked) {
+        this.Bbooked = Bbooked;
+    }
+
+    public int getEbooked() {
+        return Ebooked;
+    }
+
+    public void setEbooked(int Ebooked) {
+        this.Ebooked = Ebooked;
+    }
+
+    /**
+     * @return the selectedPaidUpgradeClass
+     */
+    public String getSelectedPaidUpgradeClass() {
+        return selectedPaidUpgradeClass;
+    }
+
+    /**
+     * @param selectedPaidUpgradeClass the selectedPaidUpgradeClass to set
+     */
+    public void setSelectedPaidUpgradeClass(String selectedPaidUpgradeClass) {
+        this.selectedPaidUpgradeClass = selectedPaidUpgradeClass;
+    }
+
+    /**
+     * @return the bookingClassLists
+     */
+    public List<String> getBookingClassLists() {
+        return bookingClassLists;
+    }
+
+    /**
+     * @param bookingClassLists the bookingClassLists to set
+     */
+    public void setBookingClassLists(List<String> bookingClassLists) {
+        this.bookingClassLists = bookingClassLists;
+    }
+
+    /**
+     * @return the totalWeightAllowed
+     */
+    public String getTotalWeightAllowed() {
+        return totalWeightAllowed;
+    }
+
+    /**
+     * @param totalWeightAllowed the totalWeightAllowed to set
+     */
+    public void setTotalWeightAllowed(String totalWeightAllowed) {
+        this.totalWeightAllowed = totalWeightAllowed;
+    }
+
+    /**
+     * @return the upgradeCosts
+     */
+    public double getUpgradeCosts() {
+        return upgradeCosts;
+    }
+
+    /**
+     * @param upgradeCosts the upgradeCosts to set
+     */
+    public void setUpgradeCosts(double upgradeCosts) {
+        this.upgradeCosts = upgradeCosts;
+    }
+
+    /**
+     * @return the baggageManagedBean
+     */
+    public BaggageManagedBean getBaggageManagedBean() {
+        return baggageManagedBean;
+    }
+
+    /**
+     * @param baggageManagedBean the baggageManagedBean to set
+     */
+    public void setBaggageManagedBean(BaggageManagedBean baggageManagedBean) {
+        this.baggageManagedBean = baggageManagedBean;
+    }
+
+    /**
+     * @return the upgradeCostsDB
+     */
+    public String getUpgradeCostsDB() {
+        return upgradeCostsDB;
+    }
+
+    /**
+     * @param upgradeCostsDB the upgradeCostsDB to set
+     */
+    public void setUpgradeCostsDB(String upgradeCostsDB) {
+        this.upgradeCostsDB = upgradeCostsDB;
+    }
+
+    /**
+     * @return the mARSManagedBean
+     */
+    public MARSManagedBean getmARSManagedBean() {
+        return mARSManagedBean;
+    }
+
+    /**
+     * @param mARSManagedBean the mARSManagedBean to set
+     */
+    public void setmARSManagedBean(MARSManagedBean mARSManagedBean) {
+        this.mARSManagedBean = mARSManagedBean;
+    }
+
+    /**
+     * @return the flightSchedules
+     */
+    public List<Schedule> getFlightSchedules() {
+        return flightSchedules;
+    }
+
+    /**
+     * @param flightSchedules the flightSchedules to set
+     */
+    public void setFlightSchedules(List<Schedule> flightSchedules) {
+        this.flightSchedules = flightSchedules;
+    }
+
+    /**
+     * @return the selectedSchedule
+     */
+    public String getSelectedSchedule() {
+        return selectedSchedule;
+    }
+
+    /**
+     * @param selectedSchedule the selectedSchedule to set
+     */
+    public void setSelectedSchedule(String selectedSchedule) {
+        this.selectedSchedule = selectedSchedule;
+    }
+
+    /**
+     * @return the nextAvailSchedules
+     */
+    public List<Schedule> getNextAvailSchedules() {
+        return nextAvailSchedules;
+    }
+
+    /**
+     * @param nextAvailSchedules the nextAvailSchedules to set
+     */
+    public void setNextAvailSchedules(List<Schedule> nextAvailSchedules) {
+        this.nextAvailSchedules = nextAvailSchedules;
+    }
+
+    public void changeFlight1() {
+        Date date = new Date();
+        Date tmr = new Date(date.getTime() + 1000 * 60 * 60 * 24);
+
+        if (getAircraftType().equals("Airbus A330-300")) {
+//            if (Eavail == 0 && Bbooked == 30) {
+            flightSchedules = distributionSessionBean.retrieveDirectFlightsForDate(booking.getSeatAvail().getSchedule().getFlight().getRoute().getOriginIATA(), booking.getSeatAvail().getSchedule().getFlight().getRoute().getDestinationIATA(), date, booking.getServiceType(), 1, 0);
+           
+           
+            List<Schedule> temps = distributionSessionBean.retrieveDirectFlightsForDate(booking.getSeatAvail().getSchedule().getFlight().getRoute().getOriginIATA(), booking.getSeatAvail().getSchedule().getFlight().getRoute().getDestinationIATA(), tmr, booking.getServiceType(), 1, 0);
+            
+            for (Schedule s : temps) {
+                flightSchedules.add(s);
+            }
+
+            for (Schedule s : flightSchedules) {
+
+                String formattedDate1 = new SimpleDateFormat("HH:mm dd/MM/yyyy").format(s.getStartDate());
+                String formattedDate2 = new SimpleDateFormat("HH:mm dd/MM/yyyy").format(date);
+
+                if (checkTime(formattedDate1, formattedDate2) < 0) {
+                    nextAvailSchedules.add(s);
+                }
+            }
+
+//            } else {
+//                message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Not eligible for free change flight! Please select seat from economy class", "");
+//                FacesContext.getCurrentInstance().addMessage(null, message);
+//            }
+        } else if (getAircraftType().equals("Boeing 777-200")) {
+            flightSchedules = distributionSessionBean.retrieveDirectFlightsForDate(booking.getSeatAvail().getSchedule().getFlight().getRoute().getOriginIATA(), booking.getSeatAvail().getSchedule().getFlight().getRoute().getDestinationIATA(), date, booking.getServiceType(), 1, 0);
+            List<Schedule> temps = distributionSessionBean.retrieveDirectFlightsForDate(booking.getSeatAvail().getSchedule().getFlight().getRoute().getOriginIATA(), booking.getSeatAvail().getSchedule().getFlight().getRoute().getDestinationIATA(), tmr, booking.getServiceType(), 1, 0);
+            for (Schedule s : temps) {
+                flightSchedules.add(s);
+            }
+
+            for (Schedule s : flightSchedules) {
+
+                String formattedDate1 = new SimpleDateFormat("HH:mm dd/MM/yyyy").format(s.getStartDate());
+                String formattedDate2 = new SimpleDateFormat("HH:mm dd/MM/yyyy").format(date);
+
+                if (checkTime(formattedDate1, formattedDate2) < 0) {
+                    nextAvailSchedules.add(s);
+                }
+            }
+        } else if (getAircraftType().equals("Boeing 777-200ER")) {
+            flightSchedules = distributionSessionBean.retrieveDirectFlightsForDate(booking.getSeatAvail().getSchedule().getFlight().getRoute().getOriginIATA(), booking.getSeatAvail().getSchedule().getFlight().getRoute().getDestinationIATA(), date, booking.getServiceType(), 1, 0);
+            List<Schedule> temps = distributionSessionBean.retrieveDirectFlightsForDate(booking.getSeatAvail().getSchedule().getFlight().getRoute().getOriginIATA(), booking.getSeatAvail().getSchedule().getFlight().getRoute().getDestinationIATA(), tmr, booking.getServiceType(), 1, 0);
+            for (Schedule s : temps) {
+                flightSchedules.add(s);
+            }
+
+            for (Schedule s : flightSchedules) {
+
+                String formattedDate1 = new SimpleDateFormat("HH:mm dd/MM/yyyy").format(s.getStartDate());
+                String formattedDate2 = new SimpleDateFormat("HH:mm dd/MM/yyyy").format(date);
+
+                if (checkTime(formattedDate1, formattedDate2) < 0) {
+                    nextAvailSchedules.add(s);
+                }
+            }
+        } else if (getAircraftType().equals("Boeing 777-300")) {
+            flightSchedules = distributionSessionBean.retrieveDirectFlightsForDate(booking.getSeatAvail().getSchedule().getFlight().getRoute().getOriginIATA(), booking.getSeatAvail().getSchedule().getFlight().getRoute().getDestinationIATA(), date, booking.getServiceType(), 1, 0);
+            List<Schedule> temps = distributionSessionBean.retrieveDirectFlightsForDate(booking.getSeatAvail().getSchedule().getFlight().getRoute().getOriginIATA(), booking.getSeatAvail().getSchedule().getFlight().getRoute().getDestinationIATA(), tmr, booking.getServiceType(), 1, 0);
+            for (Schedule s : temps) {
+                flightSchedules.add(s);
+            }
+
+            for (Schedule s : flightSchedules) {
+
+                String formattedDate1 = new SimpleDateFormat("HH:mm dd/MM/yyyy").format(s.getStartDate());
+                String formattedDate2 = new SimpleDateFormat("HH:mm dd/MM/yyyy").format(date);
+
+                if (checkTime(formattedDate1, formattedDate2) < 0) {
+                    nextAvailSchedules.add(s);
+                }
+            }
+        } else if (getAircraftType().equals("Boeing 777-300ER")) {
+            flightSchedules = distributionSessionBean.retrieveDirectFlightsForDate(booking.getSeatAvail().getSchedule().getFlight().getRoute().getOriginIATA(), booking.getSeatAvail().getSchedule().getFlight().getRoute().getDestinationIATA(), date, booking.getServiceType(), 1, 0);
+            List<Schedule> temps = distributionSessionBean.retrieveDirectFlightsForDate(booking.getSeatAvail().getSchedule().getFlight().getRoute().getOriginIATA(), booking.getSeatAvail().getSchedule().getFlight().getRoute().getDestinationIATA(), tmr, booking.getServiceType(), 1, 0);
+            for (Schedule s : temps) {
+                flightSchedules.add(s);
+            }
+
+            for (Schedule s : flightSchedules) {
+
+                String formattedDate1 = new SimpleDateFormat("HH:mm dd/MM/yyyy").format(s.getStartDate());
+                String formattedDate2 = new SimpleDateFormat("HH:mm dd/MM/yyyy").format(date);
+
+                if (checkTime(formattedDate1, formattedDate2) < 0) {
+                    nextAvailSchedules.add(s);
+                }
+            }
+        }
+
+    }
 
 }

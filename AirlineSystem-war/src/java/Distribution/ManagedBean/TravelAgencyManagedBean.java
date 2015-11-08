@@ -275,7 +275,7 @@ public class TravelAgencyManagedBean {
         return min;
     }
 
-    public void setOneWayVariables() {
+    public void setOneWayVariables() { 
         setAdults(oneWayAdult);
         setChildren(oneWayChildren);
         setOriginCity(oneWayOriginCity);
@@ -995,7 +995,7 @@ public class TravelAgencyManagedBean {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Your profile has been updated!", "");
         FacesContext.getCurrentInstance().addMessage(null, message);
 
-        return "TravelAgencyDashboard?faces-redirect=true";
+        return "TravelAgencyViewProfile?faces-redirect=true";
     }
 
     public String viewTravelAgencies() {
@@ -1041,7 +1041,7 @@ public class TravelAgencyManagedBean {
             FacesContext.getCurrentInstance().addMessage(null, message);
         }
 
-        return "SalesDepartmentDashboard?faces-redirect=true";
+        return null;
 
     }
 
@@ -1144,7 +1144,7 @@ public class TravelAgencyManagedBean {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "PNR has been cancelled!", "");
         FacesContext.getCurrentInstance().addMessage(null, message);
 
-        return "TravelAgencyViewPNRs?faces-redirect=true";
+        return null;
     }
 
     public String viewSettlementAndCommission(Long id) {

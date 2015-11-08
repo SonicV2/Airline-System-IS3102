@@ -41,6 +41,24 @@
         <h:outputStylesheet library ="css"  name="flightdisplay2.css" />
         <title>Confirmation</title>
     </h:head>
+    <style>
+        .booking-sidebar .sidebar-body .table{
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+            -ms-word-break: break-all;
+            /* This is the dangerous one in WebKit, as it breaks things wherever */
+            word-break: break-all;
+            /* Instead use this non-standard one: */
+            word-break: break-word;
+
+            /* Adds a hyphen where the word breaks, if supported (No Blink) */
+            -ms-hyphens: auto;
+            -moz-hyphens: auto;
+            -webkit-hyphens: auto;
+            hyphens: auto;
+
+        }
+    </style>
     <h:body>
         <ui:fragment rendered ="#{customerManagedBean.isCustomerLoggedOn}">
             <ui:include src="CustomerDashboardHeader.xhtml"/>
@@ -130,7 +148,7 @@
                                                     </tr>
                                                     <tr>
                                                         <td>Email </td>
-                                                        <td>#{mARSManagedBean.pnr.email}</td>
+                                                        <td id="emailbar" style="word-wrap: break-word">#{mARSManagedBean.pnr.email}</td>
                                                     </tr>
                                                     <tr>
                                                         <td>Contact Number </td>

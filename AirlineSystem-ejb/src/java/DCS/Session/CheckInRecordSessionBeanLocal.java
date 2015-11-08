@@ -19,7 +19,7 @@ public interface CheckInRecordSessionBeanLocal {
 
     public void addBooking(Booking booking);
 
-    public void addSeat(Booking booking, String seat);
+    public void addSeat(Booking booking, String seat,int upgrade, double upgradeCosts);
 
     public void addStatus(Booking booking, String status);
 

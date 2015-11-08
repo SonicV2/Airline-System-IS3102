@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <h:form>
+
+           
+                <p:outputLabel for="flight1" value="Flight:" />
+                <p:selectOneRadio id="flight1" value="#{seatManagedBean.selectedSchedule}"  layout="grid" columns="3">
+                    <f:selectItems itemLabelEscaped="false" value="#{seatManagedBean.nextAvailSchedules}" var="f" itemValue="#{f.scheduleId.toString()}" 
+                                   itemLabel="Schedule ID: #{f.scheduleId}   Flight Number: #{f.flight.flightNo} &lt;br/&gt; 
+                                                    Schedule Date: #{f.startDate}  &lt;br/&gt; Schedule Date: #{f.endDate}" />
+                </p:selectOneRadio>
+                
+                
+                  <h:commandButton value="Change" actionListener="#{seatManagedBean.changeExistBooking}"  />
+     
+
+          
+
+        </h:form>
+    </h:body>
+</html>
+

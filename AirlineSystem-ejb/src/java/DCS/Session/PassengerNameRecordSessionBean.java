@@ -7,6 +7,7 @@ package DCS.Session;
 
 import APS.Entity.Flight;
 import APS.Entity.Schedule;
+import Distribution.Entity.Customer;
 
 import Distribution.Entity.PNR;
 import Inventory.Entity.Booking;
@@ -120,7 +121,126 @@ public class PassengerNameRecordSessionBean implements PassengerNameRecordSessio
         return "null";
     }
     
+    @Override
+    public void changeClass(Booking booking, String classcode){
+        booking.setClassCode(classcode);
+        em.merge(booking);
+    }
 
+    @Override
+    public void changeServiceClass(Booking booking, String sClass){
+        booking.setServiceType(sClass);
+        em.merge(booking);
+    }
+    
+    
+    @Override
+    public String retrieveUpgradeCosts(Booking booking){
+        String field = booking.getField();
+        
+        if(field == null){
+            return "0.0";
+        }
+        else if(field.contains("paid upgrade")){
+            return (field.substring(12)); // get paid upgrade180 --> 180
+        }
+        return "0.0";
+        
+    }
+    
+    
+    @Override
+    public void changePNRStatus(Booking booking, String pnrID){
+        Query q = em.createQuery("SELECT p FROM PNR p");
+        List<PNR> pnrs = q.getResultList();
+        for(PNR p: pnrs){
+            if(p.getPnrID().equals(pnrID)){
+                p.setPnrStatus("Flown");
+                em.merge(p);
+            }
+        }
+        booking.setBookingStatus("checkin");
+        em.merge(booking);
+    
+    }
+    
+    
+    
+    @Override
+    public void changeExistBooking(Booking booking, String scheduleID){
+        Query q = em.createQuery("SELECT s FROM Schedule s");
+        List<Schedule> schedules = q.getResultList();
+        
+        for(Schedule s : schedules){
+            if(s.getScheduleId().toString().equals(scheduleID)){
+                booking.setBookingStatus("Reschedule");
+                booking.setSeatNumber("N.A");
+                booking.setFlightNo(s.getFlight().getFlightNo());
+                booking.setFlightDate(s.getStartDate());
+                em.merge(booking);
+              }
+        }
+    
+    }
+    
+   
+    @Override
+    public void addMiles(Booking booking){
+        
+        String custId = booking.getCustomerId() + "";
+        if(!custId.equals("0")){
+            int millage = getBookingMillage(booking.getClassCode());
+            double distance = calculateDistance(booking);
+            double result = distance*millage / 100.0;
+            
+            Customer c = retrieveCustomerByID(booking.getCustomerId());
+            
+            if(c==null){
+                
+                
+            }else{
+                int points = c.getMileagePoints();
+                
+                points += (int) result;
+                
+                c.setMileagePoints(points);
+                em.merge(c);
+            }
+        }
+    
+    }
+    
+    public Customer retrieveCustomerByID(long customerId){
+        Query q = em.createQuery("SELECT c FROM Customer c");
+        List<Customer> customers = q.getResultList();
+        
+        for(Customer c: customers){
+            if(c.getId().toString().equals((customerId+""))){
+                return c;
+            }
+        }
+        return null;
+    }
+    
+    public int getBookingMillage(String classcode){
+        Query q = em.createQuery("SELECT b FROM BookingClass b");
+        List<BookingClass> bc = q.getResultList();
+        
+        for(BookingClass b: bc){
+            if(b.getClasscode().equals(classcode)){
+                return b.getMillageAccru();
+            }
+        }
+        return 0;
+    
+    }
+    
+    public double calculateDistance(Booking booking){
+        Schedule schedule = booking.getSeatAvail().getSchedule();
+        return (schedule.getFlight().getRoute().getDistance());
+    }
+    
+    
     public long checkTime(String time1, String time2) {
         SimpleDateFormat formatter = new SimpleDateFormat("HH:mm dd/MM/yyyy");
         Date date1;

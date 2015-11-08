@@ -3,48 +3,80 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
         <p:growl id="growl" sticky="true" showDetail="true"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <h:outputStylesheet library ="css"  name="bootstrap.css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
+        <h:outputStylesheet library="css" name="admindb.css" />
+        <h:outputStylesheet library="css" name="morrisjs/morris.css" />
+        <!--        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js" />-->
         <title>Search Booking </title>
     </h:head>
     <h:body>
-        <h:form>
-            <h:outputLabel value="PNR Number: " />
-            <h:inputText id="pnr" required="true" requiredMessage="Please fill in PNR number!" class="form-control" value="#{searchBookingManagedBean.pnrNumber}" />
-            <h:message for="pnr"  />
+        <!--    To add the same header on all dashboard pages  -->
+        <ui:include src="/CI/DashboardHeader.xhtml"/>
+        <!--    To add the same sidebar on all dashboard pages  -->
+        <ui:include src="/CI/DashboardSidebar.xhtml"/>
+        <div id="page-wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2 class="page-header"> Departure Control Management</h2>
+                </div>
+                <div class="col-lg-8">
+                    <h:form>
+                        <div class="col-md-6">
+                        <h:outputLabel value="PNR Number: " />
+                        <h:inputText id="pnr" required="true" requiredMessage="Please fill in PNR number!" class="form-control" value="#{searchBookingManagedBean.pnrNumber}" />
+                        <h:message for="pnr"  />
 
-            <br /> <br />
+                        <br /> <br />
 
-            <h:outputLabel value="Passport Number: " />
-            <h:inputText id="passport" required="true" requiredMessage="Please fill in Passport number!" class="form-control" value="#{searchBookingManagedBean.passportNumber}" />
-            <h:message for="passport"  />
+                        <h:outputLabel value="Passport Number: " />
+                        <h:inputText id="passport" required="true" requiredMessage="Please fill in Passport number!" class="form-control" value="#{searchBookingManagedBean.passportNumber}" />
+                        <h:message for="passport"  />
 
-            <br /><br />
+                        <br /><br />
+                       
+                        <h:commandButton class="btn btn-outline btn-success" value="Search" actionListener="#{searchBookingManagedBean.getBooking}"/>
+                        <br/>
+                        <br/>
+                        <br />
+                        
+                        <h:commandButton disabled="true" value="Flight Number: #{searchBookingManagedBean.checkinSchedule.flight.flightNo}"/>
+                        <br />
+                        <h:commandButton disabled="true" value="Flight Date: #{searchBookingManagedBean.checkinSchedule.startDate}"/>
+                        <br />
+                        <h:commandButton disabled="true" value="Departure City: #{searchBookingManagedBean.checkinSchedule.flight.route.originCity}"/>
+                        <br />
+                        <h:commandButton disabled="true" value="Departure City: #{searchBookingManagedBean.checkinSchedule.flight.route.destinationCity}"/>
+ </div>
+                        <div class="col-md-12">
+                        <p:dataList value="#{searchBookingManagedBean.restSchedules}" var="sch" type="ordered">
+                            <f:facet name="header">
+                                Not Valid For Checkin
+                            </f:facet>
+                            #{sch.flight.flightNo}
+                        </p:dataList>
+                       
+                  
+                    <div class="text-center">
+               
 
-            <h:commandButton value="Search" actionListener="#{searchBookingManagedBean.getBooking}"/>
-
-            <br />
-            <h:commandButton disabled="true" value="Flight Number: #{searchBookingManagedBean.checkinSchedule.flight.flightNo}"/>
-            <br />
-            <h:commandButton disabled="true" value="Flight Date: #{searchBookingManagedBean.checkinSchedule.startDate}"/>
-            <br />
-            <h:commandButton disabled="true" value="Departure City: #{searchBookingManagedBean.checkinSchedule.flight.route.originCity}"/>
-            <br />
-            <h:commandButton disabled="true" value="Departure City: #{searchBookingManagedBean.checkinSchedule.flight.route.destinationCity}"/>
-
-            <p:dataList value="#{searchBookingManagedBean.restSchedules}" var="sch" type="ordered">
-                <f:facet name="header">
-                    Not Valid For Checkin
-                </f:facet>
-                #{sch.flight.flightNo}
-            </p:dataList>
-        </h:form>
-        
-        <h:form>
-            
-            <h:commandButton  value="Allocate Seat" action="#{searchBookingManagedBean.retrieveFlightType()}" />
-        </h:form>
+                            <h:commandButton class="btn btn-outline btn-success" value="Allocate Seat" action="#{searchBookingManagedBean.retrieveFlightType()}" />
+                       
+                    </div>
+                            
+                     </div>
+                        </h:form>
+                </div>
+                 
+            </div>
+        </div>
 
 
     </h:body>
