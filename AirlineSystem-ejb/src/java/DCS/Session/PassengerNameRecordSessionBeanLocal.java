@@ -28,6 +28,16 @@ public interface PassengerNameRecordSessionBeanLocal {
     public Flight getCheckinFlight(String pnrNumber, String passportNumber);
 
     public String retrieveClass(String classcode);
+
+    public void changeClass(Booking booking, String classcode);
+
+    public void changeServiceClass(Booking booking, String sClass);
+
+    public String retrieveUpgradeCosts(Booking booking);
+    
+    public void changePNRStatus(Booking booking, String pnrID);
+    
+     public void changeExistBooking(Booking booking, String scheduleID);
+     
+     public void addMiles(Booking booking);
 }
-
-

@@ -9,6 +9,8 @@ import DCS.Entity.BaggageTag;
 import DCS.Entity.BoardingPass;
 import DCS.Session.BaggageSessionBeanLocal;
 import DCS.Session.BoardingPassSessionBeanLocal;
+import DCS.Session.CheckInRecordSessionBeanLocal;
+import DCS.Session.PassengerNameRecordSessionBeanLocal;
 import Distribution.Entity.Baggage;
 import Inventory.Entity.Booking;
 import javax.inject.Named;
@@ -34,114 +36,124 @@ import javax.faces.event.ActionEvent;
 @ManagedBean
 public class BaggageManagedBean implements Serializable {
     @EJB
+    private CheckInRecordSessionBeanLocal checkInRecordSessionBean;
+
+    @EJB
+    private PassengerNameRecordSessionBeanLocal passengerNameRecordSessionBean;
+
+    @EJB
     private BoardingPassSessionBeanLocal boardingPassSessionBean;
 
     @EJB
     private BaggageSessionBeanLocal baggageSessionBean;
-    
-    
-    
+
     @ManagedProperty(value = "#{searchBookingManagedBean}")
     private SearchBookingManagedBean searchBookingManagedBean;
-    
+
     @ManagedProperty(value = "#{baggagePaymentManagedBean}")
     private BaggagePaymentManagedBean baggagePaymentManagedBean;
-    
-    
-    
+
     private double totalWeightAllowed;
     private List<Baggage> allBaggage; //baggage weights for all added baggage
     private double addBagWeight; // add baggage
 
     private double totalweight;
-    
+
     private double extraPayment;
-    
+
     private String banddepart;
     private String bandarr;
-    
+
     String departure;
     String destination;
-    
-    private List<BaggageTag> baggageTags; 
+
+    private List<BaggageTag> baggageTags;
     private BoardingPass boardingpass;
-    
-  
-    
+
+    private String serviceClass;
+
+    private String totalCosts;
+
     public BaggageManagedBean() {
     }
 
     @PostConstruct
     public void init() {
-        
-        retrieveAllBaggages();
-        totalweight=baggageSessionBean.retrieveTotalBaggageWeights(searchBookingManagedBean.getReqBooking());
-    }
-       
-    
-   public void showBaggageTag(ActionEvent event){
-       Booking booking= searchBookingManagedBean.getReqBooking();
-       List<Baggage> baggages= booking.getBaggages();
-       
-       baggageTags=new ArrayList<BaggageTag>();
-       for(Baggage b : baggages){
-           baggageTags.add(b.getBaggageTag());
-       }
-   }
-    
-   public void showBoardingPass(ActionEvent event){
-       Booking booking= searchBookingManagedBean.getReqBooking();
-       
-
-       boardingpass=boardingPassSessionBean.findBoardingpass(booking);
-   }
-    
-    
-    public void calculateExtra(ActionEvent event){
-        retrieveAllBaggages();
-        totalweight=baggageSessionBean.retrieveTotalBaggageWeights(searchBookingManagedBean.getReqBooking());
-        
-        
-        
-        departure=searchBookingManagedBean.getReqBooking().getSeatAvail().getSchedule().getFlight().getRoute().getOriginCountry();
-        destination=searchBookingManagedBean.getReqBooking().getSeatAvail().getSchedule().getFlight().getRoute().getDestinationCountry();
-        
-        if(departure.equals("Singapore")){
-        banddepart="Singapore";}else{
-            banddepart=baggageSessionBean.bandSearch(departure);
-        }
-        
-         if(destination.equals("Singapore")){
-        bandarr="Singapore";}else{
-            bandarr=baggageSessionBean.bandSearch(destination);
-        }
-            
-        
-        
         retrieveNumberofBaggageAllowed();
+        retrieveServiceClass();
+        retrieveAllBaggages();
+        totalweight = baggageSessionBean.retrieveTotalBaggageWeights(searchBookingManagedBean.getReqBooking());
+        double total= Double.parseDouble(passengerNameRecordSessionBean.retrieveUpgradeCosts(searchBookingManagedBean.getReqBooking()))+baggagePaymentManagedBean.getExtra();
+       // totalCosts = passengerNameRecordSessionBean.retrieveUpgradeCosts(searchBookingManagedBean.getReqBooking())+extraPayment+"";
+        totalCosts = total+"";
+    }
+
+    public void showBaggageTag(ActionEvent event) {
+        Booking booking = searchBookingManagedBean.getReqBooking();
+        List<Baggage> baggages = booking.getBaggages();
+
+        baggageTags = new ArrayList<BaggageTag>();
+        for (Baggage b : baggages) {
+            baggageTags.add(b.getBaggageTag());
+        }
+    }
+
+    public void showBoardingPass(ActionEvent event) {
+        Booking booking = searchBookingManagedBean.getReqBooking();
+
+        boardingpass = boardingPassSessionBean.findBoardingpass(booking);
         
-        double temp=(totalweight+addBagWeight);
+        System.out.println("BMB: " + boardingpass.toString());
         
-       
+        checkInRecordSessionBean.addboardingPassNo(booking, boardingpass.getSeqNumber());
+        checkInRecordSessionBean.addStatus(booking, "checkin");
         
-        this.extraPayment=baggageSessionBean.calcualtePenalty(departure,destination,totalWeightAllowed,temp);
+        passengerNameRecordSessionBean.changePNRStatus(booking, booking.getPnr().getPnrID());
         
+    }
+
+    public void calculateExtra(ActionEvent event) {
+        retrieveAllBaggages();
+        totalweight = baggageSessionBean.retrieveTotalBaggageWeights(searchBookingManagedBean.getReqBooking());
+
+        departure = searchBookingManagedBean.getReqBooking().getSeatAvail().getSchedule().getFlight().getRoute().getOriginCountry();
+        destination = searchBookingManagedBean.getReqBooking().getSeatAvail().getSchedule().getFlight().getRoute().getDestinationCountry();
+
+        if (departure.equals("Singapore")) {
+            banddepart = "Singapore";
+        } else {
+            banddepart = baggageSessionBean.bandSearch(departure);
+        }
+
+        if (destination.equals("Singapore")) {
+            bandarr = "Singapore";
+        } else {
+            bandarr = baggageSessionBean.bandSearch(destination);
+        }
+
+        retrieveNumberofBaggageAllowed();
+
+        double temp = (totalweight + addBagWeight);
+
+        this.extraPayment = baggageSessionBean.calcualtePenalty(departure, destination, totalWeightAllowed, temp);
+
         baggagePaymentManagedBean.setExtra(extraPayment);
-        
-         System.out.println("AAAAA booking" + searchBookingManagedBean.getReqBooking().getFlightNo());
+
         baggagePaymentManagedBean.setBooking(searchBookingManagedBean.getReqBooking());
-        
-        
+
         baggagePaymentManagedBean.setAddbagWeight(addBagWeight);
     }
+
+
 
     public void addBaggage(ActionEvent event) {
         FacesMessage message = null;
         retrieveNumberofBaggageAllowed();
         retrieveAllBaggages();
-        totalweight=baggageSessionBean.retrieveTotalBaggageWeights(searchBookingManagedBean.getReqBooking());
-    
-       
+        totalweight = baggageSessionBean.retrieveTotalBaggageWeights(searchBookingManagedBean.getReqBooking());
+        
+         totalCosts = passengerNameRecordSessionBean.retrieveUpgradeCosts(searchBookingManagedBean.getReqBooking());
+
         String msg = baggageSessionBean.addBaggage(searchBookingManagedBean.getReqBooking(), addBagWeight, totalWeightAllowed);
         if (msg.equals("excess")) {
             message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Overweight, Please Pay Additional Charge!", "");
@@ -158,6 +170,10 @@ public class BaggageManagedBean implements Serializable {
     public void retrieveNumberofBaggageAllowed() {
         int i = baggageSessionBean.retrieveNumberOfBaggageAllowed(getSearchBookingManagedBean().getReqBooking().getClassCode());
         setTotalWeightAllowed((i * 15.00));
+    }
+
+    public void retrieveServiceClass() {
+        setServiceClass(passengerNameRecordSessionBean.retrieveClass(searchBookingManagedBean.getReqBooking().getClassCode()));
     }
 
     /**
@@ -296,8 +312,32 @@ public class BaggageManagedBean implements Serializable {
         this.boardingpass = boardingpass;
     }
 
- 
-    
-    
+    /**
+     * @return the serviceClass
+     */
+    public String getServiceClass() {
+        return serviceClass;
+    }
+
+    /**
+     * @param serviceClass the serviceClass to set
+     */
+    public void setServiceClass(String serviceClass) {
+        this.serviceClass = serviceClass;
+    }
+
+    /**
+     * @return the totalCosts
+     */
+    public String getTotalCosts() {
+        return totalCosts;
+    }
+
+    /**
+     * @param totalCosts the totalCosts to set
+     */
+    public void setTotalCosts(String totalCosts) {
+        this.totalCosts = totalCosts;
+    }
 
 }
