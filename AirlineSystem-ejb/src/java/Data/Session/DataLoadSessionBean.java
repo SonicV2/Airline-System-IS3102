@@ -69,12 +69,12 @@ public class DataLoadSessionBean {
     @PostConstruct
     public void init() {
         System.out.println("*****Loading data");
-        //addDiscountTypes();
-        //addFlights();
-        //addCustomer();
-        //addTravelAgencies();
-        //addCustomerBooking();
-        //addTravelAgencyBookings();
+//        addDiscountTypes();
+//        addFlights();
+//        addCustomer();
+//        addTravelAgencies();
+//        addCustomerBooking();
+//        addTravelAgencyBookings();
     }
 
     public void addDiscountTypes() {
@@ -226,9 +226,9 @@ public class DataLoadSessionBean {
         TravelAgency travelAgency = travelAgencySessionBean.getAgencyUseEmail("singjjyn@gmail.com");
         travelAgency.setCurrentCredit(100);
         em.merge(travelAgency);
-        travelAgencySessionBean.addTravelAgency("Orchard Travel Agency", 500000.00, 500000.00, 0, "singjjyn@naver.com", "10 Bideford Road #22-05 S229922", "6112 4126", "Sa123!", "Tan Shi Hui");
+        travelAgencySessionBean.addTravelAgency("Orchard Travel Agency", 500000.00, 400000.00, 0, "singjjyn@naver.com", "10 Bideford Road #22-05 S229922", "6112 4126", "Sa123!", "Tan Shi Hui");
         travelAgencySessionBean.addTravelAgency("Holland Travel Agency", 300000.00, 300000.00, 0, "rnjsdbssk@naver.com", "55 North Buona Vista Road #01-27 S543122", "6785 0102", "Sa123!", "Alice Lee");
-        travelAgencySessionBean.addTravelAgency("HarbourFront Travel Agency", 400000.00, 400000.00, 0, "parthasarthy.gupta@gmail.com", "31A Boon Tat Street #03-21 S112233", "6562 3532", "Sa123!", "Dennis Wong");
+        travelAgencySessionBean.addTravelAgency("HarbourFront Travel Agency", 400000.00, 300000.00, 0, "parthasarthy.gupta@gmail.com", "31A Boon Tat Street #03-21 S112233", "6562 3532", "Sa123!", "Dennis Wong");
         travelAgencySessionBean.addTravelAgency("NewTon Travel Agency", 350000.00, 350000.00, 0, "hou.liang.90@gmail.com", "48 Thomson Road #10-07 S77866", "6512 3565", "Sa123!", "Lim Jun Hao");
 
     }

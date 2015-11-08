@@ -143,11 +143,12 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
     // Get customer using ID
     @Override
     public Customer getCustomerUseID(String customerID) {
+        Long customerIDLong = Long.parseLong(customerID);
         Customer oneCustomer = new Customer();
         try {
 
             Query q = em.createQuery("SELECT a FROM Customer " + "AS a WHERE a.id=:id");
-            q.setParameter("id", customerID);
+            q.setParameter("id", customerIDLong);
 
             List results = q.getResultList();
             if (!results.isEmpty()) {
