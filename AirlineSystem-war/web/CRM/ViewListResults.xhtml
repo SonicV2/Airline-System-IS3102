@@ -18,9 +18,9 @@
         <title>View Customer List</title>
     </h:head>
     <h:body>
-        <ui:include src="/CI/DashboardHeader.xhtml"/>
-        <!--    To add the same sidebar on all dashboard pages  -->
-        <ui:include src="/CI/DashboardSidebar.xhtml"/>
+<!--        <ui:include src="/CI/DashboardHeader.xhtml"/>
+            To add the same sidebar on all dashboard pages  
+        <ui:include src="/CI/DashboardSidebar.xhtml"/>-->
         <div id="page-wrapper">
 
             <div class="row">
@@ -64,6 +64,11 @@
                     <div class="text-center">
                     <h:commandButton class="btn btn-info" value="Send Marketing Email" 
                                      action="#{cRMAnalyticsManagedBean.sendMarketingEmail}" />
+                    </div>
+                    <br/>
+                    <div class="text-center">
+                    <h:commandButton class="btn btn-info" value="Send Discount Codes" 
+                                     action="#{cRMAnalyticsManagedBean.sendPromotionalEmail}" />
                     </div>
                 </h:form>
 

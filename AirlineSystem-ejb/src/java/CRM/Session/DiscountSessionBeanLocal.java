@@ -33,5 +33,7 @@ public interface DiscountSessionBeanLocal {
     public void markCodeAsClaimed (DiscountCode discountCode);
     public List<DiscountType> retrieveAllMileageDiscountTypes();
     public List<DiscountType> retrieveAllPromotionDiscountTypes();
+    public List<String> sendDiscountCodes (DiscountType discountType, int no);
+    public List<DiscountType> retrieveValidDiscounts();
     
 }
