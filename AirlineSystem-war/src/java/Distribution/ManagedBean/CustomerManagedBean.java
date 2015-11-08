@@ -211,6 +211,17 @@ public class CustomerManagedBean {
         }
     }
 
+    public void refreshDiscountTypesRedeemable(){
+        int currentMileage = customer.getMileagePoints(); 
+        List<DiscountType> discountTypesCustomerCanAfford = new ArrayList();
+                for (DiscountType eachDiscountType : discountTypes) {
+                    if (eachDiscountType.getMileagePointsToRedeem() <= currentMileage) {
+                        discountTypesCustomerCanAfford.add(eachDiscountType);
+                    }
+                }
+                setDiscountTypes(discountTypesCustomerCanAfford);
+    } 
+            
     //redirect to customer's dashboard
     public String redirect() {
 
@@ -367,7 +378,7 @@ public class CustomerManagedBean {
         return "CustomerDashboard";
     }
 
-    public void validateUser(ActionEvent event) {
+    public void validateUser() {
         setEmail(customerSessionBean.validateUser(customerEmail, passportNumber)); //get employee's email address 
         FacesMessage message = null;
         if (getEmail().equals("nomatch")) {
@@ -423,6 +434,8 @@ public class CustomerManagedBean {
             sendCodeToCustomer(code);
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Discount code has been redeemed. Please check your email!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
+            refreshDiscountTypesRedeemable();
+            
         }
         return null;
     }

@@ -872,7 +872,17 @@ public class MARSManagedBean {
                     FacesContext.getCurrentInstance().addMessage(null, message);
                     return null;
                 }
+                else{
+                    Customer currentCustomer = customerSessionBean.getCustomerUseID(passengerList.get(i).getCustomerId());
+                    if(!passengerList.get(i).getFirstName().equals(currentCustomer.getFirstName()) || !passengerList.get(i).getLastName().equals(currentCustomer.getLastName()) || !passengerList.get(i).getPassport().equals(currentCustomer.getPassportNumber())){
+                    message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Customer Details do not match!", "");
+                    FacesContext.getCurrentInstance().addMessage(null, message);
+                    return null;
+                    }
+                }
+                    
             }
+            
         }
 
         totalPriceWinsurance = totalSelectedPrice;
@@ -966,6 +976,7 @@ public class MARSManagedBean {
         if (discountTypeApplied){
             customerManagedBean.getCustomer().setMileagePoints(customerManagedBean.getCustomer().getMileagePoints()-(int)selectedDiscountType.getMileagePointsToRedeem());
             customerSessionBean.updateCustomerProfile(customerManagedBean.getCustomer());
+            customerManagedBean.refreshDiscountTypesRedeemable();
         }
 
         return "Confirmation";
