@@ -35,5 +35,8 @@ public interface DiscountSessionBeanLocal {
     public List<DiscountType> retrieveAllMileageDiscountTypes();
     public List<DiscountType> retrieveAllPromotionDiscountTypes();
     public void deleteCodesOfType(DiscountType discountType);
+
+    public List<String> sendDiscountCodes (DiscountType discountType, int no);
+    public List<DiscountType> retrieveValidDiscounts();
     
 }

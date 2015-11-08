@@ -293,6 +293,7 @@ public class DiscountSessionBean implements DiscountSessionBeanLocal {
         }
         return mileageDiscountTypes;
     }
+
     
     @Override
     public void deleteCodesOfType(DiscountType discountType){
@@ -307,5 +308,43 @@ public class DiscountSessionBean implements DiscountSessionBeanLocal {
             em.flush();
         }
     }
+
+    
+    public List<String> sendDiscountCodes (DiscountType discountType, int no){
+        List<String> codes = new ArrayList();
+        for(int i =0; i<no; i++){
+            codes.add(addDiscountCode(discountType));
+        }
+        return codes;
+    }
+    
+    public List<DiscountType> retrieveValidDiscounts() {
+        List<DiscountType> discountTypes = new ArrayList();
+        try {
+            Date date = new Date();
+            Query q = em.createQuery("SELECT a FROM DiscountType a WHERE a.expiryDate>:date");
+            q.setParameter("date", date);
+            List<DiscountType> results = q.getResultList();
+            if (!results.isEmpty()) {
+                discountTypes = results;
+
+            } else {
+                discountTypes = null;
+                System.out.println("No discountTypes Available!");
+            }
+
+        } catch (EntityNotFoundException enfe) {
+            System.out.println("\nEntity not found error" + "enfe.getMessage()");
+        }
+        List<DiscountType> mileageDiscountTypes = new ArrayList();
+        for (DiscountType eachDiscountType : discountTypes) {
+            if (eachDiscountType.getType().equalsIgnoreCase("Promotion")) {
+                mileageDiscountTypes.add(eachDiscountType);
+            }
+        }
+        return mileageDiscountTypes;
+    }
+    
+
 
 }
