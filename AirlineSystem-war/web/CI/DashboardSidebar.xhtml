@@ -421,6 +421,14 @@
 
                 </ui:fragment>
                 
+                <!-- this is for Departure Control Management, ground crew -->
+                <ui:fragment rendered="#{loginManagedBean.accessRightIDs.contains(42)}">
+                        <li>
+                            <a href="#{request.contextPath}/DCS/SearchBooking.xhtml"><i class="fa fa-calendar-plus-o"></i> Departure Countrol Management</a>
+                        </li>  
+
+                </ui:fragment>
+                
 
             </ul>
 
