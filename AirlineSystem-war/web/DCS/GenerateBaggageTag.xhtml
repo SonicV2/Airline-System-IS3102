@@ -1,16 +1,34 @@
-<?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
+
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <h:outputStylesheet library ="css"  name="bootstrap.css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
+        <h:outputStylesheet library="css" name="admindb.css" />
+        <h:outputStylesheet library="css" name="morrisjs/morris.css" />
+        <!--        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js" />-->
         <title>Baggage Tag Generation</title>
     </h:head>
     <h:body>
+         <!--    To add the same header on all dashboard pages  -->
+        <ui:include src="/CI/DashboardHeader.xhtml"/>
+        <!--    To add the same sidebar on all dashboard pages  -->
+        <ui:include src="/CI/DashboardSidebar.xhtml"/>
+        <div id="page-wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2 class="page-header"> Generate Baggage Tags</h2>
+                </div>
+                <div class="col-lg-12">
         <h:form>
-            <h:commandButton class="btn btn-outline btn-success" value="Generate Baggage Tag" actionListener="#{baggageManagedBean.showBaggageTag}" />
-            <h:commandButton class="btn btn-outline btn-success" value="Print Baggage Tag" />
+            <h:commandButton class="btn btn-outline btn-info " value="Generate Baggage Tag" actionListener="#{baggageManagedBean.showBaggageTag}" />
+            <h:commandButton class="btn btn-outline btn-warning" value="Print Baggage Tag" />
 
             <p:dataGrid var="tag" value="#{baggageManagedBean.baggageTags}" columns="3" layout="grid"
                         rows="12" paginator="true" id="tag">
@@ -25,19 +43,25 @@
 
                         <h:outputText value="Arrival : #{tag.arrivalCity}" />
                         <h:outputText value="Bag Status : #{tag.bagStatus}" />
-                        <h:outputText value="departure date : #{tag.departureDate}" />
-                        <h:outputText value="flight Number : #{tag.flightNumber}" />
-                        <h:outputText value="service Class : #{tag.serviceClass}" />
+                        <h:outputText value="Departure date : #{tag.departureDate}" />
+                        <h:outputText value="Flight Number : #{tag.flightNumber}" />
+                        <h:outputText value="Service Class : #{tag.serviceClass}" />
                       
                        
                     </h:panelGrid>
                 </p:panel>
 
             </p:dataGrid>
-
-
+            <br></br>
+                <br></br>
+            <div class="text-center">
             <h:commandButton class="btn btn-outline btn-success" value="Proceed" actionListener="#{baggageManagedBean.showBoardingPass}" action="ShowBoardingPass.xhtml"/>
+            </div>
         </h:form>
+                </div>
+            </div>
+        </div>
+        
     </h:body>
 </html>
 

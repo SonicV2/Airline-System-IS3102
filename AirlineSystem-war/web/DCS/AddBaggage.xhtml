@@ -15,11 +15,12 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
         <h:outputStylesheet library="css" name="admindb.css" />
         <h:outputStylesheet library="css" name="morrisjs/morris.css" />
+        <h:outputStylesheet library ="css"  name="flightdisplay2.css" />
         <title>Add Baggage</title>
     </h:head>
 
     <h:body>
-                <!--    To add the same header on all dashboard pages  -->
+        <!--    To add the same header on all dashboard pages  -->
         <ui:include src="/CI/DashboardHeader.xhtml"/>
         <!--    To add the same sidebar on all dashboard pages  -->
         <ui:include src="/CI/DashboardSidebar.xhtml"/>
@@ -29,53 +30,107 @@
                     <h2 class="page-header"> Baggage Management</h2>
                 </div>
 
-        <h:form >
-            <div>
-                <h:commandButton disabled="true" value="Flight Number: #{searchBookingManagedBean.checkinSchedule.flight.flightNo}"/>
-                &nbsp; &nbsp;
-                <h:commandButton disabled="true" value="Flight Date: #{searchBookingManagedBean.checkinSchedule.startDate}"/>
-                &nbsp; &nbsp;
-                <h:commandButton disabled="true" value="Departure City: #{searchBookingManagedBean.checkinSchedule.flight.route.originCity}"/>
-                &nbsp; &nbsp;
-                <h:commandButton disabled="true" value="Departure City: #{searchBookingManagedBean.checkinSchedule.flight.route.destinationCity}"/>
-                &nbsp; &nbsp;
-                <h:commandButton disabled="true" value="Service Class: #{searchBookingManagedBean.serviceClass}"/>
-                &nbsp; &nbsp;
-                <h:commandButton disabled="true" value="Boarding Time: #{searchBookingManagedBean.boardingTime}"/>
-                &nbsp; &nbsp;
-                <h:commandButton disabled="true" value="Total Weight Allowed: #{searchBookingManagedBean.totalWeightAllowed} KG"/>
-
-            </div>
+                <h:form >
 
 
-            <p:dataList value="#{baggageManagedBean.allBaggage}" var="bag" type="ordered">
-                <f:facet name="header">
-                    Added Baggage
-                    ( #{baggageManagedBean.totalweight} KG)
+                    <div class="flight-list-v2">
+                        <div class="flight-list-main">	
+                            <div class="col-md-2 col-sm-2 text-center airline">
+                                <br></br>
+                                <h4 style='color:#26c6da;'>Merlion Airlines</h4>
 
-                </f:facet> 
+                                <h5>#{searchBookingManagedBean.checkinSchedule.flight.flightNo}</h5>
+                            </div>
+                            <div class="col-md-3 col-sm-3 departure">
 
-                <h:outputLabel value="BaggageWeight"/>
-                #{bag.baggageWeight}
+                                <h3><i class="fa fa-plane"></i> #{searchBookingManagedBean.checkinSchedule.flight.route.originIATA} </h3>
+                                <h4><h:outputText value="#{searchBookingManagedBean.checkinSchedule.startDate}">
+                                        <f:convertDateTime pattern ="hh:mm a"/>
+                                    </h:outputText></h4>
+
+                                <h5 class="bold"><h:outputText value="#{schedules.startDate}">
+                                        <f:convertDateTime pattern ="EEE, MMM d, yyyy"/>
+                                    </h:outputText></h5>
+                                <h5>#{searchBookingManagedBean.checkinSchedule.flight.route.originCity}, #{searchBookingManagedBean.checkinSchedule.flight.route.originCountry}</h5>
+                            </div>
 
 
-            </p:dataList>
+                            <div class="col-md-4 col-sm-4 stop-duration">
+                                <div class="duration text-center">
+                                    <h1><i class="fa fa-long-arrow-right"></i></h1>
+                                    <span><i class="fa fa-clock-o"></i> 
+                                        #{mARSManagedBean.convertToHours(searchBookingManagedBean.checkinSchedule.flight.flightDuration)} Hours                                            
+                                        #{mARSManagedBean.convertToMins(searchBookingManagedBean.checkinSchedule.flight.flightDuration)} Mins 
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-3 destination">
+                                <h3><i class="fa fa-plane fa-rotate-90"></i> #{searchBookingManagedBean.checkinSchedule.flight.route.destinationIATA} </h3>
+                                <h4><h:outputText value="#{searchBookingManagedBean.checkinSchedule.endDate}">
+                                        <f:convertDateTime pattern ="hh:mm a"/>
+                                    </h:outputText></h4>
+                                <h5 class="bold"><h:outputText value="#{searchBookingManagedBean.checkinSchedule.endDate}">
+                                        <f:convertDateTime pattern ="EEE, MMM d, yyyy"/>
+                                    </h:outputText></h5>
+                                <h5>#{searchBookingManagedBean.checkinSchedule.flight.route.destinationCity}, #{searchBookingManagedBean.checkinSchedule.flight.route.destinationCountry}</h5>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="flight-list-footer">
+                            <div class="col-md-12 col-sm-12 col-xs-12 sm-invisible">
+                                <span><i class="fa fa-plane"></i> #{searchBookingManagedBean.serviceClass}</span>
 
-            <br /> <br />
-            <h:outputLabel value="Baggage Weight"/>
-            <h:inputText value="#{baggageManagedBean.addBagWeight}" />
+                                <span><i class="fa fa-clock-o"></i> Boarding Time: <h:outputText value="#{searchBookingManagedBean.boardingTime}">
+                                        <f:convertDateTime pattern ="hh:mm a EEE, MMM d, yyyy"/>
+                                    </h:outputText></span>
 
-            <br />
-            <h:commandButton value="Add Baggage" actionListener="#{baggageManagedBean.addBaggage}"  />
-            <h:commandButton value="update" action="AddBaggage.xhtml"/>
-            
-            <h:commandButton value="Pay extra weight" action="PayExtraWeight.xhtml" actionListener="#{baggageManagedBean.calculateExtra}"  />
-            
-            <h:commandButton value="Proceed" action="GenerateBaggageTag.xhtml"/>
-        </h:form>
+                                <span><i class="fa fa-suitcase"></i> Weight Allowed: #{searchBookingManagedBean.totalWeightAllowed} KG</span>
+
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <br></br>
+                    <br></br>
+                    <div class="col-md-6">
+                        <p:dataList value="#{baggageManagedBean.allBaggage}" var="bag" type="ordered">
+                            <f:facet name="header">
+                                Added Baggage
+                                ( Total Weight: #{baggageManagedBean.totalweight} KG)
+                            </f:facet> 
+
+                            Baggage #{baggageManagedBean.allBaggage.indexOf(bag)+1} -- #{bag.baggageWeight} KG
+                        </p:dataList>
+                    </div>
+                    <div class="col-lg-12">
+                        <br /> <br />
+                        <div class="col-md-8 form-inline">
+                            <h:outputLabel value="Enter Baggage Weight" />
+                            <h:inputText class="form-control" value="#{baggageManagedBean.addBagWeight}" />
+
+                            <h:commandButton value="Add Baggage" class="btn btn-outline btn-warning" actionListener="#{baggageManagedBean.addBaggage}"  />
+                            <!--            <h:commandButton value="update" action="AddBaggage.xhtml"/>-->
+                                                        <h:commandButton value="Pay extra weight" class="btn btn-outline btn-info" action="PayExtraWeight.xhtml" actionListener="#{baggageManagedBean.calculateExtra}"  />
+                        </div>
+
+
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="text-center">
+                            <br></br>
+
+
+                            <br></br>
+                            <h:commandButton value="Proceed" class="btn btn-outline btn-success" action="GenerateBaggageTag.xhtml"/>
+                        </div>
+                    </div>
+                </h:form>
+
             </div>
         </div>
-        
+
     </h:body>
 </html>
 

@@ -2,109 +2,197 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
     <h:head>
-        <title>Facelet Title</title>
+        <p:growl id="growl" sticky="true" showDetail="true"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <h:outputStylesheet library ="css"  name="bootstrap.css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
+        <h:outputStylesheet library="css" name="admindb.css" />
+        <h:outputStylesheet library="css" name="morrisjs/morris.css" />
+        <h:outputStylesheet library ="css"  name="flightdisplay2.css" />
     </h:head>
     <h:body>
-        <h:form class="col-md-6">
-            <div>
-                <h:commandButton disabled="true" value="Flight Number: #{searchBookingManagedBean.checkinSchedule.flight.flightNo}"/>
-                &nbsp; &nbsp;
-                <h:commandButton disabled="true" value="Flight Date: #{searchBookingManagedBean.checkinSchedule.startDate}"/>
-                &nbsp; &nbsp;
-                <h:commandButton disabled="true" value="Departure City: #{searchBookingManagedBean.checkinSchedule.flight.route.originCity}"/>
-                &nbsp; &nbsp;
-                <h:commandButton disabled="true" value="Departure City: #{searchBookingManagedBean.checkinSchedule.flight.route.destinationCity}"/>
-                &nbsp; &nbsp;
-                <h:commandButton disabled="true" value="Service Class: #{searchBookingManagedBean.serviceClass}"/>
-                &nbsp; &nbsp;
-                <h:commandButton disabled="true" value="Boarding Time: #{searchBookingManagedBean.boardingTime}"/>
-                &nbsp; &nbsp;
-                <h:commandButton disabled="true" value="Total Weight Allowed: #{searchBookingManagedBean.totalWeightAllowed} KG"/>
+        <!--    To add the same header on all dashboard pages  -->
+        <ui:include src="/CI/DashboardHeader.xhtml"/>
+        <!--    To add the same sidebar on all dashboard pages  -->
+        <ui:include src="/CI/DashboardSidebar.xhtml"/>
+        <div id="page-wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2 class="page-header"> Pay For Baggage</h2>
+                </div>
+                <h:form class="col-md-12">
+                    <div class="flight-list-v2">
+                        <div class="flight-list-main">	
+                            <div class="col-md-2 col-sm-2 text-center airline">
+                                <br></br>
+                                <h4 style='color:#26c6da;'>Merlion Airlines</h4>
 
+                                <h5>#{searchBookingManagedBean.checkinSchedule.flight.flightNo}</h5>
+                            </div>
+                            <div class="col-md-3 col-sm-3 departure">
+
+                                <h3><i class="fa fa-plane"></i> #{searchBookingManagedBean.checkinSchedule.flight.route.originIATA} </h3>
+                                <h4><h:outputText value="#{searchBookingManagedBean.checkinSchedule.startDate}">
+                                        <f:convertDateTime pattern ="hh:mm a"/>
+                                    </h:outputText></h4>
+
+                                <h5 class="bold"><h:outputText value="#{schedules.startDate}">
+                                        <f:convertDateTime pattern ="EEE, MMM d, yyyy"/>
+                                    </h:outputText></h5>
+                                <h5>#{searchBookingManagedBean.checkinSchedule.flight.route.originCity}, #{searchBookingManagedBean.checkinSchedule.flight.route.originCountry}</h5>
+                            </div>
+
+
+                            <div class="col-md-4 col-sm-4 stop-duration">
+                                <div class="duration text-center">
+                                    <h1><i class="fa fa-long-arrow-right"></i></h1>
+                                    <span><i class="fa fa-clock-o"></i> 
+                                        #{mARSManagedBean.convertToHours(searchBookingManagedBean.checkinSchedule.flight.flightDuration)} Hours                                            
+                                        #{mARSManagedBean.convertToMins(searchBookingManagedBean.checkinSchedule.flight.flightDuration)} Mins 
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-3 destination">
+                                <h3><i class="fa fa-plane fa-rotate-90"></i> #{searchBookingManagedBean.checkinSchedule.flight.route.destinationIATA} </h3>
+                                <h4><h:outputText value="#{searchBookingManagedBean.checkinSchedule.endDate}">
+                                        <f:convertDateTime pattern ="hh:mm a"/>
+                                    </h:outputText></h4>
+                                <h5 class="bold"><h:outputText value="#{searchBookingManagedBean.checkinSchedule.endDate}">
+                                        <f:convertDateTime pattern ="EEE, MMM d, yyyy"/>
+                                    </h:outputText></h5>
+                                <h5>#{searchBookingManagedBean.checkinSchedule.flight.route.destinationCity}, #{searchBookingManagedBean.checkinSchedule.flight.route.destinationCountry}</h5>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="flight-list-footer">
+                            <div class="col-md-12 col-sm-12 col-xs-12 sm-invisible">
+                                <span><i class="fa fa-plane"></i> #{searchBookingManagedBean.serviceClass}</span>
+
+                                <span><i class="fa fa-clock-o"></i> Boarding Time: <h:outputText value="#{searchBookingManagedBean.boardingTime}">
+                                        <f:convertDateTime pattern ="hh:mm a EEE, MMM d, yyyy"/>
+                                    </h:outputText></span>
+
+                                <span><i class="fa fa-suitcase"></i> Weight Allowed: #{searchBookingManagedBean.totalWeightAllowed} KG</span>
+
+
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <br></br>
+                        <br></br>
+                    <h:outputLabel value="Departure Country: " /> 
+                    #{baggageManagedBean.departure}
+                    <br/>
+                    <h:outputLabel value="Departure Country Band: " /> 
+                    #{baggageManagedBean.banddepart}
+
+                    <br/>
+
+                    <h:outputLabel value="Arrival Country: " /> 
+                    #{baggageManagedBean.destination}
+                    <br/>
+                    <h:outputLabel value="Arrival Country Band: " /> 
+                    #{baggageManagedBean.bandarr}
+                    <br/>
+                    <h:outputLabel value="Extra Payment Needed: " /> 
+                    SGD #{baggageManagedBean.extraPayment}
+                    
+                    </div>
+
+                </h:form>
+
+                    <div class="col-lg-12">
+                        <br></br>
+                        <br></br>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                Baggage Calculation Table
+                            </div>
+                            <!-- /.panel-heading -->
+                            <div class="panel-body">
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-bordered table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>From/To</th>
+                                                <th>Singapore</th> 
+                                                <th>Band 1</th>
+                                                <th>Band 2</th>
+                                                <th>Band 3</th>
+                                                <th>Band 4</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Singapore</td>
+                                                <td> </td> 
+                                                <td>SGD 8/kg</td>
+                                                <td>SGD 12/kg</td>
+                                                <td>SGD 30/kg</td>
+                                                <td>SGD 55/kg</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Band 1</td>
+                                <td>SGD 8/kg</td>
+                                <td>SGD 16/kg</td>
+                                <td>SGD 20/kg</td>
+                                <td>SGD 38/kg</td>
+                                <td>SGD 63/kg</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Band 2</td>
+                                <td>SGD 12/kg</td>
+                                <td>SGD 20/kg</td>
+                                <td>SGD 24/kg</td>
+                                <td>SGD 42/kg</td>
+                                <td>SGD 67/kg</td>
+                                            </tr>
+                                             <tr>
+                                <td>Band 3</td>
+                                <td>SGD 30/kg</td>
+                                <td>SGD 38/kg</td>
+                                <td>SGD 42/kg</td>
+                                <td>SGD 60/kg</td>
+                                <td>SGD 85/kg</td>
+                            </tr>
+                                            
+                                            <tr>
+                                <td>Band 4</td>
+                                <td>SGD 55/kg</td>
+                                <td>SGD 63/kg</td>
+                                <td>SGD 67/kg</td>
+                                <td>SGD 85/kg</td>
+                                <td>SGD 110/kg</td>
+                            </tr>
+                                            
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- /.table-responsive -->
+                            </div>
+                            <!-- /.panel-body -->
+                        </div>
+                        <!-- /.panel -->
+                    </div>
+
+
+                <div class="text-center">
+                    <h:form>
+                        <h:commandButton class="btn btn-outline btn-success" value="Make Payment" action="BaggagePayment.xhtml"/>
+
+                    </h:form>
+                </div>
+                </div>
             </div>
-
-            <h:outputLabel value="Departure Country: " /> 
-            #{baggageManagedBean.departure}
-            <br/>
-            <h:outputLabel value="Departure Country Band: " /> 
-            #{baggageManagedBean.banddepart}
-
-            <br/>
-
-            <h:outputLabel value="Arrival Country: " /> 
-            #{baggageManagedBean.destination}
-            <br/>
-            <h:outputLabel value="Arrival Country Band: " /> 
-            #{baggageManagedBean.bandarr}
-            <br/>
-            <h:outputLabel value="Extra Payment Needed: " /> 
-            USD #{baggageManagedBean.extraPayment}
-
-        </h:form>
-
-
-        <div>
-            <table >
-                <tr>
-                    <th>From/To</th>
-                    <th>Singapore</th> 
-                    <th>Band 1</th>
-                    <th>Band 2</th>
-                    <th>Band 3</th>
-                    <th>Band 4</th>
-
-                </tr>
-                <tr>
-                    <td>Singapore</td>
-                    <td> </td> 
-                    <td>USD 8/kg</td>
-                    <td>USD 12/kg</td>
-                    <td>USD 30/kg</td>
-                    <td>USD 55/kg</td>
-                </tr>
-                <tr>
-                    <td>Band 1</td>
-                    <td>USD 8/kg</td>
-                    <td>USD 16/kg</td>
-                    <td>USD 20/kg</td>
-                    <td>USD 38/kg</td>
-                    <td>USD 63/kg</td>
-                </tr>
-                <tr>
-                    <td>Band 2</td>
-                    <td>USD 12/kg</td>
-                    <td>USD 20/kg</td>
-                    <td>USD 24/kg</td>
-                    <td>USD 42/kg</td>
-                    <td>USD 67/kg</td>
-                </tr>
-                <tr>
-                    <td>Band 3</td>
-                    <td>USD 30/kg</td>
-                    <td>USD 38/kg</td>
-                    <td>USD 42/kg</td>
-                    <td>USD 60/kg</td>
-                    <td>USD 85/kg</td>
-                </tr>
-                <tr>
-                    <td>Band 4</td>
-                    <td>USD 55/kg</td>
-                    <td>USD 63/kg</td>
-                    <td>USD 67/kg</td>
-                    <td>USD 85/kg</td>
-                    <td>USD 110/kg</td>
-                </tr>
-            </table>
-
-        </div>    
-
-
-        <h:form>
-            <h:commandButton value="Make Payment" action="BaggagePayment.xhtml"/>
-
-        </h:form> 
 
 
 

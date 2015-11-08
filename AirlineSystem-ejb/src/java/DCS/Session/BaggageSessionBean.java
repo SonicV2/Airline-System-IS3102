@@ -186,61 +186,61 @@ public class BaggageSessionBean implements BaggageSessionBeanLocal {
 
         if (departure.equals("Singapore")) {
             System.out.println("AAAAAA in");
-            if (dest.equals("band1")) {
+            if (dest.equals("Band 1")) {
                 penalty += exceed * 8.0;
-            } else if (dest.equals("band2")) {
+            } else if (dest.equals("Band 2")) {
                 penalty += exceed * 12.0;
-            } else if (dest.equals("band3")) {
+            } else if (dest.equals("Band 3")) {
                 penalty += exceed * 30.0;
-            } else if (dest.equals("band4")) {
+            } else if (dest.equals("Band 4")) {
                 penalty += exceed * 55.0;
             }
 
-        } else if (dept.equals("band1") && destination.equals("Singapore")) {
+        } else if (dept.equals("Band 1") && destination.equals("Singapore")) {
             penalty += exceed * 8.0;
 
-        } else if (dept.equals("band1") && dest.equals("band1")) {
+        } else if (dept.equals("Band 1") && dest.equals("and 1")) {
             penalty += exceed * 16.0;
 
-        } else if (dept.equals("band1") && dest.equals("band2")) {
+        } else if (dept.equals("Band 1") && dest.equals("Band 2")) {
             penalty += exceed * 20.0;
-        } else if (dept.equals("band1") && dest.equals("band3")) {
+        } else if (dept.equals("Band 1") && dest.equals("Band 3")) {
             penalty += exceed * 38.0;
-        } else if (dept.equals("band1") && dest.equals("band3")) {
+        } else if (dept.equals("Band 1") && dest.equals("Band 3")) {
             penalty += exceed * 68.0;
 
-        } else if (dept.equals("band2") && destination.equals("Singapore")) {
+        } else if (dept.equals("Band 2") && destination.equals("Singapore")) {
             penalty += exceed * 12.0;
-        } else if (dept.equals("band2") && dest.equals("band1")) {
+        } else if (dept.equals("Band 2") && dest.equals("Band 1")) {
             penalty += exceed * 20.0;
 
-        } else if (dept.equals("band2") && dest.equals("band2")) {
+        } else if (dept.equals("Band 2") && dest.equals("Band 2")) {
             penalty += exceed * 24.0;
-        } else if (dept.equals("band2") && dest.equals("band3")) {
+        } else if (dept.equals("Band 2") && dest.equals("Band 3")) {
             penalty += exceed * 42.0;
-        } else if (dept.equals("band2") && dest.equals("band3")) {
+        } else if (dept.equals("Band 2") && dest.equals("Band 3")) {
             penalty += exceed * 67.0;
-        } else if (dept.equals("band3") && destination.equals("Singapore")) {
+        } else if (dept.equals("Band 3") && destination.equals("Singapore")) {
             penalty += exceed * 30.0;
-        } else if (dept.equals("band3") && dest.equals("band1")) {
+        } else if (dept.equals("Band 3") && dest.equals("Band 1")) {
             penalty += exceed * 38.0;
 
-        } else if (dept.equals("band3") && dest.equals("band2")) {
+        } else if (dept.equals("Band 3") && dest.equals("Band 2")) {
             penalty += exceed * 42.0;
-        } else if (dept.equals("band3") && dest.equals("band3")) {
+        } else if (dept.equals("Band 3") && dest.equals("Band 3")) {
             penalty += exceed * 60.0;
-        } else if (dept.equals("band3") && dest.equals("band3")) {
+        } else if (dept.equals("Band 3") && dest.equals("Band 3")) {
             penalty += exceed * 85.0;
-        } else if (dept.equals("band4") && destination.equals("Singapore")) {
+        } else if (dept.equals("Band 4") && destination.equals("Singapore")) {
             penalty += exceed * 55.0;
-        } else if (dept.equals("band4") && dest.equals("band1")) {
+        } else if (dept.equals("Band 4") && dest.equals("Band 1")) {
             penalty += exceed * 63.0;
 
-        } else if (dept.equals("band4") && dest.equals("band2")) {
+        } else if (dept.equals("Band 4") && dest.equals("Band 2")) {
             penalty += exceed * 67.0;
-        } else if (dept.equals("band4") && dest.equals("band3")) {
+        } else if (dept.equals("Band 4") && dest.equals("Band 3")) {
             penalty += exceed * 85.0;
-        } else if (dept.equals("band4") && dest.equals("band3")) {
+        } else if (dept.equals("Band 4") && dest.equals("Band 3")) {
             penalty += exceed * 110.0;
         }
 
@@ -266,25 +266,25 @@ public class BaggageSessionBean implements BaggageSessionBeanLocal {
 
         for (int i = 0; i < band1.length; i++) {
             if (city.equals(band1[i])) {
-                band = "band1";
+                band = "Band 1";
             }
         }
 
         for (int i = 0; i < band2.length; i++) {
             if (city.equals(band2[i])) {
-                band = "band2";
+                band = "Band 2";
             }
         }
 
         for (int i = 0; i < band3.length; i++) {
             if (city.equals(band3[i])) {
-                band = "band3";
+                band = "Band 3";
             }
         }
 
         for (int i = 0; i < band4.length; i++) {
             if (city.equals(band4[i])) {
-                band = "band4";
+                band = "Band 4";
             }
         }
 

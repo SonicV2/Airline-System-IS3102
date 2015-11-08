@@ -3,28 +3,59 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
-        <title>Facelet Title</title>
+        <p:growl id="growl" sticky="true" showDetail="true"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <h:outputStylesheet library ="css"  name="bootstrap.css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
+        <h:outputStylesheet library="css" name="admindb.css" />
+        <h:outputStylesheet library="css" name="morrisjs/morris.css" />
+        <title>Change Flight</title>
     </h:head>
     <h:body>
-        <h:form>
+        <!--    To add the same header on all dashboard pages  -->
+        <ui:include src="/CI/DashboardHeader.xhtml"/>
+        <!--    To add the same sidebar on all dashboard pages  -->
+        <ui:include src="/CI/DashboardSidebar.xhtml"/>
+        <div id="page-wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2 class="page-header"> Change To Another Flight</h2>
+                </div>
+                <div class="col-lg-12">
+                    <!--                    <h:form>-->
+                    <h:form>
+                        <p:outputLabel for="flight1" value="Flight Available To Change:" />
+                        <p:dataTable id="flight1" var="f" value="#{seatManagedBean.nextAvailSchedules}" selection="#{seatManagedBean.selectedSchedule}" rowKey="#{f}">
+                            <f:facet name="header">
+                                Flights Available
+                            </f:facet>
+                            <p:column selectionMode="single" style="width:30px;text-align:center"/>
+                            <p:column headerText="Schedule ID">
+                                <h:outputText value="#{f.scheduleId}" />
+                            </p:column>
+                            <p:column headerText="Flight Number">
+                                <h:outputText value="#{f.flight.flightNo}" />
+                            </p:column>
+                            <p:column headerText="Flight Departs From">
+                                <h:outputText value="#{f.startDate} " />
+                            </p:column>
+                            <p:column headerText="Flight Arrives At">
+                                <h:outputText value="#{f.endDate}" />
+                            </p:column>
+                            <f:facet name="footer">
+                                <h:commandButton class="btn btn-outline btn-success" value="Change" actionListener="#{seatManagedBean.changeExistBooking}" action="SearchBooking" />
+                            </f:facet>
+                        </p:dataTable>
+                    </h:form>
 
-           
-                <p:outputLabel for="flight1" value="Flight:" />
-                <p:selectOneRadio id="flight1" value="#{seatManagedBean.selectedSchedule}"  layout="grid" columns="3">
-                    <f:selectItems itemLabelEscaped="false" value="#{seatManagedBean.nextAvailSchedules}" var="f" itemValue="#{f.scheduleId.toString()}" 
-                                   itemLabel="Schedule ID: #{f.scheduleId}   Flight Number: #{f.flight.flightNo} &lt;br/&gt; 
-                                                    Schedule Date: #{f.startDate}  &lt;br/&gt; Schedule Date: #{f.endDate}" />
-                </p:selectOneRadio>
-                
-                
-                  <h:commandButton value="Change" actionListener="#{seatManagedBean.changeExistBooking}"  />
-     
-
-          
-
-        </h:form>
+                </div>
+            </div>
+        </div>
     </h:body>
 </html>
 
