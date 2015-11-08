@@ -103,8 +103,10 @@ public class SeasonManagedBean {
             Season season = sList.get(i);
             Date startDate = season.getStart();
             Date endDate = season.getEnd();
-            Date now = new Date();
-            if(now.after(startDate) && now.before(endDate)){
+            Calendar cal = Calendar.getInstance();
+            cal.set(year, month, 1, 0, 0);
+            Date current= cal.getTime();
+            if(current.after(startDate) && current.before(endDate)){
             String countryGeo =season.getLocation().getCountry();
             if (hm.get(countryGeo) != null) {
                 int count=0; 
