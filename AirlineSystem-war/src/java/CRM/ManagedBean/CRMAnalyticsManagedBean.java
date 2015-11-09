@@ -240,12 +240,28 @@ public class CRMAnalyticsManagedBean implements Serializable {
         return "SendMarketingEmail";
     }
     
+    public String sendMarketingEmailLost(){
+        int size = customerList.size();
+        description= "You are sending a mass marketing email to customers from " + from+ " percentile" 
+                +" to the " + to + " percentile of "+ type + " score. There exist " + size + " customers.";
+        return "SendMarketingEmailLost";
+    }
+    
+    
+    public String sendPromotionalEmailLost(){
+        int size = customerList.size();
+        discountList = dm.retrieveValidDiscounts();
+        description= "You are sending a mass email with a discount code to customers from " + from+ " percentile" 
+                +" to the " + to + " percentile of "+ type + " score. There exist " + size + " customers. Please select the discount type you want to send.";
+        return "SendDiscountCodesLost";
+    }
+    
     public String sendPromotionalEmail(){
         int size = csList.size();
         discountList = dm.retrieveValidDiscounts();
         description= "You are sending a mass email with a discount code to customers from " + from+ " percentile" 
                 +" to the " + to + " percentile of "+ type + " score. There exist " + size + " customers. Please select the discount type you want to send.";
-        return "SendDiscountCodes";
+        return "SendDiscountCodesLost";
     }
     
     public void sendDiscounttoCustomers(){
@@ -264,11 +280,36 @@ public class CRMAnalyticsManagedBean implements Serializable {
         }
     }
     
+    public void sendDiscounttoCustomersLost(){
+         if (discountType == null) {
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please Select a Discount Type", "");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+            return;
+        }
+        expiry = discountType.getExpiryDate();
+        int size = customerList.size();
+        List<String> codeList = dm.sendDiscountCodes(discountType, size);
+        for(int i=0; i<size; i++){
+            String email = customerList.get(i).getEmail();
+            String name = customerList.get(i).getFirstName() + " "+ customerList.get(i).getLastName();
+            sendPromotionEmail(email,name, codeList.get(i));
+        }
+    }
+    
     public void sendtoCustomerList1(){
         int size = csList.size();
         for(int i=0; i<size; i++){
             String email = csList.get(i).getEmail();
             String name = csList.get(i).getName();
+            sendEmail(email,name);
+        }
+    }
+    
+    public void sendtoCustomerListLost(){
+        int size = customerList.size();
+        for(int i=0; i<size; i++){
+            String email = customerList.get(i).getEmail();
+            String name = customerList.get(i).getFirstName() + " "+ customerList.get(i).getLastName();
             sendEmail(email,name);
         }
     }
