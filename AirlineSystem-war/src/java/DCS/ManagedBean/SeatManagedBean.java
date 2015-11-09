@@ -548,7 +548,8 @@ public class SeatManagedBean {
                 if (!searchBookingManagedBean.isOnline()) {
                     return "AddBaggage.xhtml";
                 } else {
-                    return "ShowBoardingPass.xhtml";
+                    
+                    return "OnlineShowBoardingPass.xhtml";
                 }
 
             } else if (getClasstype().equals("Business") && Integer.parseInt(getChoose().substring(1)) < 9 && Integer.parseInt(getChoose().substring(1)) > 0) {
@@ -564,7 +565,7 @@ public class SeatManagedBean {
 
                     return "AddBaggage.xhtml";
                 } else {
-                    return "ShowBoardingPass.xhtml";
+                     return "OnlineShowBoardingPass.xhtml";
                 }
             } else {
                 message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "please choose the correct class", "");
@@ -671,7 +672,12 @@ public class SeatManagedBean {
                 checkInRecordSessionBean.addSeat(booking, choose.toUpperCase(), upgrade, upgradeCosts);
                 boardingPassSessionBean.addSeat(booking, choose.toUpperCase());
 
-                return "AddBaggage.xhtml";
+                if (!searchBookingManagedBean.isOnline()) {
+
+                    return "AddBaggage.xhtml";
+                } else {
+                     return "OnlineShowBoardingPass.xhtml";
+                }
             } else if (getClasstype().equals("Business") && Integer.parseInt(getChoose().substring(1)) < 11) {
                 getB777_200seatArrange().set(getB777_200seatArrange().indexOf("\uD83D\uDCBA" + getChoose().toUpperCase()), "\n" + "\u26D4" + "\n" + getChoose().toUpperCase());
 
@@ -681,7 +687,12 @@ public class SeatManagedBean {
                 checkInRecordSessionBean.addSeat(booking, choose.toUpperCase(), upgrade, upgradeCosts);
                 boardingPassSessionBean.addSeat(booking, choose.toUpperCase());
 
-                return "AddBaggage.xhtml";
+                if (!searchBookingManagedBean.isOnline()) {
+
+                    return "AddBaggage.xhtml";
+                } else {
+                     return "OnlineShowBoardingPass.xhtml";
+                }
             } else {
                 message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "please choose the correct class", "");
                 FacesContext.getCurrentInstance().addMessage(null, message);
@@ -785,7 +796,12 @@ public class SeatManagedBean {
                 checkInRecordSessionBean.addSeat(booking, choose.toUpperCase(), upgrade, upgradeCosts);
                 boardingPassSessionBean.addSeat(booking, choose.toUpperCase());
 
-                return "AddBaggage.xhtml";
+                if (!searchBookingManagedBean.isOnline()) {
+
+                    return "AddBaggage.xhtml";
+                } else {
+                     return "OnlineShowBoardingPass.xhtml";
+                }
 
             } else if (getClasstype().equals("Business") && Integer.parseInt(getChoose().substring(1)) < 9) {
                 getB777_200ERseatArrange().set(getB777_200ERseatArrange().indexOf("\uD83D\uDCBA" + getChoose().toUpperCase()), "\n" + "\u26D4" + "\n" + getChoose().toUpperCase());
@@ -796,7 +812,12 @@ public class SeatManagedBean {
                 checkInRecordSessionBean.addSeat(booking, choose.toUpperCase(), upgrade, upgradeCosts);
                 boardingPassSessionBean.addSeat(booking, choose.toUpperCase());
 
-                return "AddBaggage.xhtml";
+                if (!searchBookingManagedBean.isOnline()) {
+
+                    return "AddBaggage.xhtml";
+                } else {
+                     return "OnlineShowBoardingPass.xhtml";
+                }
             } else {
                 message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "please choose the correct class", "");
                 FacesContext.getCurrentInstance().addMessage(null, message);

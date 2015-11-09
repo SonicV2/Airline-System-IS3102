@@ -15,7 +15,12 @@ import javax.ejb.Local;
  */
 @Local
 public interface BoardingPassSessionBeanLocal {
+
     public void addBooking(Booking booking);
+
     public void addSeat(Booking booking, String seatNo);
+
     public BoardingPass findBoardingpass(Booking booking);
+
+    public BoardingPass retrieveBoardingPassByBooking(Booking booking);
 }

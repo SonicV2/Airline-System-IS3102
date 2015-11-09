@@ -43,6 +43,7 @@ public class BoardingPassSessionBean implements BoardingPassSessionBeanLocal {
         boardingpass.setArrivalCity(booking.getSeatAvail().getSchedule().getFlight().getRoute().getDestinationCity());
         boardingpass.setDepartCity(booking.getSeatAvail().getSchedule().getFlight().getRoute().getOriginCity());
         boardingpass.setDepartTime(booking.getFlightDate());
+        boardingpass.setGate("G12");
 
         Date depart = booking.getFlightDate();
         depart.setTime(depart.getTime() - 1800 * 1000); // half an hour before
@@ -103,6 +104,22 @@ public class BoardingPassSessionBean implements BoardingPassSessionBeanLocal {
 
     }
 
+    
+    @Override
+    public BoardingPass retrieveBoardingPassByBooking(Booking booking){
+        Query q = em.createQuery("SELECT b FROM BoardingPass b");
+        
+        List<BoardingPass> passes = q.getResultList();
+        
+        for(BoardingPass b : passes){
+            if(b.getBookingID().equals(booking.getId().toString())){
+               return b; 
+            }
+        }
+        return null;
+    }
+    
+    
     public void persist(Object object) {
         em.persist(object);
     }
