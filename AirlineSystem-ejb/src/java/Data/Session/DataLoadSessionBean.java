@@ -73,7 +73,7 @@ public class DataLoadSessionBean {
     @PostConstruct
     public void init() {
         System.out.println("*****Loading data");
-//       addDiscountTypes();
+//        addDiscountTypes();
 //        addFlights();
 //        addCustomer();
 //        addTravelAgencies();
