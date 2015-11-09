@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.util.Date;
 import java.util.HashMap;
 import javax.annotation.Resource;
 import javax.ejb.EJB;
@@ -68,6 +69,10 @@ public class Controller extends HttpServlet {
                 printBalancePDF(request, response);
             } else if (source.equals("journal")) {
                 printJournalPDF(request, response);
+            } else if (source.equals("baggageTag")) {
+                printBaggageTagPDF(request, response);
+            } else if (source.equals("boardingPass")) {
+                printBoardingPassPDF(request, response);
             }
 
         } catch (Exception ex) {
@@ -380,6 +385,105 @@ public class Controller extends HttpServlet {
             parameters.put("YEAR", year);
             //Generate the report
             JasperRunManager.runReportToPdfStream(reportStream, outputStream, parameters, airlineSystemDataSource.getConnection());
+
+            outputStream.flush();
+            outputStream.close();
+        } catch (JRException jrex) {
+            System.out.println("********** Jasperreport Exception");
+            jrex.printStackTrace();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void printBaggageTagPDF(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            InputStream reportStream = getServletConfig().getServletContext().getResourceAsStream("/JasperReports/BaggageTag.jasper");
+            response.setContentType("application/pdf");
+
+            //Get the relevant information from the request sent
+            String id = (String) request.getSession().getAttribute("ID");
+            String city = (String) request.getSession().getAttribute("City");
+            Date depart = (Date) request.getSession().getAttribute("DepartDate");
+            String fNumber = (String) request.getSession().getAttribute("fNumber");
+            String service = (String) request.getSession().getAttribute("Service");
+            String seqNumber = (String) request.getSession().getAttribute("seqNumber");
+
+            response.setHeader("Content-Disposition", "attachment; filename=\"" + id + ".pdf\"");
+            ServletOutputStream outputStream = response.getOutputStream();
+
+            //Set up the parameters
+            HashMap parameters = new HashMap();
+            parameters.put("IMAGEPATH", "http://localhost:8080/AirlineSystem-war/JasperReports/MerlionAirlineLogo.jpg");
+            parameters.put("Barcode", "http://localhost:8080/AirlineSystem-war/JasperReports/barcode.png");
+            parameters.put("id", id);
+            parameters.put("City", city);
+
+            parameters.put("depart", depart);
+            parameters.put("fNumber", fNumber);
+            parameters.put("service", service);
+            parameters.put("seqNumber", seqNumber);
+
+            //System.out.println(reportStream + ", " + outputStream + ", " + airlineSystemDataSource.getConnection());
+            //Generate the report
+            JasperRunManager.runReportToPdfStream(reportStream, outputStream, parameters, new JREmptyDataSource());
+
+            outputStream.flush();
+            outputStream.close();
+        } catch (JRException jrex) {
+            System.out.println("********** Jasperreport Exception");
+            jrex.printStackTrace();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void printBoardingPassPDF(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            InputStream reportStream = getServletConfig().getServletContext().getResourceAsStream("/JasperReports/BoardingPass.jasper");
+            response.setContentType("application/pdf");
+
+            //Get the relevant information from the request sent
+            String fName = (String) request.getSession().getAttribute("fName");
+            String lName = (String) request.getSession().getAttribute("lName");
+            String dCity = (String) request.getSession().getAttribute("dCity");
+            String aCity = (String) request.getSession().getAttribute("aCity");
+            Date DepartDate = (Date) request.getSession().getAttribute("DepartDate");
+            String fNumber = (String) request.getSession().getAttribute("fNumber");
+
+            String boardTime = (String) request.getSession().getAttribute("boardTime");
+            String sClass = (String) request.getSession().getAttribute("sClass");
+            String seat = (String) request.getSession().getAttribute("seat");
+
+            String seqNumber = (String) request.getSession().getAttribute("seqNumber");
+            String gate = (String) request.getSession().getAttribute("gate");
+            String bID = (String) request.getSession().getAttribute("bID");
+
+            response.setHeader("Content-Disposition", "attachment; filename=\"" + bID + ".pdf\"");
+            ServletOutputStream outputStream = response.getOutputStream();
+
+            //Set up the parameters
+            HashMap parameters = new HashMap();
+            parameters.put("IMAGEPATH", "http://localhost:8080/AirlineSystem-war/JasperReports/MerlionAirlineLogo.jpg");
+            parameters.put("Barcode", "http://localhost:8080/AirlineSystem-war/JasperReports/barcode.png");
+            parameters.put("fName", fName);
+            parameters.put("lName", lName);
+
+            parameters.put("dCity", dCity);
+            parameters.put("aCity", aCity);
+            parameters.put("DepartDate", DepartDate);
+            parameters.put("fNumber", fNumber);
+
+            parameters.put("boardTime", boardTime);
+            parameters.put("sClass", sClass);
+            parameters.put("seat", seat);
+            parameters.put("seqNumber", seqNumber);
+
+            parameters.put("gate", gate);
+
+            //System.out.println(reportStream + ", " + outputStream + ", " + airlineSystemDataSource.getConnection());
+            //Generate the report
+            JasperRunManager.runReportToPdfStream(reportStream, outputStream, parameters, new JREmptyDataSource());
 
             outputStream.flush();
             outputStream.close();

@@ -11,7 +11,7 @@ and open the template in the editor.
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:jsf="http://xmlns.jcp.org/jsf">
-
+<h:form>
     <div class="header">
         <div class="container">
             <div class="header-grids">
@@ -39,20 +39,28 @@ and open the template in the editor.
                     <span class="menu"><h:graphicImage library="images" name="menu.png" /></span>
                     <ul class="nav1">
                         
+                        
                         <ui:fragment  rendered="#{request.requestURI eq '/AirlineSystem-war/Distribution/MerlionAirlines.xhtml'}">
-                        <li class="active"><a href="#{request.contextPath}/Distribution/MerlionAirlines.xhtml">Flights</a></li>
+                        <li class="active"><a jsf:action="#{mARSManagedBean.clear()}">Flights</a></li>
                         </ui:fragment>
                         <ui:fragment  rendered="#{request.requestURI ne '/AirlineSystem-war/Distribution/MerlionAirlines.xhtml'}">
-                        <li><a href="#{request.contextPath}/Distribution/MerlionAirlines.xhtml">Flights</a></li>
+                        <li><a jsf:action="#{mARSManagedBean.clear()}">Flights</a></li>
                         </ui:fragment>
+                           
                         <ui:fragment rendered="#{request.requestURI eq '/AirlineSystem-war/Distribution/ViewPNR.xhtml'}">
                         <li class="active"><a href="#{request.contextPath}/Distribution/ViewPNR.xhtml">Manage My Flight</a></li>
                         </ui:fragment>
                         <ui:fragment rendered="#{request.requestURI ne '/AirlineSystem-war/Distribution/ViewPNR.xhtml'}">
                         <li><a href="#{request.contextPath}/Distribution/ViewPNR.xhtml">Manage My Flight</a></li>
                         </ui:fragment>
+                        
+                        
+                        <ui:fragment rendered="#{request.requestURI eq '/AirlineSystem-war/DCS/OnlineCheckin.xhtml'}">
+                        <li class="active"><a href="#{request.contextPath}/DCS/OnlineCheckin.xhtml">Check-in</a></li>
+                        </ui:fragment>
+                        <ui:fragment rendered="#{request.requestURI ne '/AirlineSystem-war/DCS/OnlineCheckin.xhtml'}">
                         <li><a href="#{request.contextPath}/DCS/OnlineCheckin.xhtml">Check-in</a></li>
-                       
+                        </ui:fragment>
                     </ul>
                     <div class="clearfix"> </div>
                     <!-- script-for-menu -->
@@ -95,4 +103,5 @@ and open the template in the editor.
             </div>
         </div>
     </div>
+     </h:form>
 </html>

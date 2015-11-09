@@ -240,6 +240,22 @@ public class CRMAnalyticsManagedBean implements Serializable {
         return "SendMarketingEmail";
     }
     
+    public String sendMarketingEmailLost(){
+        int size = customerList.size();
+        description= "You are sending a mass marketing email to customers from " + from+ " percentile" 
+                +" to the " + to + " percentile of "+ type + " score. There exist " + size + " customers.";
+        return "SendMarketingEmailLost";
+    }
+    
+    
+    public String sendPromotionalEmailLost(){
+        int size = customerList.size();
+        discountList = dm.retrieveValidDiscounts();
+        description= "You are sending a mass email with a discount code to customers from " + from+ " percentile" 
+                +" to the " + to + " percentile of "+ type + " score. There exist " + size + " customers. Please select the discount type you want to send.";
+        return "SendDiscountCodesLost";
+    }
+    
     public String sendPromotionalEmail(){
         int size = csList.size();
         discountList = dm.retrieveValidDiscounts();
@@ -261,6 +277,26 @@ public class CRMAnalyticsManagedBean implements Serializable {
             String email = csList.get(i).getEmail();
             String name = csList.get(i).getName();
             sendPromotionEmail(email,name, codeList.get(i));
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Discount Coded Sent", "");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        }
+    }
+    
+    public void sendDiscounttoCustomersLost(){
+         if (discountType == null) {
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please Select a Discount Type", "");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+            return;
+        }
+        expiry = discountType.getExpiryDate();
+        int size = customerList.size();
+        List<String> codeList = dm.sendDiscountCodes(discountType, size);
+        for(int i=0; i<size; i++){
+            String email = customerList.get(i).getEmail();
+            String name = customerList.get(i).getFirstName() + " "+ customerList.get(i).getLastName();
+            sendPromotionEmail(email,name, codeList.get(i));
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Discount Codes Sent", "");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
         }
     }
     
@@ -270,6 +306,19 @@ public class CRMAnalyticsManagedBean implements Serializable {
             String email = csList.get(i).getEmail();
             String name = csList.get(i).getName();
             sendEmail(email,name);
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Marketing Email Sent", "");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        }
+    }
+    
+    public void sendtoCustomerListLost(){
+        int size = customerList.size();
+        for(int i=0; i<size; i++){
+            String email = customerList.get(i).getEmail();
+            String name = customerList.get(i).getFirstName() + " "+ customerList.get(i).getLastName();
+            sendEmail(email,name);
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Marketing Email Sent", "");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
         }
     }
 
@@ -302,7 +351,7 @@ public class CRMAnalyticsManagedBean implements Serializable {
     public String retrieveLostCustomers() {
         description="Lost customers are customers who previously flew with Merlion Airlines but had not flown for with Merlion Airlines for a year or more.";
         customerList = am.getLostCustomers();
-        return "GetLostCustomers";
+        return "GetLostCustomers?faces-redirect=true";
     }
 
     public String getDescription() {
