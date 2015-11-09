@@ -20,25 +20,32 @@ import javax.ejb.Local;
 @Local
 public interface AccountingSessionBeanLocal {
 
-    public void makeTransaction(String name);
-
-    public void changeAcBookYear(int originalYear, int newYear);
-
-    public List<AccountingBook> getAcBooks();
-
-    public List<Posting> getPostingsByDate();
-
-    public Posting getPosting(Long postingId);
+    public void createBook(int year, double cashAmt, double retainedAmt);
 
     public BookAccount getAccount(Long accountId);
 
-    public void deleteAccount(Long accountId);
-
-    public BookAccount addAccount(String name, int year, Type type);
-
-    public void createBook(int year);
-
     public List<BookAccount> getAccounts();
 
+    public List<BookAccount> getAccountsByType(Type type);
+
+    public Posting getPosting(Long postingId);
+
+    public List<Posting> getPostings();
+
+    public AccountingBook getAcBook(int year);
+
+    public List<AccountingBook> getAcBooks();
+
+    public void changeAcBookYear(int originalYear, int newYear);
+
+    public void makeTransaction(String name, double amount);
+
+    public AccountingBook getCurrBook();
+
+    public List<BookAccount> getRevenueAccounts(int year);
+
+    public List<BookAccount> getExpenseAccounts(int year);
+
+    public List<BookAccount> getEditableAccounts();
 
 }

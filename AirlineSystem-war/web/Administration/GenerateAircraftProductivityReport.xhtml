@@ -48,34 +48,34 @@ and open the template in the editor.
                                 <div class="book-left-form">
                                     
                                     <h4>Date of Report</h4>
-                                    <h:outputText id="date" value="#{administrationManagedBean.today}">
+                                    <h:outputText id="date" value="#{adminReportManagedBean.today}">
                                         <f:convertDateTime pattern ="EEE, MMM d, yyyy"/>
                                     </h:outputText>
                                     <br></br>
 
                                     <h4>Aircraft Tail Number</h4>
-                                    <h:outputText id="tail" value="#{administrationManagedBean.selectedAircraft.tailNo}">
+                                    <h:outputText id="tail" value="#{adminReportManagedBean.selectedAircraft.tailNo}">
                                     </h:outputText>
                                     <br></br>
 
                                     <h4>Aircraft Type</h4>
-                                    <h:outputText id="type" value="#{administrationManagedBean.selectedAircraft.aircraftType.id}" />
+                                    <h:outputText id="type" value="#{adminReportManagedBean.selectedAircraft.aircraftType.id}" />
                                     <br></br>
 
                                     <h4>Years Used</h4>
-                                    <h:outputText id="usage" value="#{administrationManagedBean.yearsUsed} years (#{administrationManagedBean.daysUsed} days)" />
+                                    <h:outputText id="usage" value="#{adminReportManagedBean.yearsUsed} years (#{adminReportManagedBean.daysUsed} days)" />
                                     <br></br>
 
                                     <h4>Total Distance Covered</h4>
-                                    <h:outputText id="distance" value="#{administrationManagedBean.distanceCovered} km" />
+                                    <h:outputText id="distance" value="#{adminReportManagedBean.distanceCovered} km" />
                                     <br></br>
 
                                     <h4>Total Travel Time</h4>
-                                    <h:outputText id="time" value="#{administrationManagedBean.totalTravelTime} hours" />
+                                    <h:outputText id="time" value="#{adminReportManagedBean.totalTravelTime} hours" />
                                     <br></br>
 
                                     <h4>Total Profit</h4>
-                                    <h:outputText id="profit" value="$#{administrationManagedBean.totalProfit}" />
+                                    <h:outputText id="profit" value="$#{adminReportManagedBean.totalProfit}" />
                                     <br></br>
 
                                 </div>
