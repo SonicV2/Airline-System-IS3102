@@ -92,7 +92,7 @@ public class AccountingSessionBean implements AccountingSessionBeanLocal {
 
         acBook.setAccounts(accounts);
         em.merge(acBook);
-        
+
         TimeZone tz = TimeZone.getTimeZone("GMT+8:00"); //Set Timezone to Singapore
         Calendar tmp = Calendar.getInstance(tz);
         posting = new Posting();
@@ -101,11 +101,11 @@ public class AccountingSessionBean implements AccountingSessionBeanLocal {
 
         account = acBook.getAccountByName("Cash");
         debit(account.getAccountId(), posting.getId(), cashAmt);
-        
+
         posting = new Posting();
         posting.createPosting(tmp.getTime(), "Initialize Equity Account");
         em.persist(posting);
-        
+
         account = acBook.getAccountByName("Retained Earnings");
         debit(account.getAccountId(), posting.getId(), retainedAmt);
 
@@ -385,27 +385,16 @@ public class AccountingSessionBean implements AccountingSessionBeanLocal {
     }
 
     @Override
-    public List<BookAccount> getEditableAccounts() {
-        accounts = new ArrayList<BookAccount>();
-
-        try {
-            Query q = em.createQuery("SELECT a FROM BookAccount " + " AS a WHERE a.accountName=:name1 OR a.accountName=:name2");
-            q.setParameter("name1", "Cash");
-            q.setParameter("name2", "Retained Earnings");
-
-            List<BookAccount> results = q.getResultList();
-            if (!results.isEmpty()) {
-                accounts = results;
-
-            } else {
-                accounts = null;
-                System.out.println("no accounts!");
+    public List<Integer> getValidYears() {
+        List<Integer> result = new ArrayList<Integer>();
+        acBooks = new ArrayList<AccountingBook>();
+        acBooks = getAcBooks();
+        if (acBooks != null) {
+            for (int i = 0; i < acBooks.size(); i++) {
+                result.add(acBooks.get(i).getYear());
             }
-        } catch (EntityNotFoundException enfe) {
-            System.out.println("\nEntity not found error" + "enfe.getMessage()");
         }
-
-        return accounts;
+        return result;
     }
 
     private BookAccount addAccount(String name, int year, Type type) {

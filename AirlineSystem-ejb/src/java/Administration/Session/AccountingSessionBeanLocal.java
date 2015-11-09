@@ -46,6 +46,6 @@ public interface AccountingSessionBeanLocal {
 
     public List<BookAccount> getExpenseAccounts(int year);
 
-    public List<BookAccount> getEditableAccounts();
+    public List<Integer> getValidYears();
 
 }

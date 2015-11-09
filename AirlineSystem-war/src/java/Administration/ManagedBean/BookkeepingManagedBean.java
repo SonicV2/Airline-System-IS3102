@@ -25,7 +25,6 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import org.primefaces.event.RowEditEvent;
 
 /**
  *
@@ -39,12 +38,7 @@ public class BookkeepingManagedBean {
     @EJB
     private AccountingSessionBeanLocal accountingSessionBean;
 
-    String accountName;
-    Type type;
-    Date entryDate;
-    Double amount;
     Integer year;
-    Boolean active;
     Double cashAmt;
     Double retainedAmt;
 
@@ -55,11 +49,13 @@ public class BookkeepingManagedBean {
     private List<BookAccount> editAccounts;
     private AccountingBook acBook;
     private List<AccountingBook> acBooks;
+    private List<Integer> years;
 
     @PostConstruct
     public void retrieve() {
         setAccounts(accountingSessionBean.getAccounts());
         setAcBooks(accountingSessionBean.getAcBooks());
+        setYears(accountingSessionBean.getValidYears());
     }
 
     public void createBookofAccounting(ActionEvent event) {
@@ -100,7 +96,13 @@ public class BookkeepingManagedBean {
         clear();
     }
 
-    public String generateIncomeStatement(int year) {
+    public String generateIncomeStatement(ActionEvent event) {
+        if (year == 0) {
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please input year of accounting!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return "PrintBookReport";
+        }
+
         List<BookAccount> revenue = accountingSessionBean.getRevenueAccounts(year);
         List<BookAccount> expense = accountingSessionBean.getExpenseAccounts(year);
         List<BookEntry> entries = new ArrayList<BookEntry>();
@@ -156,32 +158,31 @@ public class BookkeepingManagedBean {
         } finally {
             context.responseComplete();
         }
-        return "ManageBook";
+
+        clear();
+        message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Income statement for " + year + " has been successfully downloaded!", "");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+        return "PrintBookReport";
     }
 
-    public String generateStockHolderEquity(int year) {
+    public String generateStockholderEquity(ActionEvent event) {
+        if (year == 0) {
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please input year of accounting!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return "PrintBookReport";
+        }
+
         acBook = accountingSessionBean.getAcBook(year);
-        AccountingBook prev = accountingSessionBean.getAcBook(year - 1);
         List<BookAccount> revenue = accountingSessionBean.getRevenueAccounts(year);
         List<BookAccount> expense = accountingSessionBean.getExpenseAccounts(year);
         List<BookEntry> entries = new ArrayList<BookEntry>();
 
         //Calculate the Retained Earnings
         double currRet = 0.0;
-        double prevRet = 0.0;
         for (int i = 0; i < acBook.getAccounts().size(); i++) {
             if (acBook.getAccounts().get(i).getAccountName().equals("Retained Earnings")) {
                 currRet = acBook.getAccounts().get(i).getEntries().get(0).getAmount();
                 break;
-            }
-        }
-
-        if (prev != null) {
-            for (int i = 0; i < prev.getAccounts().size(); i++) {
-                if (prev.getAccounts().get(i).getAccountName().equals("Retained Earnings")) {
-                    prevRet = acBook.getAccounts().get(i).getEntries().get(0).getAmount();
-                    break;
-                }
             }
         }
 
@@ -214,7 +215,7 @@ public class BookkeepingManagedBean {
 
             //Set the required attributes of the report
             session.setAttribute("currRet", currRet);
-            session.setAttribute("prevRet", prevRet);
+            session.setAttribute("result", currRet + income);
             session.setAttribute("income", income);
             session.setAttribute("year", year);
 
@@ -227,10 +228,20 @@ public class BookkeepingManagedBean {
         } finally {
             context.responseComplete();
         }
-        return "ManageBook";
+
+        clear();
+        message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Stockholder's Equity statement for " + year + " has been successfully downloaded!", "");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+        return "PrintBookReport";
     }
 
-    public String generateBalanceSheet(int year) {
+    public String generateBalanceSheet(ActionEvent event) {
+        if (year == 0) {
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please input year of accounting!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return "PrintBookReport";
+        }
+
         List<BookAccount> asset = accountingSessionBean.getAccountsByType(Type.ASSET);
         List<BookAccount> liability = accountingSessionBean.getAccountsByType(Type.LIABILITY);
         List<BookAccount> equity = accountingSessionBean.getAccountsByType(Type.EQUITY);
@@ -250,10 +261,6 @@ public class BookkeepingManagedBean {
         double revenue1 = 0.0;
         double revenue2 = 0.0;
         double expense1 = 0.0;
-        Double currRatio = null;
-        Double income = null;
-        Double profitMargin = null;
-        Double equityRet = null;
 
         //Calculate the asset values
         for (int i = 0; i < asset.size(); i++) {
@@ -339,19 +346,6 @@ public class BookkeepingManagedBean {
             }
         }
 
-        //Calculate the metrics
-        if (liability1 + liability2 != 0) {
-            currRatio = (asset1 + asset2 + asset3 + asset4) / (liability1 + liability2);
-        }
-        income = revenue1 + revenue2 - expense1;
-        equity1 += income;
-        if (liability1 + liability2 != 0) {
-            profitMargin = income / (revenue1 + revenue2);
-        }
-        if (equity1 != 0) {
-            equityRet = (income) / (equity1);
-        }
-
         try {
             HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
             HttpServletResponse response = (HttpServletResponse) context.getExternalContext().getResponse();
@@ -364,20 +358,8 @@ public class BookkeepingManagedBean {
             session.setAttribute("pne", asset4);
             session.setAttribute("acctPay", liability1);
             session.setAttribute("unearned", liability2);
-            session.setAttribute("retained", equity1);
+            session.setAttribute("retained", equity1+revenue1+revenue2-expense1);
             session.setAttribute("year", year);
-
-            if (currRatio != null) {
-                session.setAttribute("currRation", currRatio);
-            }
-
-            if (profitMargin != null) {
-                session.setAttribute("profitMargin", profitMargin);
-            }
-
-            if (equityRet != null) {
-                session.setAttribute("equityRet", equityRet);
-            }
 
             request.setAttribute("type", "balance"); //Set to type in order to differentiate from other report generation
             RequestDispatcher dispatcher = request.getRequestDispatcher("/Controller");
@@ -388,10 +370,20 @@ public class BookkeepingManagedBean {
         } finally {
             context.responseComplete();
         }
-        return "ManageBook";
+
+        clear();
+        message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Balance Sheet for " + year + " has been successfully downloaded!", "");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+        return "PrintBookReport";
     }
-    
-    public String viewAcctJournal(int year) {        
+
+    public String generateAcctJournal(ActionEvent event) {
+        if (year == 0) {
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please input year of accounting!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return "PrintBookReport";
+        }
+
         FacesContext context = FacesContext.getCurrentInstance();
 
         try {
@@ -411,50 +403,20 @@ public class BookkeepingManagedBean {
         } finally {
             context.responseComplete();
         }
-        return "ManageBook";
+
+        clear();
+        message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Accounting Journal for " + year + " has been successfully downloaded!", "");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+        return "PrintBookReport";
     }
 
     public void clear() {
-        setAccountName(null);
-        setEntryDate(null);
-        setAmount(0.0);
         setYear(0);
-        setActive(false);
+        setCashAmt(null);
+        setRetainedAmt(null);
         setAccount(null);
-        setAccounts(null);
         setAcBook(null);
-    }
-
-    public String getAccountName() {
-        return accountName;
-    }
-
-    public void setAccountName(String accountName) {
-        this.accountName = accountName;
-    }
-
-    public Type getType() {
-        return type;
-    }
-
-    public void setType(Type type) {
-        this.type = type;
-    }
-
-    public Date getEntryDate() {
-        return entryDate;
-    }
-
-    public void setEntryDate(Date entryDate) {
-        this.entryDate = entryDate;
-    }
-
-    public Double getAmount() {
-        return amount;
-    }
-
-    public void setAmount(Double amount) {
-        this.amount = amount;
+        setMessage(null);
     }
 
     public Integer getYear() {
@@ -463,14 +425,6 @@ public class BookkeepingManagedBean {
 
     public void setYear(Integer year) {
         this.year = year;
-    }
-
-    public Boolean getActive() {
-        return active;
-    }
-
-    public void setActive(Boolean active) {
-        this.active = active;
     }
 
     public Double getCashAmt() {
@@ -527,6 +481,22 @@ public class BookkeepingManagedBean {
 
     public void setAcBooks(List<AccountingBook> acBooks) {
         this.acBooks = acBooks;
+    }
+
+    public List<Integer> getYears() {
+        return years;
+    }
+
+    public void setYears(List<Integer> years) {
+        this.years = years;
+    }
+
+    public FacesMessage getMessage() {
+        return message;
+    }
+
+    public void setMessage(FacesMessage message) {
+        this.message = message;
     }
 }
 

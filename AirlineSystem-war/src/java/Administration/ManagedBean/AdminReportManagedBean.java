@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Admin.ManagedBean;
+package Administration.ManagedBean;
 
 import APS.Entity.Aircraft;
 import APS.Entity.AircraftType;
@@ -120,14 +120,13 @@ public class AdminReportManagedBean {
             e.printStackTrace();
         }
 
-        if (selectedPnL.getSalesRevenue() == 0) {
-            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Statement is not ready for that month!", "");
-            FacesContext.getCurrentInstance().addMessage(null, message);
-            return null;
-        }
+//        if (selectedPnL.getSalesRevenue() == 0) {
+//            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Statement is not ready for that month!", "");
+//            FacesContext.getCurrentInstance().addMessage(null, message);
+//            return null;
+//        }
 
 //        setSelectedMonth(null);
-
         return "GeneratePnLStatement";
 
     }
@@ -182,7 +181,6 @@ public class AdminReportManagedBean {
         setTotalExpenses(selectedPnL.getTotalExpenses());
 
 //        setSelectedMonth(null);
-
         return "GenerateExpenses";
     }
 
@@ -231,6 +229,7 @@ public class AdminReportManagedBean {
     public String printPnL() {
 
         FacesContext context = FacesContext.getCurrentInstance();
+        DecimalFormat df = new DecimalFormat("$#,###.00");
 
         try {
             HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
@@ -238,17 +237,18 @@ public class AdminReportManagedBean {
             HttpSession session = request.getSession();
 
             //Set the required attributes of the report
-            session.setAttribute("MONTH", selectedMonth);
-            session.setAttribute("REVENUE", selectedPnL.getSalesRevenue());
-            session.setAttribute("SALARIES", selectedPnL.getEmployeeSalaries());
-            session.setAttribute("RENTALS", selectedPnL.getAirportRental());
-            session.setAttribute("TAXES", selectedPnL.getAirportTaxes());
-            session.setAttribute("COMMISSIONS", selectedPnL.getCommission());
-            session.setAttribute("FUELCOST", selectedPnL.getFuelCosts());
-            session.setAttribute("TOTALREVENUE", selectedPnL.getTotalRevenue());
-            session.setAttribute("TOTALEXPENSES", selectedPnL.getTotalExpenses());
-            session.setAttribute("TOTALPNL", selectedPnL.getTotalPnL());
-
+            session.setAttribute("DATE", selectedMonth);
+            session.setAttribute("REVENUE", df.format(selectedPnL.getSalesRevenue()));
+            session.setAttribute("SALARIES", df.format(selectedPnL.getEmployeeSalaries()));
+            session.setAttribute("RENTALS", df.format(selectedPnL.getAirportRental()));
+            session.setAttribute("TAXES", df.format(selectedPnL.getAirportTaxes()));
+            session.setAttribute("COMMISSIONS", df.format(selectedPnL.getCommission()));
+            session.setAttribute("FUELCOST", df.format(selectedPnL.getFuelCosts()));
+            session.setAttribute("AIRCRAFT", df.format(selectedPnL.getAircrafts()));
+            session.setAttribute("TOTALREVENUE", df.format(selectedPnL.getTotalRevenue()));
+            session.setAttribute("TOTALEXPENSES", df.format(selectedPnL.getTotalExpenses()));
+            session.setAttribute("TOTALPNL", df.format(selectedPnL.getTotalPnL()));
+            
             request.setAttribute("type", "PnL"); //Set to type in order to differentiate from other report generation
             RequestDispatcher dispatcher = request.getRequestDispatcher("/Controller");
             dispatcher.forward(request, response);
@@ -258,13 +258,14 @@ public class AdminReportManagedBean {
         } finally {
             context.responseComplete();
         }
-        return "PrintPnL";
+        return "GeneratePnLStatement";
     }
 
     public String printExpenses() {
 
         FacesContext context = FacesContext.getCurrentInstance();
-
+        DecimalFormat df = new DecimalFormat("#,###.00");
+        
         try {
             HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
             HttpServletResponse response = (HttpServletResponse) context.getExternalContext().getResponse();
@@ -272,13 +273,13 @@ public class AdminReportManagedBean {
 
             //Set the required attributes of the report
             session.setAttribute("DATE", selectedMonth);
-            session.setAttribute("RENTAL", airportRental);
-            session.setAttribute("TAX", airportTaxes);
-            session.setAttribute("SALARY", employeeSalaries);
-            session.setAttribute("COMMISSION", commission);
-            session.setAttribute("FUEL", fuelCosts);
-            session.setAttribute("AIRCRAFT", aircraftAcquired);
-            session.setAttribute("TOTALEX", totalExpenses);
+            session.setAttribute("RENTAL", df.format(airportRental));
+            session.setAttribute("TAX", df.format(airportTaxes));
+            session.setAttribute("SALARY", df.format(employeeSalaries));
+            session.setAttribute("COMMISSION", df.format(commission));
+            session.setAttribute("FUEL", df.format(fuelCosts));
+            session.setAttribute("AIRCRAFT", df.format(aircraftAcquired));
+            session.setAttribute("TOTALEX", df.format(totalExpenses));
 
             request.setAttribute("type", "expenses"); //Set to type in order to differentiate from other report generation
             RequestDispatcher dispatcher = request.getRequestDispatcher("/Controller");
@@ -289,15 +290,15 @@ public class AdminReportManagedBean {
         } finally {
             context.responseComplete();
         }
-        return "PrintExpenses";
+        return "GenerateExpenses";
     }
 
     public String printProductivity(String tailNo) {
 
         FacesContext context = FacesContext.getCurrentInstance();
-        
+
         selectedAircraft = fleetSessionBean.getAircraft(tailNo);
-                
+
         // Calculate years and days used
         setDaysUsed(aircraftProductivitySessionBean.calculateYearsUsed(selectedAircraft));
         double yearsInDouble = Double.parseDouble(daysUsed) / 365;
@@ -515,4 +516,3 @@ public class AdminReportManagedBean {
     }
 
 }
-
