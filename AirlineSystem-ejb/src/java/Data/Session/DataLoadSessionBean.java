@@ -80,7 +80,7 @@ public class DataLoadSessionBean {
 //        addCustomerBooking();
 //        addTravelAgencyBookings();
 //        addCabinCrew();
-//       addPilot();
+//        addPilot();
 //        addGroundCrew();
     }
 
@@ -541,9 +541,9 @@ public class DataLoadSessionBean {
         List<String> langu1= new ArrayList<String>();
         langu1.add("English");
         langu1.add("Chinese");
-         List<String> langu2= new ArrayList<String>();
-        langu1.add("English");
-        langu1.add("Japanese");
+        List<String> langu2= new ArrayList<String>();
+        langu2.add("English");
+        langu2.add("Japanese");
         List<String> langu3= new ArrayList<String>();
         langu3.add("Korean");
         langu3.add("English");
