@@ -84,10 +84,8 @@ public class AircraftProductivitySessionBean implements AircraftProductivitySess
         temp = getConfirmedPNRs("Booked");
 
         if (PNRs != null && !PNRs.isEmpty()) {
-            if (temp != null && !temp.isEmpty()) {
-                for (PNR eachBookedPNR : temp) {
-                    PNRs.add(eachBookedPNR);
-                }
+            for (PNR eachBookedPNR : temp) {
+                PNRs.add(eachBookedPNR);
             }
             for (PNR eachPNR : PNRs) {
                 if (eachPNR.getDateOfConfirmation() != null) {

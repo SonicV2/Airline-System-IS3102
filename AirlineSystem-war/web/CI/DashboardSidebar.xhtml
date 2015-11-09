@@ -122,7 +122,13 @@
                         <a href="#{request.contextPath}/APS/AddFlight.xhtml"><i class="fa fa-plus fa-fw"></i> Add Flight</a>
                     </li>
                     <li>
-                        <a href="#{request.contextPath}/APS/DeleteFlight.xhtml"><i class="fa fa-plus fa-plane"></i> Flight Management</a>
+                        <a href="#{request.contextPath}/APS/UpdateFlight.xhtml"><i class="fa fa-plus fa-plane"></i> Update Flight</a>
+                    </li>
+                    <li>
+                        <a href="#{request.contextPath}/APS/DeleteFlight.xhtml"><i class="fa fa-plus fa-plane"></i> Delete Flight</a>
+                    </li>
+                    <li>
+                        <a href="#{request.contextPath}/APS/AddSchedules.xhtml"><i class="fa fa-plus fa-plus"></i> Add Additional Schedules</a>
                     </li>
                 </ui:fragment>
                 <!--                this is for flight management, operations executive -->
@@ -404,6 +410,28 @@
                             <a><h:commandLink class="commandLink" action="#{discountManagedBean.manageDiscountTypes()}"><i class="fa fa-pencil"></i> Manage Discounts</h:commandLink></a>
                         </li>
                     </h:form>
+                </ui:fragment>
+                
+                
+                <!--This is for demand forecast management -->
+                <ui:fragment rendered="#{loginManagedBean.accessRightIDs.contains(35)}">
+                        <li>
+                            <a href="#{request.contextPath}/APS/GenerateDemandForecast.xhtml"><i class="fa fa-plus"></i> Generate Demand Forecast</a>
+                        </li>
+                       <li>
+                            <a href="#{request.contextPath}/APS/ViewDemandForecast.xhtml"><i class="fa fa-eye"></i> View Demand Forecast</a>
+                        </li>
+                </ui:fragment>
+                
+                 
+                <!--This is for demand bookkeeping management -->
+                <ui:fragment rendered="#{loginManagedBean.accessRightIDs.contains(36)}">
+                        <li>
+                            <a href="#{request.contextPath}/Administration/ManageBook.xhtml"><i class="fa fa-plus"></i> Add Accounting Book</a>
+                        </li>
+                       <li>
+                            <a href="#{request.contextPath}/Administration/PrintBookReport.xhtml"><i class="fa fa-picture-o"></i> Print Account Book</a>
+                        </li>
                 </ui:fragment>
                 
                 <!-- this is for profit and loss reporting, finance manager-->

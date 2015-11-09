@@ -38,7 +38,7 @@
     <h:body>
 
         <!--            To add the same header on all dashboard pages  
-               <ui:include src="/CI/DashboardHeader.xhtml"/>--> 
+-->               <ui:include src="/CI/DashboardHeader.xhtml"/> 
         <!--To add the same sidebar on all dashboard pages-->  
         <ui:include src="/CI/DashboardSidebar.xhtml"/>
 
@@ -60,6 +60,7 @@
                     <h:form>
                         <p:dataTable var="route" value="#{flightManagedBean.routes}" widgetVar="routesTable" paginator="true" rows="10">
                             <p:ajax event="page" global="false"/>
+                            <p:ajax event="filter" global="false"/>
                             <f:facet name="header">
                                 <p:outputPanel>
                                     <h:outputText value="Search all fields:" />

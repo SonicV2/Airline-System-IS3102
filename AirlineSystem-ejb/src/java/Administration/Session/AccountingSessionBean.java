@@ -7,7 +7,6 @@ import Administration.Entity.BookEntry;
 import Administration.Entity.Posting;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.TimeZone;
@@ -49,50 +48,67 @@ public class AccountingSessionBean implements AccountingSessionBeanLocal {
     };
 
     @Override
-    public void createBook(int year) {
+    public void createBook(int year, double cashAmt, double retainedAmt) {
         acBook = new AccountingBook();
         acBook.setYear(year);
-        account = new BookAccount();
-        accounts = new ArrayList<BookAccount>();
+        em.persist(acBook);
 
+        //Set up the accounts
+        accounts = new ArrayList<BookAccount>();
+        account = new BookAccount();
         account = addAccount("Cash", year, Type.ASSET);
         accounts.add(account);
+        account = new BookAccount();
         account = addAccount("Accounts Receivable", year, Type.ASSET);
         accounts.add(account);
+        account = new BookAccount();
         account = addAccount("Prepaid Expense", year, Type.ASSET);
         accounts.add(account);
+        account = new BookAccount();
         account = addAccount("Property and Equipment", year, Type.ASSET);
         accounts.add(account);
-        //Salaries?
+        account = new BookAccount();
         account = addAccount("Accounts Payable", year, Type.LIABILITY);
         accounts.add(account);
+        account = new BookAccount();
+        account = addAccount("Unearned Revenue", year, Type.LIABILITY);
+        accounts.add(account);
+        account = new BookAccount();
         account = addAccount("Retained Earnings", year, Type.EQUITY);
         accounts.add(account);
-        account = addAccount("Ticket Sales Revenue", year, Type.INCOME);
+        account = new BookAccount();
+        account = addAccount("Ticket Sales Revenue", year, Type.REVENUE);
         accounts.add(account);
-        account = addAccount("Expenses", year, Type.EXPENSE);
+        account = new BookAccount();
+        account = addAccount("Travel Agency Revenue", year, Type.REVENUE);
         accounts.add(account);
+        account = new BookAccount();
+        account = addAccount("Fuel Expenses", year, Type.EXPENSE);
+        accounts.add(account);
+
+        if (getAcBooks() == null) {
+            acBook.setActive(true);
+        }
 
         acBook.setAccounts(accounts);
-        em.persist(acBook);
-    }
+        em.merge(acBook);
 
-    @Override
-    public BookAccount addAccount(String name, int year, Type type) {
-        account = new BookAccount();
-        account.createAccount(name, type);
-        account.setEntries(null);
-        acBook = em.find(AccountingBook.class, year);
-        account.setAcBook(acBook);
-        em.persist(account);
+        TimeZone tz = TimeZone.getTimeZone("GMT+8:00"); //Set Timezone to Singapore
+        Calendar tmp = Calendar.getInstance(tz);
+        posting = new Posting();
+        posting.createPosting(tmp.getTime(), "Initialize Cash Account");
+        em.persist(posting);
 
-        return account;
-    }
+        account = acBook.getAccountByName("Cash");
+        debit(account.getAccountId(), posting.getId(), cashAmt);
 
-    @Override
-    public void deleteAccount(Long accountId) {
-        account = getAccount(accountId);
-        em.remove(account);
+        posting = new Posting();
+        posting.createPosting(tmp.getTime(), "Initialize Equity Account");
+        em.persist(posting);
+
+        account = acBook.getAccountByName("Retained Earnings");
+        debit(account.getAccountId(), posting.getId(), retainedAmt);
+
     }
 
     @Override
@@ -100,7 +116,7 @@ public class AccountingSessionBean implements AccountingSessionBeanLocal {
         account = new BookAccount();
         try {
 
-            Query q = em.createQuery("SELECT a FROM Account " + "AS a WHERE a.accountId=:accountId");
+            Query q = em.createQuery("SELECT a FROM BookAccount " + " AS a WHERE a.accountId=:accountId");
             q.setParameter("accountId", accountId);
 
             List results = q.getResultList();
@@ -139,14 +155,38 @@ public class AccountingSessionBean implements AccountingSessionBeanLocal {
 
         return accounts;
     }
-    
+
+    @Override
+    public List<BookAccount> getAccountsByType(Type type) {
+        accounts = new ArrayList<BookAccount>();
+
+        try {
+            Query q = em.createQuery("SELECT a FROM BookAccount " + " AS a WHERE a.type=:type");
+            q.setParameter("type", type);
+
+            List<BookAccount> results = q.getResultList();
+            if (!results.isEmpty()) {
+
+                accounts = results;
+
+            } else {
+                accounts = null;
+                System.out.println("no accounts!");
+            }
+        } catch (EntityNotFoundException enfe) {
+            System.out.println("\nEntity not found error" + "enfe.getMessage()");
+        }
+
+        return accounts;
+    }
+
     @Override
     public Posting getPosting(Long postingId) {
         posting = new Posting();
 
         try {
 
-            Query q = em.createQuery("SELECT a FROM Posting" + "AS a WHERE a.postingId=:postingId");
+            Query q = em.createQuery("SELECT a FROM Posting" + " AS a WHERE a.postingId=:postingId");
             q.setParameter("postingId", postingId);
 
             List results = q.getResultList();
@@ -164,7 +204,7 @@ public class AccountingSessionBean implements AccountingSessionBeanLocal {
     }
 
     @Override
-    public List<Posting> getPostingsByDate() {
+    public List<Posting> getPostings() {
         postings = new ArrayList<Posting>();
 
         try {
@@ -183,8 +223,31 @@ public class AccountingSessionBean implements AccountingSessionBeanLocal {
             System.out.println("\nEntity not found error" + "enfe.getMessage()");
         }
 
-        Collections.sort(postings, comparator);
+//        Collections.sort(postings, comparator);
         return postings;
+    }
+
+    @Override
+    public AccountingBook getAcBook(int year) {
+        acBook = new AccountingBook();
+
+        try {
+
+            Query q = em.createQuery("SELECT a FROM AccountingBook" + " AS a WHERE a.year=:year");
+            q.setParameter("year", year);
+
+            List results = q.getResultList();
+            if (!results.isEmpty()) {
+                acBook = (AccountingBook) results.get(0);
+
+            } else {
+                acBook = null;
+            }
+
+        } catch (EntityNotFoundException enfe) {
+            System.out.println("\nEntity not found error" + "enfe.getMessage()");
+        }
+        return acBook;
     }
 
     @Override
@@ -213,28 +276,67 @@ public class AccountingSessionBean implements AccountingSessionBeanLocal {
     @Override
     public void changeAcBookYear(int originalYear, int newYear) {
         acBook = em.find(AccountingBook.class, originalYear);
-        AccountingBook tmp = em.find(AccountingBook.class, newYear);
+        AccountingBook curr = em.find(AccountingBook.class, newYear);
         acBook.setActive(false);
-        tmp.setActive(true);
+        curr.setActive(true);
         em.merge(acBook);
-        em.merge(tmp);
+        em.merge(curr);
         em.flush();
     }
 
     @Override
-    public void makeTransaction(String name) {
+    public void makeTransaction(String name, double amount) {
         TimeZone tz = TimeZone.getTimeZone("GMT+8:00"); //Set Timezone to Singapore
         Calendar tmp = Calendar.getInstance(tz);
         posting = new Posting();
         posting.createPosting(tmp.getTime(), name);
-        
+        em.persist(posting);
+
+        account = new BookAccount();
+        acBook = getCurrBook();
+
         if (name.equals("AcquireAircraft")) {
-            
+            account = acBook.getAccountByName("Accounts Payable");
+            credit(account.getAccountId(), posting.getId(), amount);
+            account = acBook.getAccountByName("Property and Equipment");
+            debit(account.getAccountId(), posting.getId(), amount);
+        } else if (name.equals("CustomerBooking")) {
+            account = acBook.getAccountByName("Cash");
+            debit(account.getAccountId(), posting.getId(), amount);
+            account = acBook.getAccountByName("Unearned Revenue");
+            credit(account.getAccountId(), posting.getId(), amount);
+        } else if (name.equals("CustomerCheckIn")) {
+            account = acBook.getAccountByName("Unearned Revenue");
+            debit(account.getAccountId(), posting.getId(), amount);
+            account = acBook.getAccountByName("Ticket Sales Revenue");
+            credit(account.getAccountId(), posting.getId(), amount);
+        } else if (name.equals("TravelAgencyBooking")) {
+            account = acBook.getAccountByName("Accounts Receivable");
+            debit(account.getAccountId(), posting.getId(), amount);
+            account = acBook.getAccountByName("Travel Agency Revenue");
+            credit(account.getAccountId(), posting.getId(), amount);
+        } else if (name.equals("TravelAgencyCfm")) {
+            account = acBook.getAccountByName("Cash");
+            debit(account.getAccountId(), posting.getId(), amount);
+            account = acBook.getAccountByName("Accounts Receivable");
+            credit(account.getAccountId(), posting.getId(), amount);
+        } else if (name.equals("FlightFlown")) {
+            account = acBook.getAccountByName("Cash");
+            credit(account.getAccountId(), posting.getId(), amount);
+            account = acBook.getAccountByName("Fuel Expenses");
+            debit(account.getAccountId(), posting.getId(), amount);
+        } else if (name.equals("MaintainanceDone")) {//What?
+            account = acBook.getAccountByName("Cash");
+            credit(account.getAccountId(), posting.getId(), amount);
+            account = acBook.getAccountByName("Fuel Expenses");
+            debit(account.getAccountId(), posting.getId(), amount);
         }
+//Any maintanance costs? Other costs?
     }
-    
-    private AccountingBook getCurrBook(){
-         acBook = new AccountingBook();
+
+    @Override
+    public AccountingBook getCurrBook() {
+        acBook = new AccountingBook();
         try {
 
             Query q = em.createQuery("SELECT a FROM AccountingBook " + "AS a WHERE a.active=:active");
@@ -253,16 +355,88 @@ public class AccountingSessionBean implements AccountingSessionBeanLocal {
         }
         return acBook;
     }
-    
+
+    @Override
+    public List<BookAccount> getRevenueAccounts(int year) {
+        acBook = getAcBook(year);
+        accounts = acBook.getAccounts();
+        List<BookAccount> result = new ArrayList<BookAccount>();
+        for (int i = 0; i < accounts.size(); i++) {
+            if (accounts.get(i).getType().equals(Type.REVENUE)) {
+                result.add(accounts.get(i));
+            }
+        }
+
+        return result;
+    }
+
+    @Override
+    public List<BookAccount> getExpenseAccounts(int year) {
+        acBook = getAcBook(year);
+        accounts = acBook.getAccounts();
+        List<BookAccount> result = new ArrayList<BookAccount>();
+        for (int i = 0; i < accounts.size(); i++) {
+            if (accounts.get(i).getType().equals(Type.EXPENSE)) {
+                result.add(accounts.get(i));
+            }
+        }
+
+        return result;
+    }
+
+    @Override
+    public List<Integer> getValidYears() {
+        List<Integer> result = new ArrayList<Integer>();
+        acBooks = new ArrayList<AccountingBook>();
+        acBooks = getAcBooks();
+        if (acBooks != null) {
+            for (int i = 0; i < acBooks.size(); i++) {
+                result.add(acBooks.get(i).getYear());
+            }
+        }
+        return result;
+    }
+
+    private BookAccount addAccount(String name, int year, Type type) {
+        account = new BookAccount();
+        account.createAccount(name, type);
+        account.setEntries(null);
+        acBook = em.find(AccountingBook.class, year);
+        account.setAcBook(acBook);
+        em.persist(account);
+
+        return account;
+    }
+//
+//    @Override
+//    public void deleteAccount(Long accountId) {
+//        account = getAccount(accountId);
+//        em.remove(account);
+//    }
+
     private void credit(Long accountId, Long postingId, Double amt) {
         entry = new BookEntry();
         account = getAccount(accountId);
         posting = getPosting(postingId);
-        entry.createEntry(account.getType().getNormalBalanceSign()*(-amt));
+        entry.createEntry(account.getType().getNormalBalanceSign() * (-amt));
+        entry.setCredit(true);
         account.getEntries().add(entry);
-        
-        
+        posting.getEntries().add(entry);
         em.persist(entry);
+        em.merge(account);
+        em.merge(posting);
     }
-    
+
+    private void debit(Long accountId, Long postingId, Double amt) {
+        entry = new BookEntry();
+        account = getAccount(accountId);
+        posting = getPosting(postingId);
+        entry.createEntry(account.getType().getNormalBalanceSign() * (amt));
+        entry.setDebit(true);
+        account.getEntries().add(entry);
+        posting.getEntries().add(entry);
+        em.persist(entry);
+        em.merge(account);
+        em.merge(posting);
+    }
 }

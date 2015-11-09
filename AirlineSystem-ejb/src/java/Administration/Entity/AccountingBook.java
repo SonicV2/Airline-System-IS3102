@@ -58,6 +58,16 @@ public class AccountingBook implements Serializable {
         this.accounts = accounts;
     }
 
+    public BookAccount getAccountByName(String name) {
+        BookAccount account = new BookAccount();
+        for (int i = 0; i < accounts.size(); i++) {
+            if (accounts.get(i).getAccountName().equals(name)) {
+                account = accounts.get(i);
+            }
+        }
+        return account;
+    }
+    
     public List<Posting> getPostings() {
         return postings;
     }

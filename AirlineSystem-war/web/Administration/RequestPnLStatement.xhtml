@@ -41,13 +41,13 @@ and open the template in the editor.
                 <div class="col-md-4"> 
                     <h:form>
                         <p:outputLabel value="Please enter month and year: " />
-                        <p:inputText required="true" requiredMessage="Please Enter Month and Year!" class="form-control"  placeholder="MM/YYYY" value="#{administrationManagedBean.selectedMonth}"  />                             
+                        <p:inputText required="true" requiredMessage="Please Enter Month and Year!" class="form-control"  placeholder="MM/YYYY" value="#{adminReportManagedBean.selectedMonth}"  />                             
                         <br/>
 
                         <div class="form-group">
-                            <h:commandButton class="btn btn-success" value="View Profit And Loss Statement" action="#{administrationManagedBean.getStatement()}"/>
+                            <h:commandButton class="btn btn-success" value="View Profit And Loss Statement" action="#{adminReportManagedBean.getStatement()}"/>
                         </div>
-                        <h:commandButton class="btn btn-success" value="View Operating Expenses" action="#{administrationManagedBean.getExpenses()}"/>
+                        <h:commandButton class="btn btn-success" value="View Operating Expenses" action="#{adminReportManagedBean.getExpenses()}"/>
 
                     </h:form>
                 </div>
