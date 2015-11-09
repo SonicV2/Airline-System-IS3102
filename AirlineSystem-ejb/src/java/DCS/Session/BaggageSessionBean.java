@@ -311,7 +311,22 @@ public class BaggageSessionBean implements BaggageSessionBeanLocal {
     }
 
    
-
+  @Override
+    public BaggageTag retrieveBaggageTagByID(String bagTagSeq){
+        Query q  = em.createQuery("SELECT b FROM BaggageTag b");
+        List<BaggageTag> tags = q.getResultList();
+        
+        System.out.println("tagsize: " + tags.size() );
+        
+        for(BaggageTag t  : tags){
+     
+            if(t.getBaggageTagSeqNumber().equals(bagTagSeq)){
+                return t;
+            }
+        }
+        return null;
+    }
+    
     @Override
     public int retrieveNumberOfBaggageAllowed(String classcode) {
 

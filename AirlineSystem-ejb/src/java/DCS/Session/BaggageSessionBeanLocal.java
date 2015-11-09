@@ -27,11 +27,10 @@ public interface BaggageSessionBeanLocal {
     public double retrieveTotalBaggageWeights(Booking booking);
 
     public double calcualtePenalty(String departure, String destination, double allowed, double totalWeight);
+
     public String bandSearch(String city);
-    
+
     public void addExtraBaggage(Booking booking, double baggageWeight, double extra);
-    
-   
+
+    public BaggageTag retrieveBaggageTagByID(String bagTagSeq);
 }
-
-

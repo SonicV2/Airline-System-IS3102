@@ -8,6 +8,8 @@ package Servlet;
 import APS.Session.DemandForecastSessionBeanLocal;
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.util.Date;
 import java.util.HashMap;
 import javax.annotation.Resource;
@@ -19,6 +21,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
+import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperRunManager;
 
@@ -52,16 +55,26 @@ public class Controller extends HttpServlet {
             if (source.equals("demand")) {
                 System.out.println(source);
                 printForecastPDF(request, response);
-            }
-            if (source.equals("PnL")) {
+            } else if (source.equals("PnL")) {
                 printPnLPDF(request, response);
-            }
-            if (source.equals("expenses")) {
+            } else if (source.equals("expenses")) {
                 printExpensesPDF(request, response);
-            }
-            if (source.equals("productivity")) {
+            } else if (source.equals("productivity")) {
                 printProductivityPDF(request, response);
+            } else if (source.equals("income")) {
+                printIncomePDF(request, response);
+            } else if (source.equals("equity")) {
+                printEquityPDF(request, response);
+            } else if (source.equals("balance")) {
+                printBalancePDF(request, response);
+            } else if (source.equals("journal")) {
+                printJournalPDF(request, response);
+            } else if (source.equals("baggageTag")) {
+                printBaggageTagPDF(request, response);
+            } else if (source.equals("boardingPass")) {
+                printBoardingPassPDF(request, response);
             }
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -188,11 +201,10 @@ public class Controller extends HttpServlet {
 
     private void printProductivityPDF(HttpServletRequest request, HttpServletResponse response) {
         try {
-            InputStream reportStream = getServletConfig().getServletContext().getResourceAsStream("/JasperReports/AircrafProductivityReport.jasper");
+            InputStream reportStream = getServletConfig().getServletContext().getResourceAsStream("/JasperReports/AircraftProductivityReport.jasper");
             response.setContentType("application/pdf");
 
             //Get the relevant information from the request sent
-            Date date = (Date) request.getSession().getAttribute("DATE");
             String tailNo = (String) request.getSession().getAttribute("AIRCRAFT");
             String yearsUsed = (String) request.getSession().getAttribute("YEARS");
             String daysUsed = (String) request.getSession().getAttribute("DAYS");
@@ -204,10 +216,151 @@ public class Controller extends HttpServlet {
 
             //Set up the parameters
             HashMap parameters = new HashMap();
+            parameters.put("IMAGEPATH", "http://localhost:8080/AirlineSystem-war/JasperReports/cherry.jpg");
+            parameters.put("tailNo", tailNo);
+            parameters.put("yearsUsed", yearsUsed);
+            parameters.put("daysUsed", daysUsed);
+            parameters.put("totalDistance", totalDistance);
+            parameters.put("totalTime", totalTime);
+            parameters.put("totalProfit", totalProfit);
+
+            System.out.println(parameters);
+
+            System.out.println(reportStream + ", " + outputStream + ", " + airlineSystemDataSource.getConnection() + airlineSystemDataSource);
+            //Generate the report
+            JasperRunManager.runReportToPdfStream(reportStream, outputStream, parameters, new JREmptyDataSource());
+
+            outputStream.flush();
+            outputStream.close();
+        } catch (JRException jrex) {
+            System.out.println("********** Jasperreport Exception");
+            jrex.printStackTrace();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void printIncomePDF(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            InputStream reportStream = getServletConfig().getServletContext().getResourceAsStream("/JasperReports/DemandForecastReport.jasper");
+            response.setContentType("application/pdf");
+
+            //Get the relevant information from the request sent
+            double ticketRev = (double) request.getSession().getAttribute("ticket");
+            double travelRev = (double) request.getSession().getAttribute("travel");
+            double exp = (double) request.getSession().getAttribute("fuel");
+            int year = (int) request.getSession().getAttribute("year");
+            response.setHeader("Content-Disposition", "attachment; filename=\"" + year + " MAS Income Statement.pdf\"");
+            ServletOutputStream outputStream = response.getOutputStream();
+
+            //Set up the parameters
+            HashMap parameters = new HashMap();
             parameters.put("IMAGEPATH", "http://localhost:8080/AirlineSystem-war/JasperReports/flower1.png");
-//            parameters.put("YEAR", year);
-            parameters.put("FORECASTID", 592337L);
-            System.out.println(reportStream + ", " + outputStream + ", " + airlineSystemDataSource.getConnection());
+            parameters.put("YEAR", year);
+            parameters.put("TICKET", ticketRev);
+            parameters.put("TRAVEL", travelRev);
+            parameters.put("EXP", exp);
+            //Generate the report
+            JasperRunManager.runReportToPdfStream(reportStream, outputStream, parameters, new JREmptyDataSource());
+
+            outputStream.flush();
+            outputStream.close();
+        } catch (JRException jrex) {
+            System.out.println("********** Jasperreport Exception");
+            jrex.printStackTrace();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void printEquityPDF(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            InputStream reportStream = getServletConfig().getServletContext().getResourceAsStream("/JasperReports/DemandForecastReport.jasper");
+            response.setContentType("application/pdf");
+
+            //Get the relevant information from the request sent
+            double currRet = (double) request.getSession().getAttribute("currRet");
+            double prevRet = (double) request.getSession().getAttribute("prevRet");
+            double income = (double) request.getSession().getAttribute("income");
+            int year = (int) request.getSession().getAttribute("year");
+            response.setHeader("Content-Disposition", "attachment; filename=\"" + year + " MAS Equity Statement.pdf\"");
+            ServletOutputStream outputStream = response.getOutputStream();
+
+            //Set up the parameters
+            HashMap parameters = new HashMap();
+            parameters.put("IMAGEPATH", "http://localhost:8080/AirlineSystem-war/JasperReports/flower1.png");
+            parameters.put("YEAR", year);
+            parameters.put("CURR", currRet);
+            parameters.put("PREV", prevRet);
+            parameters.put("INCOME", income);
+            //Generate the report
+            JasperRunManager.runReportToPdfStream(reportStream, outputStream, parameters, new JREmptyDataSource());
+
+            outputStream.flush();
+            outputStream.close();
+        } catch (JRException jrex) {
+            System.out.println("********** Jasperreport Exception");
+            jrex.printStackTrace();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void printBalancePDF(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            InputStream reportStream = getServletConfig().getServletContext().getResourceAsStream("/JasperReports/DemandForecastReport.jasper");
+            response.setContentType("application/pdf");
+
+            //Get the relevant information from the request sent
+            double cash = (double) request.getSession().getAttribute("cash");
+            double acctRecv = (double) request.getSession().getAttribute("acctRecv");
+            double prepaid = (double) request.getSession().getAttribute("prepaid");
+            double pne = (double) request.getSession().getAttribute("pne");
+            double acctPay = (double) request.getSession().getAttribute("acctPay");
+            double unearned = (double) request.getSession().getAttribute("unearned");
+            double retained = (double) request.getSession().getAttribute("retained");
+            int year = (int) request.getSession().getAttribute("year");
+            response.setHeader("Content-Disposition", "attachment; filename=\"" + year + " MAS Equity Statement.pdf\"");
+            ServletOutputStream outputStream = response.getOutputStream();
+
+            //Set up the parameters
+            HashMap parameters = new HashMap();
+            parameters.put("IMAGEPATH", "http://localhost:8080/AirlineSystem-war/JasperReports/flower1.png");
+            parameters.put("YEAR", year);
+            parameters.put("CASH", cash);
+            parameters.put("ACCTRECV", acctRecv);
+            parameters.put("PREPAID", prepaid);
+            parameters.put("PNE", pne);
+            parameters.put("ACCTPAY", acctPay);
+            parameters.put("UNEARNED", unearned);
+            parameters.put("RETAINED", retained);
+            //Generate the report
+            JasperRunManager.runReportToPdfStream(reportStream, outputStream, parameters, new JREmptyDataSource());
+
+            outputStream.flush();
+            outputStream.close();
+        } catch (JRException jrex) {
+            System.out.println("********** Jasperreport Exception");
+            jrex.printStackTrace();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void printJournalPDF(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            InputStream reportStream = getServletConfig().getServletContext().getResourceAsStream("/JasperReports/DemandForecastReport.jasper");
+            response.setContentType("application/pdf");
+
+            //Get the relevant information from the request sent
+            int year = (int) request.getSession().getAttribute("year");
+            response.setHeader("Content-Disposition", "attachment; filename=\"" + year + " MAS Equity Statement.pdf\"");
+            ServletOutputStream outputStream = response.getOutputStream();
+
+            //Set up the parameters
+            HashMap parameters = new HashMap();
+            parameters.put("IMAGEPATH", "http://localhost:8080/AirlineSystem-war/JasperReports/flower1.png");
+            parameters.put("YEAR", year);
             //Generate the report
             JasperRunManager.runReportToPdfStream(reportStream, outputStream, parameters, airlineSystemDataSource.getConnection());
 
@@ -220,7 +373,106 @@ public class Controller extends HttpServlet {
             ex.printStackTrace();
         }
     }
-    
+
+    private void printBaggageTagPDF(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            InputStream reportStream = getServletConfig().getServletContext().getResourceAsStream("/JasperReports/BaggageTag.jasper");
+            response.setContentType("application/pdf");
+
+            //Get the relevant information from the request sent
+            String id = (String) request.getSession().getAttribute("ID");
+            String city = (String) request.getSession().getAttribute("City");
+            Date depart = (Date) request.getSession().getAttribute("DepartDate");
+            String fNumber = (String) request.getSession().getAttribute("fNumber");
+            String service = (String) request.getSession().getAttribute("Service");
+            String seqNumber = (String) request.getSession().getAttribute("seqNumber");
+
+            response.setHeader("Content-Disposition", "attachment; filename=\"" + id + ".pdf\"");
+            ServletOutputStream outputStream = response.getOutputStream();
+
+            //Set up the parameters
+            HashMap parameters = new HashMap();
+            parameters.put("IMAGEPATH", "http://localhost:8080/AirlineSystem-war/JasperReports/MerlionAirlineLogo.jpg");
+            parameters.put("Barcode", "http://localhost:8080/AirlineSystem-war/JasperReports/barcode.png");
+            parameters.put("id", id);
+            parameters.put("City", city);
+
+            parameters.put("depart", depart);
+            parameters.put("fNumber", fNumber);
+            parameters.put("service", service);
+            parameters.put("seqNumber", seqNumber);
+
+            //System.out.println(reportStream + ", " + outputStream + ", " + airlineSystemDataSource.getConnection());
+            //Generate the report
+            JasperRunManager.runReportToPdfStream(reportStream, outputStream, parameters, new JREmptyDataSource());
+
+            outputStream.flush();
+            outputStream.close();
+        } catch (JRException jrex) {
+            System.out.println("********** Jasperreport Exception");
+            jrex.printStackTrace();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void printBoardingPassPDF(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            InputStream reportStream = getServletConfig().getServletContext().getResourceAsStream("/JasperReports/BoardingPass.jasper");
+            response.setContentType("application/pdf");
+
+            //Get the relevant information from the request sent
+            String fName = (String) request.getSession().getAttribute("fName");
+            String lName = (String) request.getSession().getAttribute("lName");
+            String dCity = (String) request.getSession().getAttribute("dCity");
+            String aCity = (String) request.getSession().getAttribute("aCity");
+            Date DepartDate = (Date) request.getSession().getAttribute("DepartDate");
+            String fNumber = (String) request.getSession().getAttribute("fNumber");
+
+            String boardTime = (String) request.getSession().getAttribute("boardTime");
+            String sClass = (String) request.getSession().getAttribute("sClass");
+            String seat = (String) request.getSession().getAttribute("seat");
+
+            String seqNumber = (String) request.getSession().getAttribute("seqNumber");
+            String gate = (String) request.getSession().getAttribute("gate");
+            String bID = (String) request.getSession().getAttribute("bID");
+
+            response.setHeader("Content-Disposition", "attachment; filename=\"" + bID + ".pdf\"");
+            ServletOutputStream outputStream = response.getOutputStream();
+
+            //Set up the parameters
+            HashMap parameters = new HashMap();
+            parameters.put("IMAGEPATH", "http://localhost:8080/AirlineSystem-war/JasperReports/MerlionAirlineLogo.jpg");
+            parameters.put("Barcode", "http://localhost:8080/AirlineSystem-war/JasperReports/barcode.png");
+            parameters.put("fName", fName);
+            parameters.put("lName", lName);
+
+            parameters.put("dCity", dCity);
+            parameters.put("aCity", aCity);
+            parameters.put("DepartDate", DepartDate);
+            parameters.put("fNumber", fNumber);
+
+            parameters.put("boardTime", boardTime);
+            parameters.put("sClass", sClass);
+            parameters.put("seat", seat);
+            parameters.put("seqNumber", seqNumber);
+
+            parameters.put("gate", gate);
+
+            //System.out.println(reportStream + ", " + outputStream + ", " + airlineSystemDataSource.getConnection());
+            //Generate the report
+            JasperRunManager.runReportToPdfStream(reportStream, outputStream, parameters, new JREmptyDataSource());
+
+            outputStream.flush();
+            outputStream.close();
+        } catch (JRException jrex) {
+            System.out.println("********** Jasperreport Exception");
+            jrex.printStackTrace();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
 // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.

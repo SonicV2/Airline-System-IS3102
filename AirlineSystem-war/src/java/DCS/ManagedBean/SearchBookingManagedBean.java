@@ -197,7 +197,7 @@ public class SearchBookingManagedBean implements Serializable {
         } else {
             setPnrNumber("");
             setPassportNumber("");
-            return "/Login.xhtml";
+            return "/Distribution/MerlionAirlines.xhtml";
         }
         }
     }
