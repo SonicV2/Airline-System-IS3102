@@ -74,7 +74,7 @@ public class DataLoadSessionBean {
     public void init() {
         System.out.println("*****Loading data");
 //       addDiscountTypes();
-//        addFlights();
+  //     addFlights();
 //        addCustomer();
 //        addTravelAgencies();
 //        addCustomerBooking();
@@ -230,6 +230,52 @@ public class DataLoadSessionBean {
         //NRT-SING
         flightSessionBean.addFlight("MA115", "1100011", 500.0, date6, 1440L, false);
         flightScheduleSessionBean.scheduleFlights("MA115");
+        
+        //EXTRA FLIGHTS
+        flightSessionBean.addFlight("MA116", "1100011", 500.0, date6, 861L, false);
+        flightScheduleSessionBean.scheduleFlights("MA116");
+        
+        flightSessionBean.addFlight("MA117", "1100011", 500.0, date6, 888L, false);
+        flightScheduleSessionBean.scheduleFlights("MA117");
+        
+        flightSessionBean.addFlight("MA118", "1100011", 500.0, date6, 1420L, false);
+        flightScheduleSessionBean.scheduleFlights("MA118");
+        
+        flightSessionBean.addFlight("MA119", "1100011", 500.0, date6, 1450L, false);
+        flightScheduleSessionBean.scheduleFlights("MA119");
+        
+        flightSessionBean.addFlight("MA120", "1100011", 500.0, date6, 874L, false);
+        flightScheduleSessionBean.scheduleFlights("MA120");
+        
+        flightSessionBean.addFlight("MA121", "1100011", 500.0, date6, 882L, false);
+        flightScheduleSessionBean.scheduleFlights("MA121");
+        
+        flightSessionBean.addFlight("MA122", "1100011", 500.0, date6, 868L, false);
+        flightScheduleSessionBean.scheduleFlights("MA122");
+        
+        flightSessionBean.addFlight("MA123", "1100011", 500.0, date6, 1418L, false);
+        flightScheduleSessionBean.scheduleFlights("MA123");
+        
+        flightSessionBean.addFlight("MA124", "1100011", 500.0, date6, 870L, false);
+        flightScheduleSessionBean.scheduleFlights("MA124");
+        
+        flightSessionBean.addFlight("MA125", "1100011", 500.0, date6, 1427L, false);
+        flightScheduleSessionBean.scheduleFlights("MA125");
+        
+        flightSessionBean.addFlight("MA126", "1100011", 500.0, date6, 1441L, false);
+        flightScheduleSessionBean.scheduleFlights("MA126");
+        
+        flightSessionBean.addFlight("MA127", "1100011", 500.0, date6, 1433L, false);
+        flightScheduleSessionBean.scheduleFlights("MA127");
+        
+        flightSessionBean.addFlight("MA128", "1100011", 500.0, date6, 1429L, false);
+        flightScheduleSessionBean.scheduleFlights("MA128");
+        
+        flightSessionBean.addFlight("MA129", "1100011", 500.0, date6, 1417L, false);
+        flightScheduleSessionBean.scheduleFlights("MA129");
+        
+        flightSessionBean.addFlight("MA130", "1100011", 500.0, date6, 1464L, false);
+        flightScheduleSessionBean.scheduleFlights("MA130");
     }
 
     public void addCustomer() {
@@ -516,6 +562,30 @@ public class DataLoadSessionBean {
         employeeSessionBean.addCabinCrew("S12345I", "E", "9", "FLIGHT CREW(SINGAPORE)", date5, "Female", "98765567", "NUS", "65778905", "a0083337@u.nus.edu", "1", langu1, "Flight Stewardess",3000.0);
         employeeSessionBean.hashPwd("S12345I");
         
+        
+         employeeSessionBean.addCabinCrew("J12345A", "JE", "1", "FLIGHT CREW(JAPAN)", date1, "Female", "98765567", "NUS", "65778905", "a0083337@u.nus.edu", "5", langu1, "Lead Flight Stewardess",2000.0);
+        employeeSessionBean.hashPwd("J12345A");
+        employeeSessionBean.addCabinCrew("J12345J", "JE", "10", "FLIGHT CREW(JAPAN)", date2, "Female", "98765567", "NUS", "65778905", "a0083337@u.nus.edu", "5", langu2, "Lead Flight Stewardess",4000.0);
+        employeeSessionBean.hashPwd("J12345J");    
+        employeeSessionBean.addCabinCrew("J12345B", "JE", "2", "FLIGHT CREW(JAPAN)", date3, "Female", "98765567", "NUS", "65778905", "a0083337@u.nus.edu", "3", langu2, "Flight Stewardess",3000.0);
+        employeeSessionBean.hashPwd("J12345B");
+        employeeSessionBean.addCabinCrew("J12345C", "JE", "3", "FLIGHT CREW(JAPAN)", date4, "Female", "98765567", "NUS", "65778905", "a0083337@u.nus.edu", "2", langu1, "Flight Stewardess",4000.0);
+        employeeSessionBean.hashPwd("J12345C");
+        employeeSessionBean.addCabinCrew("J12345D", "JE", "4", "FLIGHT CREW(JAPAN)", date5, "Female", "98765567", "NUS", "65778905", "a0083337@u.nus.edu", "1", langu2, "Flight Stewardess",3000.0);
+        employeeSessionBean.hashPwd("J12345D");
+        employeeSessionBean.addCabinCrew("J12345E", "JE", "5", "FLIGHT CREW(JAPAN)", date1, "Female", "98765567", "NUS", "65778905", "a0083337@u.nus.edu", "1", langu1, "Flight Stewardess",3000.0);
+        employeeSessionBean.hashPwd("J12345E");
+        employeeSessionBean.addCabinCrew("J12345F", "JE", "6", "FLIGHT CREW(JAPAN)", date2, "Female", "98765567", "NUS", "65778905", "a0083337@u.nus.edu", "3", langu2, "Flight Stewardess",4000.0);
+        employeeSessionBean.hashPwd("J12345F");
+        employeeSessionBean.addCabinCrew("J12345G", "JE", "7", "FLIGHT CREW(JAPAN)", date3, "Female", "98765567", "NUS", "65778905", "a0083337@u.nus.edu", "2", langu1, "Flight Stewardess",3000.0);
+        employeeSessionBean.hashPwd("J12345G");
+        employeeSessionBean.addCabinCrew("J12345H", "JE", "8", "FLIGHT CREW(JAPAN)", date4, "Female", "98765567", "NUS", "65778905", "a0083337@u.nus.edu", "1", langu2, "Flight Stewardess",3000.0);
+        employeeSessionBean.hashPwd("J12345H");
+        employeeSessionBean.addCabinCrew("J12345I", "JE", "9", "FLIGHT CREW(JAPAN)", date5, "Female", "98765567", "NUS", "65778905", "a0083337@u.nus.edu", "1", langu1, "Flight Stewardess",3000.0);
+        employeeSessionBean.hashPwd("J12345I");
+        
+        
+        
         employeeSessionBean.addCabinCrew("RS12345A", "RE", "1", "FLIGHT CREW(SINGAPORE)", date1, "Female", "98765567", "NUS", "65778905", "a0083337@u.nus.edu", "5", langu1, "Reserved Flight Stewardess",3400.0);
         employeeSessionBean.hashPwd("RS12345A");
         employeeSessionBean.addCabinCrew("RS12345J", "RE", "10", "FLIGHT CREW(SINGAPORE)", date2, "Female", "98765567", "NUS", "65778905", "a0083337@u.nus.edu", "5", langu2, "Reserved Flight Stewardess",3000.0);
@@ -533,6 +603,12 @@ public class DataLoadSessionBean {
         employeeSessionBean.addCabinCrew("RS12345I", "RE", "9", "FLIGHT CREW(SINGAPORE)", date5, "Female", "98765567", "NUS", "65778905", "a0083337@u.nus.edu", "1", langu1, "Reserved Flight Stewardess",3000.0);
         employeeSessionBean.hashPwd("RS12345I");
         
+        
+         employeeSessionBean.addCabinCrew("JRS12345A", "JRE", "1", "FLIGHT CREW(JAPAN)", date1, "Female", "98765567", "NUS", "65778905", "a0083337@u.nus.edu", "5", langu1, "Reserved Flight Stewardess",3400.0);
+        employeeSessionBean.hashPwd("JRS12345A");
+        employeeSessionBean.addCabinCrew("JRS12345J", "JRE", "10", "FLIGHT CREW(JAPAN)", date2, "Female", "98765567", "NUS", "65778905", "a0083337@u.nus.edu", "5", langu2, "Reserved Flight Stewardess",3000.0);
+        employeeSessionBean.hashPwd("JRS12345J");
+        
         employeeSessionBean.addCabinCrew("S12345K", "E", "11", "FLIGHT CREW(SINGAPORE)", date4, "Male", "98765567", "NUS", "65778905", "a0083337@u.nus.edu", "1", langu2, "Flight Steward",3000.0);
         employeeSessionBean.hashPwd("S12345K");
         employeeSessionBean.addCabinCrew("S12345L", "E", "12", "FLIGHT CREW(SINGAPORE)", date5, "Male", "98765567", "NUS", "65778905", "a0083337@u.nus.edu", "2", langu1, "Flight Steward",2000.0);
@@ -541,6 +617,11 @@ public class DataLoadSessionBean {
         employeeSessionBean.hashPwd("RS12345K");
         employeeSessionBean.addCabinCrew("RS12345L", "RE", "12", "FLIGHT CREW(SINGAPORE)", date5, "Male", "98765567", "NUS", "65778905", "a0083337@u.nus.edu", "2", langu1, "Reserved Flight Steward",3000.0);
         employeeSessionBean.hashPwd("RS12345L");
+        
+        employeeSessionBean.addCabinCrew("JRS12345K", "JRE", "11", "FLIGHT CREW(JAPAN)", date4, "Male", "98765567", "NUS", "65778905", "a0083337@u.nus.edu", "1", langu2, "Reserved Flight Steward",3800.0);
+        employeeSessionBean.hashPwd("JRS12345K");
+        employeeSessionBean.addCabinCrew("JRS12345L", "JRE", "12", "FLIGHT CREW(JAPAN)", date5, "Male", "98765567", "NUS", "65778905", "a0083337@u.nus.edu", "2", langu1, "Reserved Flight Steward",3000.0);
+        employeeSessionBean.hashPwd("JRS12345L");
         
         
     }
