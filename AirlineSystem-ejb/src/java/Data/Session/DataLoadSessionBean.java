@@ -81,7 +81,7 @@ public class DataLoadSessionBean {
 //        addCustomerBooking();
 //        addTravelAgencyBookings();
 //        addCabinCrew();
-//       addPilot();
+//        addPilot();
 //        addGroundCrew();
 //        addManagers();
 //        addExecutives();
@@ -374,11 +374,12 @@ public class DataLoadSessionBean {
 
     public void addCustomerBooking() {
 
-        Schedule schedule1 = new Schedule(), schedule2 = new Schedule(), schedule3 = new Schedule();
+        Schedule schedule1 = new Schedule(), schedule2 = new Schedule(), schedule3 = new Schedule(), schedule4 = new Schedule();
         try {
             schedule1 = scheduleSessionBean.getScheduleByDate(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse("2015-11-24 02:00:00"));
             schedule2 = scheduleSessionBean.getScheduleByDate(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse("2015-12-02 01:00:00"));
             schedule3 = scheduleSessionBean.getScheduleByDate(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse("2015-12-06 08:00:00"));
+            schedule4 = scheduleSessionBean.getScheduleByDate(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse("2015-12-13 08:00:00"));
 
         } catch (ParseException ex) {
             System.out.println("Error initializing date");
@@ -387,19 +388,24 @@ public class DataLoadSessionBean {
         Booking booking1 = passengerBookingSessionBean.createBooking(600, schedule1.getSeatAvailability(), schedule1.getFlight().getFlightNo(), schedule1.getStartDate(), "Booked", "A01", "Economy Saver", "Mr", "Daniel", "Lee", customer.getPassportNumber(), customer.getNationality(), customer.getId(), false, true, 15.0, "Western");
         Booking booking2 = passengerBookingSessionBean.createBooking(500, schedule2.getSeatAvailability(), schedule2.getFlight().getFlightNo(), schedule2.getStartDate(), "Booked", "C01", "Economy Premium", "Mr", "Daniel", "Lee", customer.getPassportNumber(), customer.getNationality(), customer.getId(), false, true, 15.0, "Western");
         Booking booking3 = passengerBookingSessionBean.createBooking(500, schedule3.getSeatAvailability(), schedule3.getFlight().getFlightNo(), schedule3.getStartDate(), "Booked", "E01", "First Class", "Mr", "Daniel", "Lee", customer.getPassportNumber(), customer.getNationality(), customer.getId(), false, true, 15.0, "Western");
+        Booking booking4 = passengerBookingSessionBean.createBooking(400, schedule4.getSeatAvailability(), schedule4.getFlight().getFlightNo(), schedule4.getStartDate(), "Booked", "E01", "First Class", "Mr", "Daniel", "Lee", customer.getPassportNumber(), customer.getNationality(), customer.getId(), false, true, 15.0, "Western");
         PNR pnr1 = passengerBookingSessionBean.createPNR(1, customer.getEmail(), customer.getHomeNumber(), "Booked", 600.0, new Date(), new Date(), "MARS");
         PNR pnr2 = passengerBookingSessionBean.createPNR(1, customer.getEmail(), customer.getHomeNumber(), "Booked", 500.0, new Date(), new Date(), "MARS");
         PNR pnr3 = passengerBookingSessionBean.createPNR(1, customer.getEmail(), customer.getHomeNumber(), "Booked", 500.0, new Date(), new Date(), "MARS");
+        PNR pnr4 = passengerBookingSessionBean.createPNR(1, customer.getEmail(), customer.getHomeNumber(), "Booked", 400.0, new Date(), new Date(), "MARS");
         List<Booking> bookingList1 = new ArrayList();
         bookingList1.add(booking1);
         List<Booking> bookingList2 = new ArrayList();
         bookingList2.add(booking2);
         List<Booking> bookingList3 = new ArrayList();
         bookingList3.add(booking3);
+        List<Booking> bookingList4 = new ArrayList();
+        bookingList4.add(booking4);
 
         passengerBookingSessionBean.persistBookingAndPNR(pnr1, bookingList1, customer);
         passengerBookingSessionBean.persistBookingAndPNR(pnr2, bookingList2, customer);
         passengerBookingSessionBean.persistBookingAndPNR(pnr3, bookingList3, customer);
+        passengerBookingSessionBean.persistBookingAndPNR(pnr4, bookingList4, customer);
     }
 
     public void addTravelAgencyBookings() {
@@ -609,9 +615,9 @@ public class DataLoadSessionBean {
         List<String> langu1= new ArrayList<String>();
         langu1.add("English");
         langu1.add("Chinese");
-         List<String> langu2= new ArrayList<String>();
-        langu1.add("English");
-        langu1.add("Japanese");
+        List<String> langu2= new ArrayList<String>();
+        langu2.add("English");
+        langu2.add("Japanese");
         List<String> langu3= new ArrayList<String>();
         langu3.add("Korean");
         langu3.add("English");

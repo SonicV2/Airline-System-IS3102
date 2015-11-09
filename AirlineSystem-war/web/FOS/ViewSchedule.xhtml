@@ -17,9 +17,9 @@
         <title>View My Schedules</title>
     </h:head>
     <h:body>
-        <ui:include src="/CI/dashboardHeader.xhtml"/><!--
+        <ui:include src="/CI/DashboardHeader.xhtml"/><!--
                    To add the same sidebar on all dashboard pages -->  
-            <ui:include src="/CI/dashboardSidebar.xhtml"/>
+            <ui:include src="/CI/DashboardSidebar.xhtml"/>
         
         <h:form>
             
@@ -30,10 +30,13 @@
                         <h2 class="page-header">View My Schedule</h2>
                     </div>
 
+                    
                     <h:panelGrid columns="1" style="margin-bottom:10px" cellpadding="5">
                         <h:outputLabel for="sln2" />
                         <p:selectOneRadio id="sln2"  layout="grid" columns="1" value="#{crewSignInManagedBean.selectedPairing}">
+                            <ui:fragment rendered = "#{crewSignInManagedBean.scheduleResultDisabled.size()>0}">
                             <f:selectItems itemLabelEscaped="false" value="#{crewSignInManagedBean.scheduleResultDisabled}" var="sln2" itemLabel=" #{sln2} " />
+                            </ui:fragment>
                         </p:selectOneRadio>
 
                          

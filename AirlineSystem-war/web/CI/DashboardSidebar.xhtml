@@ -16,7 +16,7 @@
             text-decoration: none;
         }
 
-    </style>
+    </style> 
 
     <div class="navbar-default sidebar" role="navigation">
         <div class="sidebar-nav navbar-collapse">
@@ -253,11 +253,9 @@
                                 <a href="#{request.contextPath}/FOS/AssignReserveCrewSchedule.xhtml"> Assign Schedule to Reserved Crew </a>
                             </li>
                             <li>
-                                <a href="#{request.contextPath}/FOS/ViewLeaveCrew.xhtml"> View Crews on Leave</a>
+                                <a href="#{request.contextPath}/FOS/ViewLeaveCrew.xhtml"> View Flight Crews on Leave</a>
                             </li>
-                            <li>
-                                <a href="#{request.contextPath}/FOS/ViewLeavePilot.xhtml"> View Pilots on Leave </a>
-                            </li>
+                           
                         </ul>
                     </li>
                 </ui:fragment>
@@ -332,6 +330,10 @@
                 </ui:fragment>
                 <!-- this is for crew access-->
                 <ui:fragment rendered="#{loginManagedBean.accessRightIDs.contains(27) and !(loginManagedBean.isReserve)}">
+                    
+                         <li>
+                            <a href="#{request.contextPath}/FOS/ViewSchedule.xhtml"><i class="fa fa-pencil"></i> Crew Sign In</a>
+                        </li>
                     
                         <li>
                             <a href="#{request.contextPath}/FOS/ViewTimetable.xhtml"><i class="fa fa-eye"></i> View Timetable</a>
