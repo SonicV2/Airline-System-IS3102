@@ -31,9 +31,9 @@
     <h:body>
 
         <!--            To add the same header on all dashboard pages  
-               <ui:include src="/CI/dashboardHeader.xhtml"/>--> 
+-->               <ui:include src="/CI/DashboardHeader.xhtml"/> 
         <!--        To add the same sidebar on all dashboard pages -->
-<!--        <ui:include src="/CI/DashboardSidebar.xhtml"/> -->
+        <ui:include src="/CI/DashboardSidebar.xhtml"/> 
 
         <div id="page-wrapper">
 
@@ -41,18 +41,6 @@
                 <div class="col-lg-12">
                     <h2 class="page-header">Add Flight</h2>
                 </div>
-                <h:form>
-                    <div class="text-center">
-                        <h:commandButton class="btn btn-outline btn-success" value="Generate Test Flights!!!" actionListener="#{flightManagedBean.createTestFlight}"/>
-                        <br></br>
-                        <br></br>
-                    </div>
-                    <div class="text-center">
-                        <h:commandButton class="btn btn-outline btn-success" value="Test Dem Rotate" actionListener="#{flightManagedBean.testRotation}"/>
-                        <br></br>
-                        <br></br>
-                    </div>
-                </h:form>
                 <div class="col-lg-12">
                     <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
 
@@ -63,6 +51,7 @@
                     <h:form>
                         <p:dataTable var="route" value="#{routeManagedBean.routes}" widgetVar="routesTable" paginator="true" rows="10">
                             <p:ajax event="page" global="false"/>
+                            <p:ajax event="filter" global="false"/>
                             <f:facet name="header">
                                 <p:outputPanel>
                                     <h:outputText value="Search all fields:" />

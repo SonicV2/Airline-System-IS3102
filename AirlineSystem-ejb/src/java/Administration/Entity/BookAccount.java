@@ -33,7 +33,7 @@ public class BookAccount implements Serializable {
 
         ASSET(1),
         LIABILITY(-1),
-        INCOME(-1),
+        REVENUE(-1),
         EXPENSE(1),
         EQUITY(-1);
 

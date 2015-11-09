@@ -78,10 +78,12 @@ public class ProfitAndLossSessionBean implements ProfitAndLossSessionBeanLocal {
         List<TravelAgency> allAgencies = new ArrayList();
         allAgencies = getAllTravelAgencies();
 
-        for (TravelAgency eachAgency : allAgencies) {
+        if (allAgencies != null && !allAgencies.isEmpty()) {
+            for (TravelAgency eachAgency : allAgencies) {
 
-            commission += (getCurrentMonthSettlement(eachAgency, dateChosen)) * 0.1;
+                commission += (getCurrentMonthSettlement(eachAgency, dateChosen)) * 0.1;
 
+            }
         }
 
         /* Calculate aircrafts purchased */
@@ -110,12 +112,11 @@ public class ProfitAndLossSessionBean implements ProfitAndLossSessionBeanLocal {
                 if (eachSchedule.getStartDate() != null) {
                     String formattedEachDate = formatter.format(eachSchedule.getStartDate());
                     if (formattedDate.substring(2, 8).equals(formattedEachDate.substring(2, 8))) {
-                        System.out.println("Before calculation!!!!!!!!" + eachSchedule.getAircraft().getAircraftType().getFuelCost());
-                        System.out.println("Before calculation!!!!!!!!" + eachSchedule.getFlight().getRoute().getDistance());
+                        if (eachSchedule.getAircraft() == null) {
+                            continue;
+                        }
 
                         fuelCost += (eachSchedule.getAircraft().getAircraftType().getFuelCost()) * (eachSchedule.getFlight().getRoute().getDistance());
-
-                     System.out.println("AFTER CALCULATION");
 
                     }
                 }
@@ -125,30 +126,15 @@ public class ProfitAndLossSessionBean implements ProfitAndLossSessionBeanLocal {
         /* Calculate employee salaries */
         double employeeSalaries = 0;
         List<Employee> allEmployees = new ArrayList();
-        List<CabinCrew> allCabins = new ArrayList();
-        List<Pilot> allPilots = new ArrayList();
-        List<Employee> executives = new ArrayList();
-        List<Employee> managers = new ArrayList();
 
         allEmployees = getEmployees();
-        allCabins = getCabinCrews();
-        allPilots = getPilots();
 
         if (allEmployees == null) {
             employeeSalaries = 0;
         } else {
             for (Employee eachEmployee : allEmployees) {
-
-                if (eachEmployee.getEmployeeRole().equalsIgnoreCase("Executive")) {
-                    executives.add(eachEmployee);
-                } else if (eachEmployee.getEmployeeRole().equalsIgnoreCase("Manager")) {
-                    managers.add(eachEmployee);
-                }
-
+                employeeSalaries += eachEmployee.getEmployeeMonthlySalary();
             }
-
-            employeeSalaries = (executives.size() * 2000) + (managers.size() * 1000) + (allCabins.size() * 1000) + (allPilots.size() * 1500);
-
         }
 
         double totalExpenses = commission + aircraftPurchased + fuelCost + employeeSalaries + 10000 + (salesRevenue * 0.1);
@@ -206,10 +192,12 @@ public class ProfitAndLossSessionBean implements ProfitAndLossSessionBeanLocal {
         List<TravelAgency> allAgencies = new ArrayList();
         allAgencies = getAllTravelAgencies();
 
-        for (TravelAgency eachAgency : allAgencies) {
+        if (allAgencies != null && !allAgencies.isEmpty()) {
+            for (TravelAgency eachAgency : allAgencies) {
 
-            commission += (getCurrentMonthSettlement(eachAgency, dateChosen)) * 0.1;
+                commission += (getCurrentMonthSettlement(eachAgency, dateChosen)) * 0.1;
 
+            }
         }
 
         selectedPnl.setCommission(commission);
@@ -242,6 +230,9 @@ public class ProfitAndLossSessionBean implements ProfitAndLossSessionBeanLocal {
                 if (eachSchedule.getStartDate() != null) {
                     String formattedEachDate = formatter.format(eachSchedule.getStartDate());
                     if (formattedDate.substring(2, 8).equals(formattedEachDate.substring(2, 8))) {
+                        if (eachSchedule.getAircraft() == null) {
+                            continue;
+                        }
                         fuelCost += (eachSchedule.getAircraft().getAircraftType().getFuelCost()) * (eachSchedule.getFlight().getRoute().getDistance());
                     }
                 }
@@ -253,30 +244,15 @@ public class ProfitAndLossSessionBean implements ProfitAndLossSessionBeanLocal {
         /* Calculate employee salaries */
         double employeeSalaries = 0;
         List<Employee> allEmployees = new ArrayList();
-        List<CabinCrew> allCabins = new ArrayList();
-        List<Pilot> allPilots = new ArrayList();
-        List<Employee> executives = new ArrayList();
-        List<Employee> managers = new ArrayList();
 
         allEmployees = getEmployees();
-        allCabins = getCabinCrews();
-        allPilots = getPilots();
 
         if (allEmployees == null) {
             employeeSalaries = 0;
         } else {
             for (Employee eachEmployee : allEmployees) {
-
-                if (eachEmployee.getEmployeeRole().equalsIgnoreCase("Executive")) {
-                    executives.add(eachEmployee);
-                } else if (eachEmployee.getEmployeeRole().equalsIgnoreCase("Manager")) {
-                    managers.add(eachEmployee);
-                }
-
+                employeeSalaries += eachEmployee.getEmployeeMonthlySalary();
             }
-
-            employeeSalaries = (executives.size() * 2000) + (managers.size() * 1000) + (allCabins.size() * 1000) + (allPilots.size() * 1500);
-
         }
 
         selectedPnl.setEmployeeSalaries(employeeSalaries);

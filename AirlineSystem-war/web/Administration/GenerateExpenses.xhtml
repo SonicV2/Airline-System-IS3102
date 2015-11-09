@@ -51,55 +51,59 @@ and open the template in the editor.
 
                                     <h4>Date of Statement</h4>
 
-                                    <h:outputText id="date" value="#{administrationManagedBean.selectedPnL.dateOfStatement}">
+                                    <h:outputText id="date" value="#{adminReportManagedBean.selectedPnL.dateOfStatement}">
                                         <f:convertDateTime pattern ="MMM yyyy"/>
                                     </h:outputText>
                                     <br></br>
 
                                     <h4>Airport Rental</h4>
-                                    <h:outputText id="rental" value="#{administrationManagedBean.airportRental}">
+                                    <h:outputText id="rental" value="#{adminReportManagedBean.airportRental}">
                                         <f:convertNumber pattern="#,###.00" />
                                     </h:outputText>
                                     <br></br>
 
                                     <h4>Airport Taxes</h4>
-                                    <h:outputText id="tax" value="#{administrationManagedBean.airportTaxes}">
+                                    <h:outputText id="tax" value="#{adminReportManagedBean.airportTaxes}">
                                         <f:convertNumber pattern="#,###.00" />
                                     </h:outputText>
                                     <br></br>
 
                                     <h4>Employee Salaries</h4>
-                                    <h:outputText id="salaries" value="#{administrationManagedBean.employeeSalaries}">
+                                    <h:outputText id="salaries" value="#{adminReportManagedBean.employeeSalaries}">
                                         <f:convertNumber pattern="#,###.00" />
                                     </h:outputText>
                                     <br></br>
 
                                     <h4>Commission Paid</h4>
-                                    <h:outputText id="commission" value="#{administrationManagedBean.commission}">
+                                    <h:outputText id="commission" value="#{adminReportManagedBean.commission}">
                                         <f:convertNumber pattern="#,###.00" />
                                     </h:outputText>
                                     <br></br>
 
                                     <h4>Aircrafts Acquired</h4>
-                                    <h:outputText id="aircraft" value="#{administrationManagedBean.aircraftAcquired}">
+                                    <h:outputText id="aircraft" value="#{adminReportManagedBean.aircraftAcquired}">
                                         <f:convertNumber pattern="#,###.00" />
                                     </h:outputText>
                                     <br></br>
 
                                     <h4>Fuel Costs</h4>
-                                    <h:outputText id="fuel" value="#{administrationManagedBean.fuelCosts}">
+                                    <h:outputText id="fuel" value="#{adminReportManagedBean.fuelCosts}">
                                         <f:convertNumber pattern="#,###.00" />
                                     </h:outputText>
                                     <br></br>
 
                                     <h4>Total Expenses</h4>
-                                    <h:outputText id="expenses" value="#{administrationManagedBean.totalExpenses}">
+                                    <h:outputText id="expenses" value="#{adminReportManagedBean.totalExpenses}">
                                         <f:convertNumber pattern="#,###.00" />
                                     </h:outputText>
                                     <br></br>
 
                                 </div>
+                                <div class="text-center">
+                                    <h:commandButton class="btn btn-outline btn-success" value="Download Report" action="#{adminReportManagedBean.printExpenses()}"/>
+                                </div>
                             </div>
+
                         </h:form>
                     </div>
                     <div class="modal-footer">
