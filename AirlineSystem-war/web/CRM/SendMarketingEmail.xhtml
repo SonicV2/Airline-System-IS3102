@@ -39,8 +39,10 @@
                     <p:inputTextarea value="#{cRMAnalyticsManagedBean.emailBody}" rows="20" cols="70" counter="display" maxlength="1000" counterTemplate="{0} characters remaining." autoResize="false" />
                     <h:outputText id="display" />           
                     <br/>
+                    <div class="text-center">
                     <h:commandButton class="btn btn-primary" value="Send Email" 
                                      actionListener="#{cRMAnalyticsManagedBean.sendtoCustomerList1}" />
+                    </div>
                 </h:form>
                 </div>
             </div>
