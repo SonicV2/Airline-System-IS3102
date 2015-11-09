@@ -66,7 +66,16 @@
             <h:outputLabel value="Flight Number: " />
             <h:outputText value="#{searchBookingManagedBean.reqBooking.flightNo}" />
             <br /> <br />
-                      
+            
+               <h:outputLabel value="Flight Date: " />
+               <h:outputText value="#{searchBookingManagedBean.checkinSchedule.startDate}"/>
+               <br /><br/>
+             <h:outputLabel value="Departure City:"/>
+             <h:outputText value="#{searchBookingManagedBean.checkinSchedule.flight.route.originCity}"/>
+                            <br /><br/>
+                            <h:outputLabel value="Arrival City:"/>
+                            <h:outputText value="#{searchBookingManagedBean.checkinSchedule.flight.route.destinationCity}"/>
+                            <br/><br/>     
             <h:outputLabel value="PNR Number: " />
             <h:outputText value="#{searchBookingManagedBean.reqBooking.pnr.pnrID}" />
             <br /> <br />
