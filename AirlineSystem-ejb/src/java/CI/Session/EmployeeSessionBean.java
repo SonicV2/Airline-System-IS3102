@@ -600,6 +600,14 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
         em.persist(employee);
     }
     
+    @Override
+    public void employeeActivateWithId(String employeeID){
+        Employee employee = getEmployeeUseID(employeeID);
+        employee.setEmployeeAccountActivate(true);
+        em.persist(employee);
+        
+    }
+    
     public String getEmployeeFullName(String employeeUserName){
        
         String firstName = getEmployee(employeeUserName).getEmployeeDisplayFirstName();

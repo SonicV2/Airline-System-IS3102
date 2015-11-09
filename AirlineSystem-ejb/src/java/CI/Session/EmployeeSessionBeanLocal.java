@@ -24,6 +24,7 @@ public interface EmployeeSessionBeanLocal {
     
     public Employee getEmployee(String employeeUserName);
     public Employee getEmployeeUseID(String employeeID); //get employee by using ID
+    public void employeeActivateWithId(String employeeID);
     
     public String generateUserName(String employeeFirstName, String employeeLastName);
     public void hashPwd(String userName);
