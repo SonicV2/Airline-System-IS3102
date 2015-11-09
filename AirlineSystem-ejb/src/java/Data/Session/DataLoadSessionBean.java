@@ -74,7 +74,7 @@ public class DataLoadSessionBean {
     public void init() {
         System.out.println("*****Loading data");
 //       addDiscountTypes();
-//        addFlights();
+  //     addFlights();
 //        addCustomer();
 //        addTravelAgencies();
 //        addCustomerBooking();
@@ -230,6 +230,52 @@ public class DataLoadSessionBean {
         //NRT-SING
         flightSessionBean.addFlight("MA115", "1100011", 500.0, date6, 1440L, false);
         flightScheduleSessionBean.scheduleFlights("MA115");
+        
+        //EXTRA FLIGHTS
+        flightSessionBean.addFlight("MA116", "1100011", 500.0, date6, 861L, false);
+        flightScheduleSessionBean.scheduleFlights("MA116");
+        
+        flightSessionBean.addFlight("MA117", "1100011", 500.0, date6, 888L, false);
+        flightScheduleSessionBean.scheduleFlights("MA117");
+        
+        flightSessionBean.addFlight("MA118", "1100011", 500.0, date6, 1420L, false);
+        flightScheduleSessionBean.scheduleFlights("MA118");
+        
+        flightSessionBean.addFlight("MA119", "1100011", 500.0, date6, 1450L, false);
+        flightScheduleSessionBean.scheduleFlights("MA119");
+        
+        flightSessionBean.addFlight("MA120", "1100011", 500.0, date6, 874L, false);
+        flightScheduleSessionBean.scheduleFlights("MA120");
+        
+        flightSessionBean.addFlight("MA121", "1100011", 500.0, date6, 882L, false);
+        flightScheduleSessionBean.scheduleFlights("MA121");
+        
+        flightSessionBean.addFlight("MA122", "1100011", 500.0, date6, 868L, false);
+        flightScheduleSessionBean.scheduleFlights("MA122");
+        
+        flightSessionBean.addFlight("MA123", "1100011", 500.0, date6, 1418L, false);
+        flightScheduleSessionBean.scheduleFlights("MA123");
+        
+        flightSessionBean.addFlight("MA124", "1100011", 500.0, date6, 870L, false);
+        flightScheduleSessionBean.scheduleFlights("MA124");
+        
+        flightSessionBean.addFlight("MA125", "1100011", 500.0, date6, 1427L, false);
+        flightScheduleSessionBean.scheduleFlights("MA125");
+        
+        flightSessionBean.addFlight("MA126", "1100011", 500.0, date6, 1441L, false);
+        flightScheduleSessionBean.scheduleFlights("MA126");
+        
+        flightSessionBean.addFlight("MA127", "1100011", 500.0, date6, 1433L, false);
+        flightScheduleSessionBean.scheduleFlights("MA127");
+        
+        flightSessionBean.addFlight("MA128", "1100011", 500.0, date6, 1429L, false);
+        flightScheduleSessionBean.scheduleFlights("MA128");
+        
+        flightSessionBean.addFlight("MA129", "1100011", 500.0, date6, 1417L, false);
+        flightScheduleSessionBean.scheduleFlights("MA129");
+        
+        flightSessionBean.addFlight("MA130", "1100011", 500.0, date6, 1464L, false);
+        flightScheduleSessionBean.scheduleFlights("MA130");
     }
 
     public void addCustomer() {
