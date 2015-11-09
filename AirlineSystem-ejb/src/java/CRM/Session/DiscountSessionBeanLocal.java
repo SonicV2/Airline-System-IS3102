@@ -29,10 +29,13 @@ public interface DiscountSessionBeanLocal {
     public int claimedCodesForDiscountType (DiscountType discountType);
     public int unclaimedCodesForDiscountType (DiscountType discountType);
     public String addDiscountCode(DiscountType discountType);
+    public String addExpiredDiscountCode (DiscountType discountType);
     public DiscountCode getDiscountCodeFromCode (String code);
     public void markCodeAsClaimed (DiscountCode discountCode);
     public List<DiscountType> retrieveAllMileageDiscountTypes();
     public List<DiscountType> retrieveAllPromotionDiscountTypes();
+    public void deleteCodesOfType(DiscountType discountType);
+
     public List<String> sendDiscountCodes (DiscountType discountType, int no);
     public List<DiscountType> retrieveValidDiscounts();
     
