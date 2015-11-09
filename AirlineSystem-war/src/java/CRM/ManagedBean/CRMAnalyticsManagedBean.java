@@ -5,7 +5,6 @@
  */
 package CRM.ManagedBean;
 
-import CRM.Entity.DiscountType;
 import CRM.Session.AnalyticsSessionBeanLocal;
 import java.io.Serializable;
 import javax.ejb.EJB;
@@ -19,6 +18,12 @@ import java.util.HashMap;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import CI.Session.EmailSessionBeanLocal;
+import CRM.Entity.DiscountType;
+import CRM.Session.DiscountSessionBeanLocal;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import javax.annotation.PostConstruct;
 
 /**
  *
@@ -31,6 +36,9 @@ public class CRMAnalyticsManagedBean implements Serializable {
 
     @EJB
     private AnalyticsSessionBeanLocal am;
+    
+    @EJB
+    private DiscountSessionBeanLocal dm;
 
     private String type;
     private int from;
@@ -44,14 +52,20 @@ public class CRMAnalyticsManagedBean implements Serializable {
     private List<Customer> customerList;
     private String retentionRate;
     private String description = "HiHi";
+    private Date expiry;
+    private List<DiscountType> discountList;
+    private DiscountType discountType;
     
     @EJB
     private EmailSessionBeanLocal emailSessionBean;
     private String emailBody;
     private String emailTitle;
+    DateFormat df = new SimpleDateFormat("dd/MM/yyyy ");
+
     /**
      * Creates a new instance of CRMAnalyticsManagedBean
      */
+  
     public CRMAnalyticsManagedBean() {
 
     }
@@ -182,6 +196,11 @@ public class CRMAnalyticsManagedBean implements Serializable {
         calculateMode();
         return "AnalyticsResults";
     }
+    
+    public String refresh(DiscountType discountType){
+        this.discountType = discountType;
+        return "SendDiscountCodes";
+    }
 
     public String calCLVMMM() {
         description = "Customer Lifetime Value is a prediction of how valuable a customer is to Merlion Airlines";
@@ -200,12 +219,17 @@ public class CRMAnalyticsManagedBean implements Serializable {
         String body = "";
         body += "Dear " + name + ",\n\n" + emailBody;
         body += "\n\nWe look forward to seeing you on board soon!";
-        System.out.println("Look here Email");
-        System.out.println(email);
-        System.out.println("Look here Email Title");
-        System.out.println(emailTitle);
-        System.out.println("Look here Email Body");
-        System.out.println(body);
+        emailSessionBean.sendEmail(email, emailTitle, body);
+    }
+    
+    public void sendPromotionEmail(String email, String name, String discountCode) {
+        String body = "";
+        String Date = df.format(expiry);
+        String discount = String.valueOf(discountType.getDiscount());
+        body += "Dear " + name + ",\n\n" + emailBody;
+        body += "\n\n\n Your Discount Code is : " + discountCode + ". It will give u a "+ discount;
+        body += "% discount. Its expiry date is " + Date + ".";
+        body += "\n\nWe look forward to seeing you on board soon!";
         emailSessionBean.sendEmail(email, emailTitle, body);
     }
     
@@ -214,6 +238,30 @@ public class CRMAnalyticsManagedBean implements Serializable {
         description= "You are sending a mass marketing email to customers from " + from+ " percentile" 
                 +" to the " + to + " percentile of "+ type + " score. There exist " + size + " customers.";
         return "SendMarketingEmail";
+    }
+    
+    public String sendPromotionalEmail(){
+        int size = csList.size();
+        discountList = dm.retrieveValidDiscounts();
+        description= "You are sending a mass email with a discount code to customers from " + from+ " percentile" 
+                +" to the " + to + " percentile of "+ type + " score. There exist " + size + " customers. Please select the discount type you want to send.";
+        return "SendDiscountCodes";
+    }
+    
+    public void sendDiscounttoCustomers(){
+         if (discountType == null) {
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please Select a Discount Type", "");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+            return;
+        }
+        expiry = discountType.getExpiryDate();
+        int size = csList.size();
+        List<String> codeList = dm.sendDiscountCodes(discountType, size);
+        for(int i=0; i<size; i++){
+            String email = csList.get(i).getEmail();
+            String name = csList.get(i).getName();
+            sendPromotionEmail(email,name, codeList.get(i));
+        }
     }
     
     public void sendtoCustomerList1(){
@@ -344,5 +392,31 @@ public class CRMAnalyticsManagedBean implements Serializable {
     public void setHm(HashMap<Integer, Integer> hm) {
         this.hm = hm;
     }
+
+    public Date getExpiry() {
+        return expiry;
+    }
+
+    public void setExpiry(Date expiry) {
+        this.expiry = expiry;
+    }  
+
+    public List<DiscountType> getDiscountList() {
+        return discountList;
+    }
+
+    public void setDiscountList(List<DiscountType> discountList) {
+        this.discountList = discountList;
+    }
+
+    public DiscountType getDiscountType() {
+        return discountType;
+    }
+
+    public void setDiscountType(DiscountType discountType) {
+        this.discountType = discountType;
+    }
+    
+    
 
 }

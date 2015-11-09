@@ -3,13 +3,90 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core">
     <h:head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <h:outputStylesheet library ="css"  name="bootstrap.css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
+        <h:outputStylesheet library="css" name="admindb.css" />
+        <h:outputStylesheet library="css" name="morrisjs/morris.css" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <title>Send Discount Codes</title>
     </h:head>
     <h:body>
-        Hello from Facelets
+        <p:growl id="growl" sticky="true" showDetail="true"/>
+        <ui:include src="/CI/DashboardHeader.xhtml"/>
+        <!--            To add the same sidebar on all dashboard pages  -->
+        <ui:include src="/CI/DashboardSidebar.xhtml"/>
+        <div id="page-wrapper">
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2 class="page-header"> Send Discount Codes</h2>
+                </div>
+                <div class="col-lg-12">
+                <h:form>
+                    <p:dataTable var="discountType" value="#{cRMAnalyticsManagedBean.discountList}" editable="true" style="margin-bottom:20px">
+                        <f:facet name="header">
+                            Seasons
+                        </f:facet>
+                        <p:column filterBy="#{discountType.id}" filterMatchMode="contains" headerText="ID" >
+                            <h:outputText value="#{discountType.id}" />
+                        </p:column>
+
+
+                        <p:column filterBy="#{discountType.description}" filterMatchMode="contains" headerText="Description" >
+                            <h:outputText value="#{discountType.description}" />
+                        </p:column>
+
+                        <p:column filterBy="#{discountType.discount}" filterMatchMode="contains" headerText="Discount Amount" >
+                            <h:outputText value="#{discountType.discount}" />
+                        </p:column>
+
+                        <p:column filterBy="#{discountType.expiryDate}" filterMatchMode="contains" headerText="Expiry Date" >
+                            <h:outputText value="#{discountType.expiryDate}" ><f:convertDateTime pattern="EEE, MMM d, yyyy"/></h:outputText>
+                        </p:column>
+
+                        <p:column>
+                            <h:commandButton class="btn btn-primary" value="Select" 
+                                             action="#{cRMAnalyticsManagedBean.refresh(discountType)}" />
+                        </p:column>
+
+
+                    </p:dataTable>
+                </h:form>
+
+                <h:form>
+                    <br/>
+                    Selected Discount Type ID:
+                    <h:outputText value="#{cRMAnalyticsManagedBean.discountType.id}"/>
+                    <br/>
+                    <br/>
+                    Description:
+                    <p>#{cRMAnalyticsManagedBean.description} </p>
+                    <br/>
+                    <br/>
+                    <p:inputText  placeholder="Email Title" value="#{cRMAnalyticsManagedBean.emailTitle}"  />
+                    <br/>
+                    <br/>
+                    Type Your Email Body Here: 
+                    <br/>
+                    <p:inputTextarea value="#{cRMAnalyticsManagedBean.emailBody}" rows="20" cols="70" counter="display" maxlength="1000" counterTemplate="{0} characters remaining." autoResize="false" />
+                    <h:outputText id="display" />           
+                    <br/>
+                    <div class="text-center">
+                    <h:commandButton class="btn btn-primary" value="Send Email" 
+                                     action="#{cRMAnalyticsManagedBean.sendDiscounttoCustomers}" />
+                    <br></br>
+                    <br></br>
+                    </div>
+                </h:form>
+                </div>
+            </div>
+        </div>
     </h:body>
 </html>
 

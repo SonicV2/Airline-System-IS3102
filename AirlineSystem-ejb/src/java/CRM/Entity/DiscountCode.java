@@ -25,6 +25,7 @@ public class DiscountCode implements Serializable {
     private boolean claimed;
     @ManyToOne
     private DiscountType discountType;
+   
 
     public String getCodeNumber() {
         return codeNumber;

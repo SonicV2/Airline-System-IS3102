@@ -69,7 +69,7 @@ public class DataLoadSessionBean {
     @PostConstruct
     public void init() {
         System.out.println("*****Loading data");
-//        addDiscountTypes();
+//       addDiscountTypes();
 //        addFlights();
 //        addCustomer();
 //        addTravelAgencies();
@@ -78,12 +78,13 @@ public class DataLoadSessionBean {
     }
 
     public void addDiscountTypes() {
-        Date date1 = new Date(), date2 = new Date(), date3 = new Date(), date4 = new Date();
+        Date date1 = new Date(), date2 = new Date(), date3 = new Date(), date4 = new Date(), date5 = new Date();
         try {
             date1 = new SimpleDateFormat("yyyy-MM-dd").parse("2016-02-01");
             date2 = new SimpleDateFormat("yyyy-MM-dd").parse("2016-01-01");
             date3 = new SimpleDateFormat("yyyy-MM-dd").parse("2016-03-20");
             date4 = new SimpleDateFormat("yyyy-MM-dd").parse("2016-07-10");
+            date5 = new SimpleDateFormat("yyyy-MM-dd").parse("2015-08-22");          
       
 
         } catch (ParseException ex) {
@@ -124,6 +125,16 @@ public class DataLoadSessionBean {
         discountType4.setType("Promotion");
         discountType4.setExpiryDate(date4);
         em.persist(discountType4);
+        
+        
+        DiscountType discountType10 = new DiscountType();
+        discountType10.setDescription("discount 50% for SG50");
+        discountType10.setDiscount(37);
+        discountType10.setMileagePointsToRedeem(0.0);
+        discountType10.setNoOfCodesUnredeemed(0);
+        discountType10.setType("Promotion");
+        discountType10.setExpiryDate(date5);
+        em.persist(discountType10);
 
         
         DiscountType discountType5 = new DiscountType();
@@ -172,6 +183,7 @@ public class DataLoadSessionBean {
         discountSessionBean.addDiscountCode(discountType1);
         discountSessionBean.addDiscountCode(discountType1);
         discountSessionBean.addDiscountCode(discountType1);
+        discountSessionBean.addExpiredDiscountCode(discountType10);
         
     }
 
