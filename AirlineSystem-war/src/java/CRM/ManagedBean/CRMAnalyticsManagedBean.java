@@ -249,6 +249,11 @@ public class CRMAnalyticsManagedBean implements Serializable {
     }
     
     public void sendDiscounttoCustomers(){
+         if (discountType == null) {
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please Select a Discount Type", "");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+            return;
+        }
         expiry = discountType.getExpiryDate();
         int size = csList.size();
         List<String> codeList = dm.sendDiscountCodes(discountType, size);

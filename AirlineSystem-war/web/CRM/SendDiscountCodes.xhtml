@@ -9,6 +9,7 @@
         <title>Send Discount Codes</title>
     </h:head>
     <h:body>
+        <p:growl id="growl" sticky="true" showDetail="true"/>
         <h:form>
         <p:dataTable var="discountType" value="#{cRMAnalyticsManagedBean.discountList}" editable="true" style="margin-bottom:20px">
                             <f:facet name="header">
