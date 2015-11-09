@@ -529,6 +529,24 @@ public class MARSManagedBean {
         setSelectedReturnFlightOption(flightOption);
         return summary();
     }
+    
+    public String clear(){
+        
+        setOriginCity(null);
+        setDestinationCity(null);
+        setDepartureDate(null);
+        setReturnDate(null);
+        setAdults(0);
+        setChildren(0);
+        
+        setOneWayOriginCity(null);
+        setOneWayDestinationCity(null);
+        setOneWayDepartureDate(null);
+        setOneWayAdult(0);
+        setOneWayChildren(0);
+        
+        return "/Distribution/MerlionAirlines?faces-redirect=true";
+    }
 
     public String displayReturnFlights() {
 
