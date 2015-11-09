@@ -65,6 +65,7 @@ public class DemandForecastSessionBean implements DemandForecastSessionBeanLocal
         schedule = new Schedule();
         schedules = new ArrayList<Schedule>();
         sa = new SeatAvailability();
+        dForecast = new Forecast();
         forecastEntries = new ArrayList<ForecastEntry>();
         if (isUpdate) {
             dForecast = hasForecast(year, routeId);

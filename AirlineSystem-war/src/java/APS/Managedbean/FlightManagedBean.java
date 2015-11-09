@@ -268,7 +268,7 @@ public class FlightManagedBean {
         }
 
         flightScheduleSessionBean.scheduleFlights(flightNo); //Create schedule and link flight to best aircraftType
-//        flightScheduleSessionBean.rotateFlights(); //Rotate flights and assign aircraft to schedule
+        flightScheduleSessionBean.rotateAircrafts(); //Rotate flights and assign aircraft to schedule
         flightDays = "";
 
         message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Flight Added Successfully!", "");
@@ -374,7 +374,7 @@ public class FlightManagedBean {
         cal.set(2015, 10, 2, 20, 36);
         flightSessionBean.addFlight("MA186", "1101010", 733.33, cal.getTime(), 1441L, false);
         flightScheduleSessionBean.scheduleFlights("MA186");
-        
+
         flightScheduleSessionBean.rotateAircrafts(); //Rotate flights and assign aircraft to schedule
 
         message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Test Flights Generated", "");
@@ -482,6 +482,7 @@ public class FlightManagedBean {
         if (demandForecastSessionBean.hasForecast(forecastYear, routeId) != null) {
             isUpdate = true;
         }
+        
         demandForecastSessionBean.generateDemandForecast(routeId, forecastYear, period, isUpdate);
 
         message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Demand forecast for " + forecastYear + " is generated!", "");

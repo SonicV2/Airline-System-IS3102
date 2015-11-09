@@ -36,7 +36,7 @@
                     <h:form id="form">
                         
                         <p:growl id="message" showDetail="true"/>
-                        <p:dataTable id="aircrafts" var="aircraft" value="#{administrationManagedBean.aircrafts}" style="margin-bottom:20px" paginator="true" rows="10" widgetVar="aircraftsTable">
+                        <p:dataTable id="aircrafts" var="aircraft" value="#{adminReportManagedBean.aircrafts}" style="margin-bottom:20px" paginator="true" rows="10" widgetVar="aircraftsTable">
 
                             <f:facet name="header">
                                 <p:outputPanel>
@@ -53,12 +53,12 @@
                                 <h:outputText value="#{aircraft.aircraftType.id}" />
                             </p:column>
 
-                            <p:column filterBy="#{administrationManagedBean.getDateFormat(aircraft.datePurchased)}" headerText="Date of Purchase" filterMatchMode="contains">
-                                <h:outputText value="#{administrationManagedBean.getDateFormat(aircraft.datePurchased)}" />
+                            <p:column filterBy="#{adminReportManagedBean.getDateFormat(aircraft.datePurchased)}" headerText="Date of Purchase" filterMatchMode="contains">
+                                <h:outputText value="#{adminReportManagedBean.getDateFormat(aircraft.datePurchased)}" />
                             </p:column>
 
-                            <p:column filterBy="#{administrationManagedBean.getDateFormat(aircraft.lastMaintained)}" headerText="Date of Maintenance" filterMatchMode="contains">
-                                <h:outputText value="#{administrationManagedBean.getDateFormat(aircraft.lastMaintained)}" />
+                            <p:column filterBy="#{adminReportManagedBean.getDateFormat(aircraft.lastMaintained)}" headerText="Date of Maintenance" filterMatchMode="contains">
+                                <h:outputText value="#{adminReportManagedBean.getDateFormat(aircraft.lastMaintained)}" />
                             </p:column>
 
                             <p:column filterBy="#{aircraft.status}" headerText="Status" filterMatchMode="contains">
@@ -66,11 +66,11 @@
                             </p:column>
                             
                             <p:column headerText="View Productivity Report" style="width:70px">
-                                <h:commandLink action="#{administrationManagedBean.viewProductivity(aircraft.tailNo)}"><i class="fa fa-search"></i> </h:commandLink>
+                                <h:commandLink action="#{adminReportManagedBean.viewProductivity(aircraft.tailNo)}"><i class="fa fa-search"></i> </h:commandLink>
                             </p:column>
                             
                             <p:column headerText="Download Productivity Report" style="width:70px">
-                                <h:commandLink action="download"><i class="fa fa-download"></i> </h:commandLink>
+                                <h:commandLink action="#{adminReportManagedBean.printProductivity(aircraft.tailNo)}"><i class="fa fa-download"></i> </h:commandLink>
                             </p:column>
 
                         </p:dataTable>
