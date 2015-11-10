@@ -101,11 +101,17 @@
 
                 <!--                this is for Aircraft acquisition, finance manager -->
                 <ui:fragment rendered="#{loginManagedBean.accessRightIDs.contains(9)}">
+
                     <li>
-                        <a href="#{request.contextPath}/APS/AcquireAircraft.xhtml"><i class="fa fa-plus fa-fw"></i> Acquire Aircrafts</a>
-                    </li>
-                    <li>
-                        <a href="#{request.contextPath}/APS/RetireAircraft.xhtml"><i class="fa fa-plus fa-plane"></i> Aircrafts Management</a>
+                        <a href="#"><i class="fa fa-plane"></i> Aircraft Management<span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                            <li>
+                                <a href="#{request.contextPath}/APS/AcquireAircraft.xhtml"><i class="fa fa-plus"></i> Acquire Aircrafts</a>
+                            </li>
+                            <li>
+                                <a href="#{request.contextPath}/APS/RetireAircraft.xhtml"><i class="fa fa-plane"></i> Retire Aircrafts</a>
+                            </li>
+                        </ul>
                     </li>
                 </ui:fragment>
 
@@ -211,14 +217,17 @@
                 <!-- this is for price management, finance manager -->
                 <ui:fragment rendered="#{loginManagedBean.accessRightIDs.contains(16)}">
                     <li>
-                        <a href="#{request.contextPath}/Inventory/CreateBookingClass.xhtml"><i class="fa fa-plus fa-fw"></i> Create Booking Class</a>
+                        <a href="#"><i class="fa fa-dollar"></i> Booking Class Management<span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                            <li>
+                                <a href="#{request.contextPath}/Inventory/CreateBookingClass.xhtml"><i class="fa fa-plus fa-fw"></i> Create Booking Class</a>
+                            </li>
+                            <li>
+                                <a href="#{request.contextPath}/Inventory/DisplayBookingClasses.xhtml"><i class="fa fa-plus fa-eye"></i> Display Existing Pricing System</a>
+                            </li>
+                        </ul>
                     </li>
-                    <li>
-                        <a href="#{request.contextPath}/Inventory/DisplayBookingClasses.xhtml"><i class="fa fa-plus fa-eye"></i> Display Existing Pricing System</a>
-                    </li>
-                    <li>
-                        <a href="#{request.contextPath}/Inventory/ViewFlights.xhtml"><i class="fa fa-plus fa-dollar"></i> Book Flight</a>
-                    </li>
+
                 </ui:fragment>
 
                 <!-- this is for price management, finance executive -->
@@ -226,9 +235,7 @@
                     <li>
                         <a href="#{request.contextPath}/Inventory/DisplayBookingClasses.xhtml"><i class="fa fa-plus fa-eye"></i> Display Existing Pricing System</a>
                     </li>
-                    <li>
-                        <a href="#{request.contextPath}/Inventory/ViewFlights.xhtml"><i class="fa fa-plus fa-dollar"></i> Book Flight</a>
-                    </li>
+
                 </ui:fragment>
 
                 <!-- this is for crew sign-in, all crews can have this access -->
@@ -294,15 +301,15 @@
                     <li>
                         <a href="#"><i class="fa fa-file-pdf-o "></i> Post-Flight Checklist Management<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
-                                <li>
-                                    <a href="#{request.contextPath}/FOS/ChooseChecklistToView.xhtml"><i class="fa fa-plus fa-eye"></i> View filled checklists</a>
-                                </li>
-                                <li>
-                                    <a href="#{request.contextPath}/FOS/ChooseChecklistToEdit.xhtml"><i class="fa fa-gear"></i> Edit checklists</a>
-                                </li>
-                                <li>
-                                     <a href="#{request.contextPath}/FOS/ChooseChecklistToAddTo.xhtml"><i class="fa fa-plus fa-fw"></i> Add checklist item</a>
-                                </li>
+                            <li>
+                                <a href="#{request.contextPath}/FOS/ChooseChecklistToView.xhtml"><i class="fa fa-plus fa-eye"></i> View filled checklists</a>
+                            </li>
+                            <li>
+                                <a href="#{request.contextPath}/FOS/ChooseChecklistToEdit.xhtml"><i class="fa fa-gear"></i> Edit checklists</a>
+                            </li>
+                            <li>
+                                <a href="#{request.contextPath}/FOS/ChooseChecklistToAddTo.xhtml"><i class="fa fa-plus fa-fw"></i> Add checklist item</a>
+                            </li>
                         </ul>
                     </li>
                 </ui:fragment>
@@ -402,11 +409,17 @@
 
                 <!-- this is for seasonality management-->
                 <ui:fragment rendered="#{loginManagedBean.accessRightIDs.contains(30)}">
+
                     <li>
-                        <a href="#{request.contextPath}/Inventory/CreateSeason.xhtml"><i class="fa fa-plus"></i> Create Seasonality</a>
-                    </li>
-                    <li>
-                        <a href="#{request.contextPath}/Inventory/DisplaySeasons.xhtml"><i class="fa fa-eye"></i> Display Seasonalities</a>
+                        <a href="#"><i class="fa fa-area-chart"></i> Seasonality Management<span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                            <li>
+                                <a href="#{request.contextPath}/Inventory/CreateSeason.xhtml"><i class="fa fa-plus"></i> Create Seasonality</a>
+                            </li>
+                            <li>
+                                <a href="#{request.contextPath}/Inventory/DisplaySeasons.xhtml"><i class="fa fa-eye"></i> Display Seasonalities</a>
+                            </li>
+                        </ul>
                     </li>
                     <li>
                         <a href="#{request.contextPath}/Inventory/ViewTurnOut.xhtml"><i class="fa fa-search"></i> View Past Turn Out</a>
@@ -451,12 +464,12 @@
                     <li>
                         <a href="#"><i class="fa fa-line-chart"></i> Demand Forecast System<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
-                    <li>
-                        <a href="#{request.contextPath}/APS/GenerateDemandForecast.xhtml"><i class="fa fa-plus"></i> Generate Demand Forecast</a>
-                    </li>
-                    <li>
-                        <a href="#{request.contextPath}/APS/ViewDemandForecast.xhtml"><i class="fa fa-eye"></i> View Demand Forecast</a>
-                    </li>
+                            <li>
+                                <a href="#{request.contextPath}/APS/GenerateDemandForecast.xhtml"><i class="fa fa-plus"></i> Generate Demand Forecast</a>
+                            </li>
+                            <li>
+                                <a href="#{request.contextPath}/APS/ViewDemandForecast.xhtml"><i class="fa fa-eye"></i> View Demand Forecast</a>
+                            </li>
                         </ul>
                     </li>
                 </ui:fragment>
@@ -465,25 +478,42 @@
                 <!--This is for demand bookkeeping management -->
                 <ui:fragment rendered="#{loginManagedBean.accessRightIDs.contains(36)}">
                     <li>
-                        <a href="#{request.contextPath}/Administration/ManageBook.xhtml"><i class="fa fa-plus"></i> Add Accounting Book</a>
-                    </li>
-                    <li>
-                        <a href="#{request.contextPath}/Administration/PrintBookReport.xhtml"><i class="fa fa-picture-o"></i> Print Account Book</a>
+                        <a href="#"><i class="fa fa-calculator"></i> Bookkeeping Management<span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                            <li>
+                                <a href="#{request.contextPath}/Administration/ManageBook.xhtml"><i class="fa fa-plus"></i> Add Accounting Book</a>
+                            </li>
+                            <li>
+                                <a href="#{request.contextPath}/Administration/PrintBookReport.xhtml"><i class="fa fa-picture-o"></i> Print Account Book</a>
+                            </li>
+                        </ul>
                     </li>
                 </ui:fragment>
 
                 <!-- this is for profit and loss reporting, finance manager-->
-                <ui:fragment rendered="#{loginManagedBean.accessRightIDs.contains(40)}">
+                <ui:fragment rendered="#{loginManagedBean.accessRightIDs.contains(40) and !loginManagedBean.accessRightIDs.contains(41) }">
                     <li>
                         <a href="#{request.contextPath}/Administration/RequestPnLStatement.xhtml"><i class="fa fa-file-excel-o"></i> Profit and Lost Reporting</a>
                     </li>  
 
+
                 </ui:fragment>
                 <!-- this is for Aircraft Reporting, finance and operations manager-->
-                <ui:fragment rendered="#{loginManagedBean.accessRightIDs.contains(41)}">
+                <ui:fragment rendered="#{loginManagedBean.accessRightIDs.contains(41) and loginManagedBean.accessRightIDs.contains(40)}">
                     <li>
-                        <a href="#{request.contextPath}/Administration/GenerateFleetAssetReport.xhtml"><i class="fa fa-file-excel-o"></i> Aircraft Reporting</a>
-                    </li>  
+                        <a href="#"><i class="fa fa-file-text-o"></i> Reporting Tools<span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                            <li>
+                                <a href="#{request.contextPath}/Administration/RequestPnLStatement.xhtml"><i class="fa fa-file-excel-o"></i> Profit and Lost Reporting</a>
+                            </li>  
+                            <li>
+                                <a href="#{request.contextPath}/Administration/GenerateFleetAssetReport.xhtml"><i class="fa fa-paper-plane-o"></i> Fleet Asset Reporting</a>
+                            </li>  
+                            <li>
+                                <a href="#{request.contextPath}/Administration/RequestAircraftProductivityReport.xhtml"><i class="fa fa-plane"></i> Aircraft Productivity Reporting</a>
+                            </li> 
+                        </ul>
+                    </li>
 
                 </ui:fragment>
 

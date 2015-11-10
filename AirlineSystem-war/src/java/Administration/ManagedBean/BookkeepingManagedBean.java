@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Administration.ManagedBean;
+package Admin.ManagedBean;
 
 import Administration.Entity.BookAccount;
 import Administration.Entity.BookAccount.Type;
@@ -46,6 +46,7 @@ public class BookkeepingManagedBean {
 
     private BookAccount account;
     private List<BookAccount> accounts;
+    private List<BookAccount> editAccounts;
     private AccountingBook acBook;
     private List<AccountingBook> acBooks;
     private List<Integer> years;
@@ -458,6 +459,14 @@ public class BookkeepingManagedBean {
         this.accounts = accounts;
     }
 
+    public List<BookAccount> getEditAccounts() {
+        return editAccounts;
+    }
+
+    public void setEditAccounts(List<BookAccount> editAccounts) {
+        this.editAccounts = editAccounts;
+    }
+
     public AccountingBook getAcBook() {
         return acBook;
     }
@@ -490,3 +499,4 @@ public class BookkeepingManagedBean {
         this.message = message;
     }
 }
+
