@@ -52,6 +52,9 @@
                 display: inline;
 
             }
+            .form-control{
+                display: inline;
+            }
         </style>
 
         <!--Add new employee to the database-->
@@ -162,11 +165,12 @@
 
                                 <div class="form-group">
                                     <p:outputLabel for="department" value="Department: " class="col-md-4 control-label" />
-                                    <h:selectOneMenu required="true" id="department" styleClass="dropdown-menu select"  value="#{employeeManagedBean.employeeDepartment}" >
-
+                                    <div class="col-md-6"> 
+                                    <h:selectOneMenu class="form-control" required="true" id="department" value="#{employeeManagedBean.employeeDepartment}" >
                                         <f:selectItem itemLabel="Select department" itemValue="" noSelectionOption="true" />
                                         <f:selectItems value="#{departmentManagedBean.CCdepartments}" />
                                     </h:selectOneMenu>
+                                    </div>
                                 </div>
 
                                 <div class="form-group">
@@ -201,7 +205,8 @@
                                 
                                 <div class="form-group">
                                     <p:outputLabel for="p" value="Position: " class="col-md-4 control-label" />
-                                    <h:selectOneMenu  required="true" id="p" styleClass="dropdown-menu select" value="#{employeeManagedBean.position}"  >
+                                    <div class="col-lg-6">
+                                    <h:selectOneMenu  class="form-control" required="true" id="p" value="#{employeeManagedBean.position}"  >
 
                                         <f:selectItem itemLabel="Select Position" itemValue="" noSelectionOption="true" />
                                         <f:selectItem itemLabel="Captain" itemValue="Captain"  />
@@ -211,6 +216,7 @@
                                         <f:selectItem itemLabel="Reserved First Officer" itemValue="Reserved First Officer"  />
                                         <f:selectItem itemLabel="Reserved Observer" itemValue="Reserved Observer"  />
                                     </h:selectOneMenu>
+                                    </div>
 
 
                                 </div>
