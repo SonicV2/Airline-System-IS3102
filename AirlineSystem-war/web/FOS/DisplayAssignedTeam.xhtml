@@ -28,8 +28,9 @@
                 <div class="col-lg-12">
                     <h2 class="page-header">Welcome to Team Formation System</h2>
                 </div>
-
                 <h:form>
+                <div class="col-lg-12">
+                
                     <div class="row col-md-8 text-center">
                         <div class="panel panel-green">
                             <div class="panel-heading">
@@ -47,9 +48,10 @@
                             <h:commandButton class="btn btn-outline btn-success" value="Generate Team"  actionListener="#{crewScheduleManagedBean.generateTeam}"/>
                         </div>  
                     </div>
+                </div>
 
 
-                    <div class="col-lg-8">
+                    <div class="col-lg-10">
                         <br></br>
                         <br></br>
                         <p:dataTable value="#{crewScheduleManagedBean.team.pilots}" var="pilot">
@@ -84,7 +86,7 @@
                             <p:column headerText="Language" >
                                 <h:outputText value="#{ceec.languages}" />
                             </p:column>
-                            <p:column headerText="Experience" style="width: 100px">
+                            <p:column headerText="Experience (Years)" style="width: 100px">
                                 <h:outputText value="#{ceec.experience} Years" />
                             </p:column>
 
@@ -93,8 +95,11 @@
 
 
                      
-
-
+                        <br></br>
+                        <div class="text-center">
+                            <h:commandButton class="btn btn-outline btn-success" value="Return To Assign Pairing" action="ChoosePairing.xhtml" />
+                            <br></br>
+                        </div>
                     </div>
 
                 </h:form>
