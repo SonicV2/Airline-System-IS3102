@@ -41,16 +41,21 @@
                 <!--                this is for anyone who can create roles-->
                 <ui:fragment rendered="#{loginManagedBean.accessRightIDs.contains(5)}">
                     <li>
+                        <a href="#"><i class="fa fa-user-plus"></i> Role Management<span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                    <li>
                         <a href="#{request.contextPath}/CI/CreateRole.xhtml"><i class="fa fa-plus fa-fw"></i> Create Role</a>
                     </li>
                     <li>
-                        <a href="#{request.contextPath}/CI/UpdateRoles.xhtml"><i class="fa fa-gear"></i> Role Management</a>
+                        <a href="#{request.contextPath}/CI/UpdateRoles.xhtml"><i class="fa fa-pencil-square-o"></i> Update Roles</a>
                     </li>
                     <li>
                         <a href="#{request.contextPath}/CI/AddRole.xhtml"><i class="fa fa-plus fa-fw"></i> Add Additional Role to Employee</a>
                     </li>
                     <li>
                         <a href="#{request.contextPath}/CI/DeleteEmployeeRole.xhtml"><i class="fa fa-trash-o"></i> Delete Role of Employee</a>
+                    </li>
+                            </ul>
                     </li>
                 </ui:fragment>
 
