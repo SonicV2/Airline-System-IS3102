@@ -5,6 +5,7 @@
  */
 package DCS.ManagedBean;
 
+import Administration.Session.AccountingSessionBeanLocal;
 import DCS.Entity.BaggageTag;
 import DCS.Entity.BoardingPass;
 import DCS.Session.BaggageSessionBeanLocal;
@@ -30,6 +31,7 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
 /**
  *
  * @author smu
@@ -38,51 +40,54 @@ import javax.servlet.http.HttpSession;
 @RequestScoped
 @ManagedBean
 public class BaggageManagedBean implements Serializable {
-    
+
     @EJB
     private CheckInRecordSessionBeanLocal checkInRecordSessionBean;
-    
+
     @EJB
     private PassengerNameRecordSessionBeanLocal passengerNameRecordSessionBean;
-    
+
     @EJB
     private BoardingPassSessionBeanLocal boardingPassSessionBean;
-    
+
     @EJB
     private BaggageSessionBeanLocal baggageSessionBean;
-    
+
+    @EJB
+    private AccountingSessionBeanLocal accountingSessionBean;
+
     @ManagedProperty(value = "#{searchBookingManagedBean}")
     private SearchBookingManagedBean searchBookingManagedBean;
-    
+
     @ManagedProperty(value = "#{baggagePaymentManagedBean}")
     private BaggagePaymentManagedBean baggagePaymentManagedBean;
-    
+
     private double totalWeightAllowed;
     private List<Baggage> allBaggage; //baggage weights for all added baggage
     private double addBagWeight; // add baggage
 
     private double totalweight;
-    
+
     private double extraPayment;
-    
+
     private String banddepart;
     private String bandarr;
-    
+
     String departure;
     String destination;
-    
+
     private List<BaggageTag> baggageTags;
     private BoardingPass boardingpass;
-    
+
     private String serviceClass;
-    
+
     private String totalCosts;
-    
+
     private String selectPrintTag;
-    
+
     public BaggageManagedBean() {
     }
-    
+
     @PostConstruct
     public void init() {
         retrieveNumberofBaggageAllowed();
@@ -94,84 +99,89 @@ public class BaggageManagedBean implements Serializable {
         totalCosts = total + "";
         update();
     }
-    
+
     public void showBaggageTag(ActionEvent event) {
         Booking booking = searchBookingManagedBean.getReqBooking();
         List<Baggage> baggages = booking.getBaggages();
-        
+
         baggageTags = new ArrayList<BaggageTag>();
         for (Baggage b : baggages) {
             baggageTags.add(b.getBaggageTag());
         }
     }
-    
+
     public void update() {
         Booking booking = searchBookingManagedBean.getReqBooking();
         List<Baggage> baggages = booking.getBaggages();
-        
+
         baggageTags = new ArrayList<BaggageTag>();
         for (Baggage b : baggages) {
             baggageTags.add(b.getBaggageTag());
         }
     }
-    
+
     public void showBoardingPass(ActionEvent event) {
+
         Booking booking = searchBookingManagedBean.getReqBooking();
-        
+
         boardingpass = boardingPassSessionBean.findBoardingpass(booking);
-        
+
         checkInRecordSessionBean.addboardingPassNo(booking, boardingpass.getSeqNumber());
         checkInRecordSessionBean.addStatus(booking, "checkin");
-        
+
         passengerNameRecordSessionBean.changePNRStatus(booking, booking.getPnr().getPnrID());
-        
+
+        accountingSessionBean.makeTransaction("Customer CheckIn", booking.getPnr().getTotalPrice());
+        if (Double.parseDouble(totalCosts) > 0.0) {
+            accountingSessionBean.makeTransaction("Counter Payments", Double.parseDouble(totalCosts));
+        }
     }
-    
+
     public void calculateExtra(ActionEvent event) {
         retrieveAllBaggages();
         totalweight = baggageSessionBean.retrieveTotalBaggageWeights(searchBookingManagedBean.getReqBooking());
-        
+
         departure = searchBookingManagedBean.getReqBooking().getSeatAvail().getSchedule().getFlight().getRoute().getOriginCountry();
         destination = searchBookingManagedBean.getReqBooking().getSeatAvail().getSchedule().getFlight().getRoute().getDestinationCountry();
-        
+
         if (departure.equals("Singapore")) {
             banddepart = "Singapore";
         } else {
             banddepart = baggageSessionBean.bandSearch(departure);
         }
-        
+
         if (destination.equals("Singapore")) {
             bandarr = "Singapore";
         } else {
             bandarr = baggageSessionBean.bandSearch(destination);
         }
-        
+
         retrieveNumberofBaggageAllowed();
-        
+
         double temp = (totalweight + addBagWeight);
-        
+
         this.extraPayment = baggageSessionBean.calcualtePenalty(departure, destination, totalWeightAllowed, temp);
-        
+
         baggagePaymentManagedBean.setExtra(extraPayment);
-        
+
         baggagePaymentManagedBean.setBooking(searchBookingManagedBean.getReqBooking());
-        
+
         baggagePaymentManagedBean.setAddbagWeight(addBagWeight);
     }
-    
+
     public void addBaggage(ActionEvent event) {
         FacesMessage message = null;
         retrieveNumberofBaggageAllowed();
         retrieveAllBaggages();
-       
+
         totalweight = baggageSessionBean.retrieveTotalBaggageWeights(searchBookingManagedBean.getReqBooking());
-        
+
         totalCosts = passengerNameRecordSessionBean.retrieveUpgradeCosts(searchBookingManagedBean.getReqBooking());
-        
+
         String msg = baggageSessionBean.addBaggage(searchBookingManagedBean.getReqBooking(), addBagWeight, totalWeightAllowed);
-        
+
         totalweight = baggageSessionBean.retrieveTotalBaggageWeights(searchBookingManagedBean.getReqBooking());
-        
+
         if (msg.equals("excess")) {
             message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Overweight, Please Pay Additional Charge!", "");
         } else {
@@ -179,32 +189,30 @@ public class BaggageManagedBean implements Serializable {
         }
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
-    
-      public void refresh() {
-        
+
+    public void refresh() {
+
         retrieveNumberofBaggageAllowed();
         retrieveAllBaggages();
         totalweight = baggageSessionBean.retrieveTotalBaggageWeights(searchBookingManagedBean.getReqBooking());
-         retrieveServiceClass();
+        retrieveServiceClass();
         totalCosts = passengerNameRecordSessionBean.retrieveUpgradeCosts(searchBookingManagedBean.getReqBooking());
-        
-      
+
     }
-    
-    
+
     public void retrieveAllBaggages() {
         setAllBaggage(baggageSessionBean.retrieveAllBaggages(searchBookingManagedBean.getReqBooking()));
     }
-    
+
     public void retrieveNumberofBaggageAllowed() {
         int i = baggageSessionBean.retrieveNumberOfBaggageAllowed(getSearchBookingManagedBean().getReqBooking().getClassCode());
         setTotalWeightAllowed((i * 15.00));
     }
-    
+
     public void retrieveServiceClass() {
         setServiceClass(passengerNameRecordSessionBean.retrieveClass(searchBookingManagedBean.getReqBooking().getClassCode()));
     }
-    
+
     public void printAllTag(ActionEvent event) {
 //        List<Baggage> baggages = searchBookingManagedBean.getReqBooking().getBaggages();
 //
@@ -216,13 +224,13 @@ public class BaggageManagedBean implements Serializable {
 
         //printBaggageTag(selectPrintTag.getBaggageTagSeqNumber());
     }
-    
+
     public String printBaggageTag(String selectedId) {
         System.out.print("Baggage Managed Bean" + selectedId);
         BaggageTag tag = baggageSessionBean.retrieveBaggageTagByID(selectedId);
-        
+
         FacesContext context = FacesContext.getCurrentInstance();
-        
+
         try {
             System.out.print("Baggage Managed Bean inside try");
             HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
@@ -236,12 +244,12 @@ public class BaggageManagedBean implements Serializable {
             session.setAttribute("fNumber", tag.getFlightNumber());
             session.setAttribute("Service", tag.getServiceClass());
             session.setAttribute("seqNumber", tag.getBaggageTagSeqNumber());
-            
+
             request.setAttribute("type", "baggageTag"); //Set to type in order to differentiate from other report generation
             RequestDispatcher dispatcher = request.getRequestDispatcher("/Controller");
             dispatcher.forward(request, response);
             return null;
-            
+
         } catch (Exception e) {
             System.out.print("Baggage Managed Bean inside exception");
             e.printStackTrace();
@@ -251,15 +259,15 @@ public class BaggageManagedBean implements Serializable {
             System.out.print("Baggage Managed Bean inside finally");
             return null;
         }
-        
+
     }
-    
+
     public void printBoardingPass(ActionEvent event) {
         searchBookingManagedBean.addMiles(event);
         BoardingPass pass = boardingPassSessionBean.retrieveBoardingPassByBooking(searchBookingManagedBean.getReqBooking());
-        
+
         FacesContext context = FacesContext.getCurrentInstance();
-        
+
         try {
             HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
             HttpServletResponse response = (HttpServletResponse) context.getExternalContext().getResponse();
@@ -278,17 +286,17 @@ public class BaggageManagedBean implements Serializable {
             session.setAttribute("seqNumber", pass.getSeqNumber());
             session.setAttribute("gate", pass.getGate());
             session.setAttribute("bID", pass.getBookingID());
-            
+
             request.setAttribute("type", "boardingPass"); //Set to type in order to differentiate from other report generation
             RequestDispatcher dispatcher = request.getRequestDispatcher("/Controller");
             dispatcher.forward(request, response);
-            
+
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             context.responseComplete();
         }
-        
+
     }
 
     /**
@@ -346,83 +354,83 @@ public class BaggageManagedBean implements Serializable {
     public void setAllBaggage(List<Baggage> allBaggage) {
         this.allBaggage = allBaggage;
     }
-    
+
     public double getTotalweight() {
         return totalweight;
     }
-    
+
     public void setTotalweight(double totalweight) {
         this.totalweight = totalweight;
     }
-    
+
     public double getExtraPayment() {
         return extraPayment;
     }
-    
+
     public void setExtraPayment(double extraPayment) {
         this.extraPayment = extraPayment;
     }
-    
+
     public String getBanddepart() {
         return banddepart;
     }
-    
+
     public String getBandarr() {
         return bandarr;
     }
-    
+
     public String getDeparture() {
         return departure;
     }
-    
+
     public void setDeparture(String departure) {
         this.departure = departure;
     }
-    
+
     public String getDestination() {
         return destination;
     }
-    
+
     public void setDestination(String destination) {
         this.destination = destination;
     }
-    
+
     public BaggagePaymentManagedBean getBaggagePaymentManagedBean() {
         return baggagePaymentManagedBean;
     }
-    
+
     public void setBaggagePaymentManagedBean(BaggagePaymentManagedBean baggagePaymentManagedBean) {
         this.baggagePaymentManagedBean = baggagePaymentManagedBean;
     }
-    
+
     public BaggageSessionBeanLocal getBaggageSessionBean() {
         return baggageSessionBean;
     }
-    
+
     public void setBaggageSessionBean(BaggageSessionBeanLocal baggageSessionBean) {
         this.baggageSessionBean = baggageSessionBean;
     }
-    
+
     public List<BaggageTag> getBaggageTags() {
         return baggageTags;
     }
-    
+
     public void setBaggageTags(List<BaggageTag> baggageTags) {
         this.baggageTags = baggageTags;
     }
-    
+
     public BoardingPassSessionBeanLocal getBoardingPassSessionBean() {
         return boardingPassSessionBean;
     }
-    
+
     public void setBoardingPassSessionBean(BoardingPassSessionBeanLocal boardingPassSessionBean) {
         this.boardingPassSessionBean = boardingPassSessionBean;
     }
-    
+
     public BoardingPass getBoardingpass() {
         return boardingpass;
     }
-    
+
     public void setBoardingpass(BoardingPass boardingpass) {
         this.boardingpass = boardingpass;
     }
@@ -470,5 +478,5 @@ public class BaggageManagedBean implements Serializable {
         System.out.println("tag : " + selectPrintTag);
         //printBaggageTag(selectPrintTag.getBaggageTagSeqNumber());
     }
-    
+
 }

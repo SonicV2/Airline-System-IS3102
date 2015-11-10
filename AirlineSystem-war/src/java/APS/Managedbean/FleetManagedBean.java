@@ -8,6 +8,7 @@ package APS.Managedbean;
 import APS.Entity.Aircraft;
 import APS.Entity.AircraftType;
 import APS.Session.FleetSessionBeanLocal;
+import Administration.Session.AccountingSessionBeanLocal;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -40,6 +41,9 @@ public class FleetManagedBean {
     @EJB
     private FleetSessionBeanLocal fleetSessionBean;
 
+    @EJB
+    private AccountingSessionBeanLocal accountingSessionBean;
+    
     Date datePurchased;
     Date lastMaintained;
     String aircraftTypeId;
@@ -123,6 +127,8 @@ public class FleetManagedBean {
         message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Aircraft is Acquired Successfully!", "");
         FacesContext.getCurrentInstance().addMessage(null, message);
         setAircrafts(fleetSessionBean.retrieveAircrafts());
+        AircraftType aircraftType = fleetSessionBean.getAircraftType(aircraftTypeId);
+        accountingSessionBean.makeTransaction("Acquire Aircraft", aircraftType.getCost());
         clear();
 
         Logger logger = Logger.getLogger(FleetManagedBean.class.getName());
