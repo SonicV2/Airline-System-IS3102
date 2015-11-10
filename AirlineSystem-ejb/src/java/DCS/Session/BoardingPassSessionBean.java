@@ -28,7 +28,7 @@ public class BoardingPassSessionBean implements BoardingPassSessionBeanLocal {
     public static int seq = 1;
 
     @Override
-    public void addBooking(Booking booking) {
+    public void addBooking(Booking booking, String boardingTime) {
         if (existBooking(booking)) {
             return;
         }
@@ -45,10 +45,12 @@ public class BoardingPassSessionBean implements BoardingPassSessionBeanLocal {
         boardingpass.setDepartTime(booking.getFlightDate());
         boardingpass.setGate("G12");
 
-        Date depart = booking.getFlightDate();
-        depart.setTime(depart.getTime() - 1800 * 1000); // half an hour before
-        boardingpass.setBoardingTime(depart.toString());
-        depart.setTime(depart.getTime() + 1800 * 1000);
+//        Date depart = booking.getFlightDate();
+//        depart.setTime(depart.getTime() - 1800 * 1000); // half an hour before
+//        boardingpass.setBoardingTime(depart.toString());
+//        depart.setTime(depart.getTime() + 1800 * 1000);
+        
+        boardingpass.setBoardingTime(boardingTime);
 
         boardingpass.setSeqNumber(seq + "");
         seq++;
