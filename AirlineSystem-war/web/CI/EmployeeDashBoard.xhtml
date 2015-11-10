@@ -36,9 +36,23 @@
             <ui:include src="EmployeeCalendar.xhtml" />
         </ui:fragment>
 <!--        this is for pilot access-->
-        <ui:fragment rendered="#{loginManagedBean.accessRightIDs.contains(26) }">
+        <ui:fragment rendered="#{loginManagedBean.accessRightIDs.contains(26) and !(loginManagedBean.isReserve)}">
             <ui:include src="/FOS/ViewPilotTimetable.xhtml" />
         </ui:fragment>
+<!--        this is for crew access-->
+        <ui:fragment rendered="#{loginManagedBean.accessRightIDs.contains(27) and !(loginManagedBean.isReserve)}">
+            <ui:include src="/FOS/ViewTimetable.xhtml" />
+        </ui:fragment>
+<!--        this is for reserved pilot access-->
+        <ui:fragment rendered="#{loginManagedBean.accessRightIDs.contains(28) and (loginManagedBean.isReserve)}">
+            <ui:include src="/FOS/ViewReservedPilotTimetable.xhtml" />
+        </ui:fragment>
+<!--        this is for reserved pilot access-->
+        <ui:fragment rendered="#{loginManagedBean.accessRightIDs.contains(29) and (loginManagedBean.isReserve)}">
+            <ui:include src="/FOS/ViewReservedTimetable.xhtml" />
+        </ui:fragment>
+
+
 
 
 
