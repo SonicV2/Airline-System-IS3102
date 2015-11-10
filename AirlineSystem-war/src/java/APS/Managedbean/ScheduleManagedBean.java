@@ -117,6 +117,7 @@ public class ScheduleManagedBean {
         }
 
         scheduleSessionBean.addSchedules(duration, flightNo, true);
+        setFlights(flightSessionBean.retrieveActiveFlights());
         message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Schedules Added Successfully!", "");
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
