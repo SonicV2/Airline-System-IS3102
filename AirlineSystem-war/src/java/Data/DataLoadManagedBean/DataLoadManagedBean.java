@@ -37,5 +37,12 @@ public class DataLoadManagedBean {
         FacesContext.getCurrentInstance().addMessage(null, message);
         return null;
     }
+    
+    public String crmData(){
+        dataLoadSessionBean.prepareCRMData();
+        message = new FacesMessage(FacesMessage.SEVERITY_INFO, "CRM Data Loaded successfully!", "");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+        return null;
+    }
 
 }

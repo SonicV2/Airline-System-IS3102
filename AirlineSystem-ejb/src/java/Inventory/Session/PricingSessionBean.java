@@ -72,7 +72,7 @@ public class PricingSessionBean implements PricingSessionBeanLocal, PricingSessi
         List<Booking> bList= q.getResultList();
         int size = bList.size();
         int turnOut=0;
-        if(size<200){
+        if(size<100){
             return "Not Enough Historic Data";
         }
         for(int i =0; i< size; i++){

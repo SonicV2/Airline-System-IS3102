@@ -98,11 +98,10 @@ public class ClassManagedBean {
             FacesMessage msg = new FacesMessage("Amount of Mileage Accruable in Percentage","");
             FacesContext.getCurrentInstance().addMessage(null, msg);
         }
-        if(season.isEmpty()){
+        if(season==null){
             FacesMessage msg = new FacesMessage("Please Fill in Seasonality","");
             FacesContext.getCurrentInstance().addMessage(null, msg);
         }
-        else{
             String message = cm.addClassCode(getClasscode(), getPricePercent(), getAdvancedSales(), 
             getPercentSold(), getServiceClass(), isRebook(), isCancel(), 
             getBaggage(), getMillageAccru(), getSeason(),travelagent);
@@ -110,7 +109,7 @@ public class ClassManagedBean {
             FacesContext.getCurrentInstance().addMessage(null, msg);
             setBookingClass(cm.retrieveBookingClasses());
             clear();
-        }
+
     
     }
 
