@@ -148,7 +148,7 @@ public class DepartmentSessionBeanTest {
     @Test
     public void testSearchEmployee() throws Exception {
         System.out.println("searchEmployee");
-        String staffID = "S0001";
+        String staffID = "A0001";
         assertNotNull(dm.searchEmployee(staffID));
     }
 
@@ -158,7 +158,7 @@ public class DepartmentSessionBeanTest {
     @Test
     public void testChangeDepartment() throws Exception {
         System.out.println("changeDepartment");
-        String staffID = "S0001";
+        String staffID = "A0006";
         String deptNameCom = "FINANCE(";
         String deptNameOldCom = "IT("; 
         String expResult = "Successful!";
