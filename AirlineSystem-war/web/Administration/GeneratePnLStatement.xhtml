@@ -55,63 +55,73 @@ and open the template in the editor.
                                     <br></br>
 
                                     <h4>Sales Revenue</h4>
+                                    $
                                     <h:outputText id="sales" value="#{adminReportManagedBean.selectedPnL.salesRevenue}" >
-                                        <f:convertNumber type="number" groupingUsed="true" minFractionDigits="2" pattern="#,###.00"/>
+                                        <f:convertNumber type="number" groupingUsed="true" minFractionDigits="2" pattern="#,##0.00"/>
                                     </h:outputText>
                                     <br></br>
 
                                     <h4>Operating Expenses</h4>
                                     <h4>Airport Rental</h4>
+                                    $
                                     <h:outputText id="rental" value="#{adminReportManagedBean.selectedPnL.airportRental}" >
-                                        <f:convertNumber type="number" groupingUsed="true" minFractionDigits="2" pattern="#,###.00"/>
+                                        <f:convertNumber type="number" groupingUsed="true" minFractionDigits="2" pattern="#,##0.00"/>
                                     </h:outputText>
                                     <br></br>
 
                                     <h4>Airport Taxes</h4>
+                                    $
                                     <h:outputText id="tax" value="#{adminReportManagedBean.selectedPnL.airportTaxes}" >
-                                        <f:convertNumber type="number" groupingUsed="true" minFractionDigits="2" pattern="#,###.00"/>
+                                        <f:convertNumber type="number" groupingUsed="true" minFractionDigits="2" pattern="#,##0.00"/>
                                     </h:outputText>
                                     <br></br>
 
                                     <h4>Employee Salaries</h4>
+                                    $
                                     <h:outputText id="salaries" value="#{adminReportManagedBean.selectedPnL.employeeSalaries}" >
-                                        <f:convertNumber type="number" groupingUsed="true" minFractionDigits="2" pattern="#,###.00"/>
+                                        <f:convertNumber type="number" groupingUsed="true" minFractionDigits="2" pattern="#,##0.00"/>
                                     </h:outputText>
                                     <br></br>
 
                                     <h4>Commission Paid</h4>
+                                    $
                                     <h:outputText id="commission" value="#{adminReportManagedBean.selectedPnL.commission}" >
-                                        <f:convertNumber type="number" groupingUsed="true" minFractionDigits="2" pattern="#,###.00"/>
+                                        <f:convertNumber type="number" groupingUsed="true" minFractionDigits="2" pattern="#,##0.00"/>
                                     </h:outputText>
                                     <br></br>
 
                                     <h4>Aircrafts Acquired</h4>
+                                    $
                                     <h:outputText id="aircraft" value="#{adminReportManagedBean.selectedPnL.aircrafts}" >
-                                        <f:convertNumber type="number" groupingUsed="true" minFractionDigits="2" pattern="#,###.00"/>
+                                        <f:convertNumber type="number" groupingUsed="true" minFractionDigits="2" pattern="#,##0.00"/>
                                     </h:outputText>
                                     <br></br>
 
                                     <h4>Fuel Costs</h4>
+                                    $
                                     <h:outputText id="fuel" value="#{adminReportManagedBean.selectedPnL.fuelCosts}" >
                                         <f:convertNumber type="number" groupingUsed="true" minFractionDigits="2" pattern="#,###.00"/>
                                     </h:outputText>
                                     <br></br>
 
                                     <h4>Total Revenue</h4>
+                                    $
                                     <h:outputText id="revenue" value="#{adminReportManagedBean.selectedPnL.totalRevenue}" >
-                                        <f:convertNumber type="number" groupingUsed="true" minFractionDigits="2" pattern="#,###.00"/>
+                                        <f:convertNumber type="number" groupingUsed="true" minFractionDigits="2" pattern="#,##0.00"/>
                                     </h:outputText>
                                     <br></br>
 
                                     <h4>Total Expenses</h4>
+                                    $
                                     <h:outputText id="expenses" value="#{adminReportManagedBean.selectedPnL.totalExpenses}" >
-                                        <f:convertNumber type="number" groupingUsed="true" minFractionDigits="2" pattern="#,###.00"/>
+                                        <f:convertNumber type="number" groupingUsed="true" minFractionDigits="2" pattern="#,##0.00"/>
                                     </h:outputText>
                                     <br></br>
 
                                     <h4>Total Profit / Loss</h4>
+                                    $
                                     <h:outputText id="pnl" value="#{adminReportManagedBean.selectedPnL.totalPnL}">
-                                        <f:convertNumber type="number" groupingUsed="true" minFractionDigits="2" pattern="#,###.00"/>
+                                        <f:convertNumber type="number" groupingUsed="true" minFractionDigits="2" pattern="#,##0.00"/>
                                     </h:outputText>
                                     <br></br>
 

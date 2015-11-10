@@ -51,6 +51,9 @@ public class AccountingSessionBean implements AccountingSessionBeanLocal {
     public void createBook(int year, double cashAmt, double retainedAmt) {
         acBook = new AccountingBook();
         acBook.setYear(year);
+        if (getAcBooks() == null) {
+            acBook.setActive(true);
+        }
         em.persist(acBook);
 
         //Set up the accounts
@@ -83,12 +86,14 @@ public class AccountingSessionBean implements AccountingSessionBeanLocal {
         account = addAccount("Travel Agency Revenue", year, Type.REVENUE);
         accounts.add(account);
         account = new BookAccount();
+        account = addAccount("Misc Revenue", year, Type.REVENUE);
+        accounts.add(account);
+        account = new BookAccount();
         account = addAccount("Fuel Expenses", year, Type.EXPENSE);
         accounts.add(account);
-
-        if (getAcBooks() == null) {
-            acBook.setActive(true);
-        }
+        account = new BookAccount();
+        account = addAccount("Maintainance Expenses", year, Type.EXPENSE);
+        accounts.add(account);
 
         acBook.setAccounts(accounts);
         em.merge(acBook);
@@ -98,7 +103,7 @@ public class AccountingSessionBean implements AccountingSessionBeanLocal {
 
         TimeZone tz = TimeZone.getTimeZone("GMT+8:00"); //Set Timezone to Singapore
         Calendar tmp = Calendar.getInstance(tz);
-        
+
         posting = new Posting();
         posting.createPosting(tmp.getTime(), "Initialize Cash Account");
         posting.setEntries(entries);
@@ -301,27 +306,32 @@ public class AccountingSessionBean implements AccountingSessionBeanLocal {
         account = new BookAccount();
         acBook = getCurrBook();
 
-        if (name.equals("AcquireAircraft")) {
+        if (name.equals("Acquire Aircraft")) {
             account = acBook.getAccountByName("Accounts Payable");
             credit(account, posting, amount);
             account = acBook.getAccountByName("Property and Equipment");
             debit(account, posting, amount);
-        } else if (name.equals("CustomerBooking")) {
+        } else if (name.equals("Customer Booking")) {
             account = acBook.getAccountByName("Cash");
             debit(account, posting, amount);
             account = acBook.getAccountByName("Unearned Revenue");
             credit(account, posting, amount);
-        } else if (name.equals("CustomerCheckIn")) {
+        } else if (name.equals("Customer CheckIn")) {
             account = acBook.getAccountByName("Unearned Revenue");
             debit(account, posting, amount);
             account = acBook.getAccountByName("Ticket Sales Revenue");
             credit(account, posting, amount);
-        } else if (name.equals("TravelAgencyBooking")) {
+        } else if (name.equals("Counter Payments")) {
+            account = acBook.getAccountByName("Cash");
+            debit(account, posting, amount);
+            account = acBook.getAccountByName("Misc Revenue");
+            credit(account, posting, amount);
+        } else if (name.equals("Travel Agency Booking")) {
             account = acBook.getAccountByName("Accounts Receivable");
             debit(account, posting, amount);
             account = acBook.getAccountByName("Travel Agency Revenue");
             credit(account, posting, amount);
-        } else if (name.equals("TravelAgencyCfm")) {
+        } else if (name.equals("Travel Agency Confirm Payment")) {
             account = acBook.getAccountByName("Cash");
             debit(account, posting, amount);
             account = acBook.getAccountByName("Accounts Receivable");
@@ -331,10 +341,10 @@ public class AccountingSessionBean implements AccountingSessionBeanLocal {
             credit(account, posting, amount);
             account = acBook.getAccountByName("Fuel Expenses");
             debit(account, posting, amount);
-        } else if (name.equals("MaintainanceDone")) {//What?
+        } else if (name.equals("MaintainanceDone")) {
             account = acBook.getAccountByName("Cash");
             credit(account, posting, amount);
-            account = acBook.getAccountByName("Fuel Expenses");
+            account = acBook.getAccountByName("Maintainance Expenses");
             debit(account, posting, amount);
         }
 //Any maintanance costs? Other costs?
@@ -342,23 +352,31 @@ public class AccountingSessionBean implements AccountingSessionBeanLocal {
 
     @Override
     public AccountingBook getCurrBook() {
+        acBooks = new ArrayList<AccountingBook>();
         acBook = new AccountingBook();
         try {
+            Query q = em.createQuery("SELECT a from AccountingBook a");
 
-            Query q = em.createQuery("SELECT a FROM AccountingBook " + "AS a WHERE a.active=:active");
-            q.setParameter("active", true);
-
-            List results = q.getResultList();
+            List<AccountingBook> results = q.getResultList();
             if (!results.isEmpty()) {
-                acBook = (AccountingBook) results.get(0);
+
+                acBooks = results;
 
             } else {
-                acBook = null;
+                acBooks = null;
+                System.out.println("no accounting books!");
             }
-
         } catch (EntityNotFoundException enfe) {
             System.out.println("\nEntity not found error" + "enfe.getMessage()");
         }
+        
+        for(int i = 0; i<acBooks.size(); i++){
+            if (acBooks.get(i).isActive()){
+                acBook = acBooks.get(i);
+                break;
+            }
+        }
+        
         return acBook;
     }
 

@@ -98,7 +98,7 @@ public class ClassManagedBean {
             FacesMessage msg = new FacesMessage("Amount of Mileage Accruable in Percentage","");
             FacesContext.getCurrentInstance().addMessage(null, msg);
         }
-        if(season==null){
+        if(season == null){
             FacesMessage msg = new FacesMessage("Please Fill in Seasonality","");
             FacesContext.getCurrentInstance().addMessage(null, msg);
         }
@@ -109,7 +109,6 @@ public class ClassManagedBean {
             FacesContext.getCurrentInstance().addMessage(null, msg);
             setBookingClass(cm.retrieveBookingClasses());
             clear();
-
     
     }
 

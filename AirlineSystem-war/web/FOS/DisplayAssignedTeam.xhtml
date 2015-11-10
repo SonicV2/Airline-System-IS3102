@@ -19,8 +19,8 @@
     </h:head>
     <h:body>
         <!--            To add the same header on all dashboard pages  
--->       <ui:include src="/CI/DashboardHeader.xhtml"/><!--
-           To add the same sidebar on all dashboard pages -->  
+        -->       <ui:include src="/CI/DashboardHeader.xhtml"/><!--
+                   To add the same sidebar on all dashboard pages -->  
         <ui:include src="/CI/DashboardSidebar.xhtml"/>
         <div id="page-wrapper">
 
@@ -28,54 +28,85 @@
                 <div class="col-lg-12">
                     <h2 class="page-header">Welcome to Team Formation System</h2>
                 </div>
-            
-            <h:form>
-                <div class="row col-md-8 text-center">
-                    <div class="panel panel-green">
-                        <div class="panel-heading">
-                            You have selected pairing ID: #{crewScheduleManagedBean.sln.id}
-                        </div>
-                        <div class="panel-body">
-                            <h:outputLabel value="Flight Date: #{crewScheduleManagedBean.sln.FDate}"/> <br/>
-                            <h:outputLabel value="Flight Cities: #{crewScheduleManagedBean.sln.flightCities}"/><br/>
-                            <h:outputLabel value="Total Flight Hours: #{crewScheduleManagedBean.sln.flightHour}"/><br/>
-                            <h:outputLabel value="Flight Number: #{crewScheduleManagedBean.sln.flightNumbers}"/><br/>
-                            <h:outputLabel value="Flight Duration: #{crewScheduleManagedBean.sln.flightTimes}"/><br/>
+                <h:form>
+                <div class="col-lg-12">
+                
+                    <div class="row col-md-8 text-center">
+                        <div class="panel panel-green">
+                            <div class="panel-heading">
+                                You have selected pairing ID: #{crewScheduleManagedBean.sln.id}
+                            </div>
+                            <div class="panel-body">
+                                <h:outputLabel value="Flight Date: #{crewScheduleManagedBean.sln.FDate}"/> <br/>
+                                <h:outputLabel value="Flight Cities: #{crewScheduleManagedBean.sln.uniqueCities}"/><br/>
+                                <h:outputLabel value="Total Flight Hours: #{crewScheduleManagedBean.sln.flightHour}"/><br/>
 
+
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <h:commandButton class="btn btn-outline btn-success" value="Generate Team"  actionListener="#{crewScheduleManagedBean.generateTeam}"/>
+                        </div>  
+                    </div>
+                </div>
+
+
+                    <div class="col-lg-10">
+                        <br></br>
+                        <br></br>
+                        <p:dataTable value="#{crewScheduleManagedBean.team.pilots}" var="pilot">
+                            <f:facet name="header">
+                                Pilot
+                            </f:facet>
+                            <p:column headerText="Name">
+                                <h:outputText value="#{pilot.employeeDisplayFirstName} #{pilot.employeeDisplayLastName} " />
+                            </p:column>
+                            <p:column headerText="Position">
+                                <h:outputText value=" #{pilot.position}" />
+                            </p:column>
+                            <p:column headerText="Skills">
+                                <h:outputText value="#{pilot.skillsets}" />
+                            </p:column>
+                            <p:column headerText="Experience (Years)" style="width: 100px">
+                                <h:outputText value="#{pilot.experience} Years" />
+                            </p:column>
+
+                        </p:dataTable>
+
+                        <p:dataTable value="#{crewScheduleManagedBean.team.cabinCrews}" var="ceec">
+                            <f:facet name="header">
+                                Cabin Crew
+                            </f:facet>
+                            <p:column headerText="Name">
+                                <h:outputText value=" #{ceec.employeeDisplayFirstName} #{ceec.employeeDisplayLastName} " />
+                            </p:column>
+                            <p:column headerText="Position">
+                                <h:outputText value=" #{ceec.position}" />
+                            </p:column>
+                            <p:column headerText="Language" >
+                                <h:outputText value="#{ceec.languages}" />
+                            </p:column>
+                            <p:column headerText="Experience (Years)" style="width: 100px">
+                                <h:outputText value="#{ceec.experience} Years" />
+                            </p:column>
+
+                        </p:dataTable>
+
+
+
+                     
+                        <br></br>
+                        <div class="text-center">
+                            <h:commandButton class="btn btn-outline btn-success" value="Return To Assign Pairing" action="ChoosePairing.xhtml" />
+                            <br></br>
                         </div>
                     </div>
-                    <div class="text-center">
-                        <h:commandButton class="btn btn-outline btn-success" value="Generate Team"  actionListener="#{crewScheduleManagedBean.generateTeam}"/>
-                    </div>  
-                </div>
 
-
-                <div class="col-lg-8">
-                    <br></br>
-                    <br></br>
-                    <p:dataList value="#{crewScheduleManagedBean.team.pilots}" var="pilot" type="ordered">
-                        <f:facet name="header">
-                            Captain
-                        </f:facet>
-                        Name: #{pilot.employeeDisplayFirstName} #{pilot.employeeDisplayLastName}  Position: #{pilot.position}
-                    </p:dataList>
-
-
-                    <p:dataList value="#{crewScheduleManagedBean.team.cabinCrews}" var="cc" type="ordered">
-                        <f:facet name="header">
-                            Cabin Crew
-                        </f:facet>
-                        Name: #{cc.employeeDisplayFirstName} #{cc.employeeDisplayLastName}  Position: #{cc.position}
-                    </p:dataList>
-
-                </div>
-
-            </h:form>
-                </div>
+                </h:form>
+            </div>
         </div>
     </h:body>
 </html>
 
 
 
-    

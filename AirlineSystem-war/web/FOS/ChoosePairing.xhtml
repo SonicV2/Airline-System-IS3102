@@ -32,33 +32,37 @@
                 </div>
 
                 <div class="col-md-10">
-                    <div class="panel panel-green">
-                        <div class="panel-heading">
-                            Please choose a pairing to assign team:
+
+
+
+                    <h:form>
+
+                        <p:dataTable id="radioDT" var="sln" value="#{crewScheduleManagedBean.details}" selection="#{crewScheduleManagedBean.selectPairingDetail}" rowKey="#{sln}">
+                            <f:facet name="header">
+                                Please choose a pairing to assign team
+                            </f:facet>
+                            <p:column selectionMode="single" style="width:40px;text-align:center"/>
+                            <p:column headerText="Pairing Details">
+                                <h:outputText escape="false" value="#{sln.title}" />
+                            </p:column>
+                            <p:column headerText="View Info"  style="width:50px;text-align:center">
+                                <h:commandLink action="#{crewScheduleManagedBean.viewPairingInfo(sln.content)}"><i class="fa fa-eye"></i></h:commandLink>
+                            </p:column>
+
+                        </p:dataTable>
+
+
+
+                        <div class="text-center">
+                            <h:commandButton class="btn btn-outline btn-success" value="Assign Team"  action="DisplayAssignedTeam" actionListener="#{crewScheduleManagedBean.getSelectPairingID}"/>
                         </div>
-
-
-                        <h:form>
-                            <div class="panel-body">
-                                
-                                    <h:panelGrid columns="1" style="margin-bottom:10px" cellpadding="5">
-                                        <h:outputLabel for="sln1" />
-                                        <p:selectOneRadio id="sln1" value="#{crewScheduleManagedBean.sln1}"  layout="grid" columns="1" style="padding-right:40px;">
-                                            <f:selectItems itemLabelEscaped="false" value="#{crewScheduleManagedBean.scheduleResult}" var="sln" itemLabel=" #{sln} " itemValue="#{sln}"/>
-                                        </p:selectOneRadio>
-                                    </h:panelGrid>
-                                
-
-                                <div class="text-center">
-                                    <h:commandButton class="btn btn-outline btn-success" value="Assign Team"  action="DisplayAssignedTeam" actionListener="#{crewScheduleManagedBean.getSelectPairingID}"/>
-                                </div>
-                            </div>
                         </h:form>
-
-                    </div>
                 </div>
+                
+
             </div>
         </div>
+
     </h:body>
 </html>
 

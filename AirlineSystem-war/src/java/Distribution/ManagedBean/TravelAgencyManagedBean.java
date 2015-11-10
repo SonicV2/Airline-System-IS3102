@@ -9,6 +9,7 @@ import APS.Entity.Flight;
 import APS.Entity.Route;
 import APS.Entity.Schedule;
 import APS.Session.FlightSessionBeanLocal;
+import Administration.Session.AccountingSessionBeanLocal;
 import CI.Session.EmailSessionBeanLocal;
 import Distribution.Entity.FlightOptions;
 import Distribution.Entity.PNR;
@@ -60,6 +61,9 @@ public class TravelAgencyManagedBean {
 
     @EJB
     private PassengerBookingSessionBeanLocal passengerBookingSessionBean;
+    
+    @EJB
+    private AccountingSessionBeanLocal accountingSessionBean;
 
     private List<TravelAgency> travelAgencies;
     private TravelAgency selectedAgency;
@@ -763,20 +767,23 @@ public class TravelAgencyManagedBean {
 
         travelAgencySessionBean.deductCredit(travelAgency, totalSelectedPrice);
         travelAgencySessionBean.linkPNR(travelAgency, pnr);
-
-        setOneWayDepartureDate(null);
-        setOneWayAdult(0);
-        setOneWayChildren(0);
-        setOneWayServiceType(null);
-        setOneWayOriginCity(null);
-        setOneWayDestinationCity(null);
-
-        setDestinationCity(null);
-        setOriginCity(null);
-        setDepartureDate(null);
-        setReturnDate(null);
-        setAdults(0);
-        setChildren(0);
+        
+        accountingSessionBean.makeTransaction("Travel Agency Booking", totalSelectedPrice);
+        
+    setOneWayDepartureDate(null);
+    setOneWayAdult(0);
+    setOneWayChildren(0);
+    setOneWayServiceType(null);
+    setOneWayOriginCity(null);
+    setOneWayDestinationCity(null);
+    
+    setDestinationCity(null);
+    setOriginCity(null);
+    setDepartureDate(null);
+    setReturnDate(null);
+    setAdults (0);
+    setChildren(0);
+    
 
         return "TravelAgencyConfirmation";
     }
@@ -1054,6 +1061,7 @@ public class TravelAgencyManagedBean {
     public void reset() {
 
         travelAgencySessionBean.resetCreditsAndCommission(travelAgency, currentSettlement);
+        accountingSessionBean.makeTransaction("Travel Agency Confirm Payment", 0.9*currentSettlement);
 
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Credits and Commission have been reset!", "");
         FacesContext.getCurrentInstance().addMessage(null, message);
