@@ -23,4 +23,6 @@ public interface BoardingPassSessionBeanLocal {
     public BoardingPass findBoardingpass(Booking booking);
 
     public BoardingPass retrieveBoardingPassByBooking(Booking booking);
+
+    public void changeBoardingPassClass(Booking booking, String sClass);
 }

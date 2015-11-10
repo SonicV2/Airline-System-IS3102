@@ -248,7 +248,9 @@ public class SeatManagedBean {
 
                 double price = pricingSessionBean.getPrice(pricingSessionBean.getClassCode(booking.getSeatAvail().getSchedule(), "Business", 1, false), booking.getSeatAvail().getSchedule());
                 upgradeCosts = price - booking.getPrice(); // need to replace dummy 900
-                
+
+                boardingPassSessionBean.changeBoardingPassClass(booking, "Business");
+
                 upgrade = 2;
                 message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Additional Cost: " + upgradeCosts, "");
             } else {
@@ -286,6 +288,8 @@ public class SeatManagedBean {
                 double price = pricingSessionBean.getPrice(pricingSessionBean.getClassCode(booking.getSeatAvail().getSchedule(), "Business", 1, false), booking.getSeatAvail().getSchedule());
                 upgradeCosts = price - booking.getPrice();
 
+                boardingPassSessionBean.changeBoardingPassClass(booking, "Business");
+
                 upgrade = 2;
 
                 message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Additional Cost: " + upgradeCosts, "");
@@ -304,6 +308,7 @@ public class SeatManagedBean {
                 double price = pricingSessionBean.getPrice(pricingSessionBean.getClassCode(booking.getSeatAvail().getSchedule(), "Business", 1, false), booking.getSeatAvail().getSchedule());
                 upgradeCosts = price - booking.getPrice();
 
+                boardingPassSessionBean.changeBoardingPassClass(booking, "Business");
                 upgrade = 2;
 
                 message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Additional Cost: " + upgradeCosts, "");
@@ -315,6 +320,7 @@ public class SeatManagedBean {
                 double price = pricingSessionBean.getPrice(pricingSessionBean.getClassCode(booking.getSeatAvail().getSchedule(), "First Class", 1, false), booking.getSeatAvail().getSchedule());
                 upgradeCosts = price - booking.getPrice();
 
+                boardingPassSessionBean.changeBoardingPassClass(booking, "First Class");
                 upgrade = 2;
 
                 message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Additional Cost: " + upgradeCosts, "");
@@ -333,6 +339,7 @@ public class SeatManagedBean {
                 double price = pricingSessionBean.getPrice(pricingSessionBean.getClassCode(booking.getSeatAvail().getSchedule(), "Business", 1, false), booking.getSeatAvail().getSchedule());
                 upgradeCosts = price - booking.getPrice();
 
+                boardingPassSessionBean.changeBoardingPassClass(booking, "Business");
                 upgrade = 2;
 
                 message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Additional Cost: " + upgradeCosts, "");
@@ -344,6 +351,7 @@ public class SeatManagedBean {
                 double price = pricingSessionBean.getPrice(pricingSessionBean.getClassCode(booking.getSeatAvail().getSchedule(), "First Class", 1, false), booking.getSeatAvail().getSchedule());
                 upgradeCosts = price - booking.getPrice();
 
+                boardingPassSessionBean.changeBoardingPassClass(booking, "First Class");
                 upgrade = 2;
 
                 message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Additional Cost: " + upgradeCosts, "");
@@ -527,7 +535,7 @@ public class SeatManagedBean {
 
     public String chooseSeatA330() {
         System.out.println("seatmbean---" + getChoose() + choose);
-         System.out.println("seatmbean--- occupied" + getOccupied().size());
+        System.out.println("seatmbean--- occupied" + getOccupied().size());
         if (getOccupied().contains(getChoose().toUpperCase())) {
             message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "seat has already been choosen!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
@@ -548,7 +556,7 @@ public class SeatManagedBean {
                 if (!searchBookingManagedBean.isOnline()) {
                     return "AddBaggage.xhtml";
                 } else {
-                    
+
                     return "OnlineShowBoardingPass.xhtml";
                 }
 
@@ -565,7 +573,7 @@ public class SeatManagedBean {
 
                     return "AddBaggage.xhtml";
                 } else {
-                     return "OnlineShowBoardingPass.xhtml";
+                    return "OnlineShowBoardingPass.xhtml";
                 }
             } else {
                 message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "please choose the correct class", "");
@@ -676,7 +684,7 @@ public class SeatManagedBean {
 
                     return "AddBaggage.xhtml";
                 } else {
-                     return "OnlineShowBoardingPass.xhtml";
+                    return "OnlineShowBoardingPass.xhtml";
                 }
             } else if (getClasstype().equals("Business") && Integer.parseInt(getChoose().substring(1)) < 11) {
                 getB777_200seatArrange().set(getB777_200seatArrange().indexOf("\uD83D\uDCBA" + getChoose().toUpperCase()), "\n" + "\u26D4" + "\n" + getChoose().toUpperCase());
@@ -691,7 +699,7 @@ public class SeatManagedBean {
 
                     return "AddBaggage.xhtml";
                 } else {
-                     return "OnlineShowBoardingPass.xhtml";
+                    return "OnlineShowBoardingPass.xhtml";
                 }
             } else {
                 message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "please choose the correct class", "");
@@ -800,7 +808,7 @@ public class SeatManagedBean {
 
                     return "AddBaggage.xhtml";
                 } else {
-                     return "OnlineShowBoardingPass.xhtml";
+                    return "OnlineShowBoardingPass.xhtml";
                 }
 
             } else if (getClasstype().equals("Business") && Integer.parseInt(getChoose().substring(1)) < 9) {
@@ -816,7 +824,7 @@ public class SeatManagedBean {
 
                     return "AddBaggage.xhtml";
                 } else {
-                     return "OnlineShowBoardingPass.xhtml";
+                    return "OnlineShowBoardingPass.xhtml";
                 }
             } else {
                 message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "please choose the correct class", "");
@@ -1453,10 +1461,9 @@ public class SeatManagedBean {
         if (getAircraftType().equals("Airbus A330-300")) {
 //            if (Eavail == 0 && Bbooked == 30) {
             flightSchedules = distributionSessionBean.retrieveDirectFlightsForDate(booking.getSeatAvail().getSchedule().getFlight().getRoute().getOriginIATA(), booking.getSeatAvail().getSchedule().getFlight().getRoute().getDestinationIATA(), date, booking.getServiceType(), 1, 0);
-           
-           
+
             List<Schedule> temps = distributionSessionBean.retrieveDirectFlightsForDate(booking.getSeatAvail().getSchedule().getFlight().getRoute().getOriginIATA(), booking.getSeatAvail().getSchedule().getFlight().getRoute().getDestinationIATA(), tmr, booking.getServiceType(), 1, 0);
-            
+
             for (Schedule s : temps) {
                 flightSchedules.add(s);
             }

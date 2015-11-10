@@ -119,6 +119,12 @@ public class BoardingPassSessionBean implements BoardingPassSessionBeanLocal {
         return null;
     }
     
+    @Override
+    public void changeBoardingPassClass(Booking booking, String sClass){
+        BoardingPass pass = retrieveBoardingPassByBooking(booking);
+        pass.setClasstype(sClass);
+        em.merge(pass);
+    }
     
     public void persist(Object object) {
         em.persist(object);
