@@ -38,6 +38,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
@@ -105,7 +107,7 @@ public class DataLoadSessionBean implements DataLoadSessionBeanLocal {
         addTravelAgencies();
         System.out.println("*****Travel agencies added");
         addCustomerBooking();
-        System.out.println("*****Customer  bookings added");
+       System.out.println("*****Customer  bookings added");
         addTravelAgencyBookings();
         System.out.println("*****Travel Agency bookings added");
         addCabinCrew();
@@ -462,20 +464,23 @@ public class DataLoadSessionBean implements DataLoadSessionBeanLocal {
 
     public void addCustomerBooking() {
 
-        Schedule schedule1 = new Schedule(), schedule2 = new Schedule(), schedule3 = new Schedule(), schedule4 = new Schedule();
+        Schedule schedule1 = new Schedule(), schedule2 = new Schedule(), schedule3 = new Schedule(), schedule4 = new Schedule(), schedule5 = new Schedule(), schedule6 = new Schedule();
         try {
-            schedule1 = scheduleSessionBean.getScheduleByDate(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse("2015-11-24 02:00:00"));
+            schedule1 = scheduleSessionBean.getScheduleByDate(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse("2015-12-01 02:00:00"));
             schedule2 = scheduleSessionBean.getScheduleByDate(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse("2015-12-02 01:00:00"));
             schedule3 = scheduleSessionBean.getScheduleByDate(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse("2015-12-06 08:00:00"));
             schedule4 = scheduleSessionBean.getScheduleByDate(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse("2015-12-13 08:00:00"));
+            schedule5 = scheduleSessionBean.getScheduleByDate(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse("2015-12-08 01:00:00"));
+            schedule6 = scheduleSessionBean.getScheduleByDate(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse("2015-12-12 08:00:00"));
 
         } catch (ParseException ex) {
             System.out.println("Error initializing date");
         }
-        Customer customer1 = customerSessionBean.getCustomerUseEmail("singjjyn@gmail.com");
+
+       Customer customer1 = customerSessionBean.getCustomerUseEmail("singjjyn@gmail.com");
         Customer customer2 = customerSessionBean.getCustomerUseEmail("hou.liang.90@gmail.com");
 
-        Booking booking1 = passengerBookingSessionBean.createBooking(600, schedule1.getSeatAvailability(), schedule1.getFlight().getFlightNo(), schedule1.getStartDate(), "Booked", "A01", "Economy Saver", "Mr", "Daniel", "Lee", customer1.getPassportNumber(), customer1.getNationality(), customer1.getId(), false, true, 15.0, "Western");
+       Booking booking1 = passengerBookingSessionBean.createBooking(600, schedule1.getSeatAvailability(), schedule1.getFlight().getFlightNo(), schedule1.getStartDate(), "Booked", "A01", "Economy Saver", "Mr", "Daniel", "Lee", customer1.getPassportNumber(), customer1.getNationality(), customer1.getId(), false, true, 15.0, "Western");
         Booking booking2 = passengerBookingSessionBean.createBooking(500, schedule2.getSeatAvailability(), schedule2.getFlight().getFlightNo(), schedule2.getStartDate(), "Booked", "C01", "Economy Premium", "Mr", "Daniel", "Lee", customer1.getPassportNumber(), customer1.getNationality(), customer1.getId(), false, true, 15.0, "Western");
         Booking booking3 = passengerBookingSessionBean.createBooking(500, schedule3.getSeatAvailability(), schedule3.getFlight().getFlightNo(), schedule3.getStartDate(), "Booked", "E01", "First Class", "Mr", "Daniel", "Lee", customer1.getPassportNumber(), customer1.getNationality(), customer1.getId(), false, true, 15.0, "Western");
         Booking booking4 = passengerBookingSessionBean.createBooking(400, schedule4.getSeatAvailability(), schedule4.getFlight().getFlightNo(), schedule4.getStartDate(), "Booked", "E01", "First Class", "Mr", "Daniel", "Lee", customer1.getPassportNumber(), customer1.getNationality(), customer1.getId(), false, true, 15.0, "Western");
@@ -497,14 +502,20 @@ public class DataLoadSessionBean implements DataLoadSessionBeanLocal {
         passengerBookingSessionBean.persistBookingAndPNR(pnr3, bookingList3, customer1);
         passengerBookingSessionBean.persistBookingAndPNR(pnr4, bookingList4, customer1);
 
-        Booking booking5 = passengerBookingSessionBean.createBooking(600, schedule1.getSeatAvailability(), schedule1.getFlight().getFlightNo(), schedule1.getStartDate(), "Booked", "A01", "Economy Saver", "Mr", "Hou", "Liang", customer2.getPassportNumber(), customer2.getNationality(), customer2.getId(), false, true, 15.0, "Western");
-        Booking booking6 = passengerBookingSessionBean.createBooking(500, schedule2.getSeatAvailability(), schedule2.getFlight().getFlightNo(), schedule2.getStartDate(), "Booked", "C01", "Economy Premium", "Mr", "Hou", "Liang", customer2.getPassportNumber(), customer2.getNationality(), customer2.getId(), false, true, 15.0, "Western");
-        Booking booking7 = passengerBookingSessionBean.createBooking(500, schedule3.getSeatAvailability(), schedule3.getFlight().getFlightNo(), schedule3.getStartDate(), "Booked", "E01", "First Class", "Mr", "Hou", "Liang", customer2.getPassportNumber(), customer2.getNationality(), customer2.getId(), false, true, 15.0, "Western");
-        Booking booking8 = passengerBookingSessionBean.createBooking(400, schedule4.getSeatAvailability(), schedule4.getFlight().getFlightNo(), schedule4.getStartDate(), "Booked", "E01", "First Class", "Mr", "Hou", "Liang", customer2.getPassportNumber(), customer2.getNationality(), customer2.getId(), false, true, 15.0, "Western");
+        Booking booking5 = passengerBookingSessionBean.createBooking(600, schedule1.getSeatAvailability(), schedule1.getFlight().getFlightNo(), schedule1.getStartDate(), "Booked", "A01", "Economy Premium", "Mr", "Hou", "Liang", customer2.getPassportNumber(), customer2.getNationality(), customer2.getId(), false, true, 15.0, "Western");
+        Booking booking6 = passengerBookingSessionBean.createBooking(500, schedule2.getSeatAvailability(), schedule2.getFlight().getFlightNo(), schedule2.getStartDate(), "Booked", "C01", "Economy Saver", "Mr", "Hou", "Liang", customer2.getPassportNumber(), customer2.getNationality(), customer2.getId(), false, true, 15.0, "Western");
+        Booking booking7 = passengerBookingSessionBean.createBooking(500, schedule3.getSeatAvailability(), schedule3.getFlight().getFlightNo(), schedule3.getStartDate(), "Booked", "E01", "Economy Saver", "Mr", "Hou", "Liang", customer2.getPassportNumber(), customer2.getNationality(), customer2.getId(), false, true, 15.0, "Western");
+        Booking booking8 = passengerBookingSessionBean.createBooking(400, schedule4.getSeatAvailability(), schedule4.getFlight().getFlightNo(), schedule4.getStartDate(), "Booked", "E01", "Economy Saver", "Mr", "Hou", "Liang", customer2.getPassportNumber(), customer2.getNationality(), customer2.getId(), false, true, 15.0, "Western");
+        
+        Booking booking9 = passengerBookingSessionBean.createBooking(800, schedule5.getSeatAvailability(), schedule5.getFlight().getFlightNo(), schedule5.getStartDate(), "Booked", "E01", "Business", "Mr", "Hou", "Liang", customer2.getPassportNumber(), customer2.getNationality(), customer2.getId(), false, true, 15.0, "Western");
+        Booking booking10 = passengerBookingSessionBean.createBooking(800, schedule6.getSeatAvailability(), schedule6.getFlight().getFlightNo(), schedule6.getStartDate(), "Booked", "E01", "Business", "Mr", "Hou", "Liang", customer2.getPassportNumber(), customer2.getNationality(), customer2.getId(), false, true, 15.0, "Western");
+        
         PNR pnr5 = passengerBookingSessionBean.createPNR(1, customer2.getEmail(), customer2.getHomeNumber(), "Booked", 600.0, new Date(), new Date(), "MARS");
         PNR pnr6 = passengerBookingSessionBean.createPNR(1, customer2.getEmail(), customer2.getHomeNumber(), "Booked", 500.0, new Date(), new Date(), "MARS");
         PNR pnr7 = passengerBookingSessionBean.createPNR(1, customer2.getEmail(), customer2.getHomeNumber(), "Booked", 500.0, new Date(), new Date(), "MARS");
         PNR pnr8 = passengerBookingSessionBean.createPNR(1, customer2.getEmail(), customer2.getHomeNumber(), "Booked", 400.0, new Date(), new Date(), "MARS");
+        PNR pnr9 = passengerBookingSessionBean.createPNR(1, customer2.getEmail(), customer2.getHomeNumber(), "Booked", 400.0, new Date(), new Date(), "MARS");
+        
         List<Booking> bookingList5 = new ArrayList();
         bookingList5.add(booking5);
         List<Booking> bookingList6 = new ArrayList();
@@ -513,11 +524,15 @@ public class DataLoadSessionBean implements DataLoadSessionBeanLocal {
         bookingList7.add(booking7);
         List<Booking> bookingList8 = new ArrayList();
         bookingList8.add(booking8);
+        List<Booking> bookingList9 = new ArrayList();
+        bookingList9.add(booking9);
+        bookingList9.add(booking10);
 
         passengerBookingSessionBean.persistBookingAndPNR(pnr5, bookingList5, customer2);
         passengerBookingSessionBean.persistBookingAndPNR(pnr6, bookingList6, customer2);
         passengerBookingSessionBean.persistBookingAndPNR(pnr7, bookingList7, customer2);
         passengerBookingSessionBean.persistBookingAndPNR(pnr8, bookingList8, customer2);
+        passengerBookingSessionBean.persistBookingAndPNR(pnr9, bookingList9, customer2);
     }
 
     public void addTravelAgencyBookings() {
@@ -861,5 +876,7 @@ public class DataLoadSessionBean implements DataLoadSessionBeanLocal {
         em.merge(crew1);
         em.merge(pilot1);
     }
+    
+ 
 
 }

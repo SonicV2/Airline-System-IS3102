@@ -154,6 +154,7 @@ public class PassengerBookingSessionBean implements PassengerBookingSessionBeanL
                 noOfSeatsBooked = seatAvailForBooking.getFirstClassBooked();
                 seatAvailForBooking.setFirstClassBooked(noOfSeatsBooked + 1);
             }
+            em.persist(eachBooking);
             em.merge(seatAvailForBooking);
         }
         pnr.setBookings(bookings);

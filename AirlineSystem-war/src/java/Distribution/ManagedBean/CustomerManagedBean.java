@@ -253,6 +253,7 @@ public class CustomerManagedBean {
 
                     eachPNRDisplay.setNoOfTravellers(noOfTravellers);
                     eachPNRDisplay.setBookingDate(eachCustomerPNR.getDateOfBooking());
+                    eachPNRDisplay.setTotalPrice(eachCustomerPNR.getTotalPrice());
 
                     for (Booking eachBooking : eachCustomerPNR.getBookings()) {
                         if (!addedNames.contains(eachBooking.getTravellerFristName() + " " + eachBooking.getTravellerLastName())) {
