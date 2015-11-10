@@ -38,33 +38,33 @@
             <h:form class="form col-md-10 center-block">
                 <div class="form-group">
                     <h:outputLabel class="col-md-4 control-label" value="Booking Class Code: " />
-                    <p:inputText value="#{classManageBean.classcode}"  />
+                    <p:inputText value="#{classManagedBean.classcode}"  />
                     <br/>
 
                 </div>
 
                 <div class="form-group">
                     <h:outputLabel class="col-md-4 control-label" value="Percentage of Base Fare" />
-                    <p:inputText value="#{classManageBean.pricePercent}" />
+                    <p:inputText value="#{classManagedBean.pricePercent}" />
                     <br/>
 
                 </div>
 
                 <div class="form-group">
                     <h:outputLabel class="col-md-4 control-label" value="Days of Advanced Sales" />
-                    <p:inputText value="#{classManageBean.advancedSales}" />
+                    <p:inputText value="#{classManagedBean.advancedSales}" />
                     <br/>
 
                 </div> 
                 <div class="form-group">
                     <h:outputLabel class="col-md-4 control-label" value="Percentage of total tickets sold" />
-                    <p:inputText value="#{classManageBean.percentSold}" />
+                    <p:inputText value="#{classManagedBean.percentSold}" />
                     <br/>
 
                 </div> 
                 <div class="form-group">
                     <h:outputLabel class="col-md-4 control-label" value="Service Class" />
-                    <h:selectOneMenu class="form-control" id="serviceClass" value="#{classManageBean.serviceClass}" style="width:150px">
+                    <h:selectOneMenu class="form-control" id="serviceClass" value="#{classManagedBean.serviceClass}" style="width:150px">
                         <f:selectItem itemLabel="Select One" itemValue="" />
                         <f:selectItem itemLabel="Economy Saver" itemValue="Economy Saver" />
                         <f:selectItem itemLabel="Economy Basic" itemValue="Economy Basic" />
@@ -78,7 +78,7 @@
 
                 <div class="form-group">
                     <h:outputLabel class="col-md-4 control-label" value="Seasonality" />
-                    <h:selectOneMenu class="form-control" id="season" value="#{classManageBean.season}" style="width:150px">
+                    <h:selectOneMenu class="form-control" id="season" value="#{classManagedBean.season}" style="width:150px">
                         <f:selectItem itemLabel="Select One" itemValue="" />
                         <f:selectItem itemLabel="Neutral" itemValue="Neutral" />
                         <f:selectItem itemLabel="High" itemValue="High" />
@@ -89,19 +89,19 @@
                 </div> 
                 <div class="form-group">
                     <h:outputLabel class="col-md-4 control-label" value="Able to rebook without cost  " />
-                    <p:selectBooleanCheckbox value="#{classManageBean.rebook}" />
+                    <p:selectBooleanCheckbox value="#{classManagedBean.rebook}" />
                     <br/>
                 </div> 
 
                 <div class="form-group">
                     <h:outputLabel class="col-md-4 control-label" value="Able to cancel without cost  " />
-                    <p:selectBooleanCheckbox value="#{classManageBean.cancel}" />
+                    <p:selectBooleanCheckbox value="#{classManagedBean.cancel}" />
                     <br/>
 
                 </div> 
                 <div class="form-group">
                     <h:outputLabel class="col-md-4 control-label" value="Baggage Class" />
-                    <h:selectOneMenu class="form-control" id="baggageClass" value="#{classManageBean.baggage}" style="width:150px">
+                    <h:selectOneMenu class="form-control" id="baggageClass" value="#{classManagedBean.baggage}" style="width:150px">
                         <f:selectItem itemLabel="Select One" itemValue="" />
                         <f:selectItem itemLabel="1" itemValue="1" />
                         <f:selectItem itemLabel="2" itemValue="2" />
@@ -113,20 +113,20 @@
                 </div> 
                 <div class="form-group">
                     <h:outputLabel class="col-md-4 control-label" value="Amount of Mileage Accruable in Percentage" />
-                    <p:inputText value="#{classManageBean.millageAccru}" />
+                    <p:inputText value="#{classManagedBean.millageAccru}" />
                     <br/>
 
                 </div> 
                 
                 <div class="form-group">
                     <h:outputLabel class="col-md-4 control-label" value="Travel Agent:  " />
-                    <p:selectBooleanCheckbox value="#{classManageBean.travelagent}" />
+                    <p:selectBooleanCheckbox value="#{classManagedBean.travelagent}" />
                     <br/>
 
                 </div> 
 
                 <div class="text-center">
-                    <h:commandButton class="btn btn-outline btn-success" value="Add Booking Class" actionListener="#{classManageBean.addClass}"/>
+                    <h:commandButton class="btn btn-outline btn-success" value="Add Booking Class" actionListener="#{classManagedBean.addClass}"/>
                     <br></br>
                     <br></br>
                 </div>

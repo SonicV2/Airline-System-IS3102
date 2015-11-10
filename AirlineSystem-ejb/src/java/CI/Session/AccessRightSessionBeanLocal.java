@@ -16,7 +16,7 @@ import javax.ejb.Local;
 @Local
 public interface AccessRightSessionBeanLocal {
     
-    public void addAccessRight(String accessRightName);
+    public String addAccessRight(String accessRightName);
     public List<AccessRight> retrieveAllAccessRight();
     
 }

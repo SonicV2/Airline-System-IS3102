@@ -163,11 +163,15 @@ public class BaggageManagedBean implements Serializable {
         FacesMessage message = null;
         retrieveNumberofBaggageAllowed();
         retrieveAllBaggages();
+       
         totalweight = baggageSessionBean.retrieveTotalBaggageWeights(searchBookingManagedBean.getReqBooking());
         
         totalCosts = passengerNameRecordSessionBean.retrieveUpgradeCosts(searchBookingManagedBean.getReqBooking());
         
         String msg = baggageSessionBean.addBaggage(searchBookingManagedBean.getReqBooking(), addBagWeight, totalWeightAllowed);
+        
+        totalweight = baggageSessionBean.retrieveTotalBaggageWeights(searchBookingManagedBean.getReqBooking());
+        
         if (msg.equals("excess")) {
             message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Overweight, Please Pay Additional Charge!", "");
         } else {
@@ -175,6 +179,18 @@ public class BaggageManagedBean implements Serializable {
         }
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
+    
+      public void refresh() {
+        
+        retrieveNumberofBaggageAllowed();
+        retrieveAllBaggages();
+        totalweight = baggageSessionBean.retrieveTotalBaggageWeights(searchBookingManagedBean.getReqBooking());
+         retrieveServiceClass();
+        totalCosts = passengerNameRecordSessionBean.retrieveUpgradeCosts(searchBookingManagedBean.getReqBooking());
+        
+      
+    }
+    
     
     public void retrieveAllBaggages() {
         setAllBaggage(baggageSessionBean.retrieveAllBaggages(searchBookingManagedBean.getReqBooking()));
