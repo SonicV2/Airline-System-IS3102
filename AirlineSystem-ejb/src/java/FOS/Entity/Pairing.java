@@ -29,6 +29,7 @@ public class Pairing implements Serializable {
     private List<String> flightNumbers;
     private List<String> flightCities;
     private List<String> flightTimes;
+    private List<String> uniqueCities;
     private boolean paired;
     
     private boolean isA380;
@@ -38,13 +39,14 @@ public class Pairing implements Serializable {
    
     public Pairing(){}
     
-    public void create(String fDate, String flightHour, List<String> flightNumbers, List<String> flightCities, List<String> flightTimes){
+    public void create(String fDate, String flightHour, List<String> flightNumbers, List<String> flightCities, List<String> flightTimes, List<String> uniqueCities){
         this.fDate=fDate;
         this.flightHour = flightHour;
         this.flightCities = flightCities;
         this.flightNumbers = flightNumbers;
         this.flightTimes = flightTimes;
         this.paired=false;
+        this.uniqueCities = uniqueCities;
     }
     
      public Long getId() {
@@ -185,6 +187,20 @@ public class Pairing implements Serializable {
 
     public void setIsA380(boolean isA380) {
         this.isA380 = isA380;
+    }
+
+    /**
+     * @return the uniqueCities
+     */
+    public List<String> getUniqueCities() {
+        return uniqueCities;
+    }
+
+    /**
+     * @param uniqueCities the uniqueCities to set
+     */
+    public void setUniqueCities(List<String> uniqueCities) {
+        this.uniqueCities = uniqueCities;
     }
     
     

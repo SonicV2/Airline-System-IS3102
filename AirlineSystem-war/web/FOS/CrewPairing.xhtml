@@ -116,21 +116,21 @@
                                          paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} "
                                          paginator="true" rows="10" style="margin-bottom:20px">
 
-                                <p:column>
+                                <p:column style="width: 80px" >
                                     <f:facet name="header">
-                                        <h:outputText value="Pairing ID" />
+                                        <h:outputText value="Pairing ID"/>
                                     </f:facet>
                                     <h:outputText value="#{sln.id}" />
                                 </p:column>
 
-                                <p:column>
+                                <p:column style="width: 100px">
                                     <f:facet name="header">
                                         <h:outputText value="Pairing Start Date: "/>
                                     </f:facet>
                                     <h:outputText value="#{sln.FDate}" />
                                 </p:column>
 
-                                <p:column>
+                                <p:column style="width: 200px">
                                     <f:facet name="header">
                                         <h:outputText value="Flight Hour" />
                                     </f:facet>
@@ -141,10 +141,10 @@
                                     <f:facet name="header">
                                         <h:outputText value="Flight City" />
                                     </f:facet>
-                                    <h:outputText value="#{sln.flightCities}" />
+                                    <h:outputText value="#{sln.uniqueCities}" />
                                 </p:column>
                                 
-                                <p:column>
+                                <p:column style="width: 80px">
                                     <f:facet name="header">
                                         <h:outputText value="Status" />
                                     </f:facet>
