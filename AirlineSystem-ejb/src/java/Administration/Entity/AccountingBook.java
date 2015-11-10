@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -28,10 +29,10 @@ public class AccountingBook implements Serializable {
     
     private boolean active =  false;
 
-    @OneToMany(mappedBy = "acBook")
+    @OneToMany(cascade = {CascadeType.MERGE}, mappedBy = "acBook")
     List<BookAccount> accounts = new ArrayList<BookAccount>();
     
-    @OneToMany(mappedBy = "acBook")
+    @OneToMany(cascade = {CascadeType.MERGE}, mappedBy = "acBook")
     List<Posting> postings = new ArrayList<Posting>();
 
     public Integer getYear() {

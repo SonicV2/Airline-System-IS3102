@@ -8,6 +8,7 @@ package Administration.Entity;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -33,10 +34,10 @@ public class Posting implements Serializable {
     private Date postingDate;
     private String memo;
 
-    @OneToMany(mappedBy = "posting")
+    @OneToMany(cascade = {CascadeType.MERGE}, mappedBy = "posting")
     private List<BookEntry> entries;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.MERGE})
     private AccountingBook acBook = new AccountingBook();
 
     public void createPosting(Date postingDate, String memo) {

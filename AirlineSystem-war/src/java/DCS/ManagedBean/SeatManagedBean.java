@@ -248,7 +248,7 @@ public class SeatManagedBean {
 
                 double price = pricingSessionBean.getPrice(pricingSessionBean.getClassCode(booking.getSeatAvail().getSchedule(), "Business", 1, false), booking.getSeatAvail().getSchedule());
                 upgradeCosts = price - booking.getPrice(); // need to replace dummy 900
-
+                
                 upgrade = 2;
                 message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Additional Cost: " + upgradeCosts, "");
             } else {

@@ -93,21 +93,27 @@ public class AccountingSessionBean implements AccountingSessionBeanLocal {
         acBook.setAccounts(accounts);
         em.merge(acBook);
 
+        List<BookEntry> entries = new ArrayList<BookEntry>();
+        acBook = getAcBook(year);
+
         TimeZone tz = TimeZone.getTimeZone("GMT+8:00"); //Set Timezone to Singapore
         Calendar tmp = Calendar.getInstance(tz);
+        
         posting = new Posting();
         posting.createPosting(tmp.getTime(), "Initialize Cash Account");
-        em.persist(posting);
+        posting.setEntries(entries);
+        posting.setAcBook(acBook);
 
         account = acBook.getAccountByName("Cash");
-        debit(account.getAccountId(), posting.getId(), cashAmt);
+        debit(account, posting, cashAmt);
 
         posting = new Posting();
         posting.createPosting(tmp.getTime(), "Initialize Equity Account");
-        em.persist(posting);
+        posting.setEntries(entries);
+        posting.setAcBook(acBook);
 
         account = acBook.getAccountByName("Retained Earnings");
-        debit(account.getAccountId(), posting.getId(), retainedAmt);
+        debit(account, posting, retainedAmt);
 
     }
 
@@ -186,8 +192,8 @@ public class AccountingSessionBean implements AccountingSessionBeanLocal {
 
         try {
 
-            Query q = em.createQuery("SELECT a FROM Posting" + " AS a WHERE a.postingId=:postingId");
-            q.setParameter("postingId", postingId);
+            Query q = em.createQuery("SELECT a FROM Posting" + " AS a WHERE a.id=:id");
+            q.setParameter("id", postingId);
 
             List results = q.getResultList();
             if (!results.isEmpty()) {
@@ -297,39 +303,39 @@ public class AccountingSessionBean implements AccountingSessionBeanLocal {
 
         if (name.equals("AcquireAircraft")) {
             account = acBook.getAccountByName("Accounts Payable");
-            credit(account.getAccountId(), posting.getId(), amount);
+            credit(account, posting, amount);
             account = acBook.getAccountByName("Property and Equipment");
-            debit(account.getAccountId(), posting.getId(), amount);
+            debit(account, posting, amount);
         } else if (name.equals("CustomerBooking")) {
             account = acBook.getAccountByName("Cash");
-            debit(account.getAccountId(), posting.getId(), amount);
+            debit(account, posting, amount);
             account = acBook.getAccountByName("Unearned Revenue");
-            credit(account.getAccountId(), posting.getId(), amount);
+            credit(account, posting, amount);
         } else if (name.equals("CustomerCheckIn")) {
             account = acBook.getAccountByName("Unearned Revenue");
-            debit(account.getAccountId(), posting.getId(), amount);
+            debit(account, posting, amount);
             account = acBook.getAccountByName("Ticket Sales Revenue");
-            credit(account.getAccountId(), posting.getId(), amount);
+            credit(account, posting, amount);
         } else if (name.equals("TravelAgencyBooking")) {
             account = acBook.getAccountByName("Accounts Receivable");
-            debit(account.getAccountId(), posting.getId(), amount);
+            debit(account, posting, amount);
             account = acBook.getAccountByName("Travel Agency Revenue");
-            credit(account.getAccountId(), posting.getId(), amount);
+            credit(account, posting, amount);
         } else if (name.equals("TravelAgencyCfm")) {
             account = acBook.getAccountByName("Cash");
-            debit(account.getAccountId(), posting.getId(), amount);
+            debit(account, posting, amount);
             account = acBook.getAccountByName("Accounts Receivable");
-            credit(account.getAccountId(), posting.getId(), amount);
+            credit(account, posting, amount);
         } else if (name.equals("FlightFlown")) {
             account = acBook.getAccountByName("Cash");
-            credit(account.getAccountId(), posting.getId(), amount);
+            credit(account, posting, amount);
             account = acBook.getAccountByName("Fuel Expenses");
-            debit(account.getAccountId(), posting.getId(), amount);
+            debit(account, posting, amount);
         } else if (name.equals("MaintainanceDone")) {//What?
             account = acBook.getAccountByName("Cash");
-            credit(account.getAccountId(), posting.getId(), amount);
+            credit(account, posting, amount);
             account = acBook.getAccountByName("Fuel Expenses");
-            debit(account.getAccountId(), posting.getId(), amount);
+            debit(account, posting, amount);
         }
 //Any maintanance costs? Other costs?
     }
@@ -414,29 +420,51 @@ public class AccountingSessionBean implements AccountingSessionBeanLocal {
 //        em.remove(account);
 //    }
 
-    private void credit(Long accountId, Long postingId, Double amt) {
+    private void credit(BookAccount account, Posting posting, Double amt) {
         entry = new BookEntry();
-        account = getAccount(accountId);
-        posting = getPosting(postingId);
+        List<BookEntry> entries = new ArrayList<BookEntry>();
         entry.createEntry(account.getType().getNormalBalanceSign() * (-amt));
         entry.setCredit(true);
-        account.getEntries().add(entry);
-        posting.getEntries().add(entry);
+        entry.setAccount(account);
+        entry.setPosting(posting);
+        if (account.getEntries() != null) {
+            account.getEntries().add(entry);
+        } else {
+            entries.add(entry);
+            account.setEntries(entries);
+        }
+
+        if (posting.getEntries() != null) {
+            posting.getEntries().add(entry);
+        } else {
+            entries.add(entry);
+            posting.setEntries(entries);
+        }
         em.persist(entry);
-        em.merge(account);
         em.merge(posting);
     }
 
-    private void debit(Long accountId, Long postingId, Double amt) {
+    private void debit(BookAccount account, Posting posting, Double amt) {
         entry = new BookEntry();
-        account = getAccount(accountId);
-        posting = getPosting(postingId);
+        List<BookEntry> entries = new ArrayList<BookEntry>();
         entry.createEntry(account.getType().getNormalBalanceSign() * (amt));
         entry.setDebit(true);
-        account.getEntries().add(entry);
-        posting.getEntries().add(entry);
+        entry.setAccount(account);
+        entry.setPosting(posting);
+        if (account.getEntries() != null) {
+            account.getEntries().add(entry);
+        } else {
+            entries.add(entry);
+            account.setEntries(entries);
+        }
+
+        if (posting.getEntries() != null) {
+            posting.getEntries().add(entry);
+        } else {
+            entries.add(entry);
+            posting.setEntries(entries);
+        }
         em.persist(entry);
-        em.merge(account);
         em.merge(posting);
     }
 }
