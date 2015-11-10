@@ -40,7 +40,7 @@ public class ChecklistManagedBean {
      @EJB
     private ScheduleSessionBeanLocal scheduleSessionBean;
      
-     @ManagedProperty(value = "#{loginManageBean}")
+     @ManagedProperty(value = "#{loginManagedBean}")
     private LoginManagedBean loginManageBean;
      
      @EJB
@@ -93,12 +93,12 @@ public String directToChooseChecklistToFill(String name){
     setCrewName(loginManageBean.getEmployeeUserName());
     setTeam(getCrewSignInSessionBean().getCCTeam(crewName));
     setSchedulesForTeam(team.getSchedule());
-    setCurrentDaySchedulesForTeam(scheduleSessionBean.filterForCurrentDaySchedules(schedulesForTeam));
+    setCurrentDaySchedulesForTeam(scheduleSessionBean.filterForPastSchedules(schedulesForTeam));
     return "/FOS/ChooseChecklistToFill";
 }
 
 
-public String S(){
+public String directToChooseChecklistToAddTo(){
     return"/FOS/ChooseChecklistToAddTo";
 }
 

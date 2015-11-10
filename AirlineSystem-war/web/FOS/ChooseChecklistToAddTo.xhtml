@@ -34,8 +34,8 @@
             <h:form id="form">
 
 
-                <p:dataTable id="schedules" var="schedule" value="#{scheduleManageBean.futureSchedules}" rowKey="#{schedule.scheduleId}"
-                             selection="#{scheduleManageBean.selectedSchedule}" selectionMode="single" paginator="true" rows="10" widgetVar="schedulesTable">
+                <p:dataTable id="schedules" var="schedule" value="#{scheduleManagedBean.futureSchedules}" rowKey="#{schedule.scheduleId}"
+                             selection="#{scheduleManagedBean.selectedSchedule}" selectionMode="single" paginator="true" rows="10" widgetVar="schedulesTable">
 
                     <f:facet name="header">
 
