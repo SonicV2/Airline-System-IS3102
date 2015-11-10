@@ -43,6 +43,7 @@ import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import javax.ejb.LocalBean;
 import javax.ejb.Startup;
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -50,10 +51,8 @@ import javax.persistence.PersistenceContext;
  *
  * @author parthasarthygupta
  */
-@Singleton
-@Startup
-@LocalBean
-public class DataLoadSessionBean {
+@Stateless
+public class DataLoadSessionBean implements DataLoadSessionBeanLocal {
 
     @PersistenceContext(unitName = "AirlineSystem-ejbPU")
     private EntityManager em;
@@ -94,7 +93,7 @@ public class DataLoadSessionBean {
     @EJB
     private AnalyticsSessionBeanLocal am;
 
-    @PostConstruct
+    @Override
     public void init() {
         System.out.println("*****Loading data");
 //       addDiscountTypes();
