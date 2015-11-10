@@ -44,16 +44,22 @@ public class PricingSessionBeanTest {
     /**
      * Test of generateAvailability method, of class PricingSessionBean.
      */
-//    @Test
-//    public void testGenerateAvailability() throws Exception {
-//        System.out.println("generateAvailability");
-//        String flightNo = "";
-//        int economy = 0;
-//        int business = 0;
-//        int firstClass = 0;
-//
-//        assertEquals("Fare Class Added", "Fare Class Added");
-//    }
+    @Test
+    public void testGenerateAvailability() throws Exception {
+        System.out.println("generateAvailability");
+        String flightNo = "";
+        int economy = 60;
+        int business = 15;
+        int firstClass = 5;
+        int[] result =  new int[5];
+        result[0]= 25;
+        result[1]= 25;
+        result[2]= 25;
+        result[3]= 20;
+        result[4]= 10;
+        assertArrayEquals(result, pm.generateAvailability("MA202", economy, business, firstClass));
+        assertNotNull(pm.generateAvailability("MA303", economy, business, firstClass));
+    }
     
     @Test
     public void testcalTurnOut(){
@@ -99,10 +105,8 @@ public class PricingSessionBeanTest {
         //Case 1
         Schedule s1 = new Schedule();
         Calendar cal1 = Calendar.getInstance();
-        cal1.setTimeInMillis(cal1.getTimeInMillis()+(19*1000*60*60*24));
-        System.out.println(cal1.getTime());
+        cal1.setTimeInMillis(cal1.getTimeInMillis()+((long)19*1000*60*60*24));
         Date date1 = cal1.getTime();
-        System.out.println(date1);
         s1.setStartDate(date1);
         SeatAvailability sa1 = new SeatAvailability();
         sa1.setEconomySaverTotal(90);
@@ -114,61 +118,61 @@ public class PricingSessionBeanTest {
         //Case 2
         Schedule s2 = new Schedule();
         Calendar cal2 = Calendar.getInstance();
-        cal2.setTimeInMillis(cal2.getTimeInMillis()+(59*1000*60*60*24));
-        System.out.println(cal2.getTime());
+        cal2.setTimeInMillis(cal2.getTimeInMillis()+((long)59*1000*60*60*24));
         Date date2 = cal2.getTime();
-        System.out.println(date2);
         s2.setStartDate(date2);
         SeatAvailability sa2 = new SeatAvailability();
         sa2.setBusinessTotal(20);
         sa2.setBusinessBooked(10);
         s2.setSeatAvailability(sa2);
+        Flight flight = new Flight();
+        Route route = new Route();
+        route.setDestinationIATA("KUL");
+        route.setOriginIATA("SIN");
+        flight.setRoute(route);
+        s2.setFlight(flight);
         String result2= pm.getClassCode(s2, "Business", 1, false);
         assertEquals("D23", result2);
         
         //Case 3
         Schedule s3 = new Schedule();
         Calendar cal3 = Calendar.getInstance();
-        cal3.setTimeInMillis(cal3.getTimeInMillis()+(299*1000*60*60*24));
-        System.out.println(cal3.getTime());
+        cal3.setTimeInMillis(cal3.getTimeInMillis()+((long)299*1000*60*60*24));
         Date date3 = cal3.getTime();
-        cal3.setTimeInMillis(cal3.getTimeInMillis()+(2*1000*60*60*24));
-        Date date31 = cal3.getTime();
+        System.out.println("Look Here@@!!!");
         System.out.println(date3);
         s3.setStartDate(date3);
         SeatAvailability sa3 = new SeatAvailability();
-        sa3.setFirstClassTotal(5);
+        sa3.setFirstClassTotal(10);
         sa3.setFirstClassBooked(0);
         s3.setSeatAvailability(sa3);      
-        Flight flight = new Flight();
-        Route route = new Route();
-        route.setDestinationIATA("KUL");
-        route.setOriginIATA("SIN");
-        flight.setRoute(route);
-        s3.setFlight(flight);
-       
+        Route route2 = new Route();
+        Flight flight2 = new Flight();
+        route2.setDestinationIATA("IPH");
+        route2.setOriginIATA("SIN");
+        flight2.setRoute(route2);
+        s3.setFlight(flight2);
         String result3= pm.getClassCode(s3, "First Class", 1, false);
-        assertEquals("D23", result3);
+        assertEquals("E03", result3);
         
         //Case 4
         Schedule s4 = new Schedule();
         Calendar cal4 = Calendar.getInstance();
-        cal4.setTimeInMillis(cal4.getTimeInMillis()+(4*1000*60*60*24));
-        System.out.println(cal4.getTime());
+        cal4.setTimeInMillis(cal4.getTimeInMillis()+((long)4*1000*60*60*24));
         Date date4 = cal4.getTime();
-        System.out.println(date4);
         s4.setStartDate(date4);
         SeatAvailability sa4 = new SeatAvailability();
         sa4.setEconomyPremiumTotal(50);
         sa4.setEconomyPremiumBooked(48);
         s4.setSeatAvailability(sa4);
+        s4.setFlight(flight);
         String result4 = pm.getClassCode(s4, "Economy Premium", 1, false);
         assertEquals("C25", result4);
         
         //Case 5
         Schedule s5 = new Schedule();
         Calendar cal5 = Calendar.getInstance();
-        cal5.setTimeInMillis(cal5.getTimeInMillis()+(4*1000*60*60*24));
+        cal5.setTimeInMillis(cal5.getTimeInMillis()+((long)4*1000*60*60*24));
         System.out.println(cal5.getTime());
         Date date5 = cal5.getTime();
         System.out.println(date5);
@@ -177,7 +181,8 @@ public class PricingSessionBeanTest {
         sa5.setEconomyBasicTotal(50);
         sa5.setEconomyBasicBooked(10);
         s5.setSeatAvailability(sa5);
-        String result5 = pm.getClassCode(s5, "Economy Premium", 1, false);
+        s5.setFlight(flight2);
+        String result5 = pm.getClassCode(s5, "Economy Basic", 1, false);
         assertEquals("B01", result5);
      
     }
@@ -199,5 +204,3 @@ public class PricingSessionBeanTest {
     
   
 }
-
-  

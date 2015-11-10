@@ -27,10 +27,11 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal{
 
     OrganizationUnit department;
 
-    public void addDepartment(String departName, String departLocation) {
+    public String addDepartment(String departName, String departLocation) {
         department = new OrganizationUnit();
         department.create(departName.toUpperCase(), departLocation.toUpperCase());
         em.persist(department);
+        return "Department Added";
     }
     
     @Override

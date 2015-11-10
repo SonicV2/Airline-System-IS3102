@@ -140,7 +140,9 @@ public class DataLoadSessionBean implements DataLoadSessionBeanLocal {
         } catch (ParseException ex) {
             System.out.println("Error initializing date");
         }
-
+        //employeeSessionBean.addEmployee("S0002", "S0002", "yi", "quan", "FINANCE MANAGER", "FINANCE(SINGAPORE)", date1, "Male", "98218057", "Serangoon North Ave 4, Singapore", "64810187", "yiqaunster@gmail.com", 3000.0);
+        //employeeSessionBean.hashPwd("S0002");
+        //employeeSessionBean.employeeActivateWithId("S0002");
         employeeSessionBean.addEmployee("A0001", "A0001", "Super", "Admin", "SUPER ADMIN", "IT(SINGAPORE)", date1, "Female", "98218057", "Serangoon North Ave 4, Singapore", "64810187", "yuqing2404@gmail.com", 4000.0);
         employeeSessionBean.hashPwd("A0001");
         employeeSessionBean.employeeActivateWithId("A0001");
