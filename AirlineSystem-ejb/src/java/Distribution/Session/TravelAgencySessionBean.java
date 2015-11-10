@@ -50,7 +50,7 @@ public class TravelAgencySessionBean implements TravelAgencySessionBeanLocal {
             travelAgency.setSalt(salt);
             em.persist(salt);
 
-            travelAgency.createTravelAgent(name, maxCredit, maxCredit, 0.0, email, address, contactNo, hashedPwd, primaryContact);
+            travelAgency.createTravelAgent(name, maxCredit, currentCredit, 0.0, email, address, contactNo, hashedPwd, primaryContact);
 
             em.persist(travelAgency);
 
