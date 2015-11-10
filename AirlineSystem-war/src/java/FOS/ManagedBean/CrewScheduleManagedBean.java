@@ -50,6 +50,7 @@ public class CrewScheduleManagedBean {
     private List<Pairing> slns;
     private Pairing sln;  //selected from the webpage
     private String sln1;
+    private PairingDetail selectPairingDetail;
     private Team team;
     private String selectMonth; //month choosen to get pairing
     private String selectYear;
@@ -61,6 +62,10 @@ public class CrewScheduleManagedBean {
     private List<String> scheduleResult;
 
     private List<String> months;
+    
+      private List<PairingDetail> details = new ArrayList<PairingDetail>();
+      
+      private String pairingInformation;
 
     /**
      * Creates a new instance of crewScheduleManagedBean
@@ -159,10 +164,6 @@ public class CrewScheduleManagedBean {
 
         scheduleResult = new ArrayList<String>();
 
-        
-        
-       
-        
         for (int i = 0; i < restPairing.size(); i++) {
             temp += "<br /> <br /> \uD83C\uDFC1  \uD83C\uDFC1  \uD83C\uDFC1  \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 "
                     + "\uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1\uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1\uD83C\uDFC1 \uD83C\uDFC1 "
@@ -204,11 +205,28 @@ public class CrewScheduleManagedBean {
         String[] sps = temp.split("\u26F3 Pairing ID: ");
 
         for (int i = 1; i < sps.length; i++) {
-
+            addPairingDetail(sps[i]);
             scheduleResult.add("\u26F3 Pairing ID: " + sps[i]);
         }
 
     }
+    
+     public void addPairingDetail(String pairs){
+    
+       String title = pairs.substring(0,pairs.indexOf("Flight Number:"));
+       String content = pairs.substring(pairs.indexOf("Flight Number:"));
+       
+        PairingDetail pd = new PairingDetail();
+        pd.create("Pairing ID: "+title, content);
+        
+        getDetails().add(pd);
+    }
+     
+     public String viewPairingInfo(String info){
+         pairingInformation = info;
+         return "PairingInformation";
+     }
+     
 
     public long checkTime(String time1, String time2) {
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
@@ -250,21 +268,47 @@ public class CrewScheduleManagedBean {
 
     }
 
+//    public void getSelectPairingID(ActionEvent event) {
+//
+//        FacesMessage message = null;
+//        System.out.println("SLN: "+ sln1.toString());
+//
+//        if (sln1 == null) {
+//            message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "No Pairing is selected!", "");
+//            FacesContext.getCurrentInstance().addMessage(null, message);
+//        } else {
+//            String select = sln1.split("<br /> \uD83D\uDCC6 Pairing Start Date:")[0];
+//
+//            System.out.println("SELECT: "+ select);
+//            String pairingID = select.split("Pairing ID: ")[1];
+//
+//            sln = pairingSessionBean.getPairingByID(pairingID.trim());
+//        }
+//    }
+    
+    
+    
     public void getSelectPairingID(ActionEvent event) {
 
         FacesMessage message = null;
+    
 
-        if (sln1 == null) {
+        if (selectPairingDetail == null) {
             message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "No Pairing is selected!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
         } else {
-            String select = sln1.split("<br /> \uD83D\uDCC6 Pairing Start Date:")[0];
+            String select = selectPairingDetail.getTitle().split("<br /> \uD83D\uDCC6 Pairing Start Date:")[0];
 
-            String pairingID = select.split("\u26F3 Pairing ID: ")[1];
+            System.out.println("SELECT: "+ select);
+            
+            String pairingID = select.split("Pairing ID: ")[1];
 
             sln = pairingSessionBean.getPairingByID(pairingID.trim());
+            sln1 = "Successful";
         }
     }
+    
+    
 
     public void generateTeam(ActionEvent event) {
         FacesMessage message = null;
@@ -524,6 +568,48 @@ public class CrewScheduleManagedBean {
      */
     public void setMonths(List<String> months) {
         this.months = months;
+    }
+
+    /**
+     * @return the details
+     */
+    public List<PairingDetail> getDetails() {
+        return details;
+    }
+
+    /**
+     * @param details the details to set
+     */
+    public void setDetails(List<PairingDetail> details) {
+        this.details = details;
+    }
+
+    /**
+     * @return the pairingInformation
+     */
+    public String getPairingInformation() {
+        return pairingInformation;
+    }
+
+    /**
+     * @param pairingInformation the pairingInformation to set
+     */
+    public void setPairingInformation(String pairingInformation) {
+        this.pairingInformation = pairingInformation;
+    }
+
+    /**
+     * @return the selectPairingDetail
+     */
+    public PairingDetail getSelectPairingDetail() {
+        return selectPairingDetail;
+    }
+
+    /**
+     * @param selectPairingDetail the selectPairingDetail to set
+     */
+    public void setSelectPairingDetail(PairingDetail selectPairingDetail) {
+        this.selectPairingDetail = selectPairingDetail;
     }
 
 }
