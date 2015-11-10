@@ -35,83 +35,88 @@ and open the template in the editor.
 
 
     <h:body>
-        <div class="banner-bottom">
-            <!-- container -->
-            <div class="container">
-                <div class="faqs-top-grids">
-                    <div class="book-grids">
-                        <h:form id="sign-up-form">
-                            <div class="col-md-6 book-left">
-
-                                <div class="book-left-info">
-                                    <h3>Statement for Operating Expenses</h3>
-                                </div>
-                                <div class="book-left-form">
-
-
-                                    <h4>Date of Statement</h4>
-
-                                    <h:outputText id="date" value="#{adminReportManagedBean.selectedPnL.dateOfStatement}">
-                                        <f:convertDateTime pattern ="MMM yyyy"/>
-                                    </h:outputText>
-                                    <br></br>
-
-                                    <h4>Airport Rental</h4>
-                                    <h:outputText id="rental" value="#{adminReportManagedBean.airportRental}">
-                                        <f:convertNumber pattern="#,###.00" />
-                                    </h:outputText>
-                                    <br></br>
-
-                                    <h4>Airport Taxes</h4>
-                                    <h:outputText id="tax" value="#{adminReportManagedBean.airportTaxes}">
-                                        <f:convertNumber pattern="#,###.00" />
-                                    </h:outputText>
-                                    <br></br>
-
-                                    <h4>Employee Salaries</h4>
-                                    <h:outputText id="salaries" value="#{adminReportManagedBean.employeeSalaries}">
-                                        <f:convertNumber pattern="#,###.00" />
-                                    </h:outputText>
-                                    <br></br>
-
-                                    <h4>Commission Paid</h4>
-                                    <h:outputText id="commission" value="#{adminReportManagedBean.commission}">
-                                        <f:convertNumber pattern="#,###.00" />
-                                    </h:outputText>
-                                    <br></br>
-
-                                    <h4>Aircrafts Acquired</h4>
-                                    <h:outputText id="aircraft" value="#{adminReportManagedBean.aircraftAcquired}">
-                                        <f:convertNumber pattern="#,###.00" />
-                                    </h:outputText>
-                                    <br></br>
-
-                                    <h4>Fuel Costs</h4>
-                                    <h:outputText id="fuel" value="#{adminReportManagedBean.fuelCosts}">
-                                        <f:convertNumber pattern="#,###.00" />
-                                    </h:outputText>
-                                    <br></br>
-
-                                    <h4>Total Expenses</h4>
-                                    <h:outputText id="expenses" value="#{adminReportManagedBean.totalExpenses}">
-                                        <f:convertNumber pattern="#,###.00" />
-                                    </h:outputText>
-                                    <br></br>
-
-                                </div>
-                                <div class="text-center">
-                                    <h:commandButton class="btn btn-outline btn-success" value="Download Report" action="#{adminReportManagedBean.printExpenses()}"/>
-                                </div>
-                            </div>
-
-                        </h:form>
-                    </div>
-                    <div class="modal-footer">
-                    </div>
+        <!--                    To add the same header on all dashboard pages  -->
+        <ui:include src="/CI/DashboardHeader.xhtml"/>
+        <!--To add the same sidebar on all dashboard pages -->
+        <ui:include src="/CI/DashboardSidebar.xhtml"/>
+        <div id="page-wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2 class="page-header">Statement for Operating Expenses</h2>
                 </div>
+
+                <div class="col-lg-12">
+
+
+
+                    <h4>Date of Statement</h4>
+
+                    <h:outputText id="date" value="#{adminReportManagedBean.selectedPnL.dateOfStatement}">
+                        <f:convertDateTime pattern ="MMM yyyy"/>
+                    </h:outputText>
+                    <br></br>
+
+                    <h4>Airport Rental</h4>
+                    $
+                    <h:outputText id="rental" value="#{adminReportManagedBean.airportRental}">
+                        <f:convertNumber pattern="#,##0.00" />
+                    </h:outputText>
+                    <br></br>
+
+                    <h4>Airport Taxes</h4>
+                    $
+                    <h:outputText id="tax" value="#{adminReportManagedBean.airportTaxes}">
+                        <f:convertNumber pattern="#,##0.00" />
+                    </h:outputText>
+                    <br></br>
+
+                    <h4>Employee Salaries</h4>
+                    $
+                    <h:outputText id="salaries" value="#{adminReportManagedBean.employeeSalaries}">
+                        <f:convertNumber pattern="#,##0.00" />
+                    </h:outputText>
+                    <br></br>
+
+                    <h4>Commission Paid</h4>
+                    $
+                    <h:outputText id="commission" value="#{adminReportManagedBean.commission}">
+                        <f:convertNumber pattern="#,##0.00" />
+                    </h:outputText>
+                    <br></br>
+
+                    <h4>Aircrafts Acquired</h4>
+                    $
+                    <h:outputText id="aircraft" value="#{adminReportManagedBean.aircraftAcquired}">
+                        <f:convertNumber pattern="#,##0.00" />
+                    </h:outputText>
+                    <br></br>
+
+                    <h4>Fuel Costs</h4>
+                    $
+                    <h:outputText id="fuel" value="#{adminReportManagedBean.fuelCosts}">
+                        <f:convertNumber pattern="#,##0.00" />
+                    </h:outputText>
+                    <br></br>
+
+                    <h4>Total Expenses</h4>
+                    $
+                    <h:outputText id="expenses" value="#{adminReportManagedBean.totalExpenses}">
+                        <f:convertNumber pattern="#,##0.00" />
+                    </h:outputText>
+                    <br></br>
+
+
+                    <h:form>
+                        <div class="text-center">
+                            <h:commandButton class="btn btn-outline btn-success" value="Download Report" action="#{adminReportManagedBean.printExpenses()}"/>
+                        </div>
+
+
+                    </h:form>
+                </div>
+
             </div>
         </div>
-
     </h:body>
 
 </html>

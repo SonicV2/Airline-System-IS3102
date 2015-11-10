@@ -9,6 +9,7 @@ import APS.Entity.Flight;
 import APS.Entity.Route;
 import APS.Entity.Schedule;
 import APS.Session.FlightSessionBeanLocal;
+import Administration.Session.AccountingSessionBeanLocal;
 import CI.Session.EmailSessionBeanLocal;
 import CRM.Entity.DiscountCode;
 import CRM.Entity.DiscountType;
@@ -67,6 +68,9 @@ public class MARSManagedBean {
 
     @EJB
     private DiscountSessionBeanLocal discountSessionBean;
+    
+    @EJB
+    private AccountingSessionBeanLocal accountingSessionBean;
 
     @ManagedProperty(value = "#{customerManagedBean}")
     private CustomerManagedBean customerManagedBean;
@@ -996,7 +1000,10 @@ public class MARSManagedBean {
             customerSessionBean.updateCustomerProfile(customerManagedBean.getCustomer());
             customerManagedBean.refreshDiscountTypesRedeemable();
         }
-
+        
+        
+        accountingSessionBean.makeTransaction("Customer Booking", totalPriceWinsurance);
+        
         return "Confirmation";
     }
 
@@ -1050,6 +1057,7 @@ public class MARSManagedBean {
         eachPNRDisplay.setNoOfTravellers(noOfTravellers);
         eachPNRDisplay.setBookingDate(searchedPNR.getDateOfBooking());
         eachPNRDisplay.setRefundable(distributionSessionBean.isPNRRefundable(searchedPNR));
+        eachPNRDisplay.setTotalPrice(searchedPNR.getTotalPrice());
 
         for (Booking eachBooking : searchedPNR.getBookings()) {
             if (!addedNames.contains(eachBooking.getTravellerFristName() + " " + eachBooking.getTravellerLastName())) {

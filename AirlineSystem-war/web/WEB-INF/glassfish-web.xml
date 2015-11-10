@@ -5,6 +5,10 @@
     <res-ref-name>jdbc/airlinePool</res-ref-name>
     <jndi-name>jdbc/airlinePool</jndi-name>
   </resource-ref>
+  <resource-ref>
+    <res-ref-name>airlineSystemDataSource</res-ref-name>
+    <jndi-name>jdbc/airlinePool</jndi-name>
+  </resource-ref>
   <class-loader delegate="true"/>
   <jsp-config>
     <property name="keepgenerated" value="true">

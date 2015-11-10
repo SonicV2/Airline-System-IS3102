@@ -33,7 +33,7 @@ import net.sf.jasperreports.engine.JasperRunManager;
  */
 @WebServlet(name = "Controller", urlPatterns = {"/Controller", "/Controller?*"})
 public class Controller extends HttpServlet {
-
+    
     @Resource(name = "airlineSystemDataSource")
     private DataSource airlineSystemDataSource;
 
@@ -139,9 +139,9 @@ public class Controller extends HttpServlet {
             String revenue = (String) request.getSession().getAttribute("REVENUE");
             String salary = (String) request.getSession().getAttribute("SALARIES");
             String rental = (String) request.getSession().getAttribute("RENTALS");
-            String tax = (String) request.getSession().getAttribute("TAX");
+            String tax = (String) request.getSession().getAttribute("TAXES");
             String aircraft = (String) request.getSession().getAttribute("AIRCRAFT");
-            String commission = (String) request.getSession().getAttribute("COMMISSION");
+            String commission = (String) request.getSession().getAttribute("COMMISSIONS");
             String fuelCost = (String) request.getSession().getAttribute("FUELCOST");
             String totalRev = (String) request.getSession().getAttribute("TOTALREVENUE");
             String totalExp = (String) request.getSession().getAttribute("TOTALEXPENSES");

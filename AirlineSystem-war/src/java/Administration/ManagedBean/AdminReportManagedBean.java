@@ -112,8 +112,8 @@ public class AdminReportManagedBean {
 
                 setSelectedPnL(pnLSessionBean.createProfitAndLoss(date));
             } else {
-                setSelectedPnL(pnLSessionBean.getPnLbyDate(date));
-                pnLSessionBean.updateProfitAndLoss(selectedPnL);
+                ProfitAndLoss temp = pnLSessionBean.getPnLbyDate(date);
+                setSelectedPnL(pnLSessionBean.updateProfitAndLoss(temp));
             }
 
         } catch (ParseException e) {
@@ -164,8 +164,8 @@ public class AdminReportManagedBean {
 
                 setSelectedPnL(pnLSessionBean.createProfitAndLoss(date));
             } else {
-                setSelectedPnL(pnLSessionBean.getPnLbyDate(date));
-                pnLSessionBean.updateProfitAndLoss(selectedPnL);
+                ProfitAndLoss temp = pnLSessionBean.getPnLbyDate(date);
+                setSelectedPnL(pnLSessionBean.updateProfitAndLoss(temp));
             }
 
         } catch (ParseException e) {

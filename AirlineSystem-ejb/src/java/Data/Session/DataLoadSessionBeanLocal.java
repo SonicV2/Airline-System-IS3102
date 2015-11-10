@@ -14,5 +14,6 @@ import javax.ejb.Local;
 @Local
 public interface DataLoadSessionBeanLocal {
     public void init();
+    public void prepareCRMData();
     
 }

@@ -70,7 +70,6 @@ public class AnalyticsSessionBean implements AnalyticsSessionBeanLocal {
             Calendar cal = Calendar.getInstance();
             cal.set(2015, Calendar.MONTH-roll2, Calendar.DATE-roll3);
             b.setFlightDate(cal.getTime());
-            System.out.println(cal.getTime());
             em.flush();
         }
         for (int i = bSize - minus; i < bSize; i++) {
@@ -90,7 +89,6 @@ public class AnalyticsSessionBean implements AnalyticsSessionBeanLocal {
             Calendar cal = Calendar.getInstance();
             cal.set(2014, Calendar.MONTH-roll2, Calendar.DATE-roll3);
             b.setFlightDate(cal.getTime());
-            System.out.println(cal.getTime());
             em.flush();
         }
     }
