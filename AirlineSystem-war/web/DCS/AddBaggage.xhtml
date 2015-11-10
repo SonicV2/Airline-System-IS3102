@@ -48,7 +48,7 @@
                                         <f:convertDateTime pattern ="hh:mm a"/>
                                     </h:outputText></h4>
 
-                                <h5 class="bold"><h:outputText value="#{schedules.startDate}">
+                                <h5 class="bold"><h:outputText value="#{searchBookingManagedBean.checkinSchedule.startDate}">
                                         <f:convertDateTime pattern ="EEE, MMM d, yyyy"/>
                                     </h:outputText></h5>
                                 <h5>#{searchBookingManagedBean.checkinSchedule.flight.route.originCity}, #{searchBookingManagedBean.checkinSchedule.flight.route.originCountry}</h5>
@@ -111,7 +111,7 @@
                             <h:outputLabel value="Enter Baggage Weight" />
                             <h:inputText class="form-control" value="#{baggageManagedBean.addBagWeight}" /> KG
 
-                            <h:commandButton value="Add Baggage" class="btn btn-outline btn-warning" action="AddBaggage.xhtml" actionListener="#{baggageManagedBean.addBaggage}"  />
+                            <h:commandButton value="Add Baggage" class="btn btn-outline btn-warning"  actionListener="#{baggageManagedBean.addBaggage}" action="AddBaggage.xhtml" />
                             <!--            <h:commandButton value="update" action="AddBaggage.xhtml"/>-->
                                                         <h:commandButton value="Pay extra weight" class="btn btn-outline btn-info" action="PayExtraWeight.xhtml" actionListener="#{baggageManagedBean.calculateExtra}"  />
                         </div>

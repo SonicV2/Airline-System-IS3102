@@ -75,7 +75,7 @@ public class SearchBookingManagedBean implements Serializable {
             calBoardingTime();
 
             checkInRecordSessionBean.addBooking(reqBooking);
-            boardingPassSessionBean.addBooking(reqBooking);
+            boardingPassSessionBean.addBooking(reqBooking, boardingTime);
 
             this.online = true;
             if (b.size() > 1) {
@@ -102,7 +102,7 @@ public class SearchBookingManagedBean implements Serializable {
             calBoardingTime();
 
             checkInRecordSessionBean.addBooking(reqBooking);
-            boardingPassSessionBean.addBooking(reqBooking);
+            boardingPassSessionBean.addBooking(reqBooking, boardingTime);
             if (b.size() > 1) {
                 for (int i = 1; i < b.size(); i++) {
                     restSchedules.add(b.get(i).getSeatAvail().getSchedule());
