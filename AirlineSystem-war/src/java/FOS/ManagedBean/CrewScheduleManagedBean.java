@@ -14,6 +14,7 @@ import FOS.Session.PairingSessionBeanLocal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -121,7 +122,8 @@ public class CrewScheduleManagedBean {
             if (Integer.parseInt(selectMonth) == currentMonth + 1 || Integer.parseInt(selectMonth) == currentMonth) {
                 pairingSessionBean.legMain(selectMonth, selectYear);
                 setSlns(pairingSessionBean.filterPairings(selectYear, selectMonth));
-
+         
+         
                 restPairing = new ArrayList<Pairing>();
 
                 for (Pairing ppp : slns) {
@@ -180,10 +182,12 @@ public class CrewScheduleManagedBean {
                         temp += "<br /> ----------------------------------------------------------- <br />";
                     }
 
+                  
                     temp += "<br />Flight Number: " + restPairing.get(i).getFlightNumbers().get(j)
                             + "<br /> " + "Flight Route: "
                             + restPairing.get(i).getFlightCities().get(j) + " " + "\u2708".toUpperCase() + " " + restPairing.get(i).getFlightCities().get(j + 1)
                             + "<br />" + " Flight Schedules: " + restPairing.get(i).getFlightTimes().get(j) + "<br />";
+                    
 
                 }
 
