@@ -59,7 +59,7 @@
     <h:body>
 
         <!--    To add the same header on all dashboard pages  -->
-<!--        <ui:include src="/CI/DashboardHeader.xhtml"/>-->
+        <ui:include src="/CI/DashboardHeader.xhtml"/>
         <!--    To add the same sidebar on all dashboard pages  -->
         <ui:include src="/CI/DashboardSidebar.xhtml"/>
 
@@ -241,7 +241,7 @@
                         </div>
 
                         <div class="text-center">
-                            <h:commandButton class="btn btn-outline btn-success" value="Save Information" actionListener="#{employeeManagedBean.addGroundCrew}" action="/CI/employeeInformation?faces-redirect=true" /> 
+                            <h:commandButton class="btn btn-outline btn-success" value="Save Information" actionListener="#{employeeManagedBean.addGroundCrew}" action="/CI/EmployeeInformation?faces-redirect=true" /> 
                             <!--                            comment out-->
                         </div>
 
