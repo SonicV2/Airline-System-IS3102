@@ -17,6 +17,7 @@ import CI.Entity.Employee;
 
 import CI.Session.EmployeeSessionBeanLocal;
 import CRM.Entity.DiscountType;
+import CRM.Session.AnalyticsSessionBeanLocal;
 import CRM.Session.DiscountSessionBeanLocal;
 import Distribution.Entity.Customer;
 import Distribution.Entity.PNR;
@@ -29,6 +30,7 @@ import FOS.Entity.Team;
 import FOS.Session.ChecklistSessionBeanLocal;
 import FOS.Session.CrewSignInSessionBeanLocal;
 import Inventory.Entity.Booking;
+import Inventory.Session.BookingSessionBeanLocal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -84,6 +86,12 @@ public class DataLoadSessionBean implements DataLoadSessionBeanLocal {
     
     @EJB
     private CrewSignInSessionBeanLocal crewSignInSessionBean;
+    
+    @EJB
+    private BookingSessionBeanLocal bs;
+    
+    @EJB
+    private AnalyticsSessionBeanLocal am;
 
     @Override
     public void init() {
@@ -280,10 +288,16 @@ public class DataLoadSessionBean implements DataLoadSessionBeanLocal {
         discountSessionBean.addExpiredDiscountCode(discountType10);
 
     }
+    
+    public void YiQuan(){
+        bs.bookSeats("MA303");
+        am.createPsuedoCustomers();
+        am.pseudoLink();
+    }
 
     public void addFlights() {
         Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT+8:00"));
-        Date date1 = new Date(), date2 = new Date(), date3 = new Date(), date4 = new Date(), date5 = new Date(), date6 = new Date();
+        Date date1 = new Date(), date2 = new Date(), date3 = new Date(), date4 = new Date(), date5 = new Date(), date6 = new Date(), date7= new Date(), date8 = new Date();
         try {
             date1 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse("2015-11-06 02:00:00");
             date2 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse("2015-11-06 15:00:00");
@@ -291,11 +305,29 @@ public class DataLoadSessionBean implements DataLoadSessionBeanLocal {
             date4 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse("2015-11-06 13:00:00");
             date5 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse("2015-11-06 17:00:00");
             date6 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse("2015-11-06 08:00:00");
+            date7 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse("2014-11-01 16:00:00");
+            date8 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse("2015-11-15 16:00:00");
+           
 
         } catch (ParseException ex) {
             System.out.println("Error initializing date");
 
         }
+        
+        //MA777 for Testing
+        flightSessionBean.addFlight("MA777", "0000010", 200.0, date7, 852L, false);
+        flightScheduleSessionBean.scheduleFlights("MA777");
+        
+        //MA303 Past Flight
+        flightSessionBean.addFlight("MA303", "0010100", 400.0, date8, 852L, false);
+        flightScheduleSessionBean.scheduleFlights("MA202");
+        
+        //MA202 New Flight SIN-HK
+        flightSessionBean.addFlight("MA202", "0011100", 150.0, date2, 864L, false);
+        flightScheduleSessionBean.scheduleFlights("MA202");
+        
+        
+        
         //SIN-ADL FLIGHTS (Tue,Wed,Thu)
         flightSessionBean.addFlight("MA110", "0011100", 500.0, date1, 851L, false);
         flightScheduleSessionBean.scheduleFlights("MA110");
