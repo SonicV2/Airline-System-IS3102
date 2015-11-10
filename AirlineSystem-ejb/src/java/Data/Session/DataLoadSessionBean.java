@@ -120,7 +120,9 @@ public class DataLoadSessionBean implements DataLoadSessionBeanLocal {
         System.out.println("*****Managers added");
         addExecutives();
         System.out.println("*****Executives added");
+        bookSeats();
         System.out.println("***Data Load complete");
+        
 
 
     }
@@ -303,7 +305,7 @@ public class DataLoadSessionBean implements DataLoadSessionBeanLocal {
 
     }
 
-    public void YiQuan() {
+    public void bookSeats() {
         bs.bookSeats("MA303");
         am.createPsuedoCustomers();
         am.pseudoLink();
