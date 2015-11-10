@@ -290,7 +290,7 @@ public class A380PairingSessionBean implements A380PairingSessionBeanLocal {
         }
 
         String totalFlightHour = (hFlight / 100) + " hours " + (hFlight % 100) + " minutes";
-        pr.create(date, totalFlightHour, flightNos, flightCities, flightTimes);
+        //pr.create(date, totalFlightHour, flightNos, flightCities, flightTimes);
         pr.setTeam(null);
 
         pr.setIsA380(true);

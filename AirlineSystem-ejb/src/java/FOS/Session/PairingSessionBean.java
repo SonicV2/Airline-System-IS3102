@@ -303,17 +303,17 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
         
       // for unique cities  
         
-//        HashSet<String> uniqueValues = new HashSet<>(flightCities);
-//        List<String> newCities = new ArrayList<String>();
-//        
-//        for(String c: uniqueValues){
-//            newCities.add(c);
-//        }
-//        pr.create(date, totalFlightHour, flightNos, newCities, flightTimes);
+        HashSet<String> uniqueValues = new HashSet<>(flightCities);
+        List<String> newCities = new ArrayList<String>();
+        
+        for(String c: uniqueValues){
+            newCities.add(c);
+        }
+        pr.create(date, totalFlightHour, flightNos,flightCities, flightTimes, newCities);
         
         
         
-        pr.create(date, totalFlightHour, flightNos, flightCities, flightTimes);
+     //   pr.create(date, totalFlightHour, flightNos, flightCities, flightTimes);
          
         pr.setTeam(null);
 

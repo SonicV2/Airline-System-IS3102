@@ -159,6 +159,10 @@ public class CrewScheduleManagedBean {
 
         scheduleResult = new ArrayList<String>();
 
+        
+        
+       
+        
         for (int i = 0; i < restPairing.size(); i++) {
             temp += "<br /> <br /> \uD83C\uDFC1  \uD83C\uDFC1  \uD83C\uDFC1  \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 "
                     + "\uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1\uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1 \uD83C\uDFC1\uD83C\uDFC1 \uD83C\uDFC1 "
@@ -166,6 +170,8 @@ public class CrewScheduleManagedBean {
             temp += "\u26F3 Pairing ID: " + restPairing.get(i).getId() + " <br /> \uD83D\uDCC6 Pairing Start Date: " + restPairing.get(i).getFDate() + "   " + "<br /> \uD83D\uDD50 Pairing Total Flight Hours: " + restPairing.get(i).getFlightHour() + "<br />";
 
             for (int j = 0; j < restPairing.get(i).getFlightNumbers().size(); j++) {
+                
+                
                 if (j == 0) {
 
                     temp += "<br />Flight Number: " + restPairing.get(i).getFlightNumbers().get(j)
