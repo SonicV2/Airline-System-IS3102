@@ -124,7 +124,6 @@ public class DataLoadSessionBean implements DataLoadSessionBeanLocal {
         System.out.println("***Data Load complete");
         
 
-
     }
 
     public void addManagers() {
@@ -309,9 +308,13 @@ public class DataLoadSessionBean implements DataLoadSessionBeanLocal {
 
     public void bookSeats() {
         bs.bookSeats("MA303");
+
+    }
+    
+    public void prepareCRMData(){
         am.createPsuedoCustomers();
         am.pseudoLink();
-
+        System.out.println("***Analytical CRM Data complete");
     }
 
     public void addFlights() {
@@ -333,12 +336,12 @@ public class DataLoadSessionBean implements DataLoadSessionBeanLocal {
         }
 
         //MA777 for Testing
-        flightSessionBean.addFlight("MA777", "0000010", 200.0, date7, 852L, false);
+        flightSessionBean.addFlight("MA777", "0000010", 200.0, date8, 852L, false);
         flightScheduleSessionBean.scheduleFlights("MA777");
         flightScheduleSessionBean.rotateAircrafts();
 
         //MA303 Past Flight
-        flightSessionBean.addFlight("MA303", "0010100", 400.0, date8, 852L, false);
+        flightSessionBean.addFlight("MA303", "0000100", 400.0, date7, 852L, false);
         flightScheduleSessionBean.scheduleFlights("MA303");
         flightScheduleSessionBean.rotateAircrafts();
 
