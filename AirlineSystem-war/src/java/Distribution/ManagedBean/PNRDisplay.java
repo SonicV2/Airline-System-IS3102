@@ -22,6 +22,7 @@ public class PNRDisplay {
     int noOfBags;
     Date bookingDate;
     boolean refundable;
+    private double totalPrice;
     
     public String getId() {
         return id;
@@ -85,6 +86,20 @@ public class PNRDisplay {
 
     public void setRefundable(boolean refundable) {
         this.refundable = refundable;
+    }
+
+    /**
+     * @return the totalPrice
+     */
+    public double getTotalPrice() {
+        return totalPrice;
+    }
+
+    /**
+     * @param totalPrice the totalPrice to set
+     */
+    public void setTotalPrice(double totalPrice) {
+        this.totalPrice = totalPrice;
     }
     
     

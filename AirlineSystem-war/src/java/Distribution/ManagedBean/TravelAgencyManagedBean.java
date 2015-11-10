@@ -208,13 +208,12 @@ public class TravelAgencyManagedBean {
     private double currentSettlement;
 
     private String selectedMonth;
-    
+
     private List<Schedule> uniqueSchedules;
     private List<String> uniqueTravellerNames;
     private String tempDate;
     private String refundStatus;
     private int weightAllowed;
-            
 
     @PostConstruct
     public void retrieve() {
@@ -279,7 +278,7 @@ public class TravelAgencyManagedBean {
         return min;
     }
 
-    public void setOneWayVariables() { 
+    public void setOneWayVariables() {
         setAdults(oneWayAdult);
         setChildren(oneWayChildren);
         setOriginCity(oneWayOriginCity);
@@ -287,28 +286,24 @@ public class TravelAgencyManagedBean {
         setServiceType(oneWayServiceType);
         setDepartureDate(oneWayDepartureDate);
     }
-    
-    public void setClassRules(){
-         if (serviceType.equals("Economy Saver") || serviceType.equals("Economy Basic")){
+
+    public void setClassRules() {
+        if (serviceType.equals("Economy Saver") || serviceType.equals("Economy Basic")) {
             refundStatus = "Not refundable";
             weightAllowed = 15;
-        }
-        else if (serviceType.equals("Economy Premium")){
+        } else if (serviceType.equals("Economy Premium")) {
             refundStatus = "Refundable";
             weightAllowed = 15;
-        }
-        else if (serviceType.equals("Business")){
+        } else if (serviceType.equals("Business")) {
             refundStatus = "Refundable";
             weightAllowed = 30;
-        }
-        else if (serviceType.equals("First Class")){
+        } else if (serviceType.equals("First Class")) {
             refundStatus = "Refundable";
             weightAllowed = 45;
         }
     }
 
     public String displayDepartureFlights(Boolean oneWay) {
-        
 
         oneWayFlight = oneWay;
         /*Convert the chosen origin and destination cities into IATAs*/
@@ -383,7 +378,6 @@ public class TravelAgencyManagedBean {
             directFlightSchedules = new ArrayList();
             setDirectFlightDuration("");
             setClassRules();
-            
 
             //Check whether there is direct flight
             if (distributionSessionBean.existsDirectFlight(originIATA, destinationIATA)) {
@@ -859,6 +853,20 @@ public class TravelAgencyManagedBean {
         if (doLogin(email, password)) {
             setIsAgencyLoggedOn(true);
             setTravelAgency(travelAgencySessionBean.getAgencyUseEmail(email));
+
+            setOriginCity(null);
+            setDestinationCity(null);
+            setDepartureDate(null);
+            setReturnDate(null);
+            setAdults(0);
+            setChildren(0);
+
+            setOneWayOriginCity(null);
+            setOneWayDestinationCity(null);
+            setOneWayDepartureDate(null);
+            setOneWayAdult(0);
+            setOneWayChildren(0);
+
             return "TravelAgencySearchFlights";
 
             //return "CustomerDashboard";
@@ -1080,7 +1088,7 @@ public class TravelAgencyManagedBean {
 
         setTravelAgencies(travelAgencySessionBean.getAllTravelAgencies());
 
-        return "ViewAllTravelAgencies?faces-redirect=true";
+        return null;
     }
 
     public String viewPNRs(Long id) {
@@ -1092,9 +1100,9 @@ public class TravelAgencyManagedBean {
     }
 
     public String confirmPNR(PNR pnr) {
-        
+
         setSelectedPNR(pnr);
-        
+
         if (selectedPNR.getPnrStatus().equals("Cancelled")) {
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Cancelled PNR cannot be confirmed!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
@@ -1127,9 +1135,8 @@ public class TravelAgencyManagedBean {
 
     public String cancelPNR(PNR pnr) {
 
-       
         setSelectedPNR(pnr);
-        
+
         if (selectedPNR.getPnrStatus().equals("Cancelled")) {
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "PNR is already cancelled!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
@@ -1154,7 +1161,7 @@ public class TravelAgencyManagedBean {
     }
 
     public String viewSettlementAndCommission(Long id) {
-        
+
         setSelectedMonth(null);
         setTravelAgency(travelAgencySessionBean.getTravelAgencyById(id));
 
@@ -1199,10 +1206,10 @@ public class TravelAgencyManagedBean {
             FacesContext.getCurrentInstance().addMessage(null, message);
             return null;
         }
-        
+
         setTempDate(selectedMonth);
         setSelectedMonth(null);
-        
+
         return "ViewSettlementAndCommission";
     }
 
@@ -1243,22 +1250,21 @@ public class TravelAgencyManagedBean {
             FacesContext.getCurrentInstance().addMessage(null, message);
             return null;
         }
-        
+
         setTempDate(selectedMonth);
         setSelectedMonth(null);
 
         return "TravelAgencyViewSettlementAndCommission?faces-redirect=true";
     }
-    
+
     public String viewPNRDetails(PNR pnr) {
 
         setSelectedPNR(pnr);
-        
+
         List<Long> addedSchedules = new ArrayList();
         uniqueSchedules = new ArrayList();
         uniqueTravellerNames = new ArrayList();
 
-        
         for (Booking eachBooking : selectedPNR.getBookings()) {
 
             if (!uniqueTravellerNames.contains(eachBooking.getTravellerFristName() + " " + eachBooking.getTravellerLastName())) {
@@ -1279,22 +1285,21 @@ public class TravelAgencyManagedBean {
 
         return "TravelAgencyViewPNRDetails?faces-redirect=true";
     }
-    
+
     public String clearForm() {
         setSelectedMonth(null);
-        
+
         return "TravelAgencySelectsMonth?faces-redirect=true";
     }
 
-        public String travelAgencyPNRDetails(PNR pnr) {
+    public String travelAgencyPNRDetails(PNR pnr) {
 
         setSelectedPNR(pnr);
-        
+
         List<Long> addedSchedules = new ArrayList();
         uniqueSchedules = new ArrayList();
         uniqueTravellerNames = new ArrayList();
 
-        
         for (Booking eachBooking : selectedPNR.getBookings()) {
 
             if (!uniqueTravellerNames.contains(eachBooking.getTravellerFristName() + " " + eachBooking.getTravellerLastName())) {
@@ -1315,6 +1320,7 @@ public class TravelAgencyManagedBean {
 
         return "SalesDepartmentViewPNRDetails?faces-redirect=true";
     }
+
     /**
      * @return the travelAgencies
      */
