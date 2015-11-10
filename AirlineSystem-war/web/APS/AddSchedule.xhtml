@@ -1,0 +1,85 @@
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:head>
+
+        <p:growl id="growl" sticky="true" showDetail="true"/>
+        <!--        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+                <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+                <meta name="viewport" content="width=device-width, initial-scale=1" />
+                <h:outputStylesheet library ="css"  name="bootstrap.css" />
+                <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
+                <h:outputStylesheet library="css" name="admindb.css" />
+                <h:outputStylesheet library="css" name="morrisjs/morris.css" />
+                <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js" />
+        -->
+        <title>Add Schedule</title>
+    </h:head>
+    <h:body>
+
+        <h:form> 
+            
+            <p:dataTable var="flight" value="#{scheduleManageBean.flights}" widgetVar="flightTable" paginator="true" rows="10">
+
+                <f:facet name="header">
+                    <p:outputPanel>
+                        <h:outputText value="Search all fields:" />
+                        <p:inputText id="globalFilter" onkeyup="PF('flightTable').filter()" style="width:150px" placeholder="Enter keyword"/>
+                    </p:outputPanel>
+                </f:facet>
+
+                <p:column filterBy="#{flight.flightNo}" headerText="Flight ID" filterMatchMode="contains">
+                    <h:outputText value="#{flight.flightNo}" />
+                </p:column>
+                <p:column filterBy="#{flight.flightDaysString}" headerText="Flight Days" filterMatchMode="contains">
+                    <h:outputText value="#{flight.flightDaysString}" />
+                </p:column>
+                
+                <p:column filterBy="#{flight.route.originCountry}" headerText="Origin Country" filterMatchMode="contains">
+                <h:outputText value="#{flight.route.originCountry}" />
+            </p:column>
+                
+            <p:column filterBy="#{flight.route.originCity}" headerText="Origin City" filterMatchMode="contains">
+                <h:outputText value="#{flight.route.originCity}" />
+            </p:column>
+            
+            <p:column filterBy="#{flight.route.destinationCountry}" headerText="Destination Country" filterMatchMode="contains">
+                <h:outputText value="#{flight.route.destinationCountry}" />
+            </p:column>
+            
+            <p:column filterBy="#{flight.route.destinationCity}" headerText="Destination City" filterMatchMode="contains">
+                <h:outputText value="#{flight.route.destinationCity}" />
+            </p:column>
+
+                <p:column filterBy="#{flight.flightDuration}" headerText="Duration of Flight" filterMatchMode="contains">
+                    <h:outputText value="#{flight.flightDuration} Hours" />
+                </p:column>
+
+                <p:column filterBy="#{flight.basicFare}" headerText="Basic Fare" filterMatchMode="contains">
+                    <h:outputText value="#{flight.basicFare}" />
+                </p:column>
+            </p:dataTable>
+        </h:form>    
+
+        <h:form class="form col-md-12 center-block">
+
+            <div class="form-group">                          
+                <p:outputLabel value="Flight Number: " />
+                <p:inputText class="form-control input-lg" value="#{scheduleManageBean.flightNo}"  />
+                <br/>
+            </div>
+            <h:panelGrid columns="2" cellpadding="5">
+                <p:outputLabel for="datetime" value="New date and time of Flight:" />
+                <p:calendar id="datetime" value="#{scheduleManageBean.startDate}" pattern="MM/dd/yyyy HH:mm" />
+            </h:panelGrid>                               
+
+            <div>
+                <h:commandButton class="btn btn-primary btn-lg btn-block" value="Add" actionListener="#{scheduleManageBean.addSchedule}"/>
+            </div>
+        </h:form>
+    </h:body>
+</html>
+
