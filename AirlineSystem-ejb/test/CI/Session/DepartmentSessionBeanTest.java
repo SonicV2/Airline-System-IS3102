@@ -74,7 +74,7 @@ public class DepartmentSessionBeanTest {
        OrganizationUnit ou2 = ou1;
        ou2.setLocation("Japan");
        String result = dm.updateOrgUnit(ou1, ou2);
-       assertEquals("Updated successfully", result);
+       assertEquals("Updated successfully!", result);
        
     }
     
@@ -101,12 +101,12 @@ public class DepartmentSessionBeanTest {
     @Test
     public void testDeleteOrgUnit() throws Exception {
         System.out.println("deleteOrgUnit");
-        String dept = "Finance";
+        String dept = "FINANCE";
         String location ="SINGAPORE";
         String result = dm.deleteOrgUnit(dept,location);
         assertEquals("Cannot Delete!",result);
-        
         dept= "testDepartment";
+        location = "JAPAN";
         result = dm.deleteOrgUnit(dept,location);
         assertEquals("Delete successful!",result);
         
@@ -159,8 +159,8 @@ public class DepartmentSessionBeanTest {
     public void testChangeDepartment() throws Exception {
         System.out.println("changeDepartment");
         String staffID = "A0006";
-        String deptNameCom = "FINANCE(";
-        String deptNameOldCom = "IT("; 
+        String deptNameCom = "FINANCE(SINGAPORE)";
+        String deptNameOldCom = "IT(SINGAPORE)"; 
         String expResult = "Successful!";
         String result = dm.changeDepartment(staffID, deptNameCom, deptNameOldCom);
         assertEquals(expResult, result);
