@@ -27,10 +27,11 @@ public class AccessRightSessionBean implements AccessRightSessionBeanLocal {
     AccessRight accessRight;
     
 @Override    
-public void addAccessRight(String accessRightName){
+public String addAccessRight(String accessRightName){
     accessRight = new AccessRight();
     accessRight.create(accessRightName);
     em.persist(accessRight);
+    return "Access Right Added";
     
 }
 
