@@ -58,6 +58,7 @@ public class FleetSessionBeanTest {
         String hub = "Singapore";
         String status = "Stand-By";
         String result =fm.acquireAircraft(tailNo, datePurchased, lastMaintained, aircraftTypeId, hub, status);
+        fm.retireAircraft("ABC999", "3470");
         assertEquals("Aircraft Acquired",result);
     }
 
@@ -66,8 +67,18 @@ public class FleetSessionBeanTest {
      */
     @Test
     public void testRetireAircraft() throws Exception {
+        String tailNo = "ABC998";
+        Calendar cal = Calendar.getInstance();
+        cal.set(2015, 8, 1);
+        Date datePurchased = cal.getTime();
+        cal.set(2015, 2, 1);
+        Date lastMaintained = cal.getTime();
+        String aircraftTypeId = "Airbus A330-300";
+        String hub = "Singapore";
+        String status = "Stand-By";
+        fm.acquireAircraft(tailNo, datePurchased, lastMaintained, aircraftTypeId, hub, status);
         System.out.println("retireAircraft");
-        String retireNo = "ABC999";
+        String retireNo = "ABC998";
         String takeoverNo = "3470";
         String result = fm.retireAircraft(retireNo, takeoverNo);
         assertEquals("Aircraft Retired", result);
