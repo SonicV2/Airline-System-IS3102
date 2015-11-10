@@ -86,7 +86,7 @@ public class MaintainScheduleManagedBean {
             Aircraft air = maintainSessionBean.getAircraftByTailNo(tailNo);
             String aircraftType = air.getAircraftType().getId();
             tailNo += "(" + aircraftType + ")";
-            TimelineEvent event = new TimelineEvent("TYPE " + m.getType(), m.getMainStartDate(), m.getMainEndDate(), true, tailNo);
+            TimelineEvent event = new TimelineEvent("TYPE " + m.getType(), m.getMainStartDate(), m.getMainEndDate(), true, tailNo, ("TYPE" + m.getType()).toLowerCase());
             model.add(event);
         }
 

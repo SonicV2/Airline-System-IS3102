@@ -430,8 +430,16 @@
                 <!-- this is for Maintenance Scheduling Management-->
                 <ui:fragment rendered="#{loginManagedBean.accessRightIDs.contains(33)}">
                     <li>
-                        <a href="#{request.contextPath}/FOS/FlightMaintenanceTimeline.xhtml"><i class="fa fa-search"></i> Maintenance Scheduling</a>
+                        <a href="#"><i class="fa fa-cogs"></i> Maintenance Management<span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                    <li>
+                        <a href="#{request.contextPath}/FOS/FlightMaintenanceTimeline.xhtml"><i class="fa fa-clock-o"></i> Maintenance Scheduling</a>
                     </li>  
+                    <li>
+                        <a href="#{request.contextPath}/FOS/ViewMaintenanceTeams.xhtml"><i class="fa fa-eye"></i> View Maintenance Teams</a>
+                    </li> 
+                        </ul>
+                    </li>
 
                 </ui:fragment>
 
