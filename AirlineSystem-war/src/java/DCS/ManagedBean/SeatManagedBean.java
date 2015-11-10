@@ -251,6 +251,8 @@ public class SeatManagedBean {
 
                 boardingPassSessionBean.changeBoardingPassClass(booking, "Business");
 
+                baggageManagedBean.refresh();
+
                 upgrade = 2;
                 message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Additional Cost: " + upgradeCosts, "");
             } else {
@@ -534,8 +536,7 @@ public class SeatManagedBean {
     }
 
     public String chooseSeatA330() {
-        System.out.println("seatmbean---" + getChoose() + choose);
-        System.out.println("seatmbean--- occupied" + getOccupied().size());
+
         if (getOccupied().contains(getChoose().toUpperCase())) {
             message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "seat has already been choosen!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
