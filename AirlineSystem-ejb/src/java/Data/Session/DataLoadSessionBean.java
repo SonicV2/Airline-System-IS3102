@@ -73,15 +73,15 @@ public class DataLoadSessionBean {
     @PostConstruct
     public void init() {
         System.out.println("*****Loading data");
-//       addDiscountTypes();
-  //     addFlights();
-//        addCustomer();
-//        addTravelAgencies();
-//        addCustomerBooking();
-//        addTravelAgencyBookings();
-//        addCabinCrew();
-//       addPilot();
-//        addGroundCrew();
+       addDiscountTypes();
+       addFlights();
+        addCustomer();
+        addTravelAgencies();
+        addCustomerBooking();
+        addTravelAgencyBookings();
+        addCabinCrew();
+       addPilot();
+        addGroundCrew();
     }
 
     public void addDiscountTypes() {
@@ -212,77 +212,103 @@ public class DataLoadSessionBean {
         //SIN-ADL FLIGHTS (Tue,Wed,Thu)
         flightSessionBean.addFlight("MA110", "0011100", 500.0, date1, 851L, false);
         flightScheduleSessionBean.scheduleFlights("MA110");
+        flightScheduleSessionBean.rotateAircrafts();
         flightSessionBean.addFlight("MA111", "0011100", 700.0, date2, 851L, false);
         flightScheduleSessionBean.scheduleFlights("MA111");
+        flightScheduleSessionBean.rotateAircrafts();
 
         //SIN-NRT (Tue,Wed,Thu)
         flightSessionBean.addFlight("MA112", "0011100", 500.0, date3, 881L, false);
         flightScheduleSessionBean.scheduleFlights("MA112");
+        flightScheduleSessionBean.rotateAircrafts();
 
         //NRT-IAH (tue,wed,thur)
         flightSessionBean.addFlight("MA113", "0011100", 600.0, date4, 1404L, false);
         flightScheduleSessionBean.scheduleFlights("MA113");
+        flightScheduleSessionBean.rotateAircrafts();
 
         //IAH-NRT (mon,thur,fri)
         flightSessionBean.addFlight("MA114", "0100110", 600.0, date5, 1474L, false);
         flightScheduleSessionBean.scheduleFlights("MA114");
+        flightScheduleSessionBean.rotateAircrafts();
 
         //NRT-SING
         flightSessionBean.addFlight("MA115", "1100011", 500.0, date6, 1440L, false);
         flightScheduleSessionBean.scheduleFlights("MA115");
+        flightScheduleSessionBean.rotateAircrafts();
         
         //EXTRA FLIGHTS
         flightSessionBean.addFlight("MA116", "1100011", 500.0, date6, 861L, false);
         flightScheduleSessionBean.scheduleFlights("MA116");
+        flightScheduleSessionBean.rotateAircrafts();
         
         flightSessionBean.addFlight("MA117", "1100011", 500.0, date6, 888L, false);
         flightScheduleSessionBean.scheduleFlights("MA117");
+        flightScheduleSessionBean.rotateAircrafts();
         
-        flightSessionBean.addFlight("MA118", "1100011", 500.0, date6, 1420L, false);
+        flightSessionBean.addFlight("MA118", "0011100", 500.0, date6, 1420L, false);
         flightScheduleSessionBean.scheduleFlights("MA118");
+        flightScheduleSessionBean.rotateAircrafts();
         
-        flightSessionBean.addFlight("MA119", "1100011", 500.0, date6, 1450L, false);
+        flightSessionBean.addFlight("MA119", "0011100", 500.0, date6, 1447L, false);
         flightScheduleSessionBean.scheduleFlights("MA119");
+        flightScheduleSessionBean.rotateAircrafts();
         
         flightSessionBean.addFlight("MA120", "1100011", 500.0, date6, 874L, false);
         flightScheduleSessionBean.scheduleFlights("MA120");
+        flightScheduleSessionBean.rotateAircrafts();
         
         flightSessionBean.addFlight("MA121", "1100011", 500.0, date6, 882L, false);
         flightScheduleSessionBean.scheduleFlights("MA121");
+        flightScheduleSessionBean.rotateAircrafts();
         
         flightSessionBean.addFlight("MA122", "1100011", 500.0, date6, 868L, false);
         flightScheduleSessionBean.scheduleFlights("MA122");
+        flightScheduleSessionBean.rotateAircrafts();
         
-        flightSessionBean.addFlight("MA123", "1100011", 500.0, date6, 1418L, false);
+        flightSessionBean.addFlight("MA123", "0011100", 500.0, date6, 1418L, false);
         flightScheduleSessionBean.scheduleFlights("MA123");
+        flightScheduleSessionBean.rotateAircrafts();
         
         flightSessionBean.addFlight("MA124", "1100011", 500.0, date6, 870L, false);
         flightScheduleSessionBean.scheduleFlights("MA124");
+        flightScheduleSessionBean.rotateAircrafts();
         
-        flightSessionBean.addFlight("MA125", "1100011", 500.0, date6, 1427L, false);
+        flightSessionBean.addFlight("MA125", "1100011", 500.0, date5, 1427L, false);
         flightScheduleSessionBean.scheduleFlights("MA125");
+        flightScheduleSessionBean.rotateAircrafts();
         
-        flightSessionBean.addFlight("MA126", "1100011", 500.0, date6, 1441L, false);
+        flightSessionBean.addFlight("MA126", "1100011", 500.0, date5, 1441L, false);
         flightScheduleSessionBean.scheduleFlights("MA126");
+        flightScheduleSessionBean.rotateAircrafts();
         
-        flightSessionBean.addFlight("MA127", "1100011", 500.0, date6, 1433L, false);
+        flightSessionBean.addFlight("MA127", "0011100", 500.0, date5, 1433L, false);
         flightScheduleSessionBean.scheduleFlights("MA127");
+        flightScheduleSessionBean.rotateAircrafts();
         
-        flightSessionBean.addFlight("MA128", "1100011", 500.0, date6, 1429L, false);
+        flightSessionBean.addFlight("MA128", "0011100", 500.0, date5, 1419L, false);
         flightScheduleSessionBean.scheduleFlights("MA128");
+        flightScheduleSessionBean.rotateAircrafts();
         
-        flightSessionBean.addFlight("MA129", "1100011", 500.0, date6, 1417L, false);
+        flightSessionBean.addFlight("MA129", "0011100", 500.0, date5, 1429L, false);
         flightScheduleSessionBean.scheduleFlights("MA129");
+        flightScheduleSessionBean.rotateAircrafts();
         
-        flightSessionBean.addFlight("MA130", "1100011", 500.0, date6, 1464L, false);
+        flightSessionBean.addFlight("MA130", "0011100", 500.0, date5, 1464L, false);
         flightScheduleSessionBean.scheduleFlights("MA130");
+        flightScheduleSessionBean.rotateAircrafts();
     }
 
     public void addCustomer() {
         customerSessionBean.addCustomer("Daniel", "Lee", "9799 0869", "6762 3524", "singjjyn@gmail.com", "Sa123!", "12 Bukit Timah Road #19-02 S314253", "Male", new Date(), "Mr", "Singaporean", "SN123123");
-        Customer createdCustomer = customerSessionBean.getCustomerUseEmail("singjjyn@gmail.com");
-        createdCustomer.setMileagePoints(3000);
-        em.merge(createdCustomer);
+        Customer createdCustomer1 = customerSessionBean.getCustomerUseEmail("singjjyn@gmail.com");
+        createdCustomer1.setMileagePoints(3000);
+        em.merge(createdCustomer1);
+        
+        customerSessionBean.addCustomer("Hou", "Liang", "9799 0869", "6762 3524", "hou.liang.90@gmail.com", "Sa123!", "12 Bukit Timah Road #19-02 S314253", "Male", new Date(), "Mr", "Chinese", "CN123123");
+        Customer createdCustomer2 = customerSessionBean.getCustomerUseEmail("hou.liang.90@gmail.com");
+        createdCustomer2.setMileagePoints(3000);
+        em.merge(createdCustomer2);
 
     }
 
@@ -310,15 +336,17 @@ public class DataLoadSessionBean {
         } catch (ParseException ex) {
             System.out.println("Error initializing date");
         }
-        Customer customer = customerSessionBean.getCustomerUseEmail("singjjyn@gmail.com");
-        Booking booking1 = passengerBookingSessionBean.createBooking(600, schedule1.getSeatAvailability(), schedule1.getFlight().getFlightNo(), schedule1.getStartDate(), "Booked", "A01", "Economy Saver", "Mr", "Daniel", "Lee", customer.getPassportNumber(), customer.getNationality(), customer.getId(), false, true, 15.0, "Western");
-        Booking booking2 = passengerBookingSessionBean.createBooking(500, schedule2.getSeatAvailability(), schedule2.getFlight().getFlightNo(), schedule2.getStartDate(), "Booked", "C01", "Economy Premium", "Mr", "Daniel", "Lee", customer.getPassportNumber(), customer.getNationality(), customer.getId(), false, true, 15.0, "Western");
-        Booking booking3 = passengerBookingSessionBean.createBooking(500, schedule3.getSeatAvailability(), schedule3.getFlight().getFlightNo(), schedule3.getStartDate(), "Booked", "E01", "First Class", "Mr", "Daniel", "Lee", customer.getPassportNumber(), customer.getNationality(), customer.getId(), false, true, 15.0, "Western");
-        Booking booking4 = passengerBookingSessionBean.createBooking(400, schedule4.getSeatAvailability(), schedule4.getFlight().getFlightNo(), schedule4.getStartDate(), "Booked", "E01", "First Class", "Mr", "Daniel", "Lee", customer.getPassportNumber(), customer.getNationality(), customer.getId(), false, true, 15.0, "Western");
-        PNR pnr1 = passengerBookingSessionBean.createPNR(1, customer.getEmail(), customer.getHomeNumber(), "Booked", 600.0, new Date(), new Date(), "MARS");
-        PNR pnr2 = passengerBookingSessionBean.createPNR(1, customer.getEmail(), customer.getHomeNumber(), "Booked", 500.0, new Date(), new Date(), "MARS");
-        PNR pnr3 = passengerBookingSessionBean.createPNR(1, customer.getEmail(), customer.getHomeNumber(), "Booked", 500.0, new Date(), new Date(), "MARS");
-        PNR pnr4 = passengerBookingSessionBean.createPNR(1, customer.getEmail(), customer.getHomeNumber(), "Booked", 400.0, new Date(), new Date(), "MARS");
+        Customer customer1 = customerSessionBean.getCustomerUseEmail("singjjyn@gmail.com");
+        Customer customer2 = customerSessionBean.getCustomerUseEmail("hou.liang.90@gmail.com");
+        
+        Booking booking1 = passengerBookingSessionBean.createBooking(600, schedule1.getSeatAvailability(), schedule1.getFlight().getFlightNo(), schedule1.getStartDate(), "Booked", "A01", "Economy Saver", "Mr", "Daniel", "Lee", customer1.getPassportNumber(), customer1.getNationality(), customer1.getId(), false, true, 15.0, "Western");
+        Booking booking2 = passengerBookingSessionBean.createBooking(500, schedule2.getSeatAvailability(), schedule2.getFlight().getFlightNo(), schedule2.getStartDate(), "Booked", "C01", "Economy Premium", "Mr", "Daniel", "Lee", customer1.getPassportNumber(), customer1.getNationality(), customer1.getId(), false, true, 15.0, "Western");
+        Booking booking3 = passengerBookingSessionBean.createBooking(500, schedule3.getSeatAvailability(), schedule3.getFlight().getFlightNo(), schedule3.getStartDate(), "Booked", "E01", "First Class", "Mr", "Daniel", "Lee", customer1.getPassportNumber(), customer1.getNationality(), customer1.getId(), false, true, 15.0, "Western");
+        Booking booking4 = passengerBookingSessionBean.createBooking(400, schedule4.getSeatAvailability(), schedule4.getFlight().getFlightNo(), schedule4.getStartDate(), "Booked", "E01", "First Class", "Mr", "Daniel", "Lee", customer1.getPassportNumber(), customer1.getNationality(), customer1.getId(), false, true, 15.0, "Western");
+        PNR pnr1 = passengerBookingSessionBean.createPNR(1, customer1.getEmail(), customer1.getHomeNumber(), "Booked", 600.0, new Date(), new Date(), "MARS");
+        PNR pnr2 = passengerBookingSessionBean.createPNR(1, customer1.getEmail(), customer1.getHomeNumber(), "Booked", 500.0, new Date(), new Date(), "MARS");
+        PNR pnr3 = passengerBookingSessionBean.createPNR(1, customer1.getEmail(), customer1.getHomeNumber(), "Booked", 500.0, new Date(), new Date(), "MARS");
+        PNR pnr4 = passengerBookingSessionBean.createPNR(1, customer1.getEmail(), customer1.getHomeNumber(), "Booked", 400.0, new Date(), new Date(), "MARS");
         List<Booking> bookingList1 = new ArrayList();
         bookingList1.add(booking1);
         List<Booking> bookingList2 = new ArrayList();
@@ -328,10 +356,32 @@ public class DataLoadSessionBean {
         List<Booking> bookingList4 = new ArrayList();
         bookingList4.add(booking4);
 
-        passengerBookingSessionBean.persistBookingAndPNR(pnr1, bookingList1, customer);
-        passengerBookingSessionBean.persistBookingAndPNR(pnr2, bookingList2, customer);
-        passengerBookingSessionBean.persistBookingAndPNR(pnr3, bookingList3, customer);
-        passengerBookingSessionBean.persistBookingAndPNR(pnr4, bookingList4, customer);
+        passengerBookingSessionBean.persistBookingAndPNR(pnr1, bookingList1, customer1);
+        passengerBookingSessionBean.persistBookingAndPNR(pnr2, bookingList2, customer1);
+        passengerBookingSessionBean.persistBookingAndPNR(pnr3, bookingList3, customer1);
+        passengerBookingSessionBean.persistBookingAndPNR(pnr4, bookingList4, customer1);
+        
+        Booking booking5 = passengerBookingSessionBean.createBooking(600, schedule1.getSeatAvailability(), schedule1.getFlight().getFlightNo(), schedule1.getStartDate(), "Booked", "A01", "Economy Saver", "Mr", "Hou", "Liang", customer2.getPassportNumber(), customer2.getNationality(), customer2.getId(), false, true, 15.0, "Western");
+        Booking booking6 = passengerBookingSessionBean.createBooking(500, schedule2.getSeatAvailability(), schedule2.getFlight().getFlightNo(), schedule2.getStartDate(), "Booked", "C01", "Economy Premium", "Mr", "Hou", "Liang", customer2.getPassportNumber(), customer2.getNationality(), customer2.getId(), false, true, 15.0, "Western");
+        Booking booking7 = passengerBookingSessionBean.createBooking(500, schedule3.getSeatAvailability(), schedule3.getFlight().getFlightNo(), schedule3.getStartDate(), "Booked", "E01", "First Class", "Mr", "Hou", "Liang", customer2.getPassportNumber(), customer2.getNationality(), customer2.getId(), false, true, 15.0, "Western");
+        Booking booking8 = passengerBookingSessionBean.createBooking(400, schedule4.getSeatAvailability(), schedule4.getFlight().getFlightNo(), schedule4.getStartDate(), "Booked", "E01", "First Class", "Mr", "Hou", "Liang", customer2.getPassportNumber(), customer2.getNationality(), customer2.getId(), false, true, 15.0, "Western");
+        PNR pnr5 = passengerBookingSessionBean.createPNR(1, customer2.getEmail(), customer2.getHomeNumber(), "Booked", 600.0, new Date(), new Date(), "MARS");
+        PNR pnr6 = passengerBookingSessionBean.createPNR(1, customer2.getEmail(), customer2.getHomeNumber(), "Booked", 500.0, new Date(), new Date(), "MARS");
+        PNR pnr7 = passengerBookingSessionBean.createPNR(1, customer2.getEmail(), customer2.getHomeNumber(), "Booked", 500.0, new Date(), new Date(), "MARS");
+        PNR pnr8 = passengerBookingSessionBean.createPNR(1, customer2.getEmail(), customer2.getHomeNumber(), "Booked", 400.0, new Date(), new Date(), "MARS");
+        List<Booking> bookingList5 = new ArrayList();
+        bookingList5.add(booking5);
+        List<Booking> bookingList6 = new ArrayList();
+        bookingList6.add(booking6);
+        List<Booking> bookingList7 = new ArrayList();
+        bookingList7.add(booking7);
+        List<Booking> bookingList8 = new ArrayList();
+        bookingList8.add(booking8);
+        
+        passengerBookingSessionBean.persistBookingAndPNR(pnr5, bookingList5, customer2);
+        passengerBookingSessionBean.persistBookingAndPNR(pnr6, bookingList6, customer2);
+        passengerBookingSessionBean.persistBookingAndPNR(pnr7, bookingList7, customer2);
+        passengerBookingSessionBean.persistBookingAndPNR(pnr8, bookingList8, customer2);
     }
 
     public void addTravelAgencyBookings() {
