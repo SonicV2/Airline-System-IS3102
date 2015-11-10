@@ -320,7 +320,7 @@ public class DataLoadSessionBean implements DataLoadSessionBeanLocal {
         
         //MA303 Past Flight
         flightSessionBean.addFlight("MA303", "0010100", 400.0, date8, 852L, false);
-        flightScheduleSessionBean.scheduleFlights("MA202");
+        flightScheduleSessionBean.scheduleFlights("MA303");
         
         //MA202 New Flight SIN-HK
         flightSessionBean.addFlight("MA202", "0011100", 150.0, date2, 864L, false);
