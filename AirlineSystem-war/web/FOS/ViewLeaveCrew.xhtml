@@ -3,14 +3,33 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
-    <h:head>
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:head> 
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <h:outputStylesheet library ="css"  name="bootstrap.css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
+        <h:outputStylesheet library="css" name="admindb.css" />
+        <h:outputStylesheet library="css" name="morrisjs/morris.css" />
         <p:growl id="growl" sticky="true" showDetail="true"/>
         <title>Leave Crew</title>
     </h:head>
     <h:body>
+        <!--    To add the same header on all dashboard pages  -->
+        <ui:include src="/CI/DashboardHeader.xhtml"/>
+        <!--    To add the same sidebar on all dashboard pages  -->
+        <ui:include src="/CI/DashboardSidebar.xhtml"/>
+
+        <div id="page-wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2 class="page-header">View Crews On Leave</h2>
+                </div>
+                <div class="col-lg-12">
         <h:form>
-            <h:outputText value="Cabin Crew"/>
+            <h5> <b>Cabin Crew </b> </h5>
             <p:selectOneRadio id="cc" required="true" requiredMessage="Please choose one crew" layout="grid" columns="1" value="#{reservedCrewScheduleManagedBean.crewUserName}">
                 <f:selectItems itemLabelEscaped="false" value="#{reservedCrewScheduleManagedBean.leaveCCLists}" var="crew" itemValue="#{crew.employeeUserName}"
                                itemLabel="Crew UserName: #{crew.employeeUserName} 
@@ -19,18 +38,20 @@
                                &lt;br/&gt; Schedule ID: #{crew.status.substring(7)}" />
             </p:selectOneRadio>
             <br /><br />
-            <h:commandButton value="Approve" actionListener="#{reservedCrewScheduleManagedBean.reassign}"/>
+            <h:commandButton class="btn btn-outline btn-success" value="Approve" actionListener="#{reservedCrewScheduleManagedBean.reassign}"/>
             <br />
+            <br />
+    
             <p:inputTextarea rows="5" cols="30" counter="display" maxlength="1000" counterTemplate="{0} characters remaining." value="#{reservedCrewScheduleManagedBean.rejectReasonForCabinCrew}" autoResize="false" />
             <h:outputText id="display" />
             <br />
-            <h:commandButton value="Reject" actionListener="#{reservedCrewScheduleManagedBean.rejectCabinCrewLeave}"/>
+            <h:commandButton class="btn btn-outline btn-danger" value="Reject" actionListener="#{reservedCrewScheduleManagedBean.rejectCabinCrewLeave}"/>
         </h:form>
         <br /> <br />
 
 
         <h:form>
-            <h:outputText value="Pilot"/>
+            <h5><b>Pilot </b></h5>
             <p:selectOneRadio id="pilot" required="true" requiredMessage="Please choose one pilot" layout="grid" columns="1" value="#{reservedCrewScheduleManagedBean.pilotUserName}">
                 <f:selectItems itemLabelEscaped="false" value="#{reservedCrewScheduleManagedBean.leavePilotLists}" var="crew" itemValue="#{crew.employeeUserName}"
                                itemLabel="Crew UserName: #{crew.employeeUserName} 
@@ -39,13 +60,18 @@
                                &lt;br/&gt; Schedule ID: #{crew.status.substring(7)}" />
             </p:selectOneRadio>
             <br /><br />
-            <h:commandButton value="Approve" actionListener="#{reservedCrewScheduleManagedBean.reassignPilot}"/>
+            <h:commandButton class="btn btn-outline btn-success" value="Approve" actionListener="#{reservedCrewScheduleManagedBean.reassignPilot}"/>
             <br />
+            <br/>
+           
             <p:inputTextarea rows="5" cols="30" counter="display1" maxlength="1000" counterTemplate="{0} characters remaining."  autoResize="false" value="#{reservedCrewScheduleManagedBean.rejectReasonForPilot}" />
             <h:outputText id="display1" />
             <br />
-            <h:commandButton value="Reject" actionListener="#{reservedCrewScheduleManagedBean.rejectPilotleave}"/>
+            <h:commandButton class="btn btn-outline btn-danger" value="Reject" actionListener="#{reservedCrewScheduleManagedBean.rejectPilotleave}"/>
         </h:form>
+                </div>
+            </div>
+        </div>
     </h:body>
 </html>
 
