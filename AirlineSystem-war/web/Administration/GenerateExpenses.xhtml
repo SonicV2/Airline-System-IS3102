@@ -57,44 +57,51 @@ and open the template in the editor.
                     <br></br>
 
                     <h4>Airport Rental</h4>
+                    $
                     <h:outputText id="rental" value="#{adminReportManagedBean.airportRental}">
-                        <f:convertNumber pattern="#,###.00" />
+                        <f:convertNumber pattern="#,##0.00" />
                     </h:outputText>
                     <br></br>
 
                     <h4>Airport Taxes</h4>
+                    $
                     <h:outputText id="tax" value="#{adminReportManagedBean.airportTaxes}">
-                        <f:convertNumber pattern="#,###.00" />
+                        <f:convertNumber pattern="#,##0.00" />
                     </h:outputText>
                     <br></br>
 
                     <h4>Employee Salaries</h4>
+                    $
                     <h:outputText id="salaries" value="#{adminReportManagedBean.employeeSalaries}">
-                        <f:convertNumber pattern="#,###.00" />
+                        <f:convertNumber pattern="#,##0.00" />
                     </h:outputText>
                     <br></br>
 
                     <h4>Commission Paid</h4>
+                    $
                     <h:outputText id="commission" value="#{adminReportManagedBean.commission}">
-                        <f:convertNumber pattern="#,###.00" />
+                        <f:convertNumber pattern="#,##0.00" />
                     </h:outputText>
                     <br></br>
 
                     <h4>Aircrafts Acquired</h4>
+                    $
                     <h:outputText id="aircraft" value="#{adminReportManagedBean.aircraftAcquired}">
-                        <f:convertNumber pattern="#,###.00" />
+                        <f:convertNumber pattern="#,##0.00" />
                     </h:outputText>
                     <br></br>
 
                     <h4>Fuel Costs</h4>
+                    $
                     <h:outputText id="fuel" value="#{adminReportManagedBean.fuelCosts}">
-                        <f:convertNumber pattern="#,###.00" />
+                        <f:convertNumber pattern="#,##0.00" />
                     </h:outputText>
                     <br></br>
 
                     <h4>Total Expenses</h4>
+                    $
                     <h:outputText id="expenses" value="#{adminReportManagedBean.totalExpenses}">
-                        <f:convertNumber pattern="#,###.00" />
+                        <f:convertNumber pattern="#,##0.00" />
                     </h:outputText>
                     <br></br>
 
