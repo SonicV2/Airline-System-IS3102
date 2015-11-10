@@ -20,7 +20,7 @@ import javax.persistence.Query;
  * @author HOULIANG
  */
 @Stateless
-public class DepartmentSessionBean implements DepartmentSessionBeanLocal{
+public class DepartmentSessionBean implements DepartmentSessionBeanLocal, DepartmentSessionBeanRemote{
 
     @PersistenceContext(unitName = "AirlineSystem-ejbPU")
     private EntityManager em;
@@ -33,6 +33,8 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal{
         em.persist(department);
         return "Department Added";
     }
+
+
     
     @Override
     public String updateOrgUnit(OrganizationUnit oldOUnit, OrganizationUnit newOUnit){
@@ -52,8 +54,8 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal{
     @Override
     public String deleteOrgUnit(String OUName,String location){
         //String msg;
-        OrganizationUnit orgUnit = new OrganizationUnit();
-        orgUnit = getDepartment(OUName, location);
+
+        OrganizationUnit orgUnit = getDepartment(OUName, location);
         List<Employee> employees = orgUnit.getEmployee();
         
         for (Employee e: employees){

@@ -20,7 +20,7 @@ import javax.persistence.Query;
  * @author Yuqing
  */
 @Stateless
-public class AccessRightSessionBean implements AccessRightSessionBeanLocal {
+public class AccessRightSessionBean implements AccessRightSessionBeanLocal, AccessRightSessionBeanRemote {
     @PersistenceContext(unitName = "AirlineSystem-ejbPU")
     private EntityManager em;
     
