@@ -41,15 +41,15 @@
 
 
                             <h:outputLabel class="col-md-3 control-label" value="Max Flight Hours: "/>
-                            <h:outputLabel value="#{crewScheduleManagedBean.max_hour}"/>
+                            <h:outputLabel value="#{crewScheduleManagedBean.max_hour}"/> 
                             <br/><br/>
 
-                            <h:outputLabel class="col-md-3 control-label" value="Max number of legs: "/>
-                            <h:outputLabel value="#{crewScheduleManagedBean.pp.num_max_legs}"/>
+                            <h:outputLabel class="col-md-3 control-label" value="Max Number of Legs: "/>
+                            <h:outputLabel value="#{crewScheduleManagedBean.pp.num_max_legs}"/> 
                             <br/><br/>
 
 
-                            <h:outputLabel class="col-md-3 control-label" value="Min stopover time: "/>
+                            <h:outputLabel class="col-md-3 control-label" value="Min Stopover Minutes: "/>
                             <h:outputLabel value="#{crewScheduleManagedBean.pp.time_scale_min}"/>
                             <br/><br/>
                             <div class="text-center"> 
@@ -60,7 +60,7 @@
                         <h:form>
                             <div class="form-group">
                                 <h:outputLabel class="col-md-3 control-label" value="Max Flight Hours: " />
-                                <p:inputText id="a" required="true" requiredMessage="Please fill in this field!" class="form-control" placeholder="Max Flight Hours" value="#{crewScheduleManagedBean.hours_max_flight}" style="width: 200px;" />
+                                <p:inputText id="a" required="true" requiredMessage="Please fill in this field!" class="form-control" placeholder="Max Flight Hours " value="#{crewScheduleManagedBean.hours_max_flight}" style="width: 200px;" />
                                 <div class="missingfield">
                                     <h:message for="a" />
                                 </div>
@@ -68,15 +68,15 @@
 
                             <div class="form-group">
                                 <h:outputLabel class="col-md-3 control-label" value="Max number of legs: " />
-                                <p:inputText id="b" required="true" requiredMessage="Please fill in this field!"  class="form-control" placeholder="Max number of legs" value="#{crewScheduleManagedBean.num_max_legs}" style="width: 200px;"  />
+                                <p:inputText id="b" required="true" requiredMessage="Please fill in this field!"  class="form-control" placeholder="Max number of legs " value="#{crewScheduleManagedBean.num_max_legs}" style="width: 200px;"  />
                                 <div class="missingfield">
                                     <h:message for="b" />
                                 </div>
                             </div>
 
                             <div class="form-group">
-                                <h:outputLabel class="col-md-3 control-label" value="Min stopover time: " />
-                                <p:inputText id="c" required="true" requiredMessage="Please fill in this field!" class="form-control" placeholder="Min stopover time" value="#{crewScheduleManagedBean.time_scale_min}" style="width: 200px;"  />
+                                <h:outputLabel class="col-md-3 control-label" value="Min Stopover Minutes: " />
+                                <p:inputText id="c" required="true" requiredMessage="Please fill in this field!" class="form-control" placeholder="Min stopover time " value="#{crewScheduleManagedBean.time_scale_min}" style="width: 200px;"  />
                                 <div class="missingfield">
                                     <h:message for="c" />
                                 </div>
@@ -125,7 +125,7 @@
 
                                 <p:column>
                                     <f:facet name="header">
-                                        <h:outputText value="Flight Date"/>
+                                        <h:outputText value="Pairing Start Date: "/>
                                     </f:facet>
                                     <h:outputText value="#{sln.FDate}" />
                                 </p:column>
@@ -139,24 +139,23 @@
 
                                 <p:column>
                                     <f:facet name="header">
-                                        <h:outputText value="Flight Number" />
-                                    </f:facet>
-                                    <h:outputText value="#{sln.flightNumbers}" />
-                                </p:column>
-
-                                <p:column>
-                                    <f:facet name="header">
-                                        <h:outputText value="Flight Time" />
-                                    </f:facet>
-                                    <h:outputText value="#{sln.flightTimes}" />
-                                </p:column>
-
-                                <p:column>
-                                    <f:facet name="header">
                                         <h:outputText value="Flight City" />
                                     </f:facet>
                                     <h:outputText value="#{sln.flightCities}" />
                                 </p:column>
+                                
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Status" />
+                                    </f:facet>
+                                    <ui:fragment rendered="#{sln.paired}">
+                                    <h:outputText value="Assigned"/>
+                                    </ui:fragment>
+                                    <ui:fragment rendered="#{!sln.paired}">              
+                                    <h:outputText value="Not Assigned"/>
+                                      </ui:fragment>
+                                </p:column>
+                                
                             </p:dataTable>
                             <div class="text-center">
                                 <h:commandButton class="btn btn-outline btn-success" value="Assign Team" action="/FOS/ChoosePairing" />

@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -57,10 +58,10 @@ public class BookAccount implements Serializable {
 
     private Type type;
 
-    @OneToMany(mappedBy = "account")
+    @OneToMany(cascade = {CascadeType.MERGE}, mappedBy = "account")
     private List<BookEntry> entries = new ArrayList<BookEntry>();
     
-    @ManyToOne
+    @ManyToOne (cascade = {CascadeType.MERGE})
     private AccountingBook acBook = new AccountingBook();
 
     public void createAccount(String accountName, Type type) {

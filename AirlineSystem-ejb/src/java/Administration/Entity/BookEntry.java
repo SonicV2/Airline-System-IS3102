@@ -6,6 +6,7 @@
 package Administration.Entity;
 
 import java.io.Serializable;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -27,10 +28,10 @@ public class BookEntry implements Serializable {
     private boolean credit = false;
     private boolean debit = false;    
     
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.MERGE})
     private BookAccount account;
     
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.MERGE})
     private Posting posting;
     
     public void createEntry(Double amount){

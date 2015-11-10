@@ -122,6 +122,7 @@ public class DataLoadSessionBean implements DataLoadSessionBeanLocal {
         System.out.println("*****Executives added");
         System.out.println("***Data Load complete");
 
+
     }
 
     public void addManagers() {
@@ -299,12 +300,14 @@ public class DataLoadSessionBean implements DataLoadSessionBeanLocal {
         discountSessionBean.addDiscountCode(discountType1);
         discountSessionBean.addExpiredDiscountCode(discountType10);
 
+
     }
 
     public void YiQuan() {
         bs.bookSeats("MA303");
         am.createPsuedoCustomers();
         am.pseudoLink();
+
     }
 
     public void addFlights() {

@@ -269,7 +269,9 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
             flightNos.add(leg.get(i).getLine() + "");
 
             if (i == 0) {
-                flightCities.add(leg.get(i).getOrigin());
+                flightCities.add(leg.get(i).getOrigin());  
+               // flightCities.add(leg.get(i).getOrigin() + "-->");    // -->if need to add "-->"
+                
                 flightCities.add(leg.get(i).getDestination());
                 startHour = String.format("%04d", leg.get(i).getStartHour());
                 finishHour = String.format("%04d", leg.get(i).getFinishHour());
@@ -280,6 +282,8 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
                 flightTimes.add(hours);
             } else {
                 flightCities.add(leg.get(i).getDestination());
+                // flightCities.add("-->" + leg.get(i).getDestination());   // -->if need to add "-->"
+                 
                 startHour = String.format("%04d", leg.get(i).getStartHour());
                 finishHour = String.format("%04d", leg.get(i).getFinishHour());
                 hours = startHour + "-" + finishHour + "(" + leg.get(i).getDate1() + ")";
@@ -296,7 +300,21 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
         }
 
         String totalFlightHour = (hFlight / 100) + " hours " + (hFlight % 100) + " minutes";
+        
+      // for unique cities  
+        
+//        HashSet<String> uniqueValues = new HashSet<>(flightCities);
+//        List<String> newCities = new ArrayList<String>();
+//        
+//        for(String c: uniqueValues){
+//            newCities.add(c);
+//        }
+//        pr.create(date, totalFlightHour, flightNos, newCities, flightTimes);
+        
+        
+        
         pr.create(date, totalFlightHour, flightNos, flightCities, flightTimes);
+         
         pr.setTeam(null);
 
         pr.setIsA380(false);
@@ -344,6 +362,7 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
             String pMonth = p.getFDate().split("/")[1];
 
             if (p.isIsA380() == false && pYear.equals(selectYear) && pMonth.equals(selectMonth)) {
+                
                 results.add(p);
             }
         }
