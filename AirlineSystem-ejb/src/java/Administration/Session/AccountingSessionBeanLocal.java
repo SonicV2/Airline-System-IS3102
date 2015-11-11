@@ -8,8 +8,7 @@ package Administration.Session;
 import Administration.Entity.BookAccount;
 import Administration.Entity.BookAccount.Type;
 import Administration.Entity.AccountingBook;
-import Administration.Entity.BookEntry;
-import Administration.Entity.Posting;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -28,10 +27,6 @@ public interface AccountingSessionBeanLocal {
 
     public List<BookAccount> getAccountsByType(Type type);
 
-    public Posting getPosting(Long postingId);
-
-    public List<Posting> getPostings();
-
     public AccountingBook getAcBook(int year);
 
     public List<AccountingBook> getAcBooks();
@@ -42,10 +37,10 @@ public interface AccountingSessionBeanLocal {
 
     public AccountingBook getCurrBook();
 
-    public List<BookAccount> getRevenueAccounts(int year);
-
-    public List<BookAccount> getExpenseAccounts(int year);
-
     public List<Integer> getValidYears();
+
+    public void recognizeFuelExpenses(int year);
+
+    public void recognizeMaintenanceExpenses(int year);
 
 }

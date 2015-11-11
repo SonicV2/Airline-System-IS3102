@@ -65,8 +65,8 @@ public class DemandForecastSessionBean implements DemandForecastSessionBeanLocal
         schedule = new Schedule();
         schedules = new ArrayList<Schedule>();
         sa = new SeatAvailability();
-        dForecast = new Forecast();
         forecastEntries = new ArrayList<ForecastEntry>();
+        dForecast = new Forecast();
         if (isUpdate) {
             dForecast = hasForecast(year, routeId);
             forecastEntries = dForecast.getForecastEntry();
@@ -162,21 +162,7 @@ public class DemandForecastSessionBean implements DemandForecastSessionBeanLocal
             em.persist(dForecast);
         }
     }
-
-//    @Override
-//    public void deleteForecastEntries(Long forecastId) {
-//        dForecast = getForecast(forecastId);
-//        forecastEntries = dForecast.getForecastEntry();
-//        System.out.println(forecastEntries.size());
-//        dForecast.setForecastEntry(null);
-//
-//        for (int i = 0; i < forecastEntries.size(); i++) {
-//            forecastEntries.get(i).setForecast(null);
-//            System.out.println(forecastEntries.get(i));
-//            em.remove(forecastEntries.get(i));
-//        }
-//        em.flush();
-//    }
+    
     @Override
     public Forecast getForecast(Long forecastId) {
         dForecast = new Forecast();
@@ -369,18 +355,6 @@ public class DemandForecastSessionBean implements DemandForecastSessionBeanLocal
             }
         }
         return result;
-    }
-
-    @Override
-    public void testForecast() {
-        int[] data = {42, 24, 32, 37, 46, 29, 37, 43, 49, 31, 38, 40, 51, 32, 41, 44, 56, 34, 42, 46, 60, 35, 44, 48};
-        double[] result = forecast(data, 4, 12);
-        //Print Array
-        System.out.println("result:(");
-        for (int i = 0; i < result.length; i++) {
-            System.out.print(result[i] + ", ");
-        }
-        System.out.println(")");
     }
 
     //Takes in the relevant inputs and forecasts the demand
