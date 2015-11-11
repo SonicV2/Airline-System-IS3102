@@ -20,61 +20,76 @@
 
 
     </h:head>
-    
+
     <h:body>
         <p:growl id="msgs" showDetail="true"/>
         <ui:include src="DashboardHeader.xhtml"/>
         <!--    To add the same sidebar on all dashboard pages  -->
         <ui:include src="DashboardSidebar.xhtml"/>
         <div id="page-wrapper">
-            
-             <div class="row">
+
+            <div class="row">
                 <div class="col-lg-12">
                     <h2 class="page-header"> Add a role to an existing employee</h2>
                 </div>
-            <h:form class="col-md-6">
-                <div class="panel-body">
-                    <div class="row">
-                        <div class="col-lg-8">
-                            <div class="input-group custom-search-form">
-                                <p:inputText class="form-control" placeholder="Please enter employee id..." value="#{roleManagedBean.userID}"/>
-                                <span class="input-group-btn">
-                                    <h:commandButton class="btn btn-primary btn-block" value="Search" actionListener="#{roleManagedBean.search}"/>
-                                </span>
-                            </div>
-                            <br/>  
-                            
-                            <ui:repeat var ="role" value="#{roleManagedBean.newroles}">
-                                <h:outputText value="#{role}" />
-                            </ui:repeat>
-                            <br></br>
-                            
-                            <div class="form-group">
-                            
-                                <p:outputLabel for="role" value="Select Role to add: "  />
-                                <h:selectOneMenu  id="role"  value="#{roleManagedBean.new_Role}"  >
+                <h:form class="col-md-8">
+                    <div class="panel-body panel-yellow">
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <div class="input-group custom-search-form">
+                                    <p:inputText class="form-control" placeholder="Please enter employee NRIC..." value="#{roleManagedBean.userID}"/>
+                                    <span class="input-group-btn">
+                                        <h:commandButton class="btn btn-primary btn-warning" value="Search" actionListener="#{roleManagedBean.search}"/>
+                                    </span>
+                                </div>
+                                <br/>  
 
-                                   <f:selectItem itemLabel="Select Role" itemValue="" noSelectionOption="true" />
-                                   <f:selectItems value="#{roleManagedBean.roles}" />
-                                </h:selectOneMenu>    
-
-                                <br/>
-                          
+                                
                             </div>
-                              <div class="text-center">
-                            <h:commandButton class="btn btn-outline btn-success" value="Add Role" action="#{roleManagedBean.addNewRole}"/>
-                              </div>
+
+                                <div class="col-lg-8">
+                                    <div class="panel panel-yellow">
+                                        <div class="panel-heading">
+                                            Employee Name: #{roleManagedBean.employee.employeeDisplayFirstName} #{roleManagedBean.employee.employeeDisplayLastName}
+                                        </div>
+                                        <div class="panel-body">
+                                            <p>Employee Roles: </p>
+                                            <ui:repeat var ="role1" value="#{roleManagedBean.employee.roles}">
+                                                <h:outputText value="#{role1.roleName}" />
+                                                <br></br>
+                                            </ui:repeat>
+                                            
+                                            <br></br>
+                                            <div class="form-group">
+                                    <p:outputLabel for="role" value="Select Role to add: "  />
+                                    <h:selectOneMenu  class="form-control" id="role"  value="#{roleManagedBean.new_Role}"  >
+
+                                        <f:selectItem itemLabel="Select Role" itemValue="" noSelectionOption="true" />
+                                        <f:selectItems value="#{roleManagedBean.roles}" />
+                                    </h:selectOneMenu>    
+                                    <br/>
+                                </div>
+                                        </div>
+                                        <div class="panel-footer">
+                                            <div class="text-center">
+                                    <h:commandButton class="btn btn-outline btn-warning" value="Add Role" action="#{roleManagedBean.addNewRole}"/>
+                                </div>
+                                        </div>
+                                    </div>
+                                    <!-- /.col-lg-4 -->
+                                </div>
+                                
+                           
+
+                            <br/>                               
+
                         </div>
-
-                        <br/>                               
-
                     </div>
-                </div>
-                       
-        </h:form>
+
+                </h:form>
 
 
-        </div>
+            </div>
         </div>
     </h:body>
 

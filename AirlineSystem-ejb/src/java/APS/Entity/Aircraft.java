@@ -41,6 +41,7 @@ public class Aircraft implements Serializable {
     
     @OneToMany(cascade = {CascadeType.PERSIST}, mappedBy = "aircraft")
     private List<Schedule> schedules = new ArrayList<Schedule>();
+    
 
     public void createAircraft(String tailNo, Date datePurchased, Date lastMaintained, String hub, String status) {
         this.tailNo = tailNo;
@@ -106,7 +107,7 @@ public class Aircraft implements Serializable {
     public void setSchedules(List<Schedule> schedules) {
         this.schedules = schedules;
     }
-    
+           
     @Override
     public int hashCode() {
         int hash = 0;

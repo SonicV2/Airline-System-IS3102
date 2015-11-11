@@ -3,15 +3,19 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Admin.ManagedBean;
+package Administration.ManagedBean;
 
+import APS.Session.ScheduleSessionBeanLocal;
 import Administration.Entity.BookAccount;
 import Administration.Entity.BookAccount.Type;
 import Administration.Entity.AccountingBook;
 import Administration.Entity.BookEntry;
+import Administration.Entity.Posting;
 import Administration.Session.AccountingSessionBeanLocal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -38,6 +42,9 @@ public class BookkeepingManagedBean {
     @EJB
     private AccountingSessionBeanLocal accountingSessionBean;
 
+    @EJB
+    private ScheduleSessionBeanLocal scheduleSessionBean;
+
     Integer year;
     Double cashAmt;
     Double retainedAmt;
@@ -46,7 +53,6 @@ public class BookkeepingManagedBean {
 
     private BookAccount account;
     private List<BookAccount> accounts;
-    private List<BookAccount> editAccounts;
     private AccountingBook acBook;
     private List<AccountingBook> acBooks;
     private List<Integer> years;
@@ -77,6 +83,7 @@ public class BookkeepingManagedBean {
 
         accountingSessionBean.createBook(year, cashAmt, retainedAmt);
         setAcBooks(accountingSessionBean.getAcBooks());
+        setYears(accountingSessionBean.getValidYears());
         message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Book of Accounting for " + year + " with standard accounts have been successfully created!", "");
         FacesContext.getCurrentInstance().addMessage(null, message);
         clear();
@@ -102,42 +109,52 @@ public class BookkeepingManagedBean {
             FacesContext.getCurrentInstance().addMessage(null, message);
             return "PrintBookReport";
         }
+        acBook = accountingSessionBean.getAcBook(year);
 
-        List<BookAccount> revenue = accountingSessionBean.getRevenueAccounts(year);
-        List<BookAccount> expense = accountingSessionBean.getExpenseAccounts(year);
         List<BookEntry> entries = new ArrayList<BookEntry>();
+        account = new BookAccount();
         FacesContext context = FacesContext.getCurrentInstance();
 
         double revenue1 = 0.0;
         double revenue2 = 0.0;
+        double revenue3 = 0.0;
         double expense1 = 0.0;
+        double expense2 = 0.0;
 
         //Calculate the revenue and expense entries
-        for (int i = 0; i < revenue.size(); i++) {
-            if (revenue.get(i).getAccountName().equals("Ticket Sales Revenue")) {
-                entries = revenue.get(i).getEntries();
-                for (int j = 0; j < entries.size(); j++) {
-                    revenue1 += entries.get(j).getAmount();
-                }
+        account = acBook.getAccountByName("Ticket Sales Revenue");
+        if (account.getEntries() != null) {
+            for (int i = 0; i < account.getEntries().size(); i++) {
+                revenue1 += account.getEntries().get(i).getAmount();
             }
-
-            if (revenue.get(i).getAccountName().equals("Travel Agency Revenue")) {
-                entries = revenue.get(i).getEntries();
-                for (int j = 0; j < entries.size(); j++) {
-                    revenue2 += entries.get(j).getAmount();
-                }
+        }
+        account = acBook.getAccountByName("Travel Agency Revenue");
+        if (account.getEntries() != null) {
+            for (int i = 0; i < account.getEntries().size(); i++) {
+                revenue2 += account.getEntries().get(i).getAmount();
+            }
+        }
+        account = acBook.getAccountByName("Misc Revenue");
+        if (account.getEntries() != null) {
+            for (int i = 0; i < account.getEntries().size(); i++) {
+                revenue3 += account.getEntries().get(i).getAmount();
             }
         }
 
-        for (int i = 0; i < expense.size(); i++) {
-            if (expense.get(i).getAccountName().equals("Fuel Expenses")) {
-                entries = expense.get(i).getEntries();
-                for (int j = 0; j < entries.size(); j++) {
-                    expense1 += entries.get(j).getAmount();
-                }
+        accountingSessionBean.recognizeFuelExpenses(year);
+        account = acBook.getAccountByName("Fuel Expenses");
+        if (account.getEntries() != null) {
+            for (int i = 0; i < account.getEntries().size(); i++) {
+                expense1 += account.getEntries().get(i).getAmount();
             }
         }
-
+        accountingSessionBean.recognizeMaintenanceExpenses(year);
+        account = acBook.getAccountByName("Maintenance Expenses");
+        if (account.getEntries() != null) {
+            for (int i = 0; i < account.getEntries().size(); i++) {
+                expense2 += account.getEntries().get(i).getAmount();
+            }
+        }
         try {
             HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
             HttpServletResponse response = (HttpServletResponse) context.getExternalContext().getResponse();
@@ -147,7 +164,9 @@ public class BookkeepingManagedBean {
             session.setAttribute("year", year);
             session.setAttribute("ticket", revenue1);
             session.setAttribute("travel", revenue2);
+            session.setAttribute("misc", revenue3);
             session.setAttribute("fuel", expense1);
+            session.setAttribute("maintain", expense2);
 
             request.setAttribute("type", "income"); //Set to type in order to differentiate from other report generation
             RequestDispatcher dispatcher = request.getRequestDispatcher("/Controller");
@@ -161,7 +180,10 @@ public class BookkeepingManagedBean {
 
         clear();
         message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Income statement for " + year + " has been successfully downloaded!", "");
-        FacesContext.getCurrentInstance().addMessage(null, message);
+
+        FacesContext.getCurrentInstance()
+                .addMessage(null, message);
+
         return "PrintBookReport";
     }
 
@@ -173,16 +195,16 @@ public class BookkeepingManagedBean {
         }
 
         acBook = accountingSessionBean.getAcBook(year);
-        List<BookAccount> revenue = accountingSessionBean.getRevenueAccounts(year);
-        List<BookAccount> expense = accountingSessionBean.getExpenseAccounts(year);
+        account = new BookAccount();
         List<BookEntry> entries = new ArrayList<BookEntry>();
 
         //Calculate the Retained Earnings
         double currRet = 0.0;
-        for (int i = 0; i < acBook.getAccounts().size(); i++) {
-            if (acBook.getAccounts().get(i).getAccountName().equals("Retained Earnings")) {
-                currRet = acBook.getAccounts().get(i).getEntries().get(0).getAmount();
-                break;
+        account = acBook.getAccountByName("Retained Earnings");
+        System.out.println(account.getEntries());
+        if (account.getEntries() != null) {
+            for (int i = 0; i < account.getEntries().size(); i++) {
+                currRet += account.getEntries().get(i).getAmount();
             }
         }
 
@@ -190,17 +212,37 @@ public class BookkeepingManagedBean {
         double rev = 0.0;
         double exp = 0.0;
 
-        for (int i = 0; i < revenue.size(); i++) {
-            entries = revenue.get(i).getEntries();
-            for (int j = 0; j < entries.size(); j++) {
-                rev += entries.get(j).getAmount();
+        account = acBook.getAccountByName("Ticket Sales Revenue");
+        if (account.getEntries() != null) {
+            for (int i = 0; i < account.getEntries().size(); i++) {
+                rev += account.getEntries().get(i).getAmount();
+            }
+        }
+        account = acBook.getAccountByName("Travel Agency Revenue");
+        if (account.getEntries() != null) {
+            for (int i = 0; i < account.getEntries().size(); i++) {
+                rev += account.getEntries().get(i).getAmount();
+            }
+        }
+        account = acBook.getAccountByName("Misc Revenue");
+        if (account.getEntries() != null) {
+            for (int i = 0; i < account.getEntries().size(); i++) {
+                rev += account.getEntries().get(i).getAmount();
             }
         }
 
-        for (int i = 0; i < expense.size(); i++) {
-            entries = expense.get(i).getEntries();
-            for (int j = 0; j < entries.size(); j++) {
-                exp += entries.get(j).getAmount();
+        accountingSessionBean.recognizeFuelExpenses(year);
+        account = acBook.getAccountByName("Fuel Expenses");
+        if (account.getEntries() != null) {
+            for (int i = 0; i < account.getEntries().size(); i++) {
+                exp += account.getEntries().get(i).getAmount();
+            }
+        }
+        accountingSessionBean.recognizeMaintenanceExpenses(year);
+        account = acBook.getAccountByName("Maintenance Expenses");
+        if (account.getEntries() != null) {
+            for (int i = 0; i < account.getEntries().size(); i++) {
+                exp += account.getEntries().get(i).getAmount();
             }
         }
 
@@ -241,16 +283,13 @@ public class BookkeepingManagedBean {
             FacesContext.getCurrentInstance().addMessage(null, message);
             return "PrintBookReport";
         }
-
+        
+        acBook = accountingSessionBean.getCurrBook();
         List<BookAccount> asset = accountingSessionBean.getAccountsByType(Type.ASSET);
         List<BookAccount> liability = accountingSessionBean.getAccountsByType(Type.LIABILITY);
-        List<BookAccount> equity = accountingSessionBean.getAccountsByType(Type.EQUITY);
-        List<BookAccount> revenue = accountingSessionBean.getRevenueAccounts(year);
-        List<BookAccount> expense = accountingSessionBean.getExpenseAccounts(year);
         List<BookEntry> entries = new ArrayList<BookEntry>();
         FacesContext context = FacesContext.getCurrentInstance();
 
-        //DecimalFormat
         double asset1 = 0.0;
         double asset2 = 0.0;
         double asset3 = 0.0;
@@ -260,7 +299,9 @@ public class BookkeepingManagedBean {
         double equity1 = 0.0;
         double revenue1 = 0.0;
         double revenue2 = 0.0;
+        double revenue3 = 0.0;
         double expense1 = 0.0;
+        double expense2 = 0.0;
 
         //Calculate the asset values
         for (int i = 0; i < asset.size(); i++) {
@@ -311,38 +352,46 @@ public class BookkeepingManagedBean {
         }
 
         //Calculate the Equity values
-        for (int i = 0; i < equity.size(); i++) {
-            if (equity.get(i).getAccountName().equals("Retained Earnings")) {
-                entries = equity.get(i).getEntries();
-                for (int j = 0; j < entries.size(); j++) {
-                    equity1 += entries.get(j).getAmount();
-                }
+        account = acBook.getAccountByName("Retained Earnings");
+        if (account.getEntries() != null) {
+            for (int i = 0; i < account.getEntries().size(); i++) {
+                equity1 += account.getEntries().get(i).getAmount();
             }
         }
 
         //Calculate the revenue and expense entries
-        for (int i = 0; i < revenue.size(); i++) {
-            if (revenue.get(i).getAccountName().equals("Ticket Sales Revenue")) {
-                entries = revenue.get(i).getEntries();
-                for (int j = 0; j < entries.size(); j++) {
-                    revenue1 += entries.get(j).getAmount();
-                }
-            }
-
-            if (revenue.get(i).getAccountName().equals("Travel Agency Revenue")) {
-                entries = revenue.get(i).getEntries();
-                for (int j = 0; j < entries.size(); j++) {
-                    revenue2 += entries.get(j).getAmount();
-                }
+        account = acBook.getAccountByName("Ticket Sales Revenue");
+        if (account.getEntries() != null) {
+            for (int i = 0; i < account.getEntries().size(); i++) {
+                revenue1 += account.getEntries().get(i).getAmount();
             }
         }
 
-        for (int i = 0; i < expense.size(); i++) {
-            if (expense.get(i).getAccountName().equals("Fuel Expenses")) {
-                entries = expense.get(i).getEntries();
-                for (int j = 0; j < entries.size(); j++) {
-                    expense1 += entries.get(j).getAmount();
-                }
+        account = acBook.getAccountByName("Travel Agency Revenue");
+        if (account.getEntries() != null) {
+            for (int i = 0; i < account.getEntries().size(); i++) {
+                revenue2 += account.getEntries().get(i).getAmount();
+            }
+        }
+        account = acBook.getAccountByName("Misc Revenue");
+        if (account.getEntries() != null) {
+            for (int i = 0; i < account.getEntries().size(); i++) {
+                revenue3 += account.getEntries().get(i).getAmount();
+            }
+        }
+
+        accountingSessionBean.recognizeFuelExpenses(year);
+        account = acBook.getAccountByName("Fuel Expenses");
+        if (account.getEntries() != null) {
+            for (int i = 0; i < account.getEntries().size(); i++) {
+                expense1 += account.getEntries().get(i).getAmount();
+            }
+        }
+        accountingSessionBean.recognizeMaintenanceExpenses(year);
+        account = acBook.getAccountByName("Maintenance Expenses");
+        if (account.getEntries() != null) {
+            for (int i = 0; i < account.getEntries().size(); i++) {
+                expense2 += account.getEntries().get(i).getAmount();
             }
         }
 
@@ -358,7 +407,9 @@ public class BookkeepingManagedBean {
             session.setAttribute("pne", asset4);
             session.setAttribute("acctPay", liability1);
             session.setAttribute("unearned", liability2);
-            session.setAttribute("retained", equity1+revenue1+revenue2-expense1);
+            session.setAttribute("retained", equity1 + revenue1 + revenue2 + revenue3 - expense1 - expense2);
+            session.setAttribute("revSum", revenue1 + revenue2 + revenue3);
+            session.setAttribute("income", revenue1 + revenue2 + revenue3 - expense1 - expense2);
             session.setAttribute("year", year);
 
             request.setAttribute("type", "balance"); //Set to type in order to differentiate from other report generation
@@ -384,6 +435,48 @@ public class BookkeepingManagedBean {
             return "PrintBookReport";
         }
 
+        Comparator<Posting> comparator = new Comparator<Posting>() {
+            @Override
+            public int compare(Posting o1, Posting o2) {
+                int result = o1.getPostingDate().compareTo(o2.getPostingDate());
+                if (result == 0) {
+                    return o1.getPostingDate().before(o2.getPostingDate()) ? -1 : 1;
+                } else {
+                    return result;
+                }
+            }
+        };
+
+        acBook = accountingSessionBean.getAcBook(year);
+        System.out.println(acBook);
+        System.out.println(acBook.getPostings());
+        List<Posting> postings = new ArrayList<Posting>();
+        postings = acBook.getPostings();
+        int size = 0;
+        for (int i = 0; i < postings.size(); i++) {
+            for (int j = 0; j < postings.get(i).getEntries().size(); j++) {
+                size++;
+            }
+        }
+                
+        Collections.sort(postings, comparator);
+        String[][] result = new String[size][5];
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        int counter = 0;
+        for (int i = 0; i < postings.size(); i++) {
+            for (int j = 0; j < postings.get(i).getEntries().size(); j++) {
+                result[counter][0] = sdf.format(postings.get(i).getPostingDate());
+                result[counter][1] = postings.get(i).getEntries().get(j).getAccount().getAccountName();
+                result[counter][2] = String.valueOf(Math.abs(postings.get(i).getEntries().get(j).getAmount()));
+                if (postings.get(i).getEntries().get(j).isDebit()) {
+                    result[counter][3] = "Debit";
+                } else {
+                    result[counter][3] = "Credit";
+                }
+                result[counter][4] = postings.get(i).getMemo();
+                counter++;
+            }
+        }
         FacesContext context = FacesContext.getCurrentInstance();
 
         try {
@@ -393,6 +486,7 @@ public class BookkeepingManagedBean {
 
             //Set the required attributes of the report
             session.setAttribute("year", year);
+            session.setAttribute("result", result);
 
             request.setAttribute("type", "journal"); //Set to type in order to differentiate from other report generation
             RequestDispatcher dispatcher = request.getRequestDispatcher("/Controller");
@@ -411,7 +505,7 @@ public class BookkeepingManagedBean {
     }
 
     public void clear() {
-        setYear(0);
+        setYear(null);
         setCashAmt(null);
         setRetainedAmt(null);
         setAccount(null);
@@ -459,14 +553,6 @@ public class BookkeepingManagedBean {
         this.accounts = accounts;
     }
 
-    public List<BookAccount> getEditAccounts() {
-        return editAccounts;
-    }
-
-    public void setEditAccounts(List<BookAccount> editAccounts) {
-        this.editAccounts = editAccounts;
-    }
-
     public AccountingBook getAcBook() {
         return acBook;
     }
@@ -499,4 +585,3 @@ public class BookkeepingManagedBean {
         this.message = message;
     }
 }
-

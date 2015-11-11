@@ -10,6 +10,7 @@ import APS.Entity.AircraftType;
 import APS.Entity.Flight;
 import APS.Entity.Route;
 import APS.Entity.Schedule;
+import FOS.Entity.MaintainSchedule;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -23,7 +24,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import Inventory.Entity.SeatAvailability;
 import javax.ejb.EJB;
 
 /**
@@ -61,7 +61,7 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
     };
 
     @Override
-    public void scheduleFlights(String flightNo) {
+    public void scheduleFlights(String flightNo, boolean fortnight) {
         flight = getFlight(flightNo);
         aircraftType = new AircraftType();
         aircraftTypes = retrieveAircraftTypes();
@@ -69,12 +69,17 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
 
         //Find the best Aircraft for the flight
         aircraftType = aircraftTypes.get(0);
-        Double minFuel = aircraftTypes.get(0).getFuelCost();
-
+        Double minCost = aircraftType.getFuelCost();
+        Double maxRev = 0.0;
+        Double currCost = 0.0;
+        Double currRev = 0.0;
         for (AircraftType aircraftType1 : aircraftTypes) {
-            if ((route.getDistance() < (double) aircraftType1.getTravelRange() * 1.1) && (aircraftType1.getFuelCost() < minFuel)) {
+            currCost = aircraftType1.getFuelCost();
+            currRev = flight.getBasicFare() * (aircraftType1.getBusinessSeats() + aircraftType1.getEconomySeats() + aircraftType1.getFirstSeats());
+            if ((route.getDistance() < (double) aircraftType1.getTravelRange() * 1.1) && (currCost <= minCost) && (currRev >= maxRev)) {
                 aircraftType = aircraftType1;
-                minFuel = aircraftType1.getFuelCost();
+                minCost = currCost;
+                maxRev = currRev;
             }
         }
 
@@ -87,7 +92,7 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
 
         //Create link with Schedules
         //Add a list schedule until 12 months/1 year later
-        scheduleSessionBean.addSchedules(12, flightNo, false);
+        scheduleSessionBean.addSchedules(12, flightNo, false, fortnight);
     }
 
     @Override
@@ -227,8 +232,69 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
     }
 
     @Override
-    public void rotateMaintainenceSchedule(String flightNo) {
-        flight = getFlight(flightNo);
+    public void rotateMaintainenceSchedule(String tailNo) {
+        Aircraft aircraft = em.find(Aircraft.class, tailNo);
+        schedules = aircraft.getSchedules();
+//        List<MaintainSchedule> mSchedules = aircraft.getmSchedules();
+        List<Aircraft> reserves = getReserveAircrafts("Stand-By");
+        Comparator<MaintainSchedule> comparator2 = new Comparator<MaintainSchedule>() {
+            @Override
+            public int compare(MaintainSchedule o1, MaintainSchedule o2) {
+                int result = o1.getMainStartDate().compareTo(o2.getMainStartDate());
+                if (result == 0) {
+                    return o1.getMainStartDate().before(o2.getMainStartDate()) ? -1 : 1;
+                } else {
+                    return result;
+                }
+            }
+        };
+        Schedule selectedSchedule1 = new Schedule();
+        Schedule selectedSchedule2 = new Schedule();
+        Aircraft selectedAircraft = new Aircraft();
+        int counter = 0;
+        List<Schedule> selectedSchedules = new ArrayList<Schedule>();
+        Collections.sort(schedules, comparator);
+//        Collections.sort(mSchedules, comparator2);
+//        for (int i = 0; i < mSchedules.size(); i++) {
+//            //Search for the pair of schedules that conflicts
+//            for (int j = 0; j < schedules.size(); j++) {
+//                if (mSchedules.get(i).getMainStartDate().before(schedules.get(i).getStartDate())) {
+//                    selectedSchedule1 = schedules.get(i);
+//                    selectedSchedule2 = schedules.get(i + 1);
+//                }
+//            }
+//
+//            for (int j = 0; j < reserves.size(); j++) {
+//                selectedAircraft = reserves.get(j);
+//                selectedSchedules = selectedAircraft.getSchedules();
+//                Collections.sort(selectedSchedules, comparator);
+//                for (counter = 0; counter < selectedSchedules.size(); counter++) {
+//                    if (selectedSchedules.get(counter).getStartDate().before(selectedSchedule1.getStartDate()) 
+//                            && selectedSchedules.get(counter).getEndDate().after(selectedSchedule1.getEndDate())) {
+//                        break;
+//                    }
+//                    
+//                    if (selectedSchedules.get(counter).getStartDate().before(selectedSchedule2.getStartDate()) 
+//                            && selectedSchedules.get(counter).getEndDate().after(selectedSchedule2.getEndDate())) {
+//                        break;
+//                    }
+//                }
+//
+//                if (counter == selectedSchedules.size() - 1) {
+//                    break;
+//                }
+//            }
+//            
+//            aircraft.getSchedules().remove(selectedSchedule1);
+//            aircraft.getSchedules().remove(selectedSchedule2);
+//            selectedAircraft.getSchedules().add(selectedSchedule1);
+//            selectedAircraft.getSchedules().add(selectedSchedule2);
+//            selectedSchedule1.setAircraft(selectedAircraft);
+//            selectedSchedule2.setAircraft(selectedAircraft);
+//            em.merge(selectedSchedule1);
+//            em.merge(selectedSchedule2);
+//        }
+
     }
 
     //Retrieve flight object by searching with flight number
@@ -343,7 +409,6 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
 //        }
 //        return schedules;
 //    }
-
     //Returns a list of Schedule objects with start date after the given date
     private List<Schedule> removeScheduleBefore(List<Schedule> sc, Date date) {
         schedules = new ArrayList<Schedule>();
@@ -372,6 +437,30 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
             }
         }
         return schedules;
+    }
+
+    private List<Aircraft> getReserveAircrafts(String status) {
+
+        List<Aircraft> reserveAircrafts = new ArrayList<Aircraft>();
+
+        try {
+            Query q = em.createQuery("SELECT a FROM Aircraft " + "AS a WHERE a.status=:status");
+            q.setParameter("status", status);
+
+            List<Aircraft> results = q.getResultList();
+            if (!results.isEmpty()) {
+
+                reserveAircrafts = results;
+
+            } else {
+                reserveAircrafts = null;
+                System.out.println("no reserve aircraft!");
+            }
+        } catch (EntityNotFoundException enfe) {
+            System.out.println("\nEntity not found error" + "enfe.getMessage()");
+        }
+
+        return reserveAircrafts;
     }
 
     //Resets all the isAssigned attribute of the aircrafts

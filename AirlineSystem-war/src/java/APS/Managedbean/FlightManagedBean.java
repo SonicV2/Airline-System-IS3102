@@ -3,6 +3,7 @@ package APS.Managedbean;
 import APS.Entity.AircraftType;
 import APS.Entity.Flight;
 import APS.Entity.Forecast;
+import APS.Entity.ForecastEntry;
 import APS.Entity.Route;
 import APS.Entity.Schedule;
 import APS.Session.DemandForecastSessionBeanLocal;
@@ -11,6 +12,7 @@ import APS.Session.FlightScheduleSessionBeanLocal;
 import APS.Session.FlightSessionBeanLocal;
 import APS.Session.ScheduleSessionBeanLocal;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -61,6 +63,7 @@ public class FlightManagedBean {
     private Date entryTime;
     private boolean past = false;
     private boolean checked = false;
+    private boolean fortnight = false;
     String flightDays = "";
 
     private Long routeId;
@@ -163,9 +166,7 @@ public class FlightManagedBean {
         //Reading in the flight days
         flightDays = "";
 
-        for (int i = 0;
-                i < selectedFlightDays.length;
-                i++) {
+        for (int i = 0; i < selectedFlightDays.length; i++) {
             if (selectedFlightDays[i].equals("Sunday")) {
                 setString("1");
             }
@@ -175,81 +176,63 @@ public class FlightManagedBean {
             setString("0");
         }
 
-        for (int i = 0;
-                i < selectedFlightDays.length;
-                i++) {
+        for (int i = 0; i < selectedFlightDays.length; i++) {
             if (selectedFlightDays[i].equals("Monday")) {
                 setString("1");
             }
         }
 
-        if (flightDays.length()
-                == 1) {
+        if (flightDays.length() == 1) {
             setString("0");
         }
 
-        for (int i = 0;
-                i < selectedFlightDays.length;
-                i++) {
+        for (int i = 0; i < selectedFlightDays.length; i++) {
             if (selectedFlightDays[i].equals("Tuesday")) {
                 setString("1");
             }
         }
 
-        if (flightDays.length()
-                == 2) {
+        if (flightDays.length() == 2) {
             setString("0");
         }
 
-        for (int i = 0;
-                i < selectedFlightDays.length;
-                i++) {
+        for (int i = 0; i < selectedFlightDays.length; i++) {
             if (selectedFlightDays[i].equals("Wednesday")) {
                 setString("1");
             }
         }
 
-        if (flightDays.length()
-                == 3) {
+        if (flightDays.length() == 3) {
             setString("0");
         }
 
-        for (int i = 0;
-                i < selectedFlightDays.length;
-                i++) {
+        for (int i = 0; i < selectedFlightDays.length; i++) {
             if (selectedFlightDays[i].equals("Thursday")) {
                 setString("1");
             }
         }
 
-        if (flightDays.length()
-                == 4) {
+        if (flightDays.length() == 4) {
             setString("0");
         }
 
-        for (int i = 0;
-                i < selectedFlightDays.length;
-                i++) {
+        for (int i = 0; i < selectedFlightDays.length; i++) {
             if (selectedFlightDays[i].equals("Friday")) {
                 setString("1");
             }
         }
 
-        if (flightDays.length()
-                == 5) {
+        if (flightDays.length() == 5) {
             setString("0");
         }
 
-        for (int i = 0;
-                i < selectedFlightDays.length;
-                i++) {
+        for (int i = 0; i < selectedFlightDays.length; i++) {
             if (selectedFlightDays[i].equals("Saturday")) {
                 setString("1");
             }
         }
 
-        if (flightDays.length()
-                == 6) {
+        if (flightDays.length() == 6) {
             setString("0");
         }
 
@@ -262,8 +245,8 @@ public class FlightManagedBean {
             flightSessionBean.addFlight(flightNo, flightDays, basicFare, startDateTime, routeId, false);
         }
 
-        flightScheduleSessionBean.scheduleFlights(flightNo); //Create schedule and link flight to best aircraftType
-        flightScheduleSessionBean.rotateAircrafts(); //Rotate flights and assign aircraft to schedule
+        flightScheduleSessionBean.scheduleFlights(flightNo, fortnight); //Create schedule and link flight to best aircraftType
+        flightScheduleSessionBean.rotateAircrafts(); //Rotate and assign aircraft to schedule
         flightDays = "";
 
         message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Flight Added Successfully!", "");
@@ -304,71 +287,71 @@ public class FlightManagedBean {
         //Round flights to Japan everyday
         cal.set(2015, 10, 2, 7, 2);
         flightSessionBean.addFlight("MA110", "1111111", 802.80, cal.getTime(), 881L, false);
-        flightScheduleSessionBean.scheduleFlights("MA110");
+        flightScheduleSessionBean.scheduleFlights("MA110", false);
         cal.set(2015, 10, 2, 16, 25);
         flightSessionBean.addFlight("MA111", "1111111", 802.80, cal.getTime(), 1440L, false);
-        flightScheduleSessionBean.scheduleFlights("MA111");
+        flightScheduleSessionBean.scheduleFlights("MA111", false);
         cal.set(2015, 10, 2, 9, 16);
         flightSessionBean.addFlight("MA122", "1111111", 802.80, cal.getTime(), 881L, false);
-        flightScheduleSessionBean.scheduleFlights("MA122");
+        flightScheduleSessionBean.scheduleFlights("MA122", false);
         cal.set(2015, 10, 2, 18, 45);
         flightSessionBean.addFlight("MA128", "1111111", 802.80, cal.getTime(), 1440L, false);
-        flightScheduleSessionBean.scheduleFlights("MA128");
+        flightScheduleSessionBean.scheduleFlights("MA128", false);
 
         //Round flights to San Francisco from Japan 3 times a week
         cal.set(2015, 10, 2, 17, 5);
         flightSessionBean.addFlight("MA212", "0101010", 1135.00, cal.getTime(), 1407L, false);
-        flightScheduleSessionBean.scheduleFlights("MA212");
+        flightScheduleSessionBean.scheduleFlights("MA212", false);
         cal.set(2015, 10, 3, 8, 11);
         flightSessionBean.addFlight("MA221", "0010101", 1024.00, cal.getTime(), 1477L, false);
-        flightScheduleSessionBean.scheduleFlights("MA221");
+        flightScheduleSessionBean.scheduleFlights("MA221", false);
 
         //Flights for hub FRANKFURT
         //Round flights to Frankfurt every day of the week
         cal.set(2015, 10, 2, 9, 22);
         flightSessionBean.addFlight("MA133", "1111111", 1253.00, cal.getTime(), 861L, false);
-        flightScheduleSessionBean.scheduleFlights("MA133");
+        flightScheduleSessionBean.scheduleFlights("MA133", false);
         cal.set(2015, 10, 3, 0, 55);
         flightSessionBean.addFlight("MA135", "1111111", 1352.45, cal.getTime(), 1467L, false);
-        flightScheduleSessionBean.scheduleFlights("MA135");
+        flightScheduleSessionBean.scheduleFlights("MA135", false);
         cal.set(2015, 10, 2, 13, 8);
         flightSessionBean.addFlight("MA146", "1111111", 1122.48, cal.getTime(), 861L, false);
-        flightScheduleSessionBean.scheduleFlights("MA146");
+        flightScheduleSessionBean.scheduleFlights("MA146", false);
         cal.set(2015, 10, 3, 7, 05);
         flightSessionBean.addFlight("MA149", "1111111", 1038.45, cal.getTime(), 1467L, false);
-        flightScheduleSessionBean.scheduleFlights("MA149");
+        flightScheduleSessionBean.scheduleFlights("MA149", false);
 
         //Round flights to New York from frankfurt 3 times every week
         cal.set(2015, 10, 2, 7, 0);
         flightSessionBean.addFlight("MA235", "0101010", 730.00, cal.getTime(), 1406L, false);
-        flightScheduleSessionBean.scheduleFlights("MA235");
+        flightScheduleSessionBean.scheduleFlights("MA235", false);
         cal.set(2015, 10, 2, 17, 45);
         flightSessionBean.addFlight("MA239", "0010101", 724.00, cal.getTime(), 1476L, false);
-        flightScheduleSessionBean.scheduleFlights("MA239");
+        flightScheduleSessionBean.scheduleFlights("MA239", false);
 
         //Round flights to Mumbai 2 times every week
         cal.set(2015, 10, 2, 11, 2);
         flightSessionBean.addFlight("MA155", "0010100", 403.00, cal.getTime(), 870L, false);
-        flightScheduleSessionBean.scheduleFlights("MA155");
+        flightScheduleSessionBean.scheduleFlights("MA155", false);
         cal.set(2015, 10, 2, 17, 9);
         flightSessionBean.addFlight("MA158", "0010100", 403.00, cal.getTime(), 1429L, false);
-        flightScheduleSessionBean.scheduleFlights("MA158");
+        flightScheduleSessionBean.scheduleFlights("MA158", false);
 
         //Round flights to Shanghai 4 times every week
         cal.set(2015, 10, 2, 10, 20);
         flightSessionBean.addFlight("MA162", "1101010", 679.00, cal.getTime(), 1449L, false);
-        flightScheduleSessionBean.scheduleFlights("MA162");
+        flightScheduleSessionBean.scheduleFlights("MA162", false);
         cal.set(2015, 10, 2, 19, 2);
         flightSessionBean.addFlight("MA166", "1101010", 679.00, cal.getTime(), 1450L, false);
-        flightScheduleSessionBean.scheduleFlights("MA166");
+        flightScheduleSessionBean.scheduleFlights("MA166", false);
 
         //Round flights to Korea 4 times every week
         cal.set(2015, 10, 2, 9, 33);
         flightSessionBean.addFlight("MA183", "1101010", 733.33, cal.getTime(), 882L, false);
-        flightScheduleSessionBean.scheduleFlights("MA183");
+        flightScheduleSessionBean.scheduleFlights("MA183", false);
         cal.set(2015, 10, 2, 20, 36);
         flightSessionBean.addFlight("MA186", "1101010", 733.33, cal.getTime(), 1441L, false);
-        flightScheduleSessionBean.scheduleFlights("MA186");
+        flightScheduleSessionBean.scheduleFlights("MA186", false);
 
         flightScheduleSessionBean.rotateAircrafts(); //Rotate flights and assign aircraft to schedule
 
@@ -477,7 +460,6 @@ public class FlightManagedBean {
         if (demandForecastSessionBean.hasForecast(forecastYear, routeId) != null) {
             isUpdate = true;
         }
-        
         demandForecastSessionBean.generateDemandForecast(routeId, forecastYear, period, isUpdate);
 
         message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Demand forecast for " + forecastYear + " is generated!", "");
@@ -487,9 +469,52 @@ public class FlightManagedBean {
     }
 
     public String printForecast(Long selectedId) {
-        System.out.println(selectedId);
         Forecast forecast = demandForecastSessionBean.getForecast(selectedId);
-        
+        List<ForecastEntry> entries = forecast.getForecastEntry();
+
+        for (int i = 0; i < entries.size(); i++) {
+            System.out.println(entries.get(i).getEntryDate());
+        }
+
+        SimpleDateFormat sdf = new SimpleDateFormat("MMM");
+        String[][] result = new String[12][3];
+        double total = 0.0;
+        double variance = 0.0;
+        for (int i = 24; i < entries.size(); i++) {
+            total += entries.get(i).getForecastValue();
+        }
+        double mean = total / 12;
+        for (int i = 24; i < entries.size(); i++) {
+            variance += Math.pow((entries.get(i).getForecastValue() - mean), 2);
+        }
+
+        double stddiv = Math.sqrt(variance / 12);
+
+        for (int i = 24; i < entries.size(); i++) {
+            result[i - 24][0] = sdf.format(entries.get(i).getEntryDate()).toUpperCase();
+            result[i - 24][1] = entries.get(i).getForecastValue().toString();
+            if (entries.get(i).getForecastValue() > (mean + 0.67 * stddiv)) {
+                result[i - 24][2] = "High";
+            } else if (entries.get(i).getForecastValue() < (mean - 0.67 * stddiv)) {
+                result[i - 24][2] = "Low";
+            } else {
+                result[i - 24][2] = "Average";
+            }
+        }
+
+        double min = entries.get(0).getOriginalValue();
+
+        for (int i = 0; i < entries.size(); i++) {
+            if (entries.get(i).getOriginalValue() != 0.0 && entries.get(i).getOriginalValue() < min) {
+                min = entries.get(i).getOriginalValue();
+            }
+            if (entries.get(i).getForecastValue() != 0.0 && entries.get(i).getForecastValue() < min) {
+                min = entries.get(i).getForecastValue();
+            }
+        }
+
+        min *= 0.99; // Decrease min by 1% to show the graph
+
         FacesContext context = FacesContext.getCurrentInstance();
 
         try {
@@ -502,6 +527,8 @@ public class FlightManagedBean {
             session.setAttribute("ID", forecast.getForecastId());
             session.setAttribute("ORIGIN", forecast.getRoute().getOriginIATA());
             session.setAttribute("DEST", forecast.getRoute().getDestinationIATA());
+            session.setAttribute("MIN", min);
+            session.setAttribute("RESULT", result);
 
             request.setAttribute("type", "demand"); //Set to type in order to differentiate from other report generation
             RequestDispatcher dispatcher = request.getRequestDispatcher("/Controller");
@@ -517,7 +544,9 @@ public class FlightManagedBean {
 
     /*clear input after submit*/
     public void clear() {
+        setFortnight(false);
         setRouteId(null);
+        setTempNo("");
         setFlightNo("");
         setSelectedFlightDays(null);
         setEntryDate(null);
@@ -678,6 +707,14 @@ public class FlightManagedBean {
 
     public void setChecked(boolean checked) {
         this.checked = checked;
+    }
+
+    public boolean isFortnight() {
+        return fortnight;
+    }
+
+    public void setFortnight(boolean fortnight) {
+        this.fortnight = fortnight;
     }
 
     public Long getRouteId() {

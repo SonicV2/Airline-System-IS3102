@@ -32,7 +32,7 @@
 
         <!--            To add the same header on all dashboard pages  
 -->               <ui:include src="/CI/DashboardHeader.xhtml"/> 
-                To add the same sidebar on all dashboard pages 
+<!--                To add the same sidebar on all dashboard pages -->
         <ui:include src="/CI/DashboardSidebar.xhtml"/> 
 
         <div id="page-wrapper">
@@ -88,7 +88,7 @@
                             </span>
 
                             &nbsp;
-                            <p:commandButton class="btn btn-info btn-xs" update="growl" value="Check" ajax="false" action="#{flightManagedBean.checkFlight(flightManagedBean.tempNo)}" />                      
+                            <p:commandButton update="growl" value="Check" ajax="false" action="#{flightManagedBean.checkFlight(flightManagedBean.tempNo)}" />                      
                             <br/>
                         </div>
 
@@ -109,6 +109,7 @@
                                 <f:selectItem itemLabel="Saturday" itemValue="Saturday" />
                                 <f:selectItem itemLabel="Sunday" itemValue="Sunday" />
                             </p:selectManyCheckbox>
+                            <b><p:selectBooleanCheckbox itemLabel="Fortnight" value="#{flightManagedBean.fortnight}"/></b>
                             <br/>
                         </div>
                         <br></br>
@@ -130,7 +131,7 @@
                         </div>           
 
                         <div class="text-center">
-                            <p:commandButton class="btn btn-outline btn-success" update="growl" value="Add Flight" actionListener="#{flightManagedBean.createFlight}"/>
+                            <p:commandButton update="growl" value="Add Flight" actionListener="#{flightManagedBean.createFlight}"/>
                             <br></br>
                             <br></br>
                         </div>

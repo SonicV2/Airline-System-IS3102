@@ -234,7 +234,8 @@ public class ReservedCrewScheduleManagedBean {
         setPilotUserName("");
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
-        public void updateLeaveCC(ActionEvent event){
+    
+    public void updateLeaveCC(ActionEvent event){
         getAllLeaveCrew();
     }
 
