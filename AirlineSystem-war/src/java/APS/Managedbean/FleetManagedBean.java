@@ -43,7 +43,7 @@ public class FleetManagedBean {
 
     @EJB
     private AccountingSessionBeanLocal accountingSessionBean;
-    
+
     Date datePurchased;
     Date lastMaintained;
     String aircraftTypeId;
@@ -52,7 +52,7 @@ public class FleetManagedBean {
     String hub;
 
     FacesMessage message;
-    
+
     private List<AircraftType> aircraftTypes = new ArrayList<AircraftType>();
     private List<Aircraft> aircrafts;
     private Aircraft selectedAircraft;
@@ -87,34 +87,36 @@ public class FleetManagedBean {
     //Acquire new aircraft
     public void acquireAircraft(ActionEvent event) {
 
-        if (tailNo == null) {
+        if (tailNo.isEmpty()) {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please enter Aircraft Tail Number!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
-            return;
         }
 
         if (aircraftTypeId == null) {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please select aircraft type!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
-            return;
+        }
+        
+        for (int i = 0; i < fleetSessionBean.retrieveAircrafts().size(); i++) {
+            if (fleetSessionBean.retrieveAircrafts().get(i).getTailNo().equals(tailNo)) {
+                message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Tail Number already in use!", "");
+                FacesContext.getCurrentInstance().addMessage(null, message);
+            }
         }
 
         if (hub == null) {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please select location of the aircraft!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
-            return;
         }
 
         if (datePurchased == null) {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please enter date of purchase!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
-            return;
         }
 
         if (lastMaintained == null) {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please enter date of last maintenance!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
-            return;
         }
 
         if (status == null) {
@@ -125,12 +127,10 @@ public class FleetManagedBean {
 
         fleetSessionBean.acquireAircraft(tailNo, datePurchased, lastMaintained, aircraftTypeId, hub, status);
         message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Aircraft is Acquired Successfully!", "");
+        AircraftType aircraftType = fleetSessionBean.getAircraftType(aircraftTypeId);
+        accountingSessionBean.makeTransaction("Acquire Aircraft", aircraftType.getCost());
         FacesContext.getCurrentInstance().addMessage(null, message);
         setAircrafts(fleetSessionBean.retrieveAircrafts());
-        AircraftType aircraftType = fleetSessionBean.getAircraftType(aircraftTypeId);
-        System.out.println("managedbean" +aircraftType);
-        System.out.println(aircraftType.getCost());
-        accountingSessionBean.makeTransaction("Acquire Aircraft", aircraftType.getCost()*1000000);
         clear();
 
         Logger logger = Logger.getLogger(FleetManagedBean.class.getName());

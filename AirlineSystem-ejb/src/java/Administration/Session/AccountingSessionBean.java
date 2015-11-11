@@ -371,11 +371,11 @@ public class AccountingSessionBean implements AccountingSessionBeanLocal {
             Collections.sort(schedules, comparator);
             for (int i = 0; i < schedules.size(); i++) {
                 tmp.setTime(schedules.get(i).getEndDate());
-                if (tmp.get(Calendar.YEAR) == year && tmp.getTime().after(latestDate) && tmp.before(curr)) {
+                if (tmp.get(Calendar.YEAR) == year && tmp.getTime().after(latestDate) && tmp.before(curr) && schedules.get(i).getFlight().getRoute() != null) {
                     result.add(schedules.get(i));
                 }
             }
-
+            
             for (int i = 0; i < result.size(); i++) {
                 makeExpense("Flight Flown", result.get(i).getEndDate(), result.get(i).getFlight().getRoute().getDistance() * result.get(i).getFlight().getAircraftType().getFuelCost(), year);
             }

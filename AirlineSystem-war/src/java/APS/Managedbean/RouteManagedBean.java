@@ -67,6 +67,17 @@ public class RouteManagedBean {
 
     /*This is for admin to create new route*/
     public void addRoute(ActionEvent event) {
+        if (originIATA.isEmpty()) {
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please Enter Origin IATA!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        }
+        
+        if (destinationIATA.isEmpty()) {
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please Enter Destination IATA!", "");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return;
+        }
+        
         if (routeSessionBean.findLocation(originIATA) == null || routeSessionBean.findLocation(destinationIATA) == null) {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "No such IATA!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);

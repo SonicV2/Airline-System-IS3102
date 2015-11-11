@@ -9,6 +9,7 @@ import APS.Entity.Schedule;
 import APS.Session.FlightScheduleSessionBeanLocal;
 import APS.Session.FlightSessionBeanLocal;
 import APS.Session.ScheduleSessionBeanLocal;
+import Administration.Session.AccountingSessionBeanLocal;
 
 import CI.Entity.CabinCrew;
 import CI.Entity.Pilot;
@@ -95,9 +96,14 @@ public class DataLoadSessionBean implements DataLoadSessionBeanLocal {
     @EJB
     private AnalyticsSessionBeanLocal am;
 
+    @EJB
+    private AccountingSessionBeanLocal acs;
+    
     @Override
     public void init() {
         System.out.println("*****Loading data");
+        addAccountingBook();
+        System.out.println("*****Accounting Book Added");
         addDiscountTypes();
         System.out.println("*****Discount Types Added");
         addFlights();
@@ -127,7 +133,11 @@ public class DataLoadSessionBean implements DataLoadSessionBeanLocal {
         
 
     }
-
+    
+    public void addAccountingBook(){
+        acs.createBook(2015, 90000, 90000);
+    }
+    
     public void addManagers() {
         Date date1 = new Date(), date2 = new Date(), date3 = new Date(), date4 = new Date(), date5 = new Date();
 
@@ -329,7 +339,7 @@ public class DataLoadSessionBean implements DataLoadSessionBeanLocal {
             date4 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse("2015-11-06 13:00:00");
             date5 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse("2015-11-06 17:00:00");
             date6 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse("2015-11-06 08:00:00");
-            date7 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse("2014-11-01 16:00:00");
+            date7 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse("2013-09-01 16:00:00");
             date8 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse("2015-11-15 16:00:00");
 
         } catch (ParseException ex) {
@@ -507,13 +517,13 @@ public class DataLoadSessionBean implements DataLoadSessionBeanLocal {
         passengerBookingSessionBean.persistBookingAndPNR(pnr3, bookingList3, customer1);
         passengerBookingSessionBean.persistBookingAndPNR(pnr4, bookingList4, customer1);
 
-        Booking booking5 = passengerBookingSessionBean.createBooking(600, schedule1.getSeatAvailability(), schedule1.getFlight().getFlightNo(), schedule1.getStartDate(), "Booked", "A01", "Economy Premium", "Mr", "Hou", "Liang", customer2.getPassportNumber(), customer2.getNationality(), customer2.getId(), false, true, 15.0, "Western");
-        Booking booking6 = passengerBookingSessionBean.createBooking(500, schedule2.getSeatAvailability(), schedule2.getFlight().getFlightNo(), schedule2.getStartDate(), "Booked", "C01", "Economy Saver", "Mr", "Hou", "Liang", customer2.getPassportNumber(), customer2.getNationality(), customer2.getId(), false, true, 15.0, "Western");
-        Booking booking7 = passengerBookingSessionBean.createBooking(500, schedule3.getSeatAvailability(), schedule3.getFlight().getFlightNo(), schedule3.getStartDate(), "Booked", "E01", "Economy Saver", "Mr", "Hou", "Liang", customer2.getPassportNumber(), customer2.getNationality(), customer2.getId(), false, true, 15.0, "Western");
-        Booking booking8 = passengerBookingSessionBean.createBooking(400, schedule4.getSeatAvailability(), schedule4.getFlight().getFlightNo(), schedule4.getStartDate(), "Booked", "E01", "Economy Saver", "Mr", "Hou", "Liang", customer2.getPassportNumber(), customer2.getNationality(), customer2.getId(), false, true, 15.0, "Western");
+        Booking booking5 = passengerBookingSessionBean.createBooking(600, schedule1.getSeatAvailability(), schedule1.getFlight().getFlightNo(), schedule1.getStartDate(), "Booked", "C01", "Economy Premium", "Mr", "Hou", "Liang", customer2.getPassportNumber(), customer2.getNationality(), customer2.getId(), false, true, 15.0, "Western");
+        Booking booking6 = passengerBookingSessionBean.createBooking(500, schedule2.getSeatAvailability(), schedule2.getFlight().getFlightNo(), schedule2.getStartDate(), "Booked", "A01", "Economy Saver", "Mr", "Hou", "Liang", customer2.getPassportNumber(), customer2.getNationality(), customer2.getId(), false, true, 15.0, "Western");
+        Booking booking7 = passengerBookingSessionBean.createBooking(500, schedule3.getSeatAvailability(), schedule3.getFlight().getFlightNo(), schedule3.getStartDate(), "Booked", "A01", "Economy Saver", "Mr", "Hou", "Liang", customer2.getPassportNumber(), customer2.getNationality(), customer2.getId(), false, true, 15.0, "Western");
+        Booking booking8 = passengerBookingSessionBean.createBooking(400, schedule4.getSeatAvailability(), schedule4.getFlight().getFlightNo(), schedule4.getStartDate(), "Booked", "A01", "Economy Saver", "Mr", "Hou", "Liang", customer2.getPassportNumber(), customer2.getNationality(), customer2.getId(), false, true, 15.0, "Western");
         
-        Booking booking9 = passengerBookingSessionBean.createBooking(800, schedule5.getSeatAvailability(), schedule5.getFlight().getFlightNo(), schedule5.getStartDate(), "Booked", "E01", "Business", "Mr", "Hou", "Liang", customer2.getPassportNumber(), customer2.getNationality(), customer2.getId(), false, true, 15.0, "Western");
-        Booking booking10 = passengerBookingSessionBean.createBooking(800, schedule6.getSeatAvailability(), schedule6.getFlight().getFlightNo(), schedule6.getStartDate(), "Booked", "E01", "Business", "Mr", "Hou", "Liang", customer2.getPassportNumber(), customer2.getNationality(), customer2.getId(), false, true, 15.0, "Western");
+        Booking booking9 = passengerBookingSessionBean.createBooking(800, schedule5.getSeatAvailability(), schedule5.getFlight().getFlightNo(), schedule5.getStartDate(), "Booked", "D01", "Business", "Mr", "Hou", "Liang", customer2.getPassportNumber(), customer2.getNationality(), customer2.getId(), false, true, 15.0, "Western");
+        Booking booking10 = passengerBookingSessionBean.createBooking(800, schedule6.getSeatAvailability(), schedule6.getFlight().getFlightNo(), schedule6.getStartDate(), "Booked", "D01", "Business", "Mr", "Hou", "Liang", customer2.getPassportNumber(), customer2.getNationality(), customer2.getId(), false, true, 15.0, "Western");
         
         PNR pnr5 = passengerBookingSessionBean.createPNR(1, customer2.getEmail(), customer2.getHomeNumber(), "Booked", 600.0, new Date(), new Date(), "MARS");
         PNR pnr6 = passengerBookingSessionBean.createPNR(1, customer2.getEmail(), customer2.getHomeNumber(), "Booked", 500.0, new Date(), new Date(), "MARS");
@@ -948,6 +958,6 @@ public class DataLoadSessionBean implements DataLoadSessionBeanLocal {
         em.merge(pilot1);
     }
     
- 
-
+    
+    
 }
