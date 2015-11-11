@@ -269,11 +269,13 @@
                             <li>
                                 <a href="#{request.contextPath}/FOS/SearchTeam.xhtml"><i class="fa fa-eye"></i> View Existing Teams</a>
                             </li>
-                            <li>
-                                <a href="#{request.contextPath}/FOS/ViewLeaveCrew.xhtml"><i class="fa fa-eye"></i> View Flight Crews on Leave</a>
-                            </li>
                         </ul>
                     </li>
+                    <h:form>
+                        <li>
+                            <a><h:commandLink class="commandLink" actionListener="#{reservedCrewScheduleManagedBean.updateLeaveCC}" action="/FOS/ViewViewLeaveCrew.xhtml"><i class="fa fa-eye"></i> View Flight Crews on Leave</a>
+                        </li>
+                    </h:form>
 
                     <li>
                         <a href="#"><i class="fa fa-gear"></i> Reserved Staff Management<span class="fa arrow"></span></a>
