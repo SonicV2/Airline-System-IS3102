@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Administration.ManagedBean;
+package Admin.ManagedBean;
 
 import APS.Session.ScheduleSessionBeanLocal;
 import Administration.Entity.BookAccount;
@@ -12,6 +12,7 @@ import Administration.Entity.AccountingBook;
 import Administration.Entity.BookEntry;
 import Administration.Entity.Posting;
 import Administration.Session.AccountingSessionBeanLocal;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -83,7 +84,6 @@ public class BookkeepingManagedBean {
 
         accountingSessionBean.createBook(year, cashAmt, retainedAmt);
         setAcBooks(accountingSessionBean.getAcBooks());
-        setYears(accountingSessionBean.getValidYears());
         message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Book of Accounting for " + year + " with standard accounts have been successfully created!", "");
         FacesContext.getCurrentInstance().addMessage(null, message);
         clear();
@@ -434,7 +434,7 @@ public class BookkeepingManagedBean {
             FacesContext.getCurrentInstance().addMessage(null, message);
             return "PrintBookReport";
         }
-
+        DecimalFormat df = new DecimalFormat("$#,##0.00");
         Comparator<Posting> comparator = new Comparator<Posting>() {
             @Override
             public int compare(Posting o1, Posting o2) {
@@ -467,7 +467,7 @@ public class BookkeepingManagedBean {
             for (int j = 0; j < postings.get(i).getEntries().size(); j++) {
                 result[counter][0] = sdf.format(postings.get(i).getPostingDate());
                 result[counter][1] = postings.get(i).getEntries().get(j).getAccount().getAccountName();
-                result[counter][2] = String.valueOf(Math.abs(postings.get(i).getEntries().get(j).getAmount()));
+                result[counter][2] = df.format(Math.abs(postings.get(i).getEntries().get(j).getAmount()));
                 if (postings.get(i).getEntries().get(j).isDebit()) {
                     result[counter][3] = "Debit";
                 } else {

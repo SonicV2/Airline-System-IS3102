@@ -9,6 +9,7 @@ import APS.Entity.Schedule;
 import APS.Session.FlightScheduleSessionBeanLocal;
 import APS.Session.FlightSessionBeanLocal;
 import APS.Session.ScheduleSessionBeanLocal;
+import Administration.Session.AccountingSessionBeanLocal;
 
 import CI.Entity.CabinCrew;
 import CI.Entity.Pilot;
@@ -95,9 +96,14 @@ public class DataLoadSessionBean implements DataLoadSessionBeanLocal {
     @EJB
     private AnalyticsSessionBeanLocal am;
 
+    @EJB
+    private AccountingSessionBeanLocal acs;
+    
     @Override
     public void init() {
         System.out.println("*****Loading data");
+        addAccountingBook();
+        System.out.println("*****Accounting Book Added");
         addDiscountTypes();
         System.out.println("*****Discount Types Added");
         addFlights();
@@ -127,7 +133,11 @@ public class DataLoadSessionBean implements DataLoadSessionBeanLocal {
         
 
     }
-
+    
+    public void addAccountingBook(){
+        acs.createBook(2015, 90000, 90000);
+    }
+    
     public void addManagers() {
         Date date1 = new Date(), date2 = new Date(), date3 = new Date(), date4 = new Date(), date5 = new Date();
 
@@ -329,7 +339,7 @@ public class DataLoadSessionBean implements DataLoadSessionBeanLocal {
             date4 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse("2015-11-06 13:00:00");
             date5 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse("2015-11-06 17:00:00");
             date6 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse("2015-11-06 08:00:00");
-            date7 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse("2014-11-01 16:00:00");
+            date7 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse("2013-09-01 16:00:00");
             date8 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse("2015-11-15 16:00:00");
 
         } catch (ParseException ex) {

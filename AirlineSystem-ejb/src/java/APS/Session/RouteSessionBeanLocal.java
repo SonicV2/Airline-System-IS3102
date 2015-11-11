@@ -17,8 +17,8 @@ import javax.ejb.Local;
 @Local
 public interface RouteSessionBeanLocal {
     
-    public String addRoute(String origin, String destination);
-    public String deleteRoute(Long id);
+    public void addRoute(String origin, String destination);
+    public void deleteRoute(Long id);
     public Route getRoute(Long id);
     public List<Route> retrieveRoutes();
     public Location findLocation(String location);

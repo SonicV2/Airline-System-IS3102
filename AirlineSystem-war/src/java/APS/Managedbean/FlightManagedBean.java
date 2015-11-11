@@ -11,6 +11,7 @@ import APS.Session.FleetSessionBeanLocal;
 import APS.Session.FlightScheduleSessionBeanLocal;
 import APS.Session.FlightSessionBeanLocal;
 import APS.Session.ScheduleSessionBeanLocal;
+import Inventory.Session.BookingSessionBeanLocal;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -45,6 +46,8 @@ public class FlightManagedBean {
 
     @EJB
     private FlightSessionBeanLocal flightSessionBean;
+    @EJB
+    private BookingSessionBeanLocal bookingSessionBean;
     @EJB
     private FleetSessionBeanLocal fleetSessionBean;
     @EJB
@@ -109,17 +112,31 @@ public class FlightManagedBean {
             FacesContext.getCurrentInstance().addMessage(null, message);
             return;
         }
+        
+        Flight tmpflight = flightSessionBean.getFlight(flightNo);
+        if (!past) {
+            if (routeId == null) {
+                message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please enter Route ID!", "");
+                FacesContext.getCurrentInstance().addMessage(null, message);
+            }
 
-        if (routeId == null) {
-            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please enter Route ID!", "");
-            FacesContext.getCurrentInstance().addMessage(null, message);
-            return;
-        }
+            if (flightSessionBean.getRoute(routeId) == null) {
+                message = new FacesMessage(FacesMessage.SEVERITY_INFO, "No such route!", "");
+                FacesContext.getCurrentInstance().addMessage(null, message);
+            }
 
-        if (tempNo.isEmpty()) {
-            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please enter valid Flight Number!", "");
-            FacesContext.getCurrentInstance().addMessage(null, message);
-            return;
+            if (tempNo.isEmpty()) {
+                message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please enter valid Flight Number!", "");
+                FacesContext.getCurrentInstance().addMessage(null, message);
+            }
+            
+            if (tmpflight != null) {
+                if (tmpflight.getArchiveData() != null) {
+                    message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Flight number is already in use!", "");
+                    FacesContext.getCurrentInstance().addMessage(null, message);
+                    return;
+                }
+            }
         }
 
         flightNo = "MA" + tempNo; //Create flightNo from the valid no. user imputs
@@ -127,40 +144,22 @@ public class FlightManagedBean {
         if (selectedFlightDays.length == 0) {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please select Flight Days!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
-            return;
         }
 
         if (entryDate == null) {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please enter the starting date of flight!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
-            return;
         }
 
         if (entryTime == null) {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please enter the time of flight!!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
-            return;
         }
 
         if (basicFare == null) {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please enter Basic Fare!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
             return;
-        }
-
-        if (flightSessionBean.getRoute(routeId) == null) {
-            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "No such route!", "");
-            FacesContext.getCurrentInstance().addMessage(null, message);
-            return;
-        }
-
-        Flight tmpflight = flightSessionBean.getFlight(flightNo);
-        if (tmpflight != null) {
-            if (tmpflight.getArchiveData() != null) {
-                message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Flight number is already in use!", "");
-                FacesContext.getCurrentInstance().addMessage(null, message);
-                return;
-            }
         }
 
         //Reading in the flight days
@@ -248,11 +247,10 @@ public class FlightManagedBean {
         flightScheduleSessionBean.scheduleFlights(flightNo, fortnight); //Create schedule and link flight to best aircraftType
         flightScheduleSessionBean.rotateAircrafts(); //Rotate and assign aircraft to schedule
         flightDays = "";
-
+        setFlights(flightSessionBean.retrieveActiveFlights());
         message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Flight Added Successfully!", "");
 
-        FacesContext.getCurrentInstance()
-                .addMessage(null, message);
+        FacesContext.getCurrentInstance().addMessage(null, message);
 
         Logger logger = Logger.getLogger(FleetManagedBean.class.getName());
 
@@ -360,7 +358,7 @@ public class FlightManagedBean {
     }
 
     public void testRotation(ActionEvent event) {
-        flightScheduleSessionBean.rotateAircrafts();
+        bookingSessionBean.bookSeats("MA999");
     }
 
     //Archive the flight instead of actually deleting it from database
@@ -388,6 +386,8 @@ public class FlightManagedBean {
         if (deletionIndex == 0) {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Flight and relevant schedules have been completely removed!", "");
             flightSessionBean.deleteFlight(selectedFlight.getFlightNo(), false);
+        } else if (deletionIndex == selectedFlight.getSchedule().size()) {
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "All schedules of the current flight have bookings! Flight cannot be archived!", "");
         } else {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Flight has been archieved and schedules starting from " + currSc.getStartDate() + " has been deleted!", "");
             flightSessionBean.deleteFlight(selectedFlight.getFlightNo(), true);
@@ -462,6 +462,7 @@ public class FlightManagedBean {
         }
         demandForecastSessionBean.generateDemandForecast(routeId, forecastYear, period, isUpdate);
 
+        setForecasts(demandForecastSessionBean.getForecasts());
         message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Demand forecast for " + forecastYear + " is generated!", "");
         FacesContext.getCurrentInstance().addMessage(null, message);
 
@@ -544,9 +545,7 @@ public class FlightManagedBean {
 
     /*clear input after submit*/
     public void clear() {
-        setFortnight(false);
         setRouteId(null);
-        setTempNo("");
         setFlightNo("");
         setSelectedFlightDays(null);
         setEntryDate(null);

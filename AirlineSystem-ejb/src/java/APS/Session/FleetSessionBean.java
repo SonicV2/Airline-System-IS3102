@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
  * @author Yunna
  */
 @Stateless
-public class FleetSessionBean implements FleetSessionBeanLocal, FleetSessionBeanRemote {
+public class FleetSessionBean implements FleetSessionBeanLocal {
 
     @PersistenceContext(unitName = "AirlineSystem-ejbPU")
     private EntityManager em;
@@ -29,7 +29,7 @@ public class FleetSessionBean implements FleetSessionBeanLocal, FleetSessionBean
     private AircraftType aircraftType;
 
     @Override
-    public String acquireAircraft(String tailNo, Date datePurchased, Date lastMaintained, String aircraftTypeId, String hub, String status) {
+    public void acquireAircraft(String tailNo, Date datePurchased, Date lastMaintained, String aircraftTypeId, String hub, String status) {
         aircraft = new Aircraft();
         aircraftType = new AircraftType();
         aircraftType = getAircraftType(aircraftTypeId);
@@ -37,11 +37,10 @@ public class FleetSessionBean implements FleetSessionBeanLocal, FleetSessionBean
         aircraft.createAircraft(tailNo, datePurchased, lastMaintained, hub, status);
         aircraftType.getAircrafts().add(aircraft);
         em.persist(aircraft);
-        return "Aircraft Acquired";
     }
 
     @Override
-    public String retireAircraft(String retireNo, String takeoverNo) {
+    public void retireAircraft(String retireNo, String takeoverNo) {
 
         Aircraft retire = getAircraft(retireNo);
         Aircraft takeover = getAircraft(takeoverNo);
@@ -67,7 +66,6 @@ public class FleetSessionBean implements FleetSessionBeanLocal, FleetSessionBean
         retire.getAircraftType().setAircrafts(temp1);
         retire.setAircraftType(null);
         em.remove(retire);
-        return "Aircraft Retired";
     }
     
     // get aircraftType object when searching with aircraftTypeId
