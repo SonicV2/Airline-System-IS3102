@@ -47,7 +47,7 @@ and open the template in the editor.
             </div>
             <h:form id="employeeForm">
                 <p:growl id="msgs" showDetail="true"/>
-                <p:dataTable var="employee" value="#{adminManagedBean.allActiveEmployees}" editable="true"  sortMode="multiple" widgetVar="employeesTable" >
+                <p:dataTable var="employee" value="#{adminManagedBean.allActiveEmployees}" editable="true"  sortMode="multiple" widgetVar="employeesTable" paginator="true" rows="10">
 
                     <p:ajax event="rowEdit" listener="#{adminManagedBean.onRowEdit}" update=":employeeForm:msgs" />
                     <p:ajax event="rowEditCancel" listener="#{adminManagedBean.onRowCancel}" update=":employeeForm:msgs" />

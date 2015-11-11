@@ -277,9 +277,9 @@ public class CRMAnalyticsManagedBean implements Serializable {
             String email = csList.get(i).getEmail();
             String name = csList.get(i).getName();
             sendPromotionEmail(email,name, codeList.get(i));
-            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Discount Coded Sent", "");
-            FacesContext.getCurrentInstance().addMessage(null, msg);
         }
+        FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Discount Coded Sent", "");
+        FacesContext.getCurrentInstance().addMessage(null, msg);
     }
     
     public void sendDiscounttoCustomersLost(){
@@ -294,10 +294,10 @@ public class CRMAnalyticsManagedBean implements Serializable {
         for(int i=0; i<size; i++){
             String email = customerList.get(i).getEmail();
             String name = customerList.get(i).getFirstName() + " "+ customerList.get(i).getLastName();
-            sendPromotionEmail(email,name, codeList.get(i));
-            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Discount Codes Sent", "");
-            FacesContext.getCurrentInstance().addMessage(null, msg);
+            sendPromotionEmail(email,name, codeList.get(i));     
         }
+        FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Discount Codes Sent", "");
+        FacesContext.getCurrentInstance().addMessage(null, msg);
     }
     
     public void sendtoCustomerList1(){
@@ -305,10 +305,10 @@ public class CRMAnalyticsManagedBean implements Serializable {
         for(int i=0; i<size; i++){
             String email = csList.get(i).getEmail();
             String name = csList.get(i).getName();
-            sendEmail(email,name);
-            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Marketing Email Sent", "");
-            FacesContext.getCurrentInstance().addMessage(null, msg);
+            sendEmail(email,name);      
         }
+        FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Marketing Email Sent", "");
+        FacesContext.getCurrentInstance().addMessage(null, msg);
     }
     
     public void sendtoCustomerListLost(){
@@ -316,10 +316,10 @@ public class CRMAnalyticsManagedBean implements Serializable {
         for(int i=0; i<size; i++){
             String email = customerList.get(i).getEmail();
             String name = customerList.get(i).getFirstName() + " "+ customerList.get(i).getLastName();
-            sendEmail(email,name);
-            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Marketing Email Sent", "");
-            FacesContext.getCurrentInstance().addMessage(null, msg);
+            sendEmail(email,name);        
         }
+        FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Marketing Email Sent", "");
+        FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
     public String getEmailBody() {

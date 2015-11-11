@@ -25,8 +25,11 @@
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
-                    <h2 class="page-header">Fallout Rates For XXX </h2>
-
+                    <h2 class="page-header">Fallout Rates For <h:outputText value ="#{turnOutManagedBean.flight.flightNo}"/> </h2>
+                    <br/>
+                    <h2 class="page-header">Route from <h:outputText value ="#{turnOutManagedBean.route.originCity}"/>  to 
+                        <h:outputText value ="#{turnOutManagedBean.route.destinationCity}"/>
+                    </h2>
                 <p:dataTable var="fallOut" value="#{turnOutManagedBean.fList}">
                     <p:column headerText="ServiceType">
                         <h:outputText value="#{fallOut.serviceClass}" />
