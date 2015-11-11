@@ -14,12 +14,13 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import Inventory.Entity.BookingClass;
+
 
 /**
  *
  * @author YiQuan
  */
+
 public class ClassSessionBeanTest {
     
     private ClassSessionBeanRemote cm = lookup();
@@ -41,7 +42,7 @@ public class ClassSessionBeanTest {
     @Test
     public void testAddClassCode() throws Exception {
         System.out.println("addClassCode");
-        String classcode = "Z11";
+        String classcode = "Z12";
         int pricePercent = 50;
         int advancedSales = 50;
         int percentSold = 50;
@@ -56,6 +57,7 @@ public class ClassSessionBeanTest {
         String result = cm.addClassCode(classcode, pricePercent, advancedSales, percentSold, serviceClass, rebook, cancel, baggage, millageAccru, season, false);
         System.out.println("Expected Result:"+ expResult);
         System.out.println("Result:"+result);
+        cm.deleteClassCode("Z12");
         assertEquals(expResult, result);
 
     }
@@ -73,8 +75,20 @@ public class ClassSessionBeanTest {
      */
     @Test
     public void testDeleteClassCode() throws Exception {
+        System.out.println("addClassCode");
+        String classcode = "Z13";
+        int pricePercent = 50;
+        int advancedSales = 50;
+        int percentSold = 50;
+        String serviceClass = "Business";
+        boolean rebook = false;
+        boolean cancel = false;
+        int baggage = 1;
+        int millageAccru = 50;
+        String season = "High";
         String expResult = "Fare Class Deleted";
-        String result = cm.deleteClassCode("Z11");
+        cm.addClassCode(classcode, pricePercent, advancedSales, percentSold, serviceClass, rebook, cancel, baggage, millageAccru, season, false);
+        String result = cm.deleteClassCode("Z13");
         System.out.println("Expected Result:"+ expResult);
         System.out.println("Result:"+result);
         assertEquals(expResult, result);

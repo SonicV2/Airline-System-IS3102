@@ -46,13 +46,14 @@ public class FlightSessionBeanTest {
     @Test
     public void testAddFlight() throws Exception {
         System.out.println("addFlight");
-        String flightNo = "MA999";
+        String flightNo = "MA998";
         String flightDays = "1000000";
         Double basicFare = 500.0;
         Date startDateTime = new Date();
         Long routeId = Long.valueOf("852");
         boolean pastFlight = false;
         String result = fm.addFlight(flightNo, flightDays, basicFare, startDateTime, routeId, pastFlight);
+        fm.deleteFlight("MA998", false);
         assertEquals("Flight Added",result);
     }
 
@@ -63,7 +64,12 @@ public class FlightSessionBeanTest {
     public void testDeleteFlight() throws Exception {
         System.out.println("deleteFlight");
         String flightNo = "MA999";
-        String result = fm.deleteFlight(flightNo, false);
+        String flightDays = "1000000";
+        Double basicFare = 500.0;
+        Date startDateTime = new Date();
+        Long routeId = Long.valueOf("852");
+        fm.addFlight(flightNo, flightDays, basicFare, startDateTime, routeId, false);
+        String result = fm.deleteFlight("MA999", false);
       
     }
 

@@ -392,7 +392,7 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
 
         boolean check = true;
 
-        String result = validateTeam();
+        String result = validateTeam(pairing);
         if (result.equals("Bad")) {
             Query qq = em.createQuery("SELECT t FROM Team t");
             List<Team> teams = qq.getResultList();
@@ -418,6 +418,15 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
                     Flight flight;
                     List<Schedule> schedules;
                     List<Schedule> teamSchedule = new ArrayList<Schedule>();
+                    List<String> flightNumbers = pairing.getFlightNumbers();
+                    
+                    HashMap<String, String> mapping = new HashMap<String, String>();
+
+                    for (int i = 0; i < flightNumbers.size(); i++) {
+                        String flydate = temp.get(i).substring(10, temp.get(i).length() - 1);
+
+                        mapping.put(flightNumbers.get(i), flydate);
+                    }
 
                     //to take out the duplicate dates
                     for (String s : temp) {
@@ -432,8 +441,11 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
                         flightDates.add(itr.next().toString());
                     }
 
+                    for (String s : flightDates) {
+                        System.out.println("FLIGHT DATE: " + s);
+                    }
+
                     List<String> flightCities = pairing.getFlightCities();
-                    List<String> flightNumbers = pairing.getFlightNumbers();
 
                     for (String s : flightNumbers) {
                         flight = new Flight();
@@ -442,11 +454,11 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
                         schedules = new ArrayList<Schedule>();
                         schedules = flight.getSchedule();
 
-                        for (String ss : flightDates) {
+//                        for (String ss : flightDates) {
 
                             for (Schedule sh : schedules) {
                                 String formattedDate = new SimpleDateFormat("dd/MM/yyyy").format(sh.getStartDate());
-                                if (formattedDate.equals(ss)) {
+                                if (formattedDate.equals(mapping.get(s))) {
 
                                     teamSchedule = t.getSchedule();
                                     teamSchedule.add(sh);
@@ -457,13 +469,14 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
 
                                     em.merge(sh);
 
-                                    //em.merge(t);
+                                    em.merge(t);
+
                                     em.flush();
 
                                 }
                             }
                         }
-                    }
+                    //}
 //---------------------------------------------------------------------------------------------------                   
                     pairing.setPaired(true);
                     pairing.setTeam(t);
@@ -490,6 +503,16 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
         List<String> temp = pairing.getFlightTimes();
         List<String> differentDates = new ArrayList<String>();
 
+        List<String> flightNumbers = pairing.getFlightNumbers();
+
+        HashMap<String, String> mapping = new HashMap<String, String>();
+
+        for (int i = 0; i < flightNumbers.size(); i++) {
+            String flydate = temp.get(i).substring(10, temp.get(i).length() - 1);
+
+            mapping.put(flightNumbers.get(i), flydate);
+        }
+
         //to take out the duplicate dates
         for (String s : temp) {
             differentDates.add(s.substring(10, s.length() - 1));
@@ -504,9 +527,8 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
         }
 
         List<String> flightCities = pairing.getFlightCities();
-        List<String> flightNumbers = pairing.getFlightNumbers();
-//        List<String> flightTimes = pairing.getFlightTimes();
 
+//        List<String> flightTimes = pairing.getFlightTimes();
         team = new Team();
         Flight flight;
         List<Schedule> schedules;
@@ -646,35 +668,28 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
 
             schedules = new ArrayList<Schedule>();
             schedules = flight.getSchedule();
-            System.out.println("------------------>outside" + s);
-            for (String ss : flightDates) {
-                System.out.println("------------------>Flight date" + ss);
 
-            }
+//            for (String ss : flightDates) {
+            for (Schedule sh : schedules) {
+                String formattedDate = new SimpleDateFormat("dd/MM/yyyy").format(sh.getStartDate());
+                if (formattedDate.equals(mapping.get(s))) {
 
-            for (String ss : flightDates) {
+                    teamSchedule = team.getSchedule();
+                    teamSchedule.add(sh);
+                    sh.setAssigned(true);
 
-                for (Schedule sh : schedules) {
-                    String formattedDate = new SimpleDateFormat("dd/MM/yyyy").format(sh.getStartDate());
-                    if (formattedDate.equals(ss)) {
+                    team.setSchedule(teamSchedule);
+                    sh.setTeam(team);
 
-                        System.out.println("------------------>Indside loop" + ss + " flight no " + s);
+                    em.merge(sh);
 
-                        teamSchedule = team.getSchedule();
-                        teamSchedule.add(sh);
-                        sh.setAssigned(true);
+                    em.merge(team);
 
-                        team.setSchedule(teamSchedule);
-                        sh.setTeam(team);
+                    em.flush();
 
-                        em.merge(sh);
-
-                        // em.merge(team);
-                        em.flush();
-
-                    }
                 }
             }
+            // }
             team.setStatus("Formed");
 
             pairing.setPaired(true);
@@ -725,7 +740,7 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
         }
 
         if (langs.isEmpty()) {
-            System.out.println("crew break");
+          
             return results;
         }
 
@@ -748,8 +763,9 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
         return results;
     }
 
-    public String validateTeam() {
+    public String validateTeam(Pairing p) {
 
+        String base = getRequiredTeamLocation(p);
         List<Pilot> pilots = new ArrayList<Pilot>();
         List<Pilot> FOs = new ArrayList<Pilot>();
 
@@ -758,10 +774,10 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
         List<Pilot> ps = q.getResultList();
         for (Pilot pi : ps) {
             if (pi.isAssigned() == false) {
-                if (pi.getPosition().equals("Captain")) {
+                if (pi.getPosition().equals("Captain") && pi.getOrganizationUnit().getLocation().equals(base)) {
                     pilots.add(pi);
                 }
-                if (pi.getPosition().equals("First Officer")) {
+                if (pi.getPosition().equals("First Officer") && pi.getOrganizationUnit().getLocation().equals(base)) {
                     FOs.add(pi);
                 }
             }
@@ -777,18 +793,24 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
         List<CabinCrew> ps1 = q1.getResultList();
         for (CabinCrew cc : ps1) {
             if (cc.isAssigned() == false) {
-                if (cc.getPosition().equals("Lead Flight Stewardess")) {
+                if (cc.getPosition().equals("Lead Flight Stewardess") && cc.getOrganizationUnit().getLocation().equals(base)) {
                     leads.add(cc);
                 }
-                if (cc.getPosition().equals("Flight Stewardess")) {
+                if (cc.getPosition().equals("Flight Stewardess") && cc.getOrganizationUnit().getLocation().equals(base)) {
                     FS.add(cc);
                 }
-                if (cc.getPosition().equals("Flight Steward")) {
+                if (cc.getPosition().equals("Flight Steward") && cc.getOrganizationUnit().getLocation().equals(base)) {
                     steds.add(cc);
                 }
             }
         }
 
+        System.out.println("P: "+ pilots.size());
+         System.out.println("FO: "+ FOs.size());
+          System.out.println("Lead: "+ leads.size());
+           System.out.println("Fs: "+ FS.size());
+            System.out.println("steds: "+ steds.size());
+            
         if (pilots.size() < 1 || FOs.size() < 1 || leads.size() < 1 || FS.size() < 6 || steds.size() < 1) {
             return "Bad";
         } else {

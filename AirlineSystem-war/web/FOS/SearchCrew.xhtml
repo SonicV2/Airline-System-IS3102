@@ -28,7 +28,7 @@
                 <div class="col-lg-12">
                     <h2 class="page-header">Crew Management</h2>
                 </div>
-                <h1>Search Cabin Crew</h1>
+                <div class="col-lg-12">
                 <h:form>
                     <p:dataTable var="crew" value="#{searchCrewManagedBean.ccs}" widgetVar="crewsTable" paginator="true" rows="10">
 
@@ -39,29 +39,26 @@
                             </p:outputPanel>
                         </f:facet>
 
-                        <p:column filterBy="#{crew.employeeDisplayFirstName}" headerText="First Name" filterMatchMode="contains">
-                            <h:outputText value="#{crew.employeeDisplayFirstName}" />
-                        </p:column>
-                        <p:column filterBy="#{crew.employeeDisplayLastName}" headerText="Last Name" filterMatchMode="contains">
-                            <h:outputText value="#{crew.employeeDisplayLastName}" />
+                        <p:column filterBy="#{crew.employeeDisplayFirstName} #{crew.employeeDisplayLastName}" headerText="Name" filterMatchMode="contains" style="width: 150px">
+                            <h:outputText value="#{crew.employeeDisplayFirstName} #{crew.employeeDisplayLastName}" />
                         </p:column>
 
                         <p:column filterBy="#{crew.position}" headerText="Position" filterMatchMode="exact">
                             <f:facet name="filter">
-                                <p:selectOneMenu onchange="PF('crewsTable').filter()" >
+                                <h:selectOneMenu class="form-control" onchange="PF('crewsTable').filter()" >
                                     <f:selectItem itemLabel="Select One" itemValue="#{null}" noSelectionOption="true" />
                                     <f:selectItems value="#{searchCrewManagedBean.ccPosition}" />
-                                </p:selectOneMenu>
+                                </h:selectOneMenu>
                             </f:facet>
                             <h:outputText value="#{crew.position}" />
                         </p:column>
 
-                        <p:column filterBy="#{crew.team.id}" headerText="Team ID" filterMatchMode="contains">
+                        <p:column filterBy="#{crew.team.id}" headerText="Team ID" filterMatchMode="contains" style="width: 120px">
                             <h:outputText value="#{crew.team.id}" />
                         </p:column>
 
-                        <p:column filterBy="#{crew.experience}" headerText="Experience" filterMatchMode="contains">
-                            <h:outputText value="#{crew.experience}" />
+                        <p:column filterBy="#{crew.experience}" headerText="Experience (Years)" filterMatchMode="contains" style="width: 120px">
+                            <h:outputText value="#{crew.experience} Years" />
                         </p:column>
 
                         <p:column filterBy="#{crew.languages.get(0)}" headerText="Main Language" filterMatchMode="in">
@@ -89,6 +86,7 @@
 
                     </p:dataTable>
                 </h:form> 
+                </div>
             </div>
         </div>
 

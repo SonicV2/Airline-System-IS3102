@@ -86,10 +86,12 @@
                                 <br/>
                             </div>
                             <div class="form-group">
-<!--                                <div id="capt">
+                                <ui:fragment rendered="#{loginManagedBean.logInTries >2}">
+                                <div id="capt">
                                      <p:captcha id="captcha" label="Captcha" secure="true" theme="clean"/>
                                     <p:message for="captcha" />
-                                </div>-->
+                                </div>
+                            </ui:fragment>
                                 <h:commandButton class="btn btn-primary btn-lg btn-block" value="Login" action="#{loginManagedBean.check}" />
 
                                 <span class="pull-right"><a href="#{request.contextPath}/ForgetPassword.xhtml">Forgot Password? </a></span>

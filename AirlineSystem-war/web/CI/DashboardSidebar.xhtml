@@ -205,17 +205,12 @@
 
                 <!-- this is for crew scheduling, operations executive -->
                 <ui:fragment rendered="#{loginManagedBean.accessRightIDs.contains(15)}">
-                    <li>
-                        <a href="#"><i class="fa fa-clock-o"></i> Crew Scheduling<span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level">
+                    
                             <li>
                                 <a href="#{request.contextPath}/FOS/CrewPairing.xhtml"><i class="fa fa-clock-o"></i> Crew Scheduling</a>
                             </li>
-                            <li>
-                                <a href="#{request.contextPath}/FOS/CrewPairingA380.xhtml"><i class="fa fa-clock-o"></i> Crew Scheduling For A380</a>
-                            </li>
-                        </ul>
-                    </li>
+                           
+                       
 
                 </ui:fragment>
 
@@ -248,17 +243,13 @@
                     <li>
                         <a href="#{request.contextPath}/FOS/CrewSignIn.xhtml"><i class="fa fa-clock-o"></i> View Team Member</a>
                     </li>
-                    <li>
-                        <a href="#{request.contextPath}/FOS/ViewTimetable.xhtml"><i class="fa fa-plus fa-dollar"></i> View Timetable</a>
-                    </li>
-
 
                     <h:form>
                         <li>        
                             <a><h:commandLink class="commandLink" action="/FOS/ViewSchedule" actionListener="#{crewSignInManagedBean.viewPairing}"><i class="fa fa-plus fa-eye"></i> Crew Sign In</h:commandLink></a>
                         </li>
                         <li>        
-                            <a><h:commandLink class="commandLink" action="/FOS/LeaveSubmit" actionListener="#{crewSignInManagedBean.refresh}"><i class="fa fa-plus fa-pencil"></i> Submit Leave</h:commandLink></a>
+                            <a><h:commandLink class="commandLink" actionListener="#{crewSignInManagedBean.refresh(event)}"> <i class="fa fa-plus fa-pencil"></i> Submit Leave</h:commandLink></a>
                         </li>
                     </h:form>
                 </ui:fragment>
@@ -364,9 +355,6 @@
                 <ui:fragment rendered="#{loginManagedBean.accessRightIDs.contains(26) and !(loginManagedBean.isReserve)}">
 
                     <li>
-                        <a href="#{request.contextPath}/FOS/ViewPilotTimetable.xhtml"><i class="fa fa-eye"></i> View Timetable</a>
-                    </li>
-                    <li>
                         <a href="#{request.contextPath}/FOS/PilotLeaveSubmit.xhtml"><i class="fa fa-pencil"></i> Submit Leave</a>
                     </li>
 
@@ -376,10 +364,6 @@
 
                     <li>
                         <a href="#{request.contextPath}/FOS/ViewSchedule.xhtml"><i class="fa fa-pencil"></i> Crew Sign In</a>
-                    </li>
-
-                    <li>
-                        <a href="#{request.contextPath}/FOS/ViewTimetable.xhtml"><i class="fa fa-eye"></i> View Timetable</a>
                     </li>
                     <li>
                         <a href="#{request.contextPath}/FOS/LeaveSubmit.xhtml"><i class="fa fa-pencil"></i> Submit Leave</a>
@@ -400,9 +384,6 @@
                 <ui:fragment rendered="#{loginManagedBean.accessRightIDs.contains(29) and loginManagedBean.isReserve}">
                     <li>
                         <a href="#{request.contextPath}/FOS/ReservedCrewSignIn.xhtml"><i class="fa fa-search"></i> Sign in</a>
-                    </li>
-                    <li>
-                        <a href="#{request.contextPath}/FOS/ViewReservedTimetable.xhtml"><i class="fa fa-eye"></i> View Timetable</a>
                     </li>
                     <li>
                         <a href="#{request.contextPath}/FOS/ReservedCrewCheckout.xhtml"><i class="fa fa-search"></i> Check out</a>
@@ -441,16 +422,27 @@
                 <!-- this is for Ground Crew Access-->
                 <ui:fragment rendered="#{loginManagedBean.accessRightIDs.contains(32)}">
                     <li>
-                        <a href="#{request.contextPath}/FOS/GroundCrewTimetable.xhtml"><i class="fa fa-search"></i> View Timetable</a>
-                    </li>  
+                        <a href="#{request.contextPath}/FOS/DisplayCrewAvailChecklists.xhtml"><i class="fa fa-search"></i> Fill Regular Maintenance Checklist</a>
+                    </li> 
 
                 </ui:fragment>
 
                 <!-- this is for Maintenance Scheduling Management-->
                 <ui:fragment rendered="#{loginManagedBean.accessRightIDs.contains(33)}">
                     <li>
-                        <a href="#{request.contextPath}/FOS/FlightMaintenanceTimeline.xhtml"><i class="fa fa-search"></i> Maintenance Scheduling</a>
+                        <a href="#"><i class="fa fa-cogs"></i> Maintenance Management<span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                    <li>
+                        <a href="#{request.contextPath}/FOS/FlightMaintenanceTimeline.xhtml"><i class="fa fa-clock-o"></i> Maintenance Scheduling</a>
                     </li>  
+                    <li>
+                        <a href="#{request.contextPath}/FOS/ViewMaintenanceTeams.xhtml"><i class="fa fa-eye"></i> View Maintenance Teams</a>
+                    </li>
+                            <li>
+                        <a href="#{request.contextPath}/FOS/ViewSubmittedMaintainChecklists.xhtml"><i class="fa fa-eye"></i> View Filled Checklist</a>
+                    </li>
+                        </ul>
+                    </li>
 
                 </ui:fragment>
 
