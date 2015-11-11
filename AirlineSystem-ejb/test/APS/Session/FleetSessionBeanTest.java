@@ -119,7 +119,7 @@ public class FleetSessionBeanTest {
     @Test
     public void testGetReserveAircrafts() throws Exception {
         System.out.println("getReserveAircrafts");
-        String status = "Reserve";
+        String status = "Stand-By";
         assertNotNull(fm.getReserveAircrafts(status));   
     }
     
