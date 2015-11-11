@@ -69,6 +69,8 @@ public class BookingSessionBean implements BookingSessionBeanLocal {
             pseuduTurnOut(book);
             em.persist(book);
         }
+        System.out.println("Look Here !!!###");
+        System.out.println(sa.getBusinessTotal());
         int businessBooked = sa.getBusinessTotal() / 2 + random.nextInt(sa.getBusinessTotal() / 2);
         sa.setBusinessBooked(businessBooked);
         for (int i = 0; i < businessBooked; i++) {
@@ -77,6 +79,8 @@ public class BookingSessionBean implements BookingSessionBeanLocal {
             pseuduTurnOut(book);
             em.persist(book);
         }
+        System.out.println("Look Here !!!###");
+        System.out.println(sa.getFirstClassTotal());
         int firstBooked = sa.getFirstClassTotal() / 2 + random.nextInt(sa.getFirstClassTotal() / 2);
         sa.setFirstClassBooked(firstBooked);
         for (int i = 0; i < firstBooked; i++) {

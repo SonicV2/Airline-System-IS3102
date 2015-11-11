@@ -52,11 +52,11 @@ public class PricingSessionBeanTest {
         int business = 15;
         int firstClass = 5;
         int[] result =  new int[5];
-        result[0]= 25;
-        result[1]= 25;
-        result[2]= 25;
-        result[3]= 20;
-        result[4]= 10;
+        result[0]= 22;
+        result[1]= 22;
+        result[2]= 22;
+        result[3]= 15;
+        result[4]= 5;
         assertArrayEquals(result, pm.generateAvailability("MA202", economy, business, firstClass));
         assertNotNull(pm.generateAvailability("MA303", economy, business, firstClass));
     }
