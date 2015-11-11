@@ -49,22 +49,22 @@ public class MessageSessionBean implements MessageSessionBeanLocal {
 
     @Override
     public void sendBroadcastMsg(String sender, List<String> departments, String msgText) {
-       List<OrganizationUnit> ous = new ArrayList<OrganizationUnit>();
-        for(String s: departments){
-            System.out.println("Department: "+s);
+        List<OrganizationUnit> ous = new ArrayList<OrganizationUnit>();
+        for (String s : departments) {
+            System.out.println("Department: " + s);
             String dep = s.substring(0, s.indexOf("("));
             ous.add(getDepartment(dep));
         }
-        
-        for(OrganizationUnit ou : ous){
-            for(Employee e: ou.getEmployee()){
-                sendMsg(sender,e.getEmployeeUserName(),msgText);
+
+        for (OrganizationUnit ou : ous) {
+            for (Employee e : ou.getEmployee()) {
+                sendMsg(sender, e.getEmployeeUserName(), msgText);
             }
         }
     }
-    
-    public OrganizationUnit getDepartment(String department){
-        OrganizationUnit depart= new OrganizationUnit();
+
+    public OrganizationUnit getDepartment(String department) {
+        OrganizationUnit depart = new OrganizationUnit();
         try {
             Query q = em.createQuery("SELECT a FROM OrganizationUnit a WHERE a.departmentName=:departmentName");
             q.setParameter("departmentName", department);
@@ -79,7 +79,7 @@ public class MessageSessionBean implements MessageSessionBeanLocal {
             System.out.println("\nEntity not found error" + "enfe.getMessage()");
         }
         return depart;
-    
+
     }
 
     public Employee getEmployee(String employeeUserName) {
@@ -107,9 +107,11 @@ public class MessageSessionBean implements MessageSessionBeanLocal {
     @Override
     public List<Message> unReadMsg(String receiver) {
         Employee receUser = getEmployee(receiver);
+        List<Message> unReadMsgs = new ArrayList<Message>();
+
         List<Message> msgs = receUser.getMsgs();
         System.out.println("Reciever: " + receiver + " number: " + msgs.size());
-        List<Message> unReadMsgs = new ArrayList<Message>();
+
         for (Message m : msgs) {
             if (m.getReceiver().equals(receiver) && m.isIsRead() == false) {
                 unReadMsgs.add(m);
@@ -134,23 +136,21 @@ public class MessageSessionBean implements MessageSessionBeanLocal {
 
         return readMsgs;
     }
-    
-    
+
     //get a list of messages sent by the user
     @Override
-    public List<Message> sentMsg(String sender){
+    public List<Message> sentMsg(String sender) {
         Employee sendUser = getEmployee(sender);
         List<Message> msgs = sendUser.getMsgs();
         System.out.println("Sender: " + sender + "number: " + msgs.size());
         List<Message> sentMsgs = new ArrayList<Message>();
-        for (Message m: msgs)
-            if (m.getSender().equals(sender)){
+        for (Message m : msgs) {
+            if (m.getSender().equals(sender)) {
                 sentMsgs.add(m);
             }
+        }
         return sentMsgs;
     }
-    
-    
 
     //to set a list of messages as read
     @Override

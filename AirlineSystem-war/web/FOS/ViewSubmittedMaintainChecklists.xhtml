@@ -24,7 +24,7 @@
     </style>
     <h:body>
         <!--            To add the same header on all dashboard pages  
- <ui:include src="/CI/DashboardHeader.xhtml"/>
+--> <ui:include src="/CI/DashboardHeader.xhtml"/><!--
             To add the same sidebar on all dashboard pages -->  
         <ui:include src="/CI/DashboardSidebar.xhtml"/>
         <div id="page-wrapper">
@@ -33,8 +33,6 @@
                 <div class="col-lg-12">
                     <h2 class="page-header">View Submitted Maintenance Checklists</h2>
                 </div>
-
-
 
                 <div class="col-lg-12">
                     <h:form id="form">
@@ -68,16 +66,18 @@
 
                                 <p:dataTable id="checkboxDT" var="item" value="#{maintainChecklistManagedBean.selectedSubmittedChecklist.maintainChecklistItems}"  style="margin-bottom:0">
                                     <f:facet name="header">
-                                        All Submitted Checklists
+                                        All Submitted Checklists 
                                     </f:facet>
                                    
                                     <p:column headerText="Checklist Items" style="width: 30%">
                                         <h:outputText value="#{item.content}" />
                                         <h:selectBooleanCheckbox value="#{item.checked}" onclick="return false;" onkeydown="return false"/>
+                                        
                                     </p:column>
                                    
+                                  
                                 </p:dataTable>
-
+ 
 
                             </p:outputPanel>
                         </p:dialog>

@@ -184,6 +184,20 @@ public class MaintainSessionBean implements MaintainSessionBeanLocal {
         }
 
     }
+    
+    @Override
+    public List<MaintainanceTeam> retrieveTeamId(){
+        List<MaintainanceTeam> results = new ArrayList<MaintainanceTeam>();
+        
+        Query q = em.createQuery("SELECT m FROM MaintainanceTeam m");
+        List<MaintainanceTeam> teams = q.getResultList();
+        for(MaintainanceTeam t : teams){
+            results.add(t);
+        }
+        
+        return results;
+    }
+    
 
     @Override
     public void assignMainCrews() {

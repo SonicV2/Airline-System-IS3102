@@ -31,10 +31,7 @@
                     <h2 class="page-header">Welcome to Team Formation System</h2>
                 </div>
 
-                <div class="col-md-10">
-
-
-
+                <div class="col-md-9">
                     <h:form>
 
                         <p:dataTable id="radioDT" var="sln" value="#{crewScheduleManagedBean.details}" selection="#{crewScheduleManagedBean.selectPairingDetail}" rowKey="#{sln}">
@@ -45,8 +42,8 @@
                             <p:column headerText="Pairing Details">
                                 <h:outputText escape="false" value="#{sln.title}" />
                             </p:column>
-                            <p:column headerText="View Info"  style="width:50px;text-align:center">
-                                <h:commandLink action="#{crewScheduleManagedBean.viewPairingInfo(sln.content)}"><i class="fa fa-eye"></i></h:commandLink>
+                            <p:column headerText="View Info"  style="width:70px;text-align:center">
+                                <h:commandLink action="#{crewScheduleManagedBean.viewPairingInfo(sln.title, sln.content)}"><i class="fa fa-eye"></i></h:commandLink>
                             </p:column>
 
                         </p:dataTable>

@@ -265,7 +265,7 @@ public class ReservedCrewScheduleSessionBean implements ReservedCrewScheduleSess
                             c.setStatus(scheduleId);
                             c.setTeam(team);
                             em.merge(c);
-                            return "successful";
+                            return (c.getEmployeeUserName());
                         }
                     }
 
@@ -276,14 +276,14 @@ public class ReservedCrewScheduleSessionBean implements ReservedCrewScheduleSess
         if (reservedCrews.isEmpty()) {
             return "unsuccessful";
         } else {
-            System.out.println("<<<<<<<<<<<<<");
+            
             List<CabinCrew> temps = new ArrayList<CabinCrew>();
             for (CabinCrew c : reservedCrews) {
                 if (c.getOrganizationUnit().getLocation().equals(crew.getOrganizationUnit().getLocation())) {
                     temps.add(c);
                 }
             }
-            System.out.println("temp: " + temps.size());
+          
 
             if (temps.isEmpty()) {
                 return "unsuccessful";
@@ -305,11 +305,11 @@ public class ReservedCrewScheduleSessionBean implements ReservedCrewScheduleSess
                             chooseSchedule = c.getSchedule().split("-")[1];
                         }
 
-                        System.out.println("HHHHHHHH: " + chooseSchedule);
+                        
 
                         String index = chooseSchedule.substring(formattedDate - 1, formattedDate);
 
-                        System.out.println("HHHHHHHH: " + index);
+                       
 
                         if (index.equals("1")) {
 
@@ -325,7 +325,7 @@ public class ReservedCrewScheduleSessionBean implements ReservedCrewScheduleSess
                             c.setStatus(scheduleId);
                             c.setTeam(team);
                             em.merge(c);
-                            return "successful";
+                            return (c.getEmployeeUserName());
 
                         }
 

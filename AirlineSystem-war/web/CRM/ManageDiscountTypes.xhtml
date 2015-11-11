@@ -135,7 +135,7 @@
 
                         <div class="form-group">
                             <label class="control-label col-md-5">Expiry Date  </label>
-                            <p:calendar id="frmD1" required="true" requiredMessage="Please fill in Expiry Date!" value="#{discountManagedBean.expiryDate}" navigator="true" pattern="yyyy-MMM-dd"  >
+                            <p:calendar id="frmD1" required="true" requiredMessage="Please fill in Expiry Date!" value="#{discountManagedBean.expiryDate}" navigator="true" pattern="yyyy-MMM-dd" mindate="#{discountManagedBean.currentDate}"  >
                             </p:calendar>
                         </div>
 

@@ -114,7 +114,9 @@ public class MessageManagedBean {
     @PostConstruct
     public void unReadMessage() {
         setAllActiveEmployees(employeeSessionBean.retrieveAllActiveEmployees());
+        if (!messageSessionBean.unReadMsg(loginManageBean.employeeUserName).isEmpty()){
         setUnReadMsg(messageSessionBean.unReadMsg(loginManageBean.employeeUserName));
+        }
         messageSessionBean.setMsgRead(loginManageBean.employeeUserName);
         
     }

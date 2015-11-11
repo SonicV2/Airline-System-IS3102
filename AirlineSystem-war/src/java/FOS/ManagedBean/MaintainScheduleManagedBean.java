@@ -24,7 +24,9 @@ import javax.faces.bean.RequestScoped;
 import org.primefaces.extensions.model.timeline.TimelineEvent;
 import org.primefaces.extensions.model.timeline.TimelineModel;
 import java.util.Locale;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import org.primefaces.extensions.model.timeline.TimelineGroup;
 
@@ -36,6 +38,7 @@ import org.primefaces.extensions.model.timeline.TimelineGroup;
 @ViewScoped
 @ManagedBean
 public class MaintainScheduleManagedBean {
+
     @EJB
     private MaintenanceChecklistSessionBeanLocal maintenanceChecklistSessionBean;
 
@@ -55,6 +58,8 @@ public class MaintainScheduleManagedBean {
     private List<GroundCrew> selectedTeamCrews;
     private List<MaintainSchedule> selectedTeamMaintainSchedules;
     private GroundCrew gcLeader;
+
+    private List<MaintainanceTeam> teams;
 
     /**
      * Creates a new instance of MaintainScheduleManagedBean
@@ -86,26 +91,39 @@ public class MaintainScheduleManagedBean {
             Aircraft air = maintainSessionBean.getAircraftByTailNo(tailNo);
             String aircraftType = air.getAircraftType().getId();
             tailNo += "(" + aircraftType + ")";
-            TimelineEvent event = new TimelineEvent("TYPE " + m.getType(), m.getMainStartDate(), m.getMainEndDate(), true, tailNo);
+            TimelineEvent event = new TimelineEvent("TYPE " + m.getType(), m.getMainStartDate(), m.getMainEndDate(), true, tailNo, ("TYPE" + m.getType()).toLowerCase());
             model.add(event);
         }
 
     }
 
-    public void assignTeam(ActionEvent event) {
+    public void assignTeam() {
         maintainSessionBean.assignTeam();
+        FacesMessage message = null;
+        message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successfullly assigned schedules to teams!", "");
+        FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
     public void generateTeam(ActionEvent event) {
         maintainSessionBean.generateTeam();
+        retrieveTeams();
+    }
+
+    public void retrieveTeams() {
+        setTeams(maintainSessionBean.retrieveTeamId()); //retrieve maintainance team entity from db
     }
 
     public void assignCrew(ActionEvent event) {
         maintainSessionBean.assignMainCrews();
+        assignTeam();
+        FacesMessage message = null;
+        message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successfullly assigned maintenance crews to teams!", "");
+        FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
     public void getAllAssignedMaintainTeams(ActionEvent event) {
         setAllAssignedMaintainTeams(maintainSessionBean.getUnassignedMaintainTeams());
+        
     }
 
     /**
@@ -296,6 +314,20 @@ public class MaintainScheduleManagedBean {
      */
     public void setGcLeader(GroundCrew gcLeader) {
         this.gcLeader = gcLeader;
+    }
+
+    /**
+     * @return the teams
+     */
+    public List<MaintainanceTeam> getTeams() {
+        return teams;
+    }
+
+    /**
+     * @param teams the teams to set
+     */
+    public void setTeams(List<MaintainanceTeam> teams) {
+        this.teams = teams;
     }
 
 }

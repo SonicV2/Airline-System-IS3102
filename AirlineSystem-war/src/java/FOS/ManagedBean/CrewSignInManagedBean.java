@@ -635,11 +635,10 @@ public class CrewSignInManagedBean {
             //               schs.add(crewSignInSessionBean.getScheduleBy(submitFlightNumber, targetPairing.getFDate()));
             //           }
             else {
-                //String tDate1 = targetPairing.getFlightTimes().get(i + 1).substring(targetPairing.getFlightTimes().get(i).indexOf("(") + 1, targetPairing.getFlightTimes().get(i).indexOf(")"));
 
                 if (targetPairing.getFlightNumbers().get(i).equals(submitFlightNumber.substring(2))) {
 
-                    if (targetPairing.getFlightCities().get(i + 2).equals(submitCity)) {
+                    if (targetPairing.getFlightCities().size() > (i+2) && targetPairing.getFlightCities().get(i + 2).equals(submitCity)) {
 
                         String tDate = targetPairing.getFlightTimes().get(i + 1).substring(targetPairing.getFlightTimes().get(i).indexOf("(") + 1, targetPairing.getFlightTimes().get(i).indexOf(")"));
 
@@ -682,6 +681,8 @@ public class CrewSignInManagedBean {
         if (cc != null) {
             String msg = "";
             List<Schedule> hiddenSchedules = checkSchedule(selectLeaveSchedule);
+            
+            
 
             String scheduleLists = selectLeaveSchedule;
             if (hiddenSchedules.isEmpty()) {
@@ -737,6 +738,7 @@ public class CrewSignInManagedBean {
     public void refresh(ActionEvent event) {
         viewValidSchedule();
         viewPilotValidSchedule();
+      // return "/FOS/LeaveSubmit";
     }
 
     public long checkTime(String time1, String time2) {

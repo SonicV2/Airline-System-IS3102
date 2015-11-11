@@ -49,13 +49,10 @@
                                 </p:outputPanel>
                             </f:facet>
 
-                            <p:column filterBy="#{pilot.employeeDisplayFirstName}" headerText="First Name" filterMatchMode="contains">
-                                <h:outputText value="#{pilot.employeeDisplayFirstName}" />
+                            <p:column filterBy="#{pilot.employeeDisplayFirstName} #{pilot.employeeDisplayLastName}" headerText="First Name" filterMatchMode="contains">
+                                <h:outputText value="#{pilot.employeeDisplayFirstName} #{pilot.employeeDisplayLastName}" />
                             </p:column>
 
-                            <p:column filterBy="#{pilot.employeeDisplayLastName}" headerText="Last Name" filterMatchMode="contains">
-                                <h:outputText value="#{pilot.employeeDisplayLastName}" />
-                            </p:column>
 
                             <p:column filterBy="#{pilot.position}" headerText="Position" filterMatchMode="exact">
                                 <f:facet name="filter">
@@ -67,12 +64,12 @@
                                 <h:outputText value="#{pilot.position}" />
                             </p:column>
 
-                            <p:column filterBy="#{pilot.team.id}" headerText="Team ID" filterMatchMode="contains">
+                            <p:column filterBy="#{pilot.team.id}" headerText="Team ID" filterMatchMode="contains" style="width: 120px">
                                 <h:outputText value="#{pilot.team.id}" />
                             </p:column>
 
-                            <p:column filterBy="#{pilot.experience}" headerText="Experience" filterMatchMode="contains">
-                                <h:outputText value="#{pilot.experience}" />
+                            <p:column filterBy="#{pilot.experience}" headerText="Experience (Years)" filterMatchMode="contains" style="width: 120px">
+                                <h:outputText value="#{pilot.experience} Years" />
                             </p:column>
 
                             <p:column filterBy="#{pilot.skillsets.get(0)}" headerText="Main skill" filterMatchMode="in">

@@ -29,17 +29,14 @@ public class SeatSessionBean implements SeatSessionBeanLocal {
         List<String> first = schedule.getSelectedSeatsF();
         List<String> business = schedule.getSelectedSeatsB();
         List<String> economy = schedule.getSelectedSeatsE();
-        
-       
+
 //        List<String> temp=new ArrayList<String>();
 //        temp.add("A11");
 //        
 //        schedule.setSelectedSeatsE(temp);
 //        em.merge(schedule);
-        
-        
         if (first.isEmpty()) {
-          
+
         } else {
             for (String s : first) {
                 results.add(s);
@@ -47,61 +44,84 @@ public class SeatSessionBean implements SeatSessionBeanLocal {
         }
 
         if (business.isEmpty()) {
-            
+
         } else {
-            for (String s :business) {
+            for (String s : business) {
                 results.add(s);
             }
         }
 
         if (economy.isEmpty()) {
-            
+
         } else {
             for (String s : economy) {
                 results.add(s);
             }
         }
-        
 
         return results;
     }
-    
+
+    @Override
+    public void occupyAll(Schedule schedule, List<String> allSeats) {
+        List<String> dataSeats = schedule.getSelectedSeatsE();
+
+        for (String s : allSeats) {
+            if (dataSeats.contains(s)) {
+
+            } else {
+                dataSeats.add(s);
+                schedule.setSelectedSeatsE(dataSeats);
+                em.merge(schedule);
+
+            }
+        }
+    }
     
     @Override
-    public void inputChosenE(Schedule schedule,String seat){
-        List<String> seats=schedule.getSelectedSeatsE();
-        
-        if(seats.contains(seat)){
+    public void unOccupyAll(Schedule schedule){
+       List<String> dataSeats = schedule.getSelectedSeatsE();
+       
+      dataSeats.clear();
+       schedule.setSelectedSeatsE(dataSeats);
+       em.merge(schedule);
+    }
+
+    @Override
+    public void inputChosenE(Schedule schedule, String seat) {
+        List<String> seats = schedule.getSelectedSeatsE();
+
+        if (seats.contains(seat)) {
             System.out.println("duplicated seat");
-        }else{
+        } else {
             seats.add(seat);
             schedule.setSelectedSeatsE(seats);
             em.merge(schedule);
-            
-            
-            
+
         }
     }
+
     @Override
-    public void inputChosenB(Schedule schedule,String seat){
-        List<String> seats=schedule.getSelectedSeatsB();
-        
-        if(seats.contains(seat)){
+    public void inputChosenB(Schedule schedule, String seat) {
+        List<String> seats = schedule.getSelectedSeatsB();
+
+        if (seats.contains(seat)) {
             System.out.println("duplicated seat");
-        }else{
+        } else {
             seats.add(seat);
-            
+
             schedule.setSelectedSeatsB(seats);
             em.merge(schedule);
         }
     }
+
     @Override
-    public void inputChosenF(Schedule schedule,String seat){
-        List<String> seats=schedule.getSelectedSeatsF();
-        
-        if(seats.contains(seat)){
+    public void inputChosenF(Schedule schedule, String seat) {
+        List<String> seats = schedule.getSelectedSeatsF();
+
+        if (seats.contains(seat)) {
             System.out.println("duplicated seat");
-        }else{
+        } else {
             seats.add(seat);
 
             schedule.setSelectedSeatsF(seats);

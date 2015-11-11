@@ -66,6 +66,7 @@ public class CrewScheduleManagedBean {
       private List<PairingDetail> details = new ArrayList<PairingDetail>();
       
       private String pairingInformation;
+      private String pairingId;
 
     /**
      * Creates a new instance of crewScheduleManagedBean
@@ -222,7 +223,8 @@ public class CrewScheduleManagedBean {
         getDetails().add(pd);
     }
      
-     public String viewPairingInfo(String info){
+     public String viewPairingInfo(String id, String info){
+         setPairingId(id);
          pairingInformation = info;
          return "PairingInformation";
      }
@@ -610,6 +612,20 @@ public class CrewScheduleManagedBean {
      */
     public void setSelectPairingDetail(PairingDetail selectPairingDetail) {
         this.selectPairingDetail = selectPairingDetail;
+    }
+
+    /**
+     * @return the pairingId
+     */
+    public String getPairingId() {
+        return pairingId;
+    }
+
+    /**
+     * @param pairingId the pairingId to set
+     */
+    public void setPairingId(String pairingId) {
+        this.pairingId = pairingId;
     }
 
 }
