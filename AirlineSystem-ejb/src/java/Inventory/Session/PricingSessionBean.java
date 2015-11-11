@@ -38,11 +38,11 @@ public class PricingSessionBean implements PricingSessionBeanLocal, PricingSessi
         if ( calTurnOut(flightNo,"Business").equals("Not Enough Historic Data")
                 || calTurnOut(flightNo,"First Class").equals("Not Enough Historic Data")){
         int[] seats = new int[5];
-        seats[0] = (economy / 3) + 5;
-        seats[1] = (economy / 3) + 5;
-        seats[2] = (economy / 3) + 5;
-        seats[3] = business + 5;
-        seats[4] = firstClass + 5;
+        seats[0] = (economy / 3) + 2;
+        seats[1] = (economy / 3) + 2;
+        seats[2] = (economy / 3) + 2;
+        seats[3] = business;
+        seats[4] = firstClass;
         return seats;
         }
         else{
@@ -50,13 +50,12 @@ public class PricingSessionBean implements PricingSessionBeanLocal, PricingSessi
            double es = Double.valueOf(calTurnOut(flightNo,"Economy Saver"));
            double eb= Double.valueOf(calTurnOut(flightNo,"Economy Basic"));
            double ep = Double.valueOf(calTurnOut(flightNo,"Economy Premium"));
-           double b = Double.valueOf(calTurnOut(flightNo,"Business"));
-           double fc = Double.valueOf(calTurnOut(flightNo,"First Class"));
+
         seats[0] = (economy/3)*(100+ (int)es)/100 ;
         seats[1] = (economy/3)*(100+ (int)eb)/100 ;
         seats[2] = (economy/3)*(100+ (int)ep)/100 ;
-        seats[3] = (business)*(100+ (int)b)/100 ;
-        seats[4] = (firstClass)*(100+ (int)fc)/100 ;
+        seats[3] = business;
+        seats[4] = firstClass;
         return seats; 
         }
     }
