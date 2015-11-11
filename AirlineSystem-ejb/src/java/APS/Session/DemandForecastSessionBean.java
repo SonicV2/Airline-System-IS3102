@@ -106,7 +106,6 @@ public class DemandForecastSessionBean implements DemandForecastSessionBeanLocal
             int totalBooked = 0;
             schedule = schedules.get(0); //Save current Schedule
             counter = findLastScheduleOfMonth(schedules, schedule.getStartDate());
-            System.out.println(counter);
             forecastEntry = new ForecastEntry();
             //Add the demand for all schedules of a month
             for (int j = 0; j <= counter; j++) {
