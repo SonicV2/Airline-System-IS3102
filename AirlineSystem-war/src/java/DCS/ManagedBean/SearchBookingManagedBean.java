@@ -59,6 +59,9 @@ public class SearchBookingManagedBean implements Serializable {
     public SearchBookingManagedBean() {
     }
 
+    public void clear(){
+        checkinSchedule=null;
+    }
     public void getBookingOnline(ActionEvent event) {
         FacesMessage message = null;
         List<Booking> b = passengerNameRecordSessionBean.getBooking(pnrNumber, passportNumber);

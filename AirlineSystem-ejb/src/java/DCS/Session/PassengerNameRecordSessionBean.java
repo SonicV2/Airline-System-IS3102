@@ -186,6 +186,7 @@ public class PassengerNameRecordSessionBean implements PassengerNameRecordSessio
    
     @Override
     public void addMiles(Booking booking){
+        System.out.println("-------------->Booking"+booking.getId());
         
         String custId = booking.getCustomerId() + "";
         if(!custId.equals("0")){
@@ -194,6 +195,7 @@ public class PassengerNameRecordSessionBean implements PassengerNameRecordSessio
             double result = distance*millage / 100.0;
             
             Customer c = retrieveCustomerByID(booking.getCustomerId());
+            System.out.println("-------------->Customer"+c.getEmail());
             
             if(c==null){
                 
