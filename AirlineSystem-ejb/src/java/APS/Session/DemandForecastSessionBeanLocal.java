@@ -27,6 +27,4 @@ public interface DemandForecastSessionBeanLocal {
 
     public boolean isValidYear(Long routeId);
 
-    public void testForecast();
-
 }

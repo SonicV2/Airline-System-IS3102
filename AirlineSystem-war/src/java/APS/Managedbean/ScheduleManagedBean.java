@@ -13,15 +13,11 @@ import APS.Session.FlightSessionBeanLocal;
 import APS.Session.ScheduleSessionBeanLocal;
 import FOS.Entity.Team;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -58,6 +54,7 @@ public class ScheduleManagedBean {
     private List<Flight> flights;
     private Team team;
     private Aircraft aircraft;
+    private boolean fortnight;
 
     private String flightNo;
     private String flightDays;
@@ -68,7 +65,6 @@ public class ScheduleManagedBean {
     private List<Schedule> pastSchedules;
 
     private List<Aircraft> aircraftlist;
-    private List<Schedule> checklistSchedules;
 
     private String flightDaysString;
 
@@ -87,13 +83,6 @@ public class ScheduleManagedBean {
         setAircraftlist(fleetSessionBean.getReserveAircrafts("Stand-By"));
         setFutureSchedules(scheduleSessionBean.filterForFutureSchedules(schedules));
         setPastSchedules(scheduleSessionBean.filterForPastSchedules(schedules));
-        checklistSchedules = new ArrayList();
-        checklistSchedules = scheduleSessionBean.filterForPastSchedules(scheduleSessionBean.getSchedules());
-//        try {
-//            checklistSchedules.add(scheduleSessionBean.getScheduleByDate(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse("2015-11-10 02:00:00")));
-//        } catch (ParseException ex) {
-//            Logger.getLogger(ScheduleManagedBean.class.getName()).log(Level.SEVERE, null, ex);
-//        }
     }
 
     public void addSchedules(ActionEvent event) {
@@ -116,7 +105,11 @@ public class ScheduleManagedBean {
             return;
         }
 
-        scheduleSessionBean.addSchedules(duration, flightNo, true);
+        scheduleSessionBean.addSchedules(duration, flightNo, true, fortnight);
+        setFortnight(false);
+        for(int i = 0; i < 1000; i++){
+            ;
+        }
         setFlights(flightSessionBean.retrieveActiveFlights());
         message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Schedules Added Successfully!", "");
         FacesContext.getCurrentInstance().addMessage(null, message);
@@ -134,7 +127,6 @@ public class ScheduleManagedBean {
 
         schedules.remove(selectedSchedule);
         
-        //NOTE: PUT ALL THESE INTO SESSION BEAN!!!
         //remove the Flight linked to the Schedule
         List<Schedule> temp1 = selectedSchedule.getFlight().getSchedule();
         temp1.remove(selectedSchedule);
@@ -237,6 +229,14 @@ public class ScheduleManagedBean {
 
     public void setNewStartDate(Date newStartDate) {
         this.newStartDate = newStartDate;
+    }
+
+    public boolean isFortnight() {
+        return fortnight;
+    }
+
+    public void setFortnight(boolean fortnight) {
+        this.fortnight = fortnight;
     }
 
     public List<Flight> getFlights() {
@@ -349,14 +349,6 @@ public class ScheduleManagedBean {
 
     public void setPastSchedules(List<Schedule> pastSchedules) {
         this.pastSchedules = pastSchedules;
-    }
-
-    public List<Schedule> getChecklistSchedules() {
-        return checklistSchedules;
-    }
-
-    public void setChecklistSchedules(List<Schedule> checklistSchedules) {
-        this.checklistSchedules = checklistSchedules;
     }
 
 }

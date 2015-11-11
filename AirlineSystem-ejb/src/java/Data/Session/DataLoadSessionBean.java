@@ -339,106 +339,106 @@ public class DataLoadSessionBean implements DataLoadSessionBeanLocal {
 
         //MA777 for Testing
         flightSessionBean.addFlight("MA777", "0000010", 200.0, date8, 852L, false);
-        flightScheduleSessionBean.scheduleFlights("MA777");
+        flightScheduleSessionBean.scheduleFlights("MA777", false);
         flightScheduleSessionBean.rotateAircrafts();
 
         //MA303 Past Flight
         flightSessionBean.addFlight("MA303", "0000100", 400.0, date7, 852L, false);
-        flightScheduleSessionBean.scheduleFlights("MA303");
+        flightScheduleSessionBean.scheduleFlights("MA303", false);
         flightScheduleSessionBean.rotateAircrafts();
 
         //MA202 New Flight SIN-HK
         flightSessionBean.addFlight("MA202", "0011100", 150.0, date2, 864L, false);
-        flightScheduleSessionBean.scheduleFlights("MA202");
+        flightScheduleSessionBean.scheduleFlights("MA202", false);
         flightScheduleSessionBean.rotateAircrafts();
 
         //SIN-ADL FLIGHTS (Tue,Wed,Thu)
         flightSessionBean.addFlight("MA110", "0011100", 500.0, date1, 851L, false);
-        flightScheduleSessionBean.scheduleFlights("MA110");
+        flightScheduleSessionBean.scheduleFlights("MA110", false);
         flightScheduleSessionBean.rotateAircrafts();
         flightSessionBean.addFlight("MA111", "0011100", 700.0, date2, 851L, false);
-        flightScheduleSessionBean.scheduleFlights("MA111");
+        flightScheduleSessionBean.scheduleFlights("MA111", false);
         flightScheduleSessionBean.rotateAircrafts();
 
         //SIN-NRT (Tue,Wed,Thu)
         flightSessionBean.addFlight("MA112", "0011100", 500.0, date3, 881L, false);
-        flightScheduleSessionBean.scheduleFlights("MA112");
+        flightScheduleSessionBean.scheduleFlights("MA112", false);
         flightScheduleSessionBean.rotateAircrafts();
 
         //NRT-IAH (tue,wed,thur)
         flightSessionBean.addFlight("MA113", "0011100", 600.0, date4, 1404L, false);
-        flightScheduleSessionBean.scheduleFlights("MA113");
+        flightScheduleSessionBean.scheduleFlights("MA113", false);
         flightScheduleSessionBean.rotateAircrafts();
 
         //IAH-NRT (mon,thur,fri)
         flightSessionBean.addFlight("MA114", "0100110", 600.0, date5, 1474L, false);
-        flightScheduleSessionBean.scheduleFlights("MA114");
+        flightScheduleSessionBean.scheduleFlights("MA114", false);
         flightScheduleSessionBean.rotateAircrafts();
 
         //NRT-SING
         flightSessionBean.addFlight("MA115", "1100011", 500.0, date6, 1440L, false);
-        flightScheduleSessionBean.scheduleFlights("MA115");
+        flightScheduleSessionBean.scheduleFlights("MA115", false);
         flightScheduleSessionBean.rotateAircrafts();
 
         //EXTRA FLIGHTS
         flightSessionBean.addFlight("MA116", "1100011", 500.0, date6, 861L, false);
-        flightScheduleSessionBean.scheduleFlights("MA116");
+        flightScheduleSessionBean.scheduleFlights("MA116", false);
         flightScheduleSessionBean.rotateAircrafts();
 
         flightSessionBean.addFlight("MA117", "1100011", 500.0, date6, 888L, false);
-        flightScheduleSessionBean.scheduleFlights("MA117");
+        flightScheduleSessionBean.scheduleFlights("MA117", false);
         flightScheduleSessionBean.rotateAircrafts();
 
         flightSessionBean.addFlight("MA118", "0011100", 500.0, date6, 1420L, false);
-        flightScheduleSessionBean.scheduleFlights("MA118");
+        flightScheduleSessionBean.scheduleFlights("MA118", false);
         flightScheduleSessionBean.rotateAircrafts();
 
         flightSessionBean.addFlight("MA119", "0011100", 500.0, date6, 1447L, false);
-        flightScheduleSessionBean.scheduleFlights("MA119");
+        flightScheduleSessionBean.scheduleFlights("MA119", false);
         flightScheduleSessionBean.rotateAircrafts();
 
         flightSessionBean.addFlight("MA120", "1100011", 500.0, date6, 874L, false);
-        flightScheduleSessionBean.scheduleFlights("MA120");
+        flightScheduleSessionBean.scheduleFlights("MA120", false);
         flightScheduleSessionBean.rotateAircrafts();
 
         flightSessionBean.addFlight("MA121", "1100011", 500.0, date6, 882L, false);
-        flightScheduleSessionBean.scheduleFlights("MA121");
+        flightScheduleSessionBean.scheduleFlights("MA121", false);
         flightScheduleSessionBean.rotateAircrafts();
 
         flightSessionBean.addFlight("MA122", "1100011", 500.0, date6, 868L, false);
-        flightScheduleSessionBean.scheduleFlights("MA122");
+        flightScheduleSessionBean.scheduleFlights("MA122", false);
         flightScheduleSessionBean.rotateAircrafts();
 
         flightSessionBean.addFlight("MA123", "0011100", 500.0, date6, 1418L, false);
-        flightScheduleSessionBean.scheduleFlights("MA123");
+        flightScheduleSessionBean.scheduleFlights("MA123", false);
         flightScheduleSessionBean.rotateAircrafts();
 
         flightSessionBean.addFlight("MA124", "1100011", 500.0, date6, 870L, false);
-        flightScheduleSessionBean.scheduleFlights("MA124");
+        flightScheduleSessionBean.scheduleFlights("MA124", false);
         flightScheduleSessionBean.rotateAircrafts();
 
         flightSessionBean.addFlight("MA125", "1100011", 500.0, date5, 1427L, false);
-        flightScheduleSessionBean.scheduleFlights("MA125");
+        flightScheduleSessionBean.scheduleFlights("MA125", false);
         flightScheduleSessionBean.rotateAircrafts();
 
         flightSessionBean.addFlight("MA126", "1100011", 500.0, date5, 1441L, false);
-        flightScheduleSessionBean.scheduleFlights("MA126");
+        flightScheduleSessionBean.scheduleFlights("MA126", false);
         flightScheduleSessionBean.rotateAircrafts();
 
         flightSessionBean.addFlight("MA127", "0011100", 500.0, date5, 1433L, false);
-        flightScheduleSessionBean.scheduleFlights("MA127");
+        flightScheduleSessionBean.scheduleFlights("MA127", false);
         flightScheduleSessionBean.rotateAircrafts();
 
         flightSessionBean.addFlight("MA128", "0011100", 500.0, date5, 1419L, false);
-        flightScheduleSessionBean.scheduleFlights("MA128");
+        flightScheduleSessionBean.scheduleFlights("MA128", false);
         flightScheduleSessionBean.rotateAircrafts();
 
         flightSessionBean.addFlight("MA129", "0011100", 500.0, date5, 1429L, false);
-        flightScheduleSessionBean.scheduleFlights("MA129");
+        flightScheduleSessionBean.scheduleFlights("MA129", false);
         flightScheduleSessionBean.rotateAircrafts();
 
         flightSessionBean.addFlight("MA130", "0011100", 500.0, date5, 1464L, false);
-        flightScheduleSessionBean.scheduleFlights("MA130");
+        flightScheduleSessionBean.scheduleFlights("MA130", false);
         flightScheduleSessionBean.rotateAircrafts();
     }
 

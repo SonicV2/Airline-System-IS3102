@@ -72,20 +72,20 @@ and open the template in the editor.
                         <br></br>
                         <div class="form-group">                          
                             <p:outputLabel class="col-md-4 control-label" value="Origin (in IATA): " />
-                            <p:inputText value="#{routeManageBean.originIATA}"  />
+                            <p:inputText value="#{routeManagedBean.originIATA}"  />
                             <br/>
 
                         </div>
 
                         <div class="form-group">
                             <p:outputLabel class="col-md-4 control-label" value="Destination (in IATA):" />
-                            <p:inputText value="#{routeManageBean.destinationIATA}" />
+                            <p:inputText value="#{routeManagedBean.destinationIATA}" />
                             <br/>
 
                         </div>
 
                         <div class="text-center">
-                            <h:commandButton class="btn btn-outline btn-success" value="Add Route" actionListener="#{routeManageBean.addRoute}"/>
+                            <h:commandButton class="btn btn-outline btn-success" value="Add Route" actionListener="#{routeManagedBean.addRoute}"/>
                         </div>
                         <br></br>
                         <br></br>

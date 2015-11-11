@@ -237,14 +237,14 @@ public class CRMAnalyticsManagedBean implements Serializable {
         int size = csList.size();
         description= "You are sending a mass marketing email to customers from " + from+ " percentile" 
                 +" to the " + to + " percentile of "+ type + " score. There exist " + size + " customers.";
-        return "SendMarketingEmail";
+        return "SendMarketingEmail?faces-redirect=true";
     }
     
     public String sendMarketingEmailLost(){
         int size = customerList.size();
         description= "You are sending a mass marketing email to customers from " + from+ " percentile" 
                 +" to the " + to + " percentile of "+ type + " score. There exist " + size + " customers.";
-        return "SendMarketingEmailLost";
+        return "SendMarketingEmailLost?faces-redirect=true";
     }
     
     
@@ -253,7 +253,7 @@ public class CRMAnalyticsManagedBean implements Serializable {
         discountList = dm.retrieveValidDiscounts();
         description= "You are sending a mass email with a discount code to customers from " + from+ " percentile" 
                 +" to the " + to + " percentile of "+ type + " score. There exist " + size + " customers. Please select the discount type you want to send.";
-        return "SendDiscountCodesLost";
+        return "SendDiscountCodesLost?faces-redirect=true";
     }
     
     public String sendPromotionalEmail(){
@@ -261,7 +261,7 @@ public class CRMAnalyticsManagedBean implements Serializable {
         discountList = dm.retrieveValidDiscounts();
         description= "You are sending a mass email with a discount code to customers from " + from+ " percentile" 
                 +" to the " + to + " percentile of "+ type + " score. There exist " + size + " customers. Please select the discount type you want to send.";
-        return "SendDiscountCodes";
+        return "SendDiscountCodes?faces-redirect=true";
     }
     
     public void sendDiscounttoCustomers(){
