@@ -118,6 +118,7 @@ public class RoleManagedBean {
         setDeleteRoles(null);
         setNewroles(null);
         setErrorMsg("");
+
     }
 
 //    public void deleteRole(ActionEvent event) {
@@ -226,7 +227,10 @@ public class RoleManagedBean {
     //add new role to existing employee
     public void addNewRole() {
         roleSessionBean.addNewRole(employee, new_Role);
-
+        setRoles(roleSessionBean.retrive());
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Role Added Successfully", "");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+        
     }
 
     public RoleSessionBeanLocal getRoleSessionBean() {

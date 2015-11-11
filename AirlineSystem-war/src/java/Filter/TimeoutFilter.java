@@ -24,7 +24,8 @@ public class TimeoutFilter implements HttpSessionListener{
     @Override
     public void sessionDestroyed(HttpSessionEvent event) {
         HttpSession session = event.getSession();
-        System.out.println("Current Session destroyed :" + session.getId() + ";Logging out user......");
+   System.out.println("Current Session destroyed :" + session.getId() + ";Logging out user......");
+    
     }
     
     
