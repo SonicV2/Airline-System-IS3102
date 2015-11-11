@@ -101,33 +101,33 @@ public class DataLoadSessionBean implements DataLoadSessionBeanLocal {
     
     @Override
     public void init() {
-//        System.out.println("*****Loading data");
-//        addDiscountTypes();
-//        System.out.println("*****Discount Types Added");
-//        addFlights();
-//        System.out.println("*****Flights added");
-//        addCustomer();
-//        System.out.println("*****Customers added");
-//        addTravelAgencies();
-//        System.out.println("*****Travel agencies added");
+        System.out.println("*****Loading data");
+        addDiscountTypes();
+        System.out.println("*****Discount Types Added");
+        addFlights();
+        System.out.println("*****Flights added");
+        addCustomer();
+        System.out.println("*****Customers added");
+        addTravelAgencies();
+        System.out.println("*****Travel agencies added");
         addCustomerBooking();
-//       System.out.println("*****Customer  bookings added");
-//        addTravelAgencyBookings();
-//        System.out.println("*****Travel Agency bookings added");
-//        addCabinCrew();
-//        System.out.println("*****Cabin Crew added");
-//        addPilot();
-//        System.out.println("*****Pilot added");
-//        addGroundCrew();
-//        System.out.println("*****Ground Crew added");
-//        addPostFlightChecklist();
-//        System.out.println("*****Checklists added");
-//        addManagers();
-//        System.out.println("*****Managers added");
-//        addExecutives();
-//        System.out.println("*****Executives added");
-//        bookSeats();
-//        System.out.println("***Data Load complete");
+       System.out.println("*****Customer  bookings added");
+        addTravelAgencyBookings();
+        System.out.println("*****Travel Agency bookings added");
+        addCabinCrew();
+        System.out.println("*****Cabin Crew added");
+        addPilot();
+        System.out.println("*****Pilot added");
+        addGroundCrew();
+        System.out.println("*****Ground Crew added");
+        addPostFlightChecklist();
+        System.out.println("*****Checklists added");
+        addManagers();
+        System.out.println("*****Managers added");
+        addExecutives();
+        System.out.println("*****Executives added");
+        bookSeats();
+        System.out.println("***Data Load complete");
         
 
     }

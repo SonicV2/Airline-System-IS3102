@@ -280,6 +280,8 @@ public class CRMAnalyticsManagedBean implements Serializable {
         }
         FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Discount Coded Sent", "");
         FacesContext.getCurrentInstance().addMessage(null, msg);
+        emailBody= "";
+        emailTitle="";
     }
     
     public void sendDiscounttoCustomersLost(){
@@ -298,6 +300,8 @@ public class CRMAnalyticsManagedBean implements Serializable {
         }
         FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Discount Codes Sent", "");
         FacesContext.getCurrentInstance().addMessage(null, msg);
+        emailBody= "";
+        emailTitle="";
     }
     
     public void sendtoCustomerList1(){
@@ -309,6 +313,8 @@ public class CRMAnalyticsManagedBean implements Serializable {
         }
         FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Marketing Email Sent", "");
         FacesContext.getCurrentInstance().addMessage(null, msg);
+        emailBody= "";
+        emailTitle="";
     }
     
     public void sendtoCustomerListLost(){
@@ -320,6 +326,8 @@ public class CRMAnalyticsManagedBean implements Serializable {
         }
         FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Marketing Email Sent", "");
         FacesContext.getCurrentInstance().addMessage(null, msg);
+        emailBody= "";
+        emailTitle="";
     }
 
     public String getEmailBody() {
