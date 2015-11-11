@@ -131,10 +131,10 @@ public class BaggageManagedBean implements Serializable {
 
         passengerNameRecordSessionBean.changePNRStatus(booking, booking.getPnr().getPnrID());
 
-        accountingSessionBean.makeTransaction("Customer CheckIn", booking.getPnr().getTotalPrice());
-        if (Double.parseDouble(totalCosts) > 0.0) {
-            accountingSessionBean.makeTransaction("Counter Payments", Double.parseDouble(totalCosts));
-        }
+//        accountingSessionBean.makeTransaction("Customer CheckIn", booking.getPnr().getTotalPrice());
+//        if (Double.parseDouble(totalCosts) > 0.0) {
+//            accountingSessionBean.makeTransaction("Counter Payments", Double.parseDouble(totalCosts));
+//        }
     }
 
     public void calculateExtra(ActionEvent event) {

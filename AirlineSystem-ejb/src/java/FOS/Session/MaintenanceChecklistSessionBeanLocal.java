@@ -30,4 +30,6 @@ public interface MaintenanceChecklistSessionBeanLocal {
     public List<AMaintainChecklist> getSubmittedChecklists();
 
     public AMaintainChecklist getMaintainChecklistByID(String checklistId);
+
+    public String retrieveTypeByScheduleID(String scheduleId);
 }

@@ -915,9 +915,11 @@ public class DataLoadSessionBean implements DataLoadSessionBeanLocal {
 
         employeeSessionBean.addCabinCrew("X123", "CC", "PFCL", "FLIGHT CREW(SINGAPORE)", date5, "Male", "98765567", "NUS", "65778905", "a0083337@u.nus.edu", "2", langu1, "Flight Steward", 3000.0);
         employeeSessionBean.hashPwd("X123");
+        employeeSessionBean.employeeActivateWithId("X123");
 
         employeeSessionBean.addPilot("Y123", "P", "PFCL", "FLIGHT CREW(SINGAPORE)", date1, "Male", "98722345", "NUS", "65345678", "a0083337@u.nus.edu", "3", skills1, "Captain", 3300.0);
         employeeSessionBean.hashPwd("Y123");
+        employeeSessionBean.employeeActivateWithId("Y123");
 
         List<CabinCrew> cabinCrewList = new ArrayList();
         List<Pilot> pilotList = new ArrayList();

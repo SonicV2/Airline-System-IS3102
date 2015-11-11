@@ -66,16 +66,18 @@
 
                                 <p:dataTable id="checkboxDT" var="item" value="#{maintainChecklistManagedBean.selectedSubmittedChecklist.maintainChecklistItems}"  style="margin-bottom:0">
                                     <f:facet name="header">
-                                        All Submitted Checklists
+                                        All Submitted Checklists 
                                     </f:facet>
                                    
                                     <p:column headerText="Checklist Items" style="width: 30%">
                                         <h:outputText value="#{item.content}" />
                                         <h:selectBooleanCheckbox value="#{item.checked}" onclick="return false;" onkeydown="return false"/>
+                                        
                                     </p:column>
                                    
+                                  
                                 </p:dataTable>
-
+ 
 
                             </p:outputPanel>
                         </p:dialog>

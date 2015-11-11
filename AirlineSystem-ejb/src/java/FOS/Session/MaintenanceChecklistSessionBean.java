@@ -60,6 +60,7 @@ public class MaintenanceChecklistSessionBean implements MaintenanceChecklistSess
 
         MaintainChecklistItem item3 = new MaintainChecklistItem();
         item3.create("Doors, hatches and windows latching and locking");
+         checklistItems.add(item3);
         achecklist.setMaintainChecklistItems(checklistItems);
         em.persist(item3);
         em.persist(achecklist);
@@ -505,6 +506,19 @@ public class MaintenanceChecklistSessionBean implements MaintenanceChecklistSess
         return null;
     }
 
+@Override    
+    public String retrieveTypeByScheduleID(String scheduleId){
+        Query q = em.createQuery("SELECT l FROM AMaintainChecklist l");
+        List<AMaintainChecklist> lists = q.getResultList();
+        
+        for(AMaintainChecklist l : lists){
+            if(l.getId().toString().equals(scheduleId)){
+                return l.getType();
+            }
+        }
+        return "N";
+    
+    }
     public MaintainanceTeam getCrewMaintainTeam(String username) {
         Query q = em.createQuery("SELECT m FROM MaintainanceTeam m");
         List<MaintainanceTeam> teams = q.getResultList();

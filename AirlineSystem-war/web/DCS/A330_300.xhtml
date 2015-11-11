@@ -128,7 +128,7 @@
 <!--                                    <p:inputText id="seat1" value="#{seatManagedBean.choose}" /> -->
                                 
 
-                                    <h:commandButton class="btn btn-outline btn-info" value="Free Upgrade" actionListener="#{seatManagedBean.upgradeClass}" />
+                                    <h:commandButton class="btn btn-outline btn-info" value="Free Upgrade" actionListener="#{seatManagedBean.upgradeClass}" action="#{seatManagedBean.chooseSeatA330()}" />
 
                                     <h:commandButton class="btn btn-outline btn-warning" value="Paid Upgrade" actionListener="#{seatManagedBean.paidUpgradeClass}" action="#{seatManagedBean.chooseSeatA330()}" />
                                   
@@ -156,7 +156,10 @@
                 </div>
             </div>
         </div>
-</h:form>
+            <h:commandButton class="btn btn-outline btn-warning" value="Book All seat" actionListener="#{seatManagedBean.occupyAllSeatA330}"/>                                 
+            <h:commandButton class="btn btn-outline btn-warning" value="UnBook All seat" actionListener="#{seatManagedBean.unOccupyAllSeatA330}"/>                                 
+
+        </h:form>
     </h:body>
 </html>
 
