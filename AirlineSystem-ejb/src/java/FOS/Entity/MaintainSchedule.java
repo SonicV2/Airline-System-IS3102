@@ -44,6 +44,8 @@ public class MaintainSchedule implements Serializable {
     @ManyToOne(cascade = {CascadeType.PERSIST})
     private MaintainanceTeam mTeam = new MaintainanceTeam();
 
+    
+
     @OneToOne(cascade = {CascadeType.PERSIST})
     private AMaintainChecklist amaintainChecklist;
 
@@ -188,4 +190,5 @@ public class MaintainSchedule implements Serializable {
     public void setAmaintainChecklist(AMaintainChecklist amaintainChecklist) {
         this.amaintainChecklist = amaintainChecklist;
     }
+
 }

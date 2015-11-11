@@ -544,7 +544,9 @@ public class FlightManagedBean {
 
     /*clear input after submit*/
     public void clear() {
+        setFortnight(false);
         setRouteId(null);
+        setTempNo("");
         setFlightNo("");
         setSelectedFlightDays(null);
         setEntryDate(null);

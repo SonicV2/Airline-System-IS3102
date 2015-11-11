@@ -17,6 +17,7 @@ import FOS.Session.PairingSessionBeanLocal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -30,6 +31,8 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import static java.util.Comparator.comparing;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  *
@@ -466,7 +469,8 @@ public class CrewSignInManagedBean {
 
                     while (it.hasNext()) {
                         Schedule sc = it.next();
-                        if (sc.getScheduleId().toString().equals(temps[i])) {
+                        if (sc.getScheduleId().toString().equals(temps[i]) && !inValidSchedulesForSubmit.contains(sc)) {
+                            System.out.println("HERE");
                             inValidSchedulesForSubmit.add(sc);
                             //it.remove();
                         }
@@ -496,7 +500,10 @@ public class CrewSignInManagedBean {
 
                     }
 
-                    if (s.getScheduleId().toString().equals(submitScheduleId)) {
+                    if (s.getScheduleId().toString().equals(submitScheduleId) && !inValidSchedulesForSubmit.contains(s)) {
+                        
+                       
+                        
                         inValidSchedulesForSubmit.add(s);
                     }
                 }
@@ -625,7 +632,6 @@ public class CrewSignInManagedBean {
             }
         }
 
-        
         for (int i = 0; i < targetPairing.getFlightNumbers().size(); i++) {
             if (targetPairing.getFlightNumbers().size() == 1) {
                 schs.add(crewSignInSessionBean.getScheduleBy(submitFlightNumber, targetPairing.getFDate()));
@@ -638,7 +644,7 @@ public class CrewSignInManagedBean {
 
                 if (targetPairing.getFlightNumbers().get(i).equals(submitFlightNumber.substring(2))) {
 
-                    if (targetPairing.getFlightCities().size() > (i+2) && targetPairing.getFlightCities().get(i + 2).equals(submitCity)) {
+                    if (targetPairing.getFlightCities().size() > (i + 2) && targetPairing.getFlightCities().get(i + 2).equals(submitCity)) {
 
                         String tDate = targetPairing.getFlightTimes().get(i + 1).substring(targetPairing.getFlightTimes().get(i).indexOf("(") + 1, targetPairing.getFlightTimes().get(i).indexOf(")"));
 
@@ -681,9 +687,8 @@ public class CrewSignInManagedBean {
         if (cc != null) {
             String msg = "";
             List<Schedule> hiddenSchedules = checkSchedule(selectLeaveSchedule);
-            
-            
 
+            
             String scheduleLists = selectLeaveSchedule;
             if (hiddenSchedules.isEmpty()) {
                 msg = crewSignInSessionBean.submitLeave(crewName, selectLeaveReason, scheduleLists);
@@ -738,7 +743,7 @@ public class CrewSignInManagedBean {
     public void refresh(ActionEvent event) {
         viewValidSchedule();
         viewPilotValidSchedule();
-      // return "/FOS/LeaveSubmit";
+        // return "/FOS/LeaveSubmit";
     }
 
     public long checkTime(String time1, String time2) {

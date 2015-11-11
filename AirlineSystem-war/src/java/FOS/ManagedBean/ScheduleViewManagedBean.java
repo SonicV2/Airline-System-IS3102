@@ -18,7 +18,9 @@ import FOS.Session.CrewSignInSessionBeanLocal;
 import FOS.Session.MaintainSessionBeanLocal;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -39,13 +41,12 @@ import org.primefaces.model.ScheduleModel;
 @ManagedBean
 @SessionScoped
 public class ScheduleViewManagedBean {
+
     @EJB
     private MaintainSessionBeanLocal maintainSessionBean;
 
     @EJB
     private CrewSignInSessionBeanLocal crewSignInSessionBean;
-    
-    
 
     @ManagedProperty(value = "#{loginManagedBean}")
     private LoginManagedBean loginManageBean;
@@ -55,7 +56,7 @@ public class ScheduleViewManagedBean {
     private ScheduleModel eventReservedCrewModel;
     private ScheduleModel eventReservedPilotModel;
     private ScheduleModel eventGroundCrewModel;
-    
+
     private Team team;
     private MaintainanceTeam maintainTeam;
 
@@ -72,7 +73,7 @@ public class ScheduleViewManagedBean {
         addEvent();
         addPilotEvent();
         addReservedCrewEvent();
-        addReservedPilotEvent() ;
+        addReservedPilotEvent();
         addGroundCrewEvent();
     }
 
@@ -106,8 +107,15 @@ public class ScheduleViewManagedBean {
                 String scheduleId = crew.getStatus().split("-")[0].split("Leave: ")[1];
                 if (scheduleId.contains("/")) {
                     String temps[] = scheduleId.split("/");
+
+                    Set<String> set = new HashSet<String>();
                     for (int i = 0; i < temps.length; i++) {
-                        Schedule sch = crewSignInSessionBean.getScheduleByID(temps[i]);
+                        set.add(temps[i]);
+                    }
+                   
+                  
+                    for (String s : set) {
+                        Schedule sch = crewSignInSessionBean.getScheduleByID(s);
                         eventModel.addEvent(new DefaultScheduleEvent("Leave For This Schedule " + sch.getFlight().getFlightNo(), sch.getStartDate(), sch.getEndDate()));
                     }
                 } else {
@@ -270,8 +278,6 @@ public class ScheduleViewManagedBean {
 
     }
 
-    
-    
     public void addReservedPilotEvent() {
         FacesMessage message = null;
         eventReservedPilotModel = new DefaultScheduleModel();
@@ -382,21 +388,21 @@ public class ScheduleViewManagedBean {
         }
 
     }
-    
-    public void addGroundCrewEvent(){
+
+    public void addGroundCrewEvent() {
         eventGroundCrewModel = new DefaultScheduleModel();
-        
+
         String userName = loginManageBean.getEmployeeUserName();
         GroundCrew gc = maintainSessionBean.getGroundCrew(userName);
-        if(gc == null || gc.getPosition().contains("Check-in")){
+        if (gc == null || gc.getPosition().contains("Check-in")) {
             return;
         }
         MaintainanceTeam mTeam = maintainSessionBean.getCrewMaintainTeam(userName);
         List<MaintainSchedule> schedules = mTeam.getmSchedules();
-        for(MaintainSchedule s : schedules){
+        for (MaintainSchedule s : schedules) {
             eventGroundCrewModel.addEvent(new DefaultScheduleEvent("Maintenance Duty", s.getMainStartDate(), s.getMainEndDate()));
         }
-        
+
     }
 
     /**
