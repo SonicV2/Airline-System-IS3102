@@ -49,7 +49,8 @@ public class AnalyticsSessionBean implements AnalyticsSessionBeanLocal {
     }
 
     public void pseudoLink() {
-        Query q = em.createQuery("SELECT b FROM Booking b");
+        Query q = em.createQuery("SELECT b FROM Booking b WHERE b.flightNo:=flightNo");
+        q.setParameter("flightNo", "MA333");
         List<Booking> bList = q.getResultList();
         int bSize = bList.size();
         int minus = bList.size() / 12;

@@ -723,15 +723,15 @@ public class DataLoadSessionBean implements DataLoadSessionBeanLocal {
         skills1.add("A380");
         skills1.add("A330");
         List<String> skills2 = new ArrayList<String>();
-        skills1.add("A330");
+        skills2.add("A330");
         skills2.add("A380");
         skills2.add("A340");
         List<String> skills3 = new ArrayList<String>();
-        skills1.add("A330");
+        skills3.add("A330");
         skills3.add("A380");
         skills3.add("B777");
         List<String> skills4 = new ArrayList<String>();
-        skills1.add("A330");
+        skills4.add("A330");
         skills4.add("B747");
 
         employeeSessionBean.addPilot("S43210A", "PC", "1", "FLIGHT CREW(SINGAPORE)", date1, "Male", "98722345", "NUS", "65345678", "a0083337@u.nus.edu", "3", skills1, "Captain", 3300.0);

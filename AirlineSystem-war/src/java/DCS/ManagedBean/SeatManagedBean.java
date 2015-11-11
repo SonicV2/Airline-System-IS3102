@@ -402,7 +402,7 @@ public class SeatManagedBean {
                     upgrade = 1;
                 }
             } else {
-                message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Not eligible for free upgrade! Please select seat from economy class", "");
+                message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Not eligible for free upgrade! Please Select Seat From Economy Class", "");
                 FacesContext.getCurrentInstance().addMessage(null, message);
             }
         } else if (getAircraftType().equals("Boeing 777-200ER")) {
@@ -610,7 +610,7 @@ public class SeatManagedBean {
                     return "OnlineShowBoardingPass.xhtml";
                 }
             } else {
-                message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "please choose the correct class", "");
+                message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Please Choose The Correct Class", "");
                 FacesContext.getCurrentInstance().addMessage(null, message);
                 return null;
             }
