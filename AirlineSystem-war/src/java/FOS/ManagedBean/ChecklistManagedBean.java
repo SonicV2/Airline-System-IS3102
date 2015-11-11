@@ -142,6 +142,8 @@ public String addItem(){
     }
     else{
     checklistSessionBean.addChecklistItemByScheduleAndChecklistName(schedule,checklistName, checklistItemName);
+     message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Item added", "");
+     FacesContext.getCurrentInstance().addMessage(null, message);
     return "/CI/EmployeeDashBoard";
     }
     
@@ -189,7 +191,9 @@ public String fillParticularChecklist (Long scheduleKey ){
         setSchedule(scheduleSessionBean.getSchedule(scheduleId));
         checklistSessionBean.deleteChecklistItem(schedule, id, checklistName);
         setChecklistItemsForChecklist(checklistSessionBean.retrieveChecklistItemsByScheduleAndChecklistName(schedule, checklistName));
-        return "EditChecklist";
+        FacesMessage msg = new FacesMessage("Item deleted");
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+        return null;
     }
     
     public String editChecklistDone(){
