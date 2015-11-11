@@ -123,7 +123,7 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
             currTime.setTime(flight.getStartDateTime());
         }
         Date counter = currTime.getTime();
-
+        System.out.println(counter);
         //Find the the end time of the new set of schedules to be added
         Calendar endTime = Calendar.getInstance(tz);
         endTime.setTime(counter);
@@ -147,13 +147,11 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
                     break;
                 }
             }
-            
-            System.out.println(baseWeek);
+            int weekDuration = endTime.get(Calendar.WEEK_OF_YEAR) - currTime.get(Calendar.WEEK_OF_YEAR);
             //Find the relevant weeks
-            for (int i = baseWeek; i < baseWeek + duration; i += 2) {
+            for (int i = baseWeek; i <= baseWeek + weekDuration; i += 2) {
                 fortnightWeeks.add(i);
             }
-            System.out.println(fortnightWeeks);
         }
         //Add a list schedule until the number of months specified
         while (currTime.before(endTime)) {

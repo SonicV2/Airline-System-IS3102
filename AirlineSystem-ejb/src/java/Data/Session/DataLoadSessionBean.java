@@ -9,6 +9,7 @@ import APS.Entity.Schedule;
 import APS.Session.FlightScheduleSessionBeanLocal;
 import APS.Session.FlightSessionBeanLocal;
 import APS.Session.ScheduleSessionBeanLocal;
+import Administration.Session.AccountingSessionBeanLocal;
 
 import CI.Entity.CabinCrew;
 import CI.Entity.Pilot;
@@ -95,39 +96,46 @@ public class DataLoadSessionBean implements DataLoadSessionBeanLocal {
     @EJB
     private AnalyticsSessionBeanLocal am;
 
+    @EJB
+    private AccountingSessionBeanLocal acs;
+    
     @Override
     public void init() {
-        System.out.println("*****Loading data");
-        addDiscountTypes();
-        System.out.println("*****Discount Types Added");
-        addFlights();
-        System.out.println("*****Flights added");
-        addCustomer();
-        System.out.println("*****Customers added");
-        addTravelAgencies();
-        System.out.println("*****Travel agencies added");
+//        System.out.println("*****Loading data");
+//        addDiscountTypes();
+//        System.out.println("*****Discount Types Added");
+//        addFlights();
+//        System.out.println("*****Flights added");
+//        addCustomer();
+//        System.out.println("*****Customers added");
+//        addTravelAgencies();
+//        System.out.println("*****Travel agencies added");
         addCustomerBooking();
-       System.out.println("*****Customer  bookings added");
-        addTravelAgencyBookings();
-        System.out.println("*****Travel Agency bookings added");
-        addCabinCrew();
-        System.out.println("*****Cabin Crew added");
-        addPilot();
-        System.out.println("*****Pilot added");
-        addGroundCrew();
-        System.out.println("*****Ground Crew added");
-        addPostFlightChecklist();
-        System.out.println("*****Checklists added");
-        addManagers();
-        System.out.println("*****Managers added");
-        addExecutives();
-        System.out.println("*****Executives added");
-        bookSeats();
-        System.out.println("***Data Load complete");
+//       System.out.println("*****Customer  bookings added");
+//        addTravelAgencyBookings();
+//        System.out.println("*****Travel Agency bookings added");
+//        addCabinCrew();
+//        System.out.println("*****Cabin Crew added");
+//        addPilot();
+//        System.out.println("*****Pilot added");
+//        addGroundCrew();
+//        System.out.println("*****Ground Crew added");
+//        addPostFlightChecklist();
+//        System.out.println("*****Checklists added");
+//        addManagers();
+//        System.out.println("*****Managers added");
+//        addExecutives();
+//        System.out.println("*****Executives added");
+//        bookSeats();
+//        System.out.println("***Data Load complete");
         
 
     }
-
+    
+    public void addAccountingBook(){
+        acs.createBook(2015, 90000, 90000);
+    }
+    
     public void addManagers() {
         Date date1 = new Date(), date2 = new Date(), date3 = new Date(), date4 = new Date(), date5 = new Date();
 
@@ -329,7 +337,7 @@ public class DataLoadSessionBean implements DataLoadSessionBeanLocal {
             date4 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse("2015-11-06 13:00:00");
             date5 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse("2015-11-06 17:00:00");
             date6 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse("2015-11-06 08:00:00");
-            date7 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse("2014-11-01 16:00:00");
+            date7 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse("2013-09-01 16:00:00");
             date8 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse("2015-11-15 16:00:00");
 
         } catch (ParseException ex) {
@@ -463,7 +471,7 @@ public class DataLoadSessionBean implements DataLoadSessionBeanLocal {
         travelAgencySessionBean.addTravelAgency("Orchard Travel Agency", 500000.00, 400000.00, 0, "singjjyn@naver.com", "10 Bideford Road #22-05 S229922", "6112 4126", "Sa123!", "Tan Shi Hui");
         travelAgencySessionBean.addTravelAgency("Holland Travel Agency", 300000.00, 300000.00, 0, "rnjsdbssk@naver.com", "55 North Buona Vista Road #01-27 S543122", "6785 0102", "Sa123!", "Alice Lee");
         travelAgencySessionBean.addTravelAgency("HarbourFront Travel Agency", 400000.00, 300000.00, 0, "parthasarthy.gupta@gmail.com", "31A Boon Tat Street #03-21 S112233", "6562 3532", "Sa123!", "Dennis Wong");
-        travelAgencySessionBean.addTravelAgency("NewTon Travel Agency", 350000.00, 350000.00, 0, "hou.liang.90@gmail.com", "48 Thomson Road #10-07 S77866", "6512 3565", "Sa123!", "Lim Jun Hao");
+        travelAgencySessionBean.addTravelAgency("NewTon Travel Agency", 350000.00, 350000.00, 0, "yuqing2404@gmail.com", "48 Thomson Road #10-07 S77866", "6512 3565", "Sa123!", "Lim Jun Hao");
 
     }
 
@@ -511,15 +519,24 @@ public class DataLoadSessionBean implements DataLoadSessionBeanLocal {
         Booking booking6 = passengerBookingSessionBean.createBooking(500, schedule2.getSeatAvailability(), schedule2.getFlight().getFlightNo(), schedule2.getStartDate(), "Booked", "A01", "Economy Saver", "Mr", "Hou", "Liang", customer2.getPassportNumber(), customer2.getNationality(), customer2.getId(), false, true, 15.0, "Western");
         Booking booking7 = passengerBookingSessionBean.createBooking(500, schedule3.getSeatAvailability(), schedule3.getFlight().getFlightNo(), schedule3.getStartDate(), "Booked", "A01", "Economy Saver", "Mr", "Hou", "Liang", customer2.getPassportNumber(), customer2.getNationality(), customer2.getId(), false, true, 15.0, "Western");
         Booking booking8 = passengerBookingSessionBean.createBooking(400, schedule4.getSeatAvailability(), schedule4.getFlight().getFlightNo(), schedule4.getStartDate(), "Booked", "A01", "Economy Saver", "Mr", "Hou", "Liang", customer2.getPassportNumber(), customer2.getNationality(), customer2.getId(), false, true, 15.0, "Western");
+        Booking booking11 = passengerBookingSessionBean.createBooking(400, schedule4.getSeatAvailability(), schedule4.getFlight().getFlightNo(), schedule4.getStartDate(), "Booked", "A01", "Economy Saver", "Mr", "Hou", "Liang", customer2.getPassportNumber(), customer2.getNationality(), customer2.getId(), false, true, 15.0, "Western");
+        booking5.setCustomerId(customer2.getId());
+        booking6.setCustomerId(customer2.getId());
+        booking7.setCustomerId(customer2.getId());
+        booking8.setCustomerId(customer2.getId());
+        booking11.setCustomerId(customer2.getId());
         
         Booking booking9 = passengerBookingSessionBean.createBooking(800, schedule5.getSeatAvailability(), schedule5.getFlight().getFlightNo(), schedule5.getStartDate(), "Booked", "D01", "Business", "Mr", "Hou", "Liang", customer2.getPassportNumber(), customer2.getNationality(), customer2.getId(), false, true, 15.0, "Western");
         Booking booking10 = passengerBookingSessionBean.createBooking(800, schedule6.getSeatAvailability(), schedule6.getFlight().getFlightNo(), schedule6.getStartDate(), "Booked", "D01", "Business", "Mr", "Hou", "Liang", customer2.getPassportNumber(), customer2.getNationality(), customer2.getId(), false, true, 15.0, "Western");
+        booking9.setCustomerId(customer2.getId());
+        booking10.setCustomerId(customer2.getId());
         
         PNR pnr5 = passengerBookingSessionBean.createPNR(1, customer2.getEmail(), customer2.getHomeNumber(), "Booked", 600.0, new Date(), new Date(), "MARS");
         PNR pnr6 = passengerBookingSessionBean.createPNR(1, customer2.getEmail(), customer2.getHomeNumber(), "Booked", 500.0, new Date(), new Date(), "MARS");
         PNR pnr7 = passengerBookingSessionBean.createPNR(1, customer2.getEmail(), customer2.getHomeNumber(), "Booked", 500.0, new Date(), new Date(), "MARS");
         PNR pnr8 = passengerBookingSessionBean.createPNR(1, customer2.getEmail(), customer2.getHomeNumber(), "Booked", 400.0, new Date(), new Date(), "MARS");
         PNR pnr9 = passengerBookingSessionBean.createPNR(1, customer2.getEmail(), customer2.getHomeNumber(), "Booked", 400.0, new Date(), new Date(), "MARS");
+        PNR pnr10 = passengerBookingSessionBean.createPNR(1, customer2.getEmail(), customer2.getHomeNumber(), "Booked", 400.0, new Date(), new Date(), "MARS");
         
         List<Booking> bookingList5 = new ArrayList();
         bookingList5.add(booking5);
@@ -532,12 +549,15 @@ public class DataLoadSessionBean implements DataLoadSessionBeanLocal {
         List<Booking> bookingList9 = new ArrayList();
         bookingList9.add(booking9);
         bookingList9.add(booking10);
+        List<Booking> bookingList10 =new ArrayList();
+        bookingList10.add(booking11);
 
         passengerBookingSessionBean.persistBookingAndPNR(pnr5, bookingList5, customer2);
         passengerBookingSessionBean.persistBookingAndPNR(pnr6, bookingList6, customer2);
         passengerBookingSessionBean.persistBookingAndPNR(pnr7, bookingList7, customer2);
         passengerBookingSessionBean.persistBookingAndPNR(pnr8, bookingList8, customer2);
         passengerBookingSessionBean.persistBookingAndPNR(pnr9, bookingList9, customer2);
+        passengerBookingSessionBean.persistBookingAndPNR(pnr10, bookingList10, customer2);
     }
 
     public void addTravelAgencyBookings() {
@@ -645,16 +665,16 @@ public class DataLoadSessionBean implements DataLoadSessionBeanLocal {
         employeeSessionBean.addGroundCrew("G12345A", "G", "1", "GROUND CREW(SINGAPORE)", date1, "Male", "9876678", "NUS", "54333234", "a0083337@u.nus.edu", "Maintenance", "2", 3000.0);
         employeeSessionBean.hashPwd("G12345A");
         employeeSessionBean.employeeActivateWithId("G12345A");
-        employeeSessionBean.addGroundCrew("G12345B", "G", "2", "GROUND CREW(SINGAPORE)", date2, "Male", "9876678", "NUS", "54333234", "a0083337@u.nus.edu", "Avionics", "2", 3000.0);
+        employeeSessionBean.addGroundCrew("G12345B", "G", "2", "GROUND CREW(SINGAPORE)", date2, "Male", "9876678", "NUS", "54333234", "a0083337@u.nus.edu", "Avionics", "3", 3000.0);
         employeeSessionBean.hashPwd("G12345B");
         employeeSessionBean.employeeActivateWithId("G12345B");
-        employeeSessionBean.addGroundCrew("G12345C", "G", "3", "GROUND CREW(SINGAPORE)", date1, "Male", "9876678", "NUS", "54333234", "a0083337@u.nus.edu", "Sheet Metal", "2", 3000.0);
+        employeeSessionBean.addGroundCrew("G12345C", "G", "3", "GROUND CREW(SINGAPORE)", date1, "Male", "9876678", "NUS", "54333234", "a0083337@u.nus.edu", "Sheet Metal", "4", 3000.0);
         employeeSessionBean.hashPwd("G12345C");
         employeeSessionBean.employeeActivateWithId("G12345C");
-        employeeSessionBean.addGroundCrew("G12345D", "G", "4", "GROUND CREW(SINGAPORE)", date2, "Male", "9876678", "NUS", "54333234", "a0083337@u.nus.edu", "Trim and Fabrication", "2", 3000.0);
+        employeeSessionBean.addGroundCrew("G12345D", "G", "4", "GROUND CREW(SINGAPORE)", date2, "Male", "9876678", "NUS", "54333234", "a0083337@u.nus.edu", "Trim and Fabrication", "1", 3000.0);
         employeeSessionBean.hashPwd("G12345D");
         employeeSessionBean.employeeActivateWithId("G12345D");
-        employeeSessionBean.addGroundCrew("G12345E", "G", "5", "GROUND CREW(SINGAPORE)", date2, "Male", "9876678", "NUS", "54333234", "a0083337@u.nus.edu", "Painting", "2", 3000.0);
+        employeeSessionBean.addGroundCrew("G12345E", "G", "5", "GROUND CREW(SINGAPORE)", date2, "Male", "9876678", "NUS", "54333234", "a0083337@u.nus.edu", "Painting", "7", 3000.0);
         employeeSessionBean.hashPwd("G12345E");
         employeeSessionBean.employeeActivateWithId("G12345E");
         employeeSessionBean.addGroundCrew("G12345F", "G", "6", "GROUND CREW(SINGAPORE)", date1, "Male", "9876678", "NUS", "54333234", "a0083337@u.nus.edu", "Welding", "2", 3000.0);
@@ -666,13 +686,13 @@ public class DataLoadSessionBean implements DataLoadSessionBeanLocal {
         employeeSessionBean.addGroundCrew("G12345H", "G", "7", "GROUND CREW(SINGAPORE)", date1, "Male", "9876678", "NUS", "54333234", "a0083337@u.nus.edu", "Maintenance", "2", 3000.0);
         employeeSessionBean.hashPwd("G12345H");
         employeeSessionBean.employeeActivateWithId("G12345H");
-        employeeSessionBean.addGroundCrew("G12345I", "G", "8", "GROUND CREW(SINGAPORE)", date2, "Male", "9876678", "NUS", "54333234", "a0083337@u.nus.edu", "Avionics", "2", 3000.0);
+        employeeSessionBean.addGroundCrew("G12345I", "G", "8", "GROUND CREW(SINGAPORE)", date2, "Male", "9876678", "NUS", "54333234", "a0083337@u.nus.edu", "Avionics", "3", 3000.0);
         employeeSessionBean.hashPwd("G12345I");
         employeeSessionBean.employeeActivateWithId("G12345I");
-        employeeSessionBean.addGroundCrew("G12345J", "G", "9", "GROUND CREW(SINGAPORE)", date1, "Male", "9876678", "NUS", "54333234", "a0083337@u.nus.edu", "Sheet Metal", "2", 3000.0);
+        employeeSessionBean.addGroundCrew("G12345J", "G", "9", "GROUND CREW(SINGAPORE)", date1, "Male", "9876678", "NUS", "54333234", "a0083337@u.nus.edu", "Sheet Metal", "6", 3000.0);
         employeeSessionBean.hashPwd("G12345J");
         employeeSessionBean.employeeActivateWithId("G12345J");
-        employeeSessionBean.addGroundCrew("G12345K", "G", "10", "GROUND CREW(SINGAPORE)", date2, "Male", "9876678", "NUS", "54333234", "a0083337@u.nus.edu", "Trim and Fabrication", "2", 3000.0);
+        employeeSessionBean.addGroundCrew("G12345K", "G", "10", "GROUND CREW(SINGAPORE)", date2, "Male", "9876678", "NUS", "54333234", "a0083337@u.nus.edu", "Trim and Fabrication", "1", 3000.0);
         employeeSessionBean.hashPwd("G12345K");
         employeeSessionBean.employeeActivateWithId("G12345K");
         employeeSessionBean.addGroundCrew("G12345L", "G", "11", "GROUND CREW(SINGAPORE)", date2, "Male", "9876678", "NUS", "54333234", "a0083337@u.nus.edu", "Painting", "2", 3000.0);
@@ -703,13 +723,15 @@ public class DataLoadSessionBean implements DataLoadSessionBeanLocal {
         skills1.add("A380");
         skills1.add("A330");
         List<String> skills2 = new ArrayList<String>();
+        skills1.add("A330");
         skills2.add("A380");
         skills2.add("A340");
         List<String> skills3 = new ArrayList<String>();
+        skills1.add("A330");
         skills3.add("A380");
         skills3.add("B777");
         List<String> skills4 = new ArrayList<String>();
-        skills4.add("A380");
+        skills1.add("A330");
         skills4.add("B747");
 
         employeeSessionBean.addPilot("S43210A", "PC", "1", "FLIGHT CREW(SINGAPORE)", date1, "Male", "98722345", "NUS", "65345678", "a0083337@u.nus.edu", "3", skills1, "Captain", 3300.0);

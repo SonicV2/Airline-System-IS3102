@@ -21,7 +21,7 @@ import javax.persistence.Query;
  * @author Yanlong
  */
 @Stateless
-public class FlightSessionBean implements FlightSessionBeanLocal, FlightSessionBeanRemote {
+public class FlightSessionBean implements FlightSessionBeanLocal {
 
     @PersistenceContext(unitName = "AirlineSystem-ejbPU")
     private EntityManager em;
@@ -37,14 +37,14 @@ public class FlightSessionBean implements FlightSessionBeanLocal, FlightSessionB
 
     //Add new flight entity
     @Override
-    public String addFlight(String flightNo, String flightDays, Double basicFare, Date startDateTime, Long routeId, boolean pastFlight) {
+    public void addFlight(String flightNo, String flightDays, Double basicFare, Date startDateTime, Long routeId, boolean pastFlight) {
         if (pastFlight) {
             flight = getFlight(flightNo);
         } else {
             flight = new Flight();
         }
         route = getRoute(routeId);
-        
+
         //Set up the startDateTime for storing
         TimeZone tz = TimeZone.getTimeZone("GMT+8:00"); //Set Timezone to Singapore
         Calendar tmp = Calendar.getInstance(tz);
@@ -55,23 +55,21 @@ public class FlightSessionBean implements FlightSessionBeanLocal, FlightSessionB
         flight.createFlight(flightNo, flightDays, basicFare, tmp.getTime());
         flight.setRoute(route);
         route.getFlights().add(flight);
-        String id = "Airbus A380-800";
-        aircraftType = em.find(AircraftType.class, id);
         flight.setAircraftType(aircraftType);
         flight.setSchedule(schedules);
-        
-         if (pastFlight) {
+
+        if (pastFlight) {
+            flight.setArchiveData(null);
             em.merge(flight);
             em.flush();
         } else {
             em.persist(flight);
         }
-         return "Flight Added";
     }
 
     //Delete or Archieve an existing flight entity depending on the situation
     @Override
-    public String deleteFlight(String flightNo, boolean isArchive) {
+    public void deleteFlight(String flightNo, boolean isArchive) {
         flight = getFlight(flightNo);
         Long archieveData;
 
@@ -97,7 +95,6 @@ public class FlightSessionBean implements FlightSessionBeanLocal, FlightSessionB
         } else {
             em.remove(flight);
         }
-        return "Flight Deleted";
     }
 
     //Delete schedule implementation when archiving flight
@@ -114,27 +111,27 @@ public class FlightSessionBean implements FlightSessionBeanLocal, FlightSessionB
         em.remove(schedule);
         em.flush();
     }
-    
+
     @Override
-    public void edit(Flight edited, Flight original){
+    public void edit(Flight edited, Flight original) {
         AircraftType editedAC = em.find(AircraftType.class, edited.getAircraftType().getId());
         AircraftType originalAC = em.find(AircraftType.class, original.getAircraftType().getId());
-        
+
         List<Flight> tmp = originalAC.getFlights();
         tmp.remove(original);
         originalAC.setFlights(tmp);
         em.merge(originalAC);
-        
+
         tmp = editedAC.getFlights();
         tmp.add(edited);
         editedAC.setFlights(tmp);
         em.merge(editedAC);
-        
+
         Flight update = em.find(Flight.class, original.getFlightNo());
         update.setAircraftType(editedAC);
         em.merge(update);
         em.flush();
-        
+
         AircraftType tt = em.find(AircraftType.class, editedAC.getId());
         System.out.println(tt.getFlights());
     }
@@ -235,7 +232,7 @@ public class FlightSessionBean implements FlightSessionBeanLocal, FlightSessionB
     //Retrieve all the existing routes that the flights fly
     @Override
     public List<Flight> retrieveActiveFlights() {
-         flights = new ArrayList<Flight>();
+        flights = new ArrayList<Flight>();
 
         try {
             Query q = em.createQuery("SELECT a from Flight " + "AS a WHERE a.archiveData = null");

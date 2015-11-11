@@ -13,15 +13,12 @@ import APS.Session.FlightSessionBeanLocal;
 import APS.Session.ScheduleSessionBeanLocal;
 import FOS.Entity.Team;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -102,13 +99,11 @@ public class ScheduleManagedBean {
         if (flightNo.isEmpty()) {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please enter Flight Number!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
-            return;
         }
 
         if (flightSessionBean.getFlight(flightNo) == null) {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "No such flight number!", "");
             FacesContext.getCurrentInstance().addMessage(null, message);
-            return;
         }
 
         if (duration == 0) {
@@ -119,9 +114,6 @@ public class ScheduleManagedBean {
 
         scheduleSessionBean.addSchedules(duration, flightNo, true, fortnight);
         setFortnight(false);
-        for(int i = 0; i < 1000; i++){
-            ;
-        }
         setFlights(flightSessionBean.retrieveActiveFlights());
         message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Schedules Added Successfully!", "");
         FacesContext.getCurrentInstance().addMessage(null, message);

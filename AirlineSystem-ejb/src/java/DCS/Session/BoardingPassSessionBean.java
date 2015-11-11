@@ -42,7 +42,7 @@ public class BoardingPassSessionBean implements BoardingPassSessionBeanLocal {
         boardingpass.setClasstype(booking.getServiceType());
         boardingpass.setArrivalCity(booking.getSeatAvail().getSchedule().getFlight().getRoute().getDestinationCity());
         boardingpass.setDepartCity(booking.getSeatAvail().getSchedule().getFlight().getRoute().getOriginCity());
-        boardingpass.setDepartTime(booking.getFlightDate());
+        boardingpass.setDepartTime(booking.getSeatAvail().getSchedule().getStartDate());
         boardingpass.setGate("G12");
 
 //        Date depart = booking.getFlightDate();
