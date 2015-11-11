@@ -147,7 +147,7 @@ public class PricingSessionBean implements PricingSessionBeanLocal, PricingSessi
         int pricePercent = 100;
         SeatAvailability sa = s.getSeatAvailability();
         Date current = new Date();
-        int realSold = noPpl;
+        int realSold = 0;
         if (serviceClass.equals("Economy Saver")) {
             realSold = realSold + sa.getEconomySaverBooked();
             realSold = (realSold * 100) / sa.getEconomySaverTotal();
@@ -160,10 +160,16 @@ public class PricingSessionBean implements PricingSessionBeanLocal, PricingSessi
         }else if (serviceClass.equals("Business")) {
             realSold = realSold + sa.getBusinessBooked();
             realSold = (realSold * 100) / sa.getBusinessTotal();
-        }else if (serviceClass.equals("FirstClass")) {
+        }else if (serviceClass.equals("First Class")) {
+            System.out.println("ACTIVATED");
             realSold = realSold + sa.getFirstClassBooked();
             realSold = (realSold * 100) / sa.getFirstClassTotal();
         }
+        
+            System.out.println("REAL SOLD :");
+            System.out.println(realSold);
+            System.out.println(sa.getFirstClassBooked());
+            System.out.println(sa.getFirstClassTotal());
         try {
             
             Date currentDate = new Date();

@@ -39,7 +39,7 @@
                     <h:form id="iform">
                         <p:growl id="msgs" showDetail="true"/>
 
-                        <p:dataTable id="fareClasses" var="bookingclass" value="#{classManagedBean.bookingClass}" editable="true" style="margin-bottom:20px">
+                        <p:dataTable id="fareClasses" var="bookingclass" paginator="true" rows="20" value="#{classManagedBean.bookingClass}" editable="true" style="margin-bottom:20px">
                             <f:facet name="header">
                                 Fare Classes
                             </f:facet>

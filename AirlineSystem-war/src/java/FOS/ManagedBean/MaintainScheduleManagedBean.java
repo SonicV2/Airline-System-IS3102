@@ -99,6 +99,7 @@ public class MaintainScheduleManagedBean {
 
     public void assignTeam() {
         maintainSessionBean.assignTeam();
+        retrieveTeams();
         FacesMessage message = null;
         message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successfullly assigned schedules to teams!", "");
         FacesContext.getCurrentInstance().addMessage(null, message);
