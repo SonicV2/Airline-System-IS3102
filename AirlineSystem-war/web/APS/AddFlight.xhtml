@@ -32,7 +32,7 @@
 
         <!--            To add the same header on all dashboard pages  
 -->               <ui:include src="/CI/DashboardHeader.xhtml"/> 
-                To add the same sidebar on all dashboard pages 
+<!--                To add the same sidebar on all dashboard pages -->
         <ui:include src="/CI/DashboardSidebar.xhtml"/> 
 
         <div id="page-wrapper">
@@ -109,6 +109,7 @@
                                 <f:selectItem itemLabel="Saturday" itemValue="Saturday" />
                                 <f:selectItem itemLabel="Sunday" itemValue="Sunday" />
                             </p:selectManyCheckbox>
+                            <p:selectBooleanCheckbox itemLabel="Fortnight" value="#{flightManagedBean.fortnight}"/>
                             <br/>
                         </div>
                         <br></br>

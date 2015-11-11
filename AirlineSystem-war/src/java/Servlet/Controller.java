@@ -82,8 +82,7 @@ public class Controller extends HttpServlet {
         }
     }
     
-    
-    private void printForecastPDF(HttpServletRequest request, HttpServletResponse response) {
+      private void printForecastPDF(HttpServletRequest request, HttpServletResponse response) {
         try {
             InputStream reportStream = getServletConfig().getServletContext().getResourceAsStream("/JasperReports/DemandForecastReport.jasper");
             response.setContentType("application/pdf");
@@ -93,31 +92,34 @@ public class Controller extends HttpServlet {
             Long id = (Long) request.getSession().getAttribute("ID");
             String origin = (String) request.getSession().getAttribute("ORIGIN");
             String dest = (String) request.getSession().getAttribute("DEST");
+            Double min = (Double) request.getSession().getAttribute("MIN");
+            String[][] result = (String[][]) request.getSession().getAttribute("RESULT");
             response.setHeader("Content-Disposition", "attachment; filename=\"" + origin + "-" + dest + " " + year + " Demand Forcast.pdf\"");
             ServletOutputStream outputStream = response.getOutputStream();
 
-//            //Create a temporary table for the printing of the graph
-//            String tempTableName = "TEMPTTT";
-//            String query = "CREATE TEMPORARY TABLE " + tempTableName + " (MONTH int NOT NULL, "
-//                    + "DEMAND double, PRIMARY KEY (MONTH))";
-//            Class.forName("com.mysql.jdbc.Driver").newInstance();
-//            ResultSet rs = null;
-//            Statement stmt = null;
-//            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3307/AirlinesDB", "root", "password");
-//            stmt = connection.createStatement();
-//            stmt.executeUpdate(query);
-//            for (int i = 1; i <= 36; i++) {
-//                query = "INSERT INTO " + tempTableName + " VALUES (" + i + ", " + data[i - 1] + ")";
-//                stmt.executeUpdate(query);
-//            }
+            //Create a temporary table for the printing of the graph
+            String tempTableName = "TEMPTTT";
+            String query = "CREATE TEMPORARY TABLE " + tempTableName + " (ID INTEGER NOT NULL, "
+                    + "MONTH VARCHAR(255), FORECAST VARCHAR(255), LEVEL VARCHAR(255), PRIMARY KEY (MONTH))";
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            Statement stmt = null;
+            Connection connection = airlineSystemDataSource.getConnection();
+            stmt = connection.createStatement();
+            stmt.executeUpdate(query);
+            for (int i = 0; i < result.length; i++) {
+                query = "INSERT INTO " + tempTableName + " VALUES (" + (i + 1) + ", '" + result[i][0] + "', '" + result[i][1] + "', '" + result[i][2] + "')";
+                stmt.executeUpdate(query);
+            }
             //Set up the parameters
             HashMap parameters = new HashMap();
-            parameters.put("IMAGEPATH", "http://localhost:8080/AirlineSystem-war/JasperReports/flower1.png");
-//            parameters.put("YEAR", year);
-            parameters.put("FORECASTID", 592337L);
-            System.out.println(reportStream + ", " + outputStream + ", " + airlineSystemDataSource.getConnection());
+            parameters.put("IMAGEPATH", "http://localhost:8080/AirlineSystem-war/JasperReports/MALogo.jpg");
+            parameters.put("YEAR", year);
+            parameters.put("ID", id);
+            parameters.put("MIN", min);
+            parameters.put("TEMP", tempTableName);
+
             //Generate the report
-            JasperRunManager.runReportToPdfStream(reportStream, outputStream, parameters, airlineSystemDataSource.getConnection());
+            JasperRunManager.runReportToPdfStream(reportStream, outputStream, parameters, connection);
 
             outputStream.flush();
             outputStream.close();
@@ -284,12 +286,14 @@ public class Controller extends HttpServlet {
         try {
             InputStream reportStream = getServletConfig().getServletContext().getResourceAsStream("/JasperReports/IncomeStatement.jasper");
             response.setContentType("application/pdf");
-            DecimalFormat df = new DecimalFormat("$#,###.00");
+            DecimalFormat df = new DecimalFormat("$#,##0.00");
 
             //Get the relevant information from the request sent
             double ticketRev = (double) request.getSession().getAttribute("ticket");
             double travelRev = (double) request.getSession().getAttribute("travel");
-            double exp = (double) request.getSession().getAttribute("fuel");
+            double miscRev = (double) request.getSession().getAttribute("misc");
+            double fuel = (double) request.getSession().getAttribute("fuel");
+            double maintain = (double) request.getSession().getAttribute("maintain");
             int year = (int) request.getSession().getAttribute("year");
             response.setHeader("Content-Disposition", "attachment; filename=\"" + year + " MAS Income Statement.pdf\"");
             ServletOutputStream outputStream = response.getOutputStream();
@@ -308,6 +312,8 @@ public class Controller extends HttpServlet {
 
             query = "INSERT INTO " + tempTableName + " VALUES ('Travel', " + travelRev + ")";
             stmt.executeUpdate(query);
+            query = "INSERT INTO " + tempTableName + " VALUES ('Misc', " + miscRev + ")";
+            stmt.executeUpdate(query);
 
             //Set up the parameters
             HashMap parameters = new HashMap();
@@ -316,11 +322,14 @@ public class Controller extends HttpServlet {
             parameters.put("TEMP", tempTableName);
             parameters.put("TICKET", df.format(ticketRev));
             parameters.put("TRAVEL", df.format(travelRev));
-            parameters.put("TREV", df.format(ticketRev + travelRev));
-            parameters.put("EXP", df.format(exp));
-            parameters.put("TOTAL", df.format(ticketRev + travelRev - exp));
-            if (ticketRev + travelRev != 0) {
-                parameters.put("PROFITMARGIN", df.format((ticketRev + travelRev - exp) / (ticketRev + travelRev)));
+            parameters.put("MISC", df.format(miscRev));
+            parameters.put("TREV", df.format(ticketRev + travelRev + miscRev));
+            parameters.put("FUEL", df.format(fuel));
+            parameters.put("MAINTAIN", df.format(maintain));
+            parameters.put("TEXP", df.format(fuel+maintain));
+            parameters.put("TOTAL", df.format(ticketRev + travelRev + miscRev - fuel - maintain));
+            if (ticketRev + travelRev + miscRev != 0) {
+                parameters.put("PROFITMARGIN", df.format((ticketRev + travelRev + miscRev - fuel - maintain) / (ticketRev + travelRev + miscRev)));
             }
 
             //Generate the report
@@ -340,7 +349,7 @@ public class Controller extends HttpServlet {
         try {
             InputStream reportStream = getServletConfig().getServletContext().getResourceAsStream("/JasperReports/StockholderEquity.jasper");
             response.setContentType("application/pdf");
-            DecimalFormat df = new DecimalFormat("$#,###.00");
+            DecimalFormat df = new DecimalFormat("$#,##0.00");
 
             //Get the relevant information from the request sent
             double currRet = (double) request.getSession().getAttribute("currRet");
@@ -359,10 +368,10 @@ public class Controller extends HttpServlet {
             Connection connection = airlineSystemDataSource.getConnection();
             stmt = connection.createStatement();
             stmt.executeUpdate(query);
-            query = "INSERT INTO " + tempTableName + " VALUES ('BEG', " + currRet + ")";
+            query = "INSERT INTO " + tempTableName + " VALUES ('Beginning', " + currRet + ")";
             stmt.executeUpdate(query);
 
-            query = "INSERT INTO " + tempTableName + " VALUES ('CURR', " + result + ")";
+            query = "INSERT INTO " + tempTableName + " VALUES ('Current', " + result + ")";
             stmt.executeUpdate(query);
 
             //Set up the parameters
@@ -373,7 +382,7 @@ public class Controller extends HttpServlet {
             parameters.put("RESULT", df.format(result));
             parameters.put("INCOME", df.format(income));
             parameters.put("TEMP", tempTableName);
-            
+
             //Generate the report
             JasperRunManager.runReportToPdfStream(reportStream, outputStream, parameters, connection);
 
@@ -389,8 +398,10 @@ public class Controller extends HttpServlet {
 
     private void printBalancePDF(HttpServletRequest request, HttpServletResponse response) {
         try {
-            InputStream reportStream = getServletConfig().getServletContext().getResourceAsStream("/JasperReports/DemandForecastReport.jasper");
+            InputStream reportStream = getServletConfig().getServletContext().getResourceAsStream("/JasperReports/BalanceSheet.jasper");
             response.setContentType("application/pdf");
+            DecimalFormat df = new DecimalFormat("$#,##0.00");
+            DecimalFormat df2 = new DecimalFormat("0.00");
 
             //Get the relevant information from the request sent
             double cash = (double) request.getSession().getAttribute("cash");
@@ -400,24 +411,61 @@ public class Controller extends HttpServlet {
             double acctPay = (double) request.getSession().getAttribute("acctPay");
             double unearned = (double) request.getSession().getAttribute("unearned");
             double retained = (double) request.getSession().getAttribute("retained");
+            double revSum = (double) request.getSession().getAttribute("revSum");
+            double income = (double) request.getSession().getAttribute("income");
             int year = (int) request.getSession().getAttribute("year");
-            response.setHeader("Content-Disposition", "attachment; filename=\"" + year + " MAS Equity Statement.pdf\"");
+            response.setHeader("Content-Disposition", "attachment; filename=\"" + year + " MAS Balance Sheet.pdf\"");
             ServletOutputStream outputStream = response.getOutputStream();
+
+            //Create a temporary table for the printing of the graph
+            String tempTableName = "TEMPTTT";
+            String query = "CREATE TEMPORARY TABLE " + tempTableName + " (NAME1 VARCHAR(255) NOT NULL, "
+                    + "ENTRY1 DOUBLE, NAME2 VARCHAR(255), ENTRY2 DOUBLE, PRIMARY KEY (NAME1))";
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            Statement stmt = null;
+            Connection connection = airlineSystemDataSource.getConnection();
+            stmt = connection.createStatement();
+            stmt.executeUpdate(query);
+            query = "INSERT INTO " + tempTableName + " VALUES ('Cash', " + cash + ", 'Liabilities', " + (unearned + acctPay) + ")";
+            stmt.executeUpdate(query);
+            query = "INSERT INTO " + tempTableName + " VALUES ('Accounts Receivable', " + acctRecv + ", 'Assets', " + (cash + acctRecv + prepaid + pne) + ")";
+            stmt.executeUpdate(query);
+            query = "INSERT INTO " + tempTableName + " VALUES ('Prepaid Expenses', " + prepaid + ", 'Equity'," + (retained) + ")";
+            stmt.executeUpdate(query);
+            query = "INSERT INTO " + tempTableName + " VALUES ('Property & Equipment', " + pne + ", 'Total', " + (unearned + acctPay + retained) + ")";
+            stmt.executeUpdate(query);
 
             //Set up the parameters
             HashMap parameters = new HashMap();
-            parameters.put("IMAGEPATH", "http://localhost:8080/AirlineSystem-war/JasperReports/flower1.png");
+            parameters.put("IMAGEPATH", "http://localhost:8080/AirlineSystem-war/JasperReports/MALogo.jpg");
             parameters.put("YEAR", year);
-            parameters.put("CASH", cash);
-            parameters.put("ACCTRECV", acctRecv);
-            parameters.put("PREPAID", prepaid);
-            parameters.put("PNE", pne);
-            parameters.put("ACCTPAY", acctPay);
-            parameters.put("UNEARNED", unearned);
-            parameters.put("RETAINED", retained);
-            
+            parameters.put("CASH", df.format(cash));
+            parameters.put("ACCTRECV", df.format(acctRecv));
+            parameters.put("PREPAID", df.format(prepaid));
+            parameters.put("PNE", df.format(pne));
+            parameters.put("ACCTPAY", df.format(acctPay));
+            parameters.put("UNEARNED", df.format(unearned));
+            parameters.put("RETAINED", df.format(retained));
+            parameters.put("CURRTOT", df.format(cash + acctRecv + prepaid));
+            parameters.put("ASSETTOT", df.format(cash + acctRecv + prepaid + pne));
+            parameters.put("LIABTOT", df.format(unearned + acctPay));
+            parameters.put("TOT1", df.format(unearned + acctPay + retained));
+            parameters.put("TEMP", tempTableName);
+
+            System.out.println(parameters);
+            Boolean print = false;
+//            Calculate the metrics
+            if (acctPay + unearned != 0) {
+                parameters.put("RATIO", df2.format((cash + acctRecv + prepaid + pne) / (acctPay + unearned)));
+                print = true;
+            }
+            if (revSum != 0) {
+                parameters.put("MARGIN", df2.format((income) / (revSum)));
+                print = true;
+            }
+            parameters.put("PRINT", print);
             //Generate the report
-            JasperRunManager.runReportToPdfStream(reportStream, outputStream, parameters, new JREmptyDataSource());
+            JasperRunManager.runReportToPdfStream(reportStream, outputStream, parameters, connection);
 
             outputStream.flush();
             outputStream.close();
@@ -431,20 +479,35 @@ public class Controller extends HttpServlet {
 
     private void printJournalPDF(HttpServletRequest request, HttpServletResponse response) {
         try {
-            InputStream reportStream = getServletConfig().getServletContext().getResourceAsStream("/JasperReports/DemandForecastReport.jasper");
+            InputStream reportStream = getServletConfig().getServletContext().getResourceAsStream("/JasperReports/AcctJournal.jasper");
             response.setContentType("application/pdf");
 
             //Get the relevant information from the request sent
             int year = (int) request.getSession().getAttribute("year");
-            response.setHeader("Content-Disposition", "attachment; filename=\"" + year + " MAS Equity Statement.pdf\"");
+            String[][] result = (String[][]) request.getSession().getAttribute("result");
+            response.setHeader("Content-Disposition", "attachment; filename=\"" + year + " MAS General Journal.pdf\"");
             ServletOutputStream outputStream = response.getOutputStream();
 
+            //Create a temporary table for the printing of the graph
+            String tempTableName = "TEMPTTT";
+            String query = "CREATE TEMPORARY TABLE " + tempTableName + " (ID INTEGER NOT NULL, "
+                    + "DATE VARCHAR(255), ACCT VARCHAR(255), AMT VARCHAR(255), TYPE VARCHAR(255), MEMO VARCHAR(255),PRIMARY KEY (ID))";
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            Statement stmt = null;
+            Connection connection = airlineSystemDataSource.getConnection();
+            stmt = connection.createStatement();
+            stmt.executeUpdate(query);
+            for (int i = 0; i < result.length; i++) {
+                query = "INSERT INTO " + tempTableName + " VALUES ('" + (i+1) + "', '" + result[i][0] + "', '" + result[i][1] + "', '" + result[i][2] + "', '" + result[i][3] + "', '" + result[i][4] + "')";
+                stmt.executeUpdate(query);
+            }
             //Set up the parameters
             HashMap parameters = new HashMap();
-            parameters.put("IMAGEPATH", "http://localhost:8080/AirlineSystem-war/JasperReports/flower1.png");
+            parameters.put("IMAGEPATH", "http://localhost:8080/AirlineSystem-war/JasperReports/MALogo.jpg");
             parameters.put("YEAR", year);
+            parameters.put("TEMP", tempTableName);
             //Generate the report
-            JasperRunManager.runReportToPdfStream(reportStream, outputStream, parameters, airlineSystemDataSource.getConnection());
+            JasperRunManager.runReportToPdfStream(reportStream, outputStream, parameters, connection);
 
             outputStream.flush();
             outputStream.close();
@@ -455,7 +518,6 @@ public class Controller extends HttpServlet {
             ex.printStackTrace();
         }
     }
-    
 
     private void printBaggageTagPDF(HttpServletRequest request, HttpServletResponse response) {
         try {

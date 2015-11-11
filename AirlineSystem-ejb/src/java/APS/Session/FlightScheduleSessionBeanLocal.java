@@ -14,7 +14,7 @@ import javax.ejb.Local;
 @Local
 public interface FlightScheduleSessionBeanLocal {
     
-    public void scheduleFlights(String flightId);
+    public void scheduleFlights(String flightNo, boolean fortnight);
     public void rotateAircrafts();
     public void dummyRotate();
     public void rotateMaintainenceSchedule(String flightNo);

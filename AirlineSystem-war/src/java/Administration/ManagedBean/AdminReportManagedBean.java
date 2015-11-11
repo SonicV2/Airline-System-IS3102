@@ -198,7 +198,7 @@ public class AdminReportManagedBean {
         // Calculate years and days used
         setDaysUsed(aircraftProductivitySessionBean.calculateYearsUsed(selectedAircraft));
         double yearsInDouble = Double.parseDouble(daysUsed) / 365;
-        DecimalFormat df = new DecimalFormat("#.00");
+        DecimalFormat df = new DecimalFormat("0.00");
         String yearsFormatted = df.format(yearsInDouble);
         setYearsUsed(yearsFormatted);
 
@@ -302,7 +302,7 @@ public class AdminReportManagedBean {
         // Calculate years and days used
         setDaysUsed(aircraftProductivitySessionBean.calculateYearsUsed(selectedAircraft));
         double yearsInDouble = Double.parseDouble(daysUsed) / 365;
-        DecimalFormat df = new DecimalFormat("#.00");
+        DecimalFormat df = new DecimalFormat("0.00");
         String yearsFormatted = df.format(yearsInDouble);
         setYearsUsed(yearsFormatted);
 

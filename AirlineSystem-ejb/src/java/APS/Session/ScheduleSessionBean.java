@@ -101,7 +101,7 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
     //@param isUpdate - boolean that specifies whether the call is upon creation of flight or updating of flight  
     //Precond: Duration in months
     @Override
-    public void addSchedules(int duration, String flightNo, boolean isUpdate) {
+    public void addSchedules(int duration, String flightNo, boolean isUpdate, boolean fortnight) {
         flight = getFlight(flightNo);
         String flightDays = flight.getFlightDays();
         aircraftType = flight.getAircraftType();
@@ -135,25 +135,65 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
         int firstClass = aircraftType.getFirstSeats();
         int[] seats = ps.generateAvailability(flightNo, economy, business, firstClass);
 
+        //Calculate the schedules for the fortnight if needed
+        List<Integer> fortnightWeeks = new ArrayList<Integer>();
+        if (fortnight) {
+            //Look for the base week when the schedule starts
+            int baseWeek = currTime.get(Calendar.WEEK_OF_YEAR) + 1;
+            int baseDay = currTime.get(Calendar.DAY_OF_WEEK);
+            for (int i = baseDay - 1; i < 7; i++) {
+                if (flightDays.charAt(i) == '1') {
+                    baseWeek--;
+                    break;
+                }
+            }
+            
+            System.out.println(baseWeek);
+            //Find the relevant weeks
+            for (int i = baseWeek; i < baseWeek + duration; i += 2) {
+                fortnightWeeks.add(i);
+            }
+            System.out.println(fortnightWeeks);
+        }
         //Add a list schedule until the number of months specified
         while (currTime.before(endTime)) {
             schedule = new Schedule();
             seatAvail = new SeatAvailability();
             int day = currTime.get(Calendar.DAY_OF_WEEK);
-            if (flightDays.charAt(day - 1) == '1') {
-                Date flightEnd = calcEndTime(currTime.getTime(), flight);
-                schedule.createSchedule(currTime.getTime(), flightEnd);
-                schedule.setFlight(flight);
-                schedule.setTeam(team);
-                schedule.setAircraft(null);
-                seatAvail.createSeatAvail(schedule, seats);
-                schedule.setSeatAvailability(seatAvail);
-                checklists = cs.createChecklistAndItems();
-                schedule.setChecklists(checklists);
-                em.persist(schedule);
-                em.persist(seatAvail);
+            int week = currTime.get(Calendar.WEEK_OF_YEAR);
+            if (fortnight) {
+                if (fortnightWeeks.contains(week) && flightDays.charAt(day - 1) == '1') {
+                    Date flightEnd = calcEndTime(currTime.getTime(), flight);
+                    schedule.createSchedule(currTime.getTime(), flightEnd);
+                    schedule.setFlight(flight);
+                    schedule.setTeam(team);
+                    schedule.setAircraft(null);
+                    seatAvail.createSeatAvail(schedule, seats);
+                    schedule.setSeatAvailability(seatAvail);
+                    seatAvail.setBookings(null);
+                    checklists = cs.createChecklistAndItems();
+                    schedule.setChecklists(checklists);
+                    em.persist(schedule);
+                    em.persist(seatAvail);
 
-                schedules.add(schedule);
+                    schedules.add(schedule);
+                }
+            } else {
+                if (flightDays.charAt(day - 1) == '1') {
+                    Date flightEnd = calcEndTime(currTime.getTime(), flight);
+                    schedule.createSchedule(currTime.getTime(), flightEnd);
+                    schedule.setFlight(flight);
+                    schedule.setTeam(team);
+                    schedule.setAircraft(null);
+                    seatAvail.createSeatAvail(schedule, seats);
+                    schedule.setSeatAvailability(seatAvail);
+                    checklists = cs.createChecklistAndItems();
+                    schedule.setChecklists(checklists);
+                    em.persist(schedule);
+                    em.persist(seatAvail);
+
+                    schedules.add(schedule);
+                }
             }
             currTime.setTime(counter);
             currTime.add(Calendar.DATE, 1);
@@ -161,6 +201,7 @@ public class ScheduleSessionBean implements ScheduleSessionBeanLocal {
         }
         flight.setSchedule(schedules);
         em.merge(flight);
+        em.flush();
 
         if (isUpdate) {
             flightScheduleSessionBean.rotateAircrafts(); //rotate flights to assign aircrafts if addSchedules is called as a update

@@ -128,7 +128,7 @@ public class FleetManagedBean {
         FacesContext.getCurrentInstance().addMessage(null, message);
         setAircrafts(fleetSessionBean.retrieveAircrafts());
         AircraftType aircraftType = fleetSessionBean.getAircraftType(aircraftTypeId);
-        accountingSessionBean.makeTransaction("Acquire Aircraft", aircraftType.getCost());
+        accountingSessionBean.makeTransaction("Acquire Aircraft", aircraftType.getCost()*1000000);
         clear();
 
         Logger logger = Logger.getLogger(FleetManagedBean.class.getName());
