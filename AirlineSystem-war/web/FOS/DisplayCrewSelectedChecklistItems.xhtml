@@ -3,24 +3,46 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <h:head>
         <p:growl id="growl" sticky="true" showDetail="true"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <h:outputStylesheet library ="css"  name="bootstrap.css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
+        <h:outputStylesheet library="css" name="admindb.css" />
+        <h:outputStylesheet library="css" name="morrisjs/morris.css" />
         <title>Maintenance Checklist Item</title>
     </h:head>
     <h:body>
-        <h:form>
-            
-            <p:selectManyCheckbox id="grid" value="#{maintainChecklistManagedBean.checkedLists}" layout="grid" columns="3">
-                <f:selectItems value="#{maintainChecklistManagedBean.selectedChecklistItems}" var="item" itemLabel="#{item.content} &lt;br/&gt; " itemValue="#{item.content}" itemDisabled="#{item.checked}" />
-            </p:selectManyCheckbox>
-            
-            <p:inputTextarea rows="5" cols="30" counter="display" maxlength="10000" counterTemplate="{0} characters remaining." autoResize="false" value="#{maintainChecklistManagedBean.comments}"/>
-            <h:outputText id="display" />
-            <br />
-            <h:commandButton value="Save" actionListener="#{maintainChecklistManagedBean.saveChecklist}" action="/CI/EmployeeDashBoard"/>
-            <h:commandButton value="Submit" actionListener="#{maintainChecklistManagedBean.submitChecklist}" action="/CI/EmployeeDashBoard"/>
-        </h:form>
+        <!--To add the same header on all dashboard pages  -->        
+        <ui:include src="/CI/DashboardHeader.xhtml"/>
+        <!--To add the same sidebar on all dashboard pages -->  
+        <ui:include src="/CI/DashboardSidebar.xhtml"/>
+        <div id="page-wrapper">
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2 class="page-header">Fill in Regular Maintenance Checklist</h2>
+                </div>
+                <div class="col-lg-12">
+                    <h:form>
+
+                        <p:selectManyCheckbox id="grid" value="#{maintainChecklistManagedBean.checkedLists}" layout="grid" columns="3">
+                            <f:selectItems value="#{maintainChecklistManagedBean.selectedChecklistItems}" var="item" itemLabel="#{item.content} &lt;br/&gt; " itemValue="#{item.content}" itemDisabled="#{item.checked}" />
+                        </p:selectManyCheckbox>
+
+                        <p:inputTextarea rows="5" cols="30" counter="display" maxlength="10000" counterTemplate="{0} characters remaining." autoResize="false" value="#{maintainChecklistManagedBean.comments}"/>
+                        <h:outputText id="display" />
+                        <br />
+                        <h:commandButton value="Save" actionListener="#{maintainChecklistManagedBean.saveChecklist}" action="/CI/EmployeeDashBoard"/>
+                        <h:commandButton value="Submit" actionListener="#{maintainChecklistManagedBean.submitChecklist}" action="/CI/EmployeeDashBoard"/>
+                    </h:form>
+                </div>
+            </div>
+        </div>
     </h:body>
 </html>
 
