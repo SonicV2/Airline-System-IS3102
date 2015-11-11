@@ -15,5 +15,6 @@ import javax.ejb.Local;
 public interface DataLoadSessionBeanLocal {
     public void init();
     public void prepareCRMData();
+    public void bookSeats();
     
 }

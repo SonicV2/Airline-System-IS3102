@@ -50,7 +50,7 @@
                             </p:column>
 
                             <p:column headerText="Active Book" style="text-align:center">
-                                <p:commandLink class="fa fa-check" rendered="#{book.active}" value=""/>
+                                <h:selectBooleanCheckbox value="#{book.active}"  rendered="#{book.active}" disabled="true" />
                                 <h:commandButton class="btn btn-primary" rendered="#{!book.active}" value="Set as active" actionListener="#{bookkeepingManagedBean.checkBook(book.year)}" />                
                             </p:column>
                         </p:dataTable>

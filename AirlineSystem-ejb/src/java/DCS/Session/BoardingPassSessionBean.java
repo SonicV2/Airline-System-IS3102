@@ -50,7 +50,7 @@ public class BoardingPassSessionBean implements BoardingPassSessionBeanLocal {
 //        boardingpass.setBoardingTime(depart.toString());
 //        depart.setTime(depart.getTime() + 1800 * 1000);
         
-        boardingpass.setBoardingTime(boardingTime);
+        boardingpass.setBoardingTime(boardingTime.substring(0, boardingTime.indexOf("SGT")));
 
         boardingpass.setSeqNumber(seq + "");
         seq++;

@@ -166,10 +166,7 @@ public class PricingSessionBean implements PricingSessionBeanLocal, PricingSessi
             realSold = (realSold * 100) / sa.getFirstClassTotal();
         }
         
-            System.out.println("REAL SOLD :");
-            System.out.println(realSold);
-            System.out.println(sa.getFirstClassBooked());
-            System.out.println(sa.getFirstClassTotal());
+
         try {
             
             Date currentDate = new Date();

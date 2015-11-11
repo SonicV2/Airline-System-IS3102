@@ -5,6 +5,7 @@
  */
 package Inventory.Session;
 
+import Administration.Session.AccountingSessionBeanLocal;
 import Inventory.Entity.SeatAvailability;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -14,6 +15,7 @@ import java.util.Date;
 import java.util.List;
 import javax.persistence.Query;
 import java.util.Random;
+import javax.ejb.EJB;
 
 /**
  *
@@ -22,6 +24,9 @@ import java.util.Random;
 @Stateless
 public class BookingSessionBean implements BookingSessionBeanLocal {
 
+    @EJB
+    private AccountingSessionBeanLocal accountingSessionBean;
+    
     @PersistenceContext(unitName = "AirlineSystem-ejbPU")
     private EntityManager em;
     private String serviceType;
@@ -52,6 +57,7 @@ public class BookingSessionBean implements BookingSessionBeanLocal {
             book.YQcreateBooking("Economy Saver", sa);
             pseuduTurnOut2(book);
             em.persist(book);
+            //accountingSessionBean.makeTransaction("Customer Booking", book.getPrice());
         }
         int economyBasicBooked = sa.getEconomyBasicTotal() / 2 + random.nextInt(sa.getEconomyBasicTotal() / 2);
         sa.setEconomyBasicBooked(economyBasicBooked);
@@ -60,6 +66,7 @@ public class BookingSessionBean implements BookingSessionBeanLocal {
             book.YQcreateBooking("Economy Basic", sa);
             pseuduTurnOut2(book);
             em.persist(book);
+            //accountingSessionBean.makeTransaction("Customer Booking", book.getPrice());
         }
         int economyPremiumBooked = sa.getEconomyPremiumTotal() / 2 + random.nextInt(sa.getEconomyPremiumTotal() / 2);
         sa.setEconomyPremiumBooked(economyPremiumBooked);
@@ -68,9 +75,10 @@ public class BookingSessionBean implements BookingSessionBeanLocal {
             book.YQcreateBooking("Economy Premium", sa);
             pseuduTurnOut(book);
             em.persist(book);
+            //accountingSessionBean.makeTransaction("Customer Booking", book.getPrice());
         }
-        System.out.println("Look Here !!!###");
-        System.out.println(sa.getBusinessTotal());
+
+
         int businessBooked = sa.getBusinessTotal() / 2 + random.nextInt(sa.getBusinessTotal() / 2);
         sa.setBusinessBooked(businessBooked);
         for (int i = 0; i < businessBooked; i++) {
@@ -78,9 +86,8 @@ public class BookingSessionBean implements BookingSessionBeanLocal {
             book.YQcreateBooking("Business", sa);
             pseuduTurnOut(book);
             em.persist(book);
+            //accountingSessionBean.makeTransaction("Customer Booking", book.getPrice());
         }
-        System.out.println("Look Here !!!###");
-        System.out.println(sa.getFirstClassTotal());
         int firstBooked = sa.getFirstClassTotal() / 2 + random.nextInt(sa.getFirstClassTotal() / 2);
         sa.setFirstClassBooked(firstBooked);
         for (int i = 0; i < firstBooked; i++) {

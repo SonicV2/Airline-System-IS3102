@@ -117,7 +117,7 @@ public class BaggageSessionBean implements BaggageSessionBeanLocal {
             BaggageTag bagTag = new BaggageTag();
             String arrivalCity = findArrivalCityIATA(booking);
 
-            bagTag.create(generateTagNumber(), booking.getFlightNo(), booking.getFlightDate(), arrivalCity, booking.getServiceType());
+            bagTag.create(generateTagNumber(), booking.getFlightNo(), booking.getSeatAvail().getSchedule().getStartDate(), arrivalCity, booking.getServiceType());
             baggage.setBaggageTag(bagTag);
             baggage.setBaggageStatus("Confrimed");
             bagTag.setBagStatus("Confirmed");

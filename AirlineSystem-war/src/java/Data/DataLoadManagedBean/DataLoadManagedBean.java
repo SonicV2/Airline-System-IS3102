@@ -38,6 +38,12 @@ public class DataLoadManagedBean {
         return null;
     }
     
+    public void bookSeats(){
+        dataLoadSessionBean.bookSeats();
+        message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Seats Booked successfully!", "");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+    
     public String crmData(){
         dataLoadSessionBean.prepareCRMData();
         message = new FacesMessage(FacesMessage.SEVERITY_INFO, "CRM Data Loaded successfully!", "");

@@ -451,6 +451,7 @@ public class SeatManagedBean {
     public void changeExistBooking(ActionEvent event) {
 
         passengerNameRecordSessionBean.changeExistBooking(booking, selectedSchedule);
+        searchBookingManagedBean.clear();
 
     }
 

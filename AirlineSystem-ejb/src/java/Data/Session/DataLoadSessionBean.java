@@ -121,7 +121,7 @@ public class DataLoadSessionBean implements DataLoadSessionBeanLocal {
         System.out.println("*****Managers added");
         addExecutives();
         System.out.println("*****Executives added");
-        bookSeats();
+        
         System.out.println("***Data Load complete");
         
 
@@ -312,6 +312,7 @@ public class DataLoadSessionBean implements DataLoadSessionBeanLocal {
     }
 
     public void bookSeats() {
+        bs.bookSeats("MA666");
         bs.bookSeats("MA303");
 
     }
@@ -342,8 +343,9 @@ public class DataLoadSessionBean implements DataLoadSessionBeanLocal {
         }
 
         //MA666 for Demand Forecast
-        flightSessionBean.addFlight("MA666", "0101010", 600.0, date9, 881L, false);
+        flightSessionBean.addFlight("MA666", "0000010", 600.0, date9, 881L, false);
         flightScheduleSessionBean.scheduleFlights("MA666", false);
+        scheduleSessionBean.addSchedules(25, "MA666", true, false);
         
         //MA777 for Testing
         flightSessionBean.addFlight("MA777", "0000010", 200.0, date8, 852L, false);

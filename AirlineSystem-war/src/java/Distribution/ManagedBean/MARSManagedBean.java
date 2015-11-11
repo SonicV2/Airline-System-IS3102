@@ -1003,6 +1003,7 @@ public class MARSManagedBean {
         
         
         accountingSessionBean.makeTransaction("Customer Booking", totalPriceWinsurance);
+
         
         return "Confirmation";
     }
