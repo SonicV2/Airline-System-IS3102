@@ -107,7 +107,7 @@ public class Aircraft implements Serializable {
     public void setSchedules(List<Schedule> schedules) {
         this.schedules = schedules;
     }
-           
+
     @Override
     public int hashCode() {
         int hash = 0;

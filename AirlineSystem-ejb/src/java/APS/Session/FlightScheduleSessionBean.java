@@ -233,27 +233,27 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
 
     @Override
     public void rotateMaintainenceSchedule(String tailNo) {
-        Aircraft aircraft = em.find(Aircraft.class, tailNo);
-        schedules = aircraft.getSchedules();
+//        Aircraft aircraft = em.find(Aircraft.class, tailNo);
+//        schedules = aircraft.getSchedules();
 //        List<MaintainSchedule> mSchedules = aircraft.getmSchedules();
-        List<Aircraft> reserves = getReserveAircrafts("Stand-By");
-        Comparator<MaintainSchedule> comparator2 = new Comparator<MaintainSchedule>() {
-            @Override
-            public int compare(MaintainSchedule o1, MaintainSchedule o2) {
-                int result = o1.getMainStartDate().compareTo(o2.getMainStartDate());
-                if (result == 0) {
-                    return o1.getMainStartDate().before(o2.getMainStartDate()) ? -1 : 1;
-                } else {
-                    return result;
-                }
-            }
-        };
-        Schedule selectedSchedule1 = new Schedule();
-        Schedule selectedSchedule2 = new Schedule();
-        Aircraft selectedAircraft = new Aircraft();
-        int counter = 0;
-        List<Schedule> selectedSchedules = new ArrayList<Schedule>();
-        Collections.sort(schedules, comparator);
+//        List<Aircraft> reserves = getReserveAircrafts("Stand-By");
+//        Comparator<MaintainSchedule> comparator2 = new Comparator<MaintainSchedule>() {
+//            @Override
+//            public int compare(MaintainSchedule o1, MaintainSchedule o2) {
+//                int result = o1.getMainStartDate().compareTo(o2.getMainStartDate());
+//                if (result == 0) {
+//                    return o1.getMainStartDate().before(o2.getMainStartDate()) ? -1 : 1;
+//                } else {
+//                    return result;
+//                }
+//            }
+//        };
+//        Schedule selectedSchedule1 = new Schedule();
+//        Schedule selectedSchedule2 = new Schedule();
+//        Aircraft selectedAircraft = new Aircraft();
+//        int counter = 0;
+//        List<Schedule> selectedSchedules = new ArrayList<Schedule>();
+//        Collections.sort(schedules, comparator);
 //        Collections.sort(mSchedules, comparator2);
 //        for (int i = 0; i < mSchedules.size(); i++) {
 //            //Search for the pair of schedules that conflicts
