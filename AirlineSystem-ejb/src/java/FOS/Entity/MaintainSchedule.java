@@ -191,6 +191,4 @@ public class MaintainSchedule implements Serializable {
         this.amaintainChecklist = amaintainChecklist;
     }
 
-    
-
 }
