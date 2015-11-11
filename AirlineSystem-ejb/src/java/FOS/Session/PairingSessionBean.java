@@ -271,7 +271,7 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
 
             if (i == 0) {
                 flightCities.add(leg.get(i).getOrigin());
-               // flightCities.add(leg.get(i).getOrigin() + "-->");    // -->if need to add "-->"
+                // flightCities.add(leg.get(i).getOrigin() + "-->");    // -->if need to add "-->"
 
                 flightCities.add(leg.get(i).getDestination());
                 startHour = String.format("%04d", leg.get(i).getStartHour());
@@ -302,7 +302,7 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
 
         String totalFlightHour = (hFlight / 100) + " hours " + (hFlight % 100) + " minutes";
 
-      // for unique cities  
+        // for unique cities  
         HashSet<String> uniqueValues = new HashSet<>(flightCities);
         List<String> newCities = new ArrayList<String>();
 
@@ -311,7 +311,7 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
         }
         pr.create(date, totalFlightHour, flightNos, flightCities, flightTimes, newCities);
 
-     //   pr.create(date, totalFlightHour, flightNos, flightCities, flightTimes);
+        //   pr.create(date, totalFlightHour, flightNos, flightCities, flightTimes);
         pr.setTeam(null);
 
         pr.setIsA380(false);
@@ -457,8 +457,7 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
 
                                     em.merge(sh);
 
-                                    em.merge(t);
-
+                                    //em.merge(t);
                                     em.flush();
 
                                 }
@@ -647,12 +646,19 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
 
             schedules = new ArrayList<Schedule>();
             schedules = flight.getSchedule();
+            System.out.println("------------------>outside" + s);
+            for (String ss : flightDates) {
+                System.out.println("------------------>Flight date" + ss);
+
+            }
 
             for (String ss : flightDates) {
 
                 for (Schedule sh : schedules) {
                     String formattedDate = new SimpleDateFormat("dd/MM/yyyy").format(sh.getStartDate());
                     if (formattedDate.equals(ss)) {
+
+                        System.out.println("------------------>Indside loop" + ss + " flight no " + s);
 
                         teamSchedule = team.getSchedule();
                         teamSchedule.add(sh);
@@ -663,8 +669,7 @@ public class PairingSessionBean implements PairingSessionBeanLocal {
 
                         em.merge(sh);
 
-                        em.merge(team);
-
+                        // em.merge(team);
                         em.flush();
 
                     }
