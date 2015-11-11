@@ -235,7 +235,7 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
     public void rotateMaintainenceSchedule(String tailNo) {
         Aircraft aircraft = em.find(Aircraft.class, tailNo);
         schedules = aircraft.getSchedules();
-        List<MaintainSchedule> mSchedules = aircraft.getmSchedules();
+//        List<MaintainSchedule> mSchedules = aircraft.getmSchedules();
         List<Aircraft> reserves = getReserveAircrafts("Stand-By");
         Comparator<MaintainSchedule> comparator2 = new Comparator<MaintainSchedule>() {
             @Override
@@ -254,46 +254,46 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanLocal
         int counter = 0;
         List<Schedule> selectedSchedules = new ArrayList<Schedule>();
         Collections.sort(schedules, comparator);
-        Collections.sort(mSchedules, comparator2);
-        for (int i = 0; i < mSchedules.size(); i++) {
-            //Search for the pair of schedules that conflicts
-            for (int j = 0; j < schedules.size(); j++) {
-                if (mSchedules.get(i).getMainStartDate().before(schedules.get(i).getStartDate())) {
-                    selectedSchedule1 = schedules.get(i);
-                    selectedSchedule2 = schedules.get(i + 1);
-                }
-            }
-
-            for (int j = 0; j < reserves.size(); j++) {
-                selectedAircraft = reserves.get(j);
-                selectedSchedules = selectedAircraft.getSchedules();
-                Collections.sort(selectedSchedules, comparator);
-                for (counter = 0; counter < selectedSchedules.size(); counter++) {
-                    if (selectedSchedules.get(counter).getStartDate().before(selectedSchedule1.getStartDate()) 
-                            && selectedSchedules.get(counter).getEndDate().after(selectedSchedule1.getEndDate())) {
-                        break;
-                    }
-                    
-                    if (selectedSchedules.get(counter).getStartDate().before(selectedSchedule2.getStartDate()) 
-                            && selectedSchedules.get(counter).getEndDate().after(selectedSchedule2.getEndDate())) {
-                        break;
-                    }
-                }
-
-                if (counter == selectedSchedules.size() - 1) {
-                    break;
-                }
-            }
-            
-            aircraft.getSchedules().remove(selectedSchedule1);
-            aircraft.getSchedules().remove(selectedSchedule2);
-            selectedAircraft.getSchedules().add(selectedSchedule1);
-            selectedAircraft.getSchedules().add(selectedSchedule2);
-            selectedSchedule1.setAircraft(selectedAircraft);
-            selectedSchedule2.setAircraft(selectedAircraft);
-            em.merge(selectedSchedule1);
-            em.merge(selectedSchedule2);
-        }
+//        Collections.sort(mSchedules, comparator2);
+//        for (int i = 0; i < mSchedules.size(); i++) {
+//            //Search for the pair of schedules that conflicts
+//            for (int j = 0; j < schedules.size(); j++) {
+//                if (mSchedules.get(i).getMainStartDate().before(schedules.get(i).getStartDate())) {
+//                    selectedSchedule1 = schedules.get(i);
+//                    selectedSchedule2 = schedules.get(i + 1);
+//                }
+//            }
+//
+//            for (int j = 0; j < reserves.size(); j++) {
+//                selectedAircraft = reserves.get(j);
+//                selectedSchedules = selectedAircraft.getSchedules();
+//                Collections.sort(selectedSchedules, comparator);
+//                for (counter = 0; counter < selectedSchedules.size(); counter++) {
+//                    if (selectedSchedules.get(counter).getStartDate().before(selectedSchedule1.getStartDate()) 
+//                            && selectedSchedules.get(counter).getEndDate().after(selectedSchedule1.getEndDate())) {
+//                        break;
+//                    }
+//                    
+//                    if (selectedSchedules.get(counter).getStartDate().before(selectedSchedule2.getStartDate()) 
+//                            && selectedSchedules.get(counter).getEndDate().after(selectedSchedule2.getEndDate())) {
+//                        break;
+//                    }
+//                }
+//
+//                if (counter == selectedSchedules.size() - 1) {
+//                    break;
+//                }
+//            }
+//            
+//            aircraft.getSchedules().remove(selectedSchedule1);
+//            aircraft.getSchedules().remove(selectedSchedule2);
+//            selectedAircraft.getSchedules().add(selectedSchedule1);
+//            selectedAircraft.getSchedules().add(selectedSchedule2);
+//            selectedSchedule1.setAircraft(selectedAircraft);
+//            selectedSchedule2.setAircraft(selectedAircraft);
+//            em.merge(selectedSchedule1);
+//            em.merge(selectedSchedule2);
+//        }
 
     }
 
