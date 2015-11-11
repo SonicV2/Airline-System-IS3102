@@ -67,7 +67,7 @@ public class ScheduleManagedBean {
 
     private List<Aircraft> aircraftlist;
     private List<Schedule> checklistSchedules;
-
+    
     private String flightDaysString;
 
     FacesMessage message = null;
@@ -115,6 +115,7 @@ public class ScheduleManagedBean {
         scheduleSessionBean.addSchedules(duration, flightNo, true, fortnight);
         setFortnight(false);
         setFlights(flightSessionBean.retrieveActiveFlights());
+        scheduleSessionBean.displayFlightDays(flights);
         message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Schedules Added Successfully!", "");
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
@@ -181,7 +182,6 @@ public class ScheduleManagedBean {
             clear(original);
             return;
         }
-
         scheduleSessionBean.edit(edited, original);
         message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Schedule Edited", "");
         FacesContext.getCurrentInstance().addMessage(null, message);
