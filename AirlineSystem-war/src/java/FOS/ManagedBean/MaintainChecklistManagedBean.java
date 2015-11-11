@@ -148,7 +148,7 @@ public class MaintainChecklistManagedBean {
             }
         }
         
-        if (checklist7 != null || !checklist7.isEmpty()) {
+        if (checklist7 != null && !checklist7.isEmpty()) {
             for (String s : checklist7) {
                 checkedLists.add(s);
             }
@@ -225,7 +225,7 @@ public class MaintainChecklistManagedBean {
         }
         
          
-        if (checklist7 != null || !checklist7.isEmpty()) {
+        if (checklist7 != null && !checklist7.isEmpty()) {
             for (String s : checklist7) {
                 checkedLists.add(s);
             }

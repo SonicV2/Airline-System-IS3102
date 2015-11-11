@@ -36,7 +36,7 @@
                                 <div class="input-group custom-search-form">
                                     <p:inputText class="form-control" placeholder="Please enter employee NRIC..." value="#{roleManagedBean.userID}"/>
                                     <span class="input-group-btn">
-                                        <h:commandButton class="btn btn-warning btn-block" value="Search" actionListener="#{roleManagedBean.search}"/>
+                                        <h:commandButton class="btn btn-warning btn-block" value="Search" actionListener="#{roleManagedBean.searchDeleteRoles}"/>
                                     </span>
                                 </div>
 
@@ -49,12 +49,12 @@
                         <div class="row col-lg-8">
                             <div class="panel panel-yellow">
                                 <div class="panel-heading">
-                                    Employee Name: #{roleManagedBean.employee.employeeDisplayFirstName} #{roleManagedBean.employee.employeeDisplayLastName}
+                                    Employee Name: #{roleManagedBean.employeeOne.employeeDisplayFirstName} #{roleManagedBean.employeeOne.employeeDisplayLastName}
                                 </div>
                                 <div class="panel-body">
                                     <p>Employee Role To Delete: </p>
                                     <p:selectManyCheckbox id="grid" value="#{roleManagedBean.deleteRoles}" layout="grid" columns="1">
-                                        <f:selectItems value="#{roleManagedBean.newroles}" var="role" itemLabel="#{role}" itemValue="#{role}" />
+                                        <f:selectItems value="#{roleManagedBean.newRolesToDelete}" var="role" itemLabel="#{role}" itemValue="#{role}" />
                                     </p:selectManyCheckbox>
 
                                     <br></br>

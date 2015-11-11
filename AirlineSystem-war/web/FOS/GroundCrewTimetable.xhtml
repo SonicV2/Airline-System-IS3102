@@ -7,30 +7,18 @@
       xmlns:c="http://java.sun.com/jsp/jstl/core"
       xmlns:jsf="http://xmlns.jcp.org/jsf"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
-    <h:head>
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <h:outputStylesheet library ="css"  name="bootstrap.css" />
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
-        <h:outputStylesheet library="css" name="admindb.css" />
-        <h:outputStylesheet library="css" name="morrisjs/morris.css" />
-        <title>Ground Crew Timetable</title>
-    </h:head>
-    <p:growl id="growl" sticky="true" showDetail="true"/>
-    <h:body>
-        <!--    To add the same header on all dashboard pages  -->
-        <ui:include src="/CI/DashboardHeader.xhtml"/>
-        <!--    To add the same sidebar on all dashboard pages  -->
-        <ui:include src="/CI/DashboardSidebar.xhtml"/>
+
         <div id="page-wrapper">
             <div class="row">
+                <div class="col-lg-12">
+                    <h2 class="page-header"> Welcome to dashboard, #{loginManagedBean.employeeUserName}!</h2>
+                </div>
                 <div class="col-lg-12">    
                     <h:form>
                         <p:growl id="messages" showDetail="true" />
 
                         <h:panelGrid columnClasses="value">
-                            <h3 style="margin-top: 0">My Timetable</h3>
+                            <h4 style="margin-top: 0">My Timetable</h4>
                             <p:schedule id="schedule" value="#{scheduleViewManagedBean.eventGroundCrewModel}" widgetVar="myschedule" timeZone="GMT+8">
 
                                 <p:ajax event="dateSelect" listener="#{scheduleView.onDateSelect}" update="eventDetails" oncomplete="PF('eventDialog').show();" />
@@ -65,6 +53,6 @@
             </div>
         </div>
 
-    </h:body>
+
 </html>
 

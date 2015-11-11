@@ -77,6 +77,8 @@ public class RoleManagedBean {
     private Long roleIDforAccessRight;
     private List<AccessRight> newAccessRights;//if admin wants to add new access rights to a person
     private List<AccessRight> selectedNewAccessRights; //the newly selected access rights for a role 
+    private Employee employeeOne;
+    private List<String> newRolesToDelete;
     
     
     public RoleManagedBean() {
@@ -104,6 +106,30 @@ public class RoleManagedBean {
 
     }
     
+    public void searchDeleteRoles(ActionEvent event) {
+        setNewRolesToDelete(new ArrayList<String>()); //to return all the current roles 
+        employee = employeeSessionBean.getEmployeeUseID(userID);
+
+        if (employee == null) {
+            getNewRolesToDelete().add("no such user!");
+            //msg="no such user!";
+            setEmployeeOne(employee);
+        } else {
+            userName = employee.getEmployeeUserName();
+            name = employee.getEmployeeDisplayFirstName() + " " + employee.getEmployeeDisplayLastName();
+            List<Role> r = employee.getRoles();
+            for (Role r1 : r) {
+                if (!r1.getRoleName().equals("Super Admin")) {
+                    getNewRolesToDelete().add(r1.getRoleName());
+                }
+            }
+            setEmployeeOne(employee);
+        }
+        userID = null;
+        
+
+    }
+    
     public String addNewAccessRights(Long thisRoleID){
         newAccessRights = new ArrayList<AccessRight>();
         roleSessionBean.getAccessRights(thisRoleID);
@@ -116,10 +142,12 @@ public class RoleManagedBean {
 
     public void deleteEmployeeRole(ActionEvent event) {
         setErrorMsg(roleSessionBean.deleteEmployeeRole(employee, deleteRoles));
+        employeeOne = employee;
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Role Deleted Successfully", "");
         FacesContext.getCurrentInstance().addMessage(null, message);
         setUserID("");
         setDeleteRoles(null);
+        setNewRolesToDelete(null);
         setNewroles(null);
         setErrorMsg("");
         setEmployee(null);
@@ -240,6 +268,7 @@ public class RoleManagedBean {
         FacesContext.getCurrentInstance().addMessage(null, message);
         new_Role = null;
         newroles = null;
+        userID = "";
         
         
     }
@@ -559,4 +588,36 @@ public class RoleManagedBean {
         this.selectedNewAccessRights = selectedNewAccessRights;
     }
 
+    /**
+     * @return the employeeOne
+     */
+    public Employee getEmployeeOne() {
+        return employeeOne;
+    }
+
+    /**
+     * @param employeeOne the employeeOne to set
+     */
+    public void setEmployeeOne(Employee employeeOne) {
+        this.employeeOne = employeeOne;
+    }
+
+    /**
+     * @return the newRolesToDelete
+     */
+    public List<String> getNewRolesToDelete() {
+        return newRolesToDelete;
+    }
+
+    /**
+     * @param newRolesToDelete the newRolesToDelete to set
+     */
+    public void setNewRolesToDelete(List<String> newRolesToDelete) {
+        this.newRolesToDelete = newRolesToDelete;
+    }
+
+
+    
+
+ 
 }
