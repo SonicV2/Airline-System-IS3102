@@ -3,25 +3,48 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <h:head>
         <p:growl id="growl" sticky="true" showDetail="true"/>
-        <title>Facelet Title</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <h:outputStylesheet library ="css"  name="bootstrap.css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
+        <h:outputStylesheet library="css" name="admindb.css" />
+        <h:outputStylesheet library="css" name="morrisjs/morris.css" />
+        <title>Ground Crew Checklist</title>
     </h:head>
     <h:body>
-        <h:form>
-            <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
-                <p:outputLabel for="checklist" value="Available Checklists: " />
-                <p:selectOneRadio id="checklist" value="#{maintainChecklistManagedBean.selectedChecklistId}"  layout="grid" columns="3">
-                    <f:selectItems value="#{maintainChecklistManagedBean.availChecklists}" var="c" itemLabel="Checklist ID: #{c.id} &lt;br/&gt; 
-                                   Schedule Start Date: #{c.maintainSchedule.mainStartDate} &lt;br/&gt;  
-                                   Schedule End Date: #{c.maintainSchedule.mainEndDate}" itemValue="#{c.id.toString()}"/>
-                </p:selectOneRadio>
+        <!--To add the same header on all dashboard pages  -->        
+        <ui:include src="/CI/DashboardHeader.xhtml"/>
+        <!--To add the same sidebar on all dashboard pages -->  
+        <ui:include src="/CI/DashboardSidebar.xhtml"/>
+        <div id="page-wrapper">
 
-            </h:panelGrid>
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2 class="page-header">Fill in Regular Maintenance Checklist</h2>
+                </div>
+                <div class="col-lg-12">
+                    <h:form>
+                        <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
+                            <p:outputLabel for="checklist" value="Available Checklists: " />
+                            <p:selectOneRadio id="checklist" value="#{maintainChecklistManagedBean.selectedChecklistId}"  layout="grid" columns="3">
+                                <f:selectItems value="#{maintainChecklistManagedBean.availChecklists}" var="c" itemLabel="Checklist ID: #{c.id} &lt;br/&gt; 
+                                               Schedule Start Date: #{c.maintainSchedule.mainStartDate} &lt;br/&gt;  
+                                               Schedule End Date: #{c.maintainSchedule.mainEndDate}" itemValue="#{c.id.toString()}"/>
+                            </p:selectOneRadio>
 
-            <h:commandButton value="Fill Checklist" action="#{maintainChecklistManagedBean.getChecklistItems(event)}" />
-        </h:form>
+                        </h:panelGrid>
+
+                        <h:commandButton class="btn btn-outline btn-success" value="Fill Checklist" action="#{maintainChecklistManagedBean.getChecklistItems(event)}" />
+                    </h:form>
+                </div>
+            </div>
+        </div>
+
     </h:body>
 </html>
 

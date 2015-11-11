@@ -422,8 +422,8 @@
                 <!-- this is for Ground Crew Access-->
                 <ui:fragment rendered="#{loginManagedBean.accessRightIDs.contains(32)}">
                     <li>
-                        <a href="#{request.contextPath}/FOS/GroundCrewTimetable.xhtml"><i class="fa fa-search"></i> View Timetable</a>
-                    </li>  
+                        <a href="#{request.contextPath}/FOS/DisplayCrewAvailChecklists.xhtml"><i class="fa fa-search"></i> Fill Regular Maintenance Checklist</a>
+                    </li> 
 
                 </ui:fragment>
 
@@ -437,7 +437,10 @@
                     </li>  
                     <li>
                         <a href="#{request.contextPath}/FOS/ViewMaintenanceTeams.xhtml"><i class="fa fa-eye"></i> View Maintenance Teams</a>
-                    </li> 
+                    </li>
+                            <li>
+                        <a href="#{request.contextPath}/FOS/ViewSubmittedMaintainChecklists.xhtml"><i class="fa fa-eye"></i> View Filled Checklist</a>
+                    </li>
                         </ul>
                     </li>
 
