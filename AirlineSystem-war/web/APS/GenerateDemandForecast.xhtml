@@ -95,7 +95,7 @@
                             <h:outputLabel class="col-md-4 control-label" value="Year of Forecast: " />
                             <p:inputText style="width:100px" value="#{flightManagedBean.forecastYear}"/>
                             &nbsp;
-                            <p:commandButton class="btn btn-info btn-xs" update="growl" global="false" value="Check" action="#{flightManagedBean.checkForecastYear(flightManagedBean.forecastYear)}" />                      
+                            <p:commandButton update="growl" global="false" value="Check" action="#{flightManagedBean.checkForecastYear(flightManagedBean.forecastYear)}" />                      
                             <br/>
                         </div>
 
@@ -130,7 +130,7 @@
 
                         <div class="text-center">
                             <br/>
-                            <p:commandButton class="btn btn-outline btn-success" update="growl" value="Generate Forecast!" actionListener="#{flightManagedBean.generateForecast}"/>
+                            <p:commandButton update="growl" value="Generate Forecast!" actionListener="#{flightManagedBean.generateForecast}"/>
                             <br></br>
                             <br></br>
                         </div>
