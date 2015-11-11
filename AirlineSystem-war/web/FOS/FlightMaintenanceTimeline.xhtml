@@ -16,11 +16,11 @@
         <h:outputStylesheet library="css" name="admindb.css" />
         <h:outputStylesheet library="css" name="morrisjs/morris.css" />
         <title>Maintenance Timeline</title>
- 
+
     </h:head>
     <h:body>
         <!--            To add the same header on all dashboard pages -->  
-                <ui:include src="/CI/DashboardHeader.xhtml"/>
+        <ui:include src="/CI/DashboardHeader.xhtml"/>
         <!-- To add the same sidebar on all dashboard pages -->  
         <ui:include src="/CI/DashboardSidebar.xhtml"/>
         <div id="page-wrapper">
@@ -32,13 +32,29 @@
             </div>
             <h:form>
                 <div class="form-group">
-                <h:commandButton class="btn btn-outline btn-success" value="Generate Team" actionListener="#{maintainScheduleManagedBean.generateTeam}"/>: Explanation
+                    <h:commandButton class="btn btn-outline btn-success" value="Generate Team" actionListener="#{maintainScheduleManagedBean.generateTeam}"/>
+
+                    <p:dataTable id="basicDT" var="team" value="#{maintainScheduleManagedBean.teams}">
+
+                        <p:column headerText="Id">
+                            <h:outputText value="#{team.id}" />
+                        </p:column>
+                        <p:column headerText="Status">
+                            <h:outputText value="#{team.status}" />
+                        </p:column>
+                        <p:column headerText="Maintenance Crew Number: ">
+                            <h:outputText value="#{team.maintainCrewNo}" />
+                        </p:column>
+                        
+                    </p:dataTable>
+                </div>
+
+
+                <div class="form-group">
+                    <h:commandButton class="btn btn-outline btn-success" value="Assign Ground Crews to Teams" actionListener="#{maintainScheduleManagedBean.assignCrew}"/>
                 </div>
                 <div class="form-group">
-                <h:commandButton class="btn btn-outline btn-success" value="Assign Ground Crews" actionListener="#{maintainScheduleManagedBean.assignCrew}"/>: Explanation
-                </div>
-                <div class="form-group">
-                <h:commandButton class="btn btn-outline btn-success" value="Assign Schedule" actionListener="#{maintainScheduleManagedBean.assignTeam}"/>: Explanation
+                    <h:commandButton class="btn btn-outline btn-success" value="Assign Schedule" actionListener="#{maintainScheduleManagedBean.assignTeam}"/>
                 </div>
             </h:form>
             <pe:timeline id="timeline" value="#{maintainScheduleManagedBean.model}" varGroup="group"

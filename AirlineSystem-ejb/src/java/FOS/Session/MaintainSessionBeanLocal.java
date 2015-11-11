@@ -36,4 +36,6 @@ public interface MaintainSessionBeanLocal {
     public MaintainanceTeam getCrewMaintainTeam(String username);
 
     public GroundCrew getGroundCrew(String username);
+
+    public List<MaintainanceTeam> retrieveTeamId();
 }

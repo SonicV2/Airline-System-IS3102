@@ -213,7 +213,7 @@ public class ReservedCrewScheduleManagedBean {
             message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "No reserve crew available!", "");
 
         } else {
-            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "A reserved crew has been assigned!", "");
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "A reserved crew "+msgAssign+" has been assigned!", "");
         }
         setCrewUserName("");
         FacesContext.getCurrentInstance().addMessage(null, message);
