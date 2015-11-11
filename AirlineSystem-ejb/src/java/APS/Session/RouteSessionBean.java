@@ -15,7 +15,7 @@ import javax.persistence.Query;
  * @author Yunna
  */
 @Stateless
-public class RouteSessionBean implements RouteSessionBeanLocal{
+public class RouteSessionBean implements RouteSessionBeanLocal, RouteSessionBeanRemote{
     @PersistenceContext(unitName = "AirlineSystem-ejbPU")
     private EntityManager em;
     
@@ -24,7 +24,7 @@ public class RouteSessionBean implements RouteSessionBeanLocal{
         
     //Add new route entity
     @Override
-    public void addRoute(String origin, String destination){
+    public String addRoute(String origin, String destination){
         route=new Route();
         Location start = findLocation(origin);
         Location end = findLocation(destination);
@@ -32,13 +32,15 @@ public class RouteSessionBean implements RouteSessionBeanLocal{
         Double distance = haversineDist(start.getLatitude(),start.getLongitude(),end.getLatitude(),end.getLongitude());              
         route.create(start.getIATA(), end.getIATA(), start.getCountry(), end.getCountry(), start.getCity(), end.getCity(), distance);
         em.persist(route);
+        return "Route Added";
     }
     
     //Delete existing route entity
     @Override
-    public void deleteRoute(Long routeId){
+    public String deleteRoute(Long routeId){
         route = getRoute(routeId);
         em.remove(route);
+        return "Route Deleted";
     }
     
     //Get a specific route with route id
