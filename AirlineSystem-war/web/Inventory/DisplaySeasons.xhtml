@@ -104,7 +104,7 @@
                     <h:form id="iform">
                         <p:growl id="msgs" showDetail="true"/>
 
-                    <p:dataTable id="Seaons" var="season" value="#{seasonManagedBean.sList}" editable="true" style="margin-bottom:20px">
+                    <p:dataTable id="Seaons" var="season" paginator="true" rows="20" value="#{seasonManagedBean.sList}" editable="true" style="margin-bottom:20px">
                         <f:facet name="header">
                             Seasons
                         </f:facet>

@@ -5,6 +5,8 @@
  */
 package Inventory.Managedbean;
 
+import APS.Entity.Flight;
+import APS.Entity.Route;
 import Inventory.Session.PricingSessionBeanLocal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -29,6 +31,8 @@ public class TurnOutManagedBean {
     @EJB
     private PricingSessionBeanLocal pm;
     private List<FallOut> fList;
+    private Flight flight;
+    private Route route;
 
     public List<FallOut> getfList() {
         return fList;
@@ -38,9 +42,30 @@ public class TurnOutManagedBean {
         this.fList = fList;
     }
 
+    public Flight getFlight() {
+        return flight;
+    }
+
+    public void setFlight(Flight flight) {
+        this.flight = flight;
+    }
+
+    public Route getRoute() {
+        return route;
+    }
+
+    public void setRoute(Route route) {
+        this.route = route;
+    }
     
+    public String next(Flight f){
+    this.flight = f;
+    this.route = f.getRoute();
+    displayRates(f.getFlightNo());
+    return "DisplayTurnOut";
+    }
     
-    public String displayRates(String flightNo){
+    public void displayRates(String flightNo){
         fList= new ArrayList();
        FallOut fallout = new FallOut("Economy Saver", pm.calTurnOut(flightNo,"Economy Saver"));
        fList.add(fallout);
@@ -53,7 +78,7 @@ public class TurnOutManagedBean {
        FallOut fallout4 = new FallOut("First Class", pm.calTurnOut(flightNo,"First Class"));
        fList.add(fallout4);
         
-       return "DisplayTurnOut";
+       
     }   
 
 }
