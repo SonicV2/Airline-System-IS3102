@@ -161,12 +161,15 @@
 
 
                                 <div class="form-group">
+                                    
                                     <p:outputLabel for="department" value="Department: " class="col-md-4 control-label" />
-                                    <h:selectOneMenu required="true" id="department" styleClass="dropdown-menu select"  value="#{employeeManagedBean.employeeDepartment}" >
+                                    <div class="col-lg-6">
+                                    <h:selectOneMenu required="true" id="department" class="form-control"  value="#{employeeManagedBean.employeeDepartment}" >
 
                                         <f:selectItem itemLabel="Select department" itemValue="" noSelectionOption="true" />
                                         <f:selectItems value="#{departmentManagedBean.CCdepartments}" />
                                     </h:selectOneMenu>
+                                    </div>
                                 </div>
 
                                 <div class="form-group">
@@ -201,7 +204,8 @@
 
                                 <div class="form-group">
                                     <p:outputLabel for="p" value="Position: " class="col-md-4 control-label" />
-                                    <h:selectOneMenu  id="p" styleClass="dropdown-menu select" value="#{employeeManagedBean.position}"  >
+                                    <div class="col-lg-6">
+                                    <h:selectOneMenu  id="p" class="form-control" value="#{employeeManagedBean.position}"  >
 
                                         <f:selectItem itemLabel="Select Position" itemValue="" noSelectionOption="true" />
                                         <f:selectItem itemLabel="Maintenance Technician" itemValue="Maintenance"  />
@@ -213,6 +217,7 @@
                                         <f:selectItem itemLabel="Counter Check-in Crew" itemValue="Check-in Crew"  />
                                        
                                     </h:selectOneMenu>
+                                    </div>
 
 
                                 </div>

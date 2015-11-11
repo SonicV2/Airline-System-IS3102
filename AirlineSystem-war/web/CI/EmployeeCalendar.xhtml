@@ -7,7 +7,7 @@
     <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
-                    <h2 class="page-header"> Welcome to dashboard, #{loginManagedBean.employeeUserName}!</h2>
+                    <h2 class="page-header"> #{loginManagedBean.employee.employeeDisplayFirstName} #{loginManagedBean.employee.employeeDisplayLastName}</h2>
 
                     <h:form>
                         <p:growl id="messages" showDetail="true" />

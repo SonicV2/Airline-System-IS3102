@@ -55,6 +55,7 @@ public class LoginManagedBean {
     private FileHandler fh;
     private String userID;
     private Boolean isReserve = false;
+    private int logInTries = 0; //to track the number of log ins a person has
     
 
     public LoginManagedBean() {
@@ -62,10 +63,11 @@ public class LoginManagedBean {
 
 
     public String check() {
-
+        
         doLogin(employeeUserName, employeePassword);
         HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
         if (logInCheck == true) {
+            logInTries = 0;
             userID= employeeUserName;
             session.setAttribute("isLogin", employeeUserName);
             
@@ -94,12 +96,14 @@ public class LoginManagedBean {
             }
 
         }
+        else{
         RequestContext.getCurrentInstance().update("growl");
         FacesContext context = FacesContext.getCurrentInstance();
         context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "LoginFail", doLogInMsg));
 
         session.setAttribute("isLogin", null);
-        return "";
+        return "Login";
+        }
     }
 
     public String direct() {
@@ -134,22 +138,25 @@ public class LoginManagedBean {
     }
 
     public void doLogin(String employeeUserName, String employeePassword) {
+        System.out.println("LoginManagedBean ---" + logInTries);
         HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
         String temp_roles = ""; // to get all roles in this string
         setEmployee(employeeSessionBean.getEmployee(employeeUserName));
         firstTimer = false;
-
+        
         if (employeeUserName.equals("") && employeePassword.equals("")) {
             doLogInMsg = "Please Enter your User Name and Password!";
             logInCheck = false;
+            
         } else {
             if (getEmployee() == null) {
                 doLogInMsg = "Invaild Employee Name!";
                 logInCheck = false;
+                logInTries +=1;
             } else if (employee.isEmployeeLockOut()) {
                 doLogInMsg = "Account has been locked!";
                 logInCheck = false;
-                System.out.println("look here!");
+
 
             } else if (employeeSessionBean.isSameHash(employeeUserName, employeePassword)) {
 
@@ -191,6 +198,7 @@ public class LoginManagedBean {
             } else {
                 doLogInMsg = "Invaild Password!";
                 logInCheck = false;
+                logInTries +=1;
             }
 
         }
@@ -304,6 +312,20 @@ public class LoginManagedBean {
      */
     public void setIsReserve(Boolean isReserve) {
         this.isReserve = isReserve;
+    }
+
+    /**
+     * @return the logInTries
+     */
+    public int getLogInTries() {
+        return logInTries;
+    }
+
+    /**
+     * @param logInTries the logInTries to set
+     */
+    public void setLogInTries(int logInTries) {
+        this.logInTries = logInTries;
     }
 
 }

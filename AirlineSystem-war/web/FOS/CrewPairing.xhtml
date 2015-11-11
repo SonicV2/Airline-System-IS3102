@@ -21,8 +21,26 @@
         .form-control {
             display:inline;
         }
+        .loader {
+	position: fixed;
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	height: 100%;
+	z-index: 1000;
+        opacity: 0.8;
+	background: url(#{resource['images/loading.gif']}) 50% 50% no-repeat rgb(249,249,249);
+}
     </style>
+    <script>
+        function showLoader(){
+            $(".loader").show();
+}
+    </script>
+    
     <h:body>
+<!--        this is loader for gif to show-->
+        <div class="loader" style="display:none"></div> 
         <!--            To add the same header on all dashboard pages  
         -->        <ui:include src="/CI/DashboardHeader.xhtml"/><!--
                     To add the same sidebar on all dashboard pages -->  
@@ -101,7 +119,7 @@
                                 <p:inputText  required="true" requiredMessage="Please fill in this field!" class="form-control" placeholder="Choose Year" value="#{crewScheduleManagedBean.selectYear}" style="width: 200px;" />
                             </div>  
                             <div class="text-center">   
-                                <h:commandButton class="btn btn-outline btn-success" value="Display Route Pairing" actionListener="#{crewScheduleManagedBean.getSlns}"/>
+                                <h:commandButton class="btn btn-outline btn-success" value="Display Route Pairing" actionListener="#{crewScheduleManagedBean.getSlns}" onclick="showLoader();"/>
                             </div>
 
                             <br></br>

@@ -24,7 +24,7 @@
     </style>
     <h:body>
         <!--            To add the same header on all dashboard pages  
-        <ui:include src="/CI/DashboardHeader.xhtml"/>
+-->        <ui:include src="/CI/DashboardHeader.xhtml"/><!--
             To add the same sidebar on all dashboard pages -->  
         <ui:include src="/CI/DashboardSidebar.xhtml"/>
         <div id="page-wrapper">
@@ -38,7 +38,7 @@
 
                 <div class="col-lg-12">
                     <h:form id="form">
-                        <h:commandButton value="Update" actionListener="#{maintainScheduleManagedBean.getAllAssignedMaintainTeams}"/>
+                        <h:commandButton class="btn btn-outline btn-info btn-xs" value="Update" actionListener="#{maintainScheduleManagedBean.getAllAssignedMaintainTeams}"/>
                         <p:dataGrid var="team" value="#{maintainScheduleManagedBean.allAssignedMaintainTeams}" columns="3" layout="grid"
                                     rows="12" paginator="true" id="teams"
                                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
@@ -75,7 +75,7 @@
 
                                     <h:outputText value="Schedule:" />
                                     <p:dataList value="#{maintainScheduleManagedBean.selectedTeamMaintainSchedules}" paginator="true" rows="5" var="ss" type="ordered">
-                                        Schedule Start Date: #{ss.mainStartDate}  Schedule End Date: #{ss.mainEndDate} 
+                                        Start Date: #{ss.mainStartDate} || End Date: #{ss.mainEndDate} 
                                     </p:dataList>
 
                                     <h:outputText value="Ground Crew" />
