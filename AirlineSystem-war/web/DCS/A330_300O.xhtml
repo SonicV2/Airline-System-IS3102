@@ -82,7 +82,7 @@
                                                 <f:convertDateTime pattern ="hh:mm a"/>
                                             </h:outputText></h4>
 
-                                        <h5 class="bold"><h:outputText value="#{schedules.startDate}">
+                                        <h5 class="bold"><h:outputText value="#{searchBookingManagedBean.checkinSchedule.startDate}">
                                                 <f:convertDateTime pattern ="EEE, MMM d, yyyy"/>
                                             </h:outputText></h5>
                                         <h5>#{searchBookingManagedBean.checkinSchedule.flight.route.originCity}, #{searchBookingManagedBean.checkinSchedule.flight.route.originCountry}</h5>

@@ -56,13 +56,7 @@
                         <h:commandButton disabled="true" value="Departure City: #{searchBookingManagedBean.checkinSchedule.flight.route.destinationCity}"/>
  </div>
                         <div class="col-md-12">
-                        <p:dataList value="#{searchBookingManagedBean.restSchedules}" var="sch" type="ordered">
-                            <f:facet name="header">
-                                Flight Booked Under Same PNR
-                                (Flight Not Available Checkin Now)
-                            </f:facet>
-                            #{sch.flight.flightNo}
-                        </p:dataList>
+                      
                        
                   
                     <div class="text-center">

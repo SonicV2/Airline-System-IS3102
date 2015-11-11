@@ -94,6 +94,9 @@ public class BaggageManagedBean implements Serializable {
         retrieveServiceClass();
         retrieveAllBaggages();
         totalweight = baggageSessionBean.retrieveTotalBaggageWeights(searchBookingManagedBean.getReqBooking());
+        
+        totalCosts = passengerNameRecordSessionBean.retrieveUpgradeCosts(searchBookingManagedBean.getReqBooking());
+
         double total = Double.parseDouble(passengerNameRecordSessionBean.retrieveUpgradeCosts(searchBookingManagedBean.getReqBooking())) + baggagePaymentManagedBean.getExtra();
         // totalCosts = passengerNameRecordSessionBean.retrieveUpgradeCosts(searchBookingManagedBean.getReqBooking())+extraPayment+"";
         totalCosts = total + "";
@@ -288,6 +291,10 @@ public class BaggageManagedBean implements Serializable {
             session.setAttribute("bID", pass.getBookingID());
 
             request.setAttribute("type", "boardingPass"); //Set to type in order to differentiate from other report generation
+            
+            
+            searchBookingManagedBean.clear(); //clear the field
+            
             RequestDispatcher dispatcher = request.getRequestDispatcher("/Controller");
             dispatcher.forward(request, response);
 
