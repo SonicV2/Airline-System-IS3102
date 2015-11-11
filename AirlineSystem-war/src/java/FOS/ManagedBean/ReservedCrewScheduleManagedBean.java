@@ -186,6 +186,10 @@ public class ReservedCrewScheduleManagedBean {
         }
 
     }
+    
+    public void updateLeaveCC(ActionEvent event){
+        getAllLeaveCrew();
+    }
 
     public void getAllLeavePilot() {
         FacesMessage message = null;

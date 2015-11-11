@@ -43,19 +43,19 @@
                     <li>
                         <a href="#"><i class="fa fa-user-plus"></i> Role Management<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
-                    <li>
-                        <a href="#{request.contextPath}/CI/CreateRole.xhtml"><i class="fa fa-plus fa-fw"></i> Create Role</a>
-                    </li>
-                    <li>
-                        <a href="#{request.contextPath}/CI/UpdateRoles.xhtml"><i class="fa fa-pencil-square-o"></i> Update Roles</a>
-                    </li>
-                    <li>
-                        <a href="#{request.contextPath}/CI/AddRole.xhtml"><i class="fa fa-plus fa-fw"></i> Add Additional Role to Employee</a>
-                    </li>
-                    <li>
-                        <a href="#{request.contextPath}/CI/DeleteEmployeeRole.xhtml"><i class="fa fa-trash-o"></i> Delete Role of Employee</a>
-                    </li>
-                            </ul>
+                            <li>
+                                <a href="#{request.contextPath}/CI/CreateRole.xhtml"><i class="fa fa-plus fa-fw"></i> Create Role</a>
+                            </li>
+                            <li>
+                                <a href="#{request.contextPath}/CI/UpdateRoles.xhtml"><i class="fa fa-pencil-square-o"></i> Update Roles</a>
+                            </li>
+                            <li>
+                                <a href="#{request.contextPath}/CI/AddRole.xhtml"><i class="fa fa-plus fa-fw"></i> Add Additional Role to Employee</a>
+                            </li>
+                            <li>
+                                <a href="#{request.contextPath}/CI/DeleteEmployeeRole.xhtml"><i class="fa fa-trash-o"></i> Delete Role of Employee</a>
+                            </li>
+                        </ul>
                     </li>
                 </ui:fragment>
 
@@ -205,12 +205,12 @@
 
                 <!-- this is for crew scheduling, operations executive -->
                 <ui:fragment rendered="#{loginManagedBean.accessRightIDs.contains(15)}">
-                    
-                            <li>
-                                <a href="#{request.contextPath}/FOS/CrewPairing.xhtml"><i class="fa fa-clock-o"></i> Crew Scheduling</a>
-                            </li>
-                           
-                       
+
+                    <li>
+                        <a href="#{request.contextPath}/FOS/CrewPairing.xhtml"><i class="fa fa-clock-o"></i> Crew Scheduling</a>
+                    </li>
+
+
 
                 </ui:fragment>
 
@@ -249,7 +249,7 @@
                             <a><h:commandLink class="commandLink" action="/FOS/ViewSchedule" actionListener="#{crewSignInManagedBean.viewPairing}"><i class="fa fa-plus fa-eye"></i> Crew Sign In</h:commandLink></a>
                         </li>
                         <li>        
-                            <a><h:commandLink class="commandLink" actionListener="#{crewSignInManagedBean.refresh(event)}"> <i class="fa fa-plus fa-pencil"></i> Submit Leave</h:commandLink></a>
+                            <a><h:commandLink class="commandLink" actionListener="#{crewSignInManagedBean.refresh}"> <i class="fa fa-plus fa-pencil"></i> Submit Leave</h:commandLink></a>
                         </li>
                     </h:form>
                 </ui:fragment>
@@ -269,11 +269,17 @@
                             <li>
                                 <a href="#{request.contextPath}/FOS/SearchTeam.xhtml"><i class="fa fa-eye"></i> View Existing Teams</a>
                             </li>
-                            <li>
-                                <a href="#{request.contextPath}/FOS/ViewLeaveCrew.xhtml"><i class="fa fa-eye"></i> View Flight Crews on Leave</a>
-                            </li>
+
                         </ul>
+
                     </li>
+                    <h:form>
+                        <li>    
+
+                            <a><h:commandLink class="commandLink" actionListener="#{reservedCrewScheduleManagedBean.updateLeaveCC}" action="/FOS/ViewLeaveCrew.xhtml"> <i class="fa fa-eye fa-pencil"></i> View Flight Crew on Leave </h:commandLink></a>
+
+                        </li>
+                    </h:form>
 
                     <li>
                         <a href="#"><i class="fa fa-gear"></i> Reserved Staff Management<span class="fa arrow"></span></a>
@@ -422,12 +428,12 @@
                 <!-- this is for Ground Crew Access-->
                 <ui:fragment rendered="#{loginManagedBean.accessRightIDs.contains(32)}">
                     <h:form>
-                    <li>
-                       
-                    <a><h:commandLink class="commandLink" actionListener="#{maintainChecklistManagedBean.getCrewAvailChecklist}" action="/FOS/DisplayCrewAvailChecklists"><i class="fa fa-search"></i> Fill Regular Maintenance Checklist</h:commandLink></a>
-                    
+                        <li>
 
-                    </li> 
+                            <a><h:commandLink class="commandLink" actionListener="#{maintainChecklistManagedBean.getCrewAvailChecklist}" action="/FOS/DisplayCrewAvailChecklists"><i class="fa fa-search"></i> Fill Regular Maintenance Checklist</h:commandLink></a>
+
+
+                        </li> 
                     </h:form>
 
                 </ui:fragment>
@@ -437,15 +443,15 @@
                     <li>
                         <a href="#"><i class="fa fa-cogs"></i> Maintenance Management<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
-                    <li>
-                        <a href="#{request.contextPath}/FOS/FlightMaintenanceTimeline.xhtml"><i class="fa fa-clock-o"></i> Maintenance Scheduling</a>
-                    </li>  
-                    <li>
-                        <a href="#{request.contextPath}/FOS/ViewMaintenanceTeams.xhtml"><i class="fa fa-eye"></i> View Maintenance Teams</a>
-                    </li>
                             <li>
-                        <a href="#{request.contextPath}/FOS/ViewSubmittedMaintainChecklists.xhtml"><i class="fa fa-eye"></i> View Filled Checklist</a>
-                    </li>
+                                <a href="#{request.contextPath}/FOS/FlightMaintenanceTimeline.xhtml"><i class="fa fa-clock-o"></i> Maintenance Scheduling</a>
+                            </li>  
+                            <li>
+                                <a href="#{request.contextPath}/FOS/ViewMaintenanceTeams.xhtml"><i class="fa fa-eye"></i> View Maintenance Teams</a>
+                            </li>
+                            <li>
+                                <a href="#{request.contextPath}/FOS/ViewSubmittedMaintainChecklists.xhtml"><i class="fa fa-eye"></i> View Filled Checklist</a>
+                            </li>
                         </ul>
                     </li>
 
