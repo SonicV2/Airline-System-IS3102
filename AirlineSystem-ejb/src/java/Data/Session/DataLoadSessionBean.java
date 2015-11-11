@@ -97,33 +97,33 @@ public class DataLoadSessionBean implements DataLoadSessionBeanLocal {
 
     @Override
     public void init() {
-        System.out.println("*****Loading data");
-        addDiscountTypes();
-        System.out.println("*****Discount Types Added");
-        addFlights();
-        System.out.println("*****Flights added");
-        addCustomer();
-        System.out.println("*****Customers added");
-        addTravelAgencies();
-        System.out.println("*****Travel agencies added");
+//        System.out.println("*****Loading data");
+//        addDiscountTypes();
+//        System.out.println("*****Discount Types Added");
+//        addFlights();
+//        System.out.println("*****Flights added");
+//        addCustomer();
+//        System.out.println("*****Customers added");
+//        addTravelAgencies();
+//        System.out.println("*****Travel agencies added");
         addCustomerBooking();
-       System.out.println("*****Customer  bookings added");
-        addTravelAgencyBookings();
-        System.out.println("*****Travel Agency bookings added");
-        addCabinCrew();
-        System.out.println("*****Cabin Crew added");
-        addPilot();
-        System.out.println("*****Pilot added");
-        addGroundCrew();
-        System.out.println("*****Ground Crew added");
-        addPostFlightChecklist();
-        System.out.println("*****Checklists added");
-        addManagers();
-        System.out.println("*****Managers added");
-        addExecutives();
-        System.out.println("*****Executives added");
-        bookSeats();
-        System.out.println("***Data Load complete");
+//       System.out.println("*****Customer  bookings added");
+//        addTravelAgencyBookings();
+//        System.out.println("*****Travel Agency bookings added");
+//        addCabinCrew();
+//        System.out.println("*****Cabin Crew added");
+//        addPilot();
+//        System.out.println("*****Pilot added");
+//        addGroundCrew();
+//        System.out.println("*****Ground Crew added");
+//        addPostFlightChecklist();
+//        System.out.println("*****Checklists added");
+//        addManagers();
+//        System.out.println("*****Managers added");
+//        addExecutives();
+//        System.out.println("*****Executives added");
+//        bookSeats();
+//        System.out.println("***Data Load complete");
         
 
     }
@@ -463,7 +463,7 @@ public class DataLoadSessionBean implements DataLoadSessionBeanLocal {
         travelAgencySessionBean.addTravelAgency("Orchard Travel Agency", 500000.00, 400000.00, 0, "singjjyn@naver.com", "10 Bideford Road #22-05 S229922", "6112 4126", "Sa123!", "Tan Shi Hui");
         travelAgencySessionBean.addTravelAgency("Holland Travel Agency", 300000.00, 300000.00, 0, "rnjsdbssk@naver.com", "55 North Buona Vista Road #01-27 S543122", "6785 0102", "Sa123!", "Alice Lee");
         travelAgencySessionBean.addTravelAgency("HarbourFront Travel Agency", 400000.00, 300000.00, 0, "parthasarthy.gupta@gmail.com", "31A Boon Tat Street #03-21 S112233", "6562 3532", "Sa123!", "Dennis Wong");
-        travelAgencySessionBean.addTravelAgency("NewTon Travel Agency", 350000.00, 350000.00, 0, "hou.liang.90@gmail.com", "48 Thomson Road #10-07 S77866", "6512 3565", "Sa123!", "Lim Jun Hao");
+        travelAgencySessionBean.addTravelAgency("NewTon Travel Agency", 350000.00, 350000.00, 0, "yuqing2404@gmail.com", "48 Thomson Road #10-07 S77866", "6512 3565", "Sa123!", "Lim Jun Hao");
 
     }
 
@@ -511,9 +511,15 @@ public class DataLoadSessionBean implements DataLoadSessionBeanLocal {
         Booking booking6 = passengerBookingSessionBean.createBooking(500, schedule2.getSeatAvailability(), schedule2.getFlight().getFlightNo(), schedule2.getStartDate(), "Booked", "C01", "Economy Saver", "Mr", "Hou", "Liang", customer2.getPassportNumber(), customer2.getNationality(), customer2.getId(), false, true, 15.0, "Western");
         Booking booking7 = passengerBookingSessionBean.createBooking(500, schedule3.getSeatAvailability(), schedule3.getFlight().getFlightNo(), schedule3.getStartDate(), "Booked", "E01", "Economy Saver", "Mr", "Hou", "Liang", customer2.getPassportNumber(), customer2.getNationality(), customer2.getId(), false, true, 15.0, "Western");
         Booking booking8 = passengerBookingSessionBean.createBooking(400, schedule4.getSeatAvailability(), schedule4.getFlight().getFlightNo(), schedule4.getStartDate(), "Booked", "E01", "Economy Saver", "Mr", "Hou", "Liang", customer2.getPassportNumber(), customer2.getNationality(), customer2.getId(), false, true, 15.0, "Western");
+        booking5.setCustomerId(customer2.getId());
+        booking6.setCustomerId(customer2.getId());
+        booking7.setCustomerId(customer2.getId());
+        booking8.setCustomerId(customer2.getId());
         
         Booking booking9 = passengerBookingSessionBean.createBooking(800, schedule5.getSeatAvailability(), schedule5.getFlight().getFlightNo(), schedule5.getStartDate(), "Booked", "E01", "Business", "Mr", "Hou", "Liang", customer2.getPassportNumber(), customer2.getNationality(), customer2.getId(), false, true, 15.0, "Western");
         Booking booking10 = passengerBookingSessionBean.createBooking(800, schedule6.getSeatAvailability(), schedule6.getFlight().getFlightNo(), schedule6.getStartDate(), "Booked", "E01", "Business", "Mr", "Hou", "Liang", customer2.getPassportNumber(), customer2.getNationality(), customer2.getId(), false, true, 15.0, "Western");
+        booking9.setCustomerId(customer2.getId());
+        booking10.setCustomerId(customer2.getId());
         
         PNR pnr5 = passengerBookingSessionBean.createPNR(1, customer2.getEmail(), customer2.getHomeNumber(), "Booked", 600.0, new Date(), new Date(), "MARS");
         PNR pnr6 = passengerBookingSessionBean.createPNR(1, customer2.getEmail(), customer2.getHomeNumber(), "Booked", 500.0, new Date(), new Date(), "MARS");
