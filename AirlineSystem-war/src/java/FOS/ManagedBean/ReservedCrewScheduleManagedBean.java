@@ -187,9 +187,6 @@ public class ReservedCrewScheduleManagedBean {
 
     }
     
-    public void updateLeaveCC(ActionEvent event){
-        getAllLeaveCrew();
-    }
 
     public void getAllLeavePilot() {
         FacesMessage message = null;
@@ -236,6 +233,9 @@ public class ReservedCrewScheduleManagedBean {
         }
         setPilotUserName("");
         FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+        public void updateLeaveCC(ActionEvent event){
+        getAllLeaveCrew();
     }
 
     // Reassign back (Crew finishes leave)

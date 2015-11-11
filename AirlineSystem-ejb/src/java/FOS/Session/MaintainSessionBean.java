@@ -66,7 +66,7 @@ public class MaintainSessionBean implements MaintainSessionBeanLocal {
                     totalHours += calFlightHour(s.getStartDate(), s.getEndDate());
 
                     if (totalHours / 65 > cnt && s.getFlight().getRoute().getDestinationIATA().equals(a.getHub())) {
-                        System.out.println("DDDDDD: " + totalHours);
+                        
 
                         if (cntB == 3) {
                             MaintainSchedule ms = new MaintainSchedule();
@@ -81,6 +81,7 @@ public class MaintainSessionBean implements MaintainSessionBeanLocal {
                             if (!isSame) {
                                 ms.create(mStartDate, mEndDate, a.getTailNo(), "N.A", "B");
                                 ms.setmTeam(null);
+                                
                                 em.persist(ms);
                                 cnt++;
                                 cntB = 0;
