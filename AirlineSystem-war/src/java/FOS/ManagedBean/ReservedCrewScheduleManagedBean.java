@@ -109,7 +109,7 @@ public class ReservedCrewScheduleManagedBean {
         months.add("10");
         months.add("11");
         months.add("12");
-        reservedCrewSignOut();
+       // reservedCrewSignOut();
     }
 
     public void getReservedCrew(ActionEvent event) {

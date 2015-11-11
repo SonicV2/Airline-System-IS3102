@@ -9,8 +9,12 @@ import APS.Entity.Schedule;
 import APS.Session.FlightScheduleSessionBeanLocal;
 import APS.Session.FlightSessionBeanLocal;
 import APS.Session.ScheduleSessionBeanLocal;
+
 import CI.Entity.CabinCrew;
 import CI.Entity.Pilot;
+
+import CI.Entity.Employee;
+
 import CI.Session.EmployeeSessionBeanLocal;
 import CRM.Entity.DiscountType;
 import CRM.Session.DiscountSessionBeanLocal;
@@ -92,11 +96,85 @@ public class DataLoadSessionBean {
 //        addCustomerBooking();
 //        addTravelAgencyBookings();
 //        addCabinCrew();
-//       addPilot();
+//        addPilot();
 //        addGroundCrew();
     //   addPostFlightChecklist();
-    }
+//        addManagers();
+//        addExecutives();
 
+    }
+    public void addManagers(){
+        Date date1 = new Date(), date2 = new Date(), date3 = new Date(), date4 = new Date(), date5 = new Date();
+        
+        try {
+            date1 = new SimpleDateFormat("yyyy-MM-dd").parse("1990-02-01");
+            date2 = new SimpleDateFormat("yyyy-MM-dd").parse("1989-01-01");
+            date3 = new SimpleDateFormat("yyyy-MM-dd").parse("1978-03-20");
+            date4 = new SimpleDateFormat("yyyy-MM-dd").parse("1988-07-10");
+            date5 = new SimpleDateFormat("yyyy-MM-dd").parse("1987-08-22"); 
+            
+      
+
+        } catch (ParseException ex) {
+            System.out.println("Error initializing date");
+        }
+
+        employeeSessionBean.addEmployee("A0001", "A0001", "Super", "Admin", "SUPER ADMIN", "IT(SINGAPORE)", date1, "Female", "98218057", "Serangoon North Ave 4, Singapore", "64810187", "yuqing2404@gmail.com", 4000.0);
+        employeeSessionBean.hashPwd("A0001");
+        employeeSessionBean.employeeActivateWithId("A0001");
+        employeeSessionBean.addEmployee("A0002", "A0002", "Fin", "M", "FINANCE MANAGER", "FINANCE(SINGAPORE)", date1, "Male", "98218057", "Serangoon North Ave 4, Singapore", "64810187", "yuqing2404@gmail.com", 3000.0);
+        employeeSessionBean.hashPwd("A0002");
+        employeeSessionBean.employeeActivateWithId("A0002");
+        employeeSessionBean.addEmployee("A0003", "A0003", "Ops", "M", "OPERATIONS MANAGER", "OPERATIONS(SINGAPORE)", date2, "Male", "98218058", "NUS", "64810187", "yuqing2404@gmail.com", 5000.0);
+        employeeSessionBean.hashPwd("A0003");
+        employeeSessionBean.employeeActivateWithId("A0003");
+        employeeSessionBean.addEmployee("A0004", "A0004", "Mark", "M", "MARKETING MANAGER", "MARKETING(SINGAPORE)", date2, "Male", "98218058", "NUS", "64810187", "yuqing2404@gmail.com", 5000.0);
+        employeeSessionBean.hashPwd("A0004");
+        employeeSessionBean.employeeActivateWithId("A0004");
+        employeeSessionBean.addEmployee("A0005", "A0005", "Sales", "M", "SALES MANAGER", "SALES(SINGAPORE)", date2, "Male", "98218058", "NUS", "64810187", "yuqing2404@gmail.com", 5000.0);
+        employeeSessionBean.hashPwd("A0005");
+        employeeSessionBean.employeeActivateWithId("A0005");
+        employeeSessionBean.addEmployee("A0006", "A0006", "HR", "M", "HR MANAGER", "HR(SINGAPORE)", date2, "Female", "98211258", "NUS", "64810187", "yuqing2404@gmail.com", 5000.0);
+        employeeSessionBean.hashPwd("A0006");
+        employeeSessionBean.employeeActivateWithId("A0006");
+        employeeSessionBean.addEmployee("A0007", "A0007", "IT", "M", "IT MANAGER", "IT(SINGAPORE)", date3, "Male", "98211358", "NUS", "64810787", "yuqing2404@gmail.com", 5000.0);
+        employeeSessionBean.hashPwd("A0007");
+        employeeSessionBean.employeeActivateWithId("A0007");
+    }
+    
+    public void addExecutives(){
+        Date date1 = new Date(), date2 = new Date(), date3 = new Date(), date4 = new Date(), date5 = new Date();
+        try {
+            date1 = new SimpleDateFormat("yyyy-MM-dd").parse("1990-02-01");
+            date2 = new SimpleDateFormat("yyyy-MM-dd").parse("1989-01-01");
+            date3 = new SimpleDateFormat("yyyy-MM-dd").parse("1978-03-20");
+            date4 = new SimpleDateFormat("yyyy-MM-dd").parse("1988-07-10");
+            date5 = new SimpleDateFormat("yyyy-MM-dd").parse("1987-08-22");          
+      
+
+        } catch (ParseException ex) {
+            System.out.println("Error initializing date");
+        }
+        
+        employeeSessionBean.addEmployee("A0009", "A0009", "Fin", "E", "FINANCE EXECUTIVE", "FINANCE(SINGAPORE)", date4, "Male", "98218057", "Serangoon North Ave 4, Singapore", "64810187", "yuqing2404@gmail.com", 3000.0);
+        employeeSessionBean.hashPwd("A0009");
+        employeeSessionBean.employeeActivateWithId("A0009");
+        employeeSessionBean.addEmployee("A0010", "A0010", "Ops", "E", "OPERATIONS EXECUTIVE", "OPERATIONS(SINGAPORE)", date2, "Male", "98218058", "NUS", "64810187", "yuqing2404@gmail.com", 5000.0);
+        employeeSessionBean.hashPwd("A0010");
+        employeeSessionBean.employeeActivateWithId("A0010");
+        employeeSessionBean.addEmployee("A0011", "A0011", "Mark", "E", "MARKETING EXECUTIVE", "MARKETING(SINGAPORE)", date5, "Male", "98218058", "NUS", "64810187", "yuqing2404@gmail.com", 5000.0);
+        employeeSessionBean.hashPwd("A0011");
+        employeeSessionBean.employeeActivateWithId("A0011");
+        employeeSessionBean.addEmployee("A0012", "A0012", "Sales", "E", "SALES EXECUTIVE", "SALES(SINGAPORE)", date2, "Male", "98218058", "NUS", "64810187", "yuqing2404@gmail.com", 5000.0);
+        employeeSessionBean.hashPwd("A0012");
+        employeeSessionBean.employeeActivateWithId("A0012");
+        employeeSessionBean.addEmployee("A0013", "A0013", "HR", "E", "HR EXECUTIVE", "HR(SINGAPORE)", date2, "Female", "98211258", "NUS", "64810187", "yuqing2404@gmail.com", 5000.0);
+        employeeSessionBean.hashPwd("A0013");
+        employeeSessionBean.employeeActivateWithId("A0013");
+        employeeSessionBean.addEmployee("A0014", "A0014", "IT", "E", "IT EXECUTIVE", "IT(SINGAPORE)", date3, "Male", "98211358", "NUS", "64810787", "yuqing2404@gmail.com", 5000.0);
+        employeeSessionBean.hashPwd("A0014");
+        employeeSessionBean.employeeActivateWithId("A0014");
+    }
     public void addDiscountTypes() {
         Date date1 = new Date(), date2 = new Date(), date3 = new Date(), date4 = new Date(), date5 = new Date();
         try {
@@ -552,7 +630,7 @@ public class DataLoadSessionBean {
         List<String> langu2 = new ArrayList<String>();
         langu2.add("English");
         langu2.add("Japanese");
-        List<String> langu3 = new ArrayList<String>();
+        List<String> langu3= new ArrayList<String>();
         langu3.add("Korean");
         langu3.add("English");
         employeeSessionBean.addCabinCrew("S12345A", "E", "1", "FLIGHT CREW(SINGAPORE)", date1, "Female", "98765567", "NUS", "65778905", "a0083337@u.nus.edu", "5", langu1, "Lead Flight Stewardess", 2000.0);
