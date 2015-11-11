@@ -39,11 +39,7 @@
     </servlet-mapping>
     <session-config>
         <session-timeout>
-<<<<<<< HEAD
-            120
-=======
            120
->>>>>>> d63370cd8a1941cfae0ae3f2a1b1189ce4287133
         </session-timeout>
     </session-config>
     <context-param>
