@@ -35,7 +35,7 @@
 
 
                 <p:dataTable id="schedules" var="schedule" value="#{checklistManagedBean.currentDaySchedulesForTeam}" rowKey="#{schedule.scheduleId}"
-                             selection="#{scheduleManageBean.selectedSchedule}" selectionMode="single" paginator="true" rows="10" widgetVar="schedulesTable">
+                             selection="#{scheduleManagedBean.selectedSchedule}" selectionMode="single" paginator="true" rows="10" widgetVar="schedulesTable">
 
                     <f:facet name="header">
 
