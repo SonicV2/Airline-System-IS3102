@@ -99,6 +99,8 @@ public class RoleManagedBean {
                 }
             }
         }
+        userID = null;
+        
 
     }
     
@@ -114,10 +116,15 @@ public class RoleManagedBean {
 
     public void deleteEmployeeRole(ActionEvent event) {
         setErrorMsg(roleSessionBean.deleteEmployeeRole(employee, deleteRoles));
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Role Deleted Successfully", "");
+        FacesContext.getCurrentInstance().addMessage(null, message);
         setUserID("");
         setDeleteRoles(null);
         setNewroles(null);
         setErrorMsg("");
+        setEmployee(null);
+        
+
     }
 
 //    public void deleteRole(ActionEvent event) {
@@ -197,6 +204,8 @@ public class RoleManagedBean {
     public void retrive() {
         setRoles(roleSessionBean.retrive());
         setAllRoles(roleSessionBean.retrieveAllRoles());
+        setEmployee(null);
+       
     }
 
     public void onRowEdit(RowEditEvent event) {
@@ -226,7 +235,13 @@ public class RoleManagedBean {
     //add new role to existing employee
     public void addNewRole() {
         roleSessionBean.addNewRole(employee, new_Role);
-
+        setRoles(roleSessionBean.retrive());
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Role Added Successfully", "");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+        new_Role = null;
+        newroles = null;
+        
+        
     }
 
     public RoleSessionBeanLocal getRoleSessionBean() {

@@ -57,35 +57,35 @@ public class LoginFilter implements Filter {
             System.out.println("url0: " + url[0] + "url1: " + url[1] + "url: " + url[2]);
 
             if (url[2].equals("Login.xhtml") || reqURI.contains("javax.faces.resource") || url[2].equals("ForgetPassword.xhtml") || url[2].equals("APS")
-
-                   || url[2].equals("CI")||url[2].equals("CRM") || url[2].equals("FOS" )|| url[2].equals("Inventory" ) || url[2].equals("Distribution")
-                   || url[2].equals("DCS") || url[2].equals("Administration") || url[2].equals("Data")/*Delete when necessary*/) {
+                    || url[2].equals("CI") || url[2].equals("CRM") || url[2].equals("FOS") || url[2].equals("Inventory") || url[2].equals("Distribution")
+                    || url[2].equals("DCS") || url[2].equals("Administration") || url[2].equals("Data")/*Delete when necessary*/) {
 
                 System.out.println("Process ");
                 chain.doFilter(request, response);
 
-            } else if (!url[2].equals("Login.xhtml")  && (ses != null && ses.getAttribute("isLogin") != null)) {
+            } else if (!url[2].equals("Login.xhtml") && (ses != null && ses.getAttribute("isLogin") != null)) {
 
                 if (ses.getAttribute("role").equals("SUPER ADMIN")) { /* Super Admin could access all web pages*/
-                    chain.doFilter(request, response);
-                } else if(url[3].equals("EmployeeDashBoard.xhtml") || url[3].equals("EmployeeProfile.xhtml") || url[3].equals("Message.xhtml") || url[3].equals("ChangeProfile.xhtml") || url[3].equals("NewUserChangePwd.xhtml") || url[3].equals("EmployeeChangePwd.xhtml")){
-                    chain.doFilter(request, response);
-                }
-                else if((url[3].equals("CreateRole.xhtml") || url[3].equals("CreateDepartment.xhtml") || url[3].equals("DeleteRole.xhtml"))&&(ses.getAttribute("role").equals("SUPER ADMIN") || ses.getAttribute("department").equals("IT") )){
-                    chain.doFilter(request, response);
-                } else if((url[3].equals("AddRole.xhtml") || url[3].equals("EmployeeManagement.xhtml") || url[3].equals("EmployeeInformation.xhtml") || url[3].equals("DeleteEmployeeRole.xhtml") || url[3].equals("ChangeDepartment.xhtml") )&&(ses.getAttribute("role").equals("SUPER ADMIN") || ses.getAttribute("department").equals("HR"))){
-                    chain.doFilter(request, response);
-                }
 
-//                } else if (url[3].equals("employeeProfile.xhtml") && ses.getAttribute("isLogin") != null) {
-//                    chain.doFilter(request, response);
-//                } else if (url[3].equals("message.xhtml") && ses.getAttribute("isLogin") != null) {
-//                    chain.doFilter(request, response);
-//                } else if(url[3].equals("changeProfile.xhtml")){
-//                    chain.doFilter(request, response);
-//                }
+                    chain.doFilter(request, response);
+                } else if (url[3].equals("EmployeeDashBoard.xhtml") || url[3].equals("EmployeeProfile.xhtml") || url[3].equals("Message.xhtml") || url[3].equals("ChangeProfile.xhtml") || url[3].equals("NewUserChangePwd.xhtml") || url[3].equals("EmployeeChangePwd.xhtml")) {
+                    chain.doFilter(request, response);
+                } else if ((url[3].equals("CreateRole.xhtml") || url[3].equals("CreateDepartment.xhtml") || url[3].equals("DeleteRole.xhtml")) && (ses.getAttribute("role").equals("SUPER ADMIN") || ses.getAttribute("department").equals("IT"))) {
+                    chain.doFilter(request, response);
+                } else if ((url[3].equals("AddRole.xhtml") || url[3].equals("EmployeeManagement.xhtml") || url[3].equals("EmployeeInformation.xhtml") || url[3].equals("DeleteEmployeeRole.xhtml") || url[3].equals("ChangeDepartment.xhtml")) && (ses.getAttribute("role").equals("SUPER ADMIN") || ses.getAttribute("department").equals("HR"))) {
+                    chain.doFilter(request, response);
+                } 
+                //                } else if (url[3].equals("employeeProfile.xhtml") && ses.getAttribute("isLogin") != null) {
+                //                    chain.doFilter(request, response);
+                //                } else if (url[3].equals("message.xhtml") && ses.getAttribute("isLogin") != null) {
+                //                    chain.doFilter(request, response);
+                //                } else if(url[3].equals("changeProfile.xhtml")){
+                //                    chain.doFilter(request, response);
+                //                }
                 else {
+
                     res.sendError(401);/*Unauthorized Page*/
+
                 }
 
             } else {

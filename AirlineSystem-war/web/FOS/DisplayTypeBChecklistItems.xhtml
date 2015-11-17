@@ -44,14 +44,18 @@
                                     </li>
                                     <li><a href="#profile" data-toggle="tab">Landing Gear</a>
                                     </li>
-                                    <li><a href="#messages" data-toggle="tab">Liquid, Air and Gas System</a>
+                                      <li><a href="#profile1" data-toggle="tab">Flying Control</a>
                                     </li>
+                  
                                     <li><a href="#messages2" data-toggle="tab">Equipment and Environmental</a>
                                     </li>
-                                    <li><a href="#messages3" data-toggle="tab">Engine Lubrication</a>
+                                    <li><a href="#messages5" data-toggle="tab">Ignition</a>
+                                    </li>
+                                    <li><a href="#messages3" data-toggle="tab">Propeller</a>
                                     </li>
                                     <li><a href="#messages4" data-toggle="tab">Electrical System</a>
                                     </li>
+                                 
 
                                 </ul>
 
@@ -73,36 +77,43 @@
                                     <div class="tab-pane fade" id="profile">
                                         <p:selectManyCheckbox id="grid2" value="#{maintainChecklistManagedBean.checklist2}" layout="grid" columns="1">
                                             <h4>Landing Gear</h4>
-                                            <p><f:selectItems value="#{maintainChecklistManagedBean.selectedChecklistItems.subList(3, 6)}" var="item" itemLabel="#{item.content}" itemValue="#{item.content}" itemDisabled="#{item.checked}" /></p>
+                                            <p><f:selectItems value="#{maintainChecklistManagedBean.selectedChecklistItems.subList(3, 7)}" var="item" itemLabel="#{item.content}" itemValue="#{item.content}" itemDisabled="#{item.checked}" /></p>
                                         </p:selectManyCheckbox>
 
 
 
 
                                     </div>
-                                    <div class="tab-pane fade" id="messages">
-                                        <h4>Liquid, Air and Gas System</h4>
+                                    <div class="tab-pane fade" id="profile1">
+                                        <h4>Flying Control</h4>
                                         <p:selectManyCheckbox id="grid3" value="#{maintainChecklistManagedBean.checklist3}" layout="grid" columns="1">
-                                            <p><f:selectItems value="#{maintainChecklistManagedBean.selectedChecklistItems.subList(6, 9)}" var="item" itemLabel="#{item.content}" itemValue="#{item.content}" itemDisabled="#{item.checked}" /></p>
+                                            <p><f:selectItems value="#{maintainChecklistManagedBean.selectedChecklistItems.subList(7, 10)}" var="item" itemLabel="#{item.content}" itemValue="#{item.content}" itemDisabled="#{item.checked}" /></p>
                                         </p:selectManyCheckbox>
                                     </div>
                                     <div class="tab-pane fade" id="messages2">
                                         <h4>Equipment and Environmental</h4>
                                         <p:selectManyCheckbox id="grid4" value="#{maintainChecklistManagedBean.checklist4}" layout="grid" columns="1">
-                                            <p><f:selectItems value="#{maintainChecklistManagedBean.selectedChecklistItems.subList(9, 12)}" var="item" itemLabel="#{item.content}" itemValue="#{item.content}" itemDisabled="#{item.checked}" /></p>
+                                            <p><f:selectItems value="#{maintainChecklistManagedBean.selectedChecklistItems.subList(10, 13)}" var="item" itemLabel="#{item.content}" itemValue="#{item.content}" itemDisabled="#{item.checked}" /></p>
                                         </p:selectManyCheckbox>
                                     </div>
-                                    <div class="tab-pane fade" id="messages3">
-                                        <h4>Engine Lubrication</h4>
+                                    <div class="tab-pane fade" id="messages5">
+                                        <h4>Ignition</h4>
                                         <p:selectManyCheckbox id="grid5" value="#{maintainChecklistManagedBean.checklist5}" layout="grid" columns="1">
-                                            <p><f:selectItems value="#{maintainChecklistManagedBean.selectedChecklistItems.subList(12, 14)}" var="item" itemLabel=" #{item.content} " itemValue="#{item.content}" itemDisabled="#{item.checked}" /></p>
+                                            <p><f:selectItems value="#{maintainChecklistManagedBean.selectedChecklistItems.subList(13, 15)}" var="item" itemLabel=" #{item.content} " itemValue="#{item.content}" itemDisabled="#{item.checked}" /></p>
                                         </p:selectManyCheckbox>
                                     </div>
 
+                                    <div class="tab-pane fade" id="messages3">
+                                        <h4>Propeller</h4>
+                                        <p:selectManyCheckbox id="grid6" value="#{maintainChecklistManagedBean.checklist6}" layout="grid" columns="1">
+                                            <p><f:selectItems value="#{maintainChecklistManagedBean.selectedChecklistItems.subList(15, 18)}" var="item" itemLabel=" #{item.content}" itemValue="#{item.content}" itemDisabled="#{item.checked}" /></p>
+                                        </p:selectManyCheckbox>
+                                    </div>
+                                    
                                     <div class="tab-pane fade" id="messages4">
                                         <h4>Electrical System</h4>
-                                        <p:selectManyCheckbox id="grid6" value="#{maintainChecklistManagedBean.checklist6}" layout="grid" columns="1">
-                                            <p><f:selectItems value="#{maintainChecklistManagedBean.selectedChecklistItems.subList(14, 16)}" var="item" itemLabel=" #{item.content}" itemValue="#{item.content}" itemDisabled="#{item.checked}" /></p>
+                                        <p:selectManyCheckbox id="grid7" value="#{maintainChecklistManagedBean.checklist7}" layout="grid" columns="1">
+                                            <p><f:selectItems value="#{maintainChecklistManagedBean.selectedChecklistItems.subList(18, 21)}" var="item" itemLabel=" #{item.content}" itemValue="#{item.content}" itemDisabled="#{item.checked}" /></p>
                                         </p:selectManyCheckbox>
                                     </div>
                                 </div>

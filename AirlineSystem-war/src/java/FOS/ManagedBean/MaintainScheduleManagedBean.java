@@ -97,7 +97,7 @@ public class MaintainScheduleManagedBean {
 
     }
 
-    public void assignTeam(ActionEvent event) {
+    public void assignTeam() {
         maintainSessionBean.assignTeam();
         FacesMessage message = null;
         message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successfullly assigned schedules to teams!", "");
@@ -115,6 +115,7 @@ public class MaintainScheduleManagedBean {
 
     public void assignCrew(ActionEvent event) {
         maintainSessionBean.assignMainCrews();
+        assignTeam();
         FacesMessage message = null;
         message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successfullly assigned maintenance crews to teams!", "");
         FacesContext.getCurrentInstance().addMessage(null, message);

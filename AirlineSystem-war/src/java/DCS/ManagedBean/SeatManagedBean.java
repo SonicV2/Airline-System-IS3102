@@ -458,7 +458,40 @@ public class SeatManagedBean {
         int i = baggageSessionBean.retrieveNumberOfBaggageAllowed(classcode);
         setTotalWeightAllowed((i * 15) + "");
     }
+    
+    public void occupyAllSeatA330(ActionEvent event){
+        List<String> allseats = new ArrayList<String>();
+        
+        for (int i = 9; i < 41; i++) { //255 economic seats
+            if (i == 40) {
+                 allseats.add("A" + i);
+                 allseats.add("B" + i);
+                 allseats.add("D" + i);
+                 allseats.add("E" + i);
+                 allseats.add("F" + i);
+                 allseats.add("G" + i);
+                 allseats.add("H" + i);
+                break;
+            }
+             allseats.add("A" + i);
+             allseats.add("B" + i);
+            allseats.add("C" + i);
+            allseats.add("D" + i);
+            allseats.add("E" + i);
+            allseats.add("F" + i);
+            allseats.add("G" + i);
+            allseats.add("H" + i);
+            
 
+        }
+                
+        seatSessionBean.occupyAll(schedule, allseats);
+    }
+   
+    public void unOccupyAllSeatA330(ActionEvent event){
+      seatSessionBean.unOccupyAll(schedule);
+    }
+    
     public void addSeatA330() {
         for (int i = 1; i < 9; i++) {  // 30 business seats
             if (i == 1) {
@@ -587,8 +620,37 @@ public class SeatManagedBean {
         }
 
     }
+    
+ //----------------------------------------------------------------------------------------------------   
+    public void occupyAllSeatB777_200(ActionEvent event){
+        List<String> allseats = new ArrayList<String>();
+         for (int i = 11; i < 40; i++) { //228 economic seats
+            if (i == 39) {
 
-    //----------------------------------------------------------------------------------------------------   
+                allseats.add("C" + i);
+                allseats.add("D" + i);
+                allseats.add("E" + i);
+                allseats.add("F" + i);
+                break;
+            }
+            allseats.add("A" + i);
+            allseats.add("B" + i);
+            allseats.add("C" + i);
+            allseats.add("D" + i);
+            allseats.add("E" + i);
+            allseats.add("F" + i);
+            allseats.add("G" + i);
+            allseats.add("H" + i);
+           
+
+        }
+         seatSessionBean.occupyAll(schedule, allseats);
+    }
+    
+     public void unOccupyAllSeatB777_200(ActionEvent event){
+      seatSessionBean.unOccupyAll(schedule);
+    }
+    
     public void addSeatB777_200() {
         for (int i = 1; i < 11; i++) {  // 38 business seats
             if (i == 1) {
@@ -715,6 +777,41 @@ public class SeatManagedBean {
     }
 
 //-------------------------------------------------------------------------------------------------------
+   public void occupyAllSeatB777_200ER(ActionEvent event){
+        List<String> allseats = new ArrayList<String>();
+        for (int i = 9; i < 41; i++) { //255 economic seats
+            if (i == 40) {
+                allseats.add("A" + i);
+                allseats.add("B" + i);
+                allseats.add("D" + i);
+                allseats.add("E" + i);
+                allseats.add("F" + i);
+                allseats.add("G" + i);
+                allseats.add("H" + i);
+                break;
+            }
+            allseats.add("A" + i);
+            allseats.add("B" + i);
+            allseats.add("C" + i);
+            allseats.add("D" + i);
+            allseats.add("E" + i);
+            allseats.add("F" + i);
+            allseats.add("G" + i);
+            allseats.add("H" + i);
+            
+        }
+   
+   
+        seatSessionBean.occupyAll(schedule, allseats);
+   }
+    
+    
+     public void unOccupyAllSeatB777_200ER(ActionEvent event){
+      seatSessionBean.unOccupyAll(schedule);
+    }
+    
+    
+    
     public void addSeatB777_200ER() {
         for (int i = 1; i < 9; i++) {  // 30 business seats
             if (i == 1) {
@@ -839,7 +936,32 @@ public class SeatManagedBean {
 
     }
 //-------------------------------------------------------------------------------------------------------
-
+     public void occupyAllSeatB777_300(ActionEvent event){
+        List<String> allseats = new ArrayList<String>();
+        for (int i = 12; i < 41; i++) { //226 economic seats
+            if (i == 40) {
+                allseats.add("C" + i);
+                allseats.add("D" + i);
+                break;
+            }
+            allseats.add("A" + i);
+            allseats.add("B" + i);
+            allseats.add("C" + i);
+            allseats.add("D" + i);
+            allseats.add("E" + i);
+            allseats.add("F" + i);
+            allseats.add("G" + i);
+            allseats.add("H" + i);
+            
+            }
+        
+                
+        seatSessionBean.occupyAll(schedule, allseats);
+    }
+       public void unOccupyAllSeatB777_300(ActionEvent event){
+      seatSessionBean.unOccupyAll(schedule);
+    }
+      
     public void addSeatB777_300() {
         for (int i = 1; i < 3; i++) {  // 8 first class seats
 
@@ -987,6 +1109,26 @@ public class SeatManagedBean {
     }
 
 //-------------------------------------------------------------------------------------------------------    
+    public void occupyAllSeatB777_300ER(ActionEvent event){
+        List<String> allseats = new ArrayList<String>();
+        for (int i = 10; i < 39; i++) { //232 economic seats
+            allseats.add("A" + i);
+            allseats.add("B" + i);
+            allseats.add("C" + i);
+            allseats.add("D" + i);
+            allseats.add("E" + i);
+            allseats.add("F" + i);
+            allseats.add("G" + i);
+            allseats.add("H" + i);
+        }
+                
+        seatSessionBean.occupyAll(schedule, allseats);
+    }
+   
+    public void unOccupyAllSeatB777_300ER(ActionEvent event){
+      seatSessionBean.unOccupyAll(schedule);
+    }
+
     public void addSeatB777_300ER() {
         for (int i = 1; i < 2; i++) {  // 4 first class seats
 
