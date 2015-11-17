@@ -41,6 +41,9 @@ public class Aircraft implements Serializable {
     
     @OneToMany(cascade = {CascadeType.PERSIST}, mappedBy = "aircraft")
     private List<Schedule> schedules = new ArrayList<Schedule>();
+    
+    @OneToMany(cascade = {CascadeType.PERSIST}, mappedBy = "aircraft")
+    private List<MaintainSchedule> mSchedules = new ArrayList<MaintainSchedule>();
 
     public void createAircraft(String tailNo, Date datePurchased, Date lastMaintained, String hub, String status) {
         this.tailNo = tailNo;
@@ -106,7 +109,15 @@ public class Aircraft implements Serializable {
     public void setSchedules(List<Schedule> schedules) {
         this.schedules = schedules;
     }
-    
+
+    public List<MaintainSchedule> getmSchedules() {
+        return mSchedules;
+    }
+
+    public void setmSchedules(List<MaintainSchedule> mSchedules) {
+        this.mSchedules = mSchedules;
+    }
+           
     @Override
     public int hashCode() {
         int hash = 0;

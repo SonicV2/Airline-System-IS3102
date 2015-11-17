@@ -18,7 +18,7 @@ import javax.ejb.Local;
 @Local
 public interface ScheduleSessionBeanLocal {
 
-    public void addSchedules(int duration, String flightNo, boolean isUpdate);
+    public void addSchedules(int duration, String flightNo, boolean isUpdate, boolean fortnight);
     public void deleteSchedule(Long id);
     public Schedule getSchedule(Long id);
     public List<Schedule> getSchedules();

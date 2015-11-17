@@ -66,6 +66,7 @@ public class Flight implements Serializable {
         };
         
         Collections.sort(schedule,comparator);
+        System.out.println( schedule.get(schedule.size()-1).getStartDate());
         return schedule.get(schedule.size()-1).getStartDate();
     }
 
