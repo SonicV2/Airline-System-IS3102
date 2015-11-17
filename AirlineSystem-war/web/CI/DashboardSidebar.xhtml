@@ -249,7 +249,7 @@
                             <a><h:commandLink class="commandLink" action="/FOS/ViewSchedule" actionListener="#{crewSignInManagedBean.viewPairing}"><i class="fa fa-plus fa-eye"></i> Crew Sign In</h:commandLink></a>
                         </li>
                         <li>        
-                            <a><h:commandLink class="commandLink" action="/FOS/LeaveSubmit" actionListener="#{crewSignInManagedBean.refresh}"><i class="fa fa-plus fa-pencil"></i> Submit Leave</h:commandLink></a>
+                            <a><h:commandLink class="commandLink" actionListener="#{crewSignInManagedBean.refresh(event)}"> <i class="fa fa-plus fa-pencil"></i> Submit Leave</h:commandLink></a>
                         </li>
                     </h:form>
                 </ui:fragment>
